@@ -165,10 +165,14 @@ bool AI::OpenAIProvider::prefersDeveloperRole(const QString& modelId)
 }
 
 /**
- * @brief Returns true when the model supports reasoning effort controls.
+ * @brief Returns true when the model supports reasoning effort controls. Chat-tuned
+ *        variants (gpt-5.x-chat-*) reject the reasoning_effort parameter outright.
  */
 bool AI::OpenAIProvider::isReasoningModel(const QString& modelId)
 {
+  if (modelId.contains(QStringLiteral("-chat")))
+    return false;
+
   return modelId.startsWith(QStringLiteral("gpt-5.1"))
       || modelId.startsWith(QStringLiteral("gpt-5.2")) || modelId.startsWith(QStringLiteral("o1"))
       || modelId.startsWith(QStringLiteral("o3")) || modelId.startsWith(QStringLiteral("o4"));
@@ -256,8 +260,6 @@ QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
       m[QStringLiteral("role")] = role;
       if (!textAccumulator.isEmpty())
         m[QStringLiteral("content")] = textAccumulator;
-      else
-        m[QStringLiteral("content")] = QJsonValue();
 
       if (!toolCalls.isEmpty())
         m[QStringLiteral("tool_calls")] = toolCalls;

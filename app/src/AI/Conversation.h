@@ -51,9 +51,10 @@ class Conversation : public QObject {
   // clang-format on
 
 public:
-  static constexpr int kMaxToolCalls     = 25;
-  static constexpr int kMaxHistoryItems  = 400;
-  static constexpr int kMaxUiMessageRows = 600;
+  static constexpr int kMaxToolCalls        = 25;
+  static constexpr int kMaxHistoryItems     = 400;
+  static constexpr int kMaxUiMessageRows    = 600;
+  static constexpr int kMaxTransientRetries = 2;
 
   /**
    * @brief Status pill rendered by QML for each tool-call card.
@@ -98,9 +99,11 @@ public slots:
 private slots:
   void onPartialText(const QString& chunk);
   void onPartialThinking(const QString& chunk);
+  void onThinkingBlockFinished(const QJsonObject& block);
   void onToolCallRequested(const QString& callId,
                            const QString& name,
-                           const QJsonObject& arguments);
+                           const QJsonObject& arguments,
+                           const QJsonObject& extras = QJsonObject());
   void onReplyFinished();
   void onReplyError(const QString& message);
 
@@ -150,6 +153,8 @@ private:
   void resumeAfterToolBatch();
   void releaseOutstandingToolResult();
   void teardownReply();
+  [[nodiscard]] bool shouldRetryAfterError() const;
+  void scheduleTransientRetry(const QString& message);
 
   [[nodiscard]] static QString rewriteHelpLinks(const QString& text);
   void setBusy(bool busy);
@@ -182,10 +187,12 @@ private:
   QString m_assistantThinking;
   bool m_thinkingIsSynthetic;
 
+  QJsonArray m_pendingThinkingBlocks;
   QJsonArray m_pendingToolUseBlocks;
   QJsonArray m_pendingToolResultBlocks;
   int m_outstandingToolResults;
   int m_toolCallCount;
+  int m_retryCount;
   bool m_cancelled;
   bool m_summaryForced;
   bool m_busy;

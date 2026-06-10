@@ -27,6 +27,15 @@
 
 namespace API {
 /**
+ * @brief Identifies who issued a command: in-process callers (scripts, internal modules) are
+ *        trusted; network clients must pass the device-write consent gate.
+ */
+enum class CommandOrigin : quint8 {
+  Trusted,
+  Remote,
+};
+
+/**
  * @brief Main entry point for processing incoming API commands.
  */
 class CommandHandler : public QObject {
@@ -43,9 +52,12 @@ public:
   [[nodiscard]] static CommandHandler& instance();
 
   [[nodiscard]] bool isApiMessage(const QByteArray& data) const;
-  [[nodiscard]] QByteArray processMessage(const QByteArray& data);
-  [[nodiscard]] CommandResponse processCommand(const CommandRequest& request);
-  [[nodiscard]] BatchResponse processBatch(const BatchRequest& batch);
+  [[nodiscard]] QByteArray processMessage(const QByteArray& data,
+                                          const CommandOrigin origin = CommandOrigin::Trusted);
+  [[nodiscard]] CommandResponse processCommand(const CommandRequest& request,
+                                               const CommandOrigin origin = CommandOrigin::Trusted);
+  [[nodiscard]] BatchResponse processBatch(const BatchRequest& batch,
+                                           const CommandOrigin origin = CommandOrigin::Trusted);
   [[nodiscard]] QJsonObject getAvailableCommands() const;
 
 private:

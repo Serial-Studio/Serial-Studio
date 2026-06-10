@@ -30,6 +30,7 @@
 #include <memory>
 #include <QByteArrayView>
 #include <QDeadlineTimer>
+#include <QHash>
 #include <QJSEngine>
 #include <QJSValue>
 #include <QMap>
@@ -68,11 +69,27 @@ private:
   FrameBuilder& operator=(const FrameBuilder&) = delete;
 
 public:
+  /**
+   * @brief Latest received frame snapshot for script/API consumers: the raw chunk (a retained
+   *        FrameReader pool reference), the parser's channel tokens, and capture sequence
+   *        numbers. Channel tokens are valid only when channelsSequence == sequence.
+   */
+  struct LatestFrameInfo {
+    LatestFrameInfo();
+    int sourceId;
+    quint64 sequence;
+    qint64 timestampMs;
+    quint64 channelsSequence;
+    QStringList channels;
+    IO::CapturedDataPtr chunk;
+  };
+
   [[nodiscard]] static FrameBuilder& instance();
 
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
   [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
   [[nodiscard]] const DataModel::DataTableStore& tableStore() const noexcept;
+  [[nodiscard]] const LatestFrameInfo* latestFrame(int sourceId) const noexcept;
 
   void resetFrameCounters() noexcept;
   void setParseBudgetEnabled(bool enabled) noexcept;
@@ -157,6 +174,7 @@ private:
   bool m_captureDatasetValues;
   bool m_captureFlagsDirty;
   bool m_externalTableApiUsers;
+  bool m_captureLatestFrame;
   int m_seenEngineEpoch;
   SerialStudio::OperationMode m_operationMode;
   qint64 m_parseBudgetUsedNs;
@@ -177,6 +195,10 @@ private:
   std::map<int, quint64> m_sourceFrameCounters;
   std::map<EngineKey, TransformEngine> m_transformEngines;
   std::unordered_map<int, std::unordered_map<int, int>> m_replayColumnMap;
+
+  int m_latestFrameSourceId;
+  quint64 m_latestFrameSeq;
+  QHash<int, LatestFrameInfo> m_latestFrames;
 
   int m_engineCacheSourceId;
   TransformEngine* m_luaEngineForSource;
@@ -232,6 +254,10 @@ private:
   void publishSourceTemplateFrame(const DataModel::Source& src);
   void refreshAnyAsyncSink();
   void refreshDatasetCaptureFlag();
+  void refreshLatestFrameCapture();
+  void captureLatestChunk(int sourceId, const IO::CapturedDataPtr& data);
+  void captureLatestChannels(int sourceId, const QStringList& channels);
+  void captureLatestChannelSpans(int sourceId, const QByteArrayView* spans, qsizetype count);
   int trySpanLane(int sourceId,
                   bool applyPerSourceOverride,
                   DataModel::Frame& frame,

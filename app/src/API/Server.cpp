@@ -26,6 +26,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRandomGenerator>
+#include <QSet>
 
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
@@ -325,6 +326,9 @@ API::Server::Server()
   if (m_settings.value("API/DeviceWriteConsent", false).toBool())
     m_deviceWriteConsent = DeviceWriteConsent::Granted;
 
+  if (qEnvironmentVariableIntValue("SERIAL_STUDIO_API_AUTO_CONSENT") != 0)
+    m_deviceWriteConsent = DeviceWriteConsent::Granted;
+
   if (m_externalConnections)
     ensureAuthToken();
 
@@ -573,7 +577,9 @@ bool API::Server::verifyToken(const QByteArray& provided) const
 }
 
 /**
- * @brief Gates API-originated device writes behind a one-time user consent prompt.
+ * @brief Gates API-originated device writes behind a one-time user consent prompt. Headless
+ *        runs cannot show the prompt, so consent must be pre-granted there via the
+ *        SERIAL_STUDIO_API_AUTO_CONSENT env var or the persisted setting (used by CI).
  */
 bool API::Server::authorizeDeviceWrite()
 {
@@ -582,6 +588,13 @@ bool API::Server::authorizeDeviceWrite()
 
   if (m_deviceWriteConsent == DeviceWriteConsent::Denied)
     return false;
+
+  if (qApp->platformName() == QLatin1String("offscreen")) {
+    m_deviceWriteConsent = DeviceWriteConsent::Denied;
+    qWarning() << "[API] Device write denied: no GUI to prompt for consent. Set "
+                  "SERIAL_STUDIO_API_AUTO_CONSENT=1 to allow API device writes in headless mode.";
+    return false;
+  }
 
   const auto answer = Misc::Utilities::showMessageBox(
     tr("Allow API device control?"),
@@ -600,6 +613,25 @@ bool API::Server::authorizeDeviceWrite()
 
   m_deviceWriteConsent = DeviceWriteConsent::Denied;
   return false;
+}
+
+/**
+ * @brief Gates remote-origin device-write commands behind the consent prompt; commands that
+ *        never touch the hardware always pass. Keeps the command path consistent with the
+ *        raw byte paths, which run the same gate.
+ */
+bool API::Server::authorizeRemoteCommand(const QString& command)
+{
+  static const QSet<QString> kDeviceWriteCommands = {
+    QStringLiteral("io.writeData"),
+    QStringLiteral("io.ble.writeCharacteristic"),
+    QStringLiteral("console.send"),
+  };
+
+  if (!kDeviceWriteCommands.contains(command))
+    return true;
+
+  return authorizeDeviceWrite();
 }
 
 /**
@@ -893,7 +925,7 @@ void API::Server::handleJsonMessage(QTcpSocket* socket,
   }
 
   auto& cmdHandler = API::CommandHandler::instance();
-  sendResponseToSocket(socket, cmdHandler.processMessage(jsonBytes));
+  sendResponseToSocket(socket, cmdHandler.processMessage(jsonBytes, CommandOrigin::Remote));
 }
 
 /**
@@ -988,6 +1020,11 @@ void API::Server::processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& st
 
     disconnectClient(
       socket, state, ErrorCode::ExecutionError, QStringLiteral("Raw payload exceeds size limit"));
+    return;
+  }
+
+  if (!authorizeDeviceWrite()) {
+    buffer.clear();
     return;
   }
 

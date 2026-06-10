@@ -85,13 +85,15 @@ signals:
   void scriptError(const QString& message);
 
 public:
-  explicit ControlScriptWorker(QObject* parent = nullptr);
+  explicit ControlScriptWorker(ControlApiMarshaller* marshaller, QObject* parent = nullptr);
   ~ControlScriptWorker() override;
 
   ControlScriptWorker(ControlScriptWorker&&)                 = delete;
   ControlScriptWorker(const ControlScriptWorker&)            = delete;
   ControlScriptWorker& operator=(ControlScriptWorker&&)      = delete;
   ControlScriptWorker& operator=(const ControlScriptWorker&) = delete;
+
+  static void requestShutdown() noexcept;
 
 public slots:
   void start(const QString& source);
@@ -102,6 +104,7 @@ private slots:
 
 private:
   [[nodiscard]] bool compile(const QString& source, QString& errorOut);
+  void releaseEngine();
   void runSetup();
 
 private:

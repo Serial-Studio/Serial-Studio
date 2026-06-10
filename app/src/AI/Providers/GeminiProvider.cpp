@@ -117,12 +117,14 @@ QString AI::GeminiProvider::modelDisplayName(const QString& modelId) const
 }
 
 /**
- * @brief Returns Gemini-specific tool/context shaping hints.
+ * @brief Returns Gemini-specific tool/context shaping hints. The 2.5 generation thinks by
+ *        default; 2.0 models reject thinkingConfig entirely.
  */
 AI::ProviderCapabilities AI::GeminiProvider::capabilities() const
 {
   ProviderCapabilities caps;
   caps.structuredToolResults = true;
+  caps.thinking              = currentModel().contains(QStringLiteral("2.5"));
   caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("flash"));
   caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
   return caps;
@@ -156,6 +158,10 @@ QJsonObject AI::GeminiProvider::translateBlock(const QJsonObject& block)
 
     QJsonObject fcPart;
     fcPart[QStringLiteral("functionCall")] = fc;
+    const auto signature = block.value(QStringLiteral("_gemini_thought_signature")).toString();
+    if (!signature.isEmpty())
+      fcPart[QStringLiteral("thoughtSignature")] = signature;
+
     return fcPart;
   }
 
@@ -293,6 +299,14 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
 
   QJsonObject body;
   body[QStringLiteral("contents")] = translateHistory(history);
+
+  if (capabilities().thinking) {
+    QJsonObject thinkingConfig;
+    thinkingConfig[QStringLiteral("includeThoughts")] = true;
+    QJsonObject generationConfig;
+    generationConfig[QStringLiteral("thinkingConfig")] = thinkingConfig;
+    body[QStringLiteral("generationConfig")]           = generationConfig;
+  }
 
   if (!systemText.isEmpty()) {
     QJsonObject sysPart;

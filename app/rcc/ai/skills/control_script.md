@@ -15,6 +15,9 @@ the data hotpath), and is stored in the project file.
   with `delay(ms)`.
 - The user says "send X when it connects", "poll the sensor", "wake up the
   probe", "start the measurement stream".
+- The user wants widgets created automatically from incoming data ("build the
+  dashboard from whatever arrives"). Use `newFrame()` + `ensureDashboard()`
+  (below).
 
 ## The SerialStudio SDK (natural API wrappers)
 
@@ -54,6 +57,78 @@ source itself: `meta.fetchScriptingDocs{kind: 'sdk_js'}` (or `'sdk_lua'`). It
 lists every callable wrapper, so you never have to guess a function name or
 argument order. All SDK symbols also appear in the code-editor autocomplete.
 
+## Reading data: newFrame() and ensureDashboard() (control script ONLY)
+
+Two prelude helpers exist only inside the control script engine (they are gated
+on its bridge; frame parsers and transforms do not have them). Together they
+close the See -> Decide -> Act loop:
+
+- `newFrame(sourceId?)` -- returns the latest frame received from the device
+  exactly once per arrival, `null` when nothing new. Fields: `text` (raw
+  payload), `values` (the parser's channel tokens BEFORE dataset mapping, so it
+  includes channels no dataset reads yet), `sourceId`, `timestampMs` (monotonic
+  milliseconds, for deltas only, not Unix time), `sequence`. The raw command
+  is `io.getLatestFrame` (`{encoding: "base64"}` for binary). `dashboard.getData` shows only mapped data; this is the
+  pre-mapping view.
+- `ensureDashboard(spec)` -- declarative, idempotent widget builder. Spec is an
+  array of groups: `{title, widget, datasets: [{title, index, plot, gauge,
+  units, ...}]}`. Groups match by title, datasets by parser `index` within the
+  group; only missing items are created, existing ones are never modified, and
+  the last satisfied spec is memoized so calling it every `loop()` is free.
+  Group `widget`: datagrid | accelerometer | gyroscope | gps | multiplot |
+  none | plot3d | image | painter. Dataset flags: plot, fft, bar, gauge,
+  compass, led, waterfall (or a raw `options` bitfield). Created items are real
+  project edits and persist with the project.
+
+Canonical auto-dashboard loop:
+
+```javascript
+function loop() {
+  var f = newFrame();
+  if (!f) { delay(100); return; }
+
+  var spec = { title: "Telemetry", widget: "multiplot", datasets: [] };
+  for (var i = 0; i < f.values.length; ++i)
+    spec.datasets.push({ title: "Channel " + (i + 1), index: i + 1, plot: true });
+
+  ensureDashboard([spec]);
+  delay(100);
+}
+```
+
+Rules: always pace a polling loop with `delay()` (50-250 ms is plenty); do not
+hand-roll exists-checks with `project.group.list` loops (ensureDashboard does
+the diff); renaming a generated group in the editor makes the script recreate
+it under the original title (the spec is the source of truth); ConsoleOnly mode
+yields `text` but an empty `values`.
+
+## Mistakes that will not work (do not write these)
+
+Before writing any `io.ble.*` or byte-payload call, fetch `sdk_js` and copy the
+real signature. The following all fail; they are the failure modes seen most
+often:
+
+- **Object arguments.** `io.ble.setNotifyCharacteristic({ characteristicUuid: "fff2" })`
+  is wrong. Arguments are POSITIONAL: `io.ble.setNotifyCharacteristic("fff2")`.
+  Passing an object stuffs the whole object into the first parameter, so a UUID
+  becomes `[object Object]` and you get `No characteristic matches UUID ''`.
+- **`.then()` / await.** SDK calls are SYNCHRONOUS. `io.getStatus().then(...)` and
+  `await io.ble.writeCharacteristic(...)` are wrong; there are no promises. Read
+  the returned `{ ok, result, error }` object directly.
+- **Hand-rolled base64.** Never write your own hex-to-base64 (it is easy to get
+  wrong, and it is unnecessary). Pass a hex string with `SerialStudio.Hex` and
+  the SDK encodes it: `io.ble.writeCharacteristic("fff1", "5600030C", SerialStudio.Hex)`.
+- **Guessed command names.** There is no `io.ble.discoverCharacteristics`, no
+  `io.ble.setNotify`, no `dashboard.tailFrames(16)`-as-promise. The real BLE
+  commands are `selectServiceByUuid`, `setNotifyCharacteristic`,
+  `writeCharacteristic`, `listServices`, `listCharacteristics`. If you cannot
+  find a command in `sdk_js`, it does not exist.
+- **Calling script functions from the console.** A function you define in the
+  control script (e.g. a `zeroSensor()` helper) is NOT reachable as
+  `SerialStudio.controlScript.zeroSensor()` or from the console. Control-script
+  functions only run via `setup()`/`loop()`. For a user-triggerable one-shot,
+  use an Action, not a console call.
+
 ## Pacing loop() with delay()
 
 `loop()` runs as fast as it can be scheduled. Call `delay(ms)` (control script
@@ -78,27 +153,93 @@ the script:
   project and applied live; if a device is connected it recompiles and restarts.
 - `controlscript.getStatus` -> `{ running }`: whether the script is running now.
 
-## BLE service / characteristic selection from a script
+## Leave source and connection setup to the user
 
-For a split read/write BLE device, a control script can wire up the whole GATT
-layout by UUID (robust against discovery order):
+A control script automates a device that the user has **already configured and
+connected** in the I/O panel. Do not try to create, configure, or connect a data
+source from a script, and especially not a BLE source: picking the adapter,
+scanning, choosing the device, and connecting is interactive and unreliable to
+drive programmatically. Assume the connection is open by the time `setup()`
+runs (it only runs after the device connects). When the user asks for a wake-up
+or polling script, write only the `setup()`/`loop()` logic and tell them to set
+up and connect the source themselves first.
 
-- `io.ble.selectServiceByUuid("fff0")` -- pick the service.
-- `io.ble.setNotifyCharacteristic("fff2")` -- subscribe to incoming data.
+The one exception is GATT layout *within* an already-connected BLE device:
+selecting which service and notify characteristic the script talks to (below)
+is fine, because the device is connected and the choice is by UUID.
+
+## BLE GATT is owned by the project, not the script
+
+The BLE **service and notify characteristic are configured on the source and
+saved in the project** (by UUID). The driver applies them after discovery and
+only then reports "connected", so by the time `setup()` runs, the service is
+selected and the notify characteristic is subscribed. **Do not select the
+service or notify characteristic from a control script.** A script that calls
+`io.ble.selectServiceByUuid(...)` / `io.ble.setNotifyCharacteristic(...)` fights
+the driver for ownership and races discovery; leave both to the project.
+
+A control script's only BLE job is the **write handshake**:
+
 - `io.ble.writeCharacteristic("fff1", "<hex>", SerialStudio.Hex)` -- send commands.
 
-## Worked example: BLE handshake
+Pass byte payloads as a **hex string** with `SerialStudio.Hex`, never a JS array
+of numbers; the wrapper hex-decodes the string for you. When a user asks for a
+BLE wake-up/streaming script, write only the `writeCharacteristic` handshake and
+tell them to pick the service + notify characteristic on the BLE source (it is
+saved with the project). `selectServiceByUuid` / `setNotifyCharacteristic` still
+exist for advanced one-off cases, but are not the path for a normal project.
 
-Many BLE devices expose a service with separate write and notify
-characteristics, and only start streaming after a command sequence is written.
-`setup()` selects the service, subscribes to the notify characteristic, then
-writes the enable commands; readings then arrive through the frame parser.
+## Worked example: testo 549i BLE pressure probe (canonical)
+
+A real pattern for a split read/write BLE probe (service `FFF0`, write `FFF1`,
+notify `FFF2`) that streams only after a vendor command sequence. The service
+and notify characteristic are set on the source and saved in the project, so the
+control script is just the handshake; a binary frame parser turns the
+notifications into datasets.
+
+Control script (handshake only):
 
 ```javascript
+const WRITE_UUID  = "fff1";
+const ENABLE_CMDS = ["5600030000000C69023E81", "200000000000077B", "110000000000035A"];
+
 function setup() {
-  io.ble.selectServiceByUuid("fff0");
-  io.ble.setNotifyCharacteristic("fff2");
-  io.ble.writeCharacteristic("fff1", "0102030405", SerialStudio.Hex);
+  for (var i = 0; i < ENABLE_CMDS.length; ++i) {
+    if (!io.ble.writeCharacteristic(WRITE_UUID, ENABLE_CMDS[i], SerialStudio.Hex).ok) return;
+    delay(100);
+  }
+}
+
+function loop() { delay(1000); }
+```
+
+Matching frame parser. Binary BLE data needs the source set to **decoder
+Binary** and **No Delimiters**; with the Binary decoder, `parse(frame)` receives
+an **Array of byte values** (not a string), so read bytes by index and decode
+floats with `DataView` -- never `charCodeAt` on the frame:
+
+```javascript
+function floatLE(frame, at) {
+  var v = new DataView(new ArrayBuffer(4));
+  for (var i = 0; i < 4; ++i) v.setUint8(i, frame[at + i] & 0xff);
+  return v.getFloat32(0, true);
+}
+function markerEnd(frame, name) {
+  for (var i = 0; i + name.length <= frame.length; ++i) {
+    var hit = true;
+    for (var j = 0; j < name.length; ++j)
+      if (frame[i + j] !== name.charCodeAt(j)) { hit = false; break; }
+    if (hit) return i + name.length;
+  }
+  return -1;
+}
+var bar = 0, psi = 0, batt = 0;
+function parse(frame) {
+  var p = markerEnd(frame, "DifferentialPressure");
+  if (p !== -1 && p + 4 <= frame.length) { bar = floatLE(frame, p) * 1e-5; psi = bar * 14.5037738; }
+  var b = markerEnd(frame, "BatteryLevel");
+  if (b !== -1 && b + 4 <= frame.length) batt = floatLE(frame, b);
+  return [bar, psi, batt];
 }
 ```
 

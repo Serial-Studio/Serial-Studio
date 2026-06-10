@@ -471,15 +471,17 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense, const b
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles the empty-response branch of license validation: warn, decay grace.
+ * @brief Handles the empty-response branch of license validation: warn, decay grace. A failed
+ *        cache restore clears in-memory state only; the on-disk blob survives for a later
+ *        live verdict.
  */
-void Licensing::LemonSqueezy::handleEmptyValidationResponse()
+void Licensing::LemonSqueezy::handleEmptyValidationResponse(const bool cachedResponse)
 {
   qWarning() << "Activation server unreachable. License validation failed.";
 
   if (m_gracePeriod <= 0) {
     qWarning() << "Grace period expired. Clearing cached license.";
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
   }
 
   else {
@@ -661,7 +663,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
                                                      const bool cachedResponse)
 {
   if (data.isEmpty()) {
-    handleEmptyValidationResponse();
+    handleEmptyValidationResponse(cachedResponse);
     return;
   }
 

@@ -47,6 +47,9 @@ private:
     QString toolUseId;
     QString toolUseName;
     QByteArray toolInputJson;
+    QString thinkingText;
+    QString thinkingSignature;
+    QString redactedData;
   };
 
   void onSseEvent(const QString& name, const QJsonObject& data);

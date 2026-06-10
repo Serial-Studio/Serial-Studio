@@ -834,9 +834,14 @@ python test_api.py send io.writeData -p data=SGVsbG8gV29ybGQ=
 ```
 
 **Errors:**
-- `EXECUTION_ERROR`: Not connected
+- `EXECUTION_ERROR`: Not connected, or device write denied by the user
 - `MISSING_PARAM`: Missing `data` parameter
 - `INVALID_PARAM`: Invalid base64 encoding
+
+> Device-write commands (`io.writeData`, `io.ble.writeCharacteristic`, `console.send`) sent
+> by a remote API/MCP client trigger a one-time consent prompt; the user's answer is
+> remembered. Headless runs cannot show the prompt, so set the environment variable
+> `SERIAL_STUDIO_API_AUTO_CONSENT=1` to allow API device writes in that mode (used by CI).
 
 > Frame-detection mode and start/finish delimiter sequences are no longer
 > live runtime commands. They are per-source project settings configured

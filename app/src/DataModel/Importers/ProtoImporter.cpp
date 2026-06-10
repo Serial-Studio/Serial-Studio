@@ -942,6 +942,15 @@ void DataModel::ProtoImporter::showPreview(const QString& filePath)
     return;
   }
 
+  static constexpr qsizetype kMaxProtoFileBytes = 10 * 1024 * 1024;
+  if (file.size() > kMaxProtoFileBytes) {
+    Misc::Utilities::showMessageBox(tr("Proto file is too large (the limit is 10 MB)."),
+                                    tr("Verify you selected the correct .proto definition file."),
+                                    QMessageBox::Critical,
+                                    tr("Protobuf Import Error"));
+    return;
+  }
+
   QTextStream stream(&file);
   const QString src = stream.readAll();
   file.close();

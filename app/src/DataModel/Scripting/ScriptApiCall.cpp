@@ -26,6 +26,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <cmath>
 #include <map>
 #include <mutex>
 #include <QByteArray>
@@ -76,36 +77,34 @@ static std::atomic<bool> s_allowFullSurface{false};
 constexpr int kMaxJsonDepth = 64;
 
 /**
- * @brief Read-only command families safely callable from user scripts without opt-in.
+ * @brief Read-only command families safely callable from user scripts without opt-in. Names
+ *        must match CommandRegistry registrations exactly; a stale name silently denies the
+ *        command because hasCommand() is checked before this list.
  */
 static const QSet<QString>& safeMethods()
 {
   static const QSet<QString> kSet = {
-    QStringLiteral("system.info"),
-    QStringLiteral("system.ping"),
-    QStringLiteral("system.commands"),
-    QStringLiteral("project.get"),
+    QStringLiteral("api.getCommands"),
+    QStringLiteral("project.getStatus"),
     QStringLiteral("project.snapshot"),
-    QStringLiteral("project.title"),
-    QStringLiteral("project.dataset.get"),
+    QStringLiteral("project.dataset.getByPath"),
+    QStringLiteral("project.dataset.getByTitle"),
+    QStringLiteral("project.dataset.getByUniqueId"),
     QStringLiteral("project.dataset.list"),
-    QStringLiteral("project.group.get"),
     QStringLiteral("project.group.list"),
-    QStringLiteral("project.source.get"),
+    QStringLiteral("project.source.getConfig"),
     QStringLiteral("project.source.list"),
-    QStringLiteral("workspace.get"),
-    QStringLiteral("workspace.list"),
-    QStringLiteral("workspace.active"),
+    QStringLiteral("project.workspace.get"),
+    QStringLiteral("project.workspace.list"),
+    QStringLiteral("project.dataTable.list"),
+    QStringLiteral("project.dataTable.get"),
     QStringLiteral("dashboard.getStatus"),
     QStringLiteral("dashboard.getData"),
-    QStringLiteral("dashboard.snapshot"),
-    QStringLiteral("dashboard.values"),
-    QStringLiteral("notification.list"),
-    QStringLiteral("notification.post"),
+    QStringLiteral("dashboard.tailFrames"),
+    QStringLiteral("notifications.list"),
+    QStringLiteral("notifications.post"),
     QStringLiteral("sessions.list"),
     QStringLiteral("sessions.get"),
-    QStringLiteral("data_tables.list"),
-    QStringLiteral("data_tables.get"),
     QStringLiteral("controlscript.get"),
     QStringLiteral("controlscript.getStatus"),
   };
@@ -136,14 +135,31 @@ static std::map<int, detail::TokenBucket>& buckets()
 }
 
 /**
+ * @brief Erases buckets that are idle and fully refilled, so stale source ids (deleted
+ *        sources, one-shot editors) cannot grow the map forever. Caller holds bucketMutex().
+ */
+static void reclaimIdleBuckets(std::chrono::steady_clock::time_point now)
+{
+  for (auto it = buckets().begin(); it != buckets().end();) {
+    const auto& b   = it->second;
+    const double dt = std::chrono::duration<double>(now - b.lastRefill).count();
+    if (b.activeCount == 0 && b.tokens + dt * kTokensPerSec >= kBucketSize)
+      it = buckets().erase(it);
+    else
+      ++it;
+  }
+}
+
+/**
  * @brief Returns true if a token was consumed; false if rate-limited or concurrency-capped.
  */
 static bool consumeRateToken(int sourceId)
 {
   using clock = std::chrono::steady_clock;
   std::lock_guard<std::mutex> lock(bucketMutex());
-  auto& b        = buckets()[sourceId];
   const auto now = clock::now();
+  reclaimIdleBuckets(now);
+  auto& b = buckets()[sourceId];
 
   if (b.lastRefill.time_since_epoch().count() == 0) {
     b.tokens      = kBucketSize;
@@ -308,14 +324,20 @@ static QJsonValue luaToJson(lua_State* L, int idx, int depth)
 static void jsonValueToLua(lua_State* L, const QJsonValue& v, int depth);
 
 /**
- * @brief Pushes a JSON double, narrowing to lua_Integer when exact.
+ * @brief Pushes a JSON double, narrowing to lua_Integer only when finite, in the qint64 range,
+ *        and exact; the range check must precede the cast, which is UB otherwise.
  */
 static void pushJsonNumber(lua_State* L, double d)
 {
-  const qint64 i = static_cast<qint64>(d);
-  if (static_cast<double>(i) == d) {
-    lua_pushinteger(L, static_cast<lua_Integer>(i));
-    return;
+  constexpr double kInt64Min = -9223372036854775808.0;
+  constexpr double kInt64Max = 9223372036854775808.0;
+
+  if (std::isfinite(d) && d >= kInt64Min && d < kInt64Max) {
+    const qint64 i = static_cast<qint64>(d);
+    if (static_cast<double>(i) == d) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i));
+      return;
+    }
   }
 
   lua_pushnumber(L, d);
@@ -738,9 +760,9 @@ void DataModel::ScriptApiCall::installJS(QJSEngine* js, int sourceId)
 }
 
 /**
- * @brief Installs every host bridge and the full SDK into a QJSEngine in one call.
+ * @brief Installs the convenience host bridges (no apiCall bridge, no SDK eval).
  */
-void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
+void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js, int sourceId)
 {
   Q_ASSERT(js);
 
@@ -749,7 +771,16 @@ void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
   DataModel::DeviceWriteApi::installJS(js, sourceId);
   DataModel::ActionFireApi::installJS(js);
   DataModel::DashboardApi::installJS(js);
+}
 
+/**
+ * @brief Installs every host bridge and the full SDK into a QJSEngine in one call.
+ */
+void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
+{
+  Q_ASSERT(js);
+
+  installHelperBridgesJS(js, sourceId);
   installJS(js, sourceId);
 }
 

@@ -74,7 +74,15 @@ public:
     API::CommandResponse result;
     QMetaObject::invokeMethod(
       QCoreApplication::instance(),
-      [&]() { result = API::CommandRegistry::instance().execute(command, id, params); },
+      [&]() {
+        if (!API::Server::instance().authorizeRemoteCommand(command)) {
+          result = API::CommandResponse::makeError(
+            id, API::ErrorCode::ExecutionError, QStringLiteral("Device write denied by user"));
+          return;
+        }
+
+        result = API::CommandRegistry::instance().execute(command, id, params);
+      },
       Qt::BlockingQueuedConnection);
 
     response->set_id(request->id());

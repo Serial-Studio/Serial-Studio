@@ -794,8 +794,10 @@ void DataModel::FrameParserModel::rebuildParameterModel()
   m_parameterModel = model;
   Q_EMIT parameterModelChanged();
 
-  if (previous)
+  if (previous) {
+    previous->disconnect(this);
     previous->deleteLater();
+  }
 }
 
 /**

@@ -193,6 +193,9 @@ void Widgets::Accelerometer::updateData()
       rawZ = dataset.numericValue;
   }
 
+  if (!std::isfinite(rawX) || !std::isfinite(rawY) || !std::isfinite(rawZ))
+    return;
+
   constexpr double kInv981 = 1.0 / 9.81;
   const double factor      = m_inputInG ? 1.0 : kInv981;
   const double gx          = rawX * factor;

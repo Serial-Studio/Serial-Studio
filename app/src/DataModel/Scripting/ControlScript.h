@@ -27,6 +27,7 @@
 
 namespace DataModel {
 
+class ControlApiMarshaller;
 class ControlScriptWorker;
 
 /**
@@ -66,6 +67,7 @@ public slots:
   void setCode(const QString& code);
 
 private slots:
+  void shutdown();
   void onConnectedChanged();
   void onWorkerError(const QString& message);
 
@@ -81,8 +83,10 @@ private:
   QString m_code;
   bool m_ready;
   bool m_running;
+  bool m_shutdown;
   QThread m_thread;
   ControlScriptWorker* m_worker;
+  ControlApiMarshaller* m_marshaller;
 };
 
 }  // namespace DataModel

@@ -66,10 +66,11 @@ QVariant Widgets::DataGridRowsModel::data(const QModelIndex& index, int role) co
  */
 QHash<int, QByteArray> Widgets::DataGridRowsModel::roleNames() const
 {
-  return {
+  static const QHash<int, QByteArray> kNames = {
     {TitleRole, "title"},
     {ValueRole, "value"},
   };
+  return kNames;
 }
 
 /**

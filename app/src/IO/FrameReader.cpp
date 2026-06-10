@@ -201,17 +201,21 @@ void IO::FrameReader::consumeBytes(qsizetype size)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Selects the checksum algorithm and caches its expected output length.
+ * @brief Selects the checksum algorithm, caching the function and its output length so the
+ *        per-frame validation never repeats the by-name map lookup.
  */
 void IO::FrameReader::setChecksum(const QString& checksum)
 {
   m_checksum      = checksum;
   const auto& map = IO::checksumFunctionMap();
   const auto it   = map.find(m_checksum);
-  if (it != map.end())
-    m_checksumLength = it.value()("", 0).size();
-  else
+  if (it != map.end()) {
+    m_checksumFunc   = it.value();
+    m_checksumLength = m_checksumFunc("", 0).size();
+  } else {
+    m_checksumFunc   = ChecksumFunc();
     m_checksumLength = 0;
+  }
 }
 
 /**
@@ -260,6 +264,7 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
   m_operationMode = mode;
   if (m_operationMode != SerialStudio::ProjectFile) {
     m_checksumLength = 0;
+    m_checksumFunc   = ChecksumFunc();
     m_checksum       = QLatin1String("");
   }
 }
@@ -538,7 +543,8 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Validates the checksum trailing the frame against the configured algorithm.
+ * @brief Validates the checksum trailing the frame against the cached algorithm function,
+ *        reading the received bytes into a reused member buffer to stay allocation-free.
  */
 IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetype crcPosition)
 {
@@ -548,19 +554,20 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;
 
+  Q_ASSERT(m_checksumFunc);
   const auto bufferSize = m_circularBuffer.size();
   if (bufferSize < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
 
-  const auto calculated     = IO::checksum(m_checksum, frame);
-  const QByteArray received = m_circularBuffer.peekRange(crcPosition, m_checksumLength);
-  if (calculated == received)
+  const auto calculated = m_checksumFunc(frame.constData(), static_cast<int>(frame.size()));
+  m_circularBuffer.peekRangeInto(crcPosition, m_checksumLength, m_receivedChecksum);
+  if (calculated == m_receivedChecksum)
     return ValidationStatus::FrameOk;
 
   static constexpr qsizetype kMaxLogBytes = 128;
   qWarning() << "\n"
              << m_checksum << "failed:\n"
-             << "\t- Received:" << received.toHex(' ') << "\n"
+             << "\t- Received:" << m_receivedChecksum.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
              << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
              << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");

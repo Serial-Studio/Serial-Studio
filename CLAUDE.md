@@ -117,9 +117,13 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` →
   `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes
   (`assign_utf8_in_place`), zero steady-state allocation. The hotpath reads **cached**
-  flags (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`, Dashboard
-  `m_streamAvailable`) — a new input to any of them must wire its change signal to the
-  cache refresh or frames/exports silently stop (see common-mistakes.md).
+  flags (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`, `m_captureLatestFrame`,
+  Dashboard `m_streamAvailable`) — a new input to any of them must wire its change signal
+  to the cache refresh or frames/exports silently stop (see common-mistakes.md).
+  `m_captureLatestFrame` (control script running or API server on) gates the latest-frame
+  capture behind `io.getLatestFrame`: it retains one `CapturedDataPtr` per source (the
+  FrameReader pool probe skips pinned slots) plus the channel tokens — keep it gated and
+  allocation-free.
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.

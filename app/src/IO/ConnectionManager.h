@@ -148,6 +148,7 @@ public:
   [[nodiscard]] IO::Drivers::UART* uart() const noexcept;
   [[nodiscard]] IO::Drivers::Network* network() const noexcept;
   [[nodiscard]] IO::Drivers::BluetoothLE* bluetoothLE() const noexcept;
+  [[nodiscard]] IO::Drivers::BluetoothLE* connectedBluetoothLE() const noexcept;
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] IO::Drivers::Audio* audio() const noexcept;
   [[nodiscard]] IO::Drivers::CANBus* canBus() const noexcept;

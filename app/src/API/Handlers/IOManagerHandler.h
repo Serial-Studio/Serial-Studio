@@ -43,6 +43,7 @@ private:
   static CommandResponse setBusType(const QString& id, const QJsonObject& params);
   static CommandResponse writeData(const QString& id, const QJsonObject& params);
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
+  static CommandResponse getLatestFrame(const QString& id, const QJsonObject& params);
   static CommandResponse getAvailableBuses(const QString& id, const QJsonObject& params);
 };
 

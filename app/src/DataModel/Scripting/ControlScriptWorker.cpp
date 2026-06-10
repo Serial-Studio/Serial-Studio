@@ -21,13 +21,12 @@
 
 #include "DataModel/Scripting/ControlScriptWorker.h"
 
-#include <QCoreApplication>
+#include <atomic>
 #include <QFile>
 #include <QJSEngine>
 #include <QJsonObject>
 #include <QThread>
 #include <QTimer>
-#include <QUuid>
 
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
@@ -38,7 +37,12 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
+static constexpr int kLoopRearmMs       = 1;
+static constexpr int kDelaySliceMs      = 50;
+static constexpr int kMaxDelayMs        = 3600000;
 static constexpr int kRuntimeWatchdogMs = 2000;
+
+static std::atomic<bool> s_shutdownRequested{false};
 
 //--------------------------------------------------------------------------------------------------
 // GUI-thread API marshaller
@@ -55,8 +59,10 @@ DataModel::ControlApiMarshaller::ControlApiMarshaller(QObject* parent) : QObject
 QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
                                                       const QVariantMap& params)
 {
+  static std::atomic<quint64> s_requestSeq{0};
+
   API::CommandRequest request;
-  request.id      = QUuid::createUuid().toString(QUuid::WithoutBraces);
+  request.id      = QStringLiteral("cs-%1").arg(s_requestSeq.fetch_add(1) + 1);
   request.command = method;
   request.params  = QJsonObject::fromVariantMap(params);
 
@@ -96,7 +102,9 @@ void DataModel::ControlApiBridge::setWatchdog(DataModel::JsWatchdog* watchdog)
 }
 
 /**
- * @brief Implements apiCall(method, params) by blocking onto the GUI-thread marshaller.
+ * @brief Implements apiCall(method, params) by blocking onto the GUI-thread marshaller. Fails
+ *        fast during shutdown (the GUI loop stops dispatching) and re-arms the watchdog after
+ *        the call so GUI-side time is not billed against the script budget.
  */
 QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVariantMap& params)
 {
@@ -107,12 +115,21 @@ QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVari
     return out;
   }
 
+  if (s_shutdownRequested.load(std::memory_order_acquire)) {
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: application is shutting down"));
+    return out;
+  }
+
   const bool ok = QMetaObject::invokeMethod(m_marshaller,
                                             "dispatch",
                                             Qt::BlockingQueuedConnection,
                                             Q_RETURN_ARG(QVariantMap, out),
                                             Q_ARG(QString, method),
                                             Q_ARG(QVariantMap, params));
+  if (m_watchdog && !s_shutdownRequested.load(std::memory_order_acquire))
+    m_watchdog->arm();
+
   if (!ok) {
     out.insert(QStringLiteral("ok"), false);
     out.insert(QStringLiteral("error"), QStringLiteral("apiCall: GUI dispatch failed"));
@@ -136,14 +153,18 @@ QVariantList DataModel::ControlApiBridge::listCommands()
 }
 
 /**
- * @brief Blocks the worker thread for the given time, deferring the watchdog deadline.
+ * @brief Blocks the worker thread for the given time (capped at one hour), sleeping in slices
+ *        so shutdown can interrupt the wait, then defers the watchdog deadline.
  */
 void DataModel::ControlApiBridge::delay(int milliseconds)
 {
-  if (milliseconds <= 0)
-    return;
+  const int total = qBound(0, milliseconds, kMaxDelayMs);
+  for (int slept = 0; slept < total; slept += kDelaySliceMs) {
+    if (s_shutdownRequested.load(std::memory_order_acquire))
+      return;
 
-  QThread::msleep(static_cast<unsigned long>(milliseconds));
+    QThread::msleep(static_cast<unsigned long>(qMin(kDelaySliceMs, total - slept)));
+  }
 
   if (m_watchdog)
     m_watchdog->arm();
@@ -154,14 +175,18 @@ void DataModel::ControlApiBridge::delay(int milliseconds)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the worker and the GUI-thread marshaller it dispatches through.
+ * @brief Constructs the worker around a GUI-thread marshaller owned by the caller, which must
+ *        outlive the worker thread.
  */
-DataModel::ControlScriptWorker::ControlScriptWorker(QObject* parent)
-  : QObject(parent), m_loaded(false), m_loopTimer(nullptr), m_bridge(nullptr), m_marshaller(nullptr)
+DataModel::ControlScriptWorker::ControlScriptWorker(ControlApiMarshaller* marshaller,
+                                                    QObject* parent)
+  : QObject(parent)
+  , m_loaded(false)
+  , m_loopTimer(nullptr)
+  , m_bridge(nullptr)
+  , m_marshaller(marshaller)
 {
-  m_marshaller = new ControlApiMarshaller();
-  m_marshaller->moveToThread(QCoreApplication::instance()->thread());
-  m_marshaller->setParent(QCoreApplication::instance());
+  Q_ASSERT(marshaller);
 }
 
 /**
@@ -170,8 +195,15 @@ DataModel::ControlScriptWorker::ControlScriptWorker(QObject* parent)
 DataModel::ControlScriptWorker::~ControlScriptWorker()
 {
   stop();
-  if (m_marshaller)
-    m_marshaller->deleteLater();
+}
+
+/**
+ * @brief Marks the process as shutting down so apiCall() and delay() fail fast instead of
+ *        blocking on a GUI event loop that no longer dispatches.
+ */
+void DataModel::ControlScriptWorker::requestShutdown() noexcept
+{
+  s_shutdownRequested.store(true, std::memory_order_release);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -204,7 +236,7 @@ void DataModel::ControlScriptWorker::start(const QString& source)
       connect(m_loopTimer, &QTimer::timeout, this, &ControlScriptWorker::runLoopTick);
     }
 
-    m_loopTimer->start(0);
+    m_loopTimer->start(kLoopRearmMs);
   }
 }
 
@@ -219,7 +251,16 @@ void DataModel::ControlScriptWorker::stop()
   m_loaded  = false;
   m_setupFn = QJSValue();
   m_loopFn  = QJSValue();
-  m_bridge  = nullptr;
+  releaseEngine();
+}
+
+/**
+ * @brief Drops the bridge, watchdog, and engine in that order; the watchdog must unregister
+ *        before the engine it monitors is destroyed.
+ */
+void DataModel::ControlScriptWorker::releaseEngine()
+{
+  m_bridge = nullptr;
   m_watchdog.reset();
   m_engine.reset();
 }
@@ -255,7 +296,7 @@ void DataModel::ControlScriptWorker::runLoopTick()
   }
 
   if (m_loopTimer)
-    m_loopTimer->start(0);
+    m_loopTimer->start(kLoopRearmMs);
 }
 
 /**
@@ -287,7 +328,10 @@ void DataModel::ControlScriptWorker::runSetup()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the engine, installs the marshalling apiCall, and grabs setup()/loop().
+ * @brief Builds the engine, evals the SDK, and grabs setup()/loop(). Only __ss_bridge goes
+ *        in: the direct helper bridges wrap main-thread singletons and must never execute on
+ *        this worker thread (__ss_control tells the prelude to marshal instead). User source
+ *        is evaluated under the armed watchdog so a top-level loop cannot wedge the worker.
  */
 bool DataModel::ControlScriptWorker::compile(const QString& source, QString& errorOut)
 {
@@ -300,18 +344,30 @@ bool DataModel::ControlScriptWorker::compile(const QString& source, QString& err
   m_bridge->setWatchdog(m_watchdog.get());
   auto bridgeVal = m_engine->newQObject(m_bridge);
   m_engine->globalObject().setProperty(QStringLiteral("__ss_bridge"), bridgeVal);
+  m_engine->globalObject().setProperty(QStringLiteral("__ss_control"), QJSValue(true));
 
   QFile sdkFile(QStringLiteral(":/api/SerialStudio.js"));
   if (sdkFile.open(QFile::ReadOnly))
     m_engine->evaluate(QString::fromUtf8(sdkFile.readAll()));
 
+  m_watchdog->arm();
   const auto result = m_engine->evaluate(source, QStringLiteral("control-script.js"));
+  m_watchdog->disarm();
+
+  if (m_engine->isInterrupted()) {
+    m_engine->setInterrupted(false);
+    errorOut = QStringLiteral("Script did not finish evaluating within %1 ms and was "
+                              "interrupted (infinite loop at the top level?).")
+                 .arg(kRuntimeWatchdogMs);
+    releaseEngine();
+    return false;
+  }
+
   if (result.isError()) {
     errorOut = QStringLiteral("Line %1: %2")
                  .arg(result.property(QStringLiteral("lineNumber")).toInt())
                  .arg(result.toString());
-    m_engine.reset();
-    m_watchdog.reset();
+    releaseEngine();
     return false;
   }
 
@@ -320,8 +376,7 @@ bool DataModel::ControlScriptWorker::compile(const QString& source, QString& err
 
   if (!m_setupFn.isCallable() && !m_loopFn.isCallable()) {
     errorOut = QStringLiteral("Script must define setup() and/or loop().");
-    m_engine.reset();
-    m_watchdog.reset();
+    releaseEngine();
     return false;
   }
 

@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "HAL_Driver.h"
+#include "IO/Checksum.h"
 #include "IO/CircularBuffer.h"
 #include "SerialStudio.h"
 #include "ThirdParty/readerwriterqueue.h"
@@ -101,6 +102,8 @@ private:
 
 private:
   QString m_checksum;
+  ChecksumFunc m_checksumFunc;
+  QByteArray m_receivedChecksum;
   qsizetype m_checksumLength;
 
   QVector<QByteArray> m_startSequences;

@@ -155,12 +155,18 @@ void AI::GeminiReply::processChunk(const QJsonObject& chunk)
   const auto parts     = content.value(QStringLiteral("parts")).toArray();
 
   for (const auto& v : parts) {
-    const auto part = v.toObject();
+    const auto part      = v.toObject();
+    const bool isThought = part.value(QStringLiteral("thought")).toBool(false);
 
     const auto textValue = part.value(QStringLiteral("text"));
     if (textValue.isString()) {
       const auto chunkText = textValue.toString();
-      if (!chunkText.isEmpty())
+      if (chunkText.isEmpty())
+        continue;
+
+      if (isThought)
+        Q_EMIT partialThinking(chunkText);
+      else
         Q_EMIT partialText(chunkText);
 
       continue;
@@ -172,7 +178,13 @@ void AI::GeminiReply::processChunk(const QJsonObject& chunk)
       const auto name   = fc.value(QStringLiteral("name")).toString();
       const auto args   = fc.value(QStringLiteral("args")).toObject();
       const auto callId = QUuid::createUuid().toString(QUuid::WithoutBraces);
-      Q_EMIT toolCallRequested(callId, name, args);
+
+      QJsonObject extras;
+      const auto signature = part.value(QStringLiteral("thoughtSignature")).toString();
+      if (!signature.isEmpty())
+        extras[QStringLiteral("_gemini_thought_signature")] = signature;
+
+      Q_EMIT toolCallRequested(callId, name, args, extras);
     }
   }
 
@@ -216,11 +228,13 @@ void AI::GeminiReply::onReplyFinished()
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
   if (m_reply->error() != QNetworkReply::NoError && status < 400) {
+    setTransientError(true);
     finishWithError(m_reply->errorString());
     return;
   }
 
   if (status >= 400) {
+    setTransientError(status == 408 || status == 429 || status >= 500);
     handleHttpError(status);
     return;
   }

@@ -236,7 +236,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QStr
   }
 
   const int serviceIndex   = params.value(QStringLiteral("serviceIndex")).toInt();
-  auto* ble                = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble                = IO::ConnectionManager::instance().connectedBluetoothLE();
   const auto& serviceNames = ble->serviceNames();
 
   if (serviceIndex < 0 || serviceIndex >= serviceNames.count()) {
@@ -267,7 +267,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectServiceByUuid(
   }
 
   const QString uuid = params.value(QStringLiteral("serviceUuid")).toString();
-  auto* ble          = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble          = IO::ConnectionManager::instance().connectedBluetoothLE();
 
   if (!ble->selectServiceByUuid(uuid)) {
     return CommandResponse::makeError(
@@ -296,7 +296,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
   }
 
   const int characteristicIndex   = params.value(QStringLiteral("characteristicIndex")).toInt();
-  auto* ble                       = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble                       = IO::ConnectionManager::instance().connectedBluetoothLE();
   const auto& characteristicNames = ble->characteristicNames();
 
   if (characteristicIndex < 0 || characteristicIndex >= characteristicNames.count()) {
@@ -330,7 +330,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setNotifyCharacteristic(
   }
 
   const QString uuid = params.value(QStringLiteral("characteristicUuid")).toString();
-  auto* ble          = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble          = IO::ConnectionManager::instance().connectedBluetoothLE();
 
   if (!ble->setNotifyCharacteristicByUuid(uuid)) {
     return CommandResponse::makeError(
@@ -371,7 +371,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::writeCharacteristic(
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid base64 data"));
   }
 
-  auto* ble = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble = IO::ConnectionManager::instance().connectedBluetoothLE();
   if (!ble->isOpen()) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Not connected"));
@@ -428,7 +428,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getServiceList(const QSt
 {
   Q_UNUSED(params)
 
-  auto* ble                = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble                = IO::ConnectionManager::instance().connectedBluetoothLE();
   const auto& serviceNames = ble->serviceNames();
 
   QJsonArray services;
@@ -452,7 +452,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getCharacteristicList(
 {
   Q_UNUSED(params)
 
-  auto* ble                       = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble                       = IO::ConnectionManager::instance().connectedBluetoothLE();
   const auto& characteristicNames = ble->characteristicNames();
 
   QJsonArray characteristics;
@@ -477,7 +477,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getConfiguration(const Q
 {
   Q_UNUSED(params)
 
-  auto* ble = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble = IO::ConnectionManager::instance().connectedBluetoothLE();
 
   QJsonObject result;
 
@@ -506,7 +506,7 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getStatus(const QString&
 {
   Q_UNUSED(params)
 
-  auto* ble = IO::ConnectionManager::instance().bluetoothLE();
+  auto* ble = IO::ConnectionManager::instance().connectedBluetoothLE();
 
   QJsonObject result;
   result[QStringLiteral("operatingSystemSupported")] = ble->operatingSystemSupported();

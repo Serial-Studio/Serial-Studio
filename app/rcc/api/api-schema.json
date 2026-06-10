@@ -1179,6 +1179,27 @@
         ]
     },
     {
+        "description": "Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames.",
+        "name": "io.getLatestFrame",
+        "properties": {
+            "encoding": {
+                "description": "Payload encoding in the response (default: text).",
+                "enum": [
+                    "text",
+                    "base64",
+                    "both"
+                ],
+                "type": "string"
+            },
+            "sourceId": {
+                "description": "Optional source filter; omit for the newest frame across all sources.",
+                "type": "integer"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags. Call this first when the user reports a connection issue.",
         "name": "io.getStatus",
         "properties": {
@@ -1977,7 +1998,7 @@
         ]
     },
     {
-        "description": "Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: the user is shown the exact bytes and approves each call, even when auto-approve is on. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.",
+        "description": "Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is persisted); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.",
         "name": "io.writeData",
         "properties": {
             "data": {
@@ -3880,7 +3901,7 @@
         ]
     },
     {
-        "description": "Replace the current project with a starter template -- the right first move when the user says \"set me up an X project\" rather than \"add an X to my existing project\". DESTRUCTIVE: discards any unsaved current state; auto-save will write the new template to disk shortly after. After applying, narrate what landed (groups, datasets) so the user knows what they got, then proceed with any follow-up edits the user requested. Available templates and their best fit:\n  blank: empty project, one default UART source. Use when the user wants to build everything themselves.\n  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the frame parser if your device frames differ.\n  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n  scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.\n  telemetry_udp: UDP listener on port 1234, CSV body parser, 5 generic value channels. Adapt port + parser to your protocol.\n  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure broker via mqtt.set* commands.\nPass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates.",
+        "description": "Replace the current project with a starter template -- the right first move when the user says \"set me up an X project\" rather than \"add an X to my existing project\". DESTRUCTIVE: discards any unsaved current state; auto-save will write the new template to disk shortly after. After applying, narrate what landed (groups, datasets) so the user knows what they got, then proceed with any follow-up edits the user requested. Available templates and their best fit:\n  blank: empty project, one default UART source. Use when the user wants to build everything themselves.\n  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the frame parser if your device frames differ.\n  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n  scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.\n  telemetry_udp: UDP listener on port 1234, CSV body parser, 5 generic value channels. Adapt port + parser to your protocol.\n  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure the broker via project.mqtt.subscriber.setConfig.\nPass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates.",
         "name": "project.template.apply",
         "properties": {
             "dryRun": {

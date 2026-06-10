@@ -26,6 +26,7 @@
 #include <QMutexLocker>
 
 #include "API/CommandRegistry.h"
+#include "API/Server.h"
 #include "AppInfo.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -318,6 +319,11 @@ API::MCP::MCPResponse API::MCPHandler::handleToolsCall(const MCP::MCPRequest& re
   if (!registry.hasCommand(name)) {
     return MCP::MCPResponse::makeError(
       request.id, MCP::ErrorCode::InvalidParams, QStringLiteral("Unknown tool: %1").arg(name));
+  }
+
+  if (!Server::instance().authorizeRemoteCommand(name)) {
+    return MCP::MCPResponse::makeError(
+      request.id, MCP::ErrorCode::InternalError, QStringLiteral("Device write denied by user"));
   }
 
   const auto response = registry.execute(name, QString(), arguments);

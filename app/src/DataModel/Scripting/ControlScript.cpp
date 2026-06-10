@@ -21,24 +21,41 @@
 
 #include "DataModel/Scripting/ControlScript.h"
 
+#include <QCoreApplication>
+#include <QDebug>
+
 #include "AppState.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "IO/ConnectionManager.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+static constexpr int kShutdownWaitSlices  = 50;
+static constexpr int kShutdownWaitSliceMs = 100;
 
 //--------------------------------------------------------------------------------------------------
 // Construction
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the worker on its own thread and tracks the connection lifecycle.
+ * @brief Builds the worker on its own thread and tracks the connection lifecycle. The worker
+ *        thread is joined on aboutToQuit, while the GUI loop can still drain the blocking
+ *        apiCall marshaller; the marshaller is parented to this singleton so it outlives the
+ *        worker thread.
  */
-DataModel::ControlScript::ControlScript() : m_ready(false), m_running(false), m_worker(nullptr)
+DataModel::ControlScript::ControlScript()
+  : m_ready(false), m_running(false), m_shutdown(false), m_worker(nullptr), m_marshaller(nullptr)
 {
-  m_worker = new ControlScriptWorker();
+  m_marshaller = new ControlApiMarshaller(this);
+  m_worker     = new ControlScriptWorker(m_marshaller);
   m_worker->moveToThread(&m_thread);
 
   connect(&m_thread, &QThread::finished, m_worker, &QObject::deleteLater);
   connect(m_worker, &ControlScriptWorker::scriptError, this, &ControlScript::onWorkerError);
+  connect(
+    QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &ControlScript::shutdown);
 
   m_thread.start();
 }
@@ -63,13 +80,44 @@ void DataModel::ControlScript::setupExternalConnections()
 }
 
 /**
- * @brief Stops the worker thread cleanly before destruction.
+ * @brief Joins the worker thread; normally a no-op because shutdown() already ran on
+ *        aboutToQuit, while the GUI event loop was still alive.
  */
 DataModel::ControlScript::~ControlScript()
 {
-  stopWorker();
+  shutdown();
+}
+
+/**
+ * @brief Stops the worker and joins its thread while the GUI thread can still drain the
+ *        blocking apiCall marshaller; a worker parked inside an apiCall dispatch is released
+ *        by sendPostedEvents() and then fails fast on the shutdown flag.
+ */
+void DataModel::ControlScript::shutdown()
+{
+  if (m_shutdown)
+    return;
+
+  m_shutdown = true;
+  ControlScriptWorker::requestShutdown();
+  QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
+
+  if (m_running) {
+    m_running = false;
+    Q_EMIT runningChanged();
+  }
+
   m_thread.quit();
-  m_thread.wait();
+  for (int i = 0; i < kShutdownWaitSlices; ++i) {
+    if (m_thread.wait(kShutdownWaitSliceMs))
+      break;
+
+    if (QCoreApplication::instance())
+      QCoreApplication::sendPostedEvents(m_marshaller);
+  }
+
+  if (m_thread.isRunning())
+    qWarning() << "[ControlScript] Worker thread did not stop within the shutdown budget";
 }
 
 /**
@@ -131,7 +179,7 @@ void DataModel::ControlScript::setCode(const QString& code)
  */
 bool DataModel::ControlScript::shouldRun() const
 {
-  if (!m_ready)
+  if (!m_ready || m_shutdown)
     return false;
 
   return IO::ConnectionManager::instance().isConnected()

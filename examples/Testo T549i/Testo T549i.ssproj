@@ -1,0 +1,194 @@
+{
+    "actions": [],
+    "controlScriptCode": "/**\n * Testo T549i BLE Control Script (handshake only)\n *\n * The BLE source, its FFF0 service, and the FFF2 notify characteristic are\n * configured in the project and wired by the driver before this runs, so\n * setup() only sends the vendor \"enable measurement\" PDUs to FFF1. Readings\n * then arrive on FFF2 and are decoded by the frame parser.\n */\n\nlet CMD_SENT = false;\nconst WRITE_UUID  = \"fff1\";\nconst ENABLE_CMDS = [\"5600030000000C69023E81\", \"200000000000077B\", \"110000000000035A\"];\n\nfunction cmdCfg() {\n  for (var i = 0; i < ENABLE_CMDS.length; ++i) {\n    var r = io.ble.writeCharacteristic(WRITE_UUID, ENABLE_CMDS[i], SerialStudio.Hex);\n    if (!r.ok) {\n      console.error(\"[Testo T549i] enable cmd \" + i + \" failed: \" + r.error);\n      return;\n    }\n    \n    delay(100);\n  }\n  \n  CMD_SENT = true;\n  console.log(\"[Testo T549i] Enable sequence sent; streaming.\");\n}\n\nfunction setup() {\n  cmdCfg();\n}\n\nfunction loop() {\n  if (!CMD_SENT)\n      cmdCfg();\n      \n  delay(1000);\n}\n",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Pressure",
+                    "transformCode": "function transform(value)\n  return math.max(0, value / 6894.757)\nend",
+                    "transformLanguage": 1,
+                    "uniqueId": 3,
+                    "units": "psi",
+                    "value": "",
+                    "widget": "meter",
+                    "widgetMax": 1000,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 0,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Battery Level",
+                    "uniqueId": 4,
+                    "units": "%",
+                    "value": "",
+                    "widget": "bar",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Testo T549i Pressure",
+            "uniqueId": 1,
+            "widget": "datagrid"
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 5,
+    "plotTimeRange": 10,
+    "pointCount": 100,
+    "schemaVersion": 3,
+    "sources": [
+        {
+            "busType": 2,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "characteristicIndex": -1,
+                "deviceIndex": -1,
+                "notifyCharacteristicUuid": "{0000fff2-0000-1000-8000-00805f9b34fb}",
+                "serviceUuid": "{0000fff0-0000-1000-8000-00805f9b34fb}"
+            },
+            "decoder": 3,
+            "decoderMethod": 3,
+            "frameDetection": 2,
+            "frameEnd": "",
+            "frameParserCode": "/**\n * Testo T549i BLE frame parser (DecoderMethod = Binary).\n *\n * With the Binary decoder, parse(frame) receives a 0-indexed Array of byte\n * values (0-255), one BLE notification per call. The probe prefixes each\n * IEEE-754 little-endian float with an ASCII field name; we scan for the name\n * and read the 4 bytes that follow it. Notifications without a marker (CRC\n * and status frames) just re-emit the held values, so every dataset updates\n * on a steady timeline.\n *\n * Output order matches dataset index 1,2,3: [bar, psi, battery%].\n */\n\nvar pressurePa  = 0;\nvar battery     = 0;\n\nfunction indexOfMarker(frame, marker) {\n  for (var i = 0; i + marker.length <= frame.length; ++i) {\n    var hit = true;\n    for (var j = 0; j < marker.length; ++j) {\n      if (frame[i + j] !== marker.charCodeAt(j)) {\n        hit = false;\n        break;\n      }\n    }\n    \n    if (hit)\n      return i + marker.length;\n  }\n  \n  return -1;\n}\n\nfunction floatLE(frame, at) {\n  var view = new DataView(new ArrayBuffer(4));\n  for (var i = 0; i < 4; ++i)\n    view.setUint8(i, frame[at + i] & 0xff);\n    \n  return view.getFloat32(0, true);\n}\n\nfunction parse(frame) {\n  var p = indexOfMarker(frame, \"DifferentialPressure\");\n  if (p !== -1 && p + 4 <= frame.length)\n    pressurePa = floatLE(frame, p);\n\n  var b = indexOfMarker(frame, \"BatteryLevel\");\n  if (b !== -1 && b + 4 <= frame.length)\n    battery = floatLE(frame, b);\n\n  return [pressurePa, battery];\n}\n",
+            "frameParserParams": {
+                "quoteChar": "",
+                "separator": ",",
+                "skipEmpty": false,
+                "trimFields": false
+            },
+            "frameParserTemplate": "delimited",
+            "frameStart": "",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
+    "title": "Testo T549i",
+    "widgetSettings": {
+        "11:0:2": {
+            "page": 0
+        },
+        "13:0:3": {
+            "page": 0
+        },
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 536,
+                "canvasWidth": 1195,
+                "geometries": [
+                    {
+                        "height": 536,
+                        "id": 2,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 597,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 268,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 599,
+                        "x": 596,
+                        "y": 0
+                    },
+                    {
+                        "height": 268,
+                        "id": 0,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 599,
+                        "x": 596,
+                        "y": 267
+                    }
+                ],
+                "userReordered": true,
+                "windowOrder": [
+                    2,
+                    1,
+                    0
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        }
+    },
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.2.7"
+}

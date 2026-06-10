@@ -360,6 +360,32 @@ static QString bleServiceName(const QBluetoothUuid& uuid)
 }
 
 /**
+ * @brief Parses a UUID string for GATT lookups. Accepts 16/32-bit shorthand ("FFF1",
+ *        "0xFFF1") by expanding it onto the Bluetooth base UUID, plus the full 128-bit
+ *        form with or without braces. QBluetoothUuid's own QString constructor rejects
+ *        the shorthand every script and doc example uses, so never call it directly.
+ */
+static QBluetoothUuid bleUuidFromString(const QString& uuid)
+{
+  QString text = uuid.trimmed();
+  if (text.startsWith(QLatin1String("0x"), Qt::CaseInsensitive))
+    text.remove(0, 2);
+
+  if (text.size() == 4 || text.size() == 8) {
+    bool ok           = false;
+    const quint32 hex = text.toUInt(&ok, 16);
+    if (ok) {
+      if (text.size() == 4)
+        return QBluetoothUuid(static_cast<quint16>(hex));
+
+      return QBluetoothUuid(hex);
+    }
+  }
+
+  return QBluetoothUuid(text);
+}
+
+/**
  * @brief Resolves a friendly display name for a discovered BLE characteristic.
  */
 static QString bleCharacteristicName(const QLowEnergyCharacteristic& characteristic)
@@ -407,9 +433,11 @@ QList<IO::Drivers::BluetoothLE*> IO::Drivers::BluetoothLE::s_instances;
 IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
   , m_deviceConnected(false)
+  , m_gattReady(false)
   , m_selectedCharacteristic(-1)
   , m_pendingServiceIndex(-1)
   , m_pendingCharacteristicIndex(-1)
+  , m_probeServiceIndex(-1)
   , m_service(nullptr)
   , m_controller(nullptr)
 {
@@ -443,12 +471,28 @@ IO::Drivers::BluetoothLE::~BluetoothLE()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the Bluetooth LE connection.
+ * @brief Closes the Bluetooth LE connection. The resolved service + notify UUIDs are
+ *        re-staged as pendings so the GATT configuration survives a disconnect. Controller
+ *        and service go through deleteLater(): close() can run inside the controller's own
+ *        disconnected emission, and deleting the sender mid-emission crashes the backend.
  */
 void IO::Drivers::BluetoothLE::close()
 {
   const bool wasConnected = m_deviceConnected;
   m_deviceConnected       = false;
+  m_gattReady             = false;
+  m_probeServiceIndex     = -1;
+
+  const QString liveServiceUuid = m_service ? m_service->serviceUuid().toString() : QString();
+  QString liveNotifyUuid;
+  if (m_selectedCharacteristic >= 0 && m_selectedCharacteristic < m_characteristics.count())
+    liveNotifyUuid = m_characteristics.at(m_selectedCharacteristic).uuid().toString();
+
+  if (!liveServiceUuid.isEmpty())
+    m_pendingServiceUuid = liveServiceUuid;
+
+  if (!liveNotifyUuid.isEmpty())
+    m_pendingNotifyUuid = liveNotifyUuid;
 
   m_serviceNames.clear();
   m_serviceUuids.clear();
@@ -457,16 +501,15 @@ void IO::Drivers::BluetoothLE::close()
   m_selectedCharacteristic = -1;
 
   if (m_service) {
-    disconnect(m_service);
-    delete m_service;
+    m_service->disconnect(this);
+    m_service->deleteLater();
     m_service = nullptr;
   }
 
   if (m_controller) {
-    disconnect(m_controller);
+    m_controller->disconnect(this);
     m_controller->disconnectFromDevice();
-
-    delete m_controller;
+    m_controller->deleteLater();
     m_controller = nullptr;
   }
 
@@ -492,11 +535,11 @@ void IO::Drivers::BluetoothLE::close()
 }
 
 /**
- * @brief Checks if the Bluetooth LE device is open (connected or connecting).
+ * @brief Open once the link is up and GATT (service + notify characteristic) is wired.
  */
 bool IO::Drivers::BluetoothLE::isOpen() const noexcept
 {
-  return m_deviceConnected || m_controller;
+  return m_deviceConnected && m_gattReady;
 }
 
 /**
@@ -551,7 +594,7 @@ qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
  */
 qint64 IO::Drivers::BluetoothLE::writeCharacteristic(const QString& uuid, const QByteArray& data)
 {
-  const QBluetoothUuid target(uuid);
+  const QBluetoothUuid target = bleUuidFromString(uuid);
   if (target.isNull()) {
     qWarning() << "BLE writeCharacteristic: invalid UUID" << uuid;
     return 0;
@@ -744,7 +787,56 @@ QString IO::Drivers::BluetoothLE::selectedServiceUuid() const
     if (inst != this && inst->m_deviceIndex == m_deviceIndex && inst->m_service)
       return inst->m_service->serviceUuid().toString();
 
-  return m_pendingServiceUuid;
+  if (!m_pendingServiceUuid.isEmpty())
+    return m_pendingServiceUuid;
+
+  for (auto* inst : std::as_const(s_instances))
+    if (inst != this && inst->m_deviceIndex == m_deviceIndex
+        && !inst->m_pendingServiceUuid.isEmpty())
+      return inst->m_pendingServiceUuid;
+
+  return {};
+}
+
+/**
+ * @brief Returns the UUID of the subscribed notify characteristic, or the pending one.
+ */
+QString IO::Drivers::BluetoothLE::selectedNotifyCharacteristicUuid() const
+{
+  if (m_selectedCharacteristic >= 0 && m_selectedCharacteristic < m_characteristics.count())
+    return m_characteristics.at(m_selectedCharacteristic).uuid().toString();
+
+  for (auto* inst : std::as_const(s_instances)) {
+    if (inst == this || inst->m_deviceIndex != m_deviceIndex)
+      continue;
+
+    const int idx = inst->m_selectedCharacteristic;
+    if (idx >= 0 && idx < inst->m_characteristics.count())
+      return inst->m_characteristics.at(idx).uuid().toString();
+  }
+
+  if (!m_pendingNotifyUuid.isEmpty())
+    return m_pendingNotifyUuid;
+
+  for (auto* inst : std::as_const(s_instances))
+    if (inst != this && inst->m_deviceIndex == m_deviceIndex
+        && !inst->m_pendingNotifyUuid.isEmpty())
+      return inst->m_pendingNotifyUuid;
+
+  return {};
+}
+
+/**
+ * @brief Marks GATT ready once per connection and announces it on both wiring paths.
+ */
+void IO::Drivers::BluetoothLE::announceGattReady()
+{
+  if (m_gattReady)
+    return;
+
+  m_gattReady = true;
+  Q_EMIT gattReady();
+  Q_EMIT configurationChanged();
 }
 
 /**
@@ -837,7 +929,7 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
   }
 
   if (m_service) {
-    disconnect(m_service);
+    m_service->disconnect(this);
     m_service->deleteLater();
     m_service = nullptr;
   }
@@ -934,7 +1026,7 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
  */
 bool IO::Drivers::BluetoothLE::selectServiceByUuid(const QString& uuid)
 {
-  const QBluetoothUuid target(uuid);
+  const QBluetoothUuid target = bleUuidFromString(uuid);
   if (target.isNull())
     return false;
 
@@ -953,7 +1045,7 @@ bool IO::Drivers::BluetoothLE::selectServiceByUuid(const QString& uuid)
  */
 bool IO::Drivers::BluetoothLE::setNotifyCharacteristicByUuid(const QString& uuid)
 {
-  const QBluetoothUuid target(uuid);
+  const QBluetoothUuid target = bleUuidFromString(uuid);
   if (target.isNull())
     return false;
 
@@ -1001,10 +1093,28 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
     }
   }
 
-  if (m_pendingCharacteristicIndex > 0) {
+  if (!m_pendingNotifyUuid.isEmpty()) {
+    const bool found = setNotifyCharacteristicByUuid(m_pendingNotifyUuid);
+    if (!found && m_probeServiceIndex >= 0 && m_probeServiceIndex + 1 < m_serviceUuids.count()) {
+      ++m_probeServiceIndex;
+      selectService(m_probeServiceIndex + 1);
+      return;
+    }
+
+    if (found) {
+      m_pendingNotifyUuid.clear();
+      m_pendingCharacteristicIndex = -1;
+    }
+
+    m_probeServiceIndex = -1;
+  }
+
+  else if (m_pendingCharacteristicIndex > 0) {
     setCharacteristicIndex(m_pendingCharacteristicIndex);
     m_pendingCharacteristicIndex = -1;
   }
+
+  announceGattReady();
 }
 
 /**
@@ -1032,31 +1142,42 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
     }
   }
 
+  bool serviceSelected = false;
   if (m_pendingServiceIndex > 0) {
     selectService(m_pendingServiceIndex);
     m_pendingServiceIndex = -1;
+    serviceSelected       = true;
   }
 
-  else if (!m_pendingServiceUuid.isEmpty()) {
-    int idx = m_serviceUuids.indexOf(m_pendingServiceUuid);
-    if (idx >= 0) {
-      selectService(idx + 1);
-      m_pendingServiceUuid.clear();
-    }
+  else if (!m_pendingServiceUuid.isEmpty() && selectServiceByUuid(m_pendingServiceUuid)) {
+    m_pendingServiceUuid.clear();
+    serviceSelected = true;
   }
 
-  for (auto* inst : std::as_const(s_instances)) {
-    if (inst == this || inst->m_deviceIndex != m_deviceIndex)
-      continue;
+  if (!serviceSelected) {
+    for (auto* inst : std::as_const(s_instances)) {
+      if (inst == this || inst->m_deviceIndex != m_deviceIndex)
+        continue;
 
-    if (!inst->m_pendingServiceUuid.isEmpty()) {
-      int idx = m_serviceUuids.indexOf(inst->m_pendingServiceUuid);
-      if (idx >= 0) {
-        selectService(idx + 1);
+      if (inst->m_pendingServiceUuid.isEmpty())
+        continue;
+
+      if (selectServiceByUuid(inst->m_pendingServiceUuid)) {
         inst->m_pendingServiceUuid.clear();
+        serviceSelected = true;
+        break;
       }
     }
   }
+
+  if (!serviceSelected && !m_pendingNotifyUuid.isEmpty() && !m_serviceUuids.isEmpty()) {
+    m_probeServiceIndex = 0;
+    selectService(1);
+    serviceSelected = true;
+  }
+
+  if (!serviceSelected)
+    announceGattReady();
 }
 
 /**
@@ -1329,22 +1450,18 @@ QList<IO::DriverProperty> IO::Drivers::BluetoothLE::driverProperties() const
   svc.value = selectedServiceUuid();
   props.append(svc);
 
-  int charIdx = m_selectedCharacteristic;
-  if (charIdx < 0) {
-    for (auto* inst : std::as_const(s_instances)) {
-      if (inst != this && inst->m_deviceIndex == m_deviceIndex
-          && inst->m_selectedCharacteristic >= 0) {
-        charIdx = inst->m_selectedCharacteristic;
-        break;
-      }
-    }
-  }
+  IO::DriverProperty notifyUuid;
+  notifyUuid.key   = QStringLiteral("notifyCharacteristicUuid");
+  notifyUuid.label = tr("Notify Characteristic");
+  notifyUuid.type  = IO::DriverProperty::Text;
+  notifyUuid.value = selectedNotifyCharacteristicUuid();
+  props.append(notifyUuid);
 
   IO::DriverProperty ch;
   ch.key     = QStringLiteral("characteristicIndex");
   ch.label   = tr("Characteristic");
   ch.type    = IO::DriverProperty::ComboBox;
-  ch.value   = charIdx;
+  ch.value   = characteristicIndex() - 1;
   ch.options = m_characteristicNames;
   props.append(ch);
 
@@ -1359,13 +1476,20 @@ void IO::Drivers::BluetoothLE::setDriverProperty(const QString& key, const QVari
   if (key == QLatin1String("deviceIndex")) {
     m_deviceIndex = value.toInt();
     Q_EMIT deviceIndexChanged();
+    return;
   }
 
-  else if (key == QLatin1String("serviceUuid")) {
+  if (key == QLatin1String("serviceUuid")) {
     m_pendingServiceUuid = value.toString();
+    return;
   }
 
-  else if (key == QLatin1String("characteristicIndex")) {
+  if (key == QLatin1String("notifyCharacteristicUuid")) {
+    m_pendingNotifyUuid = value.toString();
+    return;
+  }
+
+  if (key == QLatin1String("characteristicIndex")) {
     m_selectedCharacteristic     = value.toInt();
     m_pendingCharacteristicIndex = value.toInt() + 1;
     Q_EMIT characteristicIndexChanged();

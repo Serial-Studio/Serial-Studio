@@ -47,20 +47,20 @@ UI::TaskbarModel::TaskbarModel(QObject* parent) : QStandardItemModel(parent) {}
  */
 QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
 {
-  QHash<int, QByteArray> names;
-
 #define BAL(x) QByteArrayLiteral(x)
-  names.insert(GroupIdRole, BAL("groupId"));
-  names.insert(IsGroupRole, BAL("isGroup"));
-  names.insert(WindowIdRole, BAL("windowId"));
-  names.insert(GroupNameRole, BAL("groupName"));
-  names.insert(WidgetTypeRole, BAL("widgetType"));
-  names.insert(WidgetNameRole, BAL("widgetName"));
-  names.insert(WidgetIconRole, BAL("widgetIcon"));
-  names.insert(WindowStateRole, BAL("windowState"));
+  static const QHash<int, QByteArray> kNames = {
+    {    GroupIdRole,     BAL("groupId")},
+    {    IsGroupRole,     BAL("isGroup")},
+    {   WindowIdRole,    BAL("windowId")},
+    {  GroupNameRole,   BAL("groupName")},
+    { WidgetTypeRole,  BAL("widgetType")},
+    { WidgetNameRole,  BAL("widgetName")},
+    { WidgetIconRole,  BAL("widgetIcon")},
+    {WindowStateRole, BAL("windowState")},
+  };
 #undef BAL
 
-  return names;
+  return kNames;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -935,8 +935,6 @@ void UI::Taskbar::buildOverviewGroupItem(QStandardItem* groupItem,
   groupItem->setData(mainWindowId, TaskbarModel::WindowIdRole);
   groupItem->setData(!alreadyRegistered, TaskbarModel::IsGroupRole);
   groupItem->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
-  if (!alreadyRegistered)
-    groupItem->setData(true, TaskbarModel::OverviewRole);
 }
 
 /**
@@ -1022,14 +1020,12 @@ void UI::Taskbar::appendGroupChildItem(QStandardItem* groupItem,
   if (SerialStudio::isGroupWidget(widgetType)) {
     const auto& dbGroup = db->getGroupWidget(widgetType, relativeIndex);
     child->setData(dbGroup.title, TaskbarModel::WidgetNameRole);
-    child->setData(false, TaskbarModel::OverviewRole);
     mapWidgetToWindow(registry.widgetIdByTypeAndIndex(widgetType, relativeIndex), windowId);
   }
 
   else if (SerialStudio::isDatasetWidget(widgetType)) {
     const auto& dbDataset = db->getDatasetWidget(widgetType, relativeIndex);
     child->setData(dbDataset.title, TaskbarModel::WidgetNameRole);
-    child->setData(false, TaskbarModel::OverviewRole);
     mapWidgetToWindow(registry.widgetIdByTypeAndIndex(widgetType, relativeIndex), windowId);
   }
 
@@ -1260,7 +1256,6 @@ void UI::Taskbar::onTerminalToggled()
   groupItem->setData(icon, TaskbarModel::WidgetIconRole);
   groupItem->setData(termWindowId, TaskbarModel::WindowIdRole);
   groupItem->setData(true, TaskbarModel::IsGroupRole);
-  groupItem->setData(true, TaskbarModel::OverviewRole);
   groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
   m_fullModel->insertRow(0, groupItem);
 
@@ -1359,7 +1354,6 @@ void UI::Taskbar::onNotificationLogToggled()
   groupItem->setData(icon, TaskbarModel::WidgetIconRole);
   groupItem->setData(logWindowId, TaskbarModel::WindowIdRole);
   groupItem->setData(true, TaskbarModel::IsGroupRole);
-  groupItem->setData(true, TaskbarModel::OverviewRole);
   groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
 
   int insertRow             = 0;
@@ -1437,7 +1431,6 @@ void UI::Taskbar::onClockToggled()
   groupItem->setData(icon, TaskbarModel::WidgetIconRole);
   groupItem->setData(clockWindowId, TaskbarModel::WindowIdRole);
   groupItem->setData(true, TaskbarModel::IsGroupRole);
-  groupItem->setData(true, TaskbarModel::OverviewRole);
   groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
 
   int insertRow = 0;
@@ -1522,7 +1515,6 @@ void UI::Taskbar::onStopwatchToggled()
   groupItem->setData(icon, TaskbarModel::WidgetIconRole);
   groupItem->setData(swWindowId, TaskbarModel::WindowIdRole);
   groupItem->setData(true, TaskbarModel::IsGroupRole);
-  groupItem->setData(true, TaskbarModel::OverviewRole);
   groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
 
   int insertRow = 0;

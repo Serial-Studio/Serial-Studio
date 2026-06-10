@@ -2084,6 +2084,11 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& requestedName,
     QJsonObject reply;
     reply[QStringLiteral("ok")]    = false;
     reply[QStringLiteral("error")] = QStringLiteral("args_validation_failed");
+    reply[QStringLiteral("repair")] =
+      QStringLiteral("The arguments object failed structural validation (too deeply nested, "
+                     "too many array items, or too large). Call meta.describeCommand{name: "
+                     "\"%1\"} and rebuild a minimal arguments object that matches the schema.")
+        .arg(name);
     return reply;
   }
 

@@ -23,7 +23,6 @@
 #include "UI/Widgets/Waterfall.h"
 
 #include <algorithm>
-#include <cstring>
 #include <QCursor>
 #include <QFontMetrics>
 #include <QHoverEvent>
@@ -208,6 +207,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_historySize(kDefaultHistory)
   , m_colorMap(Turbo)
   , m_writeRow(0)
+  , m_topRow(0)
   , m_filledOnce(false)
   , m_axisVisible(true)
   , m_colorbarVisible(true)
@@ -502,6 +502,7 @@ void Widgets::Waterfall::setMaxDb(const double value)
  */
 void Widgets::Waterfall::clearHistory()
 {
+  m_topRow     = 0;
   m_writeRow   = 0;
   m_filledOnce = false;
   if (!m_image.isNull())
@@ -562,33 +563,30 @@ void Widgets::Waterfall::rebuildHistoryImage()
   const int height = qMax(1, m_historySize);
   m_image          = QImage(width, height, QImage::Format_RGB32);
   m_image.fill(sampleColorMap(m_colorMap, 0.0));
+  m_topRow     = 0;
   m_writeRow   = 0;
   m_filledOnce = false;
 }
 
 /**
- * @brief Writes a new spectrum row at the top of the image, scrolling down.
+ * @brief Writes a new spectrum row into the ring: the newest row's physical position is
+ *        m_topRow and paint() recomposes the logical order, so a row insert costs O(width)
+ *        instead of the old O(width x height) full-image memmove.
  */
 void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
 {
   if (m_image.isNull() || bins <= 0)
     return;
 
-  m_image.detach();
-
   const int imageWidth  = m_image.width();
   const int imageHeight = m_image.height();
-  if (imageHeight > 1) {
-    const qsizetype bpl = m_image.bytesPerLine();
-    uchar* base         = m_image.bits();
-    std::memmove(base + bpl, base, static_cast<size_t>(bpl) * (imageHeight - 1));
-  }
+  m_topRow              = (m_topRow + imageHeight - 1) % imageHeight;
 
   const float minDb      = static_cast<float>(m_minDb);
   const float maxDb      = static_cast<float>(m_maxDb);
   const float invDbRange = 1.0f / qMax(1e-6f, maxDb - minDb);
   const int writableBins = qMin(bins, imageWidth);
-  QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(0));
+  QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(m_topRow));
 
   for (int x = 0; x < writableBins; ++x) {
     const float v  = (dbValues[x] - minDb) * invDbRange;
@@ -611,7 +609,8 @@ void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
 }
 
 /**
- * @brief Writes a spectrum row at a specific image row without scrolling (Campbell-mode entry).
+ * @brief Writes a spectrum row at a specific logical row without scrolling (Campbell-mode
+ *        entry); the logical row maps through the ring origin so mode toggles stay coherent.
  */
 void Widgets::Waterfall::writeRowAt(int row, const float* dbValues, int bins)
 {
@@ -622,14 +621,13 @@ void Widgets::Waterfall::writeRowAt(int row, const float* dbValues, int bins)
   if (row < 0 || row >= imageHeight)
     return;
 
-  m_image.detach();
-
   const int imageWidth   = m_image.width();
+  const int physicalRow  = (row + m_topRow) % imageHeight;
   const float minDb      = static_cast<float>(m_minDb);
   const float maxDb      = static_cast<float>(m_maxDb);
   const float invDbRange = 1.0f / qMax(1e-6f, maxDb - minDb);
   const int writableBins = qMin(bins, imageWidth);
-  QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(row));
+  QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(physicalRow));
 
   for (int x = 0; x < writableBins; ++x) {
     const float v  = (dbValues[x] - minDb) * invDbRange;
@@ -776,7 +774,7 @@ void Widgets::Waterfall::paint(QPainter* painter)
   if (!m_image.isNull()) {
     painter->save();
     painter->setClipRect(plotRect);
-    painter->drawImage(plotRect, m_image, computeSourceRect());
+    drawHistoryImage(painter, plotRect);
     painter->restore();
   }
 
@@ -869,6 +867,46 @@ QRectF Widgets::Waterfall::computePlotRect(const QFontMetrics& fm) const
                 topMargin + 0.5,
                 qMax(0.0, width() - leftMargin - rightMargin - 1),
                 qMax(0.0, height() - topMargin - bottomMargin - 1));
+}
+
+/**
+ * @brief Draws the ring-buffered history: the visible logical rows map to at most two
+ *        physical slices (wrap at the ring origin), each drawn into its share of plotRect.
+ */
+void Widgets::Waterfall::drawHistoryImage(QPainter* painter, const QRectF& plotRect) const
+{
+  Q_ASSERT(painter);
+  Q_ASSERT(!m_image.isNull());
+
+  const QRectF src = computeSourceRect();
+  if (src.isEmpty())
+    return;
+
+  const double h = m_image.height();
+  if (m_topRow == 0) {
+    painter->drawImage(plotRect, m_image, src);
+    return;
+  }
+
+  const double wrapY = h - m_topRow;
+  if (src.bottom() <= wrapY) {
+    painter->drawImage(plotRect, m_image, src.translated(0.0, m_topRow));
+    return;
+  }
+
+  if (src.top() >= wrapY) {
+    painter->drawImage(plotRect, m_image, src.translated(0.0, m_topRow - h));
+    return;
+  }
+
+  const double fracTop = (wrapY - src.top()) / src.height();
+  const double splitY  = plotRect.top() + plotRect.height() * fracTop;
+  const QRectF dstTop(plotRect.left(), plotRect.top(), plotRect.width(), splitY - plotRect.top());
+  const QRectF dstBottom(plotRect.left(), splitY, plotRect.width(), plotRect.bottom() - splitY);
+  const QRectF srcTop(src.left(), src.top() + m_topRow, src.width(), wrapY - src.top());
+  const QRectF srcBottom(src.left(), 0.0, src.width(), src.bottom() - wrapY);
+  painter->drawImage(dstTop, m_image, srcTop);
+  painter->drawImage(dstBottom, m_image, srcBottom);
 }
 
 /**

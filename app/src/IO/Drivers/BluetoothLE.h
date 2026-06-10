@@ -70,6 +70,7 @@ class BluetoothLE : public HAL_Driver {
   // clang-format on
 
 signals:
+  void gattReady();
   void devicesChanged();
   void servicesChanged();
   void deviceIndexChanged();
@@ -115,6 +116,7 @@ public:
   [[nodiscard]] QStringList characteristicNames() const;
 
   [[nodiscard]] QString selectedServiceUuid() const;
+  [[nodiscard]] QString selectedNotifyCharacteristicUuid() const;
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
@@ -133,6 +135,7 @@ private slots:
   void onCharacteristicChanged(const QLowEnergyCharacteristic& info, const QByteArray& value);
 
 private:
+  void announceGattReady();
   static void initializeSharedState();
   static void onDeviceDiscovered(const QBluetoothDeviceInfo& device);
   static void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
@@ -141,10 +144,13 @@ private:
 private:
   int m_deviceIndex;
   bool m_deviceConnected;
+  bool m_gattReady;
   int m_selectedCharacteristic;
   int m_pendingServiceIndex;
   int m_pendingCharacteristicIndex;
+  int m_probeServiceIndex;
   QString m_pendingServiceUuid;
+  QString m_pendingNotifyUuid;
   QJsonObject m_pendingIdentifier;
 
   QLowEnergyService* m_service;

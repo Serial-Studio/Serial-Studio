@@ -47,16 +47,17 @@ public:
   void closeResources() override;
   [[nodiscard]] bool isResourceOpen() const override;
 
+public slots:
+  void setTemplateFrame(const DataModel::Frame& frame);
+
 protected:
   void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
 
 private:
   void createCsvFile(const DataModel::Frame& frame);
 
-public:
-  DataModel::Frame m_templateFrame;
-
 private:
+  DataModel::Frame m_templateFrame;
   QFile m_csvFile;
   QTextStream m_textStream;
   DataModel::ExportSchema m_schema;

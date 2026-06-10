@@ -169,7 +169,9 @@ void Sessions::DatabaseManager::initWorker()
 }
 
 /**
- * @brief Synchronously closes the worker DB and joins the worker thread.
+ * @brief Synchronously closes the worker DB and joins the worker thread. If the join times
+ *        out the worker and thread are leaked on purpose: deleting objects a live thread is
+ *        still executing trades a one-time leak at shutdown for a use-after-free.
  */
 void Sessions::DatabaseManager::shutdown()
 {
@@ -179,10 +181,19 @@ void Sessions::DatabaseManager::shutdown()
   if (m_worker)
     m_worker->requestCancel();
 
+  bool joined = true;
   if (QCoreApplication::instance() && m_thread->isRunning() && m_worker) {
     QMetaObject::invokeMethod(m_worker, "closeDatabase", Qt::BlockingQueuedConnection);
     m_thread->quit();
-    m_thread->wait(5000);
+    joined = m_thread->wait(5000);
+  }
+
+  if (!joined) {
+    qWarning() << "[Sessions] Database worker did not stop within 5 s; leaking the worker "
+                  "thread to avoid tearing down objects it still uses";
+    m_worker = nullptr;
+    m_thread = nullptr;
+    return;
   }
 
   delete m_worker;

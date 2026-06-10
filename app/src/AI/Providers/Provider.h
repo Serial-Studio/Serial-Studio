@@ -44,21 +44,31 @@ class Reply : public QObject {
   Q_OBJECT
 
 public:
-  explicit Reply(QObject* parent = nullptr) : QObject(parent) {}
+  explicit Reply(QObject* parent = nullptr) : QObject(parent), m_transientError(false) {}
 
   ~Reply() override = default;
 
   virtual void abort() = 0;
 
+  [[nodiscard]] bool transientError() const noexcept { return m_transientError; }
+
 signals:
   void partialText(const QString& chunk);
   void partialThinking(const QString& chunk);
+  void thinkingBlockFinished(const QJsonObject& block);
   void toolCallRequested(const QString& callId,
                          const QString& toolName,
-                         const QJsonObject& arguments);
+                         const QJsonObject& arguments,
+                         const QJsonObject& extras = QJsonObject());
   void cacheStatsAvailable(int readTokens, int createdTokens);
   void finished();
   void errorOccurred(const QString& message);
+
+protected:
+  void setTransientError(bool transient) noexcept { m_transientError = transient; }
+
+private:
+  bool m_transientError;
 };
 
 /**

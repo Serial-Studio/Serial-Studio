@@ -78,7 +78,8 @@ double Widgets::Gyroscope::pitch() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reads the three gyro axis inputs into yaw/roll/pitch slots.
+ * @brief Reads the three gyro axis inputs into yaw/roll/pitch slots. Non-finite samples leave
+ *        their axis flag unset so a NaN can never poison the EMA state.
  */
 void Widgets::Gyroscope::readAxisInputs(const DataModel::Group& gyro,
                                         double& yawInput,
@@ -102,6 +103,9 @@ void Widgets::Gyroscope::readAxisInputs(const DataModel::Group& gyro,
     const auto& dataset = gyro.datasets[i];
     const auto widget   = dataset.widget.trimmed().toLower();
     const auto value    = dataset.numericValue;
+    if (!std::isfinite(value))
+      continue;
+
     if (isYaw(widget)) {
       yawInput = value;
       hasYaw   = true;

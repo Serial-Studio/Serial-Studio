@@ -356,6 +356,25 @@ IO::Drivers::BluetoothLE* IO::ConnectionManager::bluetoothLE() const noexcept
   return m_bluetoothLEUi.get();
 }
 
+/**
+ * @brief Returns the BLE driver that owns the live connection, or the UI-config instance when
+ *        none is open. Project mode connects through a per-source driver, so GATT operations
+ *        (writes, service/characteristic selection) must resolve this instance, not the UI one.
+ */
+IO::Drivers::BluetoothLE* IO::ConnectionManager::connectedBluetoothLE() const noexcept
+{
+  for (const auto& [deviceId, dm] : m_devices) {
+    if (!dm)
+      continue;
+
+    auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(dm->driver());
+    if (ble && ble->isOpen())
+      return ble;
+  }
+
+  return m_bluetoothLEUi.get();
+}
+
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Returns the UI-config Audio driver instance.
@@ -971,7 +990,7 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
       auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(driver.get());
       if (ble)
         connect(ble,
-                &IO::Drivers::BluetoothLE::deviceConnectedChanged,
+                &IO::Drivers::BluetoothLE::gattReady,
                 this,
                 &IO::ConnectionManager::connectedChanged);
     }

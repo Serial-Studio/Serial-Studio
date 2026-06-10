@@ -98,6 +98,10 @@ The BLE driver wraps Qt's `QLowEnergyController` and `QLowEnergyService`. The se
 
 From that point on, every notification's payload bytes become a frame, exactly as if they had arrived over UART.
 
+The device, service, and notify characteristic are saved with the project (the device by name/address, the service and characteristic by UUID, so they survive a firmware update that reorders the GATT table). On the next connection Serial Studio reselects them automatically after discovery, and only then reports the source as connected, so anything that runs on connect (a [Control Script](Control-Script.md), an auto-execute action) sees a fully wired GATT. A control script should therefore handle only the write handshake, not service or characteristic selection.
+
+If a project knows only the notify characteristic (the saved service UUID is empty, as in projects saved by older versions), Serial Studio probes the discovered services one by one until it finds the one containing that characteristic, then wires it exactly as if the service had been saved. The connection is reported only after the probe finishes, so connect-time automation still sees a ready GATT.
+
 ### Discovery is shared across instances
 
 Serial Studio caches BLE discovery state in static storage shared across all instances of the driver. The consequences:

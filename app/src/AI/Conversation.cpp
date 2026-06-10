@@ -47,6 +47,7 @@ AI::Conversation::Conversation(QObject* parent)
   , m_thinkingIsSynthetic(false)
   , m_outstandingToolResults(0)
   , m_toolCallCount(0)
+  , m_retryCount(0)
   , m_cancelled(false)
   , m_summaryForced(false)
   , m_busy(false)
@@ -177,6 +178,7 @@ void AI::Conversation::start(const QString& userText)
   m_cancelled     = false;
   m_summaryForced = false;
   m_toolCallCount = 0;
+  m_retryCount    = 0;
   m_currentStopReason.clear();
   setLastError(QString());
 
@@ -204,6 +206,7 @@ void AI::Conversation::cancel()
     setAwaitingConfirmation(false);
   }
 
+  m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
   m_outstandingToolResults  = 0;
@@ -301,6 +304,7 @@ void AI::Conversation::clear()
   m_uiMessages.clear();
   m_assistantIndex = -1;
   m_assistantText.clear();
+  m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
   m_outstandingToolResults  = 0;
@@ -352,6 +356,20 @@ void AI::Conversation::onPartialThinking(const QString& chunk)
   m_streamDirty = true;
   if (!m_streamFlushTimer->isActive())
     m_streamFlushTimer->start();
+}
+
+/**
+ * @brief Stores a completed provider thinking block (text + signature) tagged with the
+ *        model that produced it, so the next request can echo it back verbatim.
+ */
+void AI::Conversation::onThinkingBlockFinished(const QJsonObject& block)
+{
+  if (m_cancelled || !m_provider)
+    return;
+
+  auto tagged                      = block;
+  tagged[QStringLiteral("_model")] = m_provider->currentModel();
+  m_pendingThinkingBlocks.append(tagged);
 }
 
 /**
@@ -422,11 +440,33 @@ void AI::Conversation::flushPendingStreamUpdate()
 }
 
 /**
+ * @brief Builds the history tool_use block, folding provider extras (underscore-prefixed
+ *        passthrough fields such as Gemini thought signatures) into it.
+ */
+static QJsonObject makeToolUseBlock(const QString& callId,
+                                    const QString& name,
+                                    const QJsonObject& arguments,
+                                    const QJsonObject& extras)
+{
+  QJsonObject block;
+  block[QStringLiteral("type")]  = QStringLiteral("tool_use");
+  block[QStringLiteral("id")]    = callId;
+  block[QStringLiteral("name")]  = name;
+  block[QStringLiteral("input")] = arguments;
+  for (auto it = extras.constBegin(); it != extras.constEnd(); ++it)
+    if (it.key().startsWith(QLatin1Char('_')))
+      block[it.key()] = it.value();
+
+  return block;
+}
+
+/**
  * @brief Records a tool-use request and dispatches per safety tag.
  */
 void AI::Conversation::onToolCallRequested(const QString& callId,
                                            const QString& requestedName,
-                                           const QJsonObject& arguments)
+                                           const QJsonObject& arguments,
+                                           const QJsonObject& extras)
 {
   if (m_cancelled)
     return;
@@ -437,12 +477,7 @@ void AI::Conversation::onToolCallRequested(const QString& callId,
     qCWarning(serialStudioAI) << "Tool-call budget exceeded; forcing summary";
     m_summaryForced = true;
 
-    QJsonObject toolUseBlock;
-    toolUseBlock[QStringLiteral("type")]  = QStringLiteral("tool_use");
-    toolUseBlock[QStringLiteral("id")]    = callId;
-    toolUseBlock[QStringLiteral("name")]  = name;
-    toolUseBlock[QStringLiteral("input")] = arguments;
-    m_pendingToolUseBlocks.append(toolUseBlock);
+    m_pendingToolUseBlocks.append(makeToolUseBlock(callId, name, arguments, extras));
 
     QJsonObject denial;
     denial[QStringLiteral("error")] =
@@ -452,12 +487,7 @@ void AI::Conversation::onToolCallRequested(const QString& callId,
     return;
   }
 
-  QJsonObject toolUseBlock;
-  toolUseBlock[QStringLiteral("type")]  = QStringLiteral("tool_use");
-  toolUseBlock[QStringLiteral("id")]    = callId;
-  toolUseBlock[QStringLiteral("name")]  = name;
-  toolUseBlock[QStringLiteral("input")] = arguments;
-  m_pendingToolUseBlocks.append(toolUseBlock);
+  m_pendingToolUseBlocks.append(makeToolUseBlock(callId, name, arguments, extras));
 
   ++m_outstandingToolResults;
 
@@ -696,7 +726,7 @@ static QString skillForCommand(const QString& commandName)
       || commandName.startsWith(QStringLiteral("project.dataTable.")))
     return QStringLiteral("transforms");
 
-  if (commandName.startsWith(QStringLiteral("mqtt.")))
+  if (commandName.startsWith(QStringLiteral("project.mqtt.")))
     return QStringLiteral("mqtt");
 
   if (commandName.startsWith(QStringLiteral("io.canbus."))
@@ -865,6 +895,9 @@ void AI::Conversation::onReplyFinished()
 
   if (!m_assistantText.isEmpty() || !m_pendingToolUseBlocks.isEmpty()) {
     QJsonArray content;
+    for (const auto& tb : m_pendingThinkingBlocks)
+      content.append(tb);
+
     if (!m_assistantText.isEmpty()) {
       QJsonObject text;
       text[QStringLiteral("type")] = QStringLiteral("text");
@@ -901,10 +934,12 @@ void AI::Conversation::onReplyFinished()
     Q_EMIT messagesChanged();
   }
 
-  m_pendingToolUseBlocks = QJsonArray();
+  m_pendingThinkingBlocks = QJsonArray();
+  m_pendingToolUseBlocks  = QJsonArray();
   m_assistantText.clear();
   m_assistantThinking.clear();
   m_assistantIndex = -1;
+  m_retryCount     = 0;
 
   teardownReply();
 
@@ -923,11 +958,19 @@ void AI::Conversation::onReplyFinished()
 }
 
 /**
- * @brief Records a network or stream error and ends the turn.
+ * @brief Records a network or stream error and ends the turn. Transient failures (429,
+ *        5xx, timeouts) retry with backoff when nothing has streamed yet, instead of
+ *        throwing away the whole turn.
  */
 void AI::Conversation::onReplyError(const QString& message)
 {
   qCWarning(serialStudioAI) << "Reply error:" << message;
+
+  if (shouldRetryAfterError()) {
+    scheduleTransientRetry(message);
+    return;
+  }
+
   setLastError(message);
   Q_EMIT errorOccurred(message);
 
@@ -951,11 +994,58 @@ void AI::Conversation::onReplyError(const QString& message)
   m_assistantText.clear();
   m_assistantThinking.clear();
   m_assistantIndex          = -1;
+  m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
   m_outstandingToolResults  = 0;
   teardownReply();
   setBusy(false);
+}
+
+/**
+ * @brief Returns true when the failed request is safe to retry: transient cause, retry
+ *        budget left, not cancelled, and no partial output recorded yet.
+ */
+bool AI::Conversation::shouldRetryAfterError() const
+{
+  if (m_cancelled || m_retryCount >= kMaxTransientRetries)
+    return false;
+
+  if (!m_reply || !m_reply->transientError())
+    return false;
+
+  return m_assistantText.isEmpty() && m_pendingToolUseBlocks.isEmpty()
+      && m_pendingThinkingBlocks.isEmpty();
+}
+
+/**
+ * @brief Drops the empty streaming placeholder row and re-issues the request after an
+ *        exponential backoff (1.5s, 3s).
+ */
+void AI::Conversation::scheduleTransientRetry(const QString& message)
+{
+  ++m_retryCount;
+  qCInfo(serialStudioAI) << "Transient provider error, retry" << m_retryCount << "of"
+                         << kMaxTransientRetries << ":" << message;
+
+  m_streamFlushTimer->stop();
+  m_streamDirty = false;
+  teardownReply();
+
+  if (m_assistantIndex >= 0 && m_assistantIndex < m_uiMessages.size()) {
+    m_uiMessages.removeAt(m_assistantIndex);
+    m_assistantIndex = -1;
+    Q_EMIT messagesChanged();
+  }
+
+  m_assistantText.clear();
+  m_assistantThinking.clear();
+
+  const int delayMs = 1500 * (1 << (m_retryCount - 1));
+  QTimer::singleShot(delayMs, this, [this]() {
+    if (!m_cancelled && m_busy)
+      issueRequest();
+  });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -997,6 +1087,7 @@ void AI::Conversation::issueRequest()
 
   connect(m_reply, &Reply::partialText, this, &Conversation::onPartialText);
   connect(m_reply, &Reply::partialThinking, this, &Conversation::onPartialThinking);
+  connect(m_reply, &Reply::thinkingBlockFinished, this, &Conversation::onThinkingBlockFinished);
   connect(m_reply, &Reply::toolCallRequested, this, &Conversation::onToolCallRequested);
   connect(m_reply, &Reply::finished, this, &Conversation::onReplyFinished);
   connect(m_reply, &Reply::errorOccurred, this, &Conversation::onReplyError);
@@ -1167,6 +1258,21 @@ bool AI::Conversation::reconcileHistoryToolPairsAt(int& i)
 }
 
 /**
+ * @brief Replaces an aged tool_result's payload (text and Gemini structured form) with a
+ *        compact elision marker.
+ */
+static QJsonObject elideAgedToolResult(QJsonObject block)
+{
+  block[QStringLiteral("content")] = QStringLiteral("[result elided -- ask again if needed]");
+  if (block.contains(QStringLiteral("_gemini_response"))) {
+    QJsonObject elided;
+    elided[QStringLiteral("elided")]          = QStringLiteral("ask again if needed");
+    block[QStringLiteral("_gemini_response")] = elided;
+  }
+  return block;
+}
+
+/**
  * @brief Stubs older tool_result blocks; keeps the kKeepRecentUserTurns most recent verbatim.
  */
 void AI::Conversation::ageHistoryToolResults()
@@ -1210,8 +1316,8 @@ void AI::Conversation::ageHistoryToolResults()
       if (!isFsContent
           && block.value(QStringLiteral("type")).toString() == QStringLiteral("tool_result")
           && block.value(QStringLiteral("content")).toString().size() > 64) {
-        block[QStringLiteral("content")] = QStringLiteral("[result elided -- ask again if needed]");
-        mutated                          = true;
+        block   = elideAgedToolResult(block);
+        mutated = true;
       }
       newBlocks.append(block);
     }
@@ -1611,6 +1717,32 @@ void AI::Conversation::runToolCall(const QString& callId,
 }
 
 /**
+ * @brief Builds a budget-respecting replacement for an oversized tool result: keeps the
+ *        ok/error fields, flags the cut, and carries a raw-JSON preview plus guidance so
+ *        the model narrows the call instead of retrying it verbatim.
+ */
+static QJsonObject makeTruncatedResult(const QJsonObject& scrubbed,
+                                       const QByteArray& fullBytes,
+                                       int budgetBytes)
+{
+  QJsonObject out;
+  if (scrubbed.contains(QStringLiteral("ok")))
+    out[QStringLiteral("ok")] = scrubbed.value(QStringLiteral("ok"));
+
+  if (scrubbed.contains(QStringLiteral("error")))
+    out[QStringLiteral("error")] = scrubbed.value(QStringLiteral("error"));
+
+  out[QStringLiteral("truncated")] = true;
+  out[QStringLiteral("note")] =
+    QStringLiteral("Result exceeded the %1-byte budget; 'preview' holds the first bytes of "
+                   "the full JSON. Narrow the call (offset/limit, prefix, fewer fields) "
+                   "instead of repeating it.")
+      .arg(budgetBytes);
+  out[QStringLiteral("preview")] = QString::fromUtf8(fullBytes.left(budgetBytes - 512));
+  return out;
+}
+
+/**
  * @brief Stores a tool_result block to be sent back in the next request.
  */
 void AI::Conversation::recordToolResult(const QString& callId,
@@ -1628,11 +1760,12 @@ void AI::Conversation::recordToolResult(const QString& callId,
                    : qBound(2048,
                             m_provider ? m_provider->capabilities().toolResultByteBudget : 4096,
                             16 * 1024);
-  auto contentBytes = QJsonDocument(scrubbed).toJson(QJsonDocument::Compact);
+
+  QJsonObject effective = scrubbed;
+  auto contentBytes     = QJsonDocument(scrubbed).toJson(QJsonDocument::Compact);
   if (contentBytes.size() > kMaxToolResultBytes) {
-    const auto kept = contentBytes.left(kMaxToolResultBytes - 64);
-    contentBytes =
-      kept + "... [truncated " + QByteArray::number(contentBytes.size() - kept.size()) + " bytes]";
+    effective    = makeTruncatedResult(scrubbed, contentBytes, kMaxToolResultBytes);
+    contentBytes = QJsonDocument(effective).toJson(QJsonDocument::Compact);
     qCDebug(serialStudioAI) << "Tool result for" << name << "truncated to" << contentBytes.size()
                             << "bytes";
   }
@@ -1649,7 +1782,7 @@ void AI::Conversation::recordToolResult(const QString& callId,
   block[QStringLiteral("type")]                       = QStringLiteral("tool_result");
   block[QStringLiteral("tool_use_id")]                = callId;
   block[QStringLiteral("content")]                    = wrapped;
-  QJsonObject geminiPayload                           = scrubbed;
+  QJsonObject geminiPayload                           = effective;
   geminiPayload[QStringLiteral("__untrusted_source")] = sourceTag;
   block[QStringLiteral("_gemini_response")]           = geminiPayload;
   if (!name.isEmpty())
@@ -1701,6 +1834,7 @@ void AI::Conversation::resumeAfterToolBatch()
 
   m_pendingToolResultBlocks = QJsonArray();
   m_outstandingToolResults  = 0;
+  m_retryCount              = 0;
 
   issueRequest();
 }
@@ -2239,6 +2373,7 @@ void AI::Conversation::restoreFromDisk()
   m_assistantIndex = -1;
   m_assistantText.clear();
   m_assistantThinking.clear();
+  m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
   m_outstandingToolResults  = 0;

@@ -185,11 +185,23 @@ void AI::OpenAIReply::onSseError(const QString& reason)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Processes a single choice delta: text and tool-call fragments.
+ * @brief Processes a single choice delta: text, reasoning, and tool-call fragments.
+ *        reasoning_content (DeepSeek R1) and reasoning (Ollama-style servers) carry the
+ *        model's thinking stream; dropping them would hide reasoning from the user.
  */
 void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
 {
   const auto delta = choice.value(QStringLiteral("delta")).toObject();
+
+  auto reasoningValue = delta.value(QStringLiteral("reasoning_content"));
+  if (!reasoningValue.isString())
+    reasoningValue = delta.value(QStringLiteral("reasoning"));
+
+  if (reasoningValue.isString()) {
+    const auto chunk = reasoningValue.toString();
+    if (!chunk.isEmpty())
+      Q_EMIT partialThinking(chunk);
+  }
 
   const auto contentValue = delta.value(QStringLiteral("content"));
   if (contentValue.isString()) {
@@ -308,11 +320,13 @@ void AI::OpenAIReply::onReplyFinished()
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
   if (m_reply->error() != QNetworkReply::NoError && status < 400) {
+    setTransientError(true);
     finishWithError(m_reply->errorString());
     return;
   }
 
   if (status >= 400) {
+    setTransientError(status == 408 || status == 429 || status >= 500);
     const auto body = m_reply->readAll();
     QString msg;
     Misc::JsonValidator::Limits limits;

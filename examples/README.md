@@ -29,6 +29,7 @@ You can also browse and download examples directly from Serial Studio via **Help
 | [PulseSensor](PulseSensor) | Heart rate PPG sensor with signal filtering | Beginner | |
 | [RC Plane Simulator](RC%20Plane%20Simulator) | RC plane flight telemetry simulator | Intermediate | |
 | [System Monitor](System%20Monitor) | Live CPU, memory, disk, and network dashboard | Intermediate | Yes |
+| [Testo T549i](Testo%20T549i) | BLE pressure probe with Control Script handshake and Lua unit transforms | Intermediate | |
 | [TinyGPS](TinyGPS) | GPS location tracker with map widget | Beginner | |
 | [UDP Function Generator](UDP%20Function%20Generator) | Multi-waveform signal generator over UDP | Beginner | |
 | [Vibration Test Rig](Vibration%20Test%20Rig) | Motor RPM sweep driving a Campbell-mode waterfall and two scripted Painter widgets | Intermediate | Yes |

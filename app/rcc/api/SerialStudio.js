@@ -6,19 +6,36 @@ var SerialStudio = {
   Hex: 1,
   Text: 2,
 
+  _b64: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+
+  _toBase64: function(bytes) {
+    var out = '', n = bytes.length;
+    for (var i = 0; i < n; i += 3) {
+      var b1 = bytes[i] & 0xff;
+      var has2 = i + 1 < n, has3 = i + 2 < n;
+      var b2 = has2 ? (bytes[i + 1] & 0xff) : 0;
+      var b3 = has3 ? (bytes[i + 2] & 0xff) : 0;
+      var t = (b1 << 16) | (b2 << 8) | b3;
+      out += this._b64.charAt((t >> 18) & 0x3f);
+      out += this._b64.charAt((t >> 12) & 0x3f);
+      out += has2 ? this._b64.charAt((t >> 6) & 0x3f) : '=';
+      out += has3 ? this._b64.charAt(t & 0x3f) : '=';
+    }
+    return out;
+  },
+
   _encode: function(value, encoding) {
     if (encoding === SerialStudio.Hex) {
-      var hex = String(value).replace(/[^0-9a-fA-F]/g, '');
-      var bin = '';
+      var hex = String(value).replace(/[^0-9a-fA-F]/g, ''), bytes = [];
       for (var i = 0; i < hex.length; i += 2)
-        bin += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-      return btoa(bin);
+        bytes.push(parseInt(hex.substr(i, 2), 16));
+      return SerialStudio._toBase64(bytes);
     }
     if (encoding === SerialStudio.Text) {
-      var s = String(value), out = '';
+      var s = String(value), out = [];
       for (var j = 0; j < s.length; ++j)
-        out += String.fromCharCode(s.charCodeAt(j) & 0xff);
-      return btoa(out);
+        out.push(s.charCodeAt(j) & 0xff);
+      return SerialStudio._toBase64(out);
     }
     return value;  // already base64
   }
@@ -88,6 +105,32 @@ if (typeof __nc !== 'undefined') {
   notifyWarning  = function() { var a = __ssNotifyArgs(arguments); __nc.postWarning(a[0], a[1], a[2]); };
   notifyCritical = function() { var a = __ssNotifyArgs(arguments); __nc.postCritical(a[0], a[1], a[2]); };
   notifyClear    = function() { var a = __ssNotifyArgs(arguments); __nc.resolve(a[0], a[1], a[2]); };
+} else if (typeof __ss_control !== 'undefined' && typeof __ss_bridge !== 'undefined') {
+  // Control scripts run on a worker thread with no direct __nc bridge; route notify*
+  // through the marshalled apiCall so posting happens on the GUI thread. On non-Pro
+  // builds the command is absent and the call returns an error result instead.
+  notify = function(level) {
+    var a = __ssNotifyArgs(Array.prototype.slice.call(arguments, 1));
+    return __ss_bridge.call('notifications.post',
+                            { level: level, channel: a[0], title: a[1], subtitle: a[2] });
+  };
+  notifyInfo = function() {
+    var a = __ssNotifyArgs(arguments);
+    return notify(Info, a[0], a[1], a[2]);
+  };
+  notifyWarning = function() {
+    var a = __ssNotifyArgs(arguments);
+    return notify(Warning, a[0], a[1], a[2]);
+  };
+  notifyCritical = function() {
+    var a = __ssNotifyArgs(arguments);
+    return notify(Critical, a[0], a[1], a[2]);
+  };
+  notifyClear = function() {
+    var a = __ssNotifyArgs(arguments);
+    return __ss_bridge.call('notifications.resolve',
+                            { channel: a[0], title: a[1], subtitle: a[2] });
+  };
 } else {
   var __ssNoPro = function() {
     throw new Error('notify() requires a Pro license. See https://serial-studio.com/pricing');
@@ -124,6 +167,127 @@ function canSendValue(id, value, bytes) {
   for (var i = bytes - 1; i >= 0; i--)
     arr.push((v >> (i * 8)) & 0xFF);
   return canSendFrame(id, arr);
+}
+
+// Control-script See/Decide/Act helpers (bridge: __ss_bridge, worker thread only).
+// newFrame() returns the latest received frame exactly once per arrival (null when
+// nothing new); ensureDashboard(spec) declaratively creates whatever the spec
+// describes that does not exist yet -- groups matched by title, datasets matched
+// by parser index inside their group. Existing items are never modified, and the
+// last satisfied spec is memoized so calling it every loop() is free.
+if (typeof __ss_bridge !== 'undefined') {
+  var __ssLastFrameSeq = 0;
+  var __ssEnsuredSig   = '';
+
+  newFrame = function(sourceId) {
+    var p = {};
+    if (typeof sourceId === 'number')
+      p.sourceId = sourceId;
+    var r = __ss_bridge.call('io.getLatestFrame', p);
+    if (!r.ok || !r.result || !r.result.hasData)
+      return null;
+    if (r.result.sequence === __ssLastFrameSeq)
+      return null;
+    __ssLastFrameSeq = r.result.sequence;
+    return r.result;
+  };
+
+  var __ssGroupWidgets = {
+    datagrid: 0, accelerometer: 1, gyroscope: 2, gps: 3,
+    multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8
+  };
+  var __ssDatasetBits = {
+    plot: 1, fft: 2, bar: 4, gauge: 8, compass: 16, led: 32, waterfall: 64
+  };
+  var __ssDatasetOptions = function(ds) {
+    if (typeof ds.options === 'number')
+      return ds.options;
+    var bits = 0;
+    for (var key in __ssDatasetBits)
+      if (ds[key])
+        bits |= __ssDatasetBits[key];
+    return bits;
+  };
+  var __ssEnsureFail = function(out, error) {
+    out.ok    = false;
+    out.error = error || 'ensureDashboard: API call failed';
+    return out;
+  };
+
+  ensureDashboard = function(spec) {
+    var out = { ok: true, createdGroups: 0, createdDatasets: 0 };
+    if (!spec || !spec.length)
+      return out;
+
+    var sig = JSON.stringify(spec);
+    if (sig === __ssEnsuredSig)
+      return out;
+
+    var groupsRes = __ss_bridge.call('project.group.list', {});
+    var dsRes     = __ss_bridge.call('project.dataset.list', {});
+    if (!groupsRes.ok || !dsRes.ok)
+      return __ssEnsureFail(out, groupsRes.error || dsRes.error);
+
+    var groups   = groupsRes.result.groups || [];
+    var datasets = dsRes.result.datasets || [];
+
+    for (var g = 0; g < spec.length; ++g) {
+      var want    = spec[g];
+      var groupId = -1;
+      for (var i = 0; i < groups.length; ++i)
+        if (groups[i].title === want.title) { groupId = groups[i].groupId; break; }
+
+      if (groupId < 0) {
+        var widgetType = __ssGroupWidgets[want.widget || 'none'];
+        if (typeof widgetType !== 'number')
+          widgetType = __ssGroupWidgets.none;
+        var added = __ss_bridge.call('project.group.add',
+                                     { title: want.title, widgetType: widgetType });
+        if (!added.ok)
+          return __ssEnsureFail(out, added.error);
+        var relist = __ss_bridge.call('project.group.list', {});
+        if (!relist.ok)
+          return __ssEnsureFail(out, relist.error);
+        groups = relist.result.groups || [];
+        for (var j = 0; j < groups.length; ++j)
+          if (groups[j].title === want.title) { groupId = groups[j].groupId; break; }
+        if (groupId < 0)
+          return __ssEnsureFail(out, 'ensureDashboard: group missing after add');
+        out.createdGroups++;
+      }
+
+      var have = {};
+      for (var d = 0; d < datasets.length; ++d)
+        if (datasets[d].groupId === groupId)
+          have[datasets[d].index] = true;
+
+      var wantDs = want.datasets || [];
+      for (var k = 0; k < wantDs.length; ++k) {
+        var ds = wantDs[k];
+        if (have[ds.index])
+          continue;
+
+        var addDs = __ss_bridge.call('project.dataset.addMany', {
+          groupId: groupId,
+          count: 1,
+          options: __ssDatasetOptions(ds),
+          titlePattern: ds.title || ('Channel ' + ds.index),
+          startIndex: ds.index
+        });
+        if (!addDs.ok)
+          return __ssEnsureFail(out, addDs.error);
+
+        var created = ((addDs.result && addDs.result.created) || [])[0];
+        if (ds.units && created)
+          __ss_bridge.call('project.dataset.update',
+                           { groupId: groupId, datasetId: created.datasetId, units: ds.units });
+        out.createdDatasets++;
+      }
+    }
+
+    __ssEnsuredSig = sig;
+    return out;
+  };
 }
 
 var api = (typeof api !== 'undefined') ? api : {};
@@ -718,6 +882,12 @@ io.connect = function() {
 io.disconnect = function() {
   var p = {};
   return apiCall('io.disconnect', p);
+};
+
+io.getLatestFrame = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.getLatestFrame', p);
 };
 
 io.getStatus = function() {

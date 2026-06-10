@@ -55,6 +55,7 @@ class ScriptApiCall {
 public:
   static void installLua(lua_State* L, int sourceId);
   static void installJS(QJSEngine* js, int sourceId);
+  static void installHelperBridgesJS(QJSEngine* js, int sourceId);
   static void installAll(QJSEngine* js, int sourceId);
   static void installAll(lua_State* L, int sourceId);
   static void setAllowFullSurface(bool allow);

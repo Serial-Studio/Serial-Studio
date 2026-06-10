@@ -542,42 +542,46 @@ private:
  * @brief QStandardItemModel subclass exposing Project Editor custom roles to QML.
  */
 class CustomModel : public QStandardItemModel {
+  // clang-format off
+  Q_OBJECT
+  // clang-format on
+
 public:
   explicit CustomModel(QObject* parent = nullptr) : QStandardItemModel(parent) {}
 
   QHash<int, QByteArray> roleNames() const override
   {
-    QHash<int, QByteArray> names;
-
     // clang-format off
 #define BAL(x) QByteArrayLiteral(x)
-    names.insert(ProjectEditor::Active,               BAL("active"));
-    names.insert(ProjectEditor::WidgetType,           BAL("widgetType"));
-    names.insert(ProjectEditor::TreeViewIcon,         BAL("treeViewIcon"));
-    names.insert(ProjectEditor::TreeViewText,         BAL("treeViewText"));
-    names.insert(ProjectEditor::ComboBoxData,         BAL("comboBoxData"));
-    names.insert(ProjectEditor::ParameterIcon,        BAL("parameterIcon"));
-    names.insert(ProjectEditor::ParameterName,        BAL("parameterName"));
-    names.insert(ProjectEditor::EditableValue,        BAL("editableValue"));
-    names.insert(ProjectEditor::ParameterType,        BAL("parameterType"));
-    names.insert(ProjectEditor::PlaceholderValue,     BAL("placeholderValue"));
-    names.insert(ProjectEditor::TreeViewExpanded,     BAL("treeViewExpanded"));
-    names.insert(ProjectEditor::TreeViewFrameIndex,   BAL("treeViewFrameIndex"));
-    names.insert(ProjectEditor::ParameterDescription, BAL("parameterDescription"));
-    names.insert(ProjectEditor::ParameterKey,         BAL("parameterKey"));
-    names.insert(ProjectEditor::TreeViewSourceName,   BAL("treeViewSourceName"));
-    names.insert(ProjectEditor::TreeViewSourceId,     BAL("treeViewSourceId"));
-    names.insert(ProjectEditor::TreeViewVirtual,      BAL("treeViewVirtual"));
-    names.insert(ProjectEditor::TreeItemKind,         BAL("treeItemKind"));
-    names.insert(ProjectEditor::TreeItemId,           BAL("treeItemId"));
-    names.insert(ProjectEditor::TreeItemParentId,     BAL("treeItemParentId"));
-    names.insert(ProjectEditor::TreeViewWorkspaceStale, BAL("treeViewWorkspaceStale"));
-    names.insert(ProjectEditor::MinValue,             BAL("minValue"));
-    names.insert(ProjectEditor::MaxValue,             BAL("maxValue"));
+    static const QHash<int, QByteArray> kNames = {
+      {ProjectEditor::Active,                 BAL("active")},
+      {ProjectEditor::WidgetType,             BAL("widgetType")},
+      {ProjectEditor::TreeViewIcon,           BAL("treeViewIcon")},
+      {ProjectEditor::TreeViewText,           BAL("treeViewText")},
+      {ProjectEditor::ComboBoxData,           BAL("comboBoxData")},
+      {ProjectEditor::ParameterIcon,          BAL("parameterIcon")},
+      {ProjectEditor::ParameterName,          BAL("parameterName")},
+      {ProjectEditor::EditableValue,          BAL("editableValue")},
+      {ProjectEditor::ParameterType,          BAL("parameterType")},
+      {ProjectEditor::PlaceholderValue,       BAL("placeholderValue")},
+      {ProjectEditor::TreeViewExpanded,       BAL("treeViewExpanded")},
+      {ProjectEditor::TreeViewFrameIndex,     BAL("treeViewFrameIndex")},
+      {ProjectEditor::ParameterDescription,   BAL("parameterDescription")},
+      {ProjectEditor::ParameterKey,           BAL("parameterKey")},
+      {ProjectEditor::TreeViewSourceName,     BAL("treeViewSourceName")},
+      {ProjectEditor::TreeViewSourceId,       BAL("treeViewSourceId")},
+      {ProjectEditor::TreeViewVirtual,        BAL("treeViewVirtual")},
+      {ProjectEditor::TreeItemKind,           BAL("treeItemKind")},
+      {ProjectEditor::TreeItemId,             BAL("treeItemId")},
+      {ProjectEditor::TreeItemParentId,       BAL("treeItemParentId")},
+      {ProjectEditor::TreeViewWorkspaceStale, BAL("treeViewWorkspaceStale")},
+      {ProjectEditor::MinValue,               BAL("minValue")},
+      {ProjectEditor::MaxValue,               BAL("maxValue")},
+    };
 #undef BAL
     // clang-format on
 
-    return names;
+    return kNames;
   }
 };
 }  // namespace DataModel

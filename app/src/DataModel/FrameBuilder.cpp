@@ -39,6 +39,7 @@
 #include "CSV/Player.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/FrameParser.h"
@@ -95,6 +96,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_captureDatasetValues(false)
   , m_captureFlagsDirty(true)
   , m_externalTableApiUsers(false)
+  , m_captureLatestFrame(false)
   , m_seenEngineEpoch(-1)
   , m_operationMode(SerialStudio::ProjectFile)
   , m_parseBudgetUsedNs(0)
@@ -102,6 +104,8 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
   , m_jsTransformTimedOut(false)
+  , m_latestFrameSourceId(-1)
+  , m_latestFrameSeq(0)
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
   , m_jsEngineForSource(nullptr)
@@ -341,6 +345,28 @@ const DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() const noe
   return m_tableStore;
 }
 
+/**
+ * @brief Default-constructs an empty latest-frame snapshot (no chunk, sequence 0).
+ */
+DataModel::FrameBuilder::LatestFrameInfo::LatestFrameInfo()
+  : sourceId(-1), sequence(0), timestampMs(0), channelsSequence(0)
+{}
+
+/**
+ * @brief Returns the latest captured frame for @p sourceId, the newest across all sources when
+ *        @p sourceId is negative, or nullptr when capture is off or nothing arrived yet.
+ */
+const DataModel::FrameBuilder::LatestFrameInfo* DataModel::FrameBuilder::latestFrame(
+  int sourceId) const noexcept
+{
+  const int key = (sourceId >= 0) ? sourceId : m_latestFrameSourceId;
+  if (key < 0)
+    return nullptr;
+
+  const auto it = m_latestFrames.constFind(key);
+  return (it != m_latestFrames.constEnd()) ? &it.value() : nullptr;
+}
+
 //--------------------------------------------------------------------------------------------------
 // External connection setup
 //--------------------------------------------------------------------------------------------------
@@ -397,7 +423,15 @@ void DataModel::FrameBuilder::setupExternalConnections()
   });
   connect(&API::Server::instance(), &API::Server::enabledChanged, this, [this] {
     refreshAnyAsyncSink();
+    refreshLatestFrameCapture();
   });
+  connect(&API::Server::instance(), &API::Server::clientCountChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+  connect(&DataModel::ControlScript::instance(),
+          &DataModel::ControlScript::runningChanged,
+          this,
+          [this] { refreshLatestFrameCapture(); });
 #ifdef BUILD_COMMERCIAL
   connect(&Sessions::Export::instance(), &Sessions::Export::enabledChanged, this, [this] {
     refreshAnyAsyncSink();
@@ -410,29 +444,55 @@ void DataModel::FrameBuilder::setupExternalConnections()
   connect(&API::GRPC::GRPCServer::instance(), &API::GRPC::GRPCServer::enabledChanged, this, [this] {
     refreshAnyAsyncSink();
   });
+  connect(&API::GRPC::GRPCServer::instance(),
+          &API::GRPC::GRPCServer::clientCountChanged,
+          this,
+          [this] { refreshAnyAsyncSink(); });
 #endif
 
   m_operationMode = AppState::instance().operationMode();
   m_playerOpen    = SerialStudio::isAnyPlayerOpen();
   refreshAnyAsyncSink();
+  refreshLatestFrameCapture();
 }
 
 /**
- * @brief Recomputes the cached any-async-consumer flag from every export/output module.
+ * @brief Recomputes the cached any-async-consumer flag from every export/output module. The
+ *        TCP and gRPC servers only count while a client is connected: with zero clients their
+ *        workers drop every frame, so the per-frame detached copy would be pure waste.
  */
 void DataModel::FrameBuilder::refreshAnyAsyncSink()
 {
+  const auto& server = API::Server::instance();
   bool any = CSV::Export::instance().exportEnabled() || MDF4::Export::instance().exportEnabled()
-          || API::Server::instance().enabled();
+          || (server.enabled() && server.clientCount() > 0);
 #ifdef BUILD_COMMERCIAL
   any =
     any || Sessions::Export::instance().exportEnabled() || MQTT::Publisher::instance().enabled();
 #endif
 #ifdef ENABLE_GRPC
-  any = any || API::GRPC::GRPCServer::instance().enabled();
+  const auto& grpc = API::GRPC::GRPCServer::instance();
+  any              = any || (grpc.enabled() && grpc.clientCount() > 0);
 #endif
 
   m_anyAsyncSink = any;
+}
+
+/**
+ * @brief Recomputes the cached latest-frame capture flag (control script or API server active);
+ *        drops the retained chunks when every consumer is gone so FrameReader slots unpin.
+ */
+void DataModel::FrameBuilder::refreshLatestFrameCapture()
+{
+  const bool wasEnabled = m_captureLatestFrame;
+
+  m_captureLatestFrame =
+    DataModel::ControlScript::instance().running() || API::Server::instance().enabled();
+
+  if (wasEnabled && !m_captureLatestFrame) {
+    m_latestFrames.clear();
+    m_latestFrameSourceId = -1;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -493,6 +553,65 @@ void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& header
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Records the latest received chunk for @p sourceId: a retained pool reference (the
+ *        FrameReader claim probe skips pinned slots), zero copy, gated on m_captureLatestFrame.
+ */
+void DataModel::FrameBuilder::captureLatestChunk(int sourceId, const IO::CapturedDataPtr& data)
+{
+  Q_ASSERT(data);
+  Q_ASSERT(m_captureLatestFrame);
+
+  auto& entry    = m_latestFrames[sourceId];
+  entry.chunk    = data;
+  entry.sourceId = sourceId;
+  entry.sequence = ++m_latestFrameSeq;
+  entry.timestampMs =
+    std::chrono::duration_cast<std::chrono::milliseconds>(data->timestamp.time_since_epoch())
+      .count();
+
+  m_latestFrameSourceId = sourceId;
+}
+
+/**
+ * @brief Records the parser's channel tokens for the latest chunk via implicit sharing.
+ */
+void DataModel::FrameBuilder::captureLatestChannels(int sourceId, const QStringList& channels)
+{
+  Q_ASSERT(m_captureLatestFrame);
+  Q_ASSERT(!channels.isEmpty());
+
+  const auto it = m_latestFrames.find(sourceId);
+  if (it == m_latestFrames.end()) [[unlikely]]
+    return;
+
+  it->channels         = channels;
+  it->channelsSequence = it->sequence;
+}
+
+/**
+ * @brief Span-lane twin of captureLatestChannels: in-place UTF-8 writes into the reused token
+ *        list keep the capture allocation-free in steady state. @p count is span-lane bounded.
+ */
+void DataModel::FrameBuilder::captureLatestChannelSpans(int sourceId,
+                                                        const QByteArrayView* spans,
+                                                        qsizetype count)
+{
+  Q_ASSERT(spans != nullptr);
+  Q_ASSERT(m_captureLatestFrame);
+  Q_ASSERT(count > 0 && count <= kMaxSpanFields);
+
+  const auto it = m_latestFrames.find(sourceId);
+  if (it == m_latestFrames.end()) [[unlikely]]
+    return;
+
+  it->channels.resize(count);
+  for (qsizetype i = 0; i < count; ++i)
+    DataModel::assign_utf8_in_place(it->channels[i], spans[i]);
+
+  it->channelsSequence = it->sequence;
+}
+
+/**
  * @brief Dispatches a captured chunk to the parser for the current operation mode.
  */
 void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
@@ -500,6 +619,9 @@ void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
   Q_ASSERT(data);
   Q_ASSERT(!data->data.isEmpty());
   Q_ASSERT(m_operationMode == AppState::instance().operationMode());
+
+  if (m_captureLatestFrame) [[unlikely]]
+    captureLatestChunk(0, data);
 
   switch (m_operationMode) {
     case SerialStudio::QuickPlot:
@@ -528,6 +650,9 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::Captu
     hotpathRxFrame(data);
     return;
   }
+
+  if (m_captureLatestFrame) [[unlikely]]
+    captureLatestChunk(sourceId, data);
 
   parseProjectFrame(sourceId, data);
 }
@@ -558,6 +683,8 @@ void DataModel::FrameBuilder::onOperationModeChanged()
   m_quickPlotChannels = -1;
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
+  m_latestFrames.clear();
+  m_latestFrameSourceId = -1;
   invalidateFramePool();
   parseBudgetReset();
 }
@@ -605,6 +732,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (!nowConnected) {
     m_sourceFrames.clear();
     m_sourceFrameCounters.clear();
+    m_latestFrames.clear();
+    m_latestFrameSourceId = -1;
     destroyTransformEngines();
     m_tableStore.clear();
     return;
@@ -688,6 +817,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
         std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
     }
 
+    if (m_captureLatestFrame) [[unlikely]]
+      captureLatestChannels(0, channels);
+
     applyDatasetValues(m_frame, channels, info);
     hotpathTxFrame(acquireFrame(m_frame, frameTs));
     ++m_parsedFrameCount;
@@ -735,6 +867,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
         std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
     }
 
+    if (m_captureLatestFrame) [[unlikely]]
+      captureLatestChannels(sourceId, channels);
+
     applyDatasetValues(srcFrame, channels, info);
     hotpathTxFrame(acquireFrame(srcFrame, frameTs));
   }
@@ -771,6 +906,9 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
 
   if (tokens == 0)
     return 0;
+
+  if (m_captureLatestFrame) [[unlikely]]
+    captureLatestChannelSpans(sourceId, m_spanScratch.data(), tokens);
 
   TransformFrameInfo info;
   info.sourceId = sourceId;
@@ -1230,6 +1368,9 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   const int channelCount = channels.size();
   if (channelCount <= 0)
     return;
+
+  if (m_captureLatestFrame) [[unlikely]]
+    captureLatestChannels(0, channels);
 
   if (m_quickPlotChannels == -1) {
     bool allNonNumeric = true;

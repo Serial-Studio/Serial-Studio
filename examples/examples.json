@@ -243,6 +243,18 @@
     "requiresPro": true
   },
   {
+    "id": "Testo T549i",
+    "title": "Testo T549i Refrigeration Pressure Probe",
+    "description": "Automates a Testo T549i BLE pressure probe: a Control Script sends the vendor enable handshake, a binary frame parser decodes the raw stream, and Lua transforms derive bar and psi engineering units shown on a gauge.",
+    "category": "Sensors & Hardware",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "Testo T549i.ssproj",
+    "hasScreenshot": true,
+    "screenshotFileName": "testo-t549i.jpg",
+    "requiresPro": false
+  },
+  {
     "id": "TinyGPS",
     "title": "TinyGPS Location Tracker",
     "description": "Visualizes GPS location data from a GY-NEO6MV2 GPS module connected to Arduino with real-time map display of latitude, longitude, and altitude.",

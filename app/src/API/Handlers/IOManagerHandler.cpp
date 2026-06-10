@@ -22,10 +22,12 @@
 #include "API/Handlers/IOManagerHandler.h"
 
 #include <QJsonArray>
+#include <QMetaEnum>
 
 #include "API/CommandRegistry.h"
 #include "API/EnumLabels.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -152,8 +154,9 @@ void API::Handlers::IOManagerHandler::registerBusConfigCommands()
     registry.registerCommand(
       QStringLiteral("io.writeData"),
       QStringLiteral("Transmit raw bytes to the device (params: data - base64 "
-                     "encoded). Hardware-write: the user is shown the exact bytes "
-                     "and approves each call, even when auto-approve is on. "
+                     "encoded). Hardware-write: remote clients must clear the "
+                     "one-time device-write consent prompt (the user's answer is "
+                     "persisted); in-process scripts are not prompted. "
                      "Failure modes: not connected (connection_lost), bus busy "
                      "(bus_busy). Prefer console.send for text protocols."),
       schema,
@@ -189,6 +192,45 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
                    "before io.setBusType to confirm the bus is available."),
     emptySchema,
     &getAvailableBuses);
+
+  {
+    QJsonObject sourceProp;
+    sourceProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
+    sourceProp.insert(QStringLiteral("description"),
+                      QStringLiteral("Optional source filter; omit for the newest frame "
+                                     "across all sources."));
+
+    QJsonObject encodingProp;
+    encodingProp.insert(QStringLiteral("type"), QStringLiteral("string"));
+    encodingProp.insert(
+      QStringLiteral("enum"),
+      QJsonArray{QStringLiteral("text"), QStringLiteral("base64"), QStringLiteral("both")});
+    encodingProp.insert(QStringLiteral("description"),
+                        QStringLiteral("Payload encoding in the response (default: text)."));
+
+    QJsonObject props;
+    props.insert(Keys::SourceId, sourceProp);
+    props.insert(QStringLiteral("encoding"), encodingProp);
+
+    QJsonObject schema;
+    schema.insert(QStringLiteral("type"), QStringLiteral("object"));
+    schema.insert(QStringLiteral("properties"), props);
+
+    registry.registerCommand(
+      QStringLiteral("io.getLatestFrame"),
+      QStringLiteral("Returns the latest RAW frame received from the device: sequence "
+                     "number, payload (text/base64) and the parser's channel tokens in "
+                     "values[] -- including channels NOT yet mapped to any dataset "
+                     "(dashboard.getData only shows mapped data). Poll it from a control "
+                     "script loop() to detect new channels and auto-build widgets via "
+                     "project mutations; the sequence field tells you when a new frame "
+                     "arrived. Capture runs only while a control script is running or "
+                     "the API server is enabled, so hasData:false means no data OR no "
+                     "active consumer. timestampMs is a monotonic clock in milliseconds "
+                     "(not Unix epoch time); use it only for deltas between frames."),
+      schema,
+      &getLatestFrame);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -274,22 +316,22 @@ API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& 
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: busType"));
   }
 
-  const int busType         = params.value(Keys::BusType).toInt();
-  const auto availableBuses = IO::ConnectionManager::instance().availableBuses();
-
-  if (busType < 0 || busType >= availableBuses.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid busType: %1. Valid range: 0-%2")
-                                        .arg(busType)
-                                        .arg(availableBuses.count() - 1));
+  const int busType   = params.value(Keys::BusType).toInt();
+  const auto metaEnum = QMetaEnum::fromType<SerialStudio::BusType>();
+  if (!metaEnum.valueToKey(busType)) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid busType: %1. Use io.listBuses to discover the values this "
+                     "build supports.")
+        .arg(busType));
   }
 
   IO::ConnectionManager::instance().setBusType(static_cast<SerialStudio::BusType>(busType));
 
   QJsonObject result;
   result[Keys::BusType]                 = busType;
-  result[QStringLiteral("busTypeName")] = availableBuses.at(busType);
+  result[QStringLiteral("busTypeName")] = EnumLabels::busTypeLabel(busType);
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -372,6 +414,66 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
                 .arg(API::EnumLabels::busTypeLabel(busInt));
 
   result[QStringLiteral("_summary")] = summary;
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Returns the latest raw frame captured by FrameBuilder: payload plus parser tokens.
+ *        An empty store is a state (hasData:false), not an error.
+ */
+API::CommandResponse API::Handlers::IOManagerHandler::getLatestFrame(const QString& id,
+                                                                     const QJsonObject& params)
+{
+  int sourceId = -1;
+  if (params.contains(Keys::SourceId))
+    sourceId = params.value(Keys::SourceId).toInt(-1);
+
+  QString encoding = QStringLiteral("text");
+  if (params.contains(QStringLiteral("encoding")))
+    encoding = params.value(QStringLiteral("encoding")).toString(encoding).toLower();
+
+  const bool wantText   = (encoding != QStringLiteral("base64"));
+  const bool wantBase64 = (encoding != QStringLiteral("text"));
+  if (encoding != QStringLiteral("text") && encoding != QStringLiteral("base64")
+      && encoding != QStringLiteral("both")) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid encoding: %1. Valid values: text, base64, both").arg(encoding));
+  }
+
+  const auto* latest = DataModel::FrameBuilder::instance().latestFrame(sourceId);
+  if (!latest || !latest->chunk) {
+    QJsonObject empty;
+    empty[QStringLiteral("hasData")]  = false;
+    empty[QStringLiteral("sequence")] = 0;
+    empty[QStringLiteral("_summary")] =
+      QStringLiteral("No frame captured yet. Capture runs only while a control script is "
+                     "running or the API server is enabled, and requires incoming data.");
+    return CommandResponse::makeSuccess(id, empty);
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("hasData")]     = true;
+  result[QStringLiteral("sequence")]    = static_cast<qint64>(latest->sequence);
+  result[QStringLiteral("timestampMs")] = latest->timestampMs;
+  result[Keys::SourceId]                = latest->sourceId;
+
+  const QByteArray& payload = latest->chunk->data;
+  if (wantText)
+    result[QStringLiteral("text")] = QString::fromUtf8(payload);
+
+  if (wantBase64)
+    result[QStringLiteral("base64")] = QString::fromLatin1(payload.toBase64());
+
+  QJsonArray values;
+  if (latest->channelsSequence == latest->sequence)
+    for (const auto& channel : latest->channels)
+      values.append(channel);
+
+  result[QStringLiteral("valueCount")] = values.size();
+  result[QStringLiteral("values")]     = values;
 
   return CommandResponse::makeSuccess(id, result);
 }

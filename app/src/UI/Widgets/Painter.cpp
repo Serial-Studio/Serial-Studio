@@ -503,7 +503,9 @@ QString Widgets::Painter::fallbackTemplate()
 // code-verify on
 
 /**
- * @brief Compiles the user JS, looks up paint() and (optional) onFrame().
+ * @brief Compiles the user JS, looks up paint() and (optional) onFrame(). The evaluate runs
+ *        under the armed watchdog so a top-level infinite loop in a painter script cannot
+ *        freeze the GUI thread.
  */
 bool Widgets::Painter::compile(const QString& code)
 {
@@ -518,7 +520,19 @@ bool Widgets::Painter::compile(const QString& code)
   }
 
   const QString effectiveCode = code.isEmpty() ? fallbackTemplate() : code;
-  auto result                 = m_engine.evaluate(effectiveCode, QStringLiteral("painter.js"));
+  m_watchdog.arm();
+  auto result = m_engine.evaluate(effectiveCode, QStringLiteral("painter.js"));
+  m_watchdog.disarm();
+
+  if (m_engine.isInterrupted()) {
+    m_engine.setInterrupted(false);
+    setLastError(QStringLiteral("compile: script did not finish evaluating within %1 ms "
+                                "(infinite loop at the top level?)")
+                   .arg(kPainterWatchdogMs));
+    setRuntimeOk(false);
+    return false;
+  }
+
   if (result.isError()) {
     setLastError(QStringLiteral("compile: ") + result.property(QStringLiteral("message")).toString()
                  + QStringLiteral(" (line ")

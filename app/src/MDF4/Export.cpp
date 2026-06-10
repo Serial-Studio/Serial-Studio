@@ -189,6 +189,15 @@ void MDF4::ExportWorker::closeResources()
 }
 
 /**
+ * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so
+ *        the assignment never races processItems() or closeResources().
+ */
+void MDF4::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
+{
+  m_templateFrame = frame;
+}
+
+/**
  * @brief Sanitizes a frame title for use as a directory name.
  */
 static QString sanitizeFrameTitle(const QString& title)
@@ -545,10 +554,14 @@ void MDF4::Export::setupExternalConnections()
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected()) {
         auto* worker = static_cast<ExportWorker*>(m_worker);
+        DataModel::Frame frame;
         if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
-          worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
-        else
-          DataModel::clear_frame(worker->m_templateFrame);
+          frame = DataModel::FrameBuilder::instance().frame();
+
+        QMetaObject::invokeMethod(
+          worker,
+          [worker, frame = std::move(frame)] { worker->setTemplateFrame(frame); },
+          Qt::QueuedConnection);
       }
 
       else {

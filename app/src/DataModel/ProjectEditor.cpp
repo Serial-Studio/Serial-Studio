@@ -1187,7 +1187,7 @@ void DataModel::ProjectEditor::buildTreeModel()
   }
 
   if (m_treeModel) {
-    disconnect(m_treeModel);
+    m_treeModel->disconnect(this);
     m_treeModel->deleteLater();
     m_treeModel = nullptr;
   }
@@ -1660,7 +1660,7 @@ void DataModel::ProjectEditor::appendControlScriptTreeItem(QStandardItem* root)
 void DataModel::ProjectEditor::buildMqttPublisherModel()
 {
   if (m_mqttPublisherModel) {
-    disconnect(m_mqttPublisherModel);
+    m_mqttPublisherModel->disconnect(this);
     m_mqttPublisherModel->deleteLater();
     m_mqttPublisherModel = nullptr;
   }
@@ -2157,7 +2157,7 @@ void DataModel::ProjectEditor::restoreTreeSelection()
 void DataModel::ProjectEditor::buildProjectModel()
 {
   if (m_projectModel) {
-    disconnect(m_projectModel);
+    m_projectModel->disconnect(this);
     m_projectModel->deleteLater();
   }
 
@@ -2309,7 +2309,7 @@ void DataModel::ProjectEditor::buildGroupImageSection(const DataModel::Group& gr
 void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 {
   if (m_groupModel) {
-    disconnect(m_groupModel);
+    m_groupModel->disconnect(this);
     m_groupModel->deleteLater();
   }
 
@@ -2505,7 +2505,7 @@ void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::So
 void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 {
   if (m_sourceModel) {
-    disconnect(m_sourceModel);
+    m_sourceModel->disconnect(this);
     m_sourceModel->deleteLater();
   }
 
@@ -2993,7 +2993,7 @@ void DataModel::ProjectEditor::buildActionTimingRows(const DataModel::Action& ac
 void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 {
   if (m_actionModel) {
-    disconnect(m_actionModel);
+    m_actionModel->disconnect(this);
     m_actionModel->deleteLater();
   }
 
@@ -3016,7 +3016,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& dataset)
 {
   if (m_datasetModel) {
-    disconnect(m_datasetModel);
+    m_datasetModel->disconnect(this);
     m_datasetModel->deleteLater();
   }
 
@@ -4740,7 +4740,7 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
   m_selectedOutputWidget = widget;
 
   if (m_outputWidgetModel) {
-    disconnect(m_outputWidgetModel);
+    m_outputWidgetModel->disconnect(this);
     m_outputWidgetModel->deleteLater();
   }
 

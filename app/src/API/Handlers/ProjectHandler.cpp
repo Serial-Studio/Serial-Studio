@@ -5497,7 +5497,7 @@ void API::Handlers::ProjectHandler::registerTemplateCommands()
                    "  telemetry_udp: UDP listener on port 1234, CSV body parser, 5 "
                    "generic value channels. Adapt port + parser to your protocol.\n"
                    "  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After "
-                   "applying, configure broker via mqtt.set* commands.\n"
+                   "applying, configure the broker via project.mqtt.subscriber.setConfig.\n"
                    "Pass dryRun:true to return wouldDiscard + wouldApply summaries "
                    "without applying. Useful when the user is choosing between two "
                    "templates."),

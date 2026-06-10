@@ -1460,7 +1460,9 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Activates a dashboard action by transmitting its associated data and handling timer logic.
+ * @brief Activates a dashboard action by transmitting its associated data and handling timer
+ *        logic. actionStatusChanged makes QML rebuild the whole actions list, so it only fires
+ *        when a timer's activity flips; per-tick transmissions emit nothing.
  */
 void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 {
@@ -1486,7 +1488,6 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
     if (m_repeatCounters.contains(index))
       m_repeatCounters[index]--;
 
-    Q_EMIT actionStatusChanged();
     return;
   }
 
@@ -1495,19 +1496,23 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
       (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
     tickRepeatTimer(index, m_timers, m_repeatCounters);
-
-    Q_EMIT actionStatusChanged();
     return;
   }
 
+  bool timerFlipped  = false;
   const auto timerIt = m_timers.find(index);
-  if (timerIt != m_timers.end())
+  if (timerIt != m_timers.end()) {
+    const bool wasActive = timerIt.value() && timerIt.value()->isActive();
     applyTimerMode(timerIt.value(), action.timerMode, guiTrigger, action.title);
+    const bool isActive = timerIt.value() && timerIt.value()->isActive();
+    timerFlipped        = (wasActive != isActive);
+  }
 
   if (!IO::ConnectionManager::instance().paused())
     (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
-  Q_EMIT actionStatusChanged();
+  if (timerFlipped)
+    Q_EMIT actionStatusChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1695,8 +1700,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 
   m_plotDisplayTimeSec = displayNext;
 
-  const int sid             = payload.sourceId;
-  const bool hadProFeatures = containsCommercialFeatures();
+  const int sid = payload.sourceId;
 
   const auto genIt = m_sourceStructureGen.constFind(sid);
   const bool genKnown =
@@ -1706,6 +1710,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
     !genKnown || !m_sourceRawFrames.contains(sid) || m_datasetReferences.isEmpty();
 
   if (structureChanged) [[unlikely]] {
+    const bool hadProFeatures = containsCommercialFeatures();
     m_sourceStructureGen[sid] = frame->structureGeneration;
     m_sourceRawFrames[sid]    = payload;
     DataModel::Frame combined;

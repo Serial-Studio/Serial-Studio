@@ -191,6 +191,10 @@ void AI::AnthropicReply::handleContentBlockStart(const QJsonObject& data)
     bs.toolUseId   = block.value(QStringLiteral("id")).toString();
     bs.toolUseName = block.value(QStringLiteral("name")).toString();
   }
+
+  if (bs.type == QStringLiteral("redacted_thinking"))
+    bs.redactedData = block.value(QStringLiteral("data")).toString();
+
   if (idx >= 0)
     m_blocks.insert(idx, bs);
 }
@@ -214,8 +218,21 @@ void AI::AnthropicReply::handleContentBlockDelta(const QJsonObject& data)
 
   if (deltaType == QStringLiteral("thinking_delta")) {
     const auto chunk = delta.value(QStringLiteral("thinking")).toString();
-    if (!chunk.isEmpty())
+    if (!chunk.isEmpty()) {
+      auto it = m_blocks.find(idx);
+      if (it != m_blocks.end())
+        it->thinkingText.append(chunk);
+
       Q_EMIT partialThinking(chunk);
+    }
+
+    return;
+  }
+
+  if (deltaType == QStringLiteral("signature_delta")) {
+    auto it = m_blocks.find(idx);
+    if (it != m_blocks.end())
+      it->thinkingSignature.append(delta.value(QStringLiteral("signature")).toString());
 
     return;
   }
@@ -228,7 +245,8 @@ void AI::AnthropicReply::handleContentBlockDelta(const QJsonObject& data)
 }
 
 /**
- * @brief On block close, validates accumulated tool-use JSON and emits the tool call.
+ * @brief On block close, emits completed tool-use / thinking blocks. Thinking blocks keep
+ *        their signature so the conversation can echo them back verbatim on the next turn.
  */
 void AI::AnthropicReply::handleContentBlockStop(const QJsonObject& data)
 {
@@ -239,6 +257,21 @@ void AI::AnthropicReply::handleContentBlockStop(const QJsonObject& data)
 
   if (it->type == QStringLiteral("tool_use"))
     emitToolUseFromBlock(*it);
+
+  if (it->type == QStringLiteral("thinking") && !it->thinkingSignature.isEmpty()) {
+    QJsonObject block;
+    block[QStringLiteral("type")]      = QStringLiteral("thinking");
+    block[QStringLiteral("thinking")]  = it->thinkingText;
+    block[QStringLiteral("signature")] = it->thinkingSignature;
+    Q_EMIT thinkingBlockFinished(block);
+  }
+
+  if (it->type == QStringLiteral("redacted_thinking") && !it->redactedData.isEmpty()) {
+    QJsonObject block;
+    block[QStringLiteral("type")] = QStringLiteral("redacted_thinking");
+    block[QStringLiteral("data")] = it->redactedData;
+    Q_EMIT thinkingBlockFinished(block);
+  }
 
   m_blocks.remove(idx);
 }
@@ -306,11 +339,13 @@ void AI::AnthropicReply::onReplyFinished()
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
   if (m_reply->error() != QNetworkReply::NoError && status < 400) {
+    setTransientError(true);
     finishWithError(m_reply->errorString());
     return;
   }
 
   if (status >= 400) {
+    setTransientError(status == 408 || status == 429 || status >= 500);
     const auto body = m_reply->readAll();
     QString msg;
     Misc::JsonValidator::Limits limits;

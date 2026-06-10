@@ -42,6 +42,25 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the "HH:mm:ss.zzz -> " stamp for the current time, reusing the previous
+ *        string while the millisecond has not advanced (chunks arrive faster than the clock
+ *        ticks, and the locale-aware formatting is the expensive part).
+ */
+static const QString& cachedTimestampStr()
+{
+  static qint64 s_lastMs = -1;
+  static QString s_cached;
+
+  const qint64 now = QDateTime::currentMSecsSinceEpoch();
+  if (now != s_lastMs) {
+    s_lastMs = now;
+    s_cached = QDateTime::currentDateTime().toString(QStringLiteral("HH:mm:ss.zzz -> "));
+  }
+
+  return s_cached;
+}
+
+/**
  * @brief Constructs the console handler singleton.
  */
 Console::Handler::Handler()
@@ -726,8 +745,7 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
 
   QString timestamp;
   if (addTimestamp) {
-    QDateTime dateTime    = QDateTime::currentDateTime();
-    const QString timeStr = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
+    const QString& timeStr = cachedTimestampStr();
 
     if (ansiColorsEnabled()) {
       const QString ansiCyan  = QStringLiteral("\033[36m");
@@ -958,10 +976,8 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
   data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
   QString timestamp;
-  if (addTimestamp) {
-    const QDateTime dateTime = QDateTime::currentDateTime();
-    timestamp                = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
-  }
+  if (addTimestamp)
+    timestamp = cachedTimestampStr();
 
   QString processedString;
   processedString.reserve(data.length() + timestamp.length() * 4);
@@ -1133,46 +1149,58 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
 }
 
 /**
- * @brief Converts @a data into a HEX dump string.
+ * @brief Converts @a data into a HEX dump string with direct nibble writes into a
+ *        pre-reserved buffer; the per-byte QString::arg() it replaces dominated GUI time at
+ *        MB/s rates with the hex view enabled.
  */
 QString Console::Handler::hexadecimalStr(QByteArrayView data)
 {
+  static constexpr char kHexDigits[] = "0123456789abcdef";
+  constexpr auto rowSize             = 16;
+  constexpr auto rowChars            = 80;
+
   QString out;
-  constexpr auto rowSize = 16;
+  const auto rows = (data.length() + rowSize - 1) / rowSize;
+  out.reserve(rows * rowChars + 2);
 
   for (int i = 0; i < data.length(); i += rowSize) {
-    out += QStringLiteral("%1 | ").arg(i, 6, 16, QLatin1Char('0'));
+    for (int shift = 20; shift >= 0; shift -= 4)
+      out += QLatin1Char(kHexDigits[(i >> shift) & 0xF]);
+
+    out += QLatin1String(" | ");
 
     for (int j = 0; j < rowSize; ++j) {
       if (i + j < data.length()) {
-        out += QStringLiteral("%1 ").arg(
-          static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
+        const auto b  = static_cast<unsigned char>(data[i + j]);
+        out          += QLatin1Char(kHexDigits[b >> 4]);
+        out          += QLatin1Char(kHexDigits[b & 0xF]);
+        out          += QLatin1Char(' ');
       }
 
       else
-        out += QStringLiteral("   ");
+        out += QLatin1String("   ");
 
       if ((j + 1) == 8)
-        out += ' ';
+        out += QLatin1Char(' ');
     }
 
-    out += QStringLiteral("| ");
+    out += QLatin1String("| ");
     for (int j = 0; j < rowSize; ++j) {
       if (i + j >= data.length()) {
-        out += ' ';
+        out += QLatin1Char(' ');
         continue;
       }
 
       const char c = data[i + j];
       if (std::isprint(static_cast<unsigned char>(c)))
-        out += c;
+        out += QLatin1Char(c);
       else
-        out += '.';
+        out += QLatin1Char('.');
     }
 
-    out += QStringLiteral(" |\n");
+    out += QLatin1String(" |\n");
   }
 
-  out += "\n";
+  out += QLatin1Char('\n');
   return out;
 }

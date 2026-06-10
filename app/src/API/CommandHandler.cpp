@@ -39,6 +39,7 @@
 #include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/WindowHandler.h"
 #include "API/Handlers/WorkspacesHandler.h"
+#include "API/Server.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/AudioHandler.h"
@@ -97,7 +98,7 @@ bool API::CommandHandler::isApiMessage(const QByteArray& data) const
 /**
  * @brief Process an incoming message and generate a response
  */
-QByteArray API::CommandHandler::processMessage(const QByteArray& data)
+QByteArray API::CommandHandler::processMessage(const QByteArray& data, const CommandOrigin origin)
 {
   QString type;
   QJsonObject json;
@@ -115,7 +116,7 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data)
                request.id, ErrorCode::InvalidMessageType, QStringLiteral("Missing 'command' field"))
         .toJsonBytes();
     }
-    return processCommand(request).toJsonBytes();
+    return processCommand(request, origin).toJsonBytes();
   }
 
   else if (type == MessageType::Batch) {
@@ -136,7 +137,7 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data)
     }
 
     const auto batch = BatchRequest::fromJson(json);
-    return processBatch(batch).toJsonBytes();
+    return processBatch(batch, origin).toJsonBytes();
   }
 
   return CommandResponse::makeError(QString(),
@@ -146,10 +147,18 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data)
 }
 
 /**
- * @brief Process a single command request
+ * @brief Process a single command request; remote-origin device-write commands must clear the
+ *        user consent gate first, matching the raw byte paths.
  */
-API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& request)
+API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& request,
+                                                         const CommandOrigin origin)
 {
+  const bool remote = (origin == CommandOrigin::Remote);
+  if (remote && !Server::instance().authorizeRemoteCommand(request.command)) {
+    return CommandResponse::makeError(
+      request.id, ErrorCode::ExecutionError, QStringLiteral("Device write denied by user"));
+  }
+
   return CommandRegistry::instance().execute(request.command, request.id, request.params);
 }
 
@@ -160,14 +169,15 @@ API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& r
 /**
  * @brief Process a batch of commands in sequential order
  */
-API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch)
+API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch,
+                                                     const CommandOrigin origin)
 {
   BatchResponse response;
   response.id      = batch.id;
   response.success = true;
 
   for (const auto& cmd : batch.commands) {
-    const auto result = processCommand(cmd);
+    const auto result = processCommand(cmd, origin);
     response.results.append(result);
 
     if (!result.success)

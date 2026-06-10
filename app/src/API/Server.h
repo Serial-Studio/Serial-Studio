@@ -124,6 +124,7 @@ public:
   [[nodiscard]] bool authorizeDeviceWrite();
   [[nodiscard]] bool externalConnections() const noexcept;
   [[nodiscard]] bool verifyToken(const QByteArray& provided) const;
+  [[nodiscard]] bool authorizeRemoteCommand(const QString& command);
 
 public slots:
   void removeConnection();

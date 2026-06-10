@@ -42,6 +42,12 @@
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+static constexpr qsizetype kMaxImportFileBytes = 10 * 1024 * 1024;
+
+//--------------------------------------------------------------------------------------------------
 // File-local helpers
 //--------------------------------------------------------------------------------------------------
 
@@ -454,6 +460,9 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     return false;
 
+  if (file.size() > kMaxImportFileBytes)
+    return false;
+
   const QString content = QString::fromUtf8(file.readAll());
   file.close();
 
@@ -539,6 +548,9 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
 {
   QFile file(path);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return false;
+
+  if (file.size() > kMaxImportFileBytes)
     return false;
 
   QXmlStreamReader xml(&file);
@@ -635,7 +647,19 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Groups registers into contiguous blocks of the same type.
+ * @brief Returns the register count for an entry at @p address clamped so a block can never
+ *        run past the 65535 end of the Modbus register space.
+ */
+static quint16 clampedRegisterSpan(quint16 address, int registers)
+{
+  const int available = 0x10000 - address;
+  return static_cast<quint16>(qBound(0, registers, available));
+}
+
+/**
+ * @brief Groups registers into contiguous blocks of the same type. End addresses are computed
+ *        in int and clamped: a quint16 sum wraps for maps that pair high addresses with
+ *        multi-register data types and silently corrupts the block counts.
  */
 QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporter::computeBlocks()
   const
@@ -645,24 +669,26 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
 
   QVector<RegisterBlock> blocks;
   RegisterBlock current;
+  const int firstSpan  = registersForDataType(m_registers[0].dataType);
   current.registerType = m_registers[0].registerType;
   current.startAddress = m_registers[0].address;
-  current.count        = registersForDataType(m_registers[0].dataType);
+  current.count        = clampedRegisterSpan(current.startAddress, firstSpan);
   current.entries.append(m_registers[0]);
 
   for (int i = 1; i < m_registers.count(); ++i) {
-    const auto& entry     = m_registers[i];
-    const quint16 endAddr = current.startAddress + current.count;
+    const auto& entry = m_registers[i];
+    const int endAddr = static_cast<int>(current.startAddress) + current.count;
 
     if (entry.registerType == current.registerType && entry.address <= endAddr) {
-      const quint16 entryEnd = entry.address + registersForDataType(entry.dataType);
-      current.count = qMax(current.count, static_cast<quint16>(entryEnd - current.startAddress));
+      const int entryEnd = static_cast<int>(entry.address) + registersForDataType(entry.dataType);
+      const int span     = qMin(qMin(entryEnd, 0x10000) - current.startAddress, 0xFFFF);
+      current.count      = static_cast<quint16>(qMax<int>(current.count, span));
       current.entries.append(entry);
     } else {
       blocks.append(current);
       current.registerType = entry.registerType;
       current.startAddress = entry.address;
-      current.count        = registersForDataType(entry.dataType);
+      current.count = clampedRegisterSpan(entry.address, registersForDataType(entry.dataType));
       current.entries.clear();
       current.entries.append(entry);
     }

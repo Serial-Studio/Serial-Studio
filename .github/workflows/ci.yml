@@ -1607,6 +1607,7 @@ jobs:
     - name: '🚀 Start Serial Studio (headless)'
       env:
         QT_QPA_PLATFORM: offscreen
+        SERIAL_STUDIO_API_AUTO_CONSENT: '1'
       run: |
         [ "${{ matrix.os }}" = "windows" ] || ulimit -c unlimited
         "$SS_RUN" --headless --api-server &

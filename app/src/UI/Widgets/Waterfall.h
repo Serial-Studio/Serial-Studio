@@ -204,6 +204,7 @@ private:
   void drawXAxis(QPainter* painter, const QRectF& plotRect) const;
   void drawYAxis(QPainter* painter, const QRectF& plotRect) const;
   void drawCursor(QPainter* painter, const QRectF& plotRect) const;
+  void drawHistoryImage(QPainter* painter, const QRectF& plotRect) const;
   void cursorReadoutValues(
     const QRectF& plotRect, double cx, double cy, double& freqHz, double& yVal) const;
   void drawCursorTooltip(QPainter* painter,
@@ -227,6 +228,7 @@ private:
   int m_historySize;
   int m_colorMap;
   int m_writeRow;
+  int m_topRow;
   bool m_filledOnce;
   bool m_axisVisible;
   bool m_colorbarVisible;

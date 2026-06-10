@@ -61,12 +61,15 @@ QString AI::ContextBuilder::roleBlock()
           "available, but EVERY such call requires explicit per-call user approval in "
           "the chat -- auto-approve never applies to them. State what you are about to "
           "send or change before calling, configure the driver fully before io.connect, "
-          "and never retry a denied call. mqtt.set* (password/SSL) and licensing.* "
-          "mutations remain Blocked.\n")
+          "and never retry a denied call. licensing.* mutations remain Blocked, and "
+          "MQTT credential/TLS changes (project.mqtt.*.setConfig) always require an "
+          "explicit user click.\n")
       : QStringLiteral("Hardware writes\n"
                        "console.send, io.writeData, io.connect, io.disconnect, every driver "
-                       "set*, mqtt.set* (password/SSL), and licensing.* mutations are Blocked. "
-                       "The dispatcher refuses them outright. Don't propose them; instead "
+                       "set*, and licensing.* mutations are Blocked; MQTT credential/TLS "
+                       "changes (project.mqtt.*.setConfig) always require an explicit user "
+                       "click. The dispatcher refuses Blocked calls outright. Don't propose "
+                       "them; instead "
                        "explain that the user must do it themselves, or suggest building an "
                        "Output Control whose JS button performs the write under user "
                        "supervision. Only if the user explicitly asks you to drive the device "
@@ -98,12 +101,12 @@ QString AI::ContextBuilder::roleBlock()
            "  painter           -> project.painter.*, project.painter.dryRun, "
            "groups whose widget is \"painter\"\n"
            "  output_widgets    -> project.outputWidget.*\n"
-           "  mqtt              -> mqtt.*\n"
+           "  mqtt              -> project.mqtt.* (publisher + subscriber config)\n"
            "  can_modbus        -> io.canbus.*, io.modbus.*\n"
            "  filesystem        -> fs.* (read/list/search the workspace folder and "
            "dragged-in paths; write/append/delete inside the 'AI/' subfolder)\n"
            "  debugging         -> meta.snapshot, project.validate, *.dryRun, "
-           "io.tailFrames\n"
+           "dashboard.tailFrames, io.getLatestFrame\n"
            "  api_semantics     -> identity (datasetId vs index vs uniqueId), "
            "frame execution order, transform/painter cycle, tableGet edge cases, "
            "frame-parser batching timestamps. Load when a behavior/timing question "
@@ -164,7 +167,7 @@ QString AI::ContextBuilder::roleBlock()
        + hardware_note
        + QStringLiteral(
            "  io.* subscopes     -> io.audio.*, io.ble.*, io.canbus.*, io.hid.*, "
-           "io.modbus.*, io.network.*, io.process.*, io.serial.*, io.uart.*. Use "
+           "io.modbus.*, io.network.*, io.process.*, io.uart.*, io.usb.*. Use "
            "meta.listCommands{prefix:\"io.<subscope>.\"} to drill in.\n"
            "  DatasetOption vs DashboardWidget numbering: DatasetOption is a BITFLAG "
            "(1=Plot,2=FFT,4=Bar,8=Gauge,16=Compass,32=LED,64=Waterfall) used by "
@@ -790,7 +793,9 @@ QString AI::ContextBuilder::liveProjectStateBlock()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the array of system blocks for the Anthropic Messages API.
+ * @brief Returns the array of system blocks for the Anthropic Messages API. The cache
+ *        breakpoint sits on the last STABLE block (docs, else role) -- prompt caching is a
+ *        prefix match, so marking the per-request live-state block would never hit.
  */
 QJsonArray AI::ContextBuilder::buildSystemArray(bool includeScriptingDocs)
 {
@@ -802,19 +807,22 @@ QJsonArray AI::ContextBuilder::buildSystemArray(bool includeScriptingDocs)
   QJsonObject role;
   role[QStringLiteral("type")] = QStringLiteral("text");
   role[QStringLiteral("text")] = roleBlock();
+  if (!includeScriptingDocs)
+    role[QStringLiteral("cache_control")] = ephemeral;
+
   system.append(role);
 
   if (includeScriptingDocs) {
     QJsonObject docs;
-    docs[QStringLiteral("type")] = QStringLiteral("text");
-    docs[QStringLiteral("text")] = scriptingDocsBlock();
+    docs[QStringLiteral("type")]          = QStringLiteral("text");
+    docs[QStringLiteral("text")]          = scriptingDocsBlock();
+    docs[QStringLiteral("cache_control")] = ephemeral;
     system.append(docs);
   }
 
   QJsonObject live;
-  live[QStringLiteral("type")]          = QStringLiteral("text");
-  live[QStringLiteral("text")]          = liveProjectStateBlock();
-  live[QStringLiteral("cache_control")] = ephemeral;
+  live[QStringLiteral("type")] = QStringLiteral("text");
+  live[QStringLiteral("text")] = liveProjectStateBlock();
   system.append(live);
 
   return system;

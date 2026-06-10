@@ -1,6 +1,8 @@
 # Control Script (setup / loop)
 
-The Control Script automates a connected device the way an Arduino sketch does. You write two functions, `setup()` and `loop()`, and Serial Studio calls them over the life of the connection: `setup()` once when the device connects, `loop()` repeatedly at a fixed interval while it stays connected. Both functions can drive the connection through Serial Studio's I/O API, so the script can send wake-up handshakes, poll registers, issue keep-alives, or step a state machine without any firmware changes on the device.
+The Control Script automates a connected device the way an Arduino sketch does. You write two functions, `setup()` and `loop()`, and Serial Studio calls them over the life of the connection: `setup()` once when the device connects, `loop()` repeatedly while it stays connected (paced by `delay()`, as the loop() pacing section explains). Both functions can drive the connection through Serial Studio's I/O API, so the script can send wake-up handshakes, poll registers, issue keep-alives, or step a state machine without any firmware changes on the device.
+
+The script automates a device you have **already set up and connected**. It is not where you create or connect a data source: choose the bus, device, and connection in the I/O panel first, then write the script to drive that open connection. This matters most for Bluetooth LE, where scanning, selecting the device, and connecting are interactive steps best done by hand; once the BLE device is connected, the script can select its service and notify characteristic by UUID and write commands (see the BLE example below).
 
 This is a per-project script, not a per-source one. A project has exactly one Control Script; if you run several devices in one project, the script branches on the device itself.
 
@@ -11,6 +13,7 @@ Use this when:
 - A device needs a command sequence to start streaming (many BLE probes and lab instruments only report data after a "begin measurement" handshake).
 - You want to poll a device on a timer (request a Modbus register, send an `AT` query, ask for the next sample).
 - A device needs a periodic keep-alive to stay awake or stay connected.
+- The dashboard should build itself from whatever the device sends (see the self-building dashboard example below).
 
 ## Where to configure it
 
@@ -92,17 +95,48 @@ The most useful I/O calls for a control script:
 - `io.ble.writeCharacteristic(uuid, data, encoding)` -- write to a specific BLE characteristic (e.g. `"fff1"`), independent of the notify one.
 - `io.getStatus()` -- returns `{ isConnected, paused, ... }`.
 
+## Reading data: See, Decide, Act
+
+A control script is not limited to sending commands: it can also read what the device sends and act on it. The mental model is the same loop a robot runs: **see** the latest data, **decide** in plain JavaScript, **act** through the SDK.
+
+- **See**: `newFrame()` returns the latest frame received from the device, or `null` when nothing new has arrived since the last call. The returned object carries `text` (the raw payload), `values` (the parser's channel tokens, in parser order), `sourceId`, `timestampMs` (a monotonic clock in milliseconds, useful for deltas between frames, not wall-clock time), and a monotonic `sequence` number.
+- **Decide**: plain JavaScript. Compare, count, branch; top-level variables persist across `loop()` calls.
+- **Act**: write to the device (`io.writeData`), post notifications, or reshape the dashboard (`ensureDashboard()` below, or any `project.*` call).
+
+`newFrame()` sees the data *before* dataset mapping, so it includes channels that no dataset reads yet, which is exactly what you need to detect a new channel and create a widget for it. (`dashboard.getData()`, by contrast, returns only data already mapped to datasets.) The raw command underneath is `io.getLatestFrame`, which also accepts `{ encoding: "base64" }` for binary payloads.
+
+In ConsoleOnly mode frames are not parsed, so `values` is empty and only `text` carries the payload. Pace any polling loop with `delay()`; 50-250 ms is plenty for channel detection.
+
+### ensureDashboard(spec): declarative widgets
+
+`ensureDashboard(spec)` makes the described dashboard exist. You state what you want; it creates only what is missing and never modifies what is already there. Calling it on every `loop()` pass with the same spec is free (the last satisfied spec is remembered), so there is no bookkeeping to write:
+
+```javascript
+ensureDashboard([
+  {
+    title: "Telemetry",            // group, matched by title
+    widget: "multiplot",           // datagrid | multiplot | gps | none | ...
+    datasets: [
+      { title: "Temperature", index: 1, plot: true, units: "C" },
+      { title: "Pressure",    index: 2, plot: true, gauge: true }
+    ]
+  }
+]);
+```
+
+- Groups are matched by `title`; datasets are matched by their parser `index` within the group. If you rename a generated group in the Project Editor, the script no longer finds it and recreates it under the original name; treat the spec as the source of truth for the generated parts of a project.
+- Dataset flags map to widgets: `plot`, `fft`, `bar`, `gauge`, `compass`, `led`, `waterfall` (or pass a raw `options` bitfield instead).
+- Group `widget` accepts `datagrid`, `accelerometer`, `gyroscope`, `gps`, `multiplot`, `none`, `plot3d`, `image`, or `painter`.
+- Created groups and datasets are real project edits: they are saved with the project exactly like changes made in the Project Editor, so the dashboard the script builds is still there the next time the project opens.
+
 ## Examples
 
 ### 1. BLE wake-up handshake
 
-Many BLE devices expose a service (here `FFF0`) with separate write (`FFF1`) and notify (`FFF2`) characteristics, and only start streaming after a command sequence is written. `setup()` selects the service, subscribes to the notify characteristic, and writes the enable sequence; readings then arrive through the frame parser like any other data.
+Many BLE devices expose a service (here `FFF0`) with separate write (`FFF1`) and notify (`FFF2`) characteristics, and only start streaming after a command sequence is written. The service and notify characteristic are chosen on the BLE source and saved with the project; the driver wires them on connect, so the control script only writes the enable sequence. Readings then arrive through the frame parser like any other data.
 
 ```javascript
 function setup() {
-  io.ble.selectServiceByUuid("fff0");
-  io.ble.setNotifyCharacteristic("fff2");
-
   var cmds = ["0102030405", "0607080900", "0A0B0C0D0E"];
   for (var i = 0; i < cmds.length; ++i) {
     var r = io.ble.writeCharacteristic("fff1", cmds[i], SerialStudio.Hex);
@@ -111,6 +145,8 @@ function setup() {
   }
 }
 ```
+
+The characteristic UUID is a plain string and the payload a hex string with `SerialStudio.Hex`; do not wrap the arguments in an object and do not hand-encode base64. Configure the service and notify characteristic on the source (they are saved in the project) rather than selecting them from the script. For a binary BLE device, set the source's decoder to **Binary** with **No Delimiters** so the frame parser receives each notification as an array of byte values; see [Frame Parser Reference](JavaScript-API.md) for reading bytes and decoding floats.
 
 ### 2. Periodic keep-alive
 
@@ -159,6 +195,24 @@ function loop() {
     return;
 
   io.writeData("POLL", SerialStudio.Text);
+}
+```
+
+### 6. Self-building dashboard
+
+A logger that streams a variable number of comma-separated channels gets a plotted dataset per channel, created the moment a new channel first appears. Widgets that already exist are left alone, so the script is safe to leave running.
+
+```javascript
+function loop() {
+  var f = newFrame();
+  if (!f) { delay(100); return; }
+
+  var spec = { title: "Telemetry", widget: "multiplot", datasets: [] };
+  for (var i = 0; i < f.values.length; ++i)
+    spec.datasets.push({ title: "Channel " + (i + 1), index: i + 1, plot: true });
+
+  ensureDashboard([spec]);
+  delay(100);
 }
 ```
 

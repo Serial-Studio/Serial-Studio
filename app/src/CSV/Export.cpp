@@ -74,6 +74,15 @@ void CSV::ExportWorker::closeResources()
 }
 
 /**
+ * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so
+ *        the assignment never races processItems() or closeResources().
+ */
+void CSV::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
+{
+  m_templateFrame = frame;
+}
+
+/**
  * @brief Processes a batch of CSV frames, creating the file if needed.
  */
 void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
@@ -285,10 +294,14 @@ void CSV::Export::setupExternalConnections()
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected()) {
         auto* worker = static_cast<ExportWorker*>(m_worker);
+        DataModel::Frame frame;
         if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
-          worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
-        else
-          DataModel::clear_frame(worker->m_templateFrame);
+          frame = DataModel::FrameBuilder::instance().frame();
+
+        QMetaObject::invokeMethod(
+          worker,
+          [worker, frame = std::move(frame)] { worker->setTemplateFrame(frame); },
+          Qt::QueuedConnection);
       }
 
       else {

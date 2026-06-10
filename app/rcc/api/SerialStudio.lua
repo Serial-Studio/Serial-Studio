@@ -653,6 +653,12 @@ function io.disconnect()
   return apiCall('io.disconnect', p)
 end
 
+function io.getLatestFrame(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.getLatestFrame', p)
+end
+
 function io.getStatus()
   local p = {}
   return apiCall('io.getStatus', p)

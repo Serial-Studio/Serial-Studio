@@ -58,6 +58,9 @@ public:
   void closeResources() override;
   [[nodiscard]] bool isResourceOpen() const override;
 
+public slots:
+  void setTemplateFrame(const DataModel::Frame& frame);
+
 public:
   /**
    * @brief Per-channel-group state captured during file creation.
@@ -89,10 +92,8 @@ private:
                           ChannelGroupInfo& info);
   [[nodiscard]] bool initWriterAndHeader(const QString& frameName, const QDateTime& dateTime);
 
-public:
-  DataModel::Frame m_templateFrame;
-
 private:
+  DataModel::Frame m_templateFrame;
   bool m_fileOpen;
   QString m_filePath;
   std::unique_ptr<mdf::MdfWriter> m_writer;

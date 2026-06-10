@@ -63,7 +63,8 @@ static QString anthropicToolName(const QString& original)
 }
 
 /**
- * @brief Rewrites a single content block in-place for Anthropic's tool format.
+ * @brief Rewrites a single content block in-place for Anthropic's tool format. All
+ *        underscore-prefixed passthrough fields are stripped -- the API rejects them.
  */
 static QJsonObject sanitizeBlock(QJsonObject block)
 {
@@ -71,17 +72,39 @@ static QJsonObject sanitizeBlock(QJsonObject block)
   if (type == QStringLiteral("tool_use")) {
     const auto name               = block.value(QStringLiteral("name")).toString();
     block[QStringLiteral("name")] = anthropicToolName(name);
-  } else if (type == QStringLiteral("tool_result")) {
-    block.remove(QStringLiteral("_tool_name"));
-    block.remove(QStringLiteral("_gemini_response"));
   }
+
+  const auto keys = block.keys();
+  for (const auto& key : keys)
+    if (key.startsWith(QLatin1Char('_')))
+      block.remove(key);
+
   return block;
 }
 
 /**
- * @brief Sanitizes tool_use names and strips non-Anthropic fields from tool_result blocks.
+ * @brief Returns true when a history thinking block must be dropped: thinking disabled,
+ *        or the block's signature came from a different model and would fail validation.
  */
-static QJsonArray sanitizeHistoryToolNames(const QJsonArray& history)
+static bool dropThinkingBlock(const QJsonObject& block, const QString& model, bool thinkingOn)
+{
+  const auto type = block.value(QStringLiteral("type")).toString();
+  if (type != QStringLiteral("thinking") && type != QStringLiteral("redacted_thinking"))
+    return false;
+
+  if (!thinkingOn)
+    return true;
+
+  return block.value(QStringLiteral("_model")).toString() != model;
+}
+
+/**
+ * @brief Sanitizes tool_use names, filters foreign thinking blocks, and strips
+ *        non-Anthropic passthrough fields.
+ */
+static QJsonArray sanitizeHistoryToolNames(const QJsonArray& history,
+                                           const QString& model,
+                                           bool thinkingOn)
 {
   QJsonArray out;
   for (const auto& v : history) {
@@ -93,8 +116,16 @@ static QJsonArray sanitizeHistoryToolNames(const QJsonArray& history)
     }
 
     QJsonArray newContent;
-    for (const auto& bv : contentValue.toArray())
-      newContent.append(sanitizeBlock(bv.toObject()));
+    for (const auto& bv : contentValue.toArray()) {
+      const auto block = bv.toObject();
+      if (dropThinkingBlock(block, model, thinkingOn))
+        continue;
+
+      newContent.append(sanitizeBlock(block));
+    }
+
+    if (newContent.isEmpty())
+      continue;
 
     msg[QStringLiteral("content")] = newContent;
     out.append(msg);
@@ -139,6 +170,7 @@ QStringList AI::AnthropicProvider::availableModels() const
     QStringLiteral("claude-sonnet-4-6"),
     QStringLiteral("claude-opus-4-7"),
     QStringLiteral("claude-opus-4-8"),
+    QStringLiteral("claude-fable-5"),
   };
 }
 
@@ -167,6 +199,9 @@ QString AI::AnthropicProvider::modelDisplayName(const QString& modelId) const
   if (modelId == QStringLiteral("claude-opus-4-8"))
     return QStringLiteral("Opus 4.8");
 
+  if (modelId == QStringLiteral("claude-fable-5"))
+    return QStringLiteral("Fable 5");
+
   return modelId;
 }
 
@@ -186,7 +221,8 @@ AI::ProviderCapabilities AI::AnthropicProvider::capabilities() const
 }
 
 /**
- * @brief Builds the Messages API request body and returns a streaming Reply.
+ * @brief Builds the Messages API request body and returns a streaming Reply. Adaptive
+ *        thinking spends from max_tokens, so thinking-capable models get a 64K budget.
  */
 AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
                                               const QJsonArray& tools,
@@ -202,7 +238,7 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
 
   QJsonObject body;
   body[QStringLiteral("model")]      = model;
-  body[QStringLiteral("max_tokens")] = 4096;
+  body[QStringLiteral("max_tokens")] = caps.thinking ? 64000 : 16000;
   body[QStringLiteral("stream")]     = true;
   body[QStringLiteral("system")]     = ContextBuilder::buildSystemArray();
 
@@ -233,7 +269,7 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
       body[QStringLiteral("tool_choice")] = toolChoice;
     }
   }
-  body[QStringLiteral("messages")] = sanitizeHistoryToolNames(history);
+  body[QStringLiteral("messages")] = sanitizeHistoryToolNames(history, model, caps.thinking);
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);
 

@@ -123,6 +123,7 @@ QString AI::DeepSeekProvider::modelDisplayName(const QString& modelId) const
 AI::ProviderCapabilities AI::DeepSeekProvider::capabilities() const
 {
   ProviderCapabilities caps;
+  caps.thinking              = currentModel().contains(QStringLiteral("reasoner"));
   caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("chat"));
   caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
   return caps;

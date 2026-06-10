@@ -126,7 +126,7 @@ private:
   void readDeactivationResponse(const QByteArray& data);
   void readValidationResponse(const QByteArray& data, const bool cachedResponse);
 
-  void handleEmptyValidationResponse();
+  void handleEmptyValidationResponse(const bool cachedResponse);
   [[nodiscard]] bool checkValidationRules(const QJsonObject& json, const bool cachedResponse);
   void updateAppNameFromVariant(const QString& variantName);
   void applyValidatedLicense(const QJsonObject& json, const bool cachedResponse);
