@@ -26,9 +26,10 @@ always blockers. To auto-fix formatting in place: `python scripts/code-verify.py
 
 ## Full pre-commit pipeline
 
-Before any commit, run the top-level driver, which chains: clang-format → code-verify (--fix
-then --check) → documentation-verify → search-index rebuild → changed-file summary. It only
-sanitizes the working tree — committing and pushing stay with the developer:
+Before any commit, run the top-level driver, which chains: chmod (POSIX) → expand-doxygen →
+clang-format → code-verify --fix → clang-format → code-verify --check → documentation-verify →
+search-index rebuild → changed-file summary. It only sanitizes the working tree — committing
+and pushing stay with the developer:
 
 ```
 python scripts/sanitize-commit.py

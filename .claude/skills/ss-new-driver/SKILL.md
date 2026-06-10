@@ -30,8 +30,17 @@ see [ss-hotpath]). Never re-stamp downstream.
 4. `app/CMakeLists.txt` — add `src/IO/Drivers/<Name>.cpp` to the `SOURCES` list (sources are
    listed explicitly, not globbed).
 5. QML configuration UI — add the bus to the device-setup panel that renders `driverProperties()`.
-6. CLI (optional) — if it should be launchable headless, add options in `app/src/Misc/CLI.{h,cpp}`
+6. `app/src/API/EnumLabels.cpp` — add the bus to the `busTypeSlug()` and label switches (the API's
+   string names for the bus; commercial buses go inside the `#ifdef BUILD_COMMERCIAL` block).
+7. `app/src/DataModel/ProjectEditor.cpp` — add the bus to the `busTypeIcon()` switch and the
+   `busTypes` combobox list in the source form model.
+8. CLI (optional) — if it should be launchable headless, add options in `app/src/Misc/CLI.{h,cpp}`
    following the existing `setupUartConnection` / `setupTcpConnection` pattern.
+9. `tests/utils/api_client.py` (optional) — add the bus to `bus_map` if integration tests should
+   reach it via `io.setBusType`.
+
+The list above drifts as the app grows. Before declaring done, grep a recently added bus value
+(e.g. `grep -rn "BusType::HidDevice" app/src`) and mirror every switch/list it appears in.
 
 ## Rules
 

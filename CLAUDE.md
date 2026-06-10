@@ -78,13 +78,13 @@ auto-trigger. Keep them current when the workflows they encode change.
 
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
 TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
-visualization widgets, 5 output (control) widgets, 256 KHz+ data rate (CI-gated; see below). Frame parsers
-in JavaScript (`QJSEngine`), Lua 5.4 (embedded `lua54`), or Built-In ("Native" in all internal
-identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only user-facing
-strings/docs say Built-In. Parametrized C++ templates configured via a JSON descriptor, no
-user code). Per-dataset value
-transforms in JS or Lua. Pro features: Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView,
-Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer, Session Database.
+visualization widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below).
+Frame parsers in JavaScript (`QJSEngine`), Lua 5.4 (embedded `lua54`), or Built-In ("Native"
+in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
+user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
+descriptor, no user code). Per-dataset value transforms in JS or Lua. Pro features: Output
+widgets, Modbus, CAN Bus, MDF4, 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM),
+Modbus map importer, Session Database.
 
 ## Sub-Documentation
 
@@ -129,10 +129,10 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
 - **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`)
-  drives the real parse pipeline with seven gates tiered off `--min-fps` (default 256000): data
-  pipeline + Native numeric 1.024 MHz (4x), Native mixed 512 kHz (2x), Lua numeric 256 kHz,
-  JS numeric + Lua mixed 128 kHz, JS mixed 64 kHz;
-  `test.yml` runs it per PR, `deploy.yml` gates the shipped PGO binary. Don't regress it.
+  drives the real parse pipeline with seven gates tiered off `--min-fps` (default 256000), from
+  data pipeline + Native numeric at 4x (1.024 MHz) down to JS mixed at 64 kHz (full tier table
+  in the `ss-hotpath` skill); `test.yml` runs it per PR, `deploy.yml` gates the shipped PGO
+  binary. Don't regress it.
 - **Hotpath optimization macros live in `app/src/DataModel/HotpathOptimization.h`** (`SS_FORCE_INLINE`,
   `SS_FLATTEN`, `SS_HOT`/`SS_COLD`, `SS_RESTRICT`, `SS_ASSUME`, `SS_NO_UNROLL`, ...): cross-toolchain
   spellings with a `__clang__`-first cascade (clang-cl/IntelLLVM take the GNU branch). Annotate the
