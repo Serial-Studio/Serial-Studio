@@ -1,8 +1,8 @@
-# Testo T549i Refrigeration Pressure Probe
+# Testo T549i Pressure Probe
 
-This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project turns a [Testo T549i](https://www.testo.com/en/testo-549i/p/0560-2549-02) high-pressure smart probe into a live refrigeration dashboard over [Bluetooth Low Energy](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy). It is a complete tour of Serial Studio's automation stack in one small project: a Control Script wakes the probe, a binary frame parser decodes the raw stream, and per-dataset Lua transforms derive the engineering units.
+This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project turns a [Testo T549i](https://www.testo.com/en/testo-549i/p/0560-2549-02) high-pressure smart probe into a live dashboard over [Bluetooth Low Energy](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy). It is a complete tour of Serial Studio's automation stack in one small project: a Control Script wakes the probe, a binary frame parser decodes the raw stream, and per-dataset Lua transforms derive the engineering units.
 
-![Testo T549i](doc/testo-t549i.jpg)
+<div align="center"><img src="doc/testo-t549i.jpg" height=220px/></div>
 
 ## What it does
 
