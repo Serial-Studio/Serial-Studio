@@ -479,7 +479,27 @@ Item {
                        : qsTr("empty")
         })
       }
+
+      blockCursor = tblBlockTop + tables.length * (nodeH + vGap)
     }
+
+    //
+    // Control Script card (project-global, like the data tables)
+    //
+    newNodes.push({
+      type:      "controlscript",
+      sourceId:  -1,
+      groupId:   -1,
+      datasetId: -1,
+      actionId:  -1,
+      x:         colFP,
+      y:         blockCursor + vGap * 2,
+      w:         nodeW,
+      h:         nodeH,
+      label:     qsTr("Control Script"),
+      icon:      "qrc:/icons/project-editor/treeview/code.svg",
+      badge:     Cpp_JSON_ProjectModel.controlScriptCode.length > 0 ? "" : qsTr("empty")
+    })
 
     //
     // MQTT Publisher node: collects every dataset pill (commercial, opt-in)
@@ -612,9 +632,10 @@ Item {
     function onGroupsChanged()     { root.reloadDiagram() }
     function onGroupDataChanged()  { root.reloadDiagram() }
     function onActionsChanged()    { root.reloadDiagram() }
-    function onSourcesChanged()    { root.reloadDiagram() }
-    function onTablesChanged()     { root.reloadDiagram() }
-    function onTitleChanged()      { root.reloadDiagram() }
+    function onSourcesChanged()       { root.reloadDiagram() }
+    function onTablesChanged()        { root.reloadDiagram() }
+    function onTitleChanged()         { root.reloadDiagram() }
+    function onControlScriptChanged() { root.reloadDiagram() }
   }
 
   // Repaint when the publisher is toggled on/off so the node appears/disappears.
@@ -826,6 +847,7 @@ Item {
           property bool isTransform:   modelData.type === "transform"
           property bool isFP:          modelData.type === "frameparser"
           property bool isOutputPanel: modelData.type === "output-panel"
+          property bool isControlScript: modelData.type === "controlscript"
 
           readonly property string nodeKey: menuController.keyOf(modelData)
           readonly property bool isPinned: menuController.pinnedKey === nodeKey
@@ -961,7 +983,8 @@ Item {
             // "N regs"/"empty" on table cards.
             //
             Text {
-              visible: (nd.isSource || nd.isTable) && (modelData.badge || "") !== ""
+              visible: (nd.isSource || nd.isTable || nd.isControlScript)
+                       && (modelData.badge || "") !== ""
               anchors { right: parent.right; bottom: parent.bottom; margins: 4 * root.zoom }
               text: modelData.badge || ""
               font.family: Cpp_Misc_CommonFonts.monoFont.family
@@ -1014,6 +1037,9 @@ Item {
                   break
                 case "table":
                   Cpp_JSON_ProjectEditor.selectUserTable(modelData.tableName)
+                  break
+                case "controlscript":
+                  Cpp_JSON_ProjectEditor.selectControlScript()
                   break
                 case "transform":
                   Cpp_JSON_ProjectEditor.openTransformEditorFor(
@@ -1096,6 +1122,7 @@ Item {
         case "transform":      return "tx:"    + node.groupId + ":" + node.datasetId
         case "action":         return "act:"   + node.actionId
         case "table":          return "tbl:"   + (node.tableName || "")
+        case "controlscript":  return "controlscript"
         case "mqtt-publisher": return "mqtt-publisher"
       }
       return ""
@@ -1136,9 +1163,10 @@ Item {
         case "dataset":      datasetMenu.popup();     break
         case "output":       outputMenu.popup();      break
         case "output-panel": outputPanelMenu.popup(); break
-        case "action":       actionMenu.popup();      break
-        case "table":        tableMenu.popup();       break
-        case "transform":    transformMenu.popup();   break
+        case "action":        actionMenu.popup();        break
+        case "table":         tableMenu.popup();         break
+        case "transform":     transformMenu.popup();     break
+        case "controlscript": controlScriptMenu.popup(); break
         default:             pinnedKey = ""
       }
     }
@@ -2065,6 +2093,20 @@ Item {
       icon.source: "qrc:/icons/project-editor/actions/transform.svg"
       onTriggered: Cpp_JSON_ProjectEditor.openTransformEditorFor(
         menuController.currentGroupId, menuController.currentDatasetId)
+    }
+  }
+
+  Menu {
+    id: controlScriptMenu
+
+    onClosed: menuController.unpin()
+
+    MenuItem {
+      icon.width: 16
+      icon.height: 16
+      text: qsTr("Edit Control Script…")
+      icon.source: "qrc:/icons/project-editor/actions/edit-code.svg"
+      onTriggered: Cpp_JSON_ProjectEditor.selectControlScript()
     }
   }
 

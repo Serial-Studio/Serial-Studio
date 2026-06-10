@@ -532,12 +532,14 @@ bool DataModel::OutputCodeEditor::event(QEvent* event)
 }
 
 /**
- * @brief Forwards key presses to the completer popup when visible, else to the editor widget.
+ * @brief Forwards completer navigation/commit keys to the popup when visible; everything else
+ *        goes straight to the editor widget so QCompleter's focus check cannot hide the popup.
  */
 void DataModel::OutputCodeEditor::keyPressEvent(QKeyEvent* event)
 {
   auto* completer = m_widget.completer();
-  if (completer && completer->popup() && completer->popup()->isVisible())
+  if (completer && completer->popup() && completer->popup()->isVisible()
+      && SerialStudioCompleter::popupHandlesKey(event->key()))
     QCoreApplication::sendEvent(completer->popup(), event);
   else
     QCoreApplication::sendEvent(&m_widget, event);

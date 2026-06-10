@@ -308,6 +308,7 @@ public slots:
   void selectUserTable(const QString& tableName);
   void selectWorkspace(int workspaceId);
   void selectMqttPublisher();
+  void selectControlScript();
   void openMqttScriptEditor();
   void setTreeSearchQuery(const QString& query);
   void confirmCleanupUnresolvedWorkspaceWidgets();

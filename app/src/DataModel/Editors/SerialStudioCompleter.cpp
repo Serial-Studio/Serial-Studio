@@ -97,3 +97,27 @@ DataModel::SerialStudioCompleter::SerialStudioCompleter(bool lua, QObject* paren
   setCaseSensitivity(Qt::CaseInsensitive);
   setWrapAround(true);
 }
+
+/**
+ * @brief Returns true for the keys the completer popup consumes (navigation and commit). Every
+ *        other key must bypass the popup and go straight to the editor widget: the QML wrappers
+ *        host an offscreen QCodeEditor that never holds real focus, so QCompleter::eventFilter
+ *        hides the popup after relaying any key through it ("widget lost focus" check).
+ */
+bool DataModel::SerialStudioCompleter::popupHandlesKey(int key)
+{
+  switch (key) {
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_PageUp:
+    case Qt::Key_PageDown:
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+    case Qt::Key_Tab:
+    case Qt::Key_Backtab:
+    case Qt::Key_Escape:
+      return true;
+    default:
+      return false;
+  }
+}

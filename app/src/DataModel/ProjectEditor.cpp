@@ -5006,6 +5006,18 @@ void DataModel::ProjectEditor::selectMqttPublisher()
 }
 
 /**
+ * @brief Selects the project-global control-script node in the tree.
+ */
+void DataModel::ProjectEditor::selectControlScript()
+{
+  if (!m_selectionModel || !m_controlScriptItem)
+    return;
+
+  m_selectionModel->setCurrentIndex(m_controlScriptItem->index(),
+                                    QItemSelectionModel::ClearAndSelect);
+}
+
+/**
  * @brief Returns the active tree search query (empty when no filter is set).
  */
 const QString& DataModel::ProjectEditor::treeSearchQuery() const noexcept

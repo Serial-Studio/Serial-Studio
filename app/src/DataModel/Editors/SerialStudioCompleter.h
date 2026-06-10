@@ -35,6 +35,8 @@ class SerialStudioCompleter : public QCompleter {
 
 public:
   explicit SerialStudioCompleter(bool lua, QObject* parent = nullptr);
+
+  [[nodiscard]] static bool popupHandlesKey(int key);
 };
 
 }  // namespace DataModel
