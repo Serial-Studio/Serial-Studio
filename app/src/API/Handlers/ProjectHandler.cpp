@@ -2451,7 +2451,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
     languageInherited         = true;
   }
 
-  pm.updateDataset(groupId, datasetId, updated, false);
+  pm.updateDataset(groupId, datasetId, updated, true);
 
   QJsonObject result;
   result[Keys::GroupId]                = groupId;
@@ -2584,7 +2584,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetAlarmBands(const Q
       ++dropped;
   }
 
-  pm.updateDataset(groupId, datasetId, updated, false);
+  pm.updateDataset(groupId, datasetId, updated, true);
 
   QJsonObject result;
   result[Keys::GroupId]             = groupId;
@@ -4621,7 +4621,7 @@ API::CommandResponse API::Handlers::ProjectHandler::painterSetCode(const QString
 
   DataModel::Group g = groups[groupId];
   g.painterCode      = code;
-  project.updateGroup(groupId, g, false);
+  project.updateGroup(groupId, g, true);
 
   QJsonObject result;
   result[QStringLiteral("groupId")]    = groupId;
@@ -4675,6 +4675,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupUpdate(const QString& i
   DataModel::Group g = groups[groupId];
   bool rebuildTree   = false;
   QSet<QString> consumed{QStringLiteral("groupId")};
+  const auto identityKeyCount = consumed.size();
 
   const auto take = [&](const QString& key) -> bool {
     if (!params.contains(key))
@@ -4700,6 +4701,9 @@ API::CommandResponse API::Handlers::ProjectHandler::groupUpdate(const QString& i
 
   if (take(QStringLiteral("painterCode")))
     g.painterCode = params.value(QStringLiteral("painterCode")).toString();
+
+  if (consumed.size() > identityKeyCount)
+    rebuildTree = true;
 
   project.updateGroup(groupId, g, rebuildTree);
 
@@ -4916,7 +4920,8 @@ QString API::Handlers::ProjectHandler::applyDatasetUpdateParams(DataModel::Datas
 }
 
 /**
- * @brief Patch any subset of dataset fields by groupId + datasetId.
+ * @brief Patch any subset of dataset fields by groupId + datasetId; any applied field forces
+ *        the tree rebuild so the epoch-gated dashboard apply and editor reload fire.
  */
 API::CommandResponse API::Handlers::ProjectHandler::datasetUpdate(const QString& id,
                                                                   const QJsonObject& params)
@@ -4948,9 +4953,13 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetUpdate(const QString&
   bool rebuildTree     = false;
   QSet<QString> consumed{
     QStringLiteral("groupId"), Keys::DatasetId, QStringLiteral("expectedProjectEpoch")};
-  const QString err = applyDatasetUpdateParams(d, params, rebuildTree, consumed);
+  const auto identityKeyCount = consumed.size();
+  const QString err           = applyDatasetUpdateParams(d, params, rebuildTree, consumed);
   if (!err.isEmpty())
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, err);
+
+  if (consumed.size() > identityKeyCount)
+    rebuildTree = true;
 
   const auto preEpoch = captureProjectEpoch();
   project.updateDataset(groupId, datasetId, d, rebuildTree);
@@ -4999,6 +5008,7 @@ API::CommandResponse API::Handlers::ProjectHandler::actionUpdate(const QString& 
   DataModel::Action a = actions[actionId];
   bool rebuildTree    = false;
   QSet<QString> consumed{QStringLiteral("actionId")};
+  const auto identityKeyCount = consumed.size();
 
   const auto take = [&](const QString& key) -> bool {
     if (!params.contains(key))
@@ -5044,6 +5054,9 @@ API::CommandResponse API::Handlers::ProjectHandler::actionUpdate(const QString& 
   if (take(QStringLiteral("autoExecuteOnConnect")))
     a.autoExecuteOnConnect = params.value(QStringLiteral("autoExecuteOnConnect")).toBool();
 
+  if (consumed.size() > identityKeyCount)
+    rebuildTree = true;
+
   project.updateAction(actionId, a, rebuildTree);
 
   QJsonObject result;
@@ -5085,6 +5098,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetUpdate(const QSt
   DataModel::OutputWidget& w = g.outputWidgets[widgetId];
   bool rebuildTree           = false;
   QSet<QString> consumed{QStringLiteral("groupId"), QStringLiteral("widgetId")};
+  const auto identityKeyCount = consumed.size();
 
   const auto take = [&](const QString& key) -> bool {
     if (!params.contains(key))
@@ -5127,6 +5141,9 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetUpdate(const QSt
 
   if (take(QStringLiteral("initialValue")))
     w.initialValue = SerialStudio::toDouble(params.value(QStringLiteral("initialValue")));
+
+  if (consumed.size() > identityKeyCount)
+    rebuildTree = true;
 
   project.updateGroup(groupId, g, rebuildTree);
 

@@ -435,6 +435,7 @@ public slots:
 
 public:
   void flushAutoSave();
+  void scheduleAutoSave();
   void setAutoSaveSuspended(bool suspend);
 
 private:

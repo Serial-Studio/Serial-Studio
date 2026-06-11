@@ -213,8 +213,10 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
     attachErrorMetadata(name, response);
 
     if (!isDryRun && response.success
-        && DataModel::ProjectModel::instance().mutationEpoch() != epochBefore)
+        && DataModel::ProjectModel::instance().mutationEpoch() != epochBefore) {
+      DataModel::ProjectModel::instance().scheduleAutoSave();
       scheduleProjectApply();
+    }
 
     if (!preMutationBackup.isEmpty() && response.success
         && !response.result.contains(QStringLiteral("backupPath"))) {

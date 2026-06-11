@@ -302,19 +302,12 @@ DataModel::ProjectModel::ProjectModel()
   connect(this, &ProjectModel::sourceDeleted, this, bumpEpoch);
   connect(this, &ProjectModel::sourceStructureChanged, this, bumpEpoch);
   connect(this, &ProjectModel::groupsChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::actionsChanged, this, bumpEpoch);
 
   connect(this, &ProjectModel::titleChanged, this, &ProjectModel::saveStatusChanged);
   connect(this, &ProjectModel::groupsChanged, this, &ProjectModel::saveStatusChanged);
 
-  connect(this, &ProjectModel::widgetSettingsChanged, this, [this] {
-    if (m_autoSaveSuspended || m_filePath.isEmpty() || m_locked)
-      return;
-
-    if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
-      return;
-
-    m_autoSaveTimer->start();
-  });
+  connect(this, &ProjectModel::widgetSettingsChanged, this, &ProjectModel::scheduleAutoSave);
 
   // code-verify off
   // Must run before the groupsChanged auto-regen connect below: newJsonFile()
@@ -6282,6 +6275,21 @@ void DataModel::ProjectModel::flushAutoSave()
     m_autoSaveTimer->stop();
 
   autoSave();
+}
+
+/**
+ * @brief Starts the debounced autosave when saving is currently permitted; the API mutation
+ *        path calls this so programmatic edits persist without an explicit save.
+ */
+void DataModel::ProjectModel::scheduleAutoSave()
+{
+  if (m_autoSaveSuspended || m_filePath.isEmpty() || m_locked)
+    return;
+
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  m_autoSaveTimer->start();
 }
 
 /**
