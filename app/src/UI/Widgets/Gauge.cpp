@@ -67,7 +67,6 @@ void Widgets::Gauge::updateData()
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
       recomputeActiveBand(value);
-      notifyOnBandEdge();
       if (isEnabled())
         Q_EMIT updated();
     }

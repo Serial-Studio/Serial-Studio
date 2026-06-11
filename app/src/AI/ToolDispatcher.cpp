@@ -2237,6 +2237,7 @@ QJsonObject AI::ToolDispatcher::getScriptingDocs(const QString& kind) const
     QStringLiteral("transform_lua"),
     QStringLiteral("output_widget_js"),
     QStringLiteral("painter_js"),
+    QStringLiteral("control_script_js"),
   };
 
   QJsonObject reply;

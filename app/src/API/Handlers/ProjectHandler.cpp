@@ -861,11 +861,11 @@ void API::Handlers::ProjectHandler::registerDatasetAlarmCommands()
     QStringLiteral("project.dataset.getAlarmBands"),
     QStringLiteral("Returns the dataset's coloured alarm bands as a JSON array. Each entry: "
                    "{min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color "
-                   "(\"#rrggbb\" override or empty for severity default), label}. Also returns "
-                   "rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate "
-                   "band ranges before writing back. An empty array means no alarms "
-                   "configured. Applies only to bar / gauge / meter widgets; calling on other "
-                   "widget types succeeds with an empty array."),
+                   "(\"#rrggbb\" override or empty for severity default), label, blink}. Also "
+                   "returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can "
+                   "validate band ranges before writing back. An empty array means no alarms "
+                   "configured. Applies to bar / gauge / meter widgets and LED-panel datasets; "
+                   "calling on other widget types succeeds with an empty array."),
     makeSchema({
       {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                  },
       {QString(Keys::DatasetId),
@@ -881,13 +881,15 @@ void API::Handlers::ProjectHandler::registerDatasetAlarmCommands()
                    "dropped and counted in result.droppedInvalid), and an integer severity "
                    "(0=Info, 1=OK, 2=Warning, 3=Critical). color is optional (\"#rrggbb\" "
                    "override; empty/missing = severity's theme colour). label is optional "
-                   "(surfaces in band-edge notifications). Bands may have gaps and may "
-                   "overlap; rendering paints them in array order behind the value indicator. "
-                   "Severity >= Warning triggers a notification when the value enters the "
-                   "band (3-second per-widget cooldown suppresses oscillation spam).\n"
+                   "(surfaces in band-edge notifications). blink is optional (boolean; LED "
+                   "panels flash the LED while the band is active). Bands may have gaps and "
+                   "may overlap; rendering paints them in array order behind the value "
+                   "indicator. Severity >= Warning triggers a notification when the value "
+                   "enters the band, even when no widget is visible (3-second per-dataset "
+                   "cooldown suppresses oscillation spam).\n"
                    "Pass an empty array to clear all alarms."),
     makeSchema({
-      {                     QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                     },
+      {                     QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                             },
       {                          QString(Keys::DatasetId),
        QStringLiteral("integer"),
        QStringLiteral("Dataset id within the group")                             },
@@ -918,7 +920,12 @@ void API::Handlers::ProjectHandler::registerDatasetAlarmCommands()
        QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
        {QStringLiteral("description"),
        QStringLiteral("Optional band name (shown in "
-       "notifications)")}}}}},
+       "notifications)")}}},
+       {QStringLiteral("blink"),
+       QJsonObject{{QStringLiteral("type"), QStringLiteral("boolean")},
+       {QStringLiteral("description"),
+       QStringLiteral("Optional; LED panels flash the LED "
+       "while this band is active")}}}}},
        {QStringLiteral("required"),
        QJsonArray{
        QStringLiteral("min"), QStringLiteral("max"), QStringLiteral("severity")}}}
@@ -4257,7 +4264,7 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
                    "log, overviewDisplay, hideOnDashboard, xAxisId, "
                    "waterfallYAxis, fftSamples, fftSamplingRate, fftMin, fftMax, "
                    "pltMin, pltMax, wgtMin, wgtMax, ledHigh, "
-                   "alarmBands (array of {min,max,severity,color,label} objects, "
+                   "alarmBands (array of {min,max,severity,color,label,blink} objects, "
                    "severity=0..3 for Info/Ok/Warning/Critical), "
                    "or legacy alarmLow/alarmHigh/alarmEnabled for 2-band simple mode, "
                    "displayTickCount, displayFormat, "

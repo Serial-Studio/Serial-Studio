@@ -282,9 +282,20 @@ function consoleExport.setEnabled(enabled)
   return apiCall('consoleExport.setEnabled', p)
 end
 
+function controlscript.dryRun(code)
+  local p = {}
+  p['code'] = code
+  return apiCall('controlscript.dryRun', p)
+end
+
 function controlscript.get()
   local p = {}
   return apiCall('controlscript.get', p)
+end
+
+function controlscript.getCode()
+  local p = {}
+  return apiCall('controlscript.getCode', p)
 end
 
 function controlscript.getStatus()
@@ -296,6 +307,12 @@ function controlscript.set(code)
   local p = {}
   p['code'] = code
   return apiCall('controlscript.set', p)
+end
+
+function controlscript.setCode(code)
+  local p = {}
+  p['code'] = code
+  return apiCall('controlscript.setCode', p)
 end
 
 function csvExport.close()
@@ -371,6 +388,11 @@ end
 function dashboard.getTimeRange()
   local p = {}
   return apiCall('dashboard.getTimeRange', p)
+end
+
+function dashboard.reprocess()
+  local p = {}
+  return apiCall('dashboard.reprocess', p)
 end
 
 function dashboard.setFps(fps)
@@ -1247,6 +1269,13 @@ function project.dataTable.get(name)
   return apiCall('project.dataTable.get', p)
 end
 
+function project.dataTable.getValue(table, name)
+  local p = {}
+  p['table'] = table
+  p['name'] = name
+  return apiCall('project.dataTable.getValue', p)
+end
+
 function project.dataTable.list()
   local p = {}
   return apiCall('project.dataTable.list', p)
@@ -1257,6 +1286,14 @@ function project.dataTable.rename(oldName, newName)
   p['oldName'] = oldName
   p['newName'] = newName
   return apiCall('project.dataTable.rename', p)
+end
+
+function project.dataTable.setValue(table, name, value)
+  local p = {}
+  p['table'] = table
+  p['name'] = name
+  p['value'] = value
+  return apiCall('project.dataTable.setValue', p)
 end
 
 function project.dataTable.updateRegister(table, name, options)

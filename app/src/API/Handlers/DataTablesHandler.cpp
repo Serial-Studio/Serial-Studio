@@ -27,6 +27,7 @@
 #include "API/CommandRegistry.h"
 #include "API/SchemaBuilder.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "SerialStudio.h"
 
@@ -106,6 +107,16 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
       {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
   }),
     &tableGet);
+  registry.registerCommand(
+    QStringLiteral("project.dataTable.getValue"),
+    QStringLiteral("Return a register's LIVE runtime value from the data-table store (params: "
+                   "table, name). This is the same store the parser/transform tableGet() reads; "
+                   "control scripts use it through the tableGet() global."),
+    API::makeSchema({
+      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
+      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+  }),
+    &valueGet);
 }
 
 /**
@@ -140,6 +151,33 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
       {QStringLiteral("newName"), QStringLiteral("string"),     QStringLiteral("New table name")}
   }),
     &tableRename);
+
+  QJsonObject valueProps;
+  valueProps[QStringLiteral("table")] = QJsonObject{
+    {       QStringLiteral("type"),            QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Owning table name")}
+  };
+  valueProps[QStringLiteral("name")] = QJsonObject{
+    {       QStringLiteral("type"),        QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Register name")}
+  };
+  valueProps[QStringLiteral("value")] = QJsonObject{
+    {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
+    {QStringLiteral("description"),         QStringLiteral("New runtime value (number or string)")}
+  };
+  QJsonObject valueSchema;
+  valueSchema[QStringLiteral("type")]       = QStringLiteral("object");
+  valueSchema[QStringLiteral("properties")] = valueProps;
+  valueSchema[QStringLiteral("required")] =
+    QJsonArray{QStringLiteral("table"), QStringLiteral("name"), QStringLiteral("value")};
+  registry.registerCommand(
+    QStringLiteral("project.dataTable.setValue"),
+    QStringLiteral("Write a register's LIVE runtime value into the data-table store (params: "
+                   "table, name, value). Same effect as a parser/transform tableSet(); control "
+                   "scripts use it through the tableSet() global. Constant registers reject "
+                   "writes."),
+    valueSchema,
+    &valueSet);
 }
 
 /**
@@ -468,5 +506,94 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QStr
   result[QStringLiteral("name")]     = newName;
   result[QStringLiteral("computed")] = computed;
   result[QStringLiteral("updated")]  = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runtime register values (FrameBuilder data-table store)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns a register's live runtime value from the data-table store, mirroring the
+ *        parser/transform tableGet() (control scripts reach the store through this command).
+ */
+API::CommandResponse API::Handlers::DataTablesHandler::valueGet(const QString& id,
+                                                                const QJsonObject& params)
+{
+  QString table;
+  QString name;
+  if (!requireString(params, QStringLiteral("table"), table))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
+
+  if (!requireString(params, QStringLiteral("name"), name))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+
+  const auto& store = DataModel::FrameBuilder::instance().tableStore();
+  if (!store.isInitialized())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
+
+  const auto* value = store.get(table, name);
+  if (!value)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Unknown table or register: %1/%2").arg(table, name));
+
+  QJsonObject result;
+  result[QStringLiteral("table")]     = table;
+  result[QStringLiteral("name")]      = name;
+  result[QStringLiteral("isNumeric")] = value->isNumeric;
+  result[QStringLiteral("value")] =
+    value->isNumeric ? QJsonValue(value->numericValue) : QJsonValue(value->stringValue);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Writes a register's live runtime value into the data-table store, mirroring the
+ *        parser/transform tableSet() value semantics (numeric when parseable, string otherwise).
+ */
+API::CommandResponse API::Handlers::DataTablesHandler::valueSet(const QString& id,
+                                                                const QJsonObject& params)
+{
+  QString table;
+  QString name;
+  if (!requireString(params, QStringLiteral("table"), table))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
+
+  if (!requireString(params, QStringLiteral("name"), name))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+
+  if (!params.contains(QStringLiteral("value")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: value"));
+
+  const QVariant v = jsonToVariant(params.value(QStringLiteral("value")));
+
+  DataModel::RegisterValue rv;
+  rv.numericValue = SerialStudio::toDouble(v, &rv.isNumeric);
+  if (!rv.isNumeric)
+    rv.stringValue = v.toString();
+
+  auto& store = DataModel::FrameBuilder::instance().tableStore();
+  if (!store.isInitialized())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
+
+  if (!store.set(table, name, rv))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Cannot write register %1/%2 (unknown, or a constant register)")
+        .arg(table, name));
+
+  QJsonObject result;
+  result[QStringLiteral("table")]   = table;
+  result[QStringLiteral("name")]    = name;
+  result[QStringLiteral("written")] = true;
   return CommandResponse::makeSuccess(id, result);
 }

@@ -32,11 +32,6 @@
 
 class QThread;
 
-namespace DataModel {
-struct Group;
-struct Dataset;
-}  // namespace DataModel
-
 namespace Sessions {
 
 /**
@@ -121,6 +116,7 @@ private:
   void clearLocalState();
   void teardownLocalDb();
   bool openLocalDb(const QString& filePath);
+  void detectFinalValueColumns();
 
   [[nodiscard]] bool restoreProjectFromJson(const QString& json);
 
@@ -129,11 +125,6 @@ private:
 
   void alignColumnsToProject();
   void buildMultiSourceMapping();
-  void pickSlotForDataset(const DataModel::Group& g,
-                          const DataModel::Dataset& d,
-                          QMap<int, int>& uidToSource,
-                          QHash<QPair<int, int>, int>& slotPick,
-                          QSet<QPair<int, int>>& slotPickIsTransformFree);
 
   [[nodiscard]] QHash<int, QString> buildFrameAt(qint64 timestampNs);
   void injectFrame(const QHash<int, QString>& uidValues);
@@ -149,6 +140,7 @@ private:
   std::optional<QSqlDatabase> m_db;
   std::optional<QSqlQuery> m_frameQuery;
   bool m_frameQueryPrepared;
+  bool m_hasFinalValues;
   QString m_filePath;
   QString m_connectionName;
   int m_sessionId;
@@ -170,12 +162,9 @@ private:
   std::vector<qint64> m_timestampsNs;
 
   QMap<int, int> m_columnToSource;
-  QMap<int, int> m_sourceColumnCount;
+  QMap<int, std::vector<int>> m_sourceColumns;
 
   QSet<int> m_sourcesAtCurrentTs;
-
-  QHash<int, int> m_sourceMaxIndex;
-  QHash<int, std::vector<int>> m_sourceSlotUid;
 
   bool m_preSessionCaptured;
   SerialStudio::OperationMode m_preSessionOperationMode;

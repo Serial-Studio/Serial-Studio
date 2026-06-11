@@ -37,6 +37,14 @@ static const QString kSystemTable = QStringLiteral("__datasets__");
 static const QString kRawPrefix   = QStringLiteral("raw:");
 static const QString kFinalPrefix = QStringLiteral("final:");
 
+/**
+ * @brief Returns the reserved name of the internal per-dataset mirror table.
+ */
+const QString& DataModel::systemDataTableName()
+{
+  return kSystemTable;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Initialization
 //--------------------------------------------------------------------------------------------------

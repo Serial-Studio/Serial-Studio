@@ -35,6 +35,11 @@
 namespace DataModel {
 
 /**
+ * @brief Returns the reserved name of the internal per-dataset mirror table.
+ */
+[[nodiscard]] const QString& systemDataTableName();
+
+/**
  * @brief Single register value (numeric or string) held in a data table.
  */
 struct RegisterValue {

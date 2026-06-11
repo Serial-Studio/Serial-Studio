@@ -18,6 +18,18 @@ if (typeof __ss !== 'undefined') {
   datasetGetFinal = function(uid)     { return __ss.datasetGetFinal(uid); };
   if (__ss.mqttPublish)
     mqttPublish = function(t, p, q, r) { return __ss.mqttPublish(t, p, q, r); };
+} else if (typeof __ss_control !== 'undefined' && typeof __ss_bridge !== 'undefined') {
+  // Control scripts run on a worker thread with no direct __ss bridge; route the
+  // table API through the marshalled apiCall so reads/writes happen on the GUI
+  // thread. tableGet returns undefined when the table or register does not exist
+  // (so `tableGet(t, r) || fallback` keeps working).
+  tableGet = function(t, r) {
+    var res = __ss_bridge.call('project.dataTable.getValue', { table: t, name: r });
+    return (res.ok && res.result) ? res.result.value : undefined;
+  };
+  tableSet = function(t, r, v) {
+    __ss_bridge.call('project.dataTable.setValue', { table: t, name: r, value: v });
+  };
 }
 
 // Dashboard control (bridge: __ss_db, DashboardApi).
@@ -121,7 +133,10 @@ function canSendValue(id, value, bytes) {
 
 // Control-script See/Decide/Act helpers (bridge: __ss_bridge, worker thread only).
 // newFrame() returns the latest received frame exactly once per arrival (null when
-// nothing new); ensureDashboard(spec) declaratively creates whatever the spec
+// nothing new); refreshDashboard() re-runs every dataset transform from the last
+// received values and republishes the frames to the dashboard (no export side
+// effects) -- call it after tableSet() writes so they render while the device is
+// silent; ensureDashboard(spec) declaratively creates whatever the spec
 // describes that does not exist yet -- groups matched by title, datasets matched
 // by parser index inside their group. Existing items are never modified, and the
 // last satisfied spec is memoized so calling it every loop() is free.
@@ -140,6 +155,10 @@ if (typeof __ss_bridge !== 'undefined') {
       return null;
     __ssLastFrameSeq = r.result.sequence;
     return r.result;
+  };
+
+  refreshDashboard = function() {
+    return __ss_bridge.call('dashboard.reprocess', {});
   };
 
   var __ssGroupWidgets = {

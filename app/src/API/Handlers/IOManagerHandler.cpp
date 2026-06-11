@@ -21,6 +21,7 @@
 
 #include "API/Handlers/IOManagerHandler.h"
 
+#include <chrono>
 #include <QJsonArray>
 #include <QMetaEnum>
 
@@ -227,7 +228,9 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
                      "arrived. Capture runs only while a control script is running or "
                      "the API server is enabled, so hasData:false means no data OR no "
                      "active consumer. timestampMs is a monotonic clock in milliseconds "
-                     "(not Unix epoch time); use it only for deltas between frames."),
+                     "(not Unix epoch time); use it only for deltas between frames. "
+                     "ageMs is the time elapsed since the frame was captured -- use it "
+                     "for staleness watchdogs instead of mixing clocks."),
       schema,
       &getLatestFrame);
   }
@@ -454,10 +457,15 @@ API::CommandResponse API::Handlers::IOManagerHandler::getLatestFrame(const QStri
     return CommandResponse::makeSuccess(id, empty);
   }
 
+  const qint64 now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                          std::chrono::steady_clock::now().time_since_epoch())
+                          .count();
+
   QJsonObject result;
   result[QStringLiteral("hasData")]     = true;
   result[QStringLiteral("sequence")]    = static_cast<qint64>(latest->sequence);
   result[QStringLiteral("timestampMs")] = latest->timestampMs;
+  result[QStringLiteral("ageMs")]       = qMax<qint64>(0, now_ms - latest->timestampMs);
   result[Keys::SourceId]                = latest->sourceId;
 
   const QByteArray& payload = latest->chunk->data;

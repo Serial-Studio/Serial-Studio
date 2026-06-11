@@ -83,6 +83,7 @@ private:
   QString m_code;
   bool m_ready;
   bool m_running;
+  bool m_shouldRun;
   bool m_shutdown;
   QThread m_thread;
   ControlScriptWorker* m_worker;

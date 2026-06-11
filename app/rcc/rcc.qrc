@@ -840,6 +840,7 @@
         <file>ai/docs/transform_lua.md</file>
         <file>ai/docs/output_widget_js.md</file>
         <file>ai/docs/painter_js.md</file>
+        <file>ai/docs/control_script_js.md</file>
         <file>ai/templates/manifest.json</file>
         <file>ai/templates/blank.json</file>
         <file>ai/templates/imu_uart.json</file>

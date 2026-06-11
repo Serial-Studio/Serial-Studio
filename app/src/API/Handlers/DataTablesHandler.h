@@ -47,6 +47,9 @@ private:
   static CommandResponse registerAdd(const QString& id, const QJsonObject& params);
   static CommandResponse registerDelete(const QString& id, const QJsonObject& params);
   static CommandResponse registerUpdate(const QString& id, const QJsonObject& params);
+
+  static CommandResponse valueGet(const QString& id, const QJsonObject& params);
+  static CommandResponse valueSet(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

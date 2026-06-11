@@ -22,18 +22,19 @@
 
 #include "DataModel/Importers/DBCImporter.h"
 
+#include <algorithm>
 #include <cmath>
 #include <QApplication>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QJsonArray>
-#include <QRegularExpression>
 #include <QSet>
 #include <QStandardPaths>
 
 #include "DataModel/Frame.h"
 #include "DataModel/Importers/AxisTicks.h"
+#include "DataModel/Importers/ImporterCommon.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -142,7 +143,9 @@ void DataModel::DBCImporter::importDBC()
 void DataModel::DBCImporter::cancelImport()
 {
   m_messages.clear();
+  m_tableNames.clear();
   m_dbcFilePath.clear();
+  m_valueDescriptions.clear();
   Q_EMIT messagesChanged();
   Q_EMIT dbcFileNameChanged();
 }
@@ -161,7 +164,8 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
     return;
   }
 
-  m_messages = parser.messageDescriptions();
+  m_messages          = parser.messageDescriptions();
+  m_valueDescriptions = parser.messageValueDescriptions();
   if (m_messages.isEmpty()) {
     Misc::Utilities::showMessageBox(
       tr("DBC file contains no messages"),
@@ -243,6 +247,8 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
   project[Keys::Title]   = projectTitle;
   project[Keys::Actions] = QJsonArray();
 
+  buildTableNames(messages);
+
   QJsonObject source;
   source[Keys::SourceId]              = 0;
   source[Keys::Title]                 = tr("CAN Bus");
@@ -253,29 +259,27 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
   source[Keys::FrameDetection]        = static_cast<int>(SerialStudio::NoDelimiters);
   source[Keys::Decoder]               = static_cast<int>(SerialStudio::Binary);
   source[Keys::HexadecimalDelimiters] = false;
-  source[Keys::FrameParserCode]       = QString("");
-  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
-  source[Keys::FrameParserTemplate]   = QStringLiteral("can_signal_map");
-  source[Keys::FrameParserParams]     = generateNativeParserParams(messages);
+  source[Keys::FrameParserCode]       = generateLuaParser(messages);
+  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Lua);
 
   project[Keys::Sources] = QJsonArray{source};
 
-  const auto groups = generateGroups(messages);
-  QJsonArray groupArray;
-  for (const auto& group : groups)
-    groupArray.append(serialize(group));
-
-  project[Keys::Groups] = groupArray;
+  auto groups       = generateGroups(messages);
+  const auto tables = generateTables(messages);
+  finalizeImportedProject(project, groups, tables, tr("Overview"));
 
   return project;
 }
 
 /**
- * @brief Builds a Dataset for a CAN signal, choosing widget and ranges sensibly.
+ * @brief Builds a Dataset for a CAN signal: a virtual dataset whose Lua transform reads the
+ *        signal's physical value back from the message's data table.
  */
 DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   const QCanSignalDescription& signal,
   const QString& groupWidget,
+  const QString& tableName,
+  const QCanDbcFileParser::ValueDescriptions& valueLabels,
   int datasetIndex,
   MuxRole role,
   qint64 muxValue)
@@ -283,6 +287,8 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   DataModel::Dataset dataset;
   dataset.index = datasetIndex;
   dataset.units = signal.physicalUnit();
+  dataset.log   = true;
+  dataset.fft   = false;
 
   if (role == MuxRole::SimpleMuxed)
     dataset.title = QString("%1 (mux %2)").arg(signal.name()).arg(muxValue);
@@ -307,29 +313,32 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   dataset.wgtMin           = nice.min;
   dataset.wgtMax           = nice.max;
   dataset.displayTickCount = nice.tickCount;
-  dataset.displayFormat    = isIntegerSignal(signal) ? QStringLiteral("0d") : QStringLiteral("1d");
 
-  const auto isSingleBit = (signal.bitLength() == 1);
-  if (isSingleBit) {
-    dataset.widget  = QString("");
-    dataset.plt     = false;
-    dataset.fft     = false;
+  const int decimals =
+    qMax(fractionalDecimals(signal.factor()), fractionalDecimals(signal.offset()));
+  dataset.displayFormat = QStringLiteral("%1d").arg(decimals);
+
+  applyTableTransform(dataset, tableName, signal.name());
+
+  if (signal.bitLength() == 1) {
     dataset.led     = true;
     dataset.ledHigh = 1;
-    dataset.log     = true;
+    applyBooleanLedBand(dataset, tr("Active"));
     return dataset;
   }
 
-  if (shouldAssignIndividualWidget(groupWidget, signal, isSingleBit))
-    dataset.widget = selectWidgetForSignal(signal);
-  else
-    dataset.widget = QString("");
+  const bool plainScaling = (signal.factor() == 1.0 && signal.offset() == 0.0);
+  if (!valueLabels.isEmpty() && plainScaling) {
+    dataset.transformCode = enumTransformCode(tableName, signal.name(), valueLabels);
+    return dataset;
+  }
 
-  dataset.plt     = false;
-  dataset.fft     = false;
-  dataset.led     = false;
-  dataset.ledHigh = 0;
-  dataset.log     = true;
+  const bool dataGridGroup = (groupWidget == SerialStudio::groupWidgetId(SerialStudio::DataGrid));
+  dataset.widget           = dataGridGroup ? selectWidgetForSignal(signal) : QString("");
+  dataset.plt              = dataGridGroup && isPlottableSignal(signal);
+  if (!dataset.widget.isEmpty())
+    applyAnalogDisplayPolicy(dataset);
+
   return dataset;
 }
 
@@ -352,31 +361,17 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
     group.title   = message.name();
     group.widget  = selectGroupWidget(message);
 
-    const auto signalList    = message.signalDescriptions();
-    const auto selectorIndex = findSelectorIndex(message);
-    if (selectorIndex >= 0)
-      group.datasets.push_back(buildDatasetFromSignal(
-        signalList.at(selectorIndex), group.widget, datasetIndex++, MuxRole::Selector, 0));
+    const auto tableName = tableNameFor(message);
+    const auto msgLabels = m_valueDescriptions.value(message.uniqueId());
 
-    for (const auto& signal : message.signalDescriptions()) {
-      qint64 muxValue = 0;
-      const auto role = classifyMux(signal, message, muxValue);
-      if (role != MuxRole::Plain)
-        continue;
-
-      group.datasets.push_back(
-        buildDatasetFromSignal(signal, group.widget, datasetIndex++, role, muxValue));
-    }
-
-    for (const auto& signal : message.signalDescriptions()) {
-      qint64 muxValue = 0;
-      const auto role = classifyMux(signal, message, muxValue);
-      if (role != MuxRole::SimpleMuxed)
-        continue;
-
-      group.datasets.push_back(
-        buildDatasetFromSignal(signal, group.widget, datasetIndex++, role, muxValue));
-    }
+    for (const auto& entry : orderedSignals(message))
+      group.datasets.push_back(buildDatasetFromSignal(entry.signal,
+                                                      group.widget,
+                                                      tableName,
+                                                      msgLabels.value(entry.signal.name()),
+                                                      datasetIndex++,
+                                                      entry.role,
+                                                      entry.muxValue));
 
     groups.push_back(group);
     ++groupId;
@@ -386,80 +381,330 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
 }
 
 /**
- * @brief Builds the native can_signal_map template params from the DBC messages.
+ * @brief Assigns one collision-free data-table name per message (the message name, with the
+ *        frame id appended when a DBC reuses a name).
  */
-QJsonObject DataModel::DBCImporter::generateNativeParserParams(
-  const QList<QCanMessageDescription>& messages)
+void DataModel::DBCImporter::buildTableNames(const QList<QCanMessageDescription>& messages)
 {
-  m_skippedExtendedMuxSignals = 0;
+  m_tableNames.clear();
+
+  QSet<QString> used;
   for (const auto& message : messages) {
-    for (const auto& signal : message.signalDescriptions()) {
-      qint64 mv       = 0;
-      const auto role = classifyMux(signal, message, mv);
-      if (role == MuxRole::ExtendedMuxed)
-        ++m_skippedExtendedMuxSignals;
-    }
+    const auto id  = static_cast<quint32>(message.uniqueId()) & 0x1FFFFFFF;
+    const auto hex = QString::number(id, 16).toUpper();
+
+    QString name = message.name().simplified();
+    if (name.isEmpty())
+      name = QStringLiteral("Message 0x%1").arg(hex);
+
+    if (used.contains(name))
+      name += QStringLiteral(" @ 0x%1").arg(hex);
+
+    used.insert(name);
+    m_tableNames.insert(id, name);
+  }
+}
+
+/**
+ * @brief Returns the data-table name assigned to the message by buildTableNames().
+ */
+QString DataModel::DBCImporter::tableNameFor(const QCanMessageDescription& message) const
+{
+  return m_tableNames.value(static_cast<quint32>(message.uniqueId()));
+}
+
+/**
+ * @brief Returns the message's importable signals in canonical order: selector first, then
+ *        plain signals, then simple-muxed signals (extended-mux signals are skipped).
+ */
+QList<DataModel::DBCImporter::OrderedSignal> DataModel::DBCImporter::orderedSignals(
+  const QCanMessageDescription& message) const
+{
+  QList<OrderedSignal> ordered;
+  const auto signalList = message.signalDescriptions();
+
+  const auto selectorIndex = findSelectorIndex(message);
+  if (selectorIndex >= 0)
+    ordered.append({signalList.at(selectorIndex), MuxRole::Selector, 0});
+
+  for (const auto& signal : signalList) {
+    qint64 muxValue = 0;
+    if (classifyMux(signal, message, muxValue) == MuxRole::Plain)
+      ordered.append({signal, MuxRole::Plain, muxValue});
   }
 
-  QJsonArray messages_json;
+  for (const auto& signal : signalList) {
+    qint64 muxValue = 0;
+    if (classifyMux(signal, message, muxValue) == MuxRole::SimpleMuxed)
+      ordered.append({signal, MuxRole::SimpleMuxed, muxValue});
+  }
+
+  return ordered;
+}
+
+/**
+ * @brief Builds one data table per message: one Computed register per importable signal,
+ *        defaulting to 0 until the first frame for that message arrives.
+ */
+std::vector<DataModel::TableDef> DataModel::DBCImporter::generateTables(
+  const QList<QCanMessageDescription>& messages)
+{
+  std::vector<DataModel::TableDef> tables;
+
   for (const auto& message : messages) {
     if (!hasImportableSignals(message))
       continue;
 
-    const auto signalList = message.signalDescriptions();
-    QJsonArray signals_json;
+    DataModel::TableDef table;
+    table.name = tableNameFor(message);
 
-    const auto selectorIndex = findSelectorIndex(message);
-    if (selectorIndex >= 0)
-      signals_json.append(signalToJson(signalList.at(selectorIndex), MuxRole::Selector, 0));
-
-    for (const auto& signal : signalList) {
-      qint64 mv       = 0;
-      const auto role = classifyMux(signal, message, mv);
-      if (role == MuxRole::Plain)
-        signals_json.append(signalToJson(signal, role, mv));
+    for (const auto& entry : orderedSignals(message)) {
+      DataModel::RegisterDef reg;
+      reg.name         = entry.signal.name();
+      reg.type         = DataModel::RegisterType::Computed;
+      reg.defaultValue = QVariant(0.0);
+      table.registers.push_back(reg);
     }
 
-    for (const auto& signal : signalList) {
-      qint64 mv       = 0;
-      const auto role = classifyMux(signal, message, mv);
-      if (role == MuxRole::SimpleMuxed)
-        signals_json.append(signalToJson(signal, role, mv));
-    }
-
-    QJsonObject message_json;
-    message_json.insert(QStringLiteral("id"),
-                        static_cast<qint64>(static_cast<quint32>(message.uniqueId())));
-    message_json.insert(QStringLiteral("signals"), signals_json);
-    messages_json.append(message_json);
+    tables.push_back(table);
   }
 
-  QJsonObject params;
-  params.insert(QStringLiteral("messages"), messages_json);
-  return params;
+  return tables;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Lua parser generation
+//--------------------------------------------------------------------------------------------------
+
+// code-verify off
+/**
+ * @brief Returns the static extract()/parse() machinery appended below the MESSAGES spec.
+ *        Fenced: the linter's C++ parser misreads the embedded Lua literal.
+ */
+[[nodiscard]] static QString dbcLuaParserBody()
+{
+  return QStringLiteral(R"LUA(
+-- Extracts one raw signal value; base is the 1-based index of the first
+-- payload byte. Motorola (big-endian) walks the in-byte bit index down and
+-- jumps +15 across byte boundaries (the DBC sawtooth); Intel
+-- (little-endian) reads LSB-first runs. Bytes past the frame read 0.
+local function extract(frame, base, sig)
+  local value = 0
+  if sig.be then
+    local bit_pos = sig.start
+    for _ = 1, sig.len do
+      local byte = string.byte(frame, base + (bit_pos // 8)) or 0
+      value = (value << 1) | ((byte >> (bit_pos % 8)) & 1)
+      bit_pos = (bit_pos % 8 == 0) and (bit_pos + 15) or (bit_pos - 1)
+    end
+  else
+    local bits_read = 0
+    local bit_shift = sig.start % 8
+    local byte_idx = sig.start // 8
+    while bits_read < sig.len do
+      local byte = string.byte(frame, base + byte_idx) or 0
+      local take = math.min(8 - bit_shift, sig.len - bits_read)
+      value = value | (((byte >> bit_shift) & ((1 << take) - 1)) << bits_read)
+      bits_read = bits_read + take
+      bit_shift = 0
+      byte_idx = byte_idx + 1
+    end
+  end
+
+  if sig.signed and (value & (1 << (sig.len - 1))) ~= 0 then
+    value = value - (1 << sig.len)
+  end
+
+  return value
+end
+
+-- Returns the CAN id and the 1-based index of the first payload byte: bit 7
+-- of byte 1 selects the extended (29-bit, 4-byte id) header form.
+local function frame_id(frame)
+  local b1 = string.byte(frame, 1)
+  if (b1 & 0x80) ~= 0 then
+    if #frame < 5 then
+      return nil
+    end
+
+    local id = ((b1 & 0x1F) << 24) | (string.byte(frame, 2) << 16)
+             | (string.byte(frame, 3) << 8) | string.byte(frame, 4)
+    return id, 6
+  end
+
+  return ((b1 << 8) | string.byte(frame, 2)), 4
+end
+
+function parse(frame)
+  if #frame < 3 then
+    return {}
+  end
+
+  local id, base = frame_id(frame)
+  local msg = id and MESSAGES[id]
+  if not msg then
+    return {}
+  end
+
+  local selector = nil
+  for _, sig in ipairs(msg.signals) do
+    if sig.mux == nil or sig.mux == selector then
+      local raw = extract(frame, base, sig)
+      if sig.selector then
+        selector = raw
+      end
+
+      tableSet(msg.table, sig.name, raw * (sig.factor or 1) + (sig.offset or 0))
+    end
+  end
+
+  return { 0 } -- values flow through tableSet; datasets read them back
+end
+)LUA");
+}
+
+// code-verify on
+
+/**
+ * @brief Generates the user-editable Lua frame parser: a documented header, the declarative
+ *        MESSAGES spec, and the generic extract()/parse() machinery. Also counts the
+ *        extended-mux signals that the import skips.
+ */
+QString DataModel::DBCImporter::generateLuaParser(const QList<QCanMessageDescription>& messages)
+{
+  m_skippedExtendedMuxSignals = 0;
+  for (const auto& message : messages) {
+    for (const auto& signal : message.signalDescriptions()) {
+      qint64 mv = 0;
+      if (classifyMux(signal, message, mv) == MuxRole::ExtendedMuxed)
+        ++m_skippedExtendedMuxSignals;
+    }
+  }
+
+  QString spec;
+  for (const auto& message : messages)
+    if (hasImportableSignals(message))
+      spec += generateMessageSpec(message);
+
+  const QString header = QStringLiteral(R"LUA(--[[
+  CAN frame parser generated by the Serial Studio DBC importer.
+  Source database: %1
+
+  Wire format (Serial Studio CAN driver):
+    standard:  [ID_hi, ID_lo, DLC, data0..dataN]
+    extended:  [0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC, data0..dataN]
+
+  Data flow:
+    parse() decodes every known signal and publishes its physical value
+    with tableSet("<message>", "<signal>", value); each dataset reads the
+    value back with tableGet() inside its transform, so datasets never
+    depend on positional parser channels.
+
+  To add a signal:
+    1. Add one line to MESSAGES below (bit layout from the DBC).
+    2. Add a register with the same name to the message's data table.
+    3. Add a dataset whose transform reads it back with tableGet().
+]]
+
+-- Signal layout fields (omitted fields use the defaults):
+--   start    DBC start bit               len     bit length
+--   be       true = Motorola (@0)        signed  true = two's complement
+--   factor   raw -> physical multiplier  offset  raw -> physical offset
+--   selector marks the multiplexor       mux     gates the entry on a selector value
+local MESSAGES = {
+%2}
+)LUA")
+                           .arg(dbcFileName(), spec);
+
+  return header + dbcLuaParserBody();
 }
 
 /**
- * @brief Serializes one CAN signal's bit layout, scaling and multiplex role.
+ * @brief Emits one message's MESSAGES entry, with the DBC comment carried into the Lua.
  */
-QJsonObject DataModel::DBCImporter::signalToJson(const QCanSignalDescription& signal,
-                                                 MuxRole role,
-                                                 qint64 muxValue)
+QString DataModel::DBCImporter::generateMessageSpec(const QCanMessageDescription& message)
 {
-  QJsonObject json;
-  json.insert(QStringLiteral("startBit"), signal.startBit());
-  json.insert(QStringLiteral("length"), signal.bitLength());
-  json.insert(QStringLiteral("bigEndian"), signal.dataEndian() == QSysInfo::BigEndian);
-  json.insert(QStringLiteral("signed"), signal.dataFormat() == QtCanBus::DataFormat::SignedInteger);
-  json.insert(QStringLiteral("factor"), signal.factor());
-  json.insert(QStringLiteral("offset"), signal.offset());
+  const auto id  = static_cast<quint32>(message.uniqueId()) & 0x1FFFFFFF;
+  const auto hex = QString::number(id, 16).toUpper();
+
+  QString heading    = QStringLiteral("  -- %1 @ 0x%2").arg(message.name(), hex);
+  const auto comment = message.comment().simplified();
+  if (!comment.isEmpty())
+    heading += QStringLiteral(": %1").arg(comment);
+
+  QString out  = heading + QLatin1Char('\n');
+  out         += QStringLiteral("  [0x%1] = {\n    table = %2,\n    signals = {\n")
+           .arg(hex, luaQuote(tableNameFor(message)));
+
+  for (const auto& entry : orderedSignals(message))
+    out += signalSpecLine(entry.signal, entry.role, entry.muxValue);
+
+  out += QStringLiteral("    },\n  },\n");
+  return out;
+}
+
+/**
+ * @brief Emits one signal's spec line; default-valued fields are omitted so the spec stays
+ *        scannable, and the DBC signal comment rides along as a Lua comment.
+ */
+QString DataModel::DBCImporter::signalSpecLine(const QCanSignalDescription& signal,
+                                               MuxRole role,
+                                               qint64 muxValue) const
+{
+  QString line = QStringLiteral("      { name = %1, start = %2, len = %3")
+                   .arg(luaQuote(signal.name()),
+                        QString::number(signal.startBit()),
+                        QString::number(signal.bitLength()));
+
+  if (signal.dataEndian() == QSysInfo::BigEndian)
+    line += QStringLiteral(", be = true");
+
+  if (signal.dataFormat() == QtCanBus::DataFormat::SignedInteger)
+    line += QStringLiteral(", signed = true");
+
+  if (std::isfinite(signal.factor()) && signal.factor() != 1.0)
+    line += QStringLiteral(", factor = %1").arg(luaNumber(signal.factor()));
+
+  if (std::isfinite(signal.offset()) && signal.offset() != 0.0)
+    line += QStringLiteral(", offset = %1").arg(luaNumber(signal.offset()));
 
   if (role == MuxRole::Selector)
-    json.insert(QStringLiteral("selector"), true);
+    line += QStringLiteral(", selector = true");
   else if (role == MuxRole::SimpleMuxed)
-    json.insert(QStringLiteral("mux"), muxValue);
+    line += QStringLiteral(", mux = %1").arg(muxValue);
 
-  return json;
+  line += QStringLiteral(" },");
+
+  const auto comment = signal.comment().simplified();
+  if (!comment.isEmpty())
+    line += QStringLiteral(" -- %1").arg(comment);
+
+  return line + QLatin1Char('\n');
+}
+
+/**
+ * @brief Builds the Lua transform that maps a VAL_ enum signal's raw value to its DBC label,
+ *        so the dataset shows readable state text instead of a bare number.
+ */
+QString DataModel::DBCImporter::enumTransformCode(
+  const QString& table, const QString& reg, const QCanDbcFileParser::ValueDescriptions& valueLabels)
+{
+  auto keys = valueLabels.keys();
+  std::sort(keys.begin(), keys.end());
+
+  QString out = QStringLiteral("local LABELS = {\n");
+  for (const auto key : keys)
+    out +=
+      QStringLiteral("  [%1] = %2,\n").arg(QString::number(key), luaQuote(valueLabels.value(key)));
+
+  out += QStringLiteral("}\n\n"
+                        "function transform(value)\n"
+                        "  local raw = math.floor((tableGet(%1, %2) or 0) + 0.5)\n"
+                        "  return LABELS[raw] or (\"Unknown (\" .. raw .. \")\")\n"
+                        "end\n")
+           .arg(luaQuote(table), luaQuote(reg));
+
+  return out;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -552,31 +797,11 @@ DataModel::DBCImporter::MuxRole DataModel::DBCImporter::classifyMux(
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Picks a group widget type based on the message's signal family.
+ * @brief Picks the group widget: a GPS/motion summary when detected, otherwise a data grid.
  */
 QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& message)
 {
   const auto signalDescriptions = message.signalDescriptions();
-  const auto signalCount        = signalDescriptions.count();
-
-  if (signalCount == 1)
-    return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
-
-  bool allBoolean = true;
-  for (const auto& signal : signalDescriptions) {
-    if (signal.bitLength() != 1) {
-      allBoolean = false;
-      break;
-    }
-  }
-
-  if (allBoolean)
-    return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
-
-  const auto family   = detectSignalFamily(signalDescriptions);
-  const auto familyId = resolveSignalFamilyWidget(family, signalCount, signalDescriptions);
-  if (!familyId.isEmpty())
-    return familyId;
 
   const auto gpsId = detectGpsWidget(signalDescriptions);
   if (!gpsId.isEmpty())
@@ -586,55 +811,7 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
   if (!motionId.isEmpty())
     return motionId;
 
-  if (signalCount >= 2 && signalCount <= 8) {
-    const int plottableCount = countPlottable(signalDescriptions);
-    if (plottableCount >= 2)
-      return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
-  }
-
   return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
-}
-
-/**
- * @brief Returns a widget id for an explicitly recognised signal family, or empty if unmatched.
- */
-QString DataModel::DBCImporter::resolveSignalFamilyWidget(
-  SignalFamily family,
-  int signalCount,
-  const QList<QCanSignalDescription>& signalDescriptions) const
-{
-  switch (family) {
-    case WheelSpeeds:
-    case TirePressures:
-      return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
-
-    case Temperatures:
-    case Voltages:
-      if (signalCount <= 8)
-        return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
-
-      return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
-
-    case BatteryCluster:
-      return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
-
-    case StatusFlags:
-      return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
-
-    case GenericRelated:
-      if (signalCount >= 2 && signalCount <= 8) {
-        const int plottableCount = countPlottable(signalDescriptions);
-        if (plottableCount >= 2)
-          return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
-      }
-      break;
-
-    case None:
-    default:
-      break;
-  }
-
-  return QString();
 }
 
 /**
@@ -762,21 +939,20 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
 }
 
 /**
- * @brief Returns true when the signal can only take integer physical values.
+ * @brief Returns true when the signal is a continuous quantity worth a plot toggle.
  */
-bool DataModel::DBCImporter::isIntegerSignal(const QCanSignalDescription& signal)
+bool DataModel::DBCImporter::isPlottableSignal(const QCanSignalDescription& signal)
 {
-  const double factor = signal.factor();
-  const double offset = signal.offset();
-  const auto isWhole  = [](double v) {
-    return std::isfinite(v) && std::fabs(v - std::round(v)) < 1e-9;
-  };
+  if (signal.bitLength() <= 1)
+    return false;
 
-  return isWhole(factor) && isWhole(offset);
+  const auto name = signal.name().toLower();
+  return !name.contains("odometer") && !name.contains("trip") && !name.contains("counter")
+      && !name.contains("timestamp") && !name.contains("status") && !name.contains("state");
 }
 
 //--------------------------------------------------------------------------------------------------
-// Pattern detection helpers
+// Signal counting
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -795,245 +971,4 @@ int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription
   }
 
   return count;
-}
-
-/**
- * @brief Returns true if at least 2 signal names match a positional marker.
- */
-bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
-                                                  const QStringList& positions) const
-{
-  int matchCount = 0;
-  for (const auto& signal : signalList) {
-    const auto name = signal.name().toLower();
-    for (const auto& pos : positions) {
-      if (name.contains(pos)) {
-        matchCount++;
-        break;
-      }
-    }
-  }
-
-  return matchCount >= 2;
-}
-
-/**
- * @brief Returns true if at least 2 signal names use a numbered suffix.
- */
-bool DataModel::DBCImporter::hasNumberedPattern(
-  const QList<QCanSignalDescription>& signalList) const
-{
-  if (signalList.count() < 2)
-    return false;
-
-  QRegularExpression numberPattern("[_\\s]?\\d+$|\\d+[_\\s]?");
-  int numberedCount = 0;
-
-  for (const auto& signal : signalList) {
-    const auto name = signal.name();
-    if (numberPattern.match(name).hasMatch())
-      numberedCount++;
-  }
-
-  return numberedCount >= 2;
-}
-
-/**
- * @brief Returns true if all non-empty physical units are identical.
- */
-bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>& signalList) const
-{
-  if (signalList.isEmpty())
-    return false;
-
-  QStringList units;
-  for (const auto& signal : signalList) {
-    const auto unit = signal.physicalUnit().toLower().trimmed();
-    if (!unit.isEmpty() && !units.contains(unit))
-      units.append(unit);
-  }
-
-  return units.count() <= 1;
-}
-
-/**
- * @brief Returns true if the signals look like a battery monitoring cluster.
- */
-bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription>& signalList) const
-{
-  if (signalList.count() < 2)
-    return false;
-
-  bool hasVoltage = false;
-  bool hasCurrent = false;
-  bool hasSoC     = false;
-
-  for (const auto& signal : signalList) {
-    const auto name = signal.name().toLower();
-    const auto unit = signal.physicalUnit().toLower();
-
-    if (name.contains("volt") || unit.contains("v"))
-      hasVoltage = true;
-
-    if (name.contains("current") || name.contains("amp") || unit.contains("a"))
-      hasCurrent = true;
-
-    if (name.contains("soc") || name.contains("charge") || unit.contains("%"))
-      hasSoC = true;
-  }
-
-  return (hasVoltage && hasCurrent) || (hasVoltage && hasSoC) || (hasCurrent && hasSoC);
-}
-
-/**
- * @brief Returns true if all signals are 1-bit flags or status-named.
- */
-bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>& signalList) const
-{
-  for (const auto& signal : signalList) {
-    if (signal.bitLength() > 1) {
-      const auto name = signal.name().toLower();
-      if (!name.contains("status") && !name.contains("state") && !name.contains("mode")
-          && !name.contains("flag"))
-        return false;
-    }
-  }
-
-  return true;
-}
-
-/**
- * @brief Counts signals suitable for time-series plotting.
- */
-int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& signalList) const
-{
-  int count = 0;
-  for (const auto& signal : signalList) {
-    if (signal.bitLength() <= 1)
-      continue;
-
-    const auto name = signal.name().toLower();
-    if (name.contains("odometer") || name.contains("trip") || name.contains("counter")
-        || name.contains("timestamp") || name.contains("status") || name.contains("state"))
-      continue;
-
-    count++;
-  }
-
-  return count;
-}
-
-/**
- * @brief Classifies the message's signals into a SignalFamily category.
- */
-DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
-  const QList<QCanSignalDescription>& signalList) const
-{
-  if (signalList.isEmpty())
-    return None;
-
-  if (hasPositionalPattern(signalList, {"fl", "fr", "rl", "rr"})) {
-    for (const auto& signal : signalList) {
-      const auto unit = signal.physicalUnit().toLower();
-      if (unit.contains("km/h") || unit.contains("mph") || unit.contains("m/s"))
-        return WheelSpeeds;
-
-      if (unit.contains("psi") || unit.contains("bar") || unit.contains("kpa"))
-        return TirePressures;
-    }
-  }
-
-  if (hasNumberedPattern(signalList) && allSimilarUnits(signalList)) {
-    if (!signalList.isEmpty()) {
-      const auto unit = signalList.first().physicalUnit().toLower();
-      // code-verify off
-      if (unit.contains("°") || unit.contains("deg"))
-        return Temperatures;
-      // code-verify on
-
-      if (unit.contains("v") && !unit.contains("rev"))
-        return Voltages;
-    }
-  }
-
-  if (hasBatterySignals(signalList))
-    return BatteryCluster;
-
-  if (allStatusSignals(signalList))
-    return StatusFlags;
-
-  if (signalList.count() >= 2 && allSimilarUnits(signalList))
-    return GenericRelated;
-
-  return None;
-}
-
-/**
- * @brief Returns true for critical signals that always warrant an own widget.
- */
-bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signal) const
-{
-  const auto name = signal.name().toLower();
-  const auto unit = signal.physicalUnit().toLower();
-
-  if (name.contains("rpm") || unit.contains("rpm"))
-    return true;
-
-  if (name.contains("speed") || name.contains("velocity"))
-    return true;
-
-  if (unit.contains("km/h") || unit.contains("mph") || unit.contains("m/s"))
-    return true;
-
-  if (name.contains("temp") || name.contains("temperature"))
-    return true;
-
-  // code-verify off
-  if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf"))
-    return true;
-  // code-verify on
-
-  if ((name.contains("volt") || unit.contains("v")) && !unit.contains("rev"))
-    return true;
-
-  if (name.contains("current") || name.contains("amp") || unit.contains("a"))
-    return true;
-
-  if (name.contains("pressure") || unit.contains("psi") || unit.contains("bar")
-      || unit.contains("kpa") || unit.contains("pa"))
-    return true;
-
-  if (name.contains("throttle") || name.contains("brake") || name.contains("accelerator"))
-    return true;
-
-  if (name.contains("fuel") || name.contains("battery") || name.contains("soc")
-      || name.contains("charge"))
-    return true;
-
-  if (name.contains("torque") || unit.contains("nm") || unit.contains("n.m"))
-    return true;
-
-  if (name.contains("power") || unit.contains("kw") || unit.contains("hp") || unit.contains("w"))
-    return true;
-
-  return false;
-}
-
-/**
- * @brief Returns true if the signal should receive its own dataset widget.
- */
-bool DataModel::DBCImporter::shouldAssignIndividualWidget(const QString& groupWidget,
-                                                          const QCanSignalDescription& signal,
-                                                          bool isSingleBit) const
-{
-  if (isSingleBit)
-    return true;
-
-  if (groupWidget.isEmpty() || groupWidget == SerialStudio::groupWidgetId(SerialStudio::DataGrid))
-    return true;
-
-  if (isCriticalSignal(signal))
-    return true;
-
-  return false;
 }

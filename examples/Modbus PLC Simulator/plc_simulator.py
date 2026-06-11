@@ -744,36 +744,48 @@ try:
 
     PYMODBUS_VERSION = pymodbus.__version__
     log.info(f"pymodbus version: {PYMODBUS_VERSION}")
-except:
+except Exception:
     PYMODBUS_VERSION = "unknown"
 
-from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext
-
-try:
-    from pymodbus.datastore import ModbusDeviceContext as SlaveContext
-
-    USE_DEVICES_PARAM = True
-    log.info("Using pymodbus 4.x API")
-except ImportError:
-    from pymodbus.datastore import ModbusSlaveContext as SlaveContext
-
-    USE_DEVICES_PARAM = False
-    log.info("Using pymodbus 3.x API")
-
 from pymodbus.server import StartAsyncTcpServer
+
+# pymodbus >= 3.13 replaces the classic datastore with SimData/SimDevice; the
+# old classes survive only as read-only shims (no setValues). Detect by
+# behavior, not version: if the context class can't store values, use the
+# simulator API.
+USE_SIM_API = False
+try:
+    from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext
+
+    try:
+        from pymodbus.datastore import ModbusDeviceContext as SlaveContext
+    except ImportError:
+        from pymodbus.datastore import ModbusSlaveContext as SlaveContext
+
+    USE_SIM_API = not hasattr(SlaveContext, "setValues")
+except ImportError:
+    USE_SIM_API = True
+
+if USE_SIM_API:
+    from pymodbus.simulator import DataType, SimData, SimDevice
+
+    log.info("Using pymodbus SimData/SimDevice API (>= 3.13)")
+else:
+    log.info("Using pymodbus classic datastore API (<= 3.12)")
 
 # =========================================================================
 # Background Task
 # =========================================================================
 
 
-async def update_simulation(store: SlaveContext, sim: HydraulicTestStand):
+async def update_simulation(sim: HydraulicTestStand, publish=None):
     """High-frequency physics update loop."""
     log_counter = 0
     while True:
         try:
             sim.update(UPDATE_INTERVAL)
-            store.setValues(3, 0, sim.get_registers())
+            if publish:
+                publish(sim.get_registers())
 
             # Log every 500ms (compact 80-char format)
             log_counter += 1
@@ -813,19 +825,35 @@ async def update_simulation(store: SlaveContext, sim: HydraulicTestStand):
 async def run_server():
     sim = HydraulicTestStand()
 
-    store = SlaveContext(
-        di=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
-        co=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
-        hr=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
-        ir=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
-    )
+    if USE_SIM_API:
+        # Registers are refreshed lazily: pymodbus calls this on every request,
+        # so each poll sees the live simulation state.
+        async def refresh_registers(_fc, _start, _address, _count, registers, _values):
+            regs = sim.get_registers()
+            registers[: len(regs)] = regs
+            return None
 
-    if USE_DEVICES_PARAM:
-        context = ModbusServerContext(devices=store, single=True)
+        context = SimDevice(
+            0,
+            simdata=[
+                SimData(0, count=NUM_REGISTERS, values=0, datatype=DataType.REGISTERS)
+            ],
+            action=refresh_registers,
+        )
+        publish = None
     else:
-        context = ModbusServerContext(slaves=store, single=True)
+        store = SlaveContext(
+            di=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
+            co=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
+            hr=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
+            ir=ModbusSequentialDataBlock(0, [0] * NUM_REGISTERS),
+        )
+        context = ModbusServerContext(store, single=True)
 
-    asyncio.create_task(update_simulation(store, sim))
+        def publish(regs):
+            store.setValues(3, 0, regs)
+
+    asyncio.create_task(update_simulation(sim, publish))
 
     print()
     print("=" * 72)
@@ -839,7 +867,7 @@ async def run_server():
     print("    0:E-Stop  1:Start  2:Temp(°F)  3:PSI  4:RPM  5:Valve(%)")
     print("    6:GPM(÷10)  7:Load(%)  8:Vibration(÷10 mm/s)")
     print()
-    print("  Phases: STARTUP → RUNNING → PRESSURE_TEST → (FAILURE → SHUTDOWN)")
+    print("  Phases: STARTUP -> RUNNING -> PRESSURE_TEST -> (FAILURE -> SHUTDOWN)")
     print("  Flags:  E=E-Stop  A=Alarm(>2800PSI)  F=Failure")
     print("=" * 72)
     print()

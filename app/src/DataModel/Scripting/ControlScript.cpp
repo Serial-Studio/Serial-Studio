@@ -46,7 +46,12 @@ static constexpr int kShutdownWaitSliceMs = 100;
  *        worker thread.
  */
 DataModel::ControlScript::ControlScript()
-  : m_ready(false), m_running(false), m_shutdown(false), m_worker(nullptr), m_marshaller(nullptr)
+  : m_ready(false)
+  , m_running(false)
+  , m_shouldRun(false)
+  , m_shutdown(false)
+  , m_worker(nullptr)
+  , m_marshaller(nullptr)
 {
   m_marshaller = new ControlApiMarshaller(this);
   m_worker     = new ControlScriptWorker(m_marshaller);
@@ -188,13 +193,19 @@ bool DataModel::ControlScript::shouldRun() const
 
 /**
  * @brief Starts or stops the control script in step with the connection and operation mode.
+ *        Every rising edge force-restarts the worker so each connection gets a fresh engine
+ *        (setup() re-runs, top-level script state resets) even if a stale worker survived.
  */
 void DataModel::ControlScript::onConnectedChanged()
 {
-  if (shouldRun())
+  const bool run = shouldRun();
+  if (run == m_shouldRun)
+    return;
+
+  m_shouldRun = run;
+  stopWorker();
+  if (run)
     startWorker();
-  else
-    stopWorker();
 }
 
 /**
@@ -224,14 +235,16 @@ void DataModel::ControlScript::startWorker()
 }
 
 /**
- * @brief Asks the worker thread to stop the running script.
+ * @brief Asks the worker thread to stop the running script. Always queues the (idempotent)
+ *        stop so a worker that desynced from m_running can never keep an old engine alive
+ *        across a connection cycle.
  */
 void DataModel::ControlScript::stopWorker()
 {
-  if (!m_running)
-    return;
-
   QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
-  m_running = false;
-  Q_EMIT runningChanged();
+
+  if (m_running) {
+    m_running = false;
+    Q_EMIT runningChanged();
+  }
 }

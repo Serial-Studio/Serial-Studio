@@ -697,7 +697,8 @@ QString AI::ContextBuilder::scriptingDocFor(const QString& kind)
                                          QStringLiteral("transform_js"),
                                          QStringLiteral("transform_lua"),
                                          QStringLiteral("output_widget_js"),
-                                         QStringLiteral("painter_js")};
+                                         QStringLiteral("painter_js"),
+                                         QStringLiteral("control_script_js")};
 
   if (!kAllowed.contains(kind))
     return {};

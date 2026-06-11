@@ -33,6 +33,7 @@
 #include "DataModel/ExportSchema.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/FrameParserPipeline.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
@@ -294,12 +295,8 @@ void CSV::Player::parseCsvRows(QTextStream& stream)
   constexpr int kMaxCsvRows = 10'000'000;
 
   while (!stream.atEnd() && m_csvData.size() < kMaxCsvRows) {
-    QStringList row = stream.readLine().split(',');
-
-    for (auto& item : row) {
-      item = item.simplified();
-      item.remove(QStringLiteral("\""));
-    }
+    const QString line = stream.readLine();
+    QStringList row    = DataModel::splitReplayRow(line);
 
     bool isRowValid =
       !row.isEmpty()
@@ -852,12 +849,9 @@ QByteArray CSV::Player::getFrame(const int row)
 
   if (m_csvData.count() > row) {
     const auto& list = m_csvData[row];
-    for (int i = 1; i < list.count(); ++i) {
-      frame.append(list[i].toUtf8());
-      if (i < list.count() - 1)
-        frame.append(',');
-      else
-        frame.append('\n');
+    if (list.count() > 1) {
+      frame = DataModel::joinReplayRow(list.mid(1));
+      frame.append('\n');
     }
   }
 
@@ -942,7 +936,8 @@ void CSV::Player::injectFrame(const QByteArray& frame)
     return;
   }
 
-  const auto fields = QString::fromUtf8(frame).trimmed().split(',');
+  const QString row = QString::fromUtf8(frame).trimmed();
+  const auto fields = DataModel::splitReplayRow(row);
 
   QMap<int, QStringList> sourceFields;
   QSet<int> sourcesPresent;
@@ -966,7 +961,7 @@ void CSV::Player::injectFrame(const QByteArray& frame)
     if (!sourcesPresent.contains(it.key()))
       continue;
 
-    sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
+    sourcePayloads[it.key()] = DataModel::joinReplayRow(it.value()) + '\n';
   }
 
   if (sourcePayloads.isEmpty())

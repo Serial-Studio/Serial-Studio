@@ -40,6 +40,7 @@
 #include "AppState.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/FrameParserPipeline.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
@@ -48,6 +49,19 @@
 //--------------------------------------------------------------------------------------------------
 // Helper observer classes
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns true when the channel stores text samples (string-typed MDF4 channel).
+ */
+static bool isStringChannel(const mdf::IChannel* channel)
+{
+  if (!channel)
+    return false;
+
+  const auto type = channel->DataType();
+  return type == mdf::ChannelDataType::StringAscii || type == mdf::ChannelDataType::StringUTF8
+      || type == mdf::ChannelDataType::StringUTF16Le || type == mdf::ChannelDataType::StringUTF16Be;
+}
 
 /**
  * @brief Observer class that caches channel values during MDF4 data reading
@@ -59,6 +73,7 @@ public:
    */
   SampleCacheObserver(const mdf::IDataGroup& dataGroup,
                       std::map<uint64_t, std::vector<double>>& cache,
+                      std::map<uint64_t, std::vector<QString>>& stringCache,
                       std::map<uint64_t, double>& timestampCache,
                       std::map<uint64_t, std::vector<bool>>& activeChannels,
                       const std::vector<mdf::IChannel*>& allChannels,
@@ -67,12 +82,14 @@ public:
                       uint64_t recordId)
     : mdf::ISampleObserver(dataGroup)
     , m_cache(cache)
+    , m_stringCache(stringCache)
     , m_timestampCache(timestampCache)
     , m_activeChannels(activeChannels)
     , m_allChannels(allChannels)
     , m_groupChannels(groupChannels)
     , m_groupTimeChannel(groupTimeChannel)
     , m_recordId(recordId)
+    , m_hasStringChannels(false)
   {
     for (size_t i = 0; i < m_allChannels.size(); ++i) {
       for (auto* ch : m_groupChannels) {
@@ -82,6 +99,9 @@ public:
         }
       }
     }
+
+    for (auto* ch : m_groupChannels)
+      m_hasStringChannels = m_hasStringChannels || isStringChannel(ch);
   }
 
   /**
@@ -115,6 +135,15 @@ public:
     auto& values = cacheIt->second;
     auto& active = activeIt->second;
 
+    std::vector<QString>* strings = nullptr;
+    if (m_hasStringChannels) {
+      auto strIt = m_stringCache.find(cacheKey);
+      if (strIt == m_stringCache.end())
+        strIt = m_stringCache.emplace(cacheKey, std::vector<QString>(m_allChannels.size())).first;
+
+      strings = &strIt->second;
+    }
+
     for (auto* channel : m_groupChannels) {
       if (!channel)
         continue;
@@ -122,6 +151,17 @@ public:
       auto it = m_channelIndexMap.find(channel);
       if (it == m_channelIndexMap.end())
         continue;
+
+      if (strings && isStringChannel(channel)) {
+        std::string text;
+        const bool success = GetEngValue(*channel, record_id, record, text);
+        if (!success)
+          (void)GetChannelValue(*channel, record_id, record, text);
+
+        (*strings)[it->second] = QString::fromStdString(text);
+        active[it->second]     = true;
+        continue;
+      }
 
       double value       = 0.0;
       const bool success = GetEngValue(*channel, record_id, record, value);
@@ -141,6 +181,7 @@ public:
 
 private:
   std::map<uint64_t, std::vector<double>>& m_cache;
+  std::map<uint64_t, std::vector<QString>>& m_stringCache;
   std::map<uint64_t, double>& m_timestampCache;
   std::map<uint64_t, std::vector<bool>>& m_activeChannels;
   const std::vector<mdf::IChannel*>& m_allChannels;
@@ -148,6 +189,7 @@ private:
   mdf::IChannel* m_groupTimeChannel;
   uint64_t m_recordId;
   std::map<mdf::IChannel*, size_t> m_channelIndexMap;
+  bool m_hasStringChannels;
 };
 
 /**
@@ -450,8 +492,10 @@ void MDF4::Player::closeFile()
   m_timestamp.clear();
   m_frameIndex.clear();
   m_sampleCache.clear();
+  m_stringCache.clear();
   m_timestampCache.clear();
   m_activeChannels.clear();
+  m_channelIsString.clear();
   m_multiSource        = false;
   m_isSerialStudioFile = false;
   m_masterTimeChannel  = nullptr;
@@ -763,6 +807,7 @@ void MDF4::Player::readDataGroupWithObservers(
   for (auto& ci : cgInfos) {
     auto obs = std::make_unique<SampleCacheObserver>(*dg,
                                                      m_sampleCache,
+                                                     m_stringCache,
                                                      m_timestampCache,
                                                      m_activeChannels,
                                                      m_channels,
@@ -805,8 +850,10 @@ void MDF4::Player::buildFrameIndex()
   m_frameIndex.clear();
   m_channels.clear();
   m_sampleCache.clear();
+  m_stringCache.clear();
   m_timestampCache.clear();
   m_activeChannels.clear();
+  m_channelIsString.clear();
   m_masterTimeChannel = nullptr;
 
   if (!m_reader || !m_reader->IsOk())
@@ -837,6 +884,11 @@ void MDF4::Player::buildFrameIndex()
   }
 
   m_channels = allChannels;
+
+  m_channelIsString.clear();
+  m_channelIsString.reserve(m_channels.size());
+  for (const auto* ch : m_channels)
+    m_channelIsString.push_back(isStringChannel(ch));
 
   for (auto* dg : dataGroups) {
     if (!dg)
@@ -966,7 +1018,8 @@ QString MDF4::Player::formatTimestamp(double timestamp) const
 }
 
 /**
- * @brief Extracts a frame of data at the specified index
+ * @brief Extracts a frame of data at the specified index. String-typed channels replay their
+ *        cached text verbatim; numeric channels format the cached double.
  */
 QByteArray MDF4::Player::getFrame(const int index)
 {
@@ -974,27 +1027,31 @@ QByteArray MDF4::Player::getFrame(const int index)
     return QByteArray();
 
   const auto& frameIdx = m_frameIndex[index];
-  QByteArray frame;
+
+  QStringList cells;
+  cells.reserve(static_cast<int>(m_channels.size()));
 
   auto it = m_sampleCache.find(frameIdx.recordIndex);
-  if (it != m_sampleCache.end()) {
-    const auto& values = it->second;
-    for (size_t i = 0; i < values.size(); ++i) {
-      frame.append(QString::number(values[i], 'g', 10).toUtf8());
-
-      if (i < values.size() - 1)
-        frame.append(',');
-    }
+  if (it == m_sampleCache.end()) {
+    for (size_t i = 0; i < m_channels.size(); ++i)
+      cells.append(QStringLiteral("0"));
   }
 
   else {
-    for (size_t i = 0; i < m_channels.size(); ++i) {
-      frame.append("0");
-      if (i < m_channels.size() - 1)
-        frame.append(',');
+    const auto sit                      = m_stringCache.find(frameIdx.recordIndex);
+    const std::vector<QString>* strings = (sit != m_stringCache.end()) ? &sit->second : nullptr;
+
+    const auto& values = it->second;
+    for (size_t i = 0; i < values.size(); ++i) {
+      const bool is_string = i < m_channelIsString.size() && m_channelIsString[i];
+      if (is_string && strings && i < strings->size())
+        cells.append((*strings)[i]);
+      else
+        cells.append(QString::number(values[i], 'g', 10));
     }
   }
 
+  QByteArray frame = DataModel::joinReplayRow(cells);
   frame.append('\n');
   return frame;
 }
@@ -1070,7 +1127,8 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
       active = &ait->second;
   }
 
-  const auto fields = QString::fromUtf8(frame).trimmed().split(',');
+  const QString row = QString::fromUtf8(frame).trimmed();
+  const auto fields = DataModel::splitReplayRow(row);
 
   QMap<int, QStringList> sourceFields;
   QMap<int, bool> sourceHasActive;
@@ -1096,7 +1154,7 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
     if (!sourceHasActive.value(it.key(), true))
       continue;
 
-    sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
+    sourcePayloads[it.key()] = DataModel::joinReplayRow(it.value()) + '\n';
   }
 
   if (!sourcePayloads.isEmpty())

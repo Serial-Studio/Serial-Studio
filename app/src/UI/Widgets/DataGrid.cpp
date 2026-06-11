@@ -254,13 +254,15 @@ void Widgets::DataGrid::rebuildRows()
 /**
  * @brief Builds the icon-button metadata for every dashboard widget displaying
  *        @p dataset: one {windowId, icon, title} map per widget, in dashboard order,
- *        so the QML side stays a plain Repeater.
+ *        so the QML side stays a plain Repeater. Plot entries are appended last so the
+ *        right-aligned plot button lands in the same column on every row that has one.
  */
 QVariantList Widgets::DataGrid::datasetWidgets(const DataModel::Dataset& dataset) const
 {
   Q_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index));
 
   QVariantList widgets;
+  QVariantList plots;
   const auto& map = UI::Dashboard::instance().widgetMap();
   for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
     const auto type = it.value().first;
@@ -276,9 +278,14 @@ QVariantList Widgets::DataGrid::datasetWidgets(const DataModel::Dataset& dataset
     entry.insert(QStringLiteral("windowId"), it.key());
     entry.insert(QStringLiteral("icon"), SerialStudio::dashboardWidgetIcon(type));
     entry.insert(QStringLiteral("title"), SerialStudio::dashboardWidgetTitle(type));
-    widgets.append(entry);
+
+    if (type == SerialStudio::DashboardPlot)
+      plots.append(entry);
+    else
+      widgets.append(entry);
   }
 
+  widgets += plots;
   return widgets;
 }
 

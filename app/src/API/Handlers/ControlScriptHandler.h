@@ -36,6 +36,7 @@ private:
   static CommandResponse getScript(const QString& id, const QJsonObject& params);
   static CommandResponse setScript(const QString& id, const QJsonObject& params);
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
+  static CommandResponse dryRun(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

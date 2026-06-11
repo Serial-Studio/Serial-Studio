@@ -142,7 +142,6 @@ public:
 
 [[nodiscard]] QList<const INativeTemplate*> textNativeTemplates();
 [[nodiscard]] QList<const INativeTemplate*> binaryNativeTemplates();
-[[nodiscard]] QList<const INativeTemplate*> mapNativeTemplates();
 [[nodiscard]] QList<const INativeTemplate*> multiFrameNativeTemplates();
 
 [[nodiscard]] QJsonObject nativeTemplateDefaults(const INativeTemplate& tmpl);

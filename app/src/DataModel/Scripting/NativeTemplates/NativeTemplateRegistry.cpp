@@ -34,7 +34,6 @@ const QList<const DataModel::INativeTemplate*>& DataModel::nativeTemplates()
     QList<const INativeTemplate*> list;
     list += textNativeTemplates();
     list += binaryNativeTemplates();
-    list += mapNativeTemplates();
     list += multiFrameNativeTemplates();
     return list;
   }();

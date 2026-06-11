@@ -17,12 +17,14 @@
 #include <cstddef>
 #include <new>
 #include <optional>
+#include <QMap>
 #include <QMutex>
 #include <QObject>
 #include <QSettings>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
+#include "DataModel/DataTable.h"
 #include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
@@ -42,6 +44,16 @@ struct TimestampedRawBytes {
 };
 
 /**
+ * @brief One changed data-table register captured for the table_snapshots table.
+ */
+struct TableSnapshotEntry {
+  DataModel::TimestampedFrame::SteadyTimePoint timestamp;
+  QString tableName;
+  QString registerName;
+  DataModel::RegisterValue value;
+};
+
+/**
  * @brief Background worker that persists frames and raw bytes to SQLite.
  */
 class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
@@ -55,6 +67,7 @@ public:
                std::atomic<bool>* enabled,
                std::atomic<size_t>* queueSize,
                moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
+               moodycamel::ReaderWriterQueue<TableSnapshotEntry>* snapshotQueue,
                std::atomic<int>* operationMode,
                QMutex* projectSnapshotMutex,
                const QByteArray* projectSnapshot);
@@ -75,6 +88,7 @@ private:
   void storeProjectMetadata(const DataModel::Frame& frame);
   void prepareHotpathQueries();
   void writeRawBytes();
+  void writeTableSnapshots();
   void writeFrameReadings(const DataModel::TimestampedFramePtr& frame);
   void bindAndInsertReading(qint64 ns, const DataModel::Dataset& dataset);
   void finalizeSession();
@@ -94,6 +108,7 @@ private:
   std::optional<QSqlQuery> m_tableSnapshotQuery;
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_rawQueue;
+  moodycamel::ReaderWriterQueue<TableSnapshotEntry>* m_snapshotQueue;
   std::atomic<int>* m_operationMode;
   QMutex* m_projectSnapshotMutex;
   const QByteArray* m_projectSnapshot;
@@ -151,6 +166,7 @@ protected:
 
 private slots:
   void onWorkerOpenChanged();
+  void captureTableSnapshots();
   void onWorkerSessionIdAssigned(int sessionId);
 
 private:
@@ -166,7 +182,10 @@ private:
   bool m_persistSettings;
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;
+  moodycamel::ReaderWriterQueue<TableSnapshotEntry> m_tableSnapshotQueue;
   alignas(kCacheLine) std::atomic<int> m_operationMode;
+
+  QMap<QString, QMap<QString, DataModel::RegisterValue>> m_lastTableSnapshot;
 
   QMutex m_projectSnapshotMutex;
   QByteArray m_projectSnapshot;

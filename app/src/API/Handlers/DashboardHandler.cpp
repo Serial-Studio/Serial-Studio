@@ -212,6 +212,16 @@ void API::Handlers::DashboardHandler::registerQueryCommands()
       schema,
       &tailFrames);
   }
+
+  registry.registerCommand(
+    QStringLiteral("dashboard.reprocess"),
+    QStringLiteral("Re-run every dataset transform from the last received values and republish "
+                   "the frames to the dashboard (no export side effects). Dataset transforms "
+                   "normally run only when a device frame arrives; call this after "
+                   "project.dataTable.setValue writes (control scripts: tableSet()) so the "
+                   "dashboard reflects them while the device is silent."),
+    emptySchema,
+    &reprocess);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -494,5 +504,25 @@ API::CommandResponse API::Handlers::DashboardHandler::tailFrames(const QString& 
   result[QStringLiteral("series")]           = seriesArr;
   result[QStringLiteral("seriesCount")]      = seriesArr.size();
   result[QStringLiteral("samplesPerSeries")] = count;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Re-runs all dataset transforms from the last raw values and republishes the frames
+ *        to the dashboard; published:false is a state (no frame structure yet), not an error.
+ */
+API::CommandResponse API::Handlers::DashboardHandler::reprocess(const QString& id,
+                                                                const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  const bool published = DataModel::FrameBuilder::instance().reprocessFrames();
+
+  QJsonObject result;
+  result[QStringLiteral("published")] = published;
+  if (!published)
+    result[QStringLiteral("_summary")] =
+      QStringLiteral("Nothing to republish: requires ProjectFile mode and a loaded project.");
+
   return CommandResponse::makeSuccess(id, result);
 }

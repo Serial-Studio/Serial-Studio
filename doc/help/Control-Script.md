@@ -99,13 +99,44 @@ The most useful I/O calls for a control script:
 
 A control script is not limited to sending commands: it can also read what the device sends and act on it. The mental model is the same loop a robot runs: **see** the latest data, **decide** in plain JavaScript, **act** through the SDK.
 
-- **See**: `newFrame()` returns the latest frame received from the device, or `null` when nothing new has arrived since the last call. The returned object carries `text` (the raw payload), `values` (the parser's channel tokens, in parser order), `sourceId`, `timestampMs` (a monotonic clock in milliseconds, useful for deltas between frames, not wall-clock time), and a monotonic `sequence` number.
+- **See**: `newFrame()` returns the latest frame received from the device, or `null` when nothing new has arrived since the last call. The returned object carries `text` (the raw payload), `values` (the parser's channel tokens, in parser order), `sourceId`, `timestampMs` (a monotonic clock in milliseconds, useful for deltas between frames, not wall-clock time), `ageMs` (milliseconds elapsed since the frame was captured), and a monotonic `sequence` number.
 - **Decide**: plain JavaScript. Compare, count, branch; top-level variables persist across `loop()` calls.
 - **Act**: write to the device (`io.writeData`), post notifications, or reshape the dashboard (`ensureDashboard()` below, or any `project.*` call).
 
 `newFrame()` sees the data *before* dataset mapping, so it includes channels that no dataset reads yet, which is exactly what you need to detect a new channel and create a widget for it. (`dashboard.getData()`, by contrast, returns only data already mapped to datasets.) The raw command underneath is `io.getLatestFrame`, which also accepts `{ encoding: "base64" }` for binary payloads.
 
 In ConsoleOnly mode frames are not parsed, so `values` is empty and only `text` carries the payload. Pace any polling loop with `delay()`; 50-250 ms is plenty for channel detection.
+
+### Data tables: tableGet() / tableSet()
+
+Control scripts can read and write the same data-table registers the frame parser and dataset transforms use. `tableGet(table, register)` returns the live runtime value (or `undefined` when the table or register does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, register, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
+
+One caveat: dataset transforms only re-run when a frame arrives. If your script writes table registers while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame — call `refreshDashboard()` after the writes to make them render immediately. It re-runs every dataset transform from the last received values and republishes the frames to the dashboard only (nothing is appended to CSV/MDF4/session exports).
+
+### Staleness watchdog
+
+`ageMs` makes a communication-loss watchdog short: no clock mixing, no timestamp bookkeeping in the parser. Mark the failure state in the data tables, then `refreshDashboard()` renders it without waiting for a frame:
+
+```javascript
+var commLost = false;
+
+function loop() {
+  var r = io.getLatestFrame();
+  var stale = r.ok && r.result.hasData && r.result.ageMs > 1000;
+
+  if (stale && !commLost) {
+    commLost = true;
+    tableSet("BRD-1", "boot_selftest", 0xCC);  // sensor transforms show "Comm Loss"
+    refreshDashboard();
+    notifyCritical("Watchdog", "No frames for " + r.result.ageMs + " ms");
+  } else if (!stale && commLost) {
+    commLost = false;
+    notifyInfo("Watchdog", "Communication restored");
+  }
+
+  delay(100);
+}
+```
 
 ### ensureDashboard(spec): declarative widgets
 
@@ -219,6 +250,10 @@ function loop() {
 ## Saving and lifecycle
 
 The script is saved inside the project file, so it travels with the project. Editing it while connected restarts it immediately; otherwise it starts the next time the device connects and stops when the device disconnects. Use **Validate** before connecting to catch syntax errors early; runtime errors (an exception inside `setup()` or `loop()`) are shown in the editor's status bar and stop the script.
+
+Every connection starts a fresh script engine: all top-level variables reset and `setup()` runs again on each reconnect, exactly like an Arduino reset. Do not design around state surviving a connect/disconnect cycle. The latest-frame store also clears on each connection edge, so `io.getLatestFrame()` reports no data until the first frame of the current connection arrives; a watchdog built on `ageMs` can never trip from a previous connection's frame.
+
+Tools and scripts can manage the control script through the API: `controlscript.get`/`controlscript.getCode` read the source, `controlscript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlscript.set`/`controlscript.setCode` install it, and `controlscript.getStatus` reports whether it is running.
 
 ## Related
 

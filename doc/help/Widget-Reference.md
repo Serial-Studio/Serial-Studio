@@ -75,10 +75,11 @@ flowchart TD
 ### LED Panel
 
 - Group widget (auto-created for datasets with `led: true`).
-- Multiple boolean indicator LEDs.
-- LED turns on when the value exceeds the `ledHigh` threshold (default 80).
-- Best for: status flags, limit indicators, digital I/O states.
-- Configuration: set `led: true` and `ledHigh` on each dataset.
+- Multiple multi-state indicator LEDs, one per dataset.
+- With alarm bands defined, each LED lights in the color of the band the value sits in, shows the band's `label` next to the dataset title, and flashes while a band marked `blink` is active. Outside every band, the LED is off (annunciator-panel behavior).
+- Without bands, the LED falls back to the legacy single threshold: on (dataset color) when the value meets or exceeds `ledHigh` (default 80).
+- Best for: status flags, limit indicators, digital I/O states, annunciator panels.
+- Configuration: set `led: true` on each dataset, then either define `alarmBands` (see [Alarm bands](#alarm-bands)) or set `ledHigh`.
 
 ### Terminal
 
@@ -199,7 +200,7 @@ flowchart TD
 
 ## Alarm bands
 
-Bar, Gauge, and Meter widgets render one or more **alarm bands** behind the value indicator. Each band is a contiguous value range with a color and a severity tier. The gauge paints them as colored stripes (Bar) or arc segments (Gauge / Meter), and the needle / fill tints to the active band's color when the value enters it. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
+Bar, Gauge, Meter, and LED Panel widgets render one or more **alarm bands**. Each band is a contiguous value range with a color and a severity tier. The gauge paints them as colored stripes (Bar) or arc segments (Gauge / Meter), and the needle / fill tints to the active band's color when the value enters it; LED Panel entries light in the active band's color. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
 
 **Band schema.** Under the dataset's `alarmBands` array, each entry is an object:
 
@@ -209,11 +210,12 @@ Bar, Gauge, and Meter widgets render one or more **alarm bands** behind the valu
 | `max`      | double | yes      | Upper bound of the band (exclusive at top of range). |
 | `severity` | int    | yes      | `0` = Info, `1` = OK, `2` = Warning, `3` = Critical. Drives the default color and whether the band raises a notification on entry. |
 | `color`    | string | no       | Hex override (`"#rrggbb"`). When empty, the severity's theme color is used (theme switches re-tint live). |
-| `label`    | string | no       | Optional human-readable name. Surfaces in the band-edge notification subtitle. |
+| `label`    | string | no       | Optional human-readable name. Surfaces in the band-edge notification subtitle and next to the dataset title on LED panels. |
+| `blink`    | bool   | no       | When `true`, LED panels flash the LED while the value sits in this band. Defaults to `false`. |
 
-Bands may have gaps (the dataset's default background shows through), may overlap (later bands paint over earlier ones), and need not cover the full range. Editing is via the **Alarm Bands** button in the dataset toolbar (next to **Transform**), which opens a dedicated dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical), per-band color picker, severity selector, and a live preview strip.
+Bands may have gaps (the dataset's default background shows through), may overlap (later bands paint over earlier ones), and need not cover the full range. Editing is via the **Alarm Bands** button in the dataset toolbar (next to **Transform**), which opens a dedicated dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical, Indicator, Fault Indicator), per-band color picker, severity selector, blink toggle, and a live preview strip.
 
-**Notifications.** When the value enters a band with severity ≥ Warning, the widget posts a notification (`Warning` or `Critical` level, with the band's `label` in the subtitle). A 3-second per-widget cooldown suppresses oscillation spam.
+**Notifications.** When the value enters a band with severity ≥ Warning, Serial Studio posts a notification (`Warning` or `Critical` level, with the band's `label` in the subtitle). Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. A 3-second per-dataset cooldown suppresses oscillation spam.
 
 **Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For painter scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
 
@@ -245,7 +247,7 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | GPS Map       | Group   | `map`          | 2-3          | lat, lon, (alt) datasets                     |
 | Gyroscope     | Group   | `gyro`         | 3            | yaw, pitch, roll                             |
 | Accelerometer | Group   | `accelerometer`| 3            | x, y, z accel                                |
-| LED Panel     | Group   | auto           | 1+           | `led: true`, `ledHigh`                       |
+| LED Panel     | Group   | auto           | 1+           | `led: true`, `alarmBands[]` or legacy `ledHigh` |
 | 3D Plot       | Group   | `plot3d`       | 3            | x, y, z coords (Pro)                         |
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
 | Painter       | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
@@ -280,8 +282,8 @@ Every dataset in a project file supports these visualization-related fields:
 | `pltMax`           | double | 0       | Plot Y-axis maximum (0 = auto-scale). |
 | `wgtMin`           | double | 0       | Widget (bar/gauge/meter) minimum. |
 | `wgtMax`           | double | 0       | Widget (bar/gauge/meter) maximum. |
-| `ledHigh`          | double | 80      | LED activation threshold. |
-| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets. Each entry: `{min, max, severity, color?, label?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
+| `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |
+| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets and LED panels. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |

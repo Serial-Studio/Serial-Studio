@@ -219,6 +219,7 @@ set(SOURCES
   src/Platform/AppPlatform.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
+  src/UI/AlarmMonitor.cpp
   src/UI/Taskbar.cpp
   src/UI/TaskbarSettings.cpp
   src/UI/WindowManager.cpp
@@ -292,7 +293,6 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
   src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
-  src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
   src/DataModel/Editors/ControlScriptEditor.cpp
@@ -339,6 +339,7 @@ set(HEADERS
   src/Misc/BackupManager.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
+  src/UI/AlarmMonitor.h
   src/UI/Taskbar.h
   src/UI/TaskbarSettings.h
   src/UI/WindowManager.h
@@ -611,6 +612,7 @@ if(BUILD_COMMERCIAL)
     src/DataModel/Editors/PainterCodeEditor.h
     src/UI/ImageProvider.h
     src/DataModel/Importers/AxisTicks.h
+    src/DataModel/Importers/ImporterCommon.h
     src/DataModel/Importers/DBCImporter.h
     src/DataModel/Importers/ModbusMapImporter.h
     src/Licensing/Trial.h

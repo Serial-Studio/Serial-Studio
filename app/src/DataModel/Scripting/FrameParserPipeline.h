@@ -94,6 +94,22 @@ void decodeAndParseFrame(const QByteArray& rawFrame,
 void splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels);
 
 /**
+ * @brief Joins replay cells into one comma-separated row, RFC-4180-quoting any cell that
+ *        contains a comma, quote or newline. Counterpart of splitReplayRow.
+ */
+[[nodiscard]] QByteArray joinReplayRow(const QStringList& cells);
+
+/**
+ * @brief Quote-aware comma split of one synthesized replay row (RFC-4180 double-quote escape).
+ */
+[[nodiscard]] QStringList splitReplayRow(QStringView row);
+
+/**
+ * @brief Replay twin of splitQuickPlotChannels: one quote-aware row per non-empty line.
+ */
+void splitReplayChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels);
+
+/**
  * @brief Extraction + decoder + parser against the live FrameParser engine for @p sourceId.
  */
 [[nodiscard]] PipelineResult runFrameParserPipeline(const QByteArray& input,

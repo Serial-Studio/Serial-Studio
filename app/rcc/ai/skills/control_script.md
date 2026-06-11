@@ -18,6 +18,9 @@ the data hotpath), and is stored in the project file.
 - The user wants widgets created automatically from incoming data ("build the
   dashboard from whatever arrives"). Use `newFrame()` + `ensureDashboard()`
   (below).
+- The user wants a communication-loss watchdog ("show Disconnected when the
+  device goes silent"). Use `io.getLatestFrame().result.ageMs` + `tableSet()` +
+  `refreshDashboard()` (below).
 
 ## The SerialStudio SDK (natural API wrappers)
 
@@ -57,19 +60,28 @@ source itself: `meta.fetchScriptingDocs{kind: 'sdk_js'}` (or `'sdk_lua'`). It
 lists every callable wrapper, so you never have to guess a function name or
 argument order. All SDK symbols also appear in the code-editor autocomplete.
 
-## Reading data: newFrame() and ensureDashboard() (control script ONLY)
+## Reading data: newFrame(), refreshDashboard(), ensureDashboard() (control script ONLY)
 
-Two prelude helpers exist only inside the control script engine (they are gated
-on its bridge; frame parsers and transforms do not have them). Together they
-close the See -> Decide -> Act loop:
+These prelude helpers exist only inside the control script engine (they are
+gated on its bridge; frame parsers and transforms do not have them). Together
+they close the See -> Decide -> Act loop:
 
 - `newFrame(sourceId?)` -- returns the latest frame received from the device
   exactly once per arrival, `null` when nothing new. Fields: `text` (raw
   payload), `values` (the parser's channel tokens BEFORE dataset mapping, so it
   includes channels no dataset reads yet), `sourceId`, `timestampMs` (monotonic
-  milliseconds, for deltas only, not Unix time), `sequence`. The raw command
+  milliseconds, for deltas only, not Unix time), `ageMs` (milliseconds since
+  the frame was captured: the staleness-watchdog primitive; never compare
+  `timestampMs` against `Date.now()`), `sequence`. The raw command
   is `io.getLatestFrame` (`{encoding: "base64"}` for binary). `dashboard.getData` shows only mapped data; this is the
   pre-mapping view.
+- `refreshDashboard()` -- re-runs every dataset transform from the last
+  received values and republishes the frames to the dashboard (raw command:
+  `dashboard.reprocess`; no export side effects, nothing lands in CSV/MDF4).
+  Transforms normally run only when a device frame arrives, so `tableSet()`
+  writes made while the device is silent do not render until you call this.
+  Call it on state transitions, not every `loop()` pass (each call appends one
+  point to plot-enabled datasets).
 - `ensureDashboard(spec)` -- declarative, idempotent widget builder. Spec is an
   array of groups: `{title, widget, datasets: [{title, index, plot, gauge,
   units, ...}]}`. Groups match by title, datasets by parser `index` within the
@@ -79,6 +91,38 @@ close the See -> Decide -> Act loop:
   none | plot3d | image | painter. Dataset flags: plot, fft, bar, gauge,
   compass, led, waterfall (or a raw `options` bitfield). Created items are real
   project edits and persist with the project.
+
+Control scripts also get the data-table globals `tableGet(table, register)` and
+`tableSet(table, register, value)`, marshalled through
+`project.dataTable.getValue` / `setValue` (each call is a thread round-trip:
+read once per `loop()` pass, not in tight inner loops). `tableGet` returns
+`undefined` for unknown registers, so `tableGet(t, r) || fallback` works.
+`datasetGetRaw` / `datasetGetFinal` remain parser/transform-only.
+
+Canonical communication-loss watchdog (tables + refreshDashboard):
+
+```javascript
+var commLost = false;
+
+function loop() {
+  var r = io.getLatestFrame();
+  var hasData = r.ok && r.result.hasData;
+  var stale   = hasData && r.result.ageMs > 1000;
+  var fresh   = hasData && r.result.ageMs <= 1000;
+
+  if (stale && !commLost) {
+    commLost = true;
+    tableSet("BRD-1", "boot_selftest", 0xCC);  // transforms map 0xCC -> "Comm Loss"
+    refreshDashboard();                        // render it without waiting for a frame
+    notifyCritical("Watchdog", "No frames for " + r.result.ageMs + " ms");
+  } else if (fresh && commLost) {
+    commLost = false;
+    notifyInfo("Watchdog", "Communication restored");
+  }
+
+  delay(100);
+}
+```
 
 Canonical auto-dashboard loop:
 
@@ -145,13 +189,34 @@ function loop() {
 
 ## Managing the control script from the API
 
-The `controlscript.*` commands let tools and other scripts inspect and replace
-the script:
+The `controlscript.*` commands let tools and other scripts inspect, validate,
+and replace the script:
 
-- `controlscript.get` -> `{ code }`: the current script source.
-- `controlscript.set { code }`: replace the script. It is persisted in the
-  project and applied live; if a device is connected it recompiles and restarts.
+- `controlscript.get` / `controlscript.getCode` -> `{ code }`: the current
+  script source (aliases; `getCode` matches the `project.frameParser.getCode`
+  naming convention).
+- `controlscript.dryRun { code }` -> `{ valid, hasSetup, hasLoop, error?,
+  line? }`: compile-check WITHOUT installing or running anything. Syntax errors
+  come back with line numbers; `setup()`/`loop()` never execute and
+  `apiCall`/`tableSet` have no effect. **Always dry-run before set.**
+- `controlscript.set { code }` / `controlscript.setCode { code }`: replace the
+  script (aliases). It is persisted in the project and applied live; if a
+  device is connected it recompiles and restarts.
 - `controlscript.getStatus` -> `{ running }`: whether the script is running now.
+
+For the focused runtime reference (all injectable globals, lifecycle rules,
+the connect-cycle-safe watchdog), fetch
+`meta.fetchScriptingDocs{kind: 'control_script_js'}`.
+
+## Lifecycle: fresh engine on every connection
+
+The script starts when the device connects and stops when it disconnects.
+**Every connection gets a brand-new engine**: all top-level variables reset
+and `setup()` re-runs on each reconnect. Never design around state surviving
+a connect/disconnect cycle. The latest-frame store is also cleared on every
+connection edge, so `io.getLatestFrame()` reports `hasData: false` until the
+first frame of the *current* connection arrives: an `ageMs`-based watchdog
+can never fire from a previous connection's frame.
 
 ## Leave source and connection setup to the user
 

@@ -86,6 +86,7 @@ Item {
             spacing: 12
             anchors.margins: 4
             anchors.leftMargin: 24
+            anchors.rightMargin: 12
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
@@ -93,7 +94,12 @@ Item {
             Rectangle {
               id: led
 
+              readonly property bool lit: root.model.states[index]
               readonly property color ledColor: root.model.colors[index]
+              readonly property bool flashing: led.lit && root.model.blinks[index]
+              readonly property bool showLit: led.lit && (!led.flashing || led.flashOn)
+
+              property bool flashOn: true
 
               border.width: 1
               implicitWidth: 18
@@ -101,9 +107,18 @@ Item {
               radius: implicitWidth / 2
               Layout.alignment: Qt.AlignVCenter
               border.color: Cpp_ThemeManager.colors["widget_border"]
-              color: root.model.states[index] ? ledColor : Qt.darker(ledColor)
+              color: led.showLit ? led.ledColor : Qt.darker(led.ledColor)
 
               Behavior on color {ColorAnimation{}}
+
+              SequentialAnimation {
+                running: led.flashing
+                loops: Animation.Infinite
+                PropertyAction { target: led; property: "flashOn"; value: true }
+                PauseAnimation { duration: 450 }
+                PropertyAction { target: led; property: "flashOn"; value: false }
+                PauseAnimation { duration: 450 }
+              }
             }
 
             Label {
@@ -112,8 +127,20 @@ Item {
               text: root.model.titles[index]
               Layout.alignment: Qt.AlignVCenter
               horizontalAlignment: Label.AlignLeft
-              Layout.maximumWidth: layout.width - 12 - 24
               color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+
+              Behavior on color {ColorAnimation{}}
+            }
+
+            Label {
+              elide: Qt.ElideRight
+              visible: text.length > 0
+              text: root.model.labels[index]
+              Layout.alignment: Qt.AlignVCenter
+              horizontalAlignment: Label.AlignRight
+              Layout.maximumWidth: layout.width * 0.45
+              color: led.lit ? led.ledColor : Cpp_ThemeManager.colors["widget_text"]
               font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
 
               Behavior on color {ColorAnimation{}}
@@ -128,10 +155,10 @@ Item {
             y: layout.y + led.y
 
             blurEnabled: true
-            blur: root.model.states[index] ? 1 : 0
-            blurMax: root.model.states[index] ? 64 : 0
-            brightness: root.model.states[index] ? 0.4 : 0
-            saturation: root.model.states[index] ? 0.2 : 0
+            blur: led.showLit ? 1 : 0
+            blurMax: led.showLit ? 64 : 0
+            brightness: led.showLit ? 0.4 : 0
+            saturation: led.showLit ? 0.2 : 0
             visible: Cpp_Misc_GraphicsBackend.effectsEnabled
             enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
@@ -144,10 +171,10 @@ Item {
             y: layout.y + led.y
 
             blurEnabled: true
-            blur: root.model.states[index] ? 0.3 : 0
-            blurMax: root.model.states[index] ? 64 : 0
-            brightness: root.model.states[index] ? 0.4 : 0
-            saturation: root.model.states[index] ? 0.2 : 0
+            blur: led.showLit ? 0.3 : 0
+            blurMax: led.showLit ? 64 : 0
+            brightness: led.showLit ? 0.4 : 0
+            saturation: led.showLit ? 0.2 : 0
             visible: Cpp_Misc_GraphicsBackend.effectsEnabled
             enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }

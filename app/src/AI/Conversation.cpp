@@ -182,6 +182,11 @@ void AI::Conversation::start(const QString& userText)
   m_currentStopReason.clear();
   setLastError(QString());
 
+  m_pendingThinkingBlocks   = QJsonArray();
+  m_pendingToolUseBlocks    = QJsonArray();
+  m_pendingToolResultBlocks = QJsonArray();
+  m_outstandingToolResults  = 0;
+
   appendUserMessage(trimmed);
   setBusy(true);
   issueRequest();
@@ -791,7 +796,7 @@ void AI::Conversation::runMetaScriptingDocs(const QString& callId,
     result[QStringLiteral("error")] =
       QStringLiteral("Unknown kind '%1'. Valid: frame_parser_js, "
                      "frame_parser_lua, transform_js, transform_lua, "
-                     "output_widget_js, painter_js.")
+                     "output_widget_js, painter_js, control_script_js.")
         .arg(kind);
     updateToolCallCard(callId, CallStatus::Error, result);
   } else {
@@ -991,6 +996,14 @@ void AI::Conversation::onReplyError(const QString& message)
   m_uiMessages.append(errorRow);
   Q_EMIT messagesChanged();
 
+  if (!m_awaitingConfirm.isEmpty()) {
+    for (auto it = m_awaitingConfirm.constBegin(); it != m_awaitingConfirm.constEnd(); ++it)
+      updateToolCallCard(it.key(), CallStatus::Error);
+
+    m_awaitingConfirm.clear();
+    setAwaitingConfirmation(false);
+  }
+
   m_assistantText.clear();
   m_assistantThinking.clear();
   m_assistantIndex          = -1;
@@ -1060,11 +1073,11 @@ void AI::Conversation::issueRequest()
   Q_ASSERT(m_provider);
   Q_ASSERT(m_dispatcher);
 
+  pruneHistory();
+
   reconcileHistoryToolPairs();
 
   ageHistoryToolResults();
-
-  pruneHistory();
 
   beginAssistantMessage();
 
@@ -1186,10 +1199,94 @@ static QJsonArray synthesizeMissingResults(const QStringList& orderedToolUseIds,
 }
 
 /**
- * @brief Pairs every assistant.tool_use with a tool_result, synthesizing or pruning as needed.
+ * @brief Returns the tool_use ids declared by the message immediately preceding @p userIdx
+ *        when it is an assistant message with block content; an empty set otherwise.
+ */
+static QSet<QString> precedingAssistantToolUseIds(const QJsonArray& history, int userIdx)
+{
+  QSet<QString> ids;
+  if (userIdx <= 0)
+    return ids;
+
+  const auto prev = history.at(userIdx - 1).toObject();
+  if (prev.value(QStringLiteral("role")).toString() != QStringLiteral("assistant"))
+    return ids;
+
+  const auto content = prev.value(QStringLiteral("content"));
+  if (!content.isArray())
+    return ids;
+
+  collectAssistantToolUseIds(content.toArray(), ids);
+  return ids;
+}
+
+/**
+ * @brief Strips tool_result blocks whose tool_use is not declared by the immediately
+ *        preceding assistant message, dropping user messages left without content. The API
+ *        rejects the whole request on a single orphan, so corruption left by interrupted
+ *        tool batches, pruning, or restored sessions must be removed before every send.
+ */
+static void stripOrphanToolResults(QJsonArray& history)
+{
+  static const QString kKeyType        = QStringLiteral("type");
+  static const QString kKeyToolUseId   = QStringLiteral("tool_use_id");
+  static const QString kTypeToolResult = QStringLiteral("tool_result");
+
+  for (int i = 0; i < history.size(); ++i) {
+    const auto msg = history.at(i).toObject();
+    if (msg.value(QStringLiteral("role")).toString() != QStringLiteral("user"))
+      continue;
+
+    const auto contentValue = msg.value(QStringLiteral("content"));
+    if (!contentValue.isArray())
+      continue;
+
+    const auto validIds = precedingAssistantToolUseIds(history, i);
+
+    QSet<QString> seen;
+    QJsonArray kept;
+    bool mutated = false;
+    for (const auto& bv : contentValue.toArray()) {
+      const auto block = bv.toObject();
+      if (block.value(kKeyType).toString() != kTypeToolResult) {
+        kept.append(block);
+        continue;
+      }
+
+      const auto tid = block.value(kKeyToolUseId).toString();
+      if (!validIds.contains(tid) || seen.contains(tid)) {
+        mutated = true;
+        continue;
+      }
+
+      seen.insert(tid);
+      kept.append(block);
+    }
+
+    if (!mutated)
+      continue;
+
+    qCWarning(AI::serialStudioAI) << "Stripped orphan tool_result block(s) at history index" << i;
+    if (kept.isEmpty()) {
+      history.removeAt(i);
+      --i;
+      continue;
+    }
+
+    auto fixed                       = msg;
+    fixed[QStringLiteral("content")] = kept;
+    history[i]                       = fixed;
+  }
+}
+
+/**
+ * @brief Pairs every assistant.tool_use with a tool_result, synthesizing or pruning as
+ *        needed. Runs after pruneHistory so a prune cut can never ship an unpaired block.
  */
 void AI::Conversation::reconcileHistoryToolPairs()
 {
+  stripOrphanToolResults(m_history);
+
   for (int i = 0; i < m_history.size(); ++i)
     reconcileHistoryToolPairsAt(i);
 }
@@ -1274,6 +1371,8 @@ static QJsonObject elideAgedToolResult(QJsonObject block)
 
 /**
  * @brief Stubs older tool_result blocks; keeps the kKeepRecentUserTurns most recent verbatim.
+ *        fs.* and small meta discovery results are never elided -- eliding a describeCommand
+ *        or listCommands payload forces the model into blind retry loops.
  */
 void AI::Conversation::ageHistoryToolResults()
 {
@@ -1313,7 +1412,12 @@ void AI::Conversation::ageHistoryToolResults()
       const bool isFsContent = toolName == QStringLiteral("fs.read")
                             || toolName == QStringLiteral("fs.search")
                             || toolName == QStringLiteral("fs.list");
-      if (!isFsContent
+      const bool isDiscovery = toolName == QStringLiteral("meta.describeCommand")
+                            || toolName == QStringLiteral("meta.listCommands")
+                            || toolName == QStringLiteral("meta.listCategories")
+                            || toolName == QStringLiteral("meta.searchDocs")
+                            || toolName == QStringLiteral("meta.howTo");
+      if (!isFsContent && !isDiscovery
           && block.value(QStringLiteral("type")).toString() == QStringLiteral("tool_result")
           && block.value(QStringLiteral("content")).toString().size() > 64) {
         block   = elideAgedToolResult(block);
@@ -1338,13 +1442,16 @@ int AI::Conversation::firstFreshUserTurnAt(int start) const
     if (msg.value(QStringLiteral("role")).toString() != QStringLiteral("user"))
       continue;
 
-    const auto blocks = msg.value(QStringLiteral("content")).toArray();
-    bool fresh        = false;
-    for (const auto& bv : blocks)
-      fresh =
-        fresh || bv.toObject().value(QStringLiteral("type")).toString() == QStringLiteral("text");
+    const auto blocks  = msg.value(QStringLiteral("content")).toArray();
+    bool fresh         = false;
+    bool hasToolResult = false;
+    for (const auto& bv : blocks) {
+      const auto type = bv.toObject().value(QStringLiteral("type")).toString();
+      fresh           = fresh || type == QStringLiteral("text");
+      hasToolResult   = hasToolResult || type == QStringLiteral("tool_result");
+    }
 
-    if (fresh)
+    if (fresh && !hasToolResult)
       return i;
   }
 
@@ -1749,6 +1856,12 @@ void AI::Conversation::recordToolResult(const QString& callId,
                                         const QString& name,
                                         const QJsonObject& payload)
 {
+  if (!m_busy) {
+    qCWarning(serialStudioAI) << "Dropping tool result for" << name << "(" << callId
+                              << "): no turn in flight (late completion after error/cancel)";
+    return;
+  }
+
   const auto scrubbed = AI::Redactor::scrubObject(payload);
 
   constexpr int kFsResultByteBudget = 48 * 1024;

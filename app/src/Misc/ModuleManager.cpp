@@ -69,6 +69,7 @@
 #include "Misc/WorkspaceManager.h"
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
+#include "UI/AlarmMonitor.h"
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
 #include "UI/Taskbar.h"
@@ -445,6 +446,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   Console::Export::instance().setupExternalConnections();
   Console::Handler::instance().setupExternalConnections();
   IO::FileTransmission::instance().setupExternalConnections();
+  UI::AlarmMonitor::instance().setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().setupExternalConnections();
   Sessions::DatabaseManager::instance().setupExternalConnections();

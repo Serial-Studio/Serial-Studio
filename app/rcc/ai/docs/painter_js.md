@@ -52,7 +52,7 @@ datasets[0].plotMin / .plotMax       // plot Y-axis bounds
 datasets[0].widgetMin / .widgetMax   // gauge / bar bounds
 datasets[0].fftMin / .fftMax         // FFT bounds
 datasets[0].alarmLow / .alarmHigh    // legacy alarm thresholds (derived; see below)
-datasets[0].alarmBands               // [{min,max,severity,color,label}, ...] (see below)
+datasets[0].alarmBands               // [{min,max,severity,color,label,blink}, ...] (see below)
 datasets[0].ledHigh                  // LED activation threshold
 datasets[0].hasPlot / .hasFft / .hasLed
 datasets.length
@@ -131,13 +131,15 @@ colored value ranges (aviation-tachometer style: white / green / yellow
   max:      Number,   // upper bound (exclusive at top of range)
   severity: Number,   // 0=Info, 1=OK, 2=Warning, 3=Critical
   color:    String,   // "#rrggbb" override; empty -> severity's theme color
-  label:    String    // optional name (used in notifications)
+  label:    String,   // optional name (used in notifications)
+  blink:    Boolean   // optional; LED panels flash while the band is active
 }
 ```
 
 Bands may have gaps and may overlap. Severity ≥ Warning posts a
-notification when the value enters the band (3-second per-widget
-cooldown suppresses oscillation spam).
+notification when the value enters the band (3-second per-dataset
+cooldown suppresses oscillation spam), even when no widget showing
+the dataset is visible.
 
 ```js
 // Find the band a value sits in (linear scan; band counts are tiny)

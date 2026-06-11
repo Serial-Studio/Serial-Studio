@@ -3468,10 +3468,24 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
 }
 
 /**
- * @brief Emits openAlarmBandsEditor for the currently-selected dataset.
+ * @brief Emits openAlarmBandsEditor for the currently-selected dataset. LED-only datasets
+ *        often leave the widget range unset, so the scale falls back to the plot range and
+ *        then to 0-100; an LED dataset with no bands is pre-filled from its ledHigh threshold.
  */
 void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
 {
+  double range_min = qMin(m_selectedDataset.wgtMin, m_selectedDataset.wgtMax);
+  double range_max = qMax(m_selectedDataset.wgtMin, m_selectedDataset.wgtMax);
+  if (range_max <= range_min) {
+    range_min = qMin(m_selectedDataset.pltMin, m_selectedDataset.pltMax);
+    range_max = qMax(m_selectedDataset.pltMin, m_selectedDataset.pltMax);
+  }
+
+  if (range_max <= range_min) {
+    range_min = 0;
+    range_max = 100;
+  }
+
   QVariantList bands;
   bands.reserve(static_cast<int>(m_selectedDataset.alarmBands.size()));
   for (const auto& b : m_selectedDataset.alarmBands) {
@@ -3481,18 +3495,29 @@ void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
     entry.insert(QStringLiteral("severity"), static_cast<int>(b.severity));
     entry.insert(QStringLiteral("color"), b.color);
     entry.insert(QStringLiteral("label"), b.label);
+    entry.insert(QStringLiteral("blink"), b.blink);
     bands.append(entry);
   }
 
-  Q_EMIT openAlarmBandsEditor(m_selectedDataset.groupId,
-                              m_selectedDataset.datasetId,
-                              qMin(m_selectedDataset.wgtMin, m_selectedDataset.wgtMax),
-                              qMax(m_selectedDataset.wgtMin, m_selectedDataset.wgtMax),
-                              bands);
+  if (bands.isEmpty() && m_selectedDataset.led && m_selectedDataset.ledHigh < range_max) {
+    QVariantMap entry;
+    entry.insert(QStringLiteral("min"), qMax(range_min, m_selectedDataset.ledHigh));
+    entry.insert(QStringLiteral("max"), range_max);
+    entry.insert(QStringLiteral("severity"), 1);
+    entry.insert(QStringLiteral("color"),
+                 SerialStudio::getDatasetColor(m_selectedDataset.index).name());
+    entry.insert(QStringLiteral("label"), tr("On"));
+    entry.insert(QStringLiteral("blink"), false);
+    bands.append(entry);
+  }
+
+  Q_EMIT openAlarmBandsEditor(
+    m_selectedDataset.groupId, m_selectedDataset.datasetId, range_min, range_max, bands);
 }
 
 /**
- * @brief Appends the LED Display section rows to the dataset form model.
+ * @brief Appends the LED Display section rows to the dataset form model; the legacy threshold
+ *        row is omitted once alarm bands are defined, since bands drive the LED from then on.
  */
 void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
@@ -3514,6 +3539,9 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel
                    ParameterDescription);
   model->appendRow(ledItem);
 
+  if (!dataset.alarmBands.empty())
+    return;
+
   auto* ledHigh = new QStandardItem();
   ledHigh->setEditable(dataset.led);
   ledHigh->setData(0, PlaceholderValue);
@@ -3522,7 +3550,8 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel
   ledHigh->setData(dataset.ledHigh, EditableValue);
   ledHigh->setData(kDatasetView_LED_High, ParameterType);
   ledHigh->setData(tr("LED On Threshold (required)"), ParameterName);
-  ledHigh->setData(tr("LED lights up when value meets or exceeds this threshold"),
+  ledHigh->setData(tr("LED lights up when value meets or exceeds this threshold; define alarm "
+                      "bands for multi-state colors"),
                    ParameterDescription);
   model->appendRow(ledHigh);
 }
@@ -4144,6 +4173,7 @@ void DataModel::ProjectEditor::commitAlarmBands(const QVariantList& bands)
     DataModel::AlarmBand band;
     band.min   = SerialStudio::toDouble(m.value(QStringLiteral("min")));
     band.max   = SerialStudio::toDouble(m.value(QStringLiteral("max")));
+    band.blink = m.value(QStringLiteral("blink"), false).toBool();
     band.color = m.value(QStringLiteral("color")).toString().simplified();
     band.label = m.value(QStringLiteral("label")).toString().simplified();
     const int sev =

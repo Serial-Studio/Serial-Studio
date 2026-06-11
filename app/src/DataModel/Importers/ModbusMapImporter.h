@@ -25,7 +25,10 @@
 #include <QJsonObject>
 #include <QObject>
 #include <QString>
+#include <QStringList>
 #include <QVector>
+
+#include "DataModel/Frame.h"
 
 namespace DataModel {
 
@@ -110,7 +113,18 @@ private:
 
   [[nodiscard]] QVector<RegisterBlock> computeBlocks() const;
   [[nodiscard]] QJsonObject buildProject() const;
-  [[nodiscard]] static QJsonObject buildNativeParserParams(const QVector<RegisterBlock>& blocks);
+  [[nodiscard]] Dataset buildDatasetFromEntry(const RegisterEntry& entry,
+                                              bool isBool,
+                                              const QString& tableName,
+                                              const QString& regName,
+                                              int datasetIndex) const;
+
+  [[nodiscard]] static QString blockTitle(const RegisterBlock& block, qsizetype blockCount);
+  [[nodiscard]] static QStringList blockRegisterNames(const RegisterBlock& block);
+  [[nodiscard]] static QString luaEntryType(const RegisterEntry& entry, bool bitBlock);
+  [[nodiscard]] QString buildLuaParser(const QVector<RegisterBlock>& blocks,
+                                       const QStringList& tableNames,
+                                       const QList<QStringList>& registerNames) const;
 
   [[nodiscard]] static int registersForDataType(const QString& dataType);
   [[nodiscard]] static QString registerTypeName(quint8 type);

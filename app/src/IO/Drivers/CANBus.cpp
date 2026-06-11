@@ -179,9 +179,10 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes a CAN frame ([ID_hi, ID_lo, DLC, payload...]) to the bus, capping DLC at the
- * format limit (8 classic, 64 FD). Extended-ID (29-bit, set when the ID exceeds 0x7FF) and CAN
- * FD rate-switch are orthogonal flags and are applied independently.
+ * @brief Writes a CAN frame to the bus, capping DLC at the format limit (8 classic, 64 FD).
+ * Mirrors the receive header: [ID_hi, ID_lo, DLC, payload...] for standard ids, or a 29-bit
+ * extended id as [0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC, payload...]. Bit 7 of
+ * byte 0 selects the form (extended is also set when a 2-byte id exceeds the 11-bit range).
  */
 qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
@@ -195,19 +196,32 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
     return 0;
 
   try {
-    quint32 can_id = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+    const bool extended = (static_cast<quint8>(data[0]) & 0x80) != 0;
+    if (extended && data.length() < 5)
+      return 0;
 
-    quint8 dlc     = static_cast<quint8>(data[2]);
+    quint32 can_id = 0;
+    int dlc_index  = 2;
+    if (extended) {
+      can_id = (static_cast<quint32>(static_cast<quint8>(data[0]) & 0x1F) << 24)
+             | (static_cast<quint32>(static_cast<quint8>(data[1])) << 16)
+             | (static_cast<quint32>(static_cast<quint8>(data[2])) << 8)
+             | static_cast<quint8>(data[3]);
+      dlc_index = 4;
+    } else
+      can_id = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+
+    quint8 dlc     = static_cast<quint8>(data[dlc_index]);
     quint8 max_dlc = m_canFD ? 64 : 8;
 
     if (dlc > max_dlc)
       dlc = max_dlc;
 
-    QByteArray payload = data.mid(3, dlc);
+    QByteArray payload = data.mid(dlc_index + 1, dlc);
 
     QCanBusFrame frame(can_id, payload);
 
-    if (can_id > 0x7FF)
+    if (extended || can_id > 0x7FF)
       frame.setExtendedFrameFormat(true);
 
     if (m_canFD)
@@ -601,8 +615,10 @@ void IO::Drivers::CANBus::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Drains every available CAN frame and publishes each as [ID_hi, ID_lo, DLC, payload...]
- * zero-padded to a fixed 11 bytes; payloads larger than 64 bytes are dropped as malformed.
+ * @brief Drains every available CAN frame and publishes standard frames in the legacy
+ * [ID_hi, ID_lo, DLC, payload...] layout (11-bit ids keep byte 0's top bit clear; padded to
+ * 11 bytes) and extended frames as [0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC,
+ * payload...] (padded to 13 bytes); payloads larger than 64 bytes are dropped as malformed.
  */
 void IO::Drivers::CANBus::onFramesReceived()
 {
@@ -623,19 +639,24 @@ void IO::Drivers::CANBus::onFramesReceived()
       if (payload.size() > 64)
         continue;
 
-      QByteArray data;
-      data.reserve(11);
+      const bool extended  = frame.hasExtendedFrameFormat();
+      const quint32 can_id = frame.frameId() & (extended ? 0x1FFFFFFFu : 0x7FFu);
 
-      quint32 can_id = frame.frameId();
+      QByteArray data;
+      data.reserve(extended ? 13 : 11);
+
+      if (extended) {
+        data.append(static_cast<char>(0x80 | ((can_id >> 24) & 0x1F)));
+        data.append(static_cast<char>((can_id >> 16) & 0xFF));
+      }
+
       data.append(static_cast<char>((can_id >> 8) & 0xFF));
       data.append(static_cast<char>(can_id & 0xFF));
-
-      quint8 dlc = static_cast<quint8>(payload.size());
-      data.append(static_cast<char>(dlc));
-
+      data.append(static_cast<char>(static_cast<quint8>(payload.size())));
       data.append(payload);
 
-      while (data.size() < 11)
+      const qsizetype min_size = extended ? 13 : 11;
+      while (data.size() < min_size)
         data.append(static_cast<char>(0));
 
       publishReceivedData(std::move(data));

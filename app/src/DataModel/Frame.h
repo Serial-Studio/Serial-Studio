@@ -113,6 +113,7 @@ inline constexpr KeyView AlarmEnabled("alarmEnabled");
 inline constexpr KeyView AlarmBands("alarmBands");
 inline constexpr KeyView Color("color");
 inline constexpr KeyView Label("label");
+inline constexpr KeyView Blink("blink");
 inline constexpr KeyView Severity("severity");
 inline constexpr KeyView FFTSamplingRate("fftSamplingRate");
 inline constexpr KeyView TransformCode("transformCode");
@@ -354,8 +355,9 @@ struct alignas(8) AlarmBand {
   double min             = 0;                       ///< Lower bound (inclusive)
   double max             = 0;                       ///< Upper bound (exclusive at top of range)
   AlarmSeverity severity = AlarmSeverity::Warning;  ///< Default colour + notification policy
-  QString color;  ///< Optional hex override; empty -> severity default
-  QString label;  ///< Optional human label (used in notifications)
+  bool blink             = false;  ///< Flash the indicator while the band is active
+  QString color;                   ///< Optional hex override; empty -> severity default
+  QString label;                   ///< Optional human label (used in notifications)
 };
 
 static_assert(sizeof(AlarmBand) % alignof(AlarmBand) == 0, "Unaligned AlarmBand struct");
@@ -893,6 +895,9 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Min, qMin(b.min, b.max));
   obj.insert(Keys::Max, qMax(b.min, b.max));
   obj.insert(Keys::Severity, static_cast<int>(b.severity));
+  if (b.blink)
+    obj.insert(Keys::Blink, b.blink);
+
   if (!b.color.isEmpty())
     obj.insert(Keys::Color, b.color);
 

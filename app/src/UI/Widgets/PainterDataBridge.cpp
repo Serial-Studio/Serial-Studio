@@ -289,7 +289,8 @@ double Widgets::PainterDataBridge::dsAlarmHigh(int i) const
 }
 
 /**
- * @brief Returns the dataset's alarm bands as a list of {min, max, severity, color, label}.
+ * @brief Returns the dataset's alarm bands as a list of {min, max, severity, color, label,
+ *        blink}.
  */
 QVariantList Widgets::PainterDataBridge::dsAlarmBands(int i) const
 {
@@ -305,6 +306,7 @@ QVariantList Widgets::PainterDataBridge::dsAlarmBands(int i) const
     entry.insert(QStringLiteral("severity"), static_cast<int>(band.severity));
     entry.insert(QStringLiteral("color"), band.color);
     entry.insert(QStringLiteral("label"), band.label);
+    entry.insert(QStringLiteral("blink"), band.blink);
     out.append(entry);
   }
 

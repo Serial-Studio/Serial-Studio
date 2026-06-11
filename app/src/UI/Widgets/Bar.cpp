@@ -21,19 +21,11 @@
 
 #include "UI/Widgets/Bar.h"
 
-#include <QDateTime>
 #include <QVariantMap>
 
 #include "DataModel/Frame.h"
-#include "DataModel/NotificationCenter.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
-
-//--------------------------------------------------------------------------------------------------
-// Tunables
-//--------------------------------------------------------------------------------------------------
-
-static constexpr qint64 kMinNotifyIntervalMs = 3000;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
@@ -51,9 +43,6 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_maxValue(0.0)
   , m_activeBandIndex(-1)
   , m_lastBandHint(-1)
-  , m_lastFiredBand(-2)
-  , m_lastFireBySeverityMs({0, 0, 0, 0})
-  , m_alarmInitialized(false)
 {
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
@@ -95,6 +84,7 @@ void Widgets::Bar::buildBands(const std::vector<DataModel::AlarmBand>& srcBands)
     band.min         = lo;
     band.max         = hi;
     band.severity    = static_cast<int>(src.severity);
+    band.blink       = src.blink;
     band.customColor = src.color;
     band.label       = src.label;
     band.fracMin     = DSP::isZero(range) ? 0.0 : qBound(0.0, (lo - m_minValue) / range, 1.0);
@@ -107,6 +97,7 @@ void Widgets::Bar::buildBands(const std::vector<DataModel::AlarmBand>& srcBands)
     entry.insert(QStringLiteral("fracMin"), band.fracMin);
     entry.insert(QStringLiteral("fracMax"), band.fracMax);
     entry.insert(QStringLiteral("severity"), band.severity);
+    entry.insert(QStringLiteral("blink"), band.blink);
     entry.insert(QStringLiteral("customColor"), band.customColor);
     entry.insert(QStringLiteral("label"), band.label);
     m_bandsAsVariant.append(entry);
@@ -286,58 +277,8 @@ void Widgets::Bar::updateData()
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
       recomputeActiveBand(value);
-      notifyOnBandEdge();
       if (isEnabled())
         Q_EMIT updated();
     }
   }
-}
-
-//--------------------------------------------------------------------------------------------------
-// Band-edge notification routing
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Posts a notification on transition to a band with Warning or Critical severity.
- */
-void Widgets::Bar::notifyOnBandEdge()
-{
-  const int idx         = m_activeBandIndex;
-  const int sev         = activeBandSeverity();
-  const bool fireWorthy = sev >= 2;
-
-  if (!m_alarmInitialized) {
-    m_alarmInitialized = true;
-    m_lastFiredBand    = idx;
-    return;
-  }
-
-  if (idx == m_lastFiredBand)
-    return;
-
-  m_lastFiredBand = idx;
-  if (!fireWorthy || idx < 0 || idx >= m_bands.size())
-    return;
-
-  const qint64 now = QDateTime::currentMSecsSinceEpoch();
-  for (int s = sev; s <= 3; ++s)
-    if (now - m_lastFireBySeverityMs[s] < kMinNotifyIntervalMs)
-      return;
-
-  m_lastFireBySeverityMs[sev] = now;
-
-  const auto& band   = m_bands[idx];
-  const QString unit = m_units.isEmpty() ? QString() : QStringLiteral(" ") + m_units;
-  const QString name = m_title.isEmpty() ? tr("Alarm") : m_title;
-  const QString tier = sev >= 3 ? tr("critical") : tr("warning");
-  const QString lbl  = band.label.isEmpty() ? tier : band.label;
-
-  const QString subtitle =
-    tr("Value %1%2 entered the %3 band (%4–%5).")
-      .arg(
-        QString::number(m_value), unit, lbl, QString::number(band.min), QString::number(band.max));
-
-  const auto level =
-    sev >= 3 ? DataModel::NotificationCenter::Critical : DataModel::NotificationCenter::Warning;
-  DataModel::NotificationCenter::instance().post(level, tr("Alarms"), name, subtitle);
 }

@@ -153,9 +153,11 @@ private:
   mdf::IChannel* m_masterTimeChannel;
   std::vector<FrameIndex> m_frameIndex;
   std::vector<mdf::IChannel*> m_channels;
+  std::vector<bool> m_channelIsString;
   std::unique_ptr<mdf::MdfReader> m_reader;
   std::map<uint64_t, double> m_timestampCache;
   std::map<uint64_t, std::vector<double>> m_sampleCache;
+  std::map<uint64_t, std::vector<QString>> m_stringCache;
   std::map<uint64_t, std::vector<bool>> m_activeChannels;
 
   QMap<int, QVector<int>> m_sourceChannelsByIndex;

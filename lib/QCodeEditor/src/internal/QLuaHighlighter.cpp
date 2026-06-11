@@ -6,10 +6,98 @@
 // Qt
 #include <QFile>
 
+namespace
+{
+
+// Lua long brackets: [[ ]] / [=[ ]=] / [==[ ]==] ... The block state encodes
+// the construct type and the bracket level so a multiline comment or string
+// continues across blocks until the close token of the SAME level appears.
+constexpr int kStateNone = 0;
+
+int makeBlockState(bool comment, int level)
+{
+  return 1 + level * 2 + (comment ? 0 : 1);
+}
+
+bool stateIsComment(int state)
+{
+  return state > kStateNone && ((state - 1) % 2) == 0;
+}
+
+int stateLevel(int state)
+{
+  return (state - 1) / 2;
+}
+
+bool tryLongBracketOpen(const QString &text, int pos, int &level,
+                        int &consumed)
+{
+  if (pos >= text.length() || text.at(pos) != QLatin1Char('['))
+  {
+    return false;
+  }
+
+  int i = pos + 1;
+  while (i < text.length() && text.at(i) == QLatin1Char('='))
+  {
+    ++i;
+  }
+
+  if (i >= text.length() || text.at(i) != QLatin1Char('['))
+  {
+    return false;
+  }
+
+  level = i - pos - 1;
+  consumed = i - pos + 1;
+  return true;
+}
+
+int findLongBracketClose(const QString &text, int from, int level,
+                         int &closeEnd)
+{
+  const QString token = QStringLiteral("]") + QString(level, QLatin1Char('='))
+                        + QStringLiteral("]");
+
+  const int idx = text.indexOf(token, from);
+  if (idx >= 0)
+  {
+    closeEnd = idx + token.length();
+  }
+
+  return idx;
+}
+
+int skipQuotedString(const QString &text, int pos)
+{
+  const QChar quote = text.at(pos);
+
+  int i = pos + 1;
+  while (i < text.length())
+  {
+    const QChar c = text.at(i);
+    if (c == QLatin1Char('\\'))
+    {
+      i += 2;
+      continue;
+    }
+
+    if (c == quote)
+    {
+      return i + 1;
+    }
+
+    ++i;
+  }
+
+  return text.length();
+}
+
+} // namespace
+
 QLuaHighlighter::QLuaHighlighter(QTextDocument *document)
   : QStyleSyntaxHighlighter(document)
   , m_highlightRules()
-  , m_highlightBlockRules()
   , m_requirePattern(
         QRegularExpression(R"(require\s*([("'][a-zA-Z0-9*._]+['")]))"))
   , m_functionPattern(QRegularExpression(
@@ -55,16 +143,8 @@ QLuaHighlighter::QLuaHighlighter(QTextDocument *document)
   m_highlightRules.append(
       {QRegularExpression(R"(#\![a-zA-Z_]+)"), "Preprocessor"});
 
-  // Single line
-  m_highlightRules.append({QRegularExpression(R"(--[^\n]*)"), "Comment"});
-
-  // Multiline comments
-  m_highlightBlockRules.append({QRegularExpression(R"(--\[\[)"),
-                                QRegularExpression(R"(--\]\])"), "Comment"});
-
-  // Multiline string
-  m_highlightBlockRules.append(
-      {QRegularExpression(R"(\[\[)"), QRegularExpression(R"(\]\])"), "String"});
+  // Comments (line and block) and long strings are handled by the
+  // long-bracket scanner in highlightBlock(), not by regex rules.
 }
 
 void QLuaHighlighter::highlightBlock(const QString &text)
@@ -122,43 +202,78 @@ void QLuaHighlighter::highlightBlock(const QString &text)
     }
   }
 
-  setCurrentBlockState(0);
-  int startIndex = 0;
-  int highlightRuleId = previousBlockState();
-  if (highlightRuleId < 1 || highlightRuleId > m_highlightBlockRules.size())
+  setCurrentBlockState(kStateNone);
+
+  int pos = 0;
+  const int prevState = previousBlockState();
+  if (prevState > kStateNone)
   {
-    for (int i = 0; i < m_highlightBlockRules.size(); ++i)
+    const char *format = stateIsComment(prevState) ? "Comment" : "String";
+
+    int closeEnd = 0;
+    if (findLongBracketClose(text, 0, stateLevel(prevState), closeEnd) < 0)
     {
-      startIndex = text.indexOf(m_highlightBlockRules.at(i).startPattern);
-      if (startIndex >= 0)
-      {
-        highlightRuleId = i + 1;
-        break;
-      }
+      setCurrentBlockState(prevState);
+      setFormat(0, text.length(), syntaxStyle()->getFormat(format));
+      return;
     }
+
+    setFormat(0, closeEnd, syntaxStyle()->getFormat(format));
+    pos = closeEnd;
   }
 
-  while (startIndex >= 0)
+  while (pos < text.length())
   {
-    const auto &blockRules = m_highlightBlockRules.at(highlightRuleId - 1);
-    auto match = blockRules.endPattern.match(text, startIndex);
+    const QChar c = text.at(pos);
 
-    int endIndex = match.capturedStart();
-    int matchLength = 0;
-
-    if (endIndex == -1)
+    if (c == QLatin1Char('"') || c == QLatin1Char('\''))
     {
-      setCurrentBlockState(highlightRuleId);
-      matchLength = text.length() - startIndex;
-    }
-    else
-    {
-      matchLength = endIndex - startIndex + match.capturedLength();
+      pos = skipQuotedString(text, pos);
+      continue;
     }
 
-    setFormat(startIndex, matchLength,
-              syntaxStyle()->getFormat(blockRules.formatName));
-    startIndex
-        = text.indexOf(blockRules.startPattern, startIndex + matchLength);
+    int level = 0;
+    int consumed = 0;
+
+    if (c == QLatin1Char('-') && pos + 1 < text.length()
+        && text.at(pos + 1) == QLatin1Char('-'))
+    {
+      if (tryLongBracketOpen(text, pos + 2, level, consumed))
+      {
+        int closeEnd = 0;
+        if (findLongBracketClose(text, pos + 2 + consumed, level, closeEnd)
+            < 0)
+        {
+          setCurrentBlockState(makeBlockState(true, level));
+          setFormat(pos, text.length() - pos,
+                    syntaxStyle()->getFormat("Comment"));
+          return;
+        }
+
+        setFormat(pos, closeEnd - pos, syntaxStyle()->getFormat("Comment"));
+        pos = closeEnd;
+        continue;
+      }
+
+      setFormat(pos, text.length() - pos, syntaxStyle()->getFormat("Comment"));
+      return;
+    }
+
+    if (tryLongBracketOpen(text, pos, level, consumed))
+    {
+      int closeEnd = 0;
+      if (findLongBracketClose(text, pos + consumed, level, closeEnd) < 0)
+      {
+        setCurrentBlockState(makeBlockState(false, level));
+        setFormat(pos, text.length() - pos, syntaxStyle()->getFormat("String"));
+        return;
+      }
+
+      setFormat(pos, closeEnd - pos, syntaxStyle()->getFormat("String"));
+      pos = closeEnd;
+      continue;
+    }
+
+    ++pos;
   }
 }

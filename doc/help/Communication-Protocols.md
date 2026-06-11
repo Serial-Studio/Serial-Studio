@@ -215,7 +215,7 @@ Controller Area Network (CAN) is a vehicle and industrial bus standard. Serial S
 - **Bitrate.** Has to match the network exactly. Common: 125, 250, 500 kbps, 1 Mbps.
 - **CAN FD.** Enable for Flexible Data-rate frames (29-bit identifiers, up to 64 bytes payload).
 
-**CAN frame format emitted by the driver.** The driver converts each received CAN frame into a byte array: `[ID_high, ID_low, DLC, data_0, data_1, ...]`. This array is passed to Serial Studio's frame parser for decoding.
+**CAN frame format emitted by the driver.** The driver converts each received CAN frame into a byte array. Standard frames (11-bit identifiers) use `[ID_high, ID_low, DLC, data_0, data_1, ...]`; extended frames (29-bit identifiers) carry the full identifier in four bytes with bit 7 of the first byte set: `[0x80|ID_28..24, ID_23..16, ID_15..8, ID_7..0, DLC, data_0, ...]`. Standard identifiers never exceed 0x7FF, so the first byte's top bit tells the two forms apart. This array is passed to Serial Studio's frame parser for decoding.
 
 **Platform considerations:**
 

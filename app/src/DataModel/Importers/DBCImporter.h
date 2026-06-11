@@ -25,6 +25,7 @@
 #include <QCanDbcFileParser>
 #include <QCanMessageDescription>
 #include <QCanSignalDescription>
+#include <QHash>
 #include <QJsonObject>
 #include <QObject>
 #include <QString>
@@ -77,17 +78,6 @@ public slots:
   void showPreview(const QString& filePath);
 
 private:
-  enum SignalFamily {
-    WheelSpeeds,
-    TirePressures,
-    Temperatures,
-    Voltages,
-    BatteryCluster,
-    StatusFlags,
-    GenericRelated,
-    None
-  };
-
   /**
    * @brief Multiplexing role of a CAN signal as classified during DBC import.
    */
@@ -98,23 +88,44 @@ private:
     ExtendedMuxed
   };
 
+  /**
+   * @brief One importable signal in canonical order (selector, plain, then muxed).
+   */
+  struct OrderedSignal {
+    QCanSignalDescription signal;
+    MuxRole role;
+    qint64 muxValue;
+  };
+
   std::vector<Group> generateGroups(const QList<QCanMessageDescription>& messages);
   Dataset buildDatasetFromSignal(const QCanSignalDescription& signal,
                                  const QString& groupWidget,
+                                 const QString& tableName,
+                                 const QCanDbcFileParser::ValueDescriptions& valueLabels,
                                  int datasetIndex,
                                  MuxRole role,
                                  qint64 muxValue);
   QJsonObject generateProject(const QList<QCanMessageDescription>& messages);
-  QJsonObject generateNativeParserParams(const QList<QCanMessageDescription>& messages);
 
-  [[nodiscard]] static QJsonObject signalToJson(const QCanSignalDescription& signal,
-                                                MuxRole role,
-                                                qint64 muxValue);
+  void buildTableNames(const QList<QCanMessageDescription>& messages);
+  [[nodiscard]] QString tableNameFor(const QCanMessageDescription& message) const;
+  [[nodiscard]] QList<OrderedSignal> orderedSignals(const QCanMessageDescription& message) const;
+  [[nodiscard]] std::vector<TableDef> generateTables(const QList<QCanMessageDescription>& messages);
+
+  QString generateLuaParser(const QList<QCanMessageDescription>& messages);
+  [[nodiscard]] QString generateMessageSpec(const QCanMessageDescription& message);
+  [[nodiscard]] QString signalSpecLine(const QCanSignalDescription& signal,
+                                       MuxRole role,
+                                       qint64 muxValue) const;
+  [[nodiscard]] static QString enumTransformCode(
+    const QString& table,
+    const QString& reg,
+    const QCanDbcFileParser::ValueDescriptions& valueLabels);
 
   QString selectGroupWidget(const QCanMessageDescription& message);
   QString selectWidgetForSignal(const QCanSignalDescription& signal);
 
-  [[nodiscard]] static bool isIntegerSignal(const QCanSignalDescription& signal);
+  [[nodiscard]] static bool isPlottableSignal(const QCanSignalDescription& signal);
 
   [[nodiscard]] MuxRole classifyMux(const QCanSignalDescription& signal,
                                     const QCanMessageDescription& message,
@@ -126,30 +137,14 @@ private:
     const QList<QCanSignalDescription>& signalDescriptions) const;
   [[nodiscard]] QString detectMotionWidget(
     const QList<QCanSignalDescription>& signalDescriptions) const;
-  [[nodiscard]] QString resolveSignalFamilyWidget(
-    SignalFamily family,
-    int signalCount,
-    const QList<QCanSignalDescription>& signalDescriptions) const;
-
-  [[nodiscard]] SignalFamily detectSignalFamily(
-    const QList<QCanSignalDescription>& signalList) const;
-  [[nodiscard]] bool hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
-                                          const QStringList& positions) const;
-  [[nodiscard]] bool hasNumberedPattern(const QList<QCanSignalDescription>& signalList) const;
-  [[nodiscard]] bool allSimilarUnits(const QList<QCanSignalDescription>& signalList) const;
-  [[nodiscard]] bool hasBatterySignals(const QList<QCanSignalDescription>& signalList) const;
-  [[nodiscard]] bool allStatusSignals(const QList<QCanSignalDescription>& signalList) const;
-  [[nodiscard]] int countPlottable(const QList<QCanSignalDescription>& signalList) const;
-  [[nodiscard]] bool isCriticalSignal(const QCanSignalDescription& signal) const;
-  [[nodiscard]] bool shouldAssignIndividualWidget(const QString& groupWidget,
-                                                  const QCanSignalDescription& signal,
-                                                  bool isSingleBit) const;
 
   [[nodiscard]] int countTotalSignals(const QList<QCanMessageDescription>& messages) const;
 
 private:
   QString m_dbcFilePath;
+  QHash<quint32, QString> m_tableNames;
   QList<QCanMessageDescription> m_messages;
+  QCanDbcFileParser::MessageValueDescriptions m_valueDescriptions;
   int m_skippedExtendedMuxSignals;
 };
 

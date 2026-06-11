@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <array>
 #include <QQuickItem>
 #include <QString>
 #include <QVariantList>
@@ -39,11 +38,12 @@ namespace Widgets {
  * @brief Precomputed render data for a single alarm band on a widget.
  */
 struct BarBand {
-  double min     = 0;  ///< Raw lower bound
-  double max     = 0;  ///< Raw upper bound
-  double fracMin = 0;  ///< Normalised lower bound (0..1)
-  double fracMax = 0;  ///< Normalised upper bound (0..1)
-  int severity   = 2;  ///< AlarmSeverity enum value (0..3); default Warning
+  double min     = 0;      ///< Raw lower bound
+  double max     = 0;      ///< Raw upper bound
+  double fracMin = 0;      ///< Normalised lower bound (0..1)
+  double fracMax = 0;      ///< Normalised upper bound (0..1)
+  int severity   = 2;      ///< AlarmSeverity enum value (0..3); default Warning
+  bool blink     = false;  ///< Flash the indicator while the band is active
   QString customColor;
   QString label;
 };
@@ -139,7 +139,6 @@ protected:
   void buildBands(const std::vector<DataModel::AlarmBand>& srcBands);
   [[nodiscard]] int bandIndexFor(double value) const noexcept;
   void recomputeActiveBand(double value);
-  void notifyOnBandEdge();
 
   int m_index;
   int m_displayTickCount;
@@ -156,8 +155,5 @@ protected:
   QString m_emptyLabel;
   int m_activeBandIndex;
   int m_lastBandHint;
-  int m_lastFiredBand;
-  std::array<qint64, 4> m_lastFireBySeverityMs;
-  bool m_alarmInitialized;
 };
 }  // namespace Widgets

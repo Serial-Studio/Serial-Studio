@@ -202,6 +202,107 @@ void DataModel::splitQuickPlotChannels(const QByteArray& rawFrame, QList<QString
     outChannels.append(std::move(row));
 }
 
+/**
+ * @brief Joins replay cells into one comma-separated row, RFC-4180-quoting any cell that
+ *        contains a comma, quote or newline. Counterpart of splitReplayRow.
+ */
+QByteArray DataModel::joinReplayRow(const QStringList& cells)
+{
+  QString row;
+  for (int i = 0; i < cells.size(); ++i) {
+    if (i > 0)
+      row.append(QChar(','));
+
+    const QString& cell      = cells.at(i);
+    const bool needs_quoting = cell.contains(QChar(',')) || cell.contains(QChar('"'))
+                            || cell.contains(QChar('\n')) || cell.contains(QChar('\r'));
+    if (!needs_quoting) {
+      row.append(cell);
+      continue;
+    }
+
+    QString quoted = cell;
+    quoted.replace(QChar('"'), QStringLiteral("\"\""));
+    row.append(QChar('"'));
+    row.append(quoted);
+    row.append(QChar('"'));
+  }
+
+  return row.toUtf8();
+}
+
+/**
+ * @brief Quote-aware comma split of one synthesized replay row (RFC-4180 double-quote escape).
+ */
+QStringList DataModel::splitReplayRow(QStringView row)
+{
+  QStringList cells;
+  QString cell;
+  bool in_quotes  = false;
+  bool was_quoted = false;
+
+  const qsizetype length = row.size();
+  for (qsizetype i = 0; i < length; ++i) {
+    const QChar c = row.at(i);
+
+    if (in_quotes) {
+      const bool escaped = c == QChar('"') && i + 1 < length && row.at(i + 1) == QChar('"');
+      if (escaped) {
+        cell.append(QChar('"'));
+        ++i;
+        continue;
+      }
+
+      if (c == QChar('"')) {
+        in_quotes = false;
+        continue;
+      }
+
+      cell.append(c);
+      continue;
+    }
+
+    if (c == QChar(',')) {
+      cells.append(was_quoted ? cell : cell.trimmed());
+      cell.clear();
+      was_quoted = false;
+      continue;
+    }
+
+    if (c == QChar('"') && !was_quoted && cell.trimmed().isEmpty()) {
+      in_quotes  = true;
+      was_quoted = true;
+      cell.clear();
+      continue;
+    }
+
+    cell.append(c);
+  }
+
+  cells.append(was_quoted ? cell : cell.trimmed());
+  return cells;
+}
+
+/**
+ * @brief Replay twin of splitQuickPlotChannels: one quote-aware row per non-empty line.
+ */
+void DataModel::splitReplayChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels)
+{
+  outChannels.clear();
+  if (rawFrame.isEmpty())
+    return;
+
+  const QString text = QString::fromUtf8(rawFrame);
+  const auto lines   = QStringView(text).split(QChar('\n'), Qt::SkipEmptyParts);
+  for (const auto& line : lines) {
+    const auto trimmed = line.trimmed();
+    if (trimmed.isEmpty())
+      continue;
+
+    outChannels.append(splitReplayRow(trimmed));
+  }
+}
+
 //--------------------------------------------------------------------------------------------------
 // Pipeline runners (extraction + decode + parse)
 //--------------------------------------------------------------------------------------------------

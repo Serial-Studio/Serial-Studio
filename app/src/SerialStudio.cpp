@@ -653,13 +653,21 @@ bool SerialStudio::isAnyPlayerOpen()
 }
 
 /**
- * @brief Returns true when a player that stores post-transform values is open.
+ * @brief Returns true when a player that stores post-transform values is open. The Sessions
+ *        player replays the stored final values, so transforms must not run again: they read
+ *        live inputs (data tables) that do not exist during playback.
  */
 bool SerialStudio::isFinalValuePlayerOpen()
 {
   static auto& csvPlayer  = CSV::Player::instance();
   static auto& mdf4Player = MDF4::Player::instance();
+
+#ifdef BUILD_COMMERCIAL
+  static auto& sqlPlayer = Sessions::Player::instance();
+  return csvPlayer.isOpen() || mdf4Player.isOpen() || sqlPlayer.isOpen();
+#else
   return csvPlayer.isOpen() || mdf4Player.isOpen();
+#endif
 }
 
 /**

@@ -189,12 +189,11 @@ Datasets map to individual data fields in your device's output.
 **LED**
 
 - **LED.** Show this dataset in the LED panel.
-- **LED High.** Threshold above which the LED lights up.
+- **LED High.** Threshold above which the LED lights up. Shown only while the dataset has no alarm bands; once bands are defined, they drive the LED's color, label, and blink state instead.
 
-**Alarm**
+**Alarm bands**
 
-- **Alarm.** Enable threshold-based alarms.
-- **Alarm Low / Alarm High.** Trigger thresholds.
+- **Alarm Bands** (dataset toolbar, next to **Transform**). Opens a dialog to define colored value ranges with severity tiers for Bar, Gauge, Meter, and LED datasets. Each band has a min/max range, a severity (Info / OK / Warning / Critical), an optional color override and label, and a blink toggle for LED panels. Opening the dialog for an LED dataset with no bands pre-fills one band from the **LED High** threshold so existing setups migrate in place.
 
 **Widget range**
 

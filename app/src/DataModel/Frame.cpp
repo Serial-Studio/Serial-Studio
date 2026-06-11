@@ -179,6 +179,7 @@ bool DataModel::read(AlarmBand& b, const QJsonObject& obj)
 
   const int sev = ss_jsr(obj, Keys::Severity, static_cast<int>(AlarmSeverity::Warning)).toInt();
   b.severity    = static_cast<AlarmSeverity>(qBound(0, sev, 3));
+  b.blink       = ss_jsr(obj, Keys::Blink, false).toBool();
   b.color       = ss_jsr(obj, Keys::Color, "").toString().simplified();
   b.label       = ss_jsr(obj, Keys::Label, "").toString().simplified();
   return b.max > b.min;

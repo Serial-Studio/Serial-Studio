@@ -52,6 +52,7 @@ Widgets.SmartDialog {
   readonly property int colWMax: 90
   readonly property int colWMove: 24
   readonly property int colWColor: 28
+  readonly property int colWBlink: 40
   readonly property int colSpacing: 8
   readonly property int colWDelete: 28
   readonly property int colWSeverity: 130
@@ -59,7 +60,7 @@ Widgets.SmartDialog {
 
   //
   // Editable working copy of the bands list. ListModel rows: bandMin, bandMax, severity,
-  // colorHex, bandLabel.
+  // colorHex, bandLabel, bandBlink.
   //
   ListModel { id: bandsModel }
 
@@ -74,8 +75,8 @@ Widgets.SmartDialog {
   ]
 
   //
-  // Presets: author-friendly band setups for common gauges. Fractional bounds get
-  // scaled to the dataset's wgtMin/wgtMax at apply time.
+  // Presets: author-friendly band setups for common gauges. Fractional bounds get scaled to
+  // the dataset's wgtMin/wgtMax at apply time; Critical preset bands default to blink.
   //
   readonly property var presets: [
     {
@@ -84,7 +85,7 @@ Widgets.SmartDialog {
         { fracMin: 0.00, fracMax: 0.55, severity: 0, color: "", label: qsTr("Idle") },
         { fracMin: 0.55, fracMax: 0.85, severity: 1, color: "", label: qsTr("Operating") },
         { fracMin: 0.85, fracMax: 0.95, severity: 2, color: "", label: qsTr("Caution") },
-        { fracMin: 0.95, fracMax: 1.00, severity: 3, color: "", label: qsTr("Redline") }
+        { fracMin: 0.95, fracMax: 1.00, severity: 3, color: "", label: qsTr("Redline"), blink: true }
       ]
     },
     {
@@ -92,7 +93,7 @@ Widgets.SmartDialog {
       bands: [
         { fracMin: 0.00, fracMax: 0.65, severity: 1, color: "", label: qsTr("Cruise") },
         { fracMin: 0.65, fracMax: 0.90, severity: 2, color: "", label: qsTr("Fast") },
-        { fracMin: 0.90, fracMax: 1.00, severity: 3, color: "", label: qsTr("Top Speed") }
+        { fracMin: 0.90, fracMax: 1.00, severity: 3, color: "", label: qsTr("Top Speed"), blink: true }
       ]
     },
     {
@@ -101,22 +102,22 @@ Widgets.SmartDialog {
         { fracMin: 0.00, fracMax: 0.25, severity: 0, color: "", label: qsTr("Cold") },
         { fracMin: 0.25, fracMax: 0.70, severity: 1, color: "", label: qsTr("Normal") },
         { fracMin: 0.70, fracMax: 0.90, severity: 2, color: "", label: qsTr("Warm") },
-        { fracMin: 0.90, fracMax: 1.00, severity: 3, color: "", label: qsTr("Overheat") }
+        { fracMin: 0.90, fracMax: 1.00, severity: 3, color: "", label: qsTr("Overheat"), blink: true }
       ]
     },
     {
       label: qsTr("Pressure"),
       bands: [
-        { fracMin: 0.00, fracMax: 0.15, severity: 3, color: "", label: qsTr("Vacuum") },
+        { fracMin: 0.00, fracMax: 0.15, severity: 3, color: "", label: qsTr("Vacuum"), blink: true },
         { fracMin: 0.15, fracMax: 0.75, severity: 1, color: "", label: qsTr("Normal") },
         { fracMin: 0.75, fracMax: 0.90, severity: 2, color: "", label: qsTr("High") },
-        { fracMin: 0.90, fracMax: 1.00, severity: 3, color: "", label: qsTr("Burst") }
+        { fracMin: 0.90, fracMax: 1.00, severity: 3, color: "", label: qsTr("Burst"), blink: true }
       ]
     },
     {
       label: qsTr("Battery Voltage"),
       bands: [
-        { fracMin: 0.00, fracMax: 0.20, severity: 3, color: "", label: qsTr("Low") },
+        { fracMin: 0.00, fracMax: 0.20, severity: 3, color: "", label: qsTr("Low"), blink: true },
         { fracMin: 0.20, fracMax: 0.85, severity: 1, color: "", label: qsTr("Nominal") },
         { fracMin: 0.85, fracMax: 1.00, severity: 2, color: "", label: qsTr("High") }
       ]
@@ -124,7 +125,7 @@ Widgets.SmartDialog {
     {
       label: qsTr("Fuel Level"),
       bands: [
-        { fracMin: 0.00, fracMax: 0.10, severity: 3, color: "", label: qsTr("Empty") },
+        { fracMin: 0.00, fracMax: 0.10, severity: 3, color: "", label: qsTr("Empty"), blink: true },
         { fracMin: 0.10, fracMax: 0.25, severity: 2, color: "", label: qsTr("Reserve") },
         { fracMin: 0.25, fracMax: 1.00, severity: 1, color: "", label: qsTr("OK") }
       ]
@@ -132,7 +133,7 @@ Widgets.SmartDialog {
     {
       label: qsTr("Signal Strength"),
       bands: [
-        { fracMin: 0.00, fracMax: 0.15, severity: 3, color: "", label: qsTr("No Signal") },
+        { fracMin: 0.00, fracMax: 0.15, severity: 3, color: "", label: qsTr("No Signal"), blink: true },
         { fracMin: 0.15, fracMax: 0.50, severity: 2, color: "", label: qsTr("Weak") },
         { fracMin: 0.50, fracMax: 1.00, severity: 1, color: "", label: qsTr("Good") }
       ]
@@ -142,7 +143,7 @@ Widgets.SmartDialog {
       bands: [
         { fracMin: 0.00, fracMax: 0.50, severity: 1, color: "", label: qsTr("Normal") },
         { fracMin: 0.50, fracMax: 0.80, severity: 2, color: "", label: qsTr("Busy") },
-        { fracMin: 0.80, fracMax: 1.00, severity: 3, color: "", label: qsTr("Overload") }
+        { fracMin: 0.80, fracMax: 1.00, severity: 3, color: "", label: qsTr("Overload"), blink: true }
       ]
     },
     {
@@ -150,7 +151,19 @@ Widgets.SmartDialog {
       bands: [
         { fracMin: 0.00, fracMax: 0.33, severity: 1, color: "", label: qsTr("OK") },
         { fracMin: 0.33, fracMax: 0.66, severity: 2, color: "", label: qsTr("Warning") },
-        { fracMin: 0.66, fracMax: 1.00, severity: 3, color: "", label: qsTr("Critical") }
+        { fracMin: 0.66, fracMax: 1.00, severity: 3, color: "", label: qsTr("Critical"), blink: true }
+      ]
+    },
+    {
+      label: qsTr("Indicator (On / Off)"),
+      bands: [
+        { fracMin: 0.50, fracMax: 1.00, severity: 1, color: "", label: qsTr("On") }
+      ]
+    },
+    {
+      label: qsTr("Fault Indicator"),
+      bands: [
+        { fracMin: 0.50, fracMax: 1.00, severity: 3, color: "", label: qsTr("Fault"), blink: true }
       ]
     }
   ]
@@ -182,7 +195,8 @@ Widgets.SmartDialog {
         bandMax: Number(b.max ?? 0),
         severity: Number(b.severity ?? 2),
         colorHex: String(b.color ?? ""),
-        bandLabel: String(b.label ?? "")
+        bandLabel: String(b.label ?? ""),
+        bandBlink: b.blink === true
       })
     }
   }
@@ -199,7 +213,8 @@ Widgets.SmartDialog {
         max: Number(r.bandMax),
         severity: Number(r.severity),
         color: String(r.colorHex),
-        label: String(r.bandLabel)
+        label: String(r.bandLabel),
+        blink: r.bandBlink === true
       })
     }
     return out
@@ -219,7 +234,8 @@ Widgets.SmartDialog {
         bandMax: root.rangeMin + b.fracMax * range,
         severity: b.severity,
         colorHex: b.color,
-        bandLabel: b.label
+        bandLabel: b.label,
+        bandBlink: b.blink === true
       })
     }
   }
@@ -235,7 +251,8 @@ Widgets.SmartDialog {
       bandMax: hi,
       severity: 2,
       colorHex: "",
-      bandLabel: ""
+      bandLabel: "",
+      bandBlink: false
     })
   }
 
@@ -283,7 +300,7 @@ Widgets.SmartDialog {
     id: layout
 
     spacing: 12
-    Layout.minimumWidth: 760
+    Layout.minimumWidth: 810
     anchors.centerIn: parent
 
     //
@@ -304,7 +321,7 @@ Widgets.SmartDialog {
         radius: 2
         border.width: 1
         Layout.fillWidth: true
-        Layout.minimumWidth: 760
+        Layout.minimumWidth: 810
         implicitHeight: presetLayout.implicitHeight + 16
         color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
@@ -396,7 +413,7 @@ Widgets.SmartDialog {
         border.width: 1
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.minimumWidth: 760
+        Layout.minimumWidth: 810
         Layout.minimumHeight: 220
         color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
@@ -440,6 +457,13 @@ Widgets.SmartDialog {
               color: Cpp_ThemeManager.colors["placeholder_text"]
               horizontalAlignment: Text.AlignHCenter
               Layout.preferredWidth: root.colWColor
+            }
+            Label {
+              text: qsTr("Blink")
+              font: Cpp_Misc_CommonFonts.boldUiFont
+              color: Cpp_ThemeManager.colors["placeholder_text"]
+              horizontalAlignment: Text.AlignHCenter
+              Layout.preferredWidth: root.colWBlink
             }
             Label {
               text: qsTr("Label")
@@ -487,6 +511,7 @@ Widgets.SmartDialog {
               required property double bandMax
               required property string colorHex
               required property string bandLabel
+              required property bool bandBlink
 
               implicitHeight: 36
               width: ListView.view.width
@@ -586,6 +611,26 @@ Widgets.SmartDialog {
                   }
                 }
 
+                //
+                // Blink column: flashes the LED while this band is active (LED panels only)
+                //
+                Item {
+                  Layout.preferredHeight: 24
+                  Layout.alignment: Qt.AlignVCenter
+                  Layout.preferredWidth: root.colWBlink
+
+                  CheckBox {
+                    anchors.centerIn: parent
+                    checked: bandRow.bandBlink
+
+                    ToolTip.delay: 700
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Flash the LED while the value sits in this band.")
+
+                    onToggled: bandsModel.setProperty(bandRow.index, "bandBlink", checked)
+                  }
+                }
+
                 Widgets.LineField {
                   Layout.fillWidth: true
                   text: bandRow.bandLabel
@@ -681,7 +726,7 @@ Widgets.SmartDialog {
         radius: 2
         border.width: 1
         Layout.fillWidth: true
-        Layout.minimumWidth: 760
+        Layout.minimumWidth: 810
         implicitHeight: previewLayout.implicitHeight + 16
         color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]

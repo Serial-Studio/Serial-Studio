@@ -454,8 +454,29 @@
         ]
     },
     {
+        "description": "Validate control-script source WITHOUT installing or running it (params: code). Compiles the script in a sandboxed engine with the SDK prelude, reports syntax errors with line numbers, and checks that setup() and/or loop() are defined. setup()/loop() are never executed and apiCall/tableSet have no effect. Use before controlscript.set.",
+        "name": "controlscript.dryRun",
+        "properties": {
+            "code": {
+                "description": "Control script source",
+                "type": "string"
+            }
+        },
+        "required": [
+            "code"
+        ]
+    },
+    {
         "description": "Get the project's setup()/loop() control script source code.",
         "name": "controlscript.get",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the control script source (alias of controlscript.get; matches the project.frameParser.getCode naming convention).",
+        "name": "controlscript.getCode",
         "properties": {
         },
         "required": [
@@ -470,8 +491,21 @@
         ]
     },
     {
-        "description": "Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately.",
+        "description": "Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlscript.dryRun.",
         "name": "controlscript.set",
+        "properties": {
+            "code": {
+                "description": "Control script source",
+                "type": "string"
+            }
+        },
+        "required": [
+            "code"
+        ]
+    },
+    {
+        "description": "Replace the control script source (alias of controlscript.set; params: code; matches the project.frameParser.setCode naming convention).",
+        "name": "controlscript.setCode",
         "properties": {
             "code": {
                 "description": "Control script source",
@@ -615,6 +649,14 @@
     {
         "description": "Get the current visible plot time window in seconds",
         "name": "dashboard.getTimeRange",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Re-run every dataset transform from the last received values and republish the frames to the dashboard (no export side effects). Dataset transforms normally run only when a device frame arrives; call this after project.dataTable.setValue writes (control scripts: tableSet()) so the dashboard reflects them while the device is silent.",
+        "name": "dashboard.reprocess",
         "properties": {
         },
         "required": [
@@ -1179,7 +1221,7 @@
         ]
     },
     {
-        "description": "Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames.",
+        "description": "Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames. ageMs is the time elapsed since the frame was captured -- use it for staleness watchdogs instead of mixing clocks.",
         "name": "io.getLatestFrame",
         "properties": {
             "encoding": {
@@ -2483,6 +2525,24 @@
         ]
     },
     {
+        "description": "Return a register's LIVE runtime value from the data-table store (params: table, name). This is the same store the parser/transform tableGet() reads; control scripts use it through the tableGet() global.",
+        "name": "project.dataTable.getValue",
+        "properties": {
+            "name": {
+                "description": "Register name",
+                "type": "string"
+            },
+            "table": {
+                "description": "Owning table name",
+                "type": "string"
+            }
+        },
+        "required": [
+            "table",
+            "name"
+        ]
+    },
+    {
         "description": "List all user-defined data tables",
         "name": "project.dataTable.list",
         "properties": {
@@ -2506,6 +2566,32 @@
         "required": [
             "oldName",
             "newName"
+        ]
+    },
+    {
+        "description": "Write a register's LIVE runtime value into the data-table store (params: table, name, value). Same effect as a parser/transform tableSet(); control scripts use it through the tableSet() global. Constant registers reject writes.",
+        "name": "project.dataTable.setValue",
+        "properties": {
+            "name": {
+                "description": "Register name",
+                "type": "string"
+            },
+            "table": {
+                "description": "Owning table name",
+                "type": "string"
+            },
+            "value": {
+                "description": "New runtime value (number or string)",
+                "type": [
+                    "number",
+                    "string"
+                ]
+            }
+        },
+        "required": [
+            "table",
+            "name",
+            "value"
         ]
     },
     {
@@ -2623,7 +2709,7 @@
         ]
     },
     {
-        "description": "Returns the dataset's coloured alarm bands as a JSON array. Each entry: {min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color (\"#rrggbb\" override or empty for severity default), label}. Also returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate band ranges before writing back. An empty array means no alarms configured. Applies only to bar / gauge / meter widgets; calling on other widget types succeeds with an empty array.",
+        "description": "Returns the dataset's coloured alarm bands as a JSON array. Each entry: {min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color (\"#rrggbb\" override or empty for severity default), label, blink}. Also returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate band ranges before writing back. An empty array means no alarms configured. Applies to bar / gauge / meter widgets and LED-panel datasets; calling on other widget types succeeds with an empty array.",
         "name": "project.dataset.getAlarmBands",
         "properties": {
             "datasetId": {
@@ -2726,13 +2812,17 @@
         ]
     },
     {
-        "description": "Atomically replaces the dataset's alarmBands array. Each band entry must provide numeric min and max (max>min; bands with max<=min are silently dropped and counted in result.droppedInvalid), and an integer severity (0=Info, 1=OK, 2=Warning, 3=Critical). color is optional (\"#rrggbb\" override; empty/missing = severity's theme colour). label is optional (surfaces in band-edge notifications). Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity >= Warning triggers a notification when the value enters the band (3-second per-widget cooldown suppresses oscillation spam).\nPass an empty array to clear all alarms.",
+        "description": "Atomically replaces the dataset's alarmBands array. Each band entry must provide numeric min and max (max>min; bands with max<=min are silently dropped and counted in result.droppedInvalid), and an integer severity (0=Info, 1=OK, 2=Warning, 3=Critical). color is optional (\"#rrggbb\" override; empty/missing = severity's theme colour). label is optional (surfaces in band-edge notifications). blink is optional (boolean; LED panels flash the LED while the band is active). Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity >= Warning triggers a notification when the value enters the band, even when no widget is visible (3-second per-dataset cooldown suppresses oscillation spam).\nPass an empty array to clear all alarms.",
         "name": "project.dataset.setAlarmBands",
         "properties": {
             "alarmBands": {
                 "description": "Full replacement band list (empty = no alarms).",
                 "items": {
                     "properties": {
+                        "blink": {
+                            "description": "Optional; LED panels flash the LED while this band is active",
+                            "type": "boolean"
+                        },
                         "color": {
                             "description": "Optional \"#rrggbb\" override; empty = use severity's theme colour",
                             "type": "string"
@@ -2915,7 +3005,7 @@
         ]
     },
     {
-        "description": "Patch dataset fields by id (params: groupId, datasetId, plus any of title, units, widget, index, sourceId, graph, fft, led, waterfall, log, overviewDisplay, hideOnDashboard, xAxisId, waterfallYAxis, fftSamples, fftSamplingRate, fftMin, fftMax, pltMin, pltMax, wgtMin, wgtMax, ledHigh, alarmBands (array of {min,max,severity,color,label} objects, severity=0..3 for Info/Ok/Warning/Critical), or legacy alarmLow/alarmHigh/alarmEnabled for 2-band simple mode, displayTickCount, displayFormat, transformCode, transformLanguage, virtual). The boolean fields graph/fft/led/waterfall toggle the same flags as project.dataset.setOption -- use them here when patching multiple fields at once.\nUnknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field' so the caller can self-correct on the next turn instead of silently mis-applying a typo.\nREMINDERS for compute-only datasets:\n  - Set virtual=true when the dataset's value comes from transformCode rather than from a slot in the parser output. Without virtual=true the dataset still tries to read channels[index-1] and ends up empty.\n  - `index` is the 1-based parser-output slot (0 = unassigned). Patchable via this call; bulk-renumbering 40 datasets is best done through project.batch to avoid round-trip overhead.\n  - Set transformLanguage explicitly (0=JavaScript, 1=Lua, -1=inherit from source). Mismatched language vs code = silent compile failure. Lua is the recommended default; it's faster on the hotpath.",
+        "description": "Patch dataset fields by id (params: groupId, datasetId, plus any of title, units, widget, index, sourceId, graph, fft, led, waterfall, log, overviewDisplay, hideOnDashboard, xAxisId, waterfallYAxis, fftSamples, fftSamplingRate, fftMin, fftMax, pltMin, pltMax, wgtMin, wgtMax, ledHigh, alarmBands (array of {min,max,severity,color,label,blink} objects, severity=0..3 for Info/Ok/Warning/Critical), or legacy alarmLow/alarmHigh/alarmEnabled for 2-band simple mode, displayTickCount, displayFormat, transformCode, transformLanguage, virtual). The boolean fields graph/fft/led/waterfall toggle the same flags as project.dataset.setOption -- use them here when patching multiple fields at once.\nUnknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field' so the caller can self-correct on the next turn instead of silently mis-applying a typo.\nREMINDERS for compute-only datasets:\n  - Set virtual=true when the dataset's value comes from transformCode rather than from a slot in the parser output. Without virtual=true the dataset still tries to read channels[index-1] and ends up empty.\n  - `index` is the 1-based parser-output slot (0 = unassigned). Patchable via this call; bulk-renumbering 40 datasets is best done through project.batch to avoid round-trip overhead.\n  - Set transformLanguage explicitly (0=JavaScript, 1=Lua, -1=inherit from source). Mismatched language vs code = silent compile failure. Lua is the recommended default; it's faster on the hotpath.",
         "name": "project.dataset.update",
         "properties": {
             "datasetId": {

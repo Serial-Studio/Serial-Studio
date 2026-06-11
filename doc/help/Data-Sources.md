@@ -191,7 +191,7 @@ Receives and transmits CAN frames through platform-specific CAN interface plugin
 - **Windows:** Requires a third-party CAN adapter with a Qt CAN Bus plugin (PEAK, Vector, Systec).
 - **macOS:** Limited support. Requires third-party drivers.
 
-**Frame format.** Standard CAN uses 11-bit identifiers (0x000 to 0x7FF); IDs above 0x7FF are sent as 29-bit extended frames. CAN FD raises the payload limit to 64 data bytes per frame (classic CAN caps at 8). The driver outputs frames as `[ID_high, ID_low, DLC, data...]` byte arrays.
+**Frame format.** Standard CAN uses 11-bit identifiers (0x000 to 0x7FF); IDs above 0x7FF are sent as 29-bit extended frames. CAN FD raises the payload limit to 64 data bytes per frame (classic CAN caps at 8). The driver outputs standard frames as `[ID_high, ID_low, DLC, data...]` byte arrays; extended frames carry the full 29-bit identifier in four bytes with bit 7 of the first byte set (`[0x80|ID_28..24, ID_23..16, ID_15..8, ID_7..0, DLC, data...]`).
 
 **Quick start:**
 

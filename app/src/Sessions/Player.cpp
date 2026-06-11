@@ -26,10 +26,12 @@
 #  include <QThread>
 #  include <QTimer>
 #  include <QtMath>
+#  include <unordered_map>
 
 #  include "AppState.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/ProjectModel.h"
+#  include "DataModel/Scripting/FrameParserPipeline.h"
 #  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
 #  include "Misc/WorkspaceManager.h"
@@ -46,6 +48,7 @@ Sessions::Player::Player()
   : m_workerThread(nullptr)
   , m_worker(nullptr)
   , m_frameQueryPrepared(false)
+  , m_hasFinalValues(false)
   , m_sessionId(-1)
   , m_pendingSessionId(-1)
   , m_loading(false)
@@ -290,6 +293,7 @@ void Sessions::Player::closeFile()
   clearLocalState();
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+  DataModel::FrameBuilder::instance().setReplayColumnMap({});
 
   restorePreSessionState();
 
@@ -470,7 +474,30 @@ bool Sessions::Player::openLocalDb(const QString& filePath)
   QSqlQuery pragma(*m_db);
   pragma.exec("PRAGMA journal_mode=WAL");
   pragma.exec("PRAGMA busy_timeout=5000");
+
+  detectFinalValueColumns();
   return true;
+}
+
+/**
+ * @brief Probes the readings schema for the final-value columns (absent in old session files).
+ */
+void Sessions::Player::detectFinalValueColumns()
+{
+  Q_ASSERT(m_db && m_db->isOpen());
+
+  m_hasFinalValues = false;
+
+  QSqlQuery probe(*m_db);
+  if (!probe.exec("PRAGMA table_info(readings)"))
+    return;
+
+  while (probe.next()) {
+    if (probe.value(1).toString() == QLatin1String("final_numeric_value")) {
+      m_hasFinalValues = true;
+      return;
+    }
+  }
 }
 
 /**
@@ -506,13 +533,12 @@ void Sessions::Player::clearLocalState()
   m_timestamp             = "--.--";
   m_startTimestampSeconds = 0.0;
   m_multiSource           = false;
+  m_hasFinalValues        = false;
   m_columnUniqueIds.clear();
   m_uidToColumn.clear();
   m_timestampsNs.clear();
   m_columnToSource.clear();
-  m_sourceColumnCount.clear();
-  m_sourceMaxIndex.clear();
-  m_sourceSlotUid.clear();
+  m_sourceColumns.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -780,78 +806,45 @@ void Sessions::Player::alignColumnsToProject()
 }
 
 /**
- * @brief Records one dataset's uid + per-(sourceId,index) slot pick during mapping build.
- */
-void Sessions::Player::pickSlotForDataset(const DataModel::Group& g,
-                                          const DataModel::Dataset& d,
-                                          QMap<int, int>& uidToSource,
-                                          QHash<QPair<int, int>, int>& slotPick,
-                                          QSet<QPair<int, int>>& slotPickIsTransformFree)
-{
-  const int uid = d.uniqueId;
-  uidToSource.insert(uid, g.sourceId);
-
-  if (d.index <= 0)
-    return;
-
-  m_sourceMaxIndex[g.sourceId] = std::max(m_sourceMaxIndex.value(g.sourceId, 0), d.index);
-
-  const auto key       = qMakePair(g.sourceId, d.index);
-  const bool noXform   = d.transformCode.isEmpty();
-  const auto pickIt    = slotPick.constFind(key);
-  const bool unfilled  = pickIt == slotPick.constEnd();
-  const bool replacing = !unfilled && noXform && !slotPickIsTransformFree.contains(key);
-
-  if (!unfilled && !replacing)
-    return;
-
-  slotPick.insert(key, uid);
-  if (noXform)
-    slotPickIsTransformFree.insert(key);
-}
-
-/**
- * @brief Builds source/index mappings used by injectFrame; runs for any source count.
+ * @brief Builds the per-source column lists and installs the FrameBuilder replay map
+ *        (uid -> payload cell index); runs for any source count. Single-source payloads
+ *        travel through processPayload, which routes to source 0, so the map is rekeyed.
  */
 void Sessions::Player::buildMultiSourceMapping()
 {
   m_columnToSource.clear();
-  m_sourceColumnCount.clear();
-  m_sourceMaxIndex.clear();
-  m_sourceSlotUid.clear();
-
-  QHash<QPair<int, int>, int> slotPick;
-  QSet<QPair<int, int>> slotPickIsTransformFree;
+  m_sourceColumns.clear();
 
   QMap<int, int> uidToSource;
   const auto& groups = DataModel::ProjectModel::instance().groups();
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
-      pickSlotForDataset(g, d, uidToSource, slotPick, slotPickIsTransformFree);
+      uidToSource.insert(d.uniqueId, g.sourceId);
 
-  for (auto it = m_sourceMaxIndex.constBegin(); it != m_sourceMaxIndex.constEnd(); ++it) {
-    const int srcId  = it.key();
-    const int maxIdx = it.value();
-    auto& slotList   = m_sourceSlotUid[srcId];
-    slotList.assign(static_cast<size_t>(maxIdx), -1);
-    for (int idx = 1; idx <= maxIdx; ++idx) {
-      const auto pickIt = slotPick.constFind(qMakePair(srcId, idx));
-      if (pickIt != slotPick.constEnd())
-        slotList[static_cast<size_t>(idx - 1)] = pickIt.value();
-    }
-  }
-
+  std::unordered_map<int, std::unordered_map<int, int>> replay;
   for (int col = 0; col < static_cast<int>(m_columnUniqueIds.size()); ++col) {
     const int uid    = m_columnUniqueIds[static_cast<size_t>(col)];
     const auto srcIt = uidToSource.constFind(uid);
     if (srcIt == uidToSource.constEnd())
       continue;
 
-    m_columnToSource[col] = srcIt.value();
-    m_sourceColumnCount[srcIt.value()]++;
+    const int srcId    = srcIt.value();
+    auto& columns      = m_sourceColumns[srcId];
+    replay[srcId][uid] = static_cast<int>(columns.size());
+    columns.push_back(uid);
+
+    m_columnToSource[col] = srcId;
   }
 
-  m_multiSource = !m_columnToSource.isEmpty() && m_sourceColumnCount.size() > 1;
+  m_multiSource = m_sourceColumns.size() > 1;
+
+  if (!m_multiSource && !replay.empty() && replay.begin()->first != 0) {
+    auto columns = std::move(replay.begin()->second);
+    replay.clear();
+    replay[0] = std::move(columns);
+  }
+
+  DataModel::FrameBuilder::instance().setReplayColumnMap(std::move(replay));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -859,7 +852,8 @@ void Sessions::Player::buildMultiSourceMapping()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reads the readings row for @p timestampNs into a uid -> cell text map.
+ * @brief Reads the readings row for @p timestampNs into a uid -> cell text map. Replays the
+ *        stored final (post-transform) values; raw columns are the fallback for old files.
  */
 QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
 {
@@ -874,9 +868,15 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
   if (!m_frameQueryPrepared) {
     m_frameQuery.emplace(*m_db);
     m_frameQuery->setForwardOnly(true);
-    m_frameQuery->prepare("SELECT unique_id, raw_numeric_value, raw_string_value, is_numeric "
-                          "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
-                          "ORDER BY reading_id");
+    const auto query =
+      m_hasFinalValues
+        ? QStringLiteral("SELECT unique_id, final_numeric_value, final_string_value, is_numeric "
+                         "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
+                         "ORDER BY reading_id")
+        : QStringLiteral("SELECT unique_id, raw_numeric_value, raw_string_value, is_numeric "
+                         "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
+                         "ORDER BY reading_id");
+    m_frameQuery->prepare(query);
     m_frameQueryPrepared = true;
   }
 
@@ -912,32 +912,41 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
 }
 
 /**
- * @brief Assembles per-source CSV payloads slotted by dataset.index and injects them.
+ * @brief Assembles per-source replay payloads in stored column order and injects them. In
+ *        QuickPlot mode every column is emitted as one row (no source mapping exists).
  */
 void Sessions::Player::injectFrame(const QHash<int, QString>& uidValues)
 {
-  if (uidValues.isEmpty() || m_sourcesAtCurrentTs.isEmpty())
+  if (uidValues.isEmpty())
+    return;
+
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
+    QStringList cells;
+    cells.reserve(static_cast<int>(m_columnUniqueIds.size()));
+    for (int uid : m_columnUniqueIds)
+      cells.append(uidValues.value(uid));
+
+    QByteArray payload = DataModel::joinReplayRow(cells);
+    payload.append('\n');
+    IO::ConnectionManager::instance().processPayload(payload);
+    return;
+  }
+
+  if (m_sourcesAtCurrentTs.isEmpty())
     return;
 
   QMap<int, QByteArray> sourcePayloads;
   for (int srcId : std::as_const(m_sourcesAtCurrentTs)) {
-    const auto slotIt = m_sourceSlotUid.constFind(srcId);
-    if (slotIt == m_sourceSlotUid.constEnd())
-      continue;
-
-    const auto& slotList = slotIt.value();
-    if (slotList.empty())
+    const auto colsIt = m_sourceColumns.constFind(srcId);
+    if (colsIt == m_sourceColumns.constEnd() || colsIt.value().empty())
       continue;
 
     QStringList cells;
-    cells.reserve(static_cast<int>(slotList.size()));
-    for (size_t i = 0; i < slotList.size(); ++i) {
-      const int uid    = slotList[i];
-      const auto valIt = (uid >= 0) ? uidValues.constFind(uid) : uidValues.constEnd();
-      cells.append(valIt != uidValues.constEnd() ? valIt.value() : QString());
-    }
+    cells.reserve(static_cast<int>(colsIt.value().size()));
+    for (int uid : colsIt.value())
+      cells.append(uidValues.value(uid));
 
-    QByteArray payload = cells.join(',').toUtf8();
+    QByteArray payload = DataModel::joinReplayRow(cells);
     payload.append('\n');
     sourcePayloads.insert(srcId, std::move(payload));
   }

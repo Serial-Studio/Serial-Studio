@@ -298,10 +298,11 @@ Widgets.Pane {
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
                        && (Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
                            || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
-                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter)
+                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
+                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED)
               onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
               icon.source: "qrc:/icons/project-editor/actions/alarm-bands.svg"
-              ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge.")
+              ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge or LED.")
             }
 
             Widgets.ToolbarButton {

@@ -346,6 +346,14 @@ const DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() const noe
 }
 
 /**
+ * @brief Mutable DataTableStore access for main-thread writers (the API value commands).
+ */
+DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() noexcept
+{
+  return m_tableStore;
+}
+
+/**
  * @brief Default-constructs an empty latest-frame snapshot (no chunk, sequence 0).
  */
 DataModel::FrameBuilder::LatestFrameInfo::LatestFrameInfo()
@@ -711,7 +719,42 @@ void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source
 }
 
 /**
- * @brief Handles connection transitions: recompiles transforms, reloads parser, fires auto-actions.
+ * @brief Re-runs every dataset transform from the last raw values (virtual datasets re-read
+ *        the data tables) and republishes the live frames to the dashboard only, with no
+ *        export fan-out so a synthetic refresh never lands in CSV/MDF4/session records.
+ *        Returns false when no frame structure is available to publish.
+ */
+bool DataModel::FrameBuilder::reprocessFrames()
+{
+  if (m_operationMode != SerialStudio::ProjectFile)
+    return false;
+
+  static auto& dashboard = UI::Dashboard::instance();
+
+  bool published = false;
+  for (auto& frame : m_sourceFrames) {
+    if (frame.groups.empty() || frame.title.isEmpty())
+      continue;
+
+    reprocessDatasetValues(frame);
+    dashboard.hotpathRxFrame(acquireFrame(frame));
+    published = true;
+  }
+
+  if (!published && !m_frame.groups.empty() && !m_frame.title.isEmpty()) {
+    reprocessDatasetValues(m_frame);
+    dashboard.hotpathRxFrame(acquireFrame(m_frame));
+    published = true;
+  }
+
+  return published;
+}
+
+/**
+ * @brief Handles connection transitions: recompiles transforms, reloads parser, fires
+ *        auto-actions. The latest-frame store clears on both edges so io.getLatestFrame can
+ *        never serve a previous connection's frame (the capture flag can stay on across the
+ *        cycle when the API server is enabled).
  */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
@@ -738,6 +781,9 @@ void DataModel::FrameBuilder::onConnectedChanged()
     m_tableStore.clear();
     return;
   }
+
+  m_latestFrames.clear();
+  m_latestFrameSourceId = -1;
 
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
@@ -1053,7 +1099,7 @@ void DataModel::FrameBuilder::decodeProjectChannels(int sourceId,
                                                     QList<QStringList>& outChannels)
 {
   if (m_playerOpen) [[unlikely]] {
-    DataModel::splitQuickPlotChannels(data->data, outChannels);
+    DataModel::splitReplayChannels(data->data, outChannels);
     return;
   }
 
@@ -1276,6 +1322,57 @@ void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
 }
 
 /**
+ * @brief Transform-only dataset pass for reprocessFrames(): re-applies every transform from
+ *        the dataset's retained raw value instead of fresh channels, so table-driven (virtual)
+ *        datasets pick up the current store contents without a device frame.
+ */
+void DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
+{
+  Q_ASSERT(m_operationMode == SerialStudio::ProjectFile);
+  Q_ASSERT(!frame.groups.empty());
+
+  TransformFrameInfo info;
+  info.sourceId    = frame.sourceId;
+  info.timestampMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+                       std::chrono::steady_clock::now().time_since_epoch())
+                       .count();
+  if (!m_transformEngines.empty())
+    info.frameNumber = ++m_sourceFrameCounters[frame.sourceId];
+
+  const bool armedWatchdog = beginDatasetPass(info);
+
+  for (auto& group : frame.groups) {
+    for (auto& dataset : group.datasets) {
+      if (dataset.transformCode.isEmpty())
+        continue;
+
+      QVariant input(0.0);
+      if (!dataset.virtual_) {
+        bool numeric     = false;
+        const double raw = SerialStudio::toDouble(dataset.rawValue, &numeric);
+        input            = numeric ? QVariant(raw) : QVariant(dataset.rawValue);
+      }
+
+      const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
+      if (result.typeId() == QMetaType::Double) {
+        dataset.numericValue = SerialStudio::toDouble(result);
+        dataset.value        = QString::number(dataset.numericValue, 'g', 15);
+        dataset.isNumeric    = true;
+      } else {
+        dataset.value     = result.toString();
+        dataset.isNumeric = false;
+      }
+
+      if (m_captureDatasetValues)
+        m_tableStore.setDatasetFinal(
+          dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
+    }
+  }
+
+  endDatasetPass(armedWatchdog);
+}
+
+/**
  * @brief Writes channel values + transforms into every dataset of @p frame.
  */
 void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
@@ -1358,7 +1455,10 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
 
   QList<QStringList> splitRows;
-  DataModel::splitQuickPlotChannels(data->data, splitRows);
+  if (m_playerOpen) [[unlikely]]
+    DataModel::splitReplayChannels(data->data, splitRows);
+  else
+    DataModel::splitQuickPlotChannels(data->data, splitRows);
 
   auto& channels = m_channelScratch;
   channels.clear();

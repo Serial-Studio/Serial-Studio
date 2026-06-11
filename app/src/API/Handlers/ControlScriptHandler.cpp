@@ -21,10 +21,20 @@
 
 #include "API/Handlers/ControlScriptHandler.h"
 
+#include <QFile>
+#include <QJSEngine>
+
 #include "API/CommandRegistry.h"
 #include "API/SchemaBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ControlScript.h"
+#include "DataModel/Scripting/JsWatchdog.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+static constexpr int kDryRunWatchdogMs = 2000;
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -38,6 +48,10 @@ void API::Handlers::ControlScriptHandler::registerCommands()
   auto& registry   = CommandRegistry::instance();
   const auto empty = emptySchema();
 
+  const auto codeSchema = makeSchema({
+    {QStringLiteral("code"), QStringLiteral("string"), QStringLiteral("Control script source")}
+  });
+
   registry.registerCommand(
     QStringLiteral("controlscript.get"),
     QStringLiteral("Get the project's setup()/loop() control script source code."),
@@ -45,14 +59,37 @@ void API::Handlers::ControlScriptHandler::registerCommands()
     &getScript);
 
   registry.registerCommand(
+    QStringLiteral("controlscript.getCode"),
+    QStringLiteral("Get the control script source (alias of controlscript.get; matches the "
+                   "project.frameParser.getCode naming convention)."),
+    empty,
+    &getScript);
+
+  registry.registerCommand(
     QStringLiteral("controlscript.set"),
     QStringLiteral("Replace the project's control script source (params: code). The script is "
                    "persisted in the project and applied to the live runtime; if a device is "
-                   "connected it is recompiled and restarted immediately."),
-    makeSchema({
-      {QStringLiteral("code"), QStringLiteral("string"), QStringLiteral("Control script source")}
-  }),
+                   "connected it is recompiled and restarted immediately. Validate first with "
+                   "controlscript.dryRun."),
+    codeSchema,
     &setScript);
+
+  registry.registerCommand(
+    QStringLiteral("controlscript.setCode"),
+    QStringLiteral("Replace the control script source (alias of controlscript.set; params: "
+                   "code; matches the project.frameParser.setCode naming convention)."),
+    codeSchema,
+    &setScript);
+
+  registry.registerCommand(
+    QStringLiteral("controlscript.dryRun"),
+    QStringLiteral("Validate control-script source WITHOUT installing or running it (params: "
+                   "code). Compiles the script in a sandboxed engine with the SDK prelude, "
+                   "reports syntax errors with line numbers, and checks that setup() and/or "
+                   "loop() are defined. setup()/loop() are never executed and apiCall/tableSet "
+                   "have no effect. Use before controlscript.set."),
+    codeSchema,
+    &dryRun);
 
   registry.registerCommand(
     QStringLiteral("controlscript.getStatus"),
@@ -107,5 +144,73 @@ API::CommandResponse API::Handlers::ControlScriptHandler::getStatus(const QStrin
 
   QJsonObject result;
   result[QStringLiteral("running")] = DataModel::ControlScript::instance().running();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Compile-checks control-script source in a throwaway engine, mirroring the worker's
+ *        compile step: stub bridge + SDK prelude + watchdogged top-level evaluation, then a
+ *        setup()/loop() presence check. Nothing is installed or executed.
+ */
+API::CommandResponse API::Handlers::ControlScriptHandler::dryRun(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("code")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+
+  const QString code = params.value(QStringLiteral("code")).toString();
+
+  QJsonObject result;
+  if (code.trimmed().isEmpty()) {
+    result[QStringLiteral("valid")] = false;
+    result[QStringLiteral("error")] = QStringLiteral("Script is empty");
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  QJSEngine engine;
+  engine.installExtensions(QJSEngine::ConsoleExtension);
+  DataModel::JsWatchdog watchdog(
+    &engine, kDryRunWatchdogMs, QStringLiteral("controlscript.dryRun"));
+
+  engine.evaluate(
+    QStringLiteral("var __ss_bridge = { call: function() { return { ok: false, error: 'dryRun' "
+                   "}; }, listCommands: function() { return []; }, delay: function() {} };\n"
+                   "var __ss_control = true;"));
+
+  QFile sdkFile(QStringLiteral(":/api/SerialStudio.js"));
+  if (sdkFile.open(QFile::ReadOnly))
+    engine.evaluate(QString::fromUtf8(sdkFile.readAll()));
+
+  watchdog.arm();
+  const auto evalResult = engine.evaluate(code, QStringLiteral("control-script.js"));
+  watchdog.disarm();
+
+  if (engine.isInterrupted()) {
+    engine.setInterrupted(false);
+    result[QStringLiteral("valid")] = false;
+    result[QStringLiteral("error")] =
+      QStringLiteral("Script did not finish evaluating within %1 ms (infinite loop at the top "
+                     "level?)")
+        .arg(kDryRunWatchdogMs);
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  if (evalResult.isError()) {
+    result[QStringLiteral("valid")] = false;
+    result[QStringLiteral("line")]  = evalResult.property(QStringLiteral("lineNumber")).toInt();
+    result[QStringLiteral("error")] = evalResult.toString();
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  const bool hasSetup = engine.globalObject().property(QStringLiteral("setup")).isCallable();
+  const bool hasLoop  = engine.globalObject().property(QStringLiteral("loop")).isCallable();
+
+  result[QStringLiteral("valid")]    = hasSetup || hasLoop;
+  result[QStringLiteral("hasSetup")] = hasSetup;
+  result[QStringLiteral("hasLoop")]  = hasLoop;
+  if (!hasSetup && !hasLoop)
+    result[QStringLiteral("error")] = QStringLiteral("Script must define setup() and/or loop().");
+
   return CommandResponse::makeSuccess(id, result);
 }

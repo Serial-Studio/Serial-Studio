@@ -89,6 +89,7 @@ public:
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
   [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
   [[nodiscard]] const DataModel::DataTableStore& tableStore() const noexcept;
+  [[nodiscard]] DataModel::DataTableStore& tableStore() noexcept;
   [[nodiscard]] const LatestFrameInfo* latestFrame(int sourceId) const noexcept;
 
   void resetFrameCounters() noexcept;
@@ -100,6 +101,8 @@ public:
   void injectTableApiJS(QJSEngine* js);
   void refreshTableStoreFromProjectModel();
   void setReplayColumnMap(std::unordered_map<int, std::unordered_map<int, int>> map);
+
+  [[nodiscard]] bool reprocessFrames();
 
 public slots:
   void setupExternalConnections();
@@ -268,6 +271,7 @@ private:
                              QList<QStringList>& outChannels);
   bool beginDatasetPass(const TransformFrameInfo& info);
   void endDatasetPass(bool armedJsWatchdog);
+  void reprocessDatasetValues(DataModel::Frame& frame);
   void applyDatasetValues(DataModel::Frame& frame,
                           const QStringList& channels,
                           const TransformFrameInfo& info);

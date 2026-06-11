@@ -125,6 +125,26 @@ reconfigure and the per-frame walk is pointer-only.
   `dashboard ingest costs N.NNx` / `HOTPATH_DASHBOARD_INGEST_COST`. Optimize against that
   number; the historical `dashboard costs N.NNx` line compares two different projects.
 
+## Alarm Bands — Central Tracking in `UI::AlarmMonitor`
+
+Alarm-band *notifications* are dataset-level, not widget-level. `UI::AlarmMonitor` (singleton,
+wired in `ModuleManager::setupCrossModuleConnections`) rebuilds per-dataset trackers from
+`Dashboard::datasets()` on `widgetCountChanged` / `dataReset` and evaluates them on `updated()`
+(UI rate, not hotpath). Trackers resolve datasets by `uniqueId` on every pass — never cache
+`Dataset*` across signals; `resetData(true)` emits `updated()` *before* `widgetCountChanged`,
+so cached pointers would dangle. Consequences:
+
+- Notifications fire even when the dataset's widget is hidden, popped out, or `hideOnDashboard`.
+- `Bar` / `Gauge` / `Meter` / `LEDPanel` are display-only band consumers; do not re-add
+  per-widget `NotificationCenter` posts (that double-fires when a dataset is both a band
+  widget and `led: true`).
+- The value is clamped to the dataset's widget range before band lookup (mirrors analog-widget
+  semantics); 3 s per-dataset, per-severity-tier cooldown.
+- `AlarmBand.blink` (`Keys::Blink`, JSON `blink`, default false) is rendering-only: LED panels
+  flash while the band is active. LED datasets with no bands synthesize a runtime
+  `[ledHigh, +inf)` band inside `LEDPanel` (severity -1 = dataset color); nothing is migrated
+  in the project file — the editor only pre-fills a band from `ledHigh` when the dialog opens.
+
 ## Dashboard Tools — External Windows Only
 
 The four tools (terminal/Console, notification log [Pro], clock, stopwatch) are **never canvas
@@ -379,7 +399,22 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   - `SQLite::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based; tables
     `sessions/columns/readings/raw_bytes/table_snapshots`; second lock-free queue for raw
     bytes via `ConnectionManager::onRawDataReceived`. WAL mode, batch transactions.
-  - `SQLite::Player`: replays a stored session through the FrameBuilder pipeline.
+  - `SQLite::Player`: replays a stored session through the FrameBuilder pipeline using the
+    **final** (post-transform) reading columns, with a uid->cell replay column map installed via
+    `FrameBuilder::setReplayColumnMap` (same mechanism as MDF4). **All three players count as
+    final-value players** (`SerialStudio::isFinalValuePlayerOpen`), so per-dataset transforms
+    never re-run during playback — they read live inputs (data tables) that don't exist then.
+    Raw columns are only a fallback for pre-final-column session files.
+  - **Replay payload rows are RFC-4180 quoted**: players synthesize rows with
+    `DataModel::joinReplayRow` and FrameBuilder splits them with `splitReplayChannels` /
+    `splitReplayRow` (`FrameParserPipeline.h`), so string values containing commas/quotes
+    survive replay. The live QuickPlot split (`splitQuickPlotChannels`) is untouched — the
+    quote-aware splitter only runs when `m_playerOpen` is set.
+  - **`table_snapshots` capture**: `Sessions::Export::captureTableSnapshots` (main thread,
+    `TimerEvents::timeout1Hz`) diffs `FrameBuilder::tableStore().snapshot()` (skipping the
+    `__datasets__` system table) against the last tick and enqueues changed registers to the
+    worker, which batches them into `table_snapshots`. Replay does NOT need them (finals are
+    replayed); they exist for post-hoc inspection.
   - Per-sample tables use **surrogate rowid PKs** (`reading_id`, `raw_id`, `snapshot_id`
     `INTEGER PRIMARY KEY AUTOINCREMENT`) with covering indexes on
     `(session_id, unique_id, timestamp_ns)` and `(session_id, timestamp_ns)`. Use plain
@@ -487,14 +522,71 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 - **Modbus Map Importer (Pro)**: `DataModel::ModbusMapImporter` imports CSV/XML/JSON →
   auto-generates a Modbus project; preview in `ModbusPreviewDialog.qml`. Pairs with
   `IO::Drivers::Modbus::generateRegisterGroupProject`.
-- **Importer parser output**: the Modbus map and DBC importers configure **native map
-  templates**, not generated Lua (`frameParserTemplate` = `modbus_register_map` /
-  `can_signal_map`, params = the register/signal map; `MapTemplates.cpp`,
-  `mapNativeTemplates()` family). The map lives in a `NativeParamType::Json` param —
-  machine-managed, skipped by the `NativeParserEditor` form (re-import to change it).
-  Channel order = params order = dataset-index order; the importers build both from the
-  same iteration, so they can't drift. The Modbus parser keeps the driver's round-robin
-  poll cursor as latch state and resyncs on the response function code; the CAN parser
-  mirrors the Lua DBC bit semantics (BE MSB-first, LE LSB-first, Qt endian quirk flipped
-  at import). The Modbus *driver* quick-connect (`buildFrameParser`) and the Protobuf
-  importer still generate script parsers.
+- **Importer parser output**: the Modbus map and DBC importers generate **commented,
+  declarative Lua parsers** (`frameParserLanguage = Lua`), not native map templates — the
+  `modbus_register_map` / `can_signal_map` templates and `MapTemplates.cpp` were removed
+  (projects that referenced them must be re-imported). The generated parser decodes through
+  a spec table (one line per signal/register, DBC `CM_` comments inlined) and publishes
+  **physical values into per-group data tables** via `tableSet`; every dataset is
+  `virtual: true` with a Lua `tableGet` transform (`ImporterCommon.h::applyTableTransform`),
+  so nothing depends on positional parser channels (parsers return `{ 0 }` as a dummy row —
+  an empty return would skip the frame and starve the transforms). The Modbus Lua keeps the
+  driver's round-robin poll cursor as chunk-local state and resyncs on the response function
+  code (RegBool decodes the whole word; bit path only for coil/discrete blocks); the CAN Lua
+  mirrors the DBC bit semantics (Motorola sawtooth walk, Intel LSB-first, Qt endian flag
+  verbatim) — both pinned by `test_cpp_regressions.py` R14/R15 against the codegen. The CAN
+  driver publishes standard frames as `[ID_hi, ID_lo, DLC, data...]` (11-bit id, byte 0 top
+  bit always clear) and extended frames as `[0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC,
+  data...]` — bit 7 of byte 0 selects the form, `write()` mirrors it, and the generated Lua's
+  `frame_id()` decodes both (pinned by R17). The Modbus *driver* quick-connect
+  (`buildFrameParser`) and the Protobuf importer still generate their own script parsers.
+- **Importer dashboards (DBC + Modbus map)**: summary-first projects. Every group is a
+  DataGrid (DBC still detects GPS / accelerometer / gyroscope groups), analog datasets carry
+  plot + bar/gauge/meter toggles disclosed on demand via the data grid's pop-out buttons,
+  boolean signals are LEDs with an explicit `[0.5, 1]` Ok alarm band (no reliance on the
+  runtime `ledHigh` synthesis), DBC `VAL_` value tables become Lua transforms returning the
+  label text (only when factor = 1 / offset = 0), and `displayFormat` decimals derive from
+  the scaling factor. Generated bar/gauge/meter datasets get the analog display policy
+  (`ImporterCommon.h::applyAnalogDisplayPolicy`): integer-aligned tick counts (0-10 → 11
+  ticks, 0-150 → 7) and integer labels once the range spans more than one unit. Both
+  importers seed **customized workspaces** — a leading Overview
+  aggregating every group's refs (multi-group projects only), then one workspace per group,
+  each holding only the group-widget ref (+ LED panel ref), user-range IDs (≥ 5000 so the
+  load-time auto-range remap never fires) — through
+  `Importers/ImporterCommon.h::finalizeImportedProject`, which also assigns group uniqueIds,
+  serializes the data tables, and stamps `schemaVersion` + `nextUniqueId`: omit those stamps
+  and the loader treats the import as an older-schema project and silently drops the seeded
+  workspaces.
+- **Control script runs on a worker thread with apiCall only**: `ControlScriptWorker` evaluates
+  setup()/loop() in its own QJSEngine and installs ONLY `__ss_bridge` (apiCall marshalled to the
+  GUI thread via `BlockingQueuedConnection`) — never the direct helper bridges (`__ss`,
+  `__ss_db`, ... wrap main-thread singletons and must not execute off-thread). The SDK prelude
+  (`app/rcc/api/prelude.js`, embedded into `SerialStudio.js` by `scripts/generate-sdk.py`)
+  defines control-mode fallbacks that re-route the friendly globals through apiCall:
+  `notify*` → `notifications.*`, `tableGet`/`tableSet` → `project.dataTable.getValue`/`setValue`
+  (live store values; `DataTablesHandler`, backed by `FrameBuilder::tableStore()`).
+  `datasetGetRaw`/`datasetGetFinal` remain parser/transform-only. `io.getLatestFrame` returns
+  `ageMs` (steady-clock ms since capture) for staleness watchdogs — never compare its monotonic
+  `timestampMs` against `Date.now()`. A new control-script global must follow the apiCall
+  fallback pattern; installing a direct bridge on the worker engine is a threading bug. Dataset
+  transforms re-run only on frame arrival, so table writes made while the device is silent
+  don't render until the next frame — `refreshDashboard()` (`dashboard.reprocess` →
+  `FrameBuilder::reprocessFrames`) closes that gap: it re-runs every transform from the
+  retained raw values (`reprocessDatasetValues`) and republishes the live frames
+  (per-source frames when populated, else `m_frame`) to `Dashboard::hotpathRxFrame` directly,
+  deliberately skipping the `hotpathTxFrame` export fan-out so synthetic refreshes never land
+  in CSV/MDF4/session records.
+- **Control-script lifecycle is per-connection and force-restarted**: `ControlScript`
+  edge-tracks `shouldRun()` (`m_shouldRun`) and on every rising edge queues stop-then-start, so
+  each connection gets a fresh engine (top-level state resets, setup() re-runs). `stopWorker()`
+  always queues the idempotent worker stop even when `m_running` is false — a worker/GUI
+  desync must never keep an old engine alive across a cycle — and a setup() exception stops
+  the worker (loop never arms with the GUI showing stopped). `FrameBuilder::onConnectedChanged`
+  clears `m_latestFrames` on BOTH edges: with the API server on, `m_captureLatestFrame` stays
+  true across a disconnect, and a stale retained frame would otherwise leak into the next
+  connection's `io.getLatestFrame`/`newFrame()`. `controlscript.dryRun` compile-checks source
+  in a throwaway GUI-thread engine (stub `__ss_bridge` + SDK prelude + `JsWatchdog`) without
+  installing it; `controlscript.getCode`/`setCode` are registry aliases of `get`/`set`. The
+  agent-facing globals reference is `:/ai/docs/control_script_js.md`
+  (`meta.fetchScriptingDocs{kind:'control_script_js'}`; allow-lists in
+  `ContextBuilder::scriptingDocFor` AND `ToolDispatcher::getScriptingDocs`, plus `rcc.qrc`).

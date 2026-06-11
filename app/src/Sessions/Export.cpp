@@ -31,6 +31,7 @@
 #  include "IO/ConnectionManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "MDF4/Player.h"
+#  include "Misc/TimerEvents.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "Sessions/DatabaseManager.h"
 
@@ -46,6 +47,7 @@ Sessions::ExportWorker::ExportWorker(
   std::atomic<bool>* enabled,
   std::atomic<size_t>* queueSize,
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
+  moodycamel::ReaderWriterQueue<TableSnapshotEntry>* snapshotQueue,
   std::atomic<int>* operationMode,
   QMutex* projectSnapshotMutex,
   const QByteArray* projectSnapshot)
@@ -54,11 +56,13 @@ Sessions::ExportWorker::ExportWorker(
   , m_sessionId(-1)
   , m_lastRawBytesNs(-1)
   , m_rawQueue(rawQueue)
+  , m_snapshotQueue(snapshotQueue)
   , m_operationMode(operationMode)
   , m_projectSnapshotMutex(projectSnapshotMutex)
   , m_projectSnapshot(projectSnapshot)
 {
   Q_ASSERT(rawQueue);
+  Q_ASSERT(snapshotQueue);
   Q_ASSERT(operationMode);
   Q_ASSERT(projectSnapshotMutex);
   Q_ASSERT(projectSnapshot);
@@ -78,6 +82,10 @@ void Sessions::ExportWorker::closeResources()
     return;
 
   finalizeSession();
+
+  TableSnapshotEntry staleSnapshot;
+  while (m_snapshotQueue->try_dequeue(staleSnapshot)) {
+  }
 
   m_readingQuery.reset();
   m_rawBytesQuery.reset();
@@ -134,8 +142,10 @@ void Sessions::ExportWorker::processData()
     }
   }
 
-  if (m_dbOpen)
+  if (m_dbOpen) {
     writeRawBytes();
+    writeTableSnapshots();
+  }
 }
 
 /**
@@ -511,6 +521,47 @@ void Sessions::ExportWorker::writeRawBytes()
 }
 
 /**
+ * @brief Drains the table snapshot queue and writes register changes to the database.
+ */
+void Sessions::ExportWorker::writeTableSnapshots()
+{
+  Q_ASSERT(m_dbOpen);
+
+  if (!m_db || !m_tableSnapshotQuery) [[unlikely]]
+    return;
+
+  if (!m_snapshotQueue->peek())
+    return;
+
+  constexpr size_t kMaxSnapshotBatch = 1000;
+  TableSnapshotEntry entry;
+  size_t count = 0;
+
+  m_db->transaction();
+  while (count < kMaxSnapshotBatch && m_snapshotQueue->try_dequeue(entry)) {
+    const auto elapsed = entry.timestamp - m_steadyBaseline;
+    qint64 ns          = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
+    if (ns < 0) [[unlikely]]
+      ns = 0;
+
+    const auto& value = entry.value;
+    m_tableSnapshotQuery->bindValue(0, m_sessionId);
+    m_tableSnapshotQuery->bindValue(1, ns);
+    m_tableSnapshotQuery->bindValue(2, entry.tableName);
+    m_tableSnapshotQuery->bindValue(3, entry.registerName);
+    m_tableSnapshotQuery->bindValue(4, value.isNumeric ? QVariant(value.numericValue) : QVariant());
+    m_tableSnapshotQuery->bindValue(5, value.isNumeric ? QVariant() : QVariant(value.stringValue));
+
+    if (!m_tableSnapshotQuery->exec()) [[unlikely]]
+      qWarning() << "[SQLite] Insert table_snapshots failed:"
+                 << m_tableSnapshotQuery->lastError().text();
+
+    ++count;
+  }
+  m_db->commit();
+}
+
+/**
  * @brief Updates the session's ended_at timestamp.
  */
 void Sessions::ExportWorker::finalizeSession()
@@ -540,6 +591,7 @@ Sessions::Export::Export()
   , m_currentSessionId(-1)
   , m_persistSettings(true)
   , m_rawBytesQueue(8192)
+  , m_tableSnapshotQueue(1024)
   , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
 {
   initializeWorker();
@@ -595,6 +647,8 @@ void Sessions::Export::closeFile()
     m_isOpen.store(false, std::memory_order_relaxed);
     Q_EMIT openChanged();
   }
+
+  m_lastTableSnapshot.clear();
 
   if (m_currentSessionId.exchange(-1, std::memory_order_relaxed) != -1)
     Q_EMIT currentSessionIdChanged();
@@ -672,6 +726,11 @@ void Sessions::Export::setupExternalConnections()
           this,
           &Sessions::Export::refreshProjectSnapshot);
 
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::timeout1Hz,
+          this,
+          &Sessions::Export::captureTableSnapshots);
+
   refreshProjectSnapshot();
 
   const bool persisted = m_settings.value("SQLiteExport/Enabled", false).toBool();
@@ -727,6 +786,57 @@ void Sessions::Export::setSettingsPersistent(const bool persistent)
 }
 
 /**
+ * @brief Main-thread 1 Hz poll: diffs the live data-table store against the last captured
+ *        state and enqueues changed registers for the table_snapshots table.
+ */
+void Sessions::Export::captureTableSnapshots()
+{
+  if (!exportEnabled() || !isOpen() || SerialStudio::isAnyPlayerOpen()) {
+    m_lastTableSnapshot.clear();
+    return;
+  }
+
+  const auto& store = DataModel::FrameBuilder::instance().tableStore();
+  if (!store.isInitialized())
+    return;
+
+  const auto changed =
+    [this](const QString& table, const QString& reg, const DataModel::RegisterValue& val) {
+      const auto t = m_lastTableSnapshot.constFind(table);
+      if (t == m_lastTableSnapshot.constEnd())
+        return true;
+
+      const auto r = t.value().constFind(reg);
+      if (r == t.value().constEnd())
+        return true;
+
+      return r.value().isNumeric != val.isNumeric || r.value().numericValue != val.numericValue
+          || r.value().stringValue != val.stringValue;
+    };
+
+  const auto now      = DataModel::TimestampedFrame::SteadyClock::now();
+  const auto snapshot = store.snapshot();
+  for (auto t = snapshot.constBegin(); t != snapshot.constEnd(); ++t) {
+    if (t.key() == DataModel::systemDataTableName())
+      continue;
+
+    for (auto r = t.value().constBegin(); r != t.value().constEnd(); ++r) {
+      if (!changed(t.key(), r.key(), r.value()))
+        continue;
+
+      TableSnapshotEntry entry;
+      entry.timestamp    = now;
+      entry.tableName    = t.key();
+      entry.registerName = r.key();
+      entry.value        = r.value();
+      m_tableSnapshotQueue.try_enqueue(std::move(entry));
+    }
+  }
+
+  m_lastTableSnapshot = snapshot;
+}
+
+/**
  * @brief Enqueues a timestamped frame for SQLite export.
  */
 void Sessions::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
@@ -763,6 +873,7 @@ DataModel::FrameConsumerWorkerBase* Sessions::Export::createWorker()
                              &m_consumerEnabled,
                              &m_queueSize,
                              &m_rawBytesQueue,
+                             &m_tableSnapshotQueue,
                              &m_operationMode,
                              &m_projectSnapshotMutex,
                              &m_projectSnapshot);

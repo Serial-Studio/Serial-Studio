@@ -317,10 +317,12 @@ void DataModel::ControlScriptWorker::runSetup()
     return;
   }
 
-  if (result.isError())
+  if (result.isError()) {
     Q_EMIT scriptError(QStringLiteral("setup() line %1: %2")
                          .arg(result.property(QStringLiteral("lineNumber")).toInt())
                          .arg(result.toString()));
+    stop();
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
