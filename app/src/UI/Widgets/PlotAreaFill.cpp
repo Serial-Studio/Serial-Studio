@@ -77,9 +77,10 @@ const QColor& Widgets::PlotAreaFill::color() const noexcept
 }
 
 /**
- * @brief Returns the value-space baseline the fill hangs from.
+ * @brief Returns the value-space baseline the fill hangs from. Named baselineValue
+ *        because QQuickItem's baseline anchor line is FINAL and cannot be shadowed.
  */
-double Widgets::PlotAreaFill::baseline() const noexcept
+double Widgets::PlotAreaFill::baselineValue() const noexcept
 {
   return m_baseline;
 }
@@ -152,7 +153,7 @@ void Widgets::PlotAreaFill::setColor(const QColor& color)
 /**
  * @brief Sets the value-space baseline (range minimum, range maximum or zero).
  */
-void Widgets::PlotAreaFill::setBaseline(const double value)
+void Widgets::PlotAreaFill::setBaselineValue(const double value)
 {
   if (m_baseline == value)
     return;

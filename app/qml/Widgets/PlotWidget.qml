@@ -658,9 +658,9 @@ Item {
     source: root.areaFillSource
     width: _graph.plotArea.width
     height: _graph.plotArea.height
-    baseline: root.areaFillBaseline
     x: _graph.x + _graph.plotArea.x
     y: _graph.y + _graph.plotArea.y
+    baselineValue: root.areaFillBaseline
     visible: root.areaFillSource !== null
     yMax: root.yVisibleMin + root.yVisibleRange
     xMax: root.xVisibleMin + root.xVisibleRange

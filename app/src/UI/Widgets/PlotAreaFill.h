@@ -46,9 +46,9 @@ class PlotAreaFill : public QQuickItem {
              READ color
              WRITE setColor
              NOTIFY colorChanged)
-  Q_PROPERTY(double baseline
-             READ baseline
-             WRITE setBaseline
+  Q_PROPERTY(double baselineValue
+             READ baselineValue
+             WRITE setBaselineValue
              NOTIFY rangeChanged)
   Q_PROPERTY(double xMin
              READ xMin
@@ -78,7 +78,7 @@ public:
 
   [[nodiscard]] QXYSeries* source() const noexcept;
   [[nodiscard]] const QColor& color() const noexcept;
-  [[nodiscard]] double baseline() const noexcept;
+  [[nodiscard]] double baselineValue() const noexcept;
   [[nodiscard]] double xMin() const noexcept;
   [[nodiscard]] double xMax() const noexcept;
   [[nodiscard]] double yMin() const noexcept;
@@ -87,7 +87,7 @@ public:
 public slots:
   void setSource(QXYSeries* series);
   void setColor(const QColor& color);
-  void setBaseline(const double value);
+  void setBaselineValue(const double value);
   void setXMin(const double value);
   void setXMax(const double value);
   void setYMin(const double value);
