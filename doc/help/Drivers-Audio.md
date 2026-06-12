@@ -66,15 +66,16 @@ This avoids the overhead of QtMultimedia and gives the driver direct access to l
 
 The audio driver is the most thread-heavy of all Serial Studio drivers:
 
-- The audio backend (miniaudio's internal threads) invokes a capture callback on its own thread whenever a buffer of samples is ready.
-- A dedicated worker thread runs a 10 ms `Qt::PreciseTimer` at high priority, polls the captured-buffer queue, and forwards data downstream.
+- The audio backend (miniaudio's internal threads) invokes a capture callback on its own thread whenever a buffer of samples is ready. The callback hands the raw bytes to a lock-free single-producer queue and never blocks.
+- A dedicated worker thread runs a 10 ms `Qt::PreciseTimer` at highest priority, drains the captured-buffer queue, and forwards data downstream.
 - When a buffer of N samples arrives, the driver back-dates the timestamp to `now - (N-1) / sample_rate` so the first sample carries the correct acquisition time, not the moment the OS got around to firing the callback.
+- Consecutive buffers extend a continuous sample clock rather than being stamped independently; the clock snaps back to wall time only when it drifts more than 50 ms, so callback jitter never shifts the sample timeline.
 
 This timestamp accuracy is what keeps audio data lined up in CSV exports and session reports even when the audio backend buffer is large. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the full timestamp-ownership rules.
 
 ### What you get downstream
 
-For each captured buffer, Serial Studio emits one frame per sample (or per channel, depending on configuration). The frame parser sees the raw PCM values, which can be:
+The driver converts each captured buffer to CSV text: one line per sample period, channels separated by commas (`L,R` for stereo). Under line-delimited framing (the Quick Plot default), each line becomes one frame carrying its own sample-clock timestamp, so a 48000 Hz capture produces 48000 frames per second. The [frame parser](JavaScript-API.md) sees the decoded sample values as text, which can be:
 
 - Plotted directly as time-domain waveforms.
 - Fed into an FFT widget for spectrum analysis.
@@ -83,16 +84,25 @@ For each captured buffer, Serial Studio emits one frame per sample (or per chann
 
 The FFT and Waterfall widgets share the same per-dataset settings (`fftSamples`, `fftSamplingRate`, `fftMin`, `fftMax`), so a single audio channel can drive both views simultaneously.
 
+In [Quick Plot mode](Operation-Modes.md) the dashboard configures itself: each channel becomes a dataset in an *Audio Input* group with FFT enabled, `fftSamplingRate` set to the device sample rate, `fftSamples` sized to the power of two covering roughly 50 ms of signal (256 to 8192), and plot ranges taken from the sample format's limits. In a project, set those per-dataset values yourself.
+
 ### Configuration
 
 | Setting | Controls |
 |---------|----------|
-| **Input device** | Which OS audio device to capture from |
-| **Sample rate** | Sample rate, in Hz. Available rates depend on the hardware. |
-| **Sample format** | Bit depth and integer/float encoding. |
-| **Channel configuration** | Mono, stereo, or a multichannel layout, depending on the device. |
+| **Input Device** | Which OS audio device to capture from. |
+| **Sample Rate** | Capture rate in Hz; only rates the device reports are offered. First-run default is 44100 Hz (22050 Hz on Windows) when the device supports it. |
+| **Sample Format** | Unsigned 8-bit, Signed 16-bit, Signed 24-bit, Signed 32-bit, or Float 32-bit, filtered to what the device supports. |
+| **Channels** | Mono, Stereo, or a multichannel layout (3.0 up to 7.1), depending on the device. |
+| **Output Device** | Optional playback device, with its own **Sample Format** and **Channels** selectors. |
 
-For step-by-step setup, see the [Protocol Setup Guides — Audio Input section](Protocol-Setup-Guides.md).
+Selections persist across sessions and are saved with the project by stable identifiers (device name, rate in Hz, format name, channel count), so they survive index changes when devices are plugged or unplugged. None of them can change while the device is open; disconnect first.
+
+When an **Output Device** is configured, the driver opens in duplex mode and data written to it plays back as audio. Each outgoing frame is a comma-separated list with one value per playback channel: integer sample values for the integer formats, `-1.0` to `1.0` for Float 32-bit.
+
+The same settings are scriptable through the `io.audio.*` commands of the [JSON-RPC API](API-Reference.md): `setInputDevice` and `setOutputDevice` (`deviceIndex`), `setSampleRate` (`rateIndex`), `setInputSampleFormat` and `setOutputSampleFormat` (`formatIndex`), and `setInputChannelConfig` and `setOutputChannelConfig` (`channelIndex`), plus the read-only `listInputDevices`, `listOutputDevices`, `listSampleRates`, `listInputFormats`, `listOutputFormats`, and `getConfig`. Every setter takes a zero-based index into the option list, in the same order as the Setup Panel. When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
+
+For step-by-step setup, see the [Protocol Setup Guides, Audio Input section](Protocol-Setup-Guides.md).
 
 ## Common pitfalls
 
@@ -100,10 +110,10 @@ For step-by-step setup, see the [Protocol Setup Guides — Audio Input section](
 - **Distorted signal at high amplitude.** The input is clipping. Reduce the input gain in the OS or on the hardware preamp. PCM saturation produces hard distortion that looks like sharp peaks pinned to the bit-depth maximum.
 - **High noise floor.** Microphone inputs are noisier than line inputs because they expect a millivolt-range source. Driving a low-impedance signal into a microphone input amplifies the noise as well; use a line input where possible.
 - **Required sample rate is not listed.** The hardware reports its supported sample rates and Serial Studio only offers those. If a rate is unsupported, the driver cannot fake it; use a different audio interface.
-- **FFT or waterfall looks wrong.** Set `fftSamplingRate` on the dataset to match the audio sample rate. If the sample rate is 48 kHz and `fftSamplingRate` is left at its default of 100, the frequency axis is scaled by 480x.
+- **FFT or waterfall looks wrong.** Set `fftSamplingRate` on the dataset to match the audio sample rate. If the sample rate is 48 kHz and `fftSamplingRate` is left at its default of 100, the frequency axis is scaled by 480x. Quick Plot mode sets it automatically; projects do not.
 - **Latency feels high.** Audio backends typically buffer 10 to 50 ms by default. That is fine for real-time visualisation but not for closed-loop applications. Lower-latency capture requires backend-specific tuning that Serial Studio does not currently expose.
-- **Stereo input but only one channel visible.** Channel configuration is set to Mono. Switch to Stereo and the second channel appears as a second dataset.
-- **High CPU at 192 kHz.** FFT plus waterfall at a high sample rate is expensive. Reduce `fftSamples` or disable the waterfall on per-dataset settings.
+- **Stereo input but only one channel visible.** **Channels** is set to Mono. Switch to Stereo and the second channel appears as a second dataset.
+- **High CPU at 192 kHz.** FFT plus waterfall at a high sample rate is expensive. Reduce `fftSamples` or disable the waterfall in the per-dataset settings.
 
 ## Further reading
 
@@ -116,6 +126,8 @@ For step-by-step setup, see the [Protocol Setup Guides — Audio Input section](
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Audio Input setup.
+- [API Reference](API-Reference.md): the `io.audio.*` command set for scripted control.
+- [Operation Modes](Operation-Modes.md): Quick Plot vs Project File, and what gets auto-configured.
 - [Data Sources](Data-Sources.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Widget Reference](Widget-Reference.md): FFT Plot and Waterfall widget configuration.

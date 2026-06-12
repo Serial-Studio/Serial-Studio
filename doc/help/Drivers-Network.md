@@ -45,7 +45,7 @@ Once the handshake completes, both sides see a virtual full-duplex pipe: write b
 
 The most important thing about TCP is that it is a stream of bytes, not a stream of messages. If a device writes 100 bytes followed by 100 bytes, the receiver may see one read of 200 bytes, or two of 100, or 200 of 1. The boundaries are not preserved.
 
-This matters for Serial Studio because frame parsing has to operate on the stream. With a delimiter (newline, custom byte sequence) the FrameReader finds frames regardless of how the OS chunked the stream. With fixed-length frames it counts bytes. Either approach works; do not assume "one TCP packet = one frame".
+This matters for Serial Studio because frame parsing has to operate on the stream. With a delimiter (newline, custom byte sequence) the FrameReader finds frames regardless of how the OS chunked the stream. With fixed-length frames it counts bytes. Either approach works; do not assume "one TCP packet = one frame". Each extracted frame is then handed to the project's [frame parser](JavaScript-API.md) as a single `parse(frame)` call.
 
 ### Ports
 
@@ -104,15 +104,19 @@ The Network driver wraps Qt's `QTcpSocket` and `QUdpSocket`. It lives on the mai
 
 The Setup panel exposes these fields:
 
-| Field | Applies to | Controls |
-|-------|------------|----------|
-| **Socket Type** | both | TCP or UDP |
-| **Remote Address** | both | Server IP / hostname (TCP) or peer / multicast group (UDP) |
-| **Remote Port** | TCP, UDP non-multicast | Port to connect to (TCP) or send to (UDP) |
-| **Local Port** | UDP only | Port to bind for receiving; `0` = OS-assigned |
-| **Multicast** | UDP only | When checked, **Remote Address** is treated as a multicast group (e.g. `239.1.1.1`) and Serial Studio joins it on connect; the OS handles IGMP transparently |
+| Field | Applies to | Controls | Default |
+|-------|------------|----------|---------|
+| **Socket Type** | both | TCP or UDP | TCP |
+| **Remote Address** | both | Server IP / hostname (TCP) or peer / multicast group (UDP) | `127.0.0.1` |
+| **Remote Port** | TCP, UDP non-multicast | Port to connect to (TCP) or send to (UDP); hidden while **Multicast** is checked | 23 (TCP), 53 (UDP) |
+| **Local Port** | UDP only | Port to bind for receiving; `0` = OS-assigned | 0 |
+| **Multicast** | UDP only | When checked, **Remote Address** is treated as a multicast group (e.g. `239.1.1.1`) and Serial Studio joins it on connect; the OS handles IGMP transparently | off |
 
-UDP uses a single bidirectional socket; there is no separate Receiver / Sender / Multicast mode. Serial Studio binds **Local Port** for receiving and uses **Remote Address** plus **Remote Port** as the destination when writing data back.
+**Remote Address** accepts hostnames as well as IP literals. A hostname triggers a background DNS lookup, and the Connect button stays disabled until the name resolves. Clearing the address or a port field restores its default.
+
+UDP uses a single bidirectional socket; there is no separate Receiver / Sender / Multicast mode. Serial Studio binds **Local Port** for receiving and uses **Remote Address** plus **Remote Port** as the destination when writing data back. Incoming datagrams are read one at a time, so on the receive side UDP preserves the message boundaries that TCP discards.
+
+The same settings are scriptable through the `io.network.*` commands of the [JSON-RPC API](API-Reference.md): `setSocketType` (`socketTypeIndex` 0 = TCP, 1 = UDP), `setRemoteAddress`, `setTcpPort`, `setUdpLocalPort`, `setUdpRemotePort`, `setUdpMulticast`, and `lookup`, plus the read-only `getConfig` and `listSocketTypes`. The port commands take a `port` parameter (1-65535; `setUdpLocalPort` also accepts 0). When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
 
 For step-by-step setup, see the [Protocol Setup Guides, Network section](Protocol-Setup-Guides.md).
 

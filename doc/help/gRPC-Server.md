@@ -28,7 +28,7 @@ The gRPC server shares the same command set as the [TCP/JSON API](API-Reference.
 The gRPC server starts automatically whenever the API server is enabled:
 
 1. Open **Preferences** (wrench icon or **Ctrl/Cmd+,**).
-2. Go to the **Miscellaneous** group.
+2. On the **General** tab, scroll to the **Advanced** section.
 3. Turn on **"Enable API Server (Port 7777)"**.
 4. Click **OK**.
 
@@ -36,7 +36,7 @@ Both the TCP/JSON server (port 7777) and the gRPC server (port 8888) start toget
 
 ## Service definition
 
-The gRPC API is defined in `serialstudio.proto` (exportable from **Preferences → Export Protobuf File**):
+The gRPC API is defined in [`doc/grpc/serialstudio.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio.proto) in the Serial Studio repository (package `serialstudio`). Generate client stubs from that file:
 
 ```protobuf
 service SerialStudioAPI {
@@ -103,9 +103,17 @@ grpcurl -plaintext -d '{"command":"io.getStatus","id":"1"}' \
 grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/StreamFrames
 ```
 
+> **About the "Export Protobuf File" button.** The **Export…** button under
+> **Preferences → General → Advanced → Export Protobuf File** writes an auto-generated
+> *typed* schema (package `serialstudio.typed`, service `SerialStudioTypedAPI`) with one
+> request message and one RPC per registered command. Use it as machine-readable
+> documentation of every command's parameters. The running server implements only the
+> dynamic `SerialStudioAPI` service shown above, so generate client stubs from the repo's
+> `doc/grpc/serialstudio.proto`, not from the exported typed file.
+
 ## Generating client stubs
 
-Export the `.proto` file from **Preferences → Export Protobuf File**, then generate stubs for your language:
+Download `doc/grpc/serialstudio.proto` from the Serial Studio repository, then generate stubs for your language:
 
 ```bash
 # Python
@@ -126,7 +134,7 @@ protoc -I. --csharp_out=. --grpc_out=. --plugin=protoc-gen-grpc=grpc_csharp_plug
 
 ## Frame streaming
 
-The `StreamFrames` RPC is the primary way plugins and external tools receive real-time data. Unlike the TCP/JSON API (which needs polling), gRPC pushes frames to the client as they arrive.
+The `StreamFrames` RPC is the primary way plugins and external tools receive real-time data. The TCP/JSON server also pushes frames (as JSON lines broadcast to every connected client), but gRPC delivers them as compact binary messages on an explicit per-client stream, which holds up better at high frame rates.
 
 ```python
 # Stream frames with automatic reconnection
@@ -159,19 +167,19 @@ The gRPC server follows the same **Allow External API Connections** setting as t
 | Disabled (default)  | `127.0.0.1:7777`    | `127.0.0.1:8888`    |
 | Enabled             | `0.0.0.0:7777`      | `0.0.0.0:8888`      |
 
-Enable external connections in **Preferences → Miscellaneous → Allow External API Connections**.
+Enable external connections under **Preferences → General → Advanced → Allow External API Connections**.
 
-> **Security note.** Enabling external connections exposes the API to your network. Non-loopback clients must then authenticate: send the access token (found under **Preferences → Miscellaneous → API Access Token**) in the `x-serial-studio-token` request metadata. Loopback clients (`127.0.0.1` / `::1`) are exempt. The token is the only barrier, so keep it secret and disable external access when it is not needed.
+> **Security note.** Enabling external connections exposes the API to your network. Non-loopback clients must then authenticate: send the access token (shown in the **API Access Token** field next to the external-connections switch) in the `x-serial-studio-token` request metadata. Loopback clients (`127.0.0.1` / `::1`) are exempt. The token is the only barrier, so keep it secret and disable external access when it is not needed.
 
 ## Comparison with the TCP/JSON API
 
 | Feature            | TCP/JSON (port 7777)        | gRPC (port 8888)               |
 |--------------------|-----------------------------|--------------------------------|
 | Encoding           | JSON text                   | Protobuf binary                |
-| Frame streaming    | Poll with commands          | Server-push (`StreamFrames`)   |
+| Frame streaming    | JSON lines pushed to all clients | Server-push (`StreamFrames`) |
 | Message size       | Larger (JSON overhead)      | About 5 to 10 times smaller    |
 | Code generation    | Manual parsing              | Auto-generated stubs           |
-| Browser support    | WebSocket/TCP clients       | grpc-web                       |
+| Browser support    | WebSocket/TCP clients       | grpc-web (needs a proxy)       |
 | Ease of use        | `nc`, `curl`, any TCP client| Needs gRPC tooling             |
 
 **When to use gRPC:**

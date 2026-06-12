@@ -2,13 +2,13 @@
 
 The CAN Bus driver lets Serial Studio capture frames from a Controller Area Network. CAN is the dominant in-vehicle bus and is also widely used in industrial automation, motor control, and any embedded system distributed across more than one board. Typical sources include ECUs, electric motor controllers, automotive diagnostic tools, and CAN-to-USB adapters.
 
-Serial Studio Pro implements CAN through Qt's `QtSerialBus` module, which fronts SocketCAN (Linux), PCAN (PEAK), Vector (Windows), Kvaser (cross-platform), and several other backends. DBC files are imported automatically by the [Auto-Generating Projects](Auto-Generating-Projects.md) flow.
+Serial Studio Pro implements CAN through Qt's `QtSerialBus` module, which fronts SocketCAN (Linux), PEAK PCAN, Vector, SysTec, Tiny-CAN, and a virtual-CAN backend for testing. Serial Studio adds three backends of its own for consumer USB-CAN adapters: CANable and other gs_usb devices, slcan serial adapters, and the Seeed/Waveshare USB-CAN Analyzer; these appear in the same driver list and need no vendor SDK. DBC files are imported automatically by the [Auto-Generating Projects](Auto-Generating-Projects.md) flow.
 
 ## What is CAN?
 
 The Controller Area Network was developed by Bosch in 1986 for in-vehicle communication and is standardised as ISO 11898. It is a multi-master, message-broadcast, differential-pair bus designed around four priorities:
 
-- **Robust against electrical noise.** Differential signalling on a twisted pair.
+- **Resistant to electrical noise.** Differential signalling on a twisted pair.
 - **No central master.** Any node can transmit at any time.
 - **Deterministic priority.** Higher-priority messages always preempt lower-priority ones.
 - **Built-in error detection.** A CRC on every frame, automatic retransmission, and an error-confinement scheme that quarantines faulty nodes.
@@ -106,14 +106,15 @@ Most automotive and industrial CAN networks come with a DBC describing every mes
 
 The CAN driver wraps `QCanBusDevice`. Setup involves these fields:
 
-| Setting | Controls |
-|---------|----------|
-| **CAN Driver** | Which CAN backend to use: `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, etc. |
-| **Interface** | Which physical interface inside that backend (e.g. `can0`, `PCAN_USBBUS1`). |
-| **Bitrate** | Must match the bus exactly. Pick a standard rate or type a custom value. |
-| **Flexible Data-Rate** | Whether to use the CAN FD frame format. |
-| **Loopback** | Echo transmitted frames back to the application (self-reception). |
-| **Listen-Only** | Silent monitoring: receive frames without acknowledging or transmitting. |
+| Setting | Controls | Default |
+|---------|----------|---------|
+| **CAN Driver** | Which CAN backend to use: the Qt plugins `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, `virtualcan`, plus Serial Studio's own `canable_gsusb` (CANable USB), `slcan` (Serial CAN), and `seeed_usbcan` (Seeed / Waveshare) backends. | first available |
+| **Interface** | Which physical interface inside that backend (e.g. `can0`, `PCAN_USBBUS1`). | first available |
+| **Bitrate** | Must match the bus exactly. Pick a preset (10 kbps to 1 Mbps) or type a custom value in bit/s. | 500000 bit/s |
+| **Flexible Data-Rate** | Whether to use the CAN FD frame format. | off |
+| **Loopback** | Echo transmitted frames back to the application (self-reception). | off |
+| **Listen-Only** | Silent monitoring: receive frames without acknowledging or transmitting. | off |
+| **DBC Database** | **Import DBC File…** generates a project from a signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). | none |
 
 For Linux SocketCAN, the interface must be brought up from a terminal *before* Serial Studio connects:
 
@@ -131,13 +132,19 @@ sudo ip link set up can0
 
 ### Frame parsing
 
-Serial Studio receives every CAN frame as a structured object containing the ID, DLC, and data bytes, and feeds it through the frame parser. In a DBC-imported project the auto-generated parser is a Built-In (no-code) parser configured from the DBC: it dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and writes the value into the matching dataset.
+Serial Studio publishes every received CAN frame to the frame parser as a binary byte array. Standard (11-bit) frames use the layout `[ID_hi, ID_lo, DLC, payload...]`, zero-padded to 11 bytes. Extended (29-bit) frames set bit 7 of the first byte: `[0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC, payload...]`, zero-padded to 13 bytes. Configure the source with no frame delimiters and the **Binary** decoder (`decoder: 3` in the project file) so the parser entry point, `parse(frame)`, receives those raw bytes. Transmitting uses the same layout: write the header and payload bytes and the driver assembles the CAN frame.
+
+In a DBC-imported project the auto-generated parser is a Built-In (no-code) parser configured from the DBC: it dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and writes the value into the matching dataset.
 
 When the project is built by hand, the dispatch logic can instead be written in Lua or JavaScript. See [Frame Parser Scripting](JavaScript-API.md).
 
 ### Threading
 
 The CAN driver runs on the main thread. Qt's async I/O delivers received frames via signals; there is no dedicated worker thread for CAN. See [Threading and Timing Guarantees](Threading-and-Timing.md).
+
+### API control
+
+The [Socket API](API-Reference.md) and the in-app [AI Assistant](AI-Assistant.md) configure this driver through the `io.canbus.*` command scope. Mutations: `setPluginIndex` (param `pluginIndex`), `setInterfaceIndex` (`interfaceIndex`), `setBitrate` (`bitrate`, bit/s), `setCanFd` (`enabled`). Read-only: `getConfig`, `listPlugins`, `listInterfaces`, `listBitrates`, `getInterfaceError`. For the AI Assistant the setters are device-gated: blocked until the user ticks **Allow device control**, and each call still requires confirmation.
 
 For step-by-step setup, see the [Protocol Setup Guides, CAN Bus section](Protocol-Setup-Guides.md).
 
@@ -146,11 +153,11 @@ For step-by-step setup, see the [Protocol Setup Guides, CAN Bus section](Protoco
 - **No frames received.** Bit-rate mismatch is the most common cause; even a 1% deviation rejects every frame. Verify the rate with the bus owner or the device documentation. Use a CAN analyser (PCAN-View, `candump`, BusMaster) to confirm that traffic exists at the bit rate you expect.
 - **Error frames only.** Termination is missing or incorrect. A CAN bus needs exactly two 120 Ω terminators, one at each physical end of the trunk. Measured between CAN-H and CAN-L with the bus powered off, the resistance should be about 60 Ω. Anything else points to a wiring problem.
 - **Interface not listed (Linux).** Run `ip link show can0`. If the interface is not there, the kernel module is not loaded. `modprobe can_dev` and `modprobe vcan` (for virtual-CAN testing) usually fix it.
-- **Permission denied on SocketCAN.** Your user needs the `dialout` or `can` group, depending on the distribution. `sudo` works as a quick test but is not a long-term solution.
+- **Permission denied on SocketCAN.** Opening a SocketCAN interface needs no special privileges, but configuring it (`ip link set`) requires root or `CAP_NET_ADMIN`. Bring the interface up once with `sudo`, then connect as a normal user. For `slcan` and other serial adapters, the user must be able to open the serial device (the `dialout` group on Debian-family distributions).
 - **DBC import produces wrong values.** Check the byte order on the signals. DBC supports both little-endian (Intel) and big-endian (Motorola) encoding inside the same message. Auto-generated parsers handle both, but a manually edited DBC with the wrong byte order produces values that look scaled or shifted by a constant amount.
 - **Multiplexed (MUX) signals do not decode.** Simple multiplexing is supported automatically: the importer recognises the message's `MultiplexorSwitch` selector and gates each muxed signal on the matching mux value. Imported datasets are titled `Foo (mux 3)` so you can tell them apart on the dashboard. Extended multiplexing (`SG_MUL_VAL_`, `SwitchAndSignal` intermediates, value ranges) is not supported; those signals are skipped during import and the post-import dialog reports how many were dropped. Switch the source to a Lua or JavaScript frame parser to handle them by hand.
 - **CAN FD frames are dropped.** The bus, the adapter, and Serial Studio all need to be in CAN FD mode. Mixing classic-only nodes on a CAN FD bus works only if the FD nodes downshift, which not every adapter supports.
-- **PCAN/Vector/Kvaser SDK not found (Windows).** The vendor driver and runtime are separate installs. Qt's CAN plugin is only a wrapper; the actual hardware support comes from the vendor.
+- **PCAN/Vector/SysTec driver not found (Windows).** The vendor driver and runtime are separate installs. Qt's CAN plugin is only a wrapper; the actual hardware support comes from the vendor. The CANable, slcan, and Seeed/Waveshare backends are the exception: Serial Studio talks to those adapters directly.
 
 ## Further reading
 

@@ -310,6 +310,12 @@ static QString dryRunCommandForKind(const QString& kind)
   if (kind == QStringLiteral("painter"))
     return QStringLiteral("project.painter.dryRun");
 
+  if (kind == QStringLiteral("output_widget"))
+    return QStringLiteral("project.outputWidget.dryRun");
+
+  if (kind == QStringLiteral("end_to_end"))
+    return QStringLiteral("project.dryRun.endToEnd");
+
   return QString();
 }
 
@@ -333,12 +339,14 @@ static QString setCodeCommandForKind(const QString& kind)
 /**
  * @brief Error response for an unsupported assistant.script.* kind.
  */
-static API::CommandResponse unknownKindError(const QString& id, const QString& kind)
+static API::CommandResponse unknownKindError(const QString& id,
+                                             const QString& kind,
+                                             const QString& validKinds)
 {
   return API::CommandResponse::makeError(
     id,
     API::ErrorCode::InvalidParam,
-    QStringLiteral("Unknown kind: '%1'. Use one of: frame_parser, transform, painter.").arg(kind));
+    QStringLiteral("Unknown kind: '%1'. Use one of: %2.").arg(kind, validKinds));
 }
 
 /**
@@ -350,7 +358,8 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptDryRun(const QString
   const auto kind  = params.value(QStringLiteral("kind")).toString();
   const auto inner = dryRunCommandForKind(kind);
   if (inner.isEmpty())
-    return unknownKindError(id, kind);
+    return unknownKindError(
+      id, kind, QStringLiteral("frame_parser, transform, painter, output_widget, end_to_end"));
 
   QJsonObject innerParams = params;
   innerParams.remove(QStringLiteral("kind"));
@@ -367,7 +376,11 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
   const auto dryInner = dryRunCommandForKind(kind);
   const auto setInner = setCodeCommandForKind(kind);
   if (dryInner.isEmpty() || setInner.isEmpty())
-    return unknownKindError(id, kind);
+    return unknownKindError(
+      id,
+      kind,
+      QStringLiteral("frame_parser, transform, painter (output_widget code is applied via "
+                     "project.outputWidget.update; end_to_end is dry-run only)"));
 
   QJsonObject inner = params;
   inner.remove(QStringLiteral("kind"));
@@ -1036,21 +1049,28 @@ void API::Handlers::AssistantHandler::registerEditCommands()
   registry.registerCommand(
     QStringLiteral("assistant.script.dryRun"),
     QStringLiteral("Validate a script by kind without writing. Routes to "
-                   "project.frameParser.dryRun, project.dataset.transform.dryRun, or "
-                   "project.painter.dryRun based on `kind`. All other params are forwarded "
-                   "verbatim (code, language, values, plus for frame_parser the pipeline "
-                   "inputs inputBytesHex / decoderMethod / frameDetection / frameStart / "
-                   "frameEnd / hexadecimalDelimiters / checksumAlgorithm / operationMode)."),
+                   "project.frameParser.dryRun, project.dataset.transform.dryRun, "
+                   "project.painter.dryRun, project.outputWidget.dryRun, or "
+                   "project.dryRun.endToEnd based on `kind`. All other params are forwarded "
+                   "verbatim (code, language, values, inputValue / hex for output_widget, "
+                   "sampleFrame / sampleFrames for end_to_end, plus for frame_parser the "
+                   "pipeline inputs inputBytesHex / decoderMethod / frameDetection / "
+                   "frameStart / frameEnd / hexadecimalDelimiters / checksumAlgorithm / "
+                   "operationMode)."),
     API::makeSchema(
       {
         {QStringLiteral("kind"),
          QStringLiteral("string"),
-         QStringLiteral("One of: frame_parser, transform, painter.")                        },
-        {QStringLiteral("code"), QStringLiteral("string"),  QStringLiteral("Script source.")}
+         QStringLiteral("One of: frame_parser, transform, painter, output_widget, "
+                        "end_to_end.")}
   },
-      {{QStringLiteral("language"),
+      {{QStringLiteral("code"),
+        QStringLiteral("string"),
+        QStringLiteral("Script source. Required for every kind except end_to_end, which "
+                       "defaults to the live project parser.")},
+       {QStringLiteral("language"),
         QStringLiteral("integer"),
-        QStringLiteral("0 = JavaScript, 1 = Lua (frame_parser / transform).")}}),
+        QStringLiteral("0 = JavaScript, 1 = Lua (frame_parser / transform / end_to_end).")}}),
     &API::Handlers::AssistantHandler::scriptDryRun);
 
   registry.registerCommand(

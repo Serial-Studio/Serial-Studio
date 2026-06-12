@@ -96,7 +96,6 @@ Item {
   onInterpolationModeChanged: {
     scatterSeries.clear()
     upperSeries.clear()
-    lowerSeries.clear()
   }
   function updateWidgetOptions() {
     plot.yLabelVisible = root.userShowYLabel && (root.width >= 196)
@@ -119,16 +118,10 @@ Item {
 
     function onUiTimeout() {
       if (root.visible && root.model) {
-        if (root.interpolationMode === SerialStudio.InterpolationNone) {
+        if (root.interpolationMode === SerialStudio.InterpolationNone)
           root.model.draw(scatterSeries)
-        } else {
+        else
           root.model.draw(upperSeries)
-          if (root.showAreaUnderPlot) {
-            lowerSeries.clear()
-            lowerSeries.append(root.model.minX, root.model.minY)
-            lowerSeries.append(root.model.maxX, root.model.minY)
-          }
-        }
       }
     }
   }
@@ -297,14 +290,19 @@ Item {
     xAxis.tickInterval: plot.xTickInterval
     yAxis.tickInterval: plot.yTickInterval
 
+    areaFillColor: root.color
+    areaFillBaseline: root.model.minY
+    areaFillSource: root.showAreaUnderPlot
+         && root.interpolationMode !== SerialStudio.InterpolationNone
+         && root.interpolationMode !== SerialStudio.InterpolationStem
+                    ? upperSeries : null
+
     onZoomChanged: plotCommon.setDownsampleFactor(plot, model)
     onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
     onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
 
     Component.onCompleted: {
-      graph.addSeries(areaSeries)
       graph.addSeries(upperSeries)
-      graph.addSeries(lowerSeries)
       graph.addSeries(scatterSeries)
     }
 
@@ -325,25 +323,6 @@ Item {
 
       width: 2
       visible: root.interpolationMode !== SerialStudio.InterpolationNone
-    }
-
-    LineSeries {
-      id: lowerSeries
-
-      width: 0
-      visible: false
-    }
-
-    AreaSeries {
-      id: areaSeries
-
-      upperSeries: upperSeries
-      lowerSeries: lowerSeries
-      borderColor: "transparent"
-      visible: root.showAreaUnderPlot
-           && root.interpolationMode !== SerialStudio.InterpolationNone
-           && root.interpolationMode !== SerialStudio.InterpolationStem
-      color: Qt.rgba(root.color.r, root.color.g, root.color.b, 0.2)
     }
   }
 }

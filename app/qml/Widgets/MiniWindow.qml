@@ -55,6 +55,14 @@ Item {
   property alias radius: _bg.radius
 
   //
+  // Subclass hooks: gate state animations past the initial taskbar sync, and hold the
+  // window visible until a hide (minimize/close) transition finishes
+  //
+  property bool animationsEnabled: true
+  readonly property bool hideAnimationRunning: _minimizeTransition.running
+                                               || _closeTransition.running
+
+  //
   property int deviceIndex: 0
 
   //
@@ -159,9 +167,11 @@ Item {
   }
 
   //
-  // Enable/disable window when state changes
+  // Enable/disable window when state changes; scale animations anchor at the bottom
+  // edge so minimize/restore read as moving toward the taskbar
   //
   state: "normal"
+  transformOrigin: Item.Bottom
   enabled: root.state === "normal" || root.state === "maximized"
 
   //
@@ -227,8 +237,11 @@ Item {
   //
   transitions: [
     Transition {
+      id: _minimizeTransition
+
       from: "*"
       to: "minimized"
+      enabled: root.animationsEnabled
 
       NumberAnimation {
         duration: 200
@@ -240,6 +253,7 @@ Item {
     Transition {
       from: "*"
       to: "normal"
+      enabled: root.animationsEnabled
 
       NumberAnimation {
         duration: 200
@@ -251,6 +265,7 @@ Item {
     Transition {
       from: "*"
       to: "maximized"
+      enabled: root.animationsEnabled
 
       NumberAnimation {
         duration: 200
@@ -260,8 +275,11 @@ Item {
     },
 
     Transition {
+      id: _closeTransition
+
       from: "*"
       to: "closed"
+      enabled: root.animationsEnabled
 
       NumberAnimation {
         duration: 200

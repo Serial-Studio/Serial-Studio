@@ -20,6 +20,8 @@ Open the **Device Setup** panel and, under **Data Export**, toggle **Session Rec
 
 There's nothing to configure. Serial Studio picks the path, creates the schema on first use, and handles file lifecycle.
 
+Recording and the explorer can also be driven programmatically: the [API](API-Reference.md) exposes `sessions.setExportEnabled`, `sessions.getStatus`, `sessions.list`, `sessions.replay`, `sessions.exportToCsv`, `sessions.delete`, and the tagging commands (`sessions.addTag`, `sessions.assignTag`, `sessions.setNotes`). The `--session-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns recording on at startup.
+
 ### File location
 
 All sessions for a given project title live in a single `.db` file, grouped by project name:

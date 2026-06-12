@@ -151,10 +151,9 @@ function assistant.script.apply(kind, code, options)
   return apiCall('assistant.script.apply', p)
 end
 
-function assistant.script.dryRun(kind, code, options)
+function assistant.script.dryRun(kind, options)
   local p = {}
   p['kind'] = kind
-  p['code'] = code
   if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('assistant.script.dryRun', p)
 end
@@ -1435,14 +1434,9 @@ function project.dataset.update(groupId, datasetId)
   return apiCall('project.dataset.update', p)
 end
 
-function project.dryRun.endToEnd(sampleFrame, sampleFrames, sourceId, code, language, verbose)
+function project.dryRun.endToEnd(options)
   local p = {}
-  p['sampleFrame'] = sampleFrame
-  p['sampleFrames'] = sampleFrames
-  p['sourceId'] = sourceId
-  p['code'] = code
-  p['language'] = language
-  p['verbose'] = verbose
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.dryRun.endToEnd', p)
 end
 
@@ -1458,19 +1452,11 @@ function project.frameParser.dryCompile(code, language)
   return apiCall('project.frameParser.dryCompile', p)
 end
 
-function project.frameParser.dryRun(code, language, inputBytes, inputBytesHex, decoderMethod, frameDetection, frameStart, frameEnd, hexadecimalDelimiters, checksumAlgorithm, operationMode)
+function project.frameParser.dryRun(code, language, options)
   local p = {}
   p['code'] = code
   p['language'] = language
-  p['inputBytes'] = inputBytes
-  p['inputBytesHex'] = inputBytesHex
-  p['decoderMethod'] = decoderMethod
-  p['frameDetection'] = frameDetection
-  p['frameStart'] = frameStart
-  p['frameEnd'] = frameEnd
-  p['hexadecimalDelimiters'] = hexadecimalDelimiters
-  p['checksumAlgorithm'] = checksumAlgorithm
-  p['operationMode'] = operationMode
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.frameParser.dryRun', p)
 end
 
@@ -1645,11 +1631,10 @@ function project.outputWidget.delete(groupId, widgetId)
   return apiCall('project.outputWidget.delete', p)
 end
 
-function project.outputWidget.dryRun(code, inputValue, hex)
+function project.outputWidget.dryRun(code, options)
   local p = {}
   p['code'] = code
-  p['inputValue'] = inputValue
-  p['hex'] = hex
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.outputWidget.dryRun', p)
 end
 

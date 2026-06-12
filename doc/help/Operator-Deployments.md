@@ -97,7 +97,7 @@ This is the only piece of the setup UI an operator interacts with under runtime 
 
 ## CLI reference
 
-A deployment is a saved invocation of `serial-studio` with these flags. The same command can be run by hand, dropped into a service unit, or scripted in CI:
+A deployment is a saved invocation of `serial-studio` with these flags. The same command can be run by hand, dropped into a service unit, or scripted in CI (the full flag list lives in [Command-Line Interface](Command-Line-Interface.md)):
 
 ```sh
 serial-studio \

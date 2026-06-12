@@ -234,6 +234,21 @@ def harvest_templates_manifest():
         )
 
 
+def harvest_example_readmes():
+    if not EXAMPLES.exists():
+        return
+    for md in sorted(EXAMPLES.rglob("README.md")):
+        text = md.read_text(errors="replace")
+        title = md.parent.name
+        for i, chunk in enumerate(chunk_markdown(text)):
+            add(
+                source="example",
+                title=f"{title} README#{i}",
+                body=chunk,
+                doc_id=f"example/{md.relative_to(ROOT)}#{i}",
+            )
+
+
 def harvest_examples():
     if not EXAMPLES.exists():
         return
@@ -259,6 +274,18 @@ def harvest_examples():
             body="\n\n".join(body_parts),
             doc_id=f"example/{proj.relative_to(ROOT)}",
         )
+        for i, src in enumerate(data.get("sources", [])):
+            src_parser = src.get("frameParserCode", "")
+            if not src_parser:
+                continue
+            add(
+                source="example",
+                title=f"{title} (source {i})",
+                body=f"Example project: {title} ({proj.relative_to(ROOT)}), source {i}\n\n"
+                + "Frame parser:\n"
+                + first_function_or_decl(src_parser),
+                doc_id=f"example/{proj.relative_to(ROOT)}#source{i}",
+            )
 
 
 print("[index] harvesting corpus...", file=sys.stderr)
@@ -271,7 +298,12 @@ harvest_scripts(SCRIPTS / "parser/lua", "script:parser_lua")
 harvest_scripts(SCRIPTS / "transforms/js", "script:transform_js")
 harvest_scripts(SCRIPTS / "transforms/lua", "script:transform_lua")
 harvest_scripts(SCRIPTS / "output", "script:output_widget")
+harvest_scripts(SCRIPTS / "mqtt/js", "script:mqtt_js")
+harvest_scripts(SCRIPTS / "mqtt/lua", "script:mqtt_lua")
+harvest_scripts(SCRIPTS / "control", "script:control")
+harvest_markdown(SCRIPTS / "native", "doc:native_template")
 harvest_examples()
+harvest_example_readmes()
 
 print(f"[index] corpus has {len(corpus)} chunks", file=sys.stderr)
 

@@ -31,9 +31,9 @@ To create a dashboard with gauges, plots, and organized data:
 Make sure Serial Studio is connected (VirtualCAN or hardware).
 
 ### Step 2: Import DBC Database
-1. In the **Setup** → **CAN Bus** panel, click **Import DBC File...**
+1. In the **Setup** → **CAN Bus** panel, click **Import DBC File…**
 2. Navigate to `examples/CAN Bus Example/`
-3. Select `example_vehicle.dbc`
+3. Select `ecu_simulator.dbc`
 4. Click **Open**
 
 ### Step 3: Review the Preview
@@ -79,7 +79,7 @@ Reopen the project editor to:
 The ECU simulator sends realistic automotive data:
 
 **Engine ECU (100 Hz)**
-- `0x100`: RPM (0-8000), Speed (0-300 km/h)
+- `0x100`: RPM (0-7000), Speed (0-200 km/h)
 - `0x101`: Coolant Temp, Intake Temp, Engine Load
 - `0x102`: Throttle Position, Fuel Pressure
 
@@ -107,7 +107,8 @@ The ECU simulator sends realistic automotive data:
 ### Files
 
 - **`ecu_simulator.py`**: All-in-one simulator (VirtualCAN, PCAN, SocketCAN, Vector)
-- **`example_vehicle.dbc`**: DBC database file
+- **`ecu_simulator.dbc`**: DBC database file
+- **`ecu_simulator.ssproj`**: Ready-made project generated from the DBC file (load it to skip the import steps)
 - **`README.md`**: This file
 
 ## Usage Options
@@ -266,14 +267,14 @@ The raw CAN frames are binary data. To see meaningful information:
 Edit `ecu_simulator.py`:
 
 ```python
-# Change driving pattern (line ~425)
+# Change driving pattern (line ~675)
 if cycle_time < 15:
     self.target_speed = min(200, cycle_time * 10)  # Faster acceleration
 
-# Adjust message rates (line ~667)
+# Adjust message rates (line ~1015)
 rates = {
-    'engine': 200,      # Increase to 200 Hz
-    'transmission': 100,
+    "engine": 200,      # Increase to 200 Hz
+    "transmission": 100,
     # ...
 }
 ```

@@ -162,7 +162,8 @@ The warning fires on the FIRST miss per (table, register) pair --
 subsequent calls stay silent to avoid spam, so don't expect the log
 to keep filling.
 
-If `uniqueId` looks wrong: it changes after a move/delete/duplicate.
+If `uniqueId` looks wrong: it's stable across moves/reorders, but it
+disappears on delete and a duplicate gets a fresh one.
 Re-resolve via `project.dataset.getByPath { path: "Group/Dataset" }`
 before reading the value.
 

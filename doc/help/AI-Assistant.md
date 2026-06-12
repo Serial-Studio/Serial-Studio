@@ -10,7 +10,7 @@ It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gem
 
 The assistant talks to Serial Studio through the same command surface as the MCP/JSON-RPC API (see the [API Reference](API-Reference.md) for the full list). The short version: anything you can do in the Project Editor, the assistant can do for you, with two important caveats:
 
-- **It does not connect, disconnect, or change driver settings by default.** Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, write bytes to the device) is blocked from the AI surface unless you opt in by ticking **Allow device control** in the panel footer. With that toggle on, those commands become Confirm-tier (you still approve each one); with it off they are refused outright so a wrong answer cannot knock you offline.
+- **It does not connect, disconnect, or change driver settings by default.** Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, write bytes to the device) is blocked from the AI surface unless you opt in by ticking **Allow device control** in the panel footer. With that toggle on, those commands become Always-confirm (you approve each call, even when Auto-approve edits is on); with it off they are refused outright so a wrong answer cannot knock you offline.
 - **It can read documentation.** When you ask about a feature it doesn't already know, it pulls the relevant page from `doc/help/` directly off the Serial Studio repo so its answer matches the version you are running.
 
 Typical things people ask it to do:
@@ -80,15 +80,15 @@ Each tool call shows up in the chat as a small expandable card with the command 
 
 ### The safety tiers
 
-Every command is tagged at startup. There are four buckets:
+Every command is tagged at startup. There are five tiers:
 
 | Tier | Behavior | Examples |
 |---|---|---|
 | **Safe** | Auto-runs. No prompt. Read-only inspection. | `project.group.list`, `dashboard.getStatus`, `io.uart.listPorts`, every `get*` and `*.list` |
 | **Confirm** | Card with **Approve** / **Deny** buttons. Anything that mutates the project counts. | `project.group.add`, `project.dataset.update`, `project.workspace.add`, `project.template.apply` |
-| **Always confirm** | Like Confirm, but still asks **even when Auto-approve edits is on**. Destructive families (delete / clear / new / import / reset). | `project.new`, `project.group.delete`, `project.workspace.clearAll`, `project.frameParser.reset`, `fs.delete`, `sessions.clearAll` |
+| **Always confirm** | Like Confirm, but still asks **even when Auto-approve edits is on**. Destructive or sensitive families: delete / clear / new / open-replace / install / uninstall, plus MQTT credential + TLS config and control-script installs. | `project.new`, `project.group.delete`, `project.workspace.clearAll`, `fs.delete`, `sessions.delete`, `controlscript.setCode`, `project.mqtt.publisher.setConfig` |
 | **Device-gated** | Blocked by default; becomes **Always confirm** only when **Allow device control** is ticked. Driver settings, connection state, and anything that writes bytes to the device. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*` |
-| **Blocked** | Refused outright; never unblockable from the UI. The model is told it isn't available. | `mqtt.setPassword`, `mqtt.setSslEnabled`, `mqtt.setSslProtocol`, `licensing.*` mutations |
+| **Blocked** | Refused outright; never unblockable from the UI. The model is told it isn't available. | `licensing.activate`, `licensing.deactivate`, `licensing.setLicense`, and the other `licensing.*` mutations |
 
 You can approve a single call (**Approve**) or, when the assistant queues several mutations in a row, approve the whole batch at once (**Approve all**). Denial is logged and the assistant is told. It will usually offer an alternative or back off, not retry blindly.
 
@@ -118,9 +118,9 @@ If your project file contains commercial firmware code or proprietary protocol n
 
 The assistant can pull `doc/help/*.md` pages directly off the Serial Studio GitHub repo when it needs them. You'll see this as a tool call named `meta.fetchHelp` with a path like `Painter-Widget` or `JavaScript-API`. It is read-only and Safe. The first call usually grabs `help.json` (the page index), the second pulls the relevant page.
 
-For scripting, there's a parallel surface called `meta.fetchScriptingDocs` that returns the API reference for one of six scripting contexts (frame parser JS, frame parser Lua, dataset transform JS, dataset transform Lua, output widget JS, painter JS). The assistant is wired to call this **before** writing or modifying any script. That's why frame parsers it generates use real APIs and not made-up function names.
+For scripting, there's a parallel surface called `meta.fetchScriptingDocs` that returns the API reference for one of nine kinds: `frame_parser_js`, `frame_parser_lua`, `transform_js`, `transform_lua`, `output_widget_js`, `painter_js`, `control_script_js`, plus `sdk_js` and `sdk_lua`, which return the generated SerialStudio SDK source itself. The assistant is wired to call this **before** writing or modifying any script. That's why frame parsers it generates use real APIs and not made-up function names.
 
-There's also `meta.searchDocs` (a small built-in BM25 index over the bundled help and scripting docs, used to find the right page when a path isn't obvious) and `meta.loadSkill` (loads one of a handful of focused skill briefs: `painter`, `frame_parsers`, `transforms`, `output_widgets`, `workspace_design`, `dashboard_layout`, `mqtt`, `can_modbus`, `filesystem`, `debugging`, `project_basics`, `tool_discovery`, `api_semantics`, `behavioral`) when the assistant needs deeper guidance for a specific task.
+There's also `meta.searchDocs` (a small built-in BM25 index over the bundled help and scripting docs, used to find the right page when a path isn't obvious) and `meta.loadSkill` (loads one of a handful of focused skill briefs: `painter`, `frame_parsers`, `transforms`, `output_widgets`, `workspace_design`, `dashboard_layout`, `mqtt`, `can_modbus`, `filesystem`, `debugging`, `project_basics`, `tool_discovery`, `api_semantics`, `behavioral`, `control_script`) when the assistant needs deeper guidance for a specific task.
 
 ## Project templates
 
@@ -138,10 +138,10 @@ Eight providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, 
 Yes. That's exactly what the **Confirm** tier is for. The card shows the command name and the full arguments object before you approve.
 
 **Can the assistant connect or disconnect my device?**
-Not unless you let it. Connection-state changes (`io.connect`, `io.disconnect`, `io.setPaused`) and every `set*` on every driver are device-gated: blocked by default, and the assistant can only read your device list and current configuration. Tick **Allow device control** in the footer and those commands become available as Confirm-tier actions (you still approve each one).
+Not unless you let it. Connection-state changes (`io.connect`, `io.disconnect`, `io.setPaused`) and every `set*` on every driver are device-gated: blocked by default, and the assistant can only read your device list and current configuration. Tick **Allow device control** in the footer and those commands become available as Always-confirm actions (you approve each call, even when Auto-approve edits is on).
 
 **Can it write data to my device?**
-Direct MCP write commands are device-gated: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*` and every connection-state command, are blocked until you tick **Allow device control** (then they ask for approval per call). A second group is blocked outright with no UI override: `licensing.*` mutations and `mqtt.set*` (password / SSL). The assistant can, however, propose **frame parser / transform / painter code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
+Direct MCP write commands are device-gated: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*` and every connection-state command, are blocked until you tick **Allow device control** (then they ask for approval per call). A second group is blocked outright with no UI override: `licensing.*` mutations. MQTT broker credentials get a different guard: `project.mqtt.publisher.setConfig` and `project.mqtt.subscriber.setConfig` are Always-confirm, and the matching `getConfig` commands never return the stored password. The assistant can, however, propose **frame parser / transform / painter code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
 
 **Why does my project state show up in the prompt?**
 So the assistant can answer "what sources are configured?", "which datasets feed this group?", or "is the frame parser doing what I think it is?" without first running ten read-only tool calls. The state snapshot lives outside the cached prefix so it can change between turns without invalidating the cache.

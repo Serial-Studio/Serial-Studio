@@ -109,6 +109,7 @@ it comes back automatically.
 ## Reading the results
 
 - **Throughput** is the sustained frames/second for that phase. Higher is better.
+- **Target** is the tiered gate frame rate for that phase, or `n/a` for informational phases.
 - **Time** is the wall-clock seconds the phase ran.
 - **Result** is **Pass** (green) or **Fail** (red) for the seven gated phases (the data pipeline
   plus the six parser phases), and `n/a` for the informational export and dashboard phases. A

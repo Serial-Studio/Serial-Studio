@@ -74,24 +74,28 @@ A USB-to-serial adapter converts USB to TTL or RS-232 levels. To Serial Studio, 
 
 The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel map one-to-one onto UART parameters:
 
-| Setting | Controls |
-|---------|----------|
-| **Port** | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) |
-| **Baud rate** | Bits per second |
-| **Data bits** | 5 / 6 / 7 / 8 |
-| **Parity** | None / Even / Odd / Space / Mark |
-| **Stop bits** | 1 / 1.5 / 2 |
-| **Flow control** | None / Hardware (RTS/CTS) / Software (XON/XOFF) |
-| **DTR enabled** | Asserts the DTR line on connect (some boards reset on DTR toggle, e.g. Arduino) |
-| **Auto reconnect** | Reopens the port if the device disappears and comes back |
+| Setting | Controls | Default |
+|---------|----------|---------|
+| **COM Port** | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) | none selected |
+| **Baud Rate** | Bits per second; presets from 110 to 921600, and the field accepts any positive rate typed in | 9600 |
+| **Data Bits** | 5 / 6 / 7 / 8 | 8 |
+| **Parity** | None / Even / Odd / Space / Mark | None |
+| **Stop Bits** | 1 / 1.5 / 2 | 1 |
+| **Flow Control** | None / RTS/CTS / XON/XOFF | None |
+| **Send DTR Signal** | Asserts the DTR line on connect (some boards reset on DTR toggle, e.g. Arduino) | on |
+| **Auto Reconnect** | Rescans ports once per second and reconnects when the last-used device re-enumerates | off |
+
+On Linux and macOS the **COM Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
 
 `QSerialPort` uses Qt's event loop for non-blocking reads, so the UART driver runs entirely on the main thread; bytes arrive there and feed the FrameReader directly. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the rationale.
+
+The same settings are scriptable through the `io.uart.*` commands of the [JSON-RPC API](API-Reference.md): `setDevice` (by path), `setPortIndex`, `setBaudRate`, `setParity`, `setDataBits`, `setStopBits`, `setFlowControl`, `setDtrEnabled`, and `setAutoReconnect`, plus the read-only `listPorts`, `listBaudRates`, and `getConfig`. `setBaudRate` takes the rate itself (`baudRate`, bits per second); the other line settings take a zero-based index into the option list in the same order as the Setup Panel (`parityIndex` 2 = Odd, `stopBitsIndex` 1 = 1.5, `flowControlIndex` 1 = RTS/CTS). When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
 
 For step-by-step setup, see the [Protocol Setup Guides, Serial/UART section](Protocol-Setup-Guides.md).
 
 ## Common pitfalls
 
-- **The Arduino resets every time you connect.** The DTR line is toggling. Boards with a USB-CDC bootloader (Uno, Nano, ESP8266 with the auto-reset circuit) treat a DTR pulse as "reset and enter bootloader". Disable **DTR enabled** in the driver settings, or use a CH340/FTDI-style adapter that lets you control DTR independently.
+- **The Arduino resets every time you connect.** The DTR line is toggling. Boards with a USB-CDC bootloader (Uno, Nano, ESP8266 with the auto-reset circuit) treat a DTR pulse as "reset and enter bootloader". Disable **Send DTR Signal** in the Setup Panel, or use a CH340/FTDI-style adapter that lets you control DTR independently.
 - **Garbled output that looks almost right.** Baud-rate mismatch. If roughly half the bytes look correct and the rest are random, the rate is off by a factor of two (115200 configured, 57600 on the wire, or vice versa).
 - **The port opens but nothing comes through.** TX and RX may be swapped. Some adapters label pins from the host's point of view, some from the device's. The fix is usually to swap them physically.
 - **Long cable runs drop bytes.** TTL and RS-232 do not tolerate distance. Use RS-485 transceivers on both ends to reach 100 m or more reliably.

@@ -240,6 +240,17 @@ ConsoleOnly (replaced DeviceSendsJSON, 2026-04) bypasses CircularBuffer + queue;
 - Title edits update the tree item in-place via `m_*Items` — never call a mutating
   `ProjectModel` function on every keystroke.
 
+## On-Disk Change Detection — `ProjectModel` File Watcher
+
+- A `QFileSystemWatcher` on `m_filePath` detects external edits: 500 ms debounce →
+  SHA-256 content compare against `m_diskFileHash` → prompt to reload (or notification +
+  `setModified(true)` in suppressed/API mode). Deletion posts a warning and dirties the
+  project so a save can recreate the file. Signal: `projectFileChangedOnDisk()`.
+- **Invariant**: every successful disk write or load must re-arm the watcher + hash via
+  `watchProjectFile()`. `writeProjectFile()`, `loadFromJsonDocument()`, and `newJsonFile()`
+  already do; a new save/load path that bypasses them will make self-writes look like
+  external edits (QSaveFile's atomic rename also drops the watch on some platforms).
+
 ## Rolling Backups — `BackupManager`
 
 - Auto-snapshots the project on a 5s debounce. The **whole-project SHA-1** over
@@ -477,6 +488,15 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   (one row per dashboard `updated` tick), not the sample rate; sub-second ranges clamp to 16 rows.
 - **AxisRangeDialog** hides its X section for time plots (`timeAxis` from the widget model); the manual
   X min/max is meaningless when X is the Time Range. Y range stays editable.
+- **Area-under-plot fill** (`Widgets::PlotAreaFill`, driven via `PlotWidget.qml`'s `areaFillSource` /
+  `areaFillBaseline` / `areaFillColor`): one GPU triangle strip with per-vertex alpha (0.04 at the
+  baseline, 0.40 at the data's per-sign extreme — the gradient anchors to the data, not the axis range),
+  overlaid on the GraphsView plot area and tracking `xVisibleMin`/`yVisibleMin` under zoom/pan. It
+  replaced the QtGraphs `AreaSeries` (whose per-tick CPU shape re-triangulation stalled audio-rate
+  curves) and the bipolar `drawClamped` split series. Baseline rules: Plot = 0 when bipolar, `maxY`
+  when all-negative (inverted mountain), else `minY`; FFT always uses `minY` (floor). The fill renders
+  above the curve stroke (same hue, no visible difference) and below the crosshair overlay; it follows
+  the curve series' `update()` signal, so paused plots freeze it for free.
 - **Plot Sweep / Trigger mode (Pro)**: oscilloscope sweep for **time-axis** Plot/MultiPlot. `DSP::SweepEngine`
   (`DSP.h`) owns a front/back decimating `TimeRing` per curve; `advance(now, trigValue)` runs on the hotpath
   (alloc-free), detects a level+edge crossing (interpolated `t0`), honors holdoff + Auto/Normal/Single, and

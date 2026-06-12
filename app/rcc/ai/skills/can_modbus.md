@@ -47,8 +47,10 @@ parser if extended mux is required.
 
 If the user has a custom protocol on CAN, you'll write a frame parser
 that reads the raw `id, dlc, data[]` and extracts your fields. The CAN
-driver feeds the parser one message at a time. Frame format:
-`<id_hex>;<data_hex>` by default.
+driver feeds the parser one message at a time. Frames are published as
+binary: standard = `[ID_hi, ID_lo, DLC, payload...]`, extended =
+`[0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC, payload]`, zero-padded
+to 11/13 bytes; parse with `decoderMethod: 3` (Binary).
 
 ## Modbus
 
@@ -67,15 +69,13 @@ more slave devices on a fixed interval.
    `io.modbus.setSlaveAddress{address}` — the slave id.
 3. **For TCP**:
    `io.modbus.setHost{host}`, `io.modbus.setPort{port}` (default 502).
-4. `io.modbus.setPollInterval{ms}` — default 100ms is sane. Faster
+4. `io.modbus.setPollInterval{intervalMs}` — default 100ms is sane. Faster
    intervals can saturate slow RTU devices.
 5. **Register groups**: a register group is a contiguous range to poll.
    Use `io.modbus.addRegisterGroup{...}` for each, with:
-   - `registerType`: 0 = Coils, 1 = DiscreteInputs, 2 = HoldingRegisters,
-     3 = InputRegisters
+   - `type`: 0 = HoldingRegisters, 1 = InputRegisters, 2 = Coils,
+     3 = DiscreteInputs
    - `startAddress` and `count`
-   - `dataType`: int16, uint16, int32, uint32, float32 (each int32/float
-     spans 2 holding registers)
 6. `io.connect{}`.
 
 ### Modbus map import

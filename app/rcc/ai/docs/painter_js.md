@@ -13,16 +13,18 @@ feed a painter; see "Reading peer datasets" below.
 
 The script defines TWO functions. Names must match exactly.
 
-- **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (24 Hz default)
-  to redraw the canvas. `ctx` is a Canvas-2D-like context. `w` and `h` are
-  the current widget size in pixels. Treat the canvas as ephemeral; clear
-  what you need at the top of each call.
+- **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (60 Hz default,
+  configurable 1–240 via `dashboard.setFps`), only while dashboard data is
+  updating, to redraw the canvas. `ctx` is a Canvas-2D-like context. `w`
+  and `h` are the current widget size in pixels. Treat the canvas as
+  ephemeral; clear what you need at the top of each call.
 
-- **`onFrame()`: OPTIONAL.** Called once per parsed frame, before the
-  next paint, with no arguments. Read live values via
+- **`onFrame()`: OPTIONAL.** Called once per dashboard update tick (frames
+  are batched at high rates), immediately before each paint, with no
+  arguments. Read live values via
   `datasets[i].value` (etc.) or via `datasetGetFinal(uniqueId)` and cache
-  them in top-level `var`s if you need to do per-frame computation outside
-  the per-tick `paint`.
+  them in top-level `var`s if you need to do per-tick computation outside
+  `paint`.
 
 `bootstrap()` does **not** exist. Top-level statements at the script's
 outer scope run once when the script compiles; that is your "bootstrap".
@@ -115,9 +117,10 @@ project Action by its stable `actionId`. The dashboard helpers all return
 `{ ok, error? }` and never log.
 
 **Call these from `onFrame()`, NOT `paint()`.** `paint` runs on every
-dashboard tick (24 Hz); a write or `clearPlots` per paint will saturate
-the link / yank the plot. Use `onFrame()` (one call per parsed frame) or
-guard with a state machine.
+dashboard tick (up to 60 Hz); a write or `clearPlots` per paint will
+saturate the link / yank the plot. `onFrame()` also runs at UI cadence,
+so guard with a state transition or a `frame.number` change, not a
+per-call write.
 
 ## Alarm bands (colored value ranges)
 
@@ -216,8 +219,8 @@ Two register types:
   Set when you declare it; every `tableGet` thereafter returns the same
   value. Use for: calibration coefficients, lookup tables, configuration
   flags.
-- **Computed**: writable from transforms (and only transforms) via
-  `tableSet`. Holds the last value written **indefinitely**, with no
+- **Computed**: writable via `tableSet` from parsers, transforms,
+  painters, and output widgets. Holds the last value written **indefinitely**, with no
   per-frame reset. The `defaultValue` is the starting value at
   project load. Use for: filter/integrator state, cross-frame counters,
   latched flags, and intermediate results another transform reads later
@@ -248,8 +251,9 @@ return raw * scale + offset;   // a transform body
 ```
 
 Per-frame ordering: transforms run in group-array then dataset-array
-order. Inside a transform you can read **raw values for ALL datasets**
-and **final values only for datasets earlier in the order**. Painters
+order, in a single pass. Inside a transform, reads of **earlier**
+datasets (raw or final) return this frame's values; reads of **later**
+datasets silently return the **previous** frame's. Painters
 run AFTER all transforms, so painters see final values for everything.
 
 ## arc / moveTo discipline
@@ -569,7 +573,9 @@ calling it from your script will throw or no-op.
 - `measureTextWidth(s)` is a fast shortcut returning just the width.
 
 **Images**
-- `drawImage(src, x, y)` and `drawImage(src, x, y, w, h)`: source must be
+- `drawImage(src, x, y)` draws unscaled; a 5-arg `drawImage` call silently
+  ignores `w`/`h`. The scaled form is the separate function
+  `drawImageScaled(src, x, y, w, h)`. `src` must be
   a `qrc:/` resource OR a path inside the project file's directory tree.
   URLs (`http://`, `https://`, etc.) are rejected for sandbox reasons.
 - `createPattern(src, repetition)` where repetition is "repeat" (default),
@@ -586,7 +592,8 @@ calling it from your script will throw or no-op.
   in a top-level `var`.
 
 **Geometry**
-- `ctx.width`, `ctx.height` mirror the `w` / `h` arguments to `paint`.
+- `ctx.width()`, `ctx.height()` (methods) mirror the `w` / `h` arguments
+  to `paint`.
 
 **Not supported (will throw or no-op)**
 - `drawImage` from network URLs.
@@ -623,7 +630,9 @@ function paint(ctx, w, h) {
 
 ## Performance
 
-`paint` runs at 24 Hz by default. Cheap: lineTo / arc / fillText calls,
+`paint` runs at up to 60 Hz by default (configurable 1–240 via
+`dashboard.setFps`), and only while dashboard data is updating. Cheap:
+lineTo / arc / fillText calls,
 arithmetic. Avoid: building intermediate strings every frame
 (`toFixed(1)` is fine; `JSON.stringify` is not), creating new gradients
 per call (cache in a top-level `var`).

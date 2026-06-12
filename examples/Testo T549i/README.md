@@ -9,7 +9,7 @@ This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project tur
 - Restores the probe's GATT configuration from the project: service `0xFFF0`, notify characteristic `0xFFF2`, both saved by UUID.
 - Sends the vendor "enable measurement" handshake to write characteristic `0xFFF1` from the project's Control Script, so the probe starts streaming without any phone app.
 - Decodes the probe's binary notifications with a JavaScript frame parser that emits raw device units only: differential pressure in pascal and battery level in percent.
-- Converts pascal into bar and psi with two one-line Lua transforms that read the same parser channel, and shows the result on a plot, a gauge, and a battery bar.
+- Converts pascal into psi with a one-line Lua transform, and shows the result on a plot, a meter, and a battery bar.
 
 ## The BLE protocol
 
@@ -41,7 +41,7 @@ Battery level arrives the same way, with the field name `BatteryLevel`.
 
 ## Control Script: the wake-up handshake
 
-The Control Script runs `setup()` once when the device connects and `loop()` while it stays connected, like an Arduino sketch. Serial Studio reports the source as connected only after the saved service and notify characteristic are wired, so the script can write immediately:
+The Control Script runs `setup()` once when the device connects and `loop()` while it stays connected, like an Arduino sketch. Serial Studio reports the source as connected only after the saved service and notify characteristic are wired, so the script can write immediately. The handshake, condensed from the project's script:
 
 ```js
 const WRITE_UUID  = "fff1";
@@ -72,15 +72,14 @@ No unit conversion happens in the parser. That keeps it a pure description of th
 
 ## Engineering units with transforms
 
-Both pressure datasets read the same parser channel (index 1) and diverge purely through their Lua transforms:
+The pressure dataset reads parser channel 1 and converts pascal to psi in its Lua transform:
 
-| Dataset        | Index | Transform                          | Units | Widget       |
-|----------------|-------|------------------------------------|-------|--------------|
-| Pressure       | 1     | `return value * 1e-5`              | bar   | Plot         |
-| Pressure (psi) | 1     | `return value * 0.000145037738`    | psi   | Gauge        |
-| Battery Level  | 2     | none                               | %     | Bar          |
+| Dataset        | Index | Transform                               | Units | Widget       |
+|----------------|-------|-----------------------------------------|-------|--------------|
+| Pressure       | 1     | `return math.max(0, value / 6894.757)` | psi   | Meter + plot |
+| Battery Level  | 2     | none                                    | %     | Bar          |
 
-Adding another unit (kPa, inHg, MPa) is one more dataset with a one-line transform; the parser stays untouched. The gauge spans -15 to 870 psi and the plot -1 to 60 bar, matching the probe's measurement range.
+Adding another unit (bar, kPa, inHg) is one more dataset with a one-line transform that reads the same channel; the parser stays untouched. The meter spans 0 to 1000 psi, and the `math.max` clamp pins negative sensor drift to zero.
 
 ## Project configuration
 
@@ -98,4 +97,4 @@ Adding another unit (kPa, inHg, MPa) is one more dataset with a one-line transfo
 1. Open the project and select Bluetooth LE as the input source.
 2. Power on the probe and pick it from the device list (it advertises as `T549i SN:...`).
 3. Click Connect. Serial Studio restores the service and notify characteristic, the Control Script sends the enable sequence, and readings start streaming.
-4. Clamp the probe on a pressure port and watch the gauge. Unpressurized, it reads a few hundredths of a bar around zero from sensor drift.
+4. Clamp the probe on a pressure port and watch the meter. Unpressurized, it reads zero; the transform clamps negative sensor drift.

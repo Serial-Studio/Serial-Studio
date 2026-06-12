@@ -24,6 +24,8 @@ import QtGraphs
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
+
 Item {
   id: root
 
@@ -45,6 +47,14 @@ Item {
   property bool triggerEditing: false
   property alias plotArea: _graph.plotArea
   property alias curveColors: _theme.seriesColors
+
+  //
+  // Area-under-curve fill: assign a curve series to areaFillSource and the fill
+  // renders as a GPU triangle strip under the crosshair overlay (PlotAreaFill)
+  //
+  property var areaFillSource: null
+  property real areaFillBaseline: 0
+  property color areaFillColor: "transparent"
 
   //
   // Emitted when the user drags the trigger-level line; the parent writes the
@@ -635,6 +645,25 @@ Item {
         }
       }
     }
+  }
+
+  //
+  // Area-under-curve fill, tracking the visible window so it follows zoom/pan
+  //
+  PlotAreaFill {
+    clip: true
+    yMin: root.yVisibleMin
+    xMin: root.xVisibleMin
+    color: root.areaFillColor
+    source: root.areaFillSource
+    width: _graph.plotArea.width
+    height: _graph.plotArea.height
+    baseline: root.areaFillBaseline
+    x: _graph.x + _graph.plotArea.x
+    y: _graph.y + _graph.plotArea.y
+    visible: root.areaFillSource !== null
+    yMax: root.yVisibleMin + root.yVisibleRange
+    xMax: root.xVisibleMin + root.xVisibleRange
   }
 
   //

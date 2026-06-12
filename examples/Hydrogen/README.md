@@ -41,7 +41,7 @@ Where:
 
 - `x, y, z`: electron position in Cartesian coordinates (in units of $$a_0$$).
 - `psi2`: probability density $$\psi^2(r) = |\psi(r)|^2$$.
-- `r`: radial distance from the nucleus (in units of $$a_0$$).
+- `r`: radial distance from the nucleus (in units of $$a_0$$). The project maps only the first four columns; `r` provides spatial context.
 
 Example:
 
@@ -49,19 +49,21 @@ Example:
 
 ## How to run
 
+The script needs Python 3.6 or later and uses only the standard library.
+
 1. Run the simulation:
 
    `python3 hydrogen.py`
 
 2. In Serial Studio:
    - Open the `Hydrogen.ssproj` project file.
-   - Set the input source to UDP, port `9000`.
+   - Confirm the input source is UDP on local port `9000` (the project file stores this configuration).
    - Click **Connect**.
 
 ## Visualizations
 
-- **3D Plot.** The live electron cloud in space.
-- **XY Plot.** $$\psi^2$$ vs $$x$$, showing spatial density.
+- **3D Plot (`3D Visualization`).** The live electron cloud in space, driven by the `X`, `Y`, and `Z` datasets.
+- **Plot (`Probability Density`).** The `ψ²` dataset plotted against `X`, showing spatial density.
 
 ## Files included
 
@@ -74,3 +76,4 @@ Example:
 
 - This simulation doesn't numerically solve the Schrödinger equation. It samples from the known analytical 1s solution.
 - All spatial values are in normalized Bohr units $$a_0 = 1$$.
+- For a clearer point cloud, enable the scatter plot style instead of interpolated line plots.

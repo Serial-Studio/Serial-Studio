@@ -348,7 +348,7 @@ Subscribes to a broker topic filter and feeds each received payload into the fra
 
 ## Multi-device mode
 
-When a project file defines multiple sources, Serial Studio runs in multi-device mode. Each source sets its own bus type, connection settings, frame delimiters, and (optionally) JavaScript parser.
+When a project file defines multiple sources, Serial Studio runs in multi-device mode. Each source sets its own bus type, connection settings, frame delimiters, and (optionally) a frame parser in Lua or JavaScript.
 
 **Key behaviors:**
 

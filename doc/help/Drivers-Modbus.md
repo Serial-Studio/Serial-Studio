@@ -2,7 +2,7 @@
 
 Modbus is a long-standing industrial protocol. Designed in 1979 by Modicon for their PLCs, it is now a de-facto standard across factory automation, building management, energy metering, and process control. PLCs, RTUs, and SCADA equipment overwhelmingly speak Modbus, so Serial Studio uses it to read most factory-floor devices.
 
-Serial Studio Pro implements both **Modbus RTU** (over serial) and **Modbus TCP** (over Ethernet), and ships a [register-map importer](Auto-Generating-Projects.md) that turns vendor CSV/XML/JSON files into a working project automatically.
+Serial Studio Pro implements both **Modbus RTU** (over serial) and **Modbus TCP** (over Ethernet), and includes a [register-map importer](Auto-Generating-Projects.md) that turns vendor CSV/XML/JSON files into a working project automatically.
 
 ## What is Modbus?
 
@@ -121,29 +121,37 @@ The standard Modbus TCP port is **502**.
 
 ## How Serial Studio uses it
 
-Serial Studio acts as the master (Modbus client) and can poll any number of slaves on the same physical link.
+Serial Studio acts as the master (Modbus client). One connection polls one slave address; every configured register group is read from that slave. Writes from [Output Controls](Output-Controls.md) target holding registers on the same slave (one or two consecutive registers per write).
 
 ### Configuration model
 
 Setup is a hierarchy:
 
-1. **Connection.** Choose RTU (serial port plus baud rate) or TCP (host plus port).
-2. **Slave address.** 1 to 247 for RTU, Unit ID for TCP.
-3. **Register groups.** One group per contiguous block of same-type registers you want to read. Each group has:
-   - Register type (coils, discrete inputs, holding, input).
-   - Starting address (0-based, protocol numbering).
-   - Count of registers to read in one request.
-4. **Poll interval.** How often Serial Studio reissues all the read requests.
+1. **Protocol.** Modbus RTU or Modbus TCP (default: TCP).
+   - RTU: **Serial Port**, **Baud Rate** (default 9600), **Parity** (default None), **Data Bits** (default 8), **Stop Bits** (default 1).
+   - TCP: **Host** (default `127.0.0.1`) and **Port**. Serial Studio defaults to port 5020, the unprivileged port most local simulators bind; real devices almost always listen on 502.
+2. **Slave Address.** 1 to 247 for RTU, Unit ID for TCP. Default 1.
+3. **Register groups** (the **Configure Register Groups…** button). One group per contiguous block of same-type registers to read. Each group has:
+   - Register type (Holding Registers, Input Registers, Coils, Discrete Inputs).
+   - Starting address (0-based, protocol numbering, 0-65535).
+   - Count of entries to read in one request: 1 to 125. The cap applies to coil and discrete-input groups as well, even though the protocol allows more bits per read.
+4. **Poll Interval (ms).** How often Serial Studio restarts the read cycle. Default 100 ms, minimum 10 ms.
 
-On each poll cycle, Serial Studio iterates through every configured register group, sends the read request, parses the response, and emits a frame containing the read values. The frame parser then extracts named datasets from those values.
+On each poll tick, Serial Studio reads the groups sequentially: it sends the request for the first group, waits for the reply, then moves to the next. Each reply is published to the frame parser as its own binary frame in RTU layout, `[slave address, function code, byte count, data...]`, with no CRC appended; the same layout is used on TCP connections. Register data arrives big-endian (high byte first); coil and discrete-input data arrives as packed bits, least-significant bit first. A reply that reports an error produces no frame. If a reply is still outstanding when the timer fires again, that cycle is skipped, so a slow slave lowers the effective poll rate instead of queueing requests. Requests time out after 1000 ms with 3 retries.
+
+The frame parser extracts named datasets from those bytes through its `parse(frame)` entry point, where `frame` is the byte array above (use the **Binary** decoder and no frame delimiters). Because the groups arrive as separate frames, a hand-written parser must track which group each frame belongs to; the auto-generated Lua parser counts frames through the cycle. See [Frame Parser Scripting](JavaScript-API.md).
 
 ### Auto-generation
 
-For devices with documented register maps, the [Modbus map importer](Auto-Generating-Projects.md) reads vendor CSV/XML/JSON files and generates the register groups, datasets, and a complete Lua frame parser automatically. This is the recommended starting point.
+For devices with documented register maps, the [Modbus map importer](Auto-Generating-Projects.md) (**Import Register Map…** in the setup panel) reads vendor CSV/XML/JSON files and generates the register groups, datasets, and a complete Lua frame parser automatically. This is the recommended starting point. Without a vendor file, the **Generate Project** button in the register-groups dialog builds an equivalent project from the groups configured by hand.
 
 ### Threading
 
 The Modbus driver wraps Qt's `QModbusClient` and runs on the main thread. Polling is event-driven (no busy loop); Qt's async I/O delivers responses via signals. See [Threading and Timing Guarantees](Threading-and-Timing.md).
+
+### API control
+
+The [Socket API](API-Reference.md) and the in-app [AI Assistant](AI-Assistant.md) configure this driver through the `io.modbus.*` command scope. Mutations: `setProtocolIndex` (param `protocolIndex`: 0 = RTU, 1 = TCP), `setSlaveAddress` (`address`: 1-247), `setPollInterval` (`intervalMs`: minimum 10), `setHost` (`host`), `setPort` (`port`), `setSerialPortIndex` (`portIndex`), `setBaudRate` (`baudRate`), `setParityIndex` (`parityIndex`), `setDataBitsIndex` (`dataBitsIndex`), `setStopBitsIndex` (`stopBitsIndex`), `addRegisterGroup` (`type`: 0 = Holding Registers, 1 = Input Registers, 2 = Coils, 3 = Discrete Inputs; `startAddress`: 0-65535; `count`: 1-125), `removeRegisterGroup` (`groupIndex`), `clearRegisterGroups`. Read-only: `getConfig`, `listProtocols`, `listSerialPorts`, `listParities`, `listDataBits`, `listStopBits`, `listBaudRates`, `listRegisterTypes`, `listRegisterGroups`. For the AI Assistant the setters are device-gated: blocked until the user ticks **Allow device control**, and each call still requires confirmation.
 
 For step-by-step setup, see the [Protocol Setup Guides, Modbus section](Protocol-Setup-Guides.md).
 
@@ -153,9 +161,9 @@ For step-by-step setup, see the [Protocol Setup Guides, Modbus section](Protocol
 - **Off-by-one address.** PLC numbering versus protocol numbering. If the docs say "holding register 40101", the protocol address is *100*, not 40101 and not 101.
 - **CRC errors on RTU.** Almost always a wiring or termination issue. RS-485 needs 120 Ω terminators at both ends of the trunk. Stub branches longer than a few inches corrupt the CRC at high baud rates.
 - **Wrong byte order for 32-bit values.** Read raw 16-bit registers, inspect the bytes, and compare them to the vendor documentation. Most modern devices use big-endian word and big-endian byte order. A float that reads as `1.234e-23` is being decoded with the wrong endianness.
-- **Polling too fast.** Some devices, especially older PLCs, cannot process requests faster than about one every 100 ms. Serial Studio is happy to poll at 10 ms, but the device may not respond. Slow the poll interval down.
+- **Polling too fast.** Some devices, especially older PLCs, cannot process requests faster than about one every 100 ms. Serial Studio accepts intervals down to 10 ms, but when a reply is still pending at the next tick the whole cycle is skipped, so an overdriven slave shows up as a low or irregular frame rate. Slow the poll interval down.
 - **TCP works but RTU does not.** RS-485 is an unforgiving electrical environment: long cables, missing ground, intermittent termination, or missing bias resistors can all break it. Some adapters lack pull-up/pull-down on the idle bus and need an external biasing network. An oscilloscope on the line is the fastest way to diagnose this.
-- **"Illegal data address" exception.** The slave's memory map does not contain that register. Recheck the vendor documentation. Some PLCs only respond to addresses configured in their program; others allow reads of any address.
+- **"Illegal data address" exception.** The slave's memory map does not contain that register. Recheck the vendor documentation. Some PLCs only respond to addresses configured in their program; others allow reads of any address. Serial Studio discards error replies, so a group that triggers this exception produces no frames at all.
 - **Slave responds slowly under load.** Modern Modbus TCP is fast; Modbus RTU at 9600 baud is slow by design. A 60-register read takes about 12 ms of wire time alone, plus device processing time. Do not expect kilohertz polling on serial.
 
 ## Further reading

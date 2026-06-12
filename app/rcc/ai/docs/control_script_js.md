@@ -34,7 +34,7 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
 |---|---|
 | `apiCall(method, params)` | Call ANY API command by name; marshalled (blocking) to the GUI thread. Returns the command's response object (`{ok, result?, error?}`). |
 | `delay(ms)` | Sleep without tripping the watchdog. |
-| `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock — never compare with `Date.now()`), `ageMs` (milliseconds since arrival — use this for staleness/watchdogs), `channels`, `text`. |
+| `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock — never compare with `Date.now()`), `ageMs` (milliseconds since arrival — use this for staleness/watchdogs), `values` (the parser tokens, with `valueCount` and optional `base64`), `text`. |
 | `refreshDashboard()` | Re-runs every dataset transform from the last received values and republishes to the dashboard (no export side effects). Call after `tableSet()` writes so they render while the device is silent. |
 | `ensureDashboard(spec)` | Declaratively create missing groups/datasets (matched by title / parser index). Existing items are never modified; memoized, so calling it every `loop()` is free. |
 | `tableGet(table, register)` | Read a data-table register; `undefined` when missing (so `tableGet(t, r) \|\| fallback` works). |

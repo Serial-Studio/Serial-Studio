@@ -25,7 +25,9 @@ You can also browse and download examples directly from Serial Studio via **Help
 | [MCP Client](MCP%20Client) | Model Context Protocol client for AI integration | Advanced | |
 | [Modbus PLC Simulator](Modbus%20PLC%20Simulator) | Hydraulic test stand Modbus TCP simulator | Intermediate | Yes |
 | [MPU6050](MPU6050) | MPU6050 accelerometer and gyroscope visualization | Beginner | |
+| [MQTT Subscriber Example](MQTT%20Subscriber%20Example) | Live Helsinki transit vehicle tracking over public MQTT | Intermediate | Yes |
 | [NI DAQmx](NI%20DAQmx) | NI DAQ device data acquisition bridge | Intermediate | |
+| [Protobuf Example](Protobuf%20Example) | Protocol Buffers schema import with binary auto-detect parsing | Intermediate | |
 | [PulseSensor](PulseSensor) | Heart rate PPG sensor with signal filtering | Beginner | |
 | [RC Plane Simulator](RC%20Plane%20Simulator) | RC plane flight telemetry simulator | Intermediate | |
 | [System Monitor](System%20Monitor) | Live CPU, memory, disk, and network dashboard | Intermediate | Yes |

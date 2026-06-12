@@ -22,14 +22,15 @@ ISS data is pulled from the [Where the ISS at?](https://wheretheiss.at/) API, wh
 ## Project features
 
 - Real-time map tracking of the ISS.
-- Altitude bar graph with configurable alarms.
-- Velocity gauge with alarm thresholds.
+- Altitude bar graph scaled from 300 to 700 km.
+- Velocity gauge scaled from 27,000 to 28,500 km/h.
 - UDP-based telemetry stream using a simple JSON format.
 - Visual layout configured entirely in Serial Studio's project editor.
 
 ## Data format
 
-Each UDP frame is a newline-delimited JSON object:
+Each UDP frame is a newline-terminated JSON object. The script forwards the full API
+response; the frame parser reads these four fields:
 
 ```json
 {
@@ -50,8 +51,7 @@ The widgets then map to array indices:
 
 - `Latitude`: index 1.
 - `Longitude`: index 2.
-- `Altitude (m)`: index 3 (first group).
-- `Altitude (km)`: index 3 (second group).
+- `Altitude`: index 3, used twice (the `ISS Position` map group and the `Sensor Readings` bar graph).
 - `Speed`: index 4.
 
 ## How to run
@@ -75,8 +75,8 @@ The widgets then map to array indices:
 ## Visualizations
 
 - **Map widget.** Live ISS position by latitude and longitude.
-- **Bar graph.** Altitude in kilometers, with min/max alarms.
-- **Gauge.** Orbital speed, with low/high alarm threshold zones.
+- **Bar graph.** Altitude in kilometers, on a 300 to 700 km scale.
+- **Gauge.** Orbital speed, on a 27,000 to 28,500 km/h scale.
 
 ## Files
 

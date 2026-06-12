@@ -151,11 +151,14 @@ actionFire(actionId)             // -> { ok: true } | { ok: false, error: "..." 
 
 Both are synchronous, fire-and-forget, and never throw. `deviceWrite` defaults `sourceId` to the painter's group `sourceId`; pass an explicit one to target a different source.
 
-**Important:** `paint()` runs on every dashboard tick (60 Hz by default). Calling `deviceWrite` or `actionFire` from `paint()` will saturate the link. Use them from `onFrame()` (called once per parsed frame, before the next paint), or guard with mouse / state conditions:
+**Important:** `paint()` runs on every dashboard tick (60 Hz by default). Calling `deviceWrite` or `actionFire` from `paint()` will saturate the link. `onFrame()` runs at the same cadence (once per dashboard tick, with frames batched at high rates), so move the calls there and guard them on a state transition or a `frame.number` change:
 
 ```javascript
+var alarmRaised = false;
 function onFrame() {
-  if (datasets[0].value > 100) actionFire(7);   // existing "Alarm" action
+  var high = datasets[0].value > 100;
+  if (high && !alarmRaised) actionFire(7);   // existing "Alarm" action
+  alarmRaised = high;
 }
 ```
 
@@ -210,7 +213,7 @@ For full circles, `moveTo(cx + r, cy)` is sufficient.
 
 ### Text
 
-`fillText(text, x, y)`, `strokeText(text, x, y)`, `measureTextWidth(text)`. Honors the current `font`, `textAlign`, and `textBaseline`. Note that `measureTextWidth` returns a number directly, not a metrics object.
+`fillText(text, x, y)`, `strokeText(text, x, y)`, `measureTextWidth(text)`, `measureText(text)`. Honors the current `font`, `textAlign`, and `textBaseline`. `measureTextWidth` returns the advance width as a plain number; `measureText` returns a metrics object with `width`, `actualBoundingBoxAscent`, `actualBoundingBoxDescent`, `fontBoundingBoxAscent`, and `fontBoundingBoxDescent`.
 
 ### Images
 
@@ -309,7 +312,7 @@ The double space in `"STEREO  VU"` widens the inter-letter spacing without requi
 
 ### Segmented bars
 
-Because gradients are not available, the templates draw bars as a sequence of solid-color segments. Each segment is rendered in one of two states (lit or unlit) so the full range of the bar remains visible:
+The templates draw bars as a sequence of solid-color segments rather than a gradient fill. Each segment is rendered in one of two states (lit or unlit) so the full range of the bar remains visible:
 
 ```javascript
 const SEGMENTS = 32;

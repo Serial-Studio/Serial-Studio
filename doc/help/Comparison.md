@@ -6,7 +6,7 @@ A comparison of Serial Studio against other data visualization and telemetry too
 
 | Tool                      | Cost          | Real-time    | Multi-protocol                | GUI config  | Open source   | Best for                              |
 |---------------------------|---------------|--------------|-------------------------------|-------------|---------------|---------------------------------------|
-| **Serial Studio**         | Free + Pro    | Excellent    | Serial/BLE/MQTT/TCP/UDP       | Yes         | GPL-3.0       | Embedded telemetry, IoT, education    |
+| **Serial Studio**         | Free + Pro    | Excellent    | Serial/BLE/TCP/UDP/MQTT/Modbus/CAN/USB/HID/Audio | Yes | GPL-3.0 | Embedded telemetry, IoT, education    |
 | Arduino Serial Plotter    | Free          | Basic        | Serial only                   | No config   | GPL           | Quick Arduino debugging               |
 | Processing                | Free          | Manual       | Manual                        | Code-based  | LGPL          | Custom visualizations, art projects   |
 | MATLAB                    | $$$$          | Good         | Via toolboxes                 | Scripting   | Proprietary   | Scientific computing, academia        |
@@ -98,7 +98,7 @@ MATLAB is industry-standard software for numerical computing and data analysis.
 - **Serial Studio GPL:** free forever.
 - **Serial Studio Pro:** monthly, yearly, or lifetime licenses (check current pricing at [serial-studio.com](https://serial-studio.com)).
 
-**Real-time capability.** Serial Studio updates at 60 FPS with no scripting. MATLAB requires writing data acquisition code and periodic plot updates.
+**Real-time capability.** Serial Studio redraws dashboards at up to 60 FPS with no scripting, and its frame-parsing pipeline sustains 256,000 frames per second (a CI-gated benchmark). MATLAB requires writing data acquisition code and periodic plot updates.
 
 ### Serial Studio vs Python + Matplotlib/PySerial
 
@@ -197,7 +197,6 @@ TeraTerm and PuTTY are terminal emulators, mainly for text-based communication.
 
 - You're sending AT commands to modems.
 - You need SSH or Telnet to a remote server.
-- You're doing binary file transfers (XMODEM, YMODEM).
 - You want a serial console for embedded Linux (U-Boot, a shell).
 
 **Use Serial Studio instead when:**
@@ -206,6 +205,7 @@ TeraTerm and PuTTY are terminal emulators, mainly for text-based communication.
 - You're monitoring structured telemetry, not just text.
 - You want CSV data logging.
 - You need multiple simultaneous data streams.
+- You need file transfers (XMODEM, YMODEM, ZMODEM) alongside telemetry. Pro includes all three; see [File Transmission](File-Transmission.md).
 - You want plots and gauges rather than a text console.
 
 ### Serial Studio vs CoolTerm
@@ -268,7 +268,7 @@ Plotly Dash is a Python framework for building web-based analytical dashboards.
 ### Choose Serial Studio if
 
 - You need real-time telemetry dashboards without coding.
-- Your data comes from serial, BLE, MQTT, or network sockets.
+- Your data comes from serial, BLE, MQTT, Modbus, CAN Bus, or network sockets.
 - You want ready-made visualization widgets with little setup.
 - Your team includes non-programmers who need access.
 - You need CSV export.

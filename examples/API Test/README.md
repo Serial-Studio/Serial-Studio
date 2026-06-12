@@ -28,9 +28,9 @@ This Python client provides:
 
 1. **Serial Studio** running with API Server enabled
    - Open Serial Studio
-   - Go to **Settings → Miscellaneous**
-   - Enable **API Server**
-   - Default port: 7777 (configurable)
+   - Open **Preferences**, **General** tab, **Advanced** section
+   - Toggle **Enable API Server (Port 7777)**
+   - The server listens on port 7777
 
 2. **Python 3.8 or later** (no additional dependencies required)
 
@@ -109,9 +109,12 @@ Inside the REPL, you can use these special commands:
 ```bash
 $ python test_api.py interactive
 
-Serial Studio API Interactive Client
-Connected to 127.0.0.1:7777
-Type 'help' for available commands, 'list' to see all API commands, or 'quit' to exit.
+Connecting to 127.0.0.1:7777...
+Connected!
+
+==========================================================
+        Serial Studio Interactive Mode (REPL)
+==========================================================
 
 ss> io.getStatus
 {
@@ -140,15 +143,15 @@ ss> io.uart.getConfig
 }
 
 ss> list
-Available commands (~290 total):
-  api.getCommands - Get list of all available commands
-  io.connect - Open the configured connection
-  io.disconnect - Close the current connection
-  io.getStatus - Get connection state and bus type
-  io.uart.listPorts - List available serial ports
-  csvPlayer.open - Open CSV file for playback
-  project.exportJson - Export the active project as JSON
-  project.template.list - List bundled project templates
+Available Commands (...):
+
+  api.*
+    api.getCommands       Get list of all available commands
+
+  io.*
+    io.connect            Open the configured connection
+    io.disconnect         Close the current connection
+    io.getStatus          Get connection state and bus type
   ...
 
 ss> quit
@@ -185,8 +188,8 @@ python test_api.py send io.uart.setBaudRate --params '{"baudRate": 115200}'
 # Show all API commands with descriptions
 python test_api.py list
 
-# Output as JSON (for scripting)
-python test_api.py list --json
+# Output as JSON (for scripting); --json goes before the mode
+python test_api.py --json list
 ```
 
 ### Batch Commands from File
@@ -248,8 +251,8 @@ introspects the live server with `api.getCommands`, then exercises:
 # Run smoke tests
 python test_api.py test
 
-# Verbose output (logs each request/response)
-python test_api.py test --verbose
+# Verbose output (logs each request/response); --verbose goes before the mode
+python test_api.py --verbose test
 ```
 
 If a command vanishes from the C++ registry, the corresponding line in
@@ -267,9 +270,6 @@ Use `python test_api.py list` to see all commands, or run `python test_api.py in
 - `io.uart.*` - UART/Serial driver
 - `io.network.*` - Network (TCP/UDP) driver
 - `io.ble.*` - Bluetooth Low Energy driver
-- `io.usb.*` - Raw USB driver
-- `io.hid.*` - HID driver
-- `io.process.*` - Process I/O driver
 - `console.*` - Console/terminal control
 - `dashboard.*` - Dashboard introspection
 - `project.*` - Project model & editor
@@ -290,7 +290,10 @@ Use `python test_api.py list` to see all commands, or run `python test_api.py in
 - `io.modbus.*` - Modbus RTU/TCP driver
 - `io.canbus.*` - CAN Bus driver
 - `io.audio.*` - Audio input/output driver
-- `mqtt.*` - MQTT client configuration (`connect`, `disconnect`, plus broker/auth/TLS/will/identity setters)
+- `io.usb.*` - Raw USB driver
+- `io.hid.*` - HID driver
+- `io.process.*` - Process I/O driver
+- `project.mqtt.publisher.*` / `project.mqtt.subscriber.*` - MQTT publisher/subscriber configuration (`getConfig`, `setConfig`, `getStatus`)
 - `sessions.*` - Session database browse/replay/export
 
 For the full reference with parameters and examples, see [API-Reference.md](../../doc/help/API-Reference.md).
@@ -386,13 +389,13 @@ python test_api.py send dashboard.setOperationMode -p mode=2
 # Set visualization refresh rate (FPS)
 python test_api.py send dashboard.setFps -p fps=60
 
-# Set data points per plot
-python test_api.py send dashboard.setPoints -p points=500
+# Set the visible plot time window (seconds)
+python test_api.py send dashboard.setTimeRange -p seconds=10
 
 # Query individual settings
 python test_api.py send dashboard.getOperationMode
 python test_api.py send dashboard.getFps
-python test_api.py send dashboard.getPoints
+python test_api.py send dashboard.getTimeRange
 ```
 
 ## API Protocol Reference
@@ -457,7 +460,12 @@ All messages are JSON objects terminated by a newline (`\n`).
 | 3 | Audio | Pro |
 | 4 | Modbus (RTU/TCP) | Pro |
 | 5 | CAN Bus | Pro |
-| 6 | MQTT | Pro |
+| 6 | USB (raw, libusb) | Pro |
+| 7 | HID (hidapi) | Pro |
+| 8 | Process I/O | Pro |
+| 9 | MQTT Subscriber | Pro |
+
+Use `io.listBuses` to discover the bus types your build supports.
 
 ### Operation Modes (for `dashboard.setOperationMode`)
 
@@ -475,7 +483,7 @@ All messages are JSON objects terminated by a newline (`\n`).
 
 **Solutions:**
 1. Verify Serial Studio is running
-2. Check API Server is enabled (Settings → Extensions)
+2. Check API Server is enabled (Preferences → General → Advanced)
 3. Confirm port number (default: 7777)
 4. Try specifying host/port explicitly:
    ```bash
@@ -509,7 +517,7 @@ All messages are JSON objects terminated by a newline (`\n`).
    python test_api.py list
    ```
 
-2. Check if command requires Pro license (see API_REFERENCE.md)
+2. Check if the command requires a Pro license ([API-Reference.md](../../doc/help/API-Reference.md))
 
 3. Verify command spelling and case (commands are case-sensitive)
 
@@ -518,14 +526,14 @@ All messages are JSON objects terminated by a newline (`\n`).
 ### Scripting with JSON Output
 
 ```bash
-# Get status and extract specific field
-STATUS=$(python test_api.py send io.getStatus --json)
+# Get status and extract specific field (--json goes before the mode)
+STATUS=$(python test_api.py --json send io.getStatus)
 IS_CONNECTED=$(echo $STATUS | jq -r '.result.isConnected')
 
 if [ "$IS_CONNECTED" = "true" ]; then
     echo "Already connected"
 else
-    python test_api.py send io.connect --json
+    python test_api.py --json send io.connect
 fi
 ```
 
@@ -594,7 +602,9 @@ send_command("io.uart.setBaudRate", {"baudRate": 115200})
 
 - `test_api.py` - Main Python client (CLI, REPL, tests)
 - `README.md` - This documentation file
-- `API_REFERENCE.md` - Complete API command reference
+- `doc/screenshot.png` - Screenshot used in this README
+
+The complete API command reference lives at [doc/help/API-Reference.md](../../doc/help/API-Reference.md).
 
 ## License
 

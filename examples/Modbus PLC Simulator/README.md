@@ -84,21 +84,21 @@ python3 plc_simulator.py
 **Expected output:**
 
 ```
-======================================================================
+========================================================================
   HYDRAULIC TEST STAND SIMULATOR
-======================================================================
+========================================================================
   Server: 0.0.0.0:5020  |  Update: 50ms (20Hz)
 
   Registers (FC03 Holding):
     0:E-Stop  1:Start  2:Temp(°F)  3:PSI  4:RPM  5:Valve(%)
     6:GPM(÷10)  7:Load(%)  8:Vibration(÷10 mm/s)
 
-  Phases: STARTUP → RUNNING → PRESSURE_TEST → (FAILURE → SHUTDOWN)
+  Phases: STARTUP -> RUNNING -> PRESSURE_TEST -> (FAILURE -> SHUTDOWN)
   Flags:  E=E-Stop  A=Alarm(>2800PSI)  F=Failure
-======================================================================
+========================================================================
 
-[STARTUP ] -   R:   0 P:  14 F: 0.0 L: 0 V:0.1 T: 72
-[STARTUP ] -   R: 180 P: 110 F: 4.8 L:17 V:1.8 T: 72
+10:30:00 [STARTUP ] -   R:   0 P:  14 F: 0.0 L: 0 V:0.1 T: 72
+10:30:01 [STARTUP ] -   R: 180 P: 110 F: 4.8 L:17 V:1.8 T: 72
 ...
 ```
 
@@ -124,14 +124,13 @@ python3 plc_simulator.py
 The included project file (`Modbus PLC Simulator.ssproj`) provides:
 
 - **Status LEDs.** Emergency Stop and Running indicators.
-- **Temperature bar.** Oil temperature with alarm thresholds.
-- **Pressure gauge.** System pressure with high alarm at 2800 PSI.
-- **RPM gauge.** Motor speed with color-coded zones.
+- **Temperature plot.** Oil temperature trend (72 to 180 °F).
+- **Pressure gauge.** System pressure (0 to 3000 PSI).
+- **RPM gauge.** Motor speed (0 to 3600 RPM).
 - **Valve position bar.** Control valve opening percentage.
 - **Flow rate graph.** Real-time pump flow monitoring.
-- **Motor load gauge.** Motor load percentage.
+- **Motor load bar.** Motor load percentage.
 - **Vibration graph.** ISO 10816 vibration monitoring.
-- **Time-series plots.** Trend visualization for every parameter.
 
 ## Modbus register map CSV
 
@@ -148,13 +147,12 @@ To import:
 
 ## Frame parser
 
-Serial Studio auto-generates a JavaScript frame parser based on the register map. The parser:
+Serial Studio auto-generates a JavaScript frame parser based on the register map. The parser embedded in this project:
 
-- Handles all Modbus function codes (0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x10).
-- Parses both register and coil/discrete input responses.
+- Reads the register payload from each Modbus response (`[slaveAddr, funcCode, byteCount, ...data]`).
+- Decodes the nine 16-bit big-endian holding registers.
 - Applies scaling factors (Flow Rate and Vibration are divided by 10).
-- Handles Modbus exception responses (0x80+).
-- Keeps the last known good values on errors.
+- Keeps the last known good values when a frame is too short.
 
 ## Files
 

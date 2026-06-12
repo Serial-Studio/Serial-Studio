@@ -275,7 +275,7 @@ end
 
 Because Computed registers hold the last value written, they're a natural place for state that has to survive between frames, the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
 
-Table `calibration`:
+Table `runtime`:
 
 | Register        | Type     | Default |
 |-----------------|----------|---------|
@@ -289,11 +289,11 @@ function transform(_, info)
   if T == nil then return 0 end
   local ts = info.timestampMs or 0
 
-  local prevT  = tableGet("calibration", "last_temp")
-  local prevTs = tableGet("calibration", "last_t_ms")
+  local prevT  = tableGet("runtime", "last_temp")
+  local prevTs = tableGet("runtime", "last_t_ms")
 
-  tableSet("calibration", "last_temp", T)
-  tableSet("calibration", "last_t_ms", ts)
+  tableSet("runtime", "last_temp", T)
+  tableSet("runtime", "last_t_ms", ts)
 
   if prevTs == 0 then return 0 end
   local dt = ts - prevTs

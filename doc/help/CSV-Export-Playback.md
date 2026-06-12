@@ -30,10 +30,10 @@ CSV export is toggled in the Setup panel of the main window, under **Data Export
 
 ### File location
 
-Exported CSV files land under your Documents directory in a structured hierarchy:
+Exported CSV files land under your workspace folder (Documents/Serial Studio by default; configurable in Settings) in a structured hierarchy:
 
 ```
-Documents/Serial Studio/CSV/<Project Name>/<YYYY-MM-DD_HH-MM-SS>.csv
+<Workspace>/CSV/<Project Name>/<YYYY-MM-DD_HH-MM-SS>.csv
 ```
 
 For example, a session started at 3:30:05 PM on March 17, 2026, for a project named "Weather Station" would produce:
@@ -41,6 +41,10 @@ For example, a session started at 3:30:05 PM on March 17, 2026, for a project na
 ```
 Documents/Serial Studio/CSV/Weather Station/2026-03-17_15-30-05.csv
 ```
+
+### Automation
+
+Export and playback can be driven without the GUI. The [API](API-Reference.md) exposes `csvExport.getStatus`, `csvExport.setEnabled`, and `csvExport.close` for export, plus the `csvPlayer.*` family (`open`, `play`, `pause`, `setProgress`, `getStatus`, and frame stepping) for playback. The `--csv-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns export on at startup.
 
 ### File format
 

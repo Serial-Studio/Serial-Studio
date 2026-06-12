@@ -1,6 +1,6 @@
 # Bluetooth Low Energy Driver
 
-The Bluetooth Low Energy (BLE) driver lets Serial Studio connect to any BLE peripheral that exposes its data through GATT services and characteristics. It is shipped in the free build. BLE is the common wireless transport for battery-powered sensors, fitness wearables, and prototyping boards such as the ESP32 and nRF52.
+The Bluetooth Low Energy (BLE) driver lets Serial Studio connect to any BLE peripheral that exposes its data through GATT services and characteristics. It is included in the free build. BLE is the common wireless transport for battery-powered sensors, fitness wearables, and prototyping boards such as the ESP32 and nRF52.
 
 For "classic" Bluetooth devices (the older 2.x flavor that uses the Serial Port Profile), the OS already exposes a virtual COM port. Use the [UART driver](Drivers-UART.md) for those. This page covers BLE only.
 
@@ -81,7 +81,7 @@ A central can use four GATT operations against a characteristic:
 - **Notify**: the peripheral pushes a new value to the central whenever the value changes. The central must enable notifications first by writing to the **Client Characteristic Configuration Descriptor (CCCD)**. This is the standard pattern for telemetry.
 - **Indicate**: like Notify, but the central acknowledges each update. Slightly more reliable, slightly slower.
 
-For Serial Studio, the operation is almost always Notify: select a characteristic, enable notifications, and every value the peripheral sends becomes a frame.
+For Serial Studio, the operation is almost always Notify: select a characteristic, enable notifications, and every value the peripheral sends flows into the incoming data stream.
 
 ### MTU and throughput
 
@@ -89,14 +89,16 @@ BLE is slow compared to USB or TCP. The default MTU (Maximum Transmission Unit) 
 
 ## How Serial Studio uses it
 
-The BLE driver wraps Qt's `QLowEnergyController` and `QLowEnergyService`. The setup flow has four steps:
+The BLE driver wraps Qt's `QLowEnergyController` and `QLowEnergyService`. The Setup Panel exposes three dropdowns, labeled **Device**, **Service**, and **Characteristic**, and the flow has four steps:
 
-1. **Scan.** Serial Studio uses `QBluetoothDeviceDiscoveryAgent` to enumerate nearby BLE peripherals. The list builds up over a few seconds.
-2. **Select device.** Pick a peripheral from the dropdown. Serial Studio connects and discovers services.
-3. **Select service.** Pick the GATT service that holds the telemetry data. Most devices expose several services; choose the one containing the characteristic you need.
-4. **Select characteristic.** Pick the specific characteristic to subscribe to. Serial Studio enables notifications on it by writing `0x0001` to the CCCD.
+1. **Scan.** Serial Studio uses `QBluetoothDeviceDiscoveryAgent` to enumerate nearby BLE peripherals. The **Device** list builds up over a few seconds; the refresh button restarts the scan. Only peripherals that advertise a name are listed.
+2. **Select device.** Pick a peripheral from the **Device** dropdown and click **Connect**. Serial Studio connects and discovers services.
+3. **Select service.** Once discovery finishes, pick the GATT service that holds the telemetry data from the **Service** dropdown. Most devices expose several services; choose the one containing the characteristic you need.
+4. **Select characteristic.** Pick the characteristic to subscribe to from the **Characteristic** dropdown. Serial Studio enables notifications on it by writing `0x0001` to the CCCD.
 
-From that point on, every notification's payload bytes become a frame, exactly as if they had arrived over UART.
+From that point on, every notification's payload bytes enter the incoming stream exactly as if they had arrived over UART, and the configured frame detection splits them into frames. Quick Plot mode frames on line endings; in a project, set the source's frame detection to **No Delimiters** to map one notification to one frame, and decode packed binary payloads in a [frame parser](JavaScript-API.md).
+
+Writes use the same selection in reverse: data sent through the console or an [action](Actions.md) is written to the selected characteristic with Write With Response. Devices that split RX and TX across two characteristics (the Nordic UART Service pattern) take writes through `io.ble.writeCharacteristic`, which resolves any characteristic in the selected service by UUID and uses Write Without Response when the characteristic supports it.
 
 The device, service, and notify characteristic are saved with the project (the device by name/address, the service and characteristic by UUID, so they survive a firmware update that reorders the GATT table). On the next connection Serial Studio reselects them automatically after discovery, and only then reports the source as connected, so anything that runs on connect (a [Control Script](Control-Script.md), an auto-execute action) sees a fully wired GATT. A control script should therefore handle only the write handshake, not service or characteristic selection.
 
@@ -116,11 +118,15 @@ This is intentional. It prevents the dropdown from snapping to a different selec
 
 The driver lives on the main thread. QtBluetooth's event-driven async I/O delivers notifications via Qt signals; there is no dedicated worker thread. See [Threading and Timing Guarantees](Threading-and-Timing.md).
 
+### Scripting and API control
+
+The same flow is scriptable through the `io.ble.*` commands of the [JSON-RPC API](API-Reference.md): `selectDevice` (`deviceIndex`), `selectService` (`serviceIndex`), and `setCharacteristicIndex` (`characteristicIndex`) select by index into the lists returned by `listDevices`, `listServices`, and `listCharacteristics`; `selectServiceByUuid` (`serviceUuid`) and `setNotifyCharacteristic` (`characteristicUuid`) select by UUID, which survives GATT-table reordering; `writeCharacteristic` (`characteristicUuid`, base64 `data`) writes to any characteristic in the selected service. `startDiscovery`, `getConfig`, and `getStatus` round out the set. UUID parameters accept the 16-bit short form (`fff1`, `0xFFF1`) or the full 128-bit form, with or without braces. When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
+
 For step-by-step setup, see the [Protocol Setup Guides, Bluetooth LE section](Protocol-Setup-Guides.md).
 
 ## Common pitfalls
 
-- **Device does not appear in the scan.** The peripheral may not be advertising, or its advertisement interval may be very long. Power-cycle it. On macOS, grant Serial Studio Bluetooth permission in **System Settings → Privacy & Security → Bluetooth**. On Linux, the user may need to be in the `bluetooth` group.
+- **Device does not appear in the scan.** The peripheral may not be advertising, or its advertisement interval may be very long. Power-cycle it. Serial Studio also hides peripherals that advertise without a name, so set a device name in the firmware. On macOS, grant Serial Studio Bluetooth permission in **System Settings → Privacy & Security → Bluetooth**. On Linux, the user may need to be in the `bluetooth` group.
 - **Connected, but no characteristic appears.** GATT discovery may not have finished. Wait a few seconds after connect; some peripherals are slow to respond to discovery requests. If nothing ever appears, the device may require pairing or bonding before exposing the service (some Nordic-based devices do).
 - **Notifications enable but no data arrives.** Notifications were probably enabled on a characteristic that does not push notifications. Check the characteristic's properties (Read / Write / Notify / Indicate). Only Notify-capable characteristics deliver data continuously.
 - **Throughput is much lower than expected.** This is BLE working as designed. The connection interval (negotiated between central and peripheral, typically 7.5 ms to 4 s) caps the packet rate. A 7.5 ms interval with a 247-byte MTU yields roughly 250 kbps of payload. Peripherals often negotiate slow intervals to save power; check the firmware for a way to request a faster interval.
@@ -139,6 +145,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Bluetooth LE section](Pr
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step BLE setup in the Setup Panel.
+- [API Reference](API-Reference.md): the `io.ble.*` command set for scripted control.
 - [Data Sources](Data-Sources.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Use Cases](Use-Cases.md): wireless sensor patterns and BLE prototyping setups.

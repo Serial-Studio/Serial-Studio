@@ -41,9 +41,9 @@ static constexpr int kShutdownWaitSliceMs = 100;
 
 /**
  * @brief Builds the worker on its own thread and tracks the connection lifecycle. The worker
- *        thread is joined on aboutToQuit, while the GUI loop can still drain the blocking
- *        apiCall marshaller; the marshaller is parented to this singleton so it outlives the
- *        worker thread.
+ *        thread is joined at the start of ModuleManager::onQuit() while every module is still
+ *        alive (aboutToQuit stays connected as an idempotent fallback); the marshaller is
+ *        parented to this singleton so it outlives the worker thread.
  */
 DataModel::ControlScript::ControlScript()
   : m_ready(false)
@@ -123,6 +123,8 @@ void DataModel::ControlScript::shutdown()
 
   if (m_thread.isRunning())
     qWarning() << "[ControlScript] Worker thread did not stop within the shutdown budget";
+  else
+    m_worker = nullptr;
 }
 
 /**
@@ -237,10 +239,14 @@ void DataModel::ControlScript::startWorker()
 /**
  * @brief Asks the worker thread to stop the running script. Always queues the (idempotent)
  *        stop so a worker that desynced from m_running can never keep an old engine alive
- *        across a connection cycle.
+ *        across a connection cycle. No-op after shutdown(): the joined worker thread has
+ *        already deleted m_worker, so the pointer dangles.
  */
 void DataModel::ControlScript::stopWorker()
 {
+  if (m_shutdown)
+    return;
+
   QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
 
   if (m_running) {

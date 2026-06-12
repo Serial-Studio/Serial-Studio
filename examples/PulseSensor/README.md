@@ -53,7 +53,7 @@ The filtered signal is printed to serial so Serial Studio can visualize it.
    - Connect your Arduino to the computer.
    - Launch Serial Studio and pick the right serial port.
    - Set the baud rate to 115200 to match the sketch.
-3. **Enable Quick Plot.** In the Setup pane, click the **Quick Plot** radio box. It plots all numeric values it receives, line by line, like the Arduino IDE's Serial Plotter.
+3. **Enable Quick Plot.** In the Setup pane, go to **FRAME PARSING** → Quick Plot (Comma Separated Values). It plots all numeric values it receives, line by line, like the Arduino IDE's Serial Plotter.
 4. **CSV export.** Serial Studio can export a playable CSV file even if you haven't created a project. Good for offline analysis or sharing.
 
 ![Serial Studio Quick Plot](doc/csv.png)

@@ -21,6 +21,10 @@ Works on both GPL and Pro builds.
 
 ## Quick Start (no hardware required)
 
+The folder includes `Protobuf Example.ssproj`, the project this walkthrough
+produces, already switched to UDP. Open it directly and jump to step 3, or
+follow the import steps to generate it yourself.
+
 ### 1. Import the schema
 
 1. Launch Serial Studio.
@@ -96,6 +100,8 @@ once the second tag is seen.
 - **`sensor.proto`** — proto3 schema with `Vec3` and `Sensor`.
 - **`sensor_simulator.py`** — UDP simulator. Hand-encodes the wire
   format with `struct`; no third-party Python packages needed.
+- **`Protobuf Example.ssproj`** — the generated project, preconfigured
+  for UDP port `7878`.
 - **`README.md`** — this file.
 
 ## See also

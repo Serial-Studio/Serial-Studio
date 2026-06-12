@@ -806,7 +806,10 @@ void IO::ConnectionManager::disconnectAllDevices()
 }
 
 /**
- * @brief Destroys the UI drivers now so their worker threads join while QApplication is alive.
+ * @brief Destroys the device managers and UI drivers. main() calls this after the QML
+ *        engine is destroyed (a live engine re-evaluates every driver binding against
+ *        null and floods the log with TypeErrors) but while QApplication is still
+ *        alive, so worker threads join cleanly instead of during static destruction.
  */
 void IO::ConnectionManager::shutdownDrivers()
 {

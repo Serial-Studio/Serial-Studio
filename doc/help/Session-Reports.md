@@ -4,7 +4,7 @@ Serial Studio Pro can export any recorded session as a **self-contained HTML rep
 
 ## Generating a report
 
-1. Open the **Session Explorer** from the toolbar or the **File** menu.
+1. Open the **Session Explorer** from the **Sessions** button on the toolbar.
 2. Select a recorded session.
 3. Click **Generate Report** in the session detail pane.
 4. Configure branding, page, and section options in the dialog (see [Options](#options)).

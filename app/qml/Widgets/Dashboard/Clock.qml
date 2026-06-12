@@ -62,7 +62,7 @@ Item {
   readonly property real secondAngle: seconds * 6
   readonly property real minuteAngle: (minutes + seconds / 60) * 6
   readonly property real hourAngle:   ((hours % 12) + minutes / 60) * 30
-  readonly property real fontSize: Math.max(10, Math.min(14, Math.min(width, height) / 22))
+  readonly property real fontSize: Math.max(10, Math.min(28, Math.min(width, height) / 22))
                                    * Cpp_Misc_CommonFonts.widgetFontScale
 
   function pad(n) { return (n < 10 ? "0" : "") + n }
@@ -89,6 +89,102 @@ Item {
   readonly property color chromeTop: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], darkBg ? 2.0 : 1.30)
   readonly property color chromeMid: Cpp_ThemeManager.colors["widget_base"]
   readonly property color chromeBot: Qt.darker(Cpp_ThemeManager.colors["widget_base"], darkBg ? 1.05 : 1.18)
+
+  //
+  // Sword-hand silhouette shared by the hour/minute hands and their drop shadows;
+  // geom supplies tipLen/tipW/baseW/neckW/tailW/tailLen/shoulderY.
+  //
+  component HandPath: ShapePath {
+    required property var geom
+
+    strokeWidth: -1
+
+    startY: needleLayer.cy - geom.shoulderY
+    startX: needleLayer.cx - geom.baseW / 2
+
+    PathLine {
+      x: needleLayer.cx - geom.tipW / 2
+      y: needleLayer.cy - geom.tipLen + geom.tipW / 2
+    }
+    PathArc {
+      radiusX: geom.tipW / 2
+      radiusY: geom.tipW / 2
+      direction: PathArc.Clockwise
+      x: needleLayer.cx + geom.tipW / 2
+      y: needleLayer.cy - geom.tipLen + geom.tipW / 2
+    }
+    PathLine {
+      y: needleLayer.cy - geom.shoulderY
+      x: needleLayer.cx + geom.baseW / 2
+    }
+    PathLine {
+      y: needleLayer.cy
+      x: needleLayer.cx + geom.neckW / 2
+    }
+    PathLine {
+      y: needleLayer.cy + geom.tailLen
+      x: needleLayer.cx + geom.tailW / 2
+    }
+    PathArc {
+      radiusX: geom.tailW / 2
+      radiusY: geom.tailW / 2
+      direction: PathArc.Clockwise
+      y: needleLayer.cy + geom.tailLen
+      x: needleLayer.cx - geom.tailW / 2
+    }
+    PathLine {
+      y: needleLayer.cy
+      x: needleLayer.cx - geom.neckW / 2
+    }
+    PathLine {
+      y: needleLayer.cy - geom.shoulderY
+      x: needleLayer.cx - geom.baseW / 2
+    }
+  }
+
+  //
+  // Right half of the same silhouette, split at the centerline ridge: filled darker
+  // so the hand reads as creased, light-catching metal instead of a flat sticker.
+  //
+  component HandFacetPath: ShapePath {
+    required property var geom
+
+    strokeWidth: -1
+
+    startX: needleLayer.cx
+    startY: needleLayer.cy - geom.tipLen
+
+    PathArc {
+      radiusX: geom.tipW / 2
+      radiusY: geom.tipW / 2
+      direction: PathArc.Clockwise
+      x: needleLayer.cx + geom.tipW / 2
+      y: needleLayer.cy - geom.tipLen + geom.tipW / 2
+    }
+    PathLine {
+      y: needleLayer.cy - geom.shoulderY
+      x: needleLayer.cx + geom.baseW / 2
+    }
+    PathLine {
+      y: needleLayer.cy
+      x: needleLayer.cx + geom.neckW / 2
+    }
+    PathLine {
+      y: needleLayer.cy + geom.tailLen
+      x: needleLayer.cx + geom.tailW / 2
+    }
+    PathArc {
+      x: needleLayer.cx
+      radiusX: geom.tailW / 2
+      radiusY: geom.tailW / 2
+      direction: PathArc.Clockwise
+      y: needleLayer.cy + geom.tailLen + geom.tailW / 2
+    }
+    PathLine {
+      x: needleLayer.cx
+      y: needleLayer.cy - geom.tipLen
+    }
+  }
 
   //
   // Persist the active SwipeView page across sessions.
@@ -131,7 +227,7 @@ Item {
         readonly property real chromeW: Math.max(3, gaugeSize * 0.025)
 
         readonly property bool showHourLabels: gaugeSize >= 130
-        readonly property real fontSize: Math.max(10, Math.min(14, gaugeSize / 22))
+        readonly property real fontSize: Math.max(10, Math.min(28, gaugeSize / 22))
                                          * Cpp_Misc_CommonFonts.widgetFontScale
 
         //
@@ -281,6 +377,85 @@ Item {
           }
 
           //
+          // Bezel inner shadow: radial falloff just inside the rim so the bezel
+          // reads as overhanging the dial face.
+          //
+          Shape {
+            id: bezelShadow
+
+            z: 1
+            smooth: true
+            antialiasing: true
+            anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
+
+            readonly property real cx: width / 2
+            readonly property real cy: height / 2
+            readonly property real rOut: width / 2 - gaugeFace.border.width
+            readonly property real rIn: bezelShadow.rOut - Math.max(5, width * 0.05)
+
+            ShapePath {
+              strokeWidth: -1
+              fillRule: ShapePath.OddEvenFill
+              fillGradient: RadialGradient {
+                focalRadius: 0
+                focalX: bezelShadow.cx
+                focalY: bezelShadow.cy
+                centerX: bezelShadow.cx
+                centerY: bezelShadow.cy
+                centerRadius: bezelShadow.rOut
+                GradientStop { position: bezelShadow.rIn / bezelShadow.rOut; color: "transparent" }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.15) }
+              }
+
+              startY: bezelShadow.cy
+              startX: bezelShadow.cx + bezelShadow.rOut
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rOut
+                radiusY: bezelShadow.rOut
+                x: bezelShadow.cx - bezelShadow.rOut
+              }
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rOut
+                radiusY: bezelShadow.rOut
+                x: bezelShadow.cx + bezelShadow.rOut
+              }
+              PathMove {
+                y: bezelShadow.cy
+                x: bezelShadow.cx + bezelShadow.rIn
+              }
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rIn
+                radiusY: bezelShadow.rIn
+                x: bezelShadow.cx - bezelShadow.rIn
+              }
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rIn
+                radiusY: bezelShadow.rIn
+                x: bezelShadow.cx + bezelShadow.rIn
+              }
+            }
+          }
+
+          //
+          // Inner-face ring redrawn opaque above the ticks so the rim line stays crisp.
+          //
+          Rectangle {
+            z: 1
+            border.width: 1
+            radius: width / 2
+            antialiasing: true
+            anchors.fill: parent
+            color: "transparent"
+            anchors.margins: parent.border.width
+            border.color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.15)
+          }
+
+          //
           // Needle layer: hour/minute use the widget_border silver palette,
           // second hand keeps the alarm tint.
           //
@@ -297,7 +472,38 @@ Item {
             readonly property color handStroke: Qt.darker(handBase, 1.35)
 
             //
-            // Hour hand: short, tapered to a rounded tip; back end stops at pivot
+            // Hour-hand drop shadow: same silhouette offset straight down in screen
+            // space, so the light direction stays fixed while the hand rotates.
+            //
+            Shape {
+              smooth: true
+              layer.samples: 16
+              layer.smooth: true
+              antialiasing: true
+              width: parent.width
+              height: parent.height
+              rotation: root.hourAngle
+              transformOrigin: Item.Center
+              y: Math.max(1, gaugeFace.width * 0.004)
+              preferredRendererType: Shape.CurveRenderer
+              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+
+              Behavior on rotation {
+                SpringAnimation {
+                  spring: 4.5
+                  damping: 0.4
+                  modulus: 360
+                }
+              }
+
+              HandPath {
+                geom: hourShape
+                fillColor: Qt.rgba(0, 0, 0, 0.10)
+              }
+            }
+
+            //
+            // Hour hand: faceted sword hand, light left facet against dark right facet
             //
             Shape {
               id: hourShape
@@ -312,13 +518,24 @@ Item {
               preferredRendererType: Shape.CurveRenderer
               layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
-              readonly property real tipLen: gaugeFace.width * 0.24
-              readonly property real tipW:  Math.max(4, hourShape.baseW * 0.50)
-              readonly property real baseW: Math.max(7, gaugeFace.width * 0.062)
+              readonly property real tipLen: gaugeFace.width * 0.26
+              readonly property real tailLen: gaugeFace.width * 0.10
+              readonly property real shoulderY: hourShape.tipLen * 0.30
+              readonly property real tipW:  Math.max(3, hourShape.baseW * 0.42)
+              readonly property real neckW: Math.max(4, hourShape.baseW * 0.55)
+              readonly property real tailW: Math.max(3, hourShape.baseW * 0.50)
+              readonly property real baseW: Math.max(7, gaugeFace.width * 0.058)
 
-              Behavior on rotation { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+              Behavior on rotation {
+                SpringAnimation {
+                  spring: 4.5
+                  damping: 0.4
+                  modulus: 360
+                }
+              }
 
-              ShapePath {
+              HandPath {
+                geom: hourShape
                 strokeWidth: 0.6
                 capStyle: ShapePath.RoundCap
                 joinStyle: ShapePath.MiterJoin
@@ -328,38 +545,57 @@ Item {
                   x2: needleLayer.cx
                   y1: needleLayer.cy
                   y2: needleLayer.cy - hourShape.tipLen
-                  GradientStop { position: 0.0; color: Qt.lighter(needleLayer.handBase, 1.15) }
-                  GradientStop { position: 0.5; color: needleLayer.handBase }
-                  GradientStop { position: 1.0; color: Qt.darker(needleLayer.handBase, 1.18) }
+                  GradientStop { position: 0.0; color: Qt.lighter(needleLayer.handBase, 1.04) }
+                  GradientStop { position: 1.0; color: Qt.lighter(needleLayer.handBase, 1.32) }
                 }
+              }
 
-                startY: needleLayer.cy
-                startX: needleLayer.cx - hourShape.baseW / 2
-
-                PathLine {
-                  x: needleLayer.cx - hourShape.tipW / 2
-                  y: needleLayer.cy - hourShape.tipLen + hourShape.tipW / 2
-                }
-                PathArc {
-                  radiusX: hourShape.tipW / 2
-                  radiusY: hourShape.tipW / 2
-                  direction: PathArc.Clockwise
-                  x: needleLayer.cx + hourShape.tipW / 2
-                  y: needleLayer.cy - hourShape.tipLen + hourShape.tipW / 2
-                }
-                PathLine {
-                  y: needleLayer.cy
-                  x: needleLayer.cx + hourShape.baseW / 2
-                }
-                PathLine {
-                  y: needleLayer.cy
-                  x: needleLayer.cx - hourShape.baseW / 2
+              HandFacetPath {
+                geom: hourShape
+                fillGradient: LinearGradient {
+                  x1: needleLayer.cx
+                  x2: needleLayer.cx
+                  y1: needleLayer.cy
+                  y2: needleLayer.cy - hourShape.tipLen
+                  GradientStop { position: 0.0; color: Qt.darker(needleLayer.handBase, 1.42) }
+                  GradientStop { position: 1.0; color: Qt.darker(needleLayer.handBase, 1.12) }
                 }
               }
             }
 
             //
-            // Minute hand: longer than hour, same rounded-tip / no-tail style
+            // Minute-hand drop shadow: slightly deeper offset, it sits above the
+            // hour hand and farther from the dial.
+            //
+            Shape {
+              smooth: true
+              layer.samples: 16
+              layer.smooth: true
+              antialiasing: true
+              width: parent.width
+              height: parent.height
+              rotation: root.minuteAngle
+              transformOrigin: Item.Center
+              y: Math.max(1.5, gaugeFace.width * 0.006)
+              preferredRendererType: Shape.CurveRenderer
+              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+
+              Behavior on rotation {
+                SpringAnimation {
+                  spring: 4.5
+                  damping: 0.4
+                  modulus: 360
+                }
+              }
+
+              HandPath {
+                geom: minuteShape
+                fillColor: Qt.rgba(0, 0, 0, 0.09)
+              }
+            }
+
+            //
+            // Minute hand: longer faceted sword hand, same crease as the hour hand
             //
             Shape {
               id: minuteShape
@@ -374,14 +610,25 @@ Item {
               preferredRendererType: Shape.CurveRenderer
               layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
-              readonly property real tipLen: gaugeFace.width * 0.36
-              readonly property real baseW: Math.max(5, gaugeFace.width * 0.044)
-              readonly property real tipW:  Math.max(3, minuteShape.baseW * 0.50)
+              readonly property real tipLen: gaugeFace.width * 0.38
+              readonly property real tailLen: gaugeFace.width * 0.11
+              readonly property real shoulderY: minuteShape.tipLen * 0.26
+              readonly property real baseW: Math.max(5, gaugeFace.width * 0.042)
+              readonly property real neckW: Math.max(3, minuteShape.baseW * 0.55)
+              readonly property real tipW:  Math.max(2.5, minuteShape.baseW * 0.40)
+              readonly property real tailW: Math.max(2.5, minuteShape.baseW * 0.50)
 
-              Behavior on rotation { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+              Behavior on rotation {
+                SpringAnimation {
+                  spring: 4.5
+                  damping: 0.4
+                  modulus: 360
+                }
+              }
 
-              ShapePath {
+              HandPath {
                 strokeWidth: 0.6
+                geom: minuteShape
                 capStyle: ShapePath.RoundCap
                 joinStyle: ShapePath.MiterJoin
                 strokeColor: needleLayer.handStroke
@@ -390,39 +637,66 @@ Item {
                   x2: needleLayer.cx
                   y1: needleLayer.cy
                   y2: needleLayer.cy - minuteShape.tipLen
-                  GradientStop { position: 0.0; color: Qt.lighter(needleLayer.handBase, 1.15) }
-                  GradientStop { position: 0.5; color: needleLayer.handBase }
-                  GradientStop { position: 1.0; color: Qt.darker(needleLayer.handBase, 1.18) }
+                  GradientStop { position: 0.0; color: Qt.lighter(needleLayer.handBase, 1.04) }
+                  GradientStop { position: 1.0; color: Qt.lighter(needleLayer.handBase, 1.32) }
                 }
+              }
 
-                startY: needleLayer.cy
-                startX: needleLayer.cx - minuteShape.baseW / 2
-
-                PathLine {
-                  x: needleLayer.cx - minuteShape.tipW / 2
-                  y: needleLayer.cy - minuteShape.tipLen + minuteShape.tipW / 2
-                }
-                PathArc {
-                  direction: PathArc.Clockwise
-                  radiusX: minuteShape.tipW / 2
-                  radiusY: minuteShape.tipW / 2
-                  x: needleLayer.cx + minuteShape.tipW / 2
-                  y: needleLayer.cy - minuteShape.tipLen + minuteShape.tipW / 2
-                }
-                PathLine {
-                  y: needleLayer.cy
-                  x: needleLayer.cx + minuteShape.baseW / 2
-                }
-                PathLine {
-                  y: needleLayer.cy
-                  x: needleLayer.cx - minuteShape.baseW / 2
+              HandFacetPath {
+                geom: minuteShape
+                fillGradient: LinearGradient {
+                  x1: needleLayer.cx
+                  x2: needleLayer.cx
+                  y1: needleLayer.cy
+                  y2: needleLayer.cy - minuteShape.tipLen
+                  GradientStop { position: 0.0; color: Qt.darker(needleLayer.handBase, 1.42) }
+                  GradientStop { position: 1.0; color: Qt.darker(needleLayer.handBase, 1.12) }
                 }
               }
             }
 
             //
-            // Second hand: thin, accent-colored, hard-snap each tick.
-            // Keeps its counterweight tail.
+            // Second-hand drop shadow: topmost hand, deepest offset from the dial.
+            //
+            Shape {
+              smooth: true
+              layer.samples: 16
+              layer.smooth: true
+              antialiasing: true
+              width: parent.width
+              height: parent.height
+              rotation: root.secondAngle
+              transformOrigin: Item.Center
+              y: Math.max(2, gaugeFace.width * 0.008)
+              preferredRendererType: Shape.CurveRenderer
+              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+
+              Behavior on rotation {
+                SpringAnimation {
+                  spring: 8
+                  modulus: 360
+                  damping: 0.45
+                }
+              }
+
+              ShapePath {
+                strokeWidth: -1
+                fillColor: Qt.rgba(0, 0, 0, 0.08)
+
+                startY: needleLayer.cy
+                startX: needleLayer.cx - secondShape.baseW / 2
+
+                PathLine { x: needleLayer.cx; y: needleLayer.cy - secondShape.tipLen }
+                PathLine { x: needleLayer.cx + secondShape.baseW / 2; y: needleLayer.cy }
+                PathLine { x: needleLayer.cx + secondShape.tailW / 2; y: needleLayer.cy + secondShape.tailLen }
+                PathLine { x: needleLayer.cx - secondShape.tailW / 2; y: needleLayer.cy + secondShape.tailLen }
+                PathLine { x: needleLayer.cx - secondShape.baseW / 2; y: needleLayer.cy }
+              }
+            }
+
+            //
+            // Second hand: thin, accent-colored, stiff spring tick like a quartz
+            // movement. Keeps its counterweight tail.
             //
             Shape {
               id: secondShape
@@ -436,6 +710,14 @@ Item {
               transformOrigin: Item.Center
               preferredRendererType: Shape.CurveRenderer
               layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+
+              Behavior on rotation {
+                SpringAnimation {
+                  spring: 8
+                  modulus: 360
+                  damping: 0.45
+                }
+              }
 
               readonly property color tint: Cpp_ThemeManager.colors["alarm"]
               readonly property real tipLen: gaugeFace.width * 0.42
@@ -465,6 +747,53 @@ Item {
                 PathLine { x: needleLayer.cx + secondShape.tailW / 2; y: needleLayer.cy + secondShape.tailLen }
                 PathLine { x: needleLayer.cx - secondShape.tailW / 2; y: needleLayer.cy + secondShape.tailLen }
                 PathLine { x: needleLayer.cx - secondShape.baseW / 2; y: needleLayer.cy }
+              }
+            }
+
+            //
+            // Pivot hub shadow: soft radial falloff under the hub
+            //
+            Shape {
+              id: hubShadow
+
+              smooth: true
+              height: width
+              antialiasing: true
+              anchors.centerIn: parent
+              preferredRendererType: Shape.CurveRenderer
+              width: Math.max(12, gaugeFace.width * 0.075) * 1.7
+              anchors.verticalCenterOffset: Math.max(1, gaugeFace.width * 0.006)
+
+              readonly property real r: width / 2
+
+              ShapePath {
+                strokeWidth: -1
+                fillGradient: RadialGradient {
+                  focalRadius: 0
+                  focalX: hubShadow.r
+                  focalY: hubShadow.r
+                  centerX: hubShadow.r
+                  centerY: hubShadow.r
+                  centerRadius: hubShadow.r
+                  GradientStop { position: 0.0;  color: Qt.rgba(0, 0, 0, 0.20) }
+                  GradientStop { position: 0.55; color: Qt.rgba(0, 0, 0, 0.14) }
+                  GradientStop { position: 1.0;  color: "transparent" }
+                }
+
+                startY: hubShadow.r
+                startX: hubShadow.width
+                PathArc {
+                  x: 0
+                  y: hubShadow.r
+                  radiusX: hubShadow.r
+                  radiusY: hubShadow.r
+                }
+                PathArc {
+                  y: hubShadow.r
+                  x: hubShadow.width
+                  radiusX: hubShadow.r
+                  radiusY: hubShadow.r
+                }
               }
             }
 

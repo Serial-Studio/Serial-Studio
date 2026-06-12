@@ -64,10 +64,10 @@ public:
   [[nodiscard]] bool running() const;
 
 public slots:
+  void shutdown();
   void setCode(const QString& code);
 
 private slots:
-  void shutdown();
   void onConnectedChanged();
   void onWorkerError(const QString& message);
 

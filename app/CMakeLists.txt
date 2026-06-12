@@ -228,6 +228,7 @@ set(SOURCES
   src/UI/Widgets/LEDPanel.cpp
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
+  src/UI/Widgets/PlotAreaFill.cpp
   src/UI/Widgets/Compass.cpp
   src/UI/Widgets/Bar.cpp
   src/UI/Widgets/Meter.cpp
@@ -348,6 +349,7 @@ set(HEADERS
   src/UI/Widgets/MultiPlot.h
   src/UI/Widgets/Gauge.h
   src/UI/Widgets/Plot.h
+  src/UI/Widgets/PlotAreaFill.h
   src/UI/Widgets/DataGrid.h
   src/UI/Widgets/FFTPlot.h
   src/UI/Widgets/Gyroscope.h
@@ -537,6 +539,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/PlotCommon.qml
   qml/Widgets/Dashboard/Stopwatch.qml
   qml/Widgets/Dashboard/Terminal.qml
+  qml/Widgets/Dashboard/ValueFormat.js
   qml/Widgets/BigButton.qml
   qml/Widgets/BoundField.qml
   qml/Widgets/Combo.qml

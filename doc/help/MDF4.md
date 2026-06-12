@@ -74,6 +74,10 @@ Each dataset becomes one MDF4 channel, and each project group becomes one MDF4 c
 - The file auto-closes when the device disconnects or when export is turned off.
 - If you disconnect and reconnect during the same session, a new file is created with a new timestamp.
 
+### Automation
+
+The [API](API-Reference.md) exposes `mdf4Export.getStatus`, `mdf4Export.setEnabled`, and `mdf4Export.close` for export, plus the `mdf4Player.*` family for playback. The `--mdf-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns export on at startup.
+
 ### Background writing
 
 MDF4 export runs on its own worker thread and flushes to disk in batches. On modern desktop hardware, sustained high frame rates are routine. Each exported frame keeps the source-derived timestamp it was parsed with; the export path never re-stamps the data.

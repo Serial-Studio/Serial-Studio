@@ -20,6 +20,7 @@ Without multi-frame parsing, you'd need to manually duplicate scalar values (bat
 
 ```json
 {
+  "timestamp": 1718200000,
   "battery": 3.75,
   "temperature": 25.5,
   "accel_x": [0.12, 0.15, ..., 0.08],  // 120 samples
@@ -28,20 +29,25 @@ Without multi-frame parsing, you'd need to manually duplicate scalar values (bat
 }
 ```
 
+The simulator wraps each packet in `/*` and `*/` delimiters, which match the start/end frame
+detection sequences configured in `imu_batched.ssproj`. The `timestamp` field is transmitted
+but ignored by the parser.
+
 ### JavaScript parser
+
+This is the parser stored in `imu_batched.ssproj`. The two scalars are repeated across frames;
+the three arrays are unzipped element-by-element:
 
 ```javascript
 function parse(frame) {
     if (frame.length > 0) {
-        var data = JSON.parse(frame);
-    
-        // Return mixed scalar/vector array
+        let data = JSON.parse(frame);
         return [
-            data.battery,      // Scalar: repeated across frames
-            data.temperature,  // Scalar: repeated across frames
-            data.accel_x,      // Vector: unzipped element-by-element
-            data.accel_y,      // Vector: unzipped element-by-element
-            data.accel_z       // Vector: unzipped element-by-element
+            data.battery,
+            data.temperature,
+            data.accel_x,
+            data.accel_y,
+            data.accel_z
         ];
     }
 
@@ -72,7 +78,7 @@ python3 imu_simulator.py
 
 - `--host HOST`. UDP destination (default: 127.0.0.1).
 - `--port PORT`. UDP port (default: 9000).
-- `--sample-rate RATE`. Samples per packet (default: 120).
+- `--sample-rate RATE`. Accelerometer sample rate in Hz, which is also the number of samples per packet (default: 120).
 - `--packet-rate RATE`. Packets per second (default: 1.0).
 - `--duration SECONDS`. Run duration (default: infinite).
 

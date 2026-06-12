@@ -8,7 +8,7 @@ If you have never used MQTT before, read [MQTT Topics & Semantics](MQTT-Topics.m
 
 ## What an MQTT subscriber sees
 
-The broker maintains a routing table. Whenever a publisher posts to a topic, the broker forwards a copy of the payload to every client whose **topic filter** matches. The driver opens one connection per project source, registers its topic filter, and from then on every matching payload triggers a `messageReceived` callback. The bytes are then handed to the FrameReader exactly the same way bytes off a UART would be.
+The broker maintains a routing table. Whenever a publisher posts to a topic, the broker forwards a copy of the payload to every client whose **topic filter** matches. The driver opens one connection per project source, registers its topic filter at QoS 0, and from then on every matching payload triggers a `messageReceived` callback. The bytes are then handed to the FrameReader exactly the same way bytes off a UART would be. Empty payloads and messages that do not match the filter are discarded before they reach the FrameReader.
 
 ```mermaid
 flowchart LR
@@ -33,16 +33,22 @@ When you select **MQTT Subscriber** as the **Bus Type** for a source, the projec
 | Field | Controls |
 |-------|----------|
 | **Hostname** | Broker address (IP or hostname). Default `127.0.0.1`. |
-| **Port** | Broker port. Default `1883` plaintext, `8883` for TLS. |
-| **Client ID** | Identifier sent on CONNECT. Auto-generated; **Regenerate** picks a new one. |
+| **Port** | Broker TCP port. Default `1883`. Set `8883` yourself for TLS brokers; toggling TLS does not change the port. |
+| **Topic Filter** | Topic to subscribe to. Supports `+` (one level) and `#` (rest) wildcards. Required; the source will not open without one. |
+| **Client ID** | Identifier sent on CONNECT. Auto-generated (random 16 characters) when empty. |
 | **Username / Password** | Optional broker authentication. |
-| **Topic Filter** | Topic to subscribe to. Supports `+` (one level) and `#` (rest) wildcards. |
-| **MQTT Version** | 3.1, 3.1.1, or 5.0. |
+| **MQTT Version** | MQTT 3.1, 3.1.1, or 5.0. Default MQTT 5.0. |
 | **Clean Session** | Discard any persisted session state on CONNECT. Default on. |
-| **Keep Alive** | Seconds between PING packets when idle. |
-| **Auto Keep Alive** | Let the driver pick a sensible keep-alive interval. |
-| **SSL / TLS** | Master toggle, protocol family, peer-verify mode, peer-verify depth. |
-| **CA Certificates** | Load extra PEM certificates for self-signed brokers. |
+| **Keep Alive (s)** | Seconds between PING packets when idle. Default 60; `0` disables the mechanism. |
+| **Auto Keep Alive** | Let the client send keep-alive pings automatically. Default on. |
+| **SSL/TLS Enabled** | Master TLS toggle. Off by default; when on, the three fields below appear. |
+| **SSL Protocol** | TLS protocol family: TLS 1.2, TLS 1.3, TLS 1.3 or Later, DTLS 1.2 or Later, Any Protocol, or Secure Protocols Only (default). |
+| **Peer Verify Mode** | None, Query Peer, Verify Peer, or Auto Verify Peer (default). |
+| **Peer Verify Depth** | Maximum certificate chain length accepted. Default `10`; `0` = unlimited. |
+
+The main window's **Setup** pane shows the same configuration with two extras: a **Regenerate** button beside **Client ID**, and a **CA Certificates** row whose **Load From Folder…** button imports PEM certificates for self-signed brokers. The Setup pane omits **Auto Keep Alive** and shortens a few labels (**Version**, **Use SSL/TLS**, **Peer Verify**, **Verify Depth**); the fields are otherwise the same.
+
+The same fields are scriptable through the [API](API-Reference.md) commands `project.mqtt.subscriber.getConfig`, `project.mqtt.subscriber.setConfig`, and `project.mqtt.subscriber.getStatus`. `setConfig` patches only the keys you pass and schedules a reconnect when the driver is connected.
 
 For step-by-step instructions, see the [Protocol Setup Guides, MQTT section](Protocol-Setup-Guides.md).
 
@@ -65,7 +71,7 @@ The project editor treats MQTT subscribers the same as any other bus type, so a 
 3. **Repeat.** Add a second source, set **Bus Type** to **MQTT Subscriber** again, and configure it for the second broker (or a different topic on the same broker).
 4. **Map datasets per source.** Each source has its own frame parser; the Frame builder routes parsed frames to the dashboard with the source ID preserved, exactly as for serial+network mixes.
 
-Two MQTT sources targeting the same broker but different topic filters are fine: the driver opens two CONNECT sessions with different client IDs and registers one subscription each. There is no special "shared broker" optimization, and there does not need to be — `QMqttClient` is cheap to instance.
+Two MQTT sources targeting the same broker but different topic filters are fine: the driver opens two independent CONNECT sessions and registers one subscription each. Give each source its own **Client ID**; brokers drop the older connection when two clients share one. There is no special "shared broker" optimization, and there does not need to be — `QMqttClient` is cheap to instance.
 
 ## TLS / SSL
 
@@ -74,7 +80,7 @@ For any broker reachable from outside the local network, use TLS:
 - Set the port to `8883` (the standard MQTT-over-TLS port).
 - Enable **SSL/TLS**.
 - Keep **Peer Verify** at `Verify Peer` (or the default `Auto Verify Peer`) for production. Drop to `None` only when testing against a self-signed broker certificate and never against a public broker.
-- If the broker uses a private CA, click **Load From Folder…** under **CA Certificates** and pick the directory containing the PEM chain.
+- If the broker uses a private CA, click **Load From Folder…** under **CA Certificates** in the Setup pane and pick the directory containing the PEM chain.
 
 The TLS configuration is per-source, so two MQTT subscribers in the same project can use different brokers with different trust roots without interfering with each other.
 
@@ -82,7 +88,7 @@ The TLS configuration is per-source, so two MQTT subscribers in the same project
 
 - **Subscribed but no data.** Topics are case-sensitive: `Sensors/Temp` is not the same as `sensors/temp`. Run `mosquitto_sub -t '#' -v` against the broker to see what is being published. If the publisher uses a deeper or shallower level structure than expected, the filter will silently miss everything.
 - **Connected but stale data shows up.** A retained message on a topic above the live stream can mask new publishes for a fresh subscriber. Subscribe to `your/topic/#` and watch what the broker delivers on connect.
-- **Client ID conflict.** Brokers enforce unique client IDs. Two Serial Studio instances (or two sources within the same instance, by accident) sharing one client ID make the broker kick the older connection. **Regenerate** to pick a fresh ID per source.
+- **Client ID conflict.** Brokers enforce unique client IDs. Two Serial Studio instances (or two sources within the same instance, by accident) sharing one client ID make the broker kick the older connection. Click **Regenerate** in the Setup pane to pick a fresh ID per source.
 - **TLS handshake fails.** A broker requiring TLS will reject the connection if the certificate chain is not trusted. Self-signed brokers need the CA imported explicitly via the **CA Certificates** field's **Load From Folder…** button.
 - **Public-broker latency.** Free public brokers like `test.mosquitto.org` round-trip through the public Internet; expect tens-to-hundreds of milliseconds of jitter. For low-latency telemetry, run Mosquitto on the same LAN.
 - **High publish rate stalls the dashboard.** MQTT is not a streaming protocol. At thousands of messages per second, broker queues back up and the dashboard sees bursts and pauses. When per-reading granularity is not required, batch multiple readings into a single MQTT message and parse them frame-by-frame inside the project's frame parser.

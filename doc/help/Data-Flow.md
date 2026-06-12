@@ -38,7 +38,7 @@ The frame reader scans the input buffer for frame boundaries and extracts comple
 - **Start Delimiter Only.** Frame boundaries fall between consecutive start markers.
 - **No Delimiters.** Pass all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
 
-After extraction, the frame reader can optionally validate a checksum (CRC-8, CRC-16, or CRC-32). Valid frames move to the next stage.
+After extraction, the frame reader can optionally validate a checksum. Seven algorithms are registered: `XOR-8`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, and `CRC-32`. Valid frames move to the next stage.
 
 ## Stage 4: frame builder
 
@@ -59,9 +59,8 @@ No project file needed. This mode targets rapid prototyping with CSV-formatted s
 2. Call the `parse(frame)` function in your chosen scripting engine (Lua 5.4 or JavaScript).
 3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. Reset every computed register in the project's [Data Tables](Data-Tables.md) to its default value, so transform-to-transform communication is always scoped to a single frame.
-6. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. Transforms can read project constants, publish computed registers, and reference other datasets' raw or already-transformed values. See [Dataset Value Transforms](Dataset-Transforms.md).
-7. Build the final frame with the populated dataset values. Virtual datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
+5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed registers in the project's [Data Tables](Data-Tables.md); computed registers persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
+6. Build the final frame with the populated dataset values. Virtual datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
 
 ### Multi-source projects
 
@@ -71,7 +70,7 @@ In multi-device projects, each device (source) is parsed independently, with its
 
 The dashboard updates all active widgets with the new values as they arrive. Time-series widgets (plots, FFT, GPS trajectory) append new samples to a fixed-size history and drop the oldest samples once the history is full.
 
-Widget rendering is capped at a configurable refresh rate. The default is 60 Hz, and you can change it in **Settings → UI Refresh Rate** to any value between 1 and 240 Hz. Higher rates give smoother animation but cost more CPU and GPU. Lower rates are useful on laptops, older machines, or when you want to free resources for recording. Note that incoming data is not sampled or discarded at this rate. Every frame is still processed and exported. Only the visual refresh of the widgets is capped.
+Widget rendering is capped at a configurable refresh rate. The default is 60 Hz, and you can change it in **Settings → UI Refresh Rate** (or with the `dashboard.setFps` API command) to any value between 1 and 240 Hz. Higher rates give smoother animation but cost more CPU and GPU. Lower rates are useful on laptops, older machines, or when you want to free resources for recording. Note that incoming data is not sampled or discarded at this rate. Every frame is still processed and exported. Only the visual refresh of the widgets is capped.
 
 ## Stage 6: export (optional parallel path)
 

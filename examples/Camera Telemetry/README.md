@@ -2,7 +2,7 @@
 
 ## Overview
 
-Streams live camera video to Serial Studio over UDP as fast as possible. Only FPS and frame count are sent alongside the image.
+Streams live camera video to Serial Studio over UDP at a target frame rate (30 FPS by default). Only FPS and frame count are sent alongside the image.
 
 No microcontroller needed. A standard webcam or built-in laptop camera is all you need. A synthetic test pattern is available when no camera is connected (`--no-camera`).
 
@@ -40,7 +40,7 @@ AB CD EF 32 39 2E 38 2C 31 30 32 34 FE ED
          2  9  .  8  ,  1  0  2  4
 ```
 
-The sentinels are chosen so they're statistically impossible to occur in JPEG, PNG, BMP, or WebP compressed data. `AB CD EF` isn't a valid JPEG marker sequence and doesn't arise from JPEG byte-stuffing rules. The FrameReader extracts only bytes between the two sentinels. The ImageFrameReader ignores ASCII telemetry packets since they carry no image magic bytes.
+The sentinels are chosen so they are unlikely to occur in JPEG, PNG, BMP, or WebP compressed data. `AB CD EF` isn't a valid JPEG marker sequence and doesn't arise from JPEG byte-stuffing rules. The FrameReader extracts only bytes between the two sentinels. The ImageFrameReader ignores ASCII telemetry packets since they carry no image magic bytes.
 
 ## How to run
 
@@ -77,7 +77,7 @@ python3 camera_telemetry.py --quality 60         # smaller packets
 
 1. Open Serial Studio and load `Camera Telemetry.ssproj`.
 2. In the **Setup** panel, set **Bus Type** → **Network Socket**, **Socket Type** → **UDP**.
-3. Set **Port** to `9000` (or whatever `--port` you used).
+3. Set **Local Port** to `9000` (or whatever `--port` you used).
 4. Click **Connect**.
 
 ## Performance tips

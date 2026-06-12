@@ -38,11 +38,15 @@ Item {
   required property CompassModel model
 
   //
-  // Unbounded accumulator: needle takes shortest path across the 359->0 wrap.
+  // Unbounded accumulator: needle takes shortest path across the 359->0 wrap, and
+  // the spring follower tracks it continuously like a real card movement.
   //
   property real unwrappedHeading: 0
   Behavior on unwrappedHeading {
-    NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
+    SpringAnimation {
+      spring: 4.5
+      damping: 0.4
+    }
   }
 
   Connections {
@@ -78,7 +82,7 @@ Item {
   //
   readonly property bool showLabels: width >= 130 && height >= 130
   readonly property bool showSubLabels: width >= 200 && height >= 200
-  readonly property real fontSize: Math.max(10, Math.min(14, Math.min(width, height) / 22))
+  readonly property real fontSize: Math.max(10, Math.min(28, Math.min(width, height) / 22))
                                    * Cpp_Misc_CommonFonts.widgetFontScale
 
   readonly property var cardinalLabels: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
@@ -255,6 +259,126 @@ Item {
           }
 
           //
+          // Bezel inner shadow: radial falloff just inside the rim so the bezel
+          // reads as overhanging the rose.
+          //
+          Shape {
+            id: bezelShadow
+
+            z: 1
+            smooth: true
+            antialiasing: true
+            anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
+
+            readonly property real cx: width / 2
+            readonly property real cy: height / 2
+            readonly property real rOut: width / 2 - gaugeFace.border.width
+            readonly property real rIn: bezelShadow.rOut - Math.max(5, width * 0.05)
+
+            ShapePath {
+              strokeWidth: -1
+              fillRule: ShapePath.OddEvenFill
+              fillGradient: RadialGradient {
+                focalRadius: 0
+                focalX: bezelShadow.cx
+                focalY: bezelShadow.cy
+                centerX: bezelShadow.cx
+                centerY: bezelShadow.cy
+                centerRadius: bezelShadow.rOut
+                GradientStop { position: bezelShadow.rIn / bezelShadow.rOut; color: "transparent" }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.15) }
+              }
+
+              startY: bezelShadow.cy
+              startX: bezelShadow.cx + bezelShadow.rOut
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rOut
+                radiusY: bezelShadow.rOut
+                x: bezelShadow.cx - bezelShadow.rOut
+              }
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rOut
+                radiusY: bezelShadow.rOut
+                x: bezelShadow.cx + bezelShadow.rOut
+              }
+              PathMove {
+                y: bezelShadow.cy
+                x: bezelShadow.cx + bezelShadow.rIn
+              }
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rIn
+                radiusY: bezelShadow.rIn
+                x: bezelShadow.cx - bezelShadow.rIn
+              }
+              PathArc {
+                y: bezelShadow.cy
+                radiusX: bezelShadow.rIn
+                radiusY: bezelShadow.rIn
+                x: bezelShadow.cx + bezelShadow.rIn
+              }
+            }
+          }
+
+          //
+          // Inner-face ring redrawn opaque above the rose so the rim line stays crisp.
+          //
+          Rectangle {
+            z: 1
+            border.width: 1
+            radius: width / 2
+            antialiasing: true
+            anchors.fill: parent
+            color: "transparent"
+            anchors.margins: parent.border.width
+            border.color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.15)
+          }
+
+          //
+          // Needle drop shadow: same silhouette offset straight down in screen
+          // space, so the light direction stays fixed while the needle rotates.
+          //
+          Shape {
+            smooth: true
+            layer.samples: 16
+            layer.smooth: true
+            antialiasing: true
+            width: gaugeFace.width
+            height: gaugeFace.height
+            anchors.centerIn: parent
+            transformOrigin: Item.Center
+            rotation: root.unwrappedHeading
+            preferredRendererType: Shape.CurveRenderer
+            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+            anchors.verticalCenterOffset: Math.max(1, gaugeFace.width * 0.004)
+
+            ShapePath {
+              strokeWidth: -1
+              fillColor: Qt.rgba(0, 0, 0, 0.10)
+
+              startY: needleShape.cy
+              startX: needleShape.cx - needleShape.baseW / 2
+              PathLine { x: needleShape.cx; y: needleShape.cy - needleShape.tipLen }
+              PathLine { x: needleShape.cx + needleShape.baseW / 2; y: needleShape.cy }
+              PathLine { x: needleShape.cx - needleShape.baseW / 2; y: needleShape.cy }
+            }
+
+            ShapePath {
+              strokeWidth: -1
+              fillColor: Qt.rgba(0, 0, 0, 0.10)
+
+              startY: needleShape.cy
+              startX: needleShape.cx - needleShape.tailW / 2
+              PathLine { x: needleShape.cx; y: needleShape.cy + needleShape.tailLen }
+              PathLine { x: needleShape.cx + needleShape.tailW / 2; y: needleShape.cy }
+              PathLine { x: needleShape.cx - needleShape.tailW / 2; y: needleShape.cy }
+            }
+          }
+
+          //
           // Compass needle: accent-colored north end and silver counterweight tail.
           // Rotates by the unwrapped accumulator so 359 -> 0 takes the short way.
           //
@@ -326,6 +450,53 @@ Item {
               PathLine { x: needleShape.cx;                                y: needleShape.cy + needleShape.tailLen }
               PathLine { x: needleShape.cx + needleShape.tailW / 2;        y: needleShape.cy }
               PathLine { x: needleShape.cx - needleShape.tailW / 2;        y: needleShape.cy }
+            }
+          }
+
+          //
+          // Pivot hub shadow: soft radial falloff under the hub
+          //
+          Shape {
+            id: hubShadow
+
+            smooth: true
+            height: width
+            antialiasing: true
+            anchors.centerIn: parent
+            preferredRendererType: Shape.CurveRenderer
+            width: Math.max(12, gaugeFace.width * 0.075) * 1.7
+            anchors.verticalCenterOffset: Math.max(1, gaugeFace.width * 0.006)
+
+            readonly property real r: width / 2
+
+            ShapePath {
+              strokeWidth: -1
+              fillGradient: RadialGradient {
+                focalRadius: 0
+                focalX: hubShadow.r
+                focalY: hubShadow.r
+                centerX: hubShadow.r
+                centerY: hubShadow.r
+                centerRadius: hubShadow.r
+                GradientStop { position: 0.0;  color: Qt.rgba(0, 0, 0, 0.20) }
+                GradientStop { position: 0.55; color: Qt.rgba(0, 0, 0, 0.14) }
+                GradientStop { position: 1.0;  color: "transparent" }
+              }
+
+              startY: hubShadow.r
+              startX: hubShadow.width
+              PathArc {
+                x: 0
+                y: hubShadow.r
+                radiusX: hubShadow.r
+                radiusY: hubShadow.r
+              }
+              PathArc {
+                y: hubShadow.r
+                x: hubShadow.width
+                radiusX: hubShadow.r
+                radiusY: hubShadow.r
+              }
             }
           }
 

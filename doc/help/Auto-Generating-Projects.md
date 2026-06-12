@@ -39,7 +39,7 @@ A DBC (CAN Database) file describes every message and signal on a CAN network: m
 
 1. In the **Setup Panel**, select **CAN Bus** from the I/O Interface dropdown.
 2. Configure the CAN backend, interface, and bitrate as usual (see [Protocol Setup Guides](Protocol-Setup-Guides.md)).
-3. Click **Import DBC File...**.
+3. Click **Import DBC File…**.
 4. Pick a `.dbc`. Serial Studio parses it and shows a preview listing every message: `1: EngineData @ 0x100 (5 signals)`, `2: VehicleSpeed @ 0x101 (2 signals)`, and so on.
 5. Click **Create Project**. You'll be prompted for an output path.
 
@@ -82,7 +82,7 @@ Modbus register maps come in a hundred ad-hoc formats. Serial Studio accepts the
 ### How to run it
 
 1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
-2. Click **Import Register Map...**.
+2. Click **Import Register Map…**.
 3. Pick a `.csv`, `.xml`, or `.json` file.
 4. Review the registers in the preview dialog: `1: Temperature @ 0 (Holding Registers, uint16) [°C]`, `2: Pressure @ 1 (Holding Registers, uint16) [PSI]`, ...
 5. Click **Create Project**. You'll be prompted to save the `.ssproj`.

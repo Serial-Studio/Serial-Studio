@@ -30,7 +30,7 @@ Camera images are fetched from ArcGIS World Imagery satellite tiles (free, no AP
 
 ### Output controls
 
-Each drone has an output control panel on the dashboard with four interactive widgets that send commands back to the simulator.
+Each drone has an output control panel on the dashboard with six interactive widgets that send commands back to the simulator.
 
 | Control            | Widget type  | Range            | Command sent               |
 |--------------------|--------------|------------------|----------------------------|
@@ -39,8 +39,9 @@ Each drone has an output control panel on the dashboard with four interactive wi
 | **Camera**         | Toggle       | ON/OFF           | `CAM ON\r\n` / `CAM OFF\r\n` |
 | **Takeoff**        | Button       |                  | `TKO\r\n`                  |
 | **Return to Home** | Button       |                  | `RTH\r\n`                  |
+| **Crash**          | Button       |                  | `CRASH\r\n`                |
 
-**Throttle** scales the drone's airspeed. 50% is normal cruise, 0% is idle, 100% is full speed. **Heading** applies a rotational offset to the flight path. **Camera** turns the synthetic JPEG feed on or off (telemetry keeps streaming). **Takeoff** launches from the helipad (only when grounded). **RTH** triggers return-to-home, landing, and automatic battery recharge.
+**Throttle** scales the drone's airspeed. 50% is normal cruise, 0% is idle, 100% is full speed. **Heading** applies a rotational offset to the flight path. **Camera** turns the synthetic JPEG feed on or off (telemetry keeps streaming). **Takeoff** launches from the helipad (only when grounded). **RTH** triggers return-to-home, landing, and automatic battery recharge. **Crash** drops the TCP link to simulate a catastrophic failure.
 
 ### Telemetry per drone (11 fields)
 
@@ -108,17 +109,18 @@ Commands are parsed on each simulation tick. Multiple commands can arrive per ti
 
 ## Dashboard widgets
 
-Each drone has six widget groups on the dashboard.
+Each drone has eight widget groups on the dashboard.
 
 | Widget     | Type          | Description |
 |------------|---------------|-------------|
 | Camera     | Image View    | Live satellite (Alpha) or thermal/IR (Bravo) camera feed |
-| Position   | Map           | GPS track on an interactive map |
+| Navigation | Map           | GPS track on an interactive map |
 | Heading    | Compass       | Compass heading indicator |
 | Attitude   | Gyroscope     | Roll, pitch, and yaw visualization |
 | Flight     | Gauges + Bars | Airspeed, altitude, and vertical speed |
 | Power      | Gauges + Bars | Battery voltage, current draw, and charge level |
-| Controls   | Output Panel  | Throttle, heading, camera toggle, and RTH per drone |
+| Controls   | Output Panel  | Throttle, heading, camera toggle, takeoff, RTH, and crash per drone |
+| State      | Painter       | Scripted live state visualizer driven by the telemetry datasets |
 
 ## Flight models
 

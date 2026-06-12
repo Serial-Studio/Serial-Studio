@@ -86,6 +86,7 @@
 #include "UI/Widgets/Meter.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
+#include "UI/Widgets/PlotAreaFill.h"
 #include "UI/Widgets/Terminal.h"
 #include "UI/WindowManager.h"
 
@@ -201,6 +202,8 @@ Misc::ModuleManager::ModuleManager()
   : m_headless(false)
   , m_quitHandled(false)
   , m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
+  , m_performanceMode(m_settings.value("App/PerformanceMode", true).toBool())
+  , m_inhibitIdleSleep(m_settings.value("App/InhibitIdleSleep", true).toBool())
 {
   (void)Misc::Translator::instance();
 
@@ -222,6 +225,24 @@ bool Misc::ModuleManager::automaticUpdates() const noexcept
 }
 
 /**
+ * @brief Returns whether OS performance hints are applied at startup; consumed by
+ *        AppPlatform::prepareEnvironment() before this singleton exists.
+ */
+bool Misc::ModuleManager::performanceMode() const noexcept
+{
+  return m_performanceMode;
+}
+
+/**
+ * @brief Returns whether system/display idle sleep is inhibited at startup; consumed by
+ *        AppPlatform::inhibitIdleSleep().
+ */
+bool Misc::ModuleManager::inhibitIdleSleep() const noexcept
+{
+  return m_inhibitIdleSleep;
+}
+
+/**
  * @brief Enables headless mode, suppressing QML and GUI loading on init.
  */
 void Misc::ModuleManager::setHeadless(const bool headless)
@@ -238,6 +259,30 @@ void Misc::ModuleManager::setAutomaticUpdates(const bool enabled)
     m_automaticUpdates = enabled;
     m_settings.setValue("App/CheckForUpdates", m_automaticUpdates);
     Q_EMIT automaticUpdatesChanged();
+  }
+}
+
+/**
+ * @brief Enables/disables startup performance hints; takes effect on the next launch.
+ */
+void Misc::ModuleManager::setPerformanceMode(const bool enabled)
+{
+  if (m_performanceMode != enabled) {
+    m_performanceMode = enabled;
+    m_settings.setValue("App/PerformanceMode", m_performanceMode);
+    Q_EMIT performanceModeChanged();
+  }
+}
+
+/**
+ * @brief Enables/disables startup idle-sleep inhibition; takes effect on the next launch.
+ */
+void Misc::ModuleManager::setInhibitIdleSleep(const bool enabled)
+{
+  if (m_inhibitIdleSleep != enabled) {
+    m_inhibitIdleSleep = enabled;
+    m_settings.setValue("App/InhibitIdleSleep", m_inhibitIdleSleep);
+    Q_EMIT inhibitIdleSleepChanged();
   }
 }
 
@@ -280,6 +325,8 @@ void Misc::ModuleManager::onQuit()
   m_quitHandled = true;
 
   qInstallMessageHandler(nullptr);
+
+  DataModel::ControlScript::instance().shutdown();
 
   Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();
@@ -337,6 +384,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Bar>("SerialStudio", 1, 0, "BarModel");
   qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");
   qmlRegisterType<Widgets::Plot>("SerialStudio", 1, 0, "PlotModel");
+  qmlRegisterType<Widgets::PlotAreaFill>("SerialStudio", 1, 0, "PlotAreaFill");
   qmlRegisterType<Widgets::Gauge>("SerialStudio", 1, 0, "GaugeModel");
   qmlRegisterType<Widgets::Compass>("SerialStudio", 1, 0, "CompassModel");
   qmlRegisterType<Widgets::FFTPlot>("SerialStudio", 1, 0, "FFTPlotModel");

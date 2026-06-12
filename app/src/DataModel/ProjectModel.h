@@ -30,6 +30,7 @@
 #include "SerialStudio.h"
 
 class QTimer;
+class QFileSystemWatcher;
 
 namespace DataModel {
 
@@ -120,6 +121,7 @@ signals:
   void pointCountChanged();
   void plotTimeRangeChanged();
   void jsonFileChanged();
+  void projectFileChangedOnDisk();
   void modifiedChanged();
   void contentTouched();
   void groupsChanged();
@@ -445,6 +447,11 @@ private:
   void autoSave();
   [[nodiscard]] bool writeProjectFile(const QString& path);
 
+  void watchProjectFile();
+  void resolveDiskFileChange();
+  void promptDiskFileReload();
+  [[nodiscard]] static QByteArray hashProjectFile(const QString& path);
+
   bool confirmGroupWidgetChange(DataModel::Group& grp, SerialStudio::GroupWidget widget);
   bool applyGroupWidget(DataModel::Group& grp, SerialStudio::GroupWidget widget);
   bool populateFixedLayoutGroup(DataModel::Group& grp, SerialStudio::GroupWidget widget);
@@ -528,6 +535,11 @@ private:
   QTimer* m_autoSaveTimer;
   bool m_autoSaveSuspended;
   qint64 m_mutationEpoch;
+
+  QFileSystemWatcher* m_fileWatcher;
+  bool m_diskCheckPending;
+  bool m_diskPromptActive;
+  QByteArray m_diskFileHash;
 
   std::vector<DataModel::Workspace> m_sessionWorkspaces;
 

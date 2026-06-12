@@ -23,10 +23,12 @@
 
 #include <algorithm>
 #include <QApplication>
+#include <QCryptographicHash>
 #include <QDirIterator>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QFileSystemWatcher>
 #include <QHash>
 #include <QInputDialog>
 #include <QJsonArray>
@@ -286,10 +288,21 @@ DataModel::ProjectModel::ProjectModel()
   , m_autoSaveTimer(new QTimer(this))
   , m_autoSaveSuspended(false)
   , m_mutationEpoch(0)
+  , m_fileWatcher(new QFileSystemWatcher(this))
+  , m_diskCheckPending(false)
+  , m_diskPromptActive(false)
 {
   m_autoSaveTimer->setSingleShot(true);
   m_autoSaveTimer->setInterval(1500);
   connect(m_autoSaveTimer, &QTimer::timeout, this, &ProjectModel::autoSave);
+
+  connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, [this] {
+    if (m_diskCheckPending)
+      return;
+
+    m_diskCheckPending = true;
+    QTimer::singleShot(500, this, &ProjectModel::resolveDiskFileChange);
+  });
 
   const auto bumpEpoch = [this] {
     ++m_mutationEpoch;
@@ -1790,6 +1803,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_sources.push_back(defaultSource);
 
   m_filePath = "";
+  watchProjectFile();
 
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
@@ -2098,6 +2112,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   migrateLegacyDashboardLayout(json);
 
   setModified(false);
+  watchProjectFile();
 
   if (migrateLegacySeparator(json))
     return true;
@@ -5194,7 +5209,8 @@ void DataModel::ProjectModel::confirmDeleteRegister(const QString& table,
 }
 
 /**
- * @brief Exports a table's registers to a CSV file chosen by the user.
+ * @brief Exports a table's registers to a CSV file chosen by the user, with the
+ * register permission written as read-write/read-only to match the editor UI.
  */
 void DataModel::ProjectModel::exportTableToCsv(const QString& tableName)
 {
@@ -5219,23 +5235,25 @@ void DataModel::ProjectModel::exportTableToCsv(const QString& tableName)
     return;
 
   QTextStream out(&file);
-  out << "name,type,value\n";
+  out << "name,permissions,value\n";
   for (const auto& reg : it->registers) {
-    const auto type = (reg.type == DataModel::RegisterType::Computed) ? QStringLiteral("computed")
-                                                                      : QStringLiteral("constant");
+    const auto permissions = (reg.type == DataModel::RegisterType::Computed)
+                             ? QStringLiteral("read-write")
+                             : QStringLiteral("read-only");
 
     auto val = reg.defaultValue.toString();
     if (val.contains(',') || val.contains('"') || val.contains('\n'))
       val = QStringLiteral("\"%1\"").arg(val.replace('"', "\"\""));
 
-    out << reg.name << ',' << type << ',' << val << '\n';
+    out << reg.name << ',' << permissions << ',' << val << '\n';
   }
 
   file.close();
 }
 
 /**
- * @brief Imports registers from a CSV file into an existing table.
+ * @brief Imports registers from a CSV file into an existing table, accepting both the
+ * read-write/read-only permission terms and the legacy computed/constant type values.
  */
 void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
 {
@@ -5277,9 +5295,9 @@ void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
     if (parts.size() < 3)
       continue;
 
-    const auto name    = parts[0].trimmed();
-    const auto typeStr = parts[1].trimmed().toLower();
-    auto valStr        = parts.mid(2).join(',').trimmed();
+    const auto name     = parts[0].trimmed();
+    const auto permsStr = parts[1].trimmed().toLower();
+    auto valStr         = parts.mid(2).join(',').trimmed();
     if (valStr.size() >= 2 && valStr.startsWith('"') && valStr.endsWith('"')) {
       valStr = valStr.mid(1, valStr.size() - 2);
       valStr.replace(QStringLiteral("\"\""), QStringLiteral("\""));
@@ -5288,7 +5306,9 @@ void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
     if (name.isEmpty())
       continue;
 
-    const bool computed = (typeStr == QStringLiteral("computed"));
+    const bool computed =
+      (permsStr == QStringLiteral("read-write")) || (permsStr == QStringLiteral("read/write"))
+      || (permsStr == QStringLiteral("rw")) || (permsStr == QStringLiteral("computed"));
 
     bool isNumeric              = false;
     const double dval           = SerialStudio::toDouble(valStr, &isNumeric);
@@ -6330,7 +6350,115 @@ bool DataModel::ProjectModel::writeProjectFile(const QString& path)
     return false;
   }
 
+  watchProjectFile();
   return true;
+}
+
+/**
+ * @brief Returns the SHA-256 of the file at @p path, or an empty array when unreadable.
+ */
+QByteArray DataModel::ProjectModel::hashProjectFile(const QString& path)
+{
+  QFile file(path);
+  if (!file.open(QFile::ReadOnly))
+    return {};
+
+  return QCryptographicHash::hash(file.readAll(), QCryptographicHash::Sha256);
+}
+
+/**
+ * @brief Re-arms the filesystem watcher on m_filePath and caches the on-disk content hash;
+ *        called after every successful write or load so self-saves are recognized as such
+ *        (QSaveFile's atomic rename drops the previous watch on some platforms).
+ */
+void DataModel::ProjectModel::watchProjectFile()
+{
+  const auto watched = m_fileWatcher->files();
+  if (!watched.isEmpty())
+    m_fileWatcher->removePaths(watched);
+
+  m_diskFileHash.clear();
+  if (m_filePath.isEmpty() || !QFile::exists(m_filePath))
+    return;
+
+  m_fileWatcher->addPath(m_filePath);
+  m_diskFileHash = hashProjectFile(m_filePath);
+}
+
+/**
+ * @brief Debounced watcher handler: ignores self-saves (hash unchanged), flags deletion,
+ *        and prompts to reload when another program modified the project file.
+ */
+void DataModel::ProjectModel::resolveDiskFileChange()
+{
+  m_diskCheckPending = false;
+  if (m_diskPromptActive || m_filePath.isEmpty())
+    return;
+
+  if (!QFile::exists(m_filePath)) {
+    m_diskFileHash.clear();
+    setModified(true);
+    Q_EMIT projectFileChangedOnDisk();
+    DataModel::NotificationCenter::instance().postWarning(
+      QStringLiteral("ProjectModel"),
+      tr("Project file removed from disk"),
+      tr("%1 was deleted or renamed by another program. Save the project to recreate it.")
+        .arg(jsonFileName()));
+    return;
+  }
+
+  if (!m_fileWatcher->files().contains(m_filePath))
+    m_fileWatcher->addPath(m_filePath);
+
+  const auto hash = hashProjectFile(m_filePath);
+  if (hash.isEmpty() || hash == m_diskFileHash)
+    return;
+
+  m_diskFileHash = hash;
+  Q_EMIT projectFileChangedOnDisk();
+
+  if (m_suppressMessageBoxes) {
+    qWarning() << "[ProjectModel] Project file changed on disk; keeping in-memory state";
+    setModified(true);
+    DataModel::NotificationCenter::instance().postWarning(
+      QStringLiteral("ProjectModel"),
+      tr("Project file changed on disk"),
+      tr("%1 was modified by another program. The in-memory project was kept; reopen the "
+         "file to load the external changes.")
+        .arg(jsonFileName()));
+    return;
+  }
+
+  promptDiskFileReload();
+}
+
+/**
+ * @brief Asks whether to reload the externally-modified project file; declining keeps the
+ *        in-memory state and marks it modified so the divergence is saveable.
+ */
+void DataModel::ProjectModel::promptDiskFileReload()
+{
+  m_diskPromptActive  = true;
+  const auto question = m_modified ? tr("The project file was modified by another program.\n\n"
+                                        "Reload it and discard your unsaved changes?")
+                                   : tr("The project file was modified by another program.\n\n"
+                                        "Reload it?");
+  const auto ret      = Misc::Utilities::showMessageBox(tr("Project file changed on disk"),
+                                                   question,
+                                                   QMessageBox::Question,
+                                                   APP_NAME,
+                                                   QMessageBox::Yes | QMessageBox::No);
+  m_diskPromptActive  = false;
+
+  if (ret != QMessageBox::Yes) {
+    setModified(true);
+    return;
+  }
+
+  const auto path = m_filePath;
+  m_filePath.clear();
+  if (!openJsonFile(path))
+    qWarning() << "[ProjectModel] Reload after on-disk change failed:" << path;
 }
 
 /**

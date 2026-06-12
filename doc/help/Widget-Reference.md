@@ -45,7 +45,7 @@ flowchart TD
 
 ### GPS Map
 
-- Widget key: `"map"` (also accepts `"gps"`).
+- Widget key: `"gps"` (also accepts `"map"`).
 - Tile-based map with real-time position tracking.
 - Plots the trajectory path.
 - Shows latitude, longitude, and altitude.
@@ -188,6 +188,7 @@ flowchart TD
 - Heading indicator (0 to 360 degrees).
 - Auto-converts a numeric heading to a cardinal direction (N, NE, E, SE, S, SW, W, NW).
 - Best for: heading and bearing, wind direction, orientation.
+- **Two-page swipe view.** Page 0 is the compass rose; page 1 is a large digital readout (heading plus cardinal direction). The active page is persisted per widget.
 
 ### Meter
 
@@ -244,7 +245,7 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 |---------------|---------|----------------|--------------|----------------------------------------------|
 | Data Grid     | Group   | `datagrid`     | 1+           | (none)                                       |
 | MultiPlot     | Group   | `multiplot`    | 1+           | `graph: true` on datasets                    |
-| GPS Map       | Group   | `map`          | 2-3          | lat, lon, (alt) datasets                     |
+| GPS Map       | Group   | `gps`          | 2-3          | lat, lon, (alt) datasets                     |
 | Gyroscope     | Group   | `gyro`         | 3            | yaw, pitch, roll                             |
 | Accelerometer | Group   | `accelerometer`| 3            | x, y, z accel                                |
 | LED Panel     | Group   | auto           | 1+           | `led: true`, `alarmBands[]` or legacy `ledHigh` |
@@ -256,7 +257,7 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | Waterfall     | Dataset | auto           | n/a          | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
 | Bar           | Dataset | `bar`          | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
 | Gauge         | Dataset | `gauge`        | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
-| Compass       | Dataset | `compass`      | n/a          | value 0-360                                  |
+| Compass       | Dataset | `compass`      | n/a          | value 0-360, swipe to digital page           |
 | Meter         | Dataset | `meter`        | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
 | Clock         | Utility | (toggle)       | 0            | system-clock driven; swipe between analog face / digital readout |
 | Stopwatch     | Utility | (toggle)       | 0            | local Start/Stop/Lap/Reset with lap table    |

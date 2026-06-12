@@ -69,8 +69,8 @@ The Serial Studio API Server is a **TCP server** that listens on **port 7777** (
 
 The API Server is available in both **Serial Studio GPL** and **Serial Studio Pro** builds:
 
-- **GPL Build**: Access to 93 core commands (UART, Network, BLE, CSV export/player, Console, Dashboard, Project, I/O Manager)
-- **Pro Build**: Full access to all 165 commands (includes Modbus, CAN Bus, MQTT, MDF4 export/player, Audio)
+- **GPL Build**: Access to the core commands (UART, Network, BLE, CSV export/player, Console, Dashboard, Project, I/O Manager)
+- **Pro Build**: Full access to every command (includes Modbus, CAN Bus, MQTT, MDF4 export/player, Audio)
 
 **Legend:**
 - 🟢 = GPL/Pro (available in all builds)
@@ -78,17 +78,17 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 
 ## Calling the API from Frame Parsers, Transforms, and Painters
 
-Every command listed in this document is also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread.
+The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. The gateway is default-deny: only a small read-only allow-list is callable with no setup, and every other command returns `METHOD_NOT_ALLOWED` unless the project opts in via `apiCall.allowFullSurface`. See [Frame Parser Scripting](JavaScript-API.md) for the allow-list, rate limits, and examples.
 
 ```lua
-local r = apiCall("dashboard.snapshot")
+local r = apiCall("project.dataset.list")
 if r.ok then
   print("Got " .. #r.result.datasets .. " datasets")
 end
 ```
 
 ```javascript
-const r = apiCall("workspaces.setActive", { idOrName: "Diagnostics" });
+const r = apiCall("dashboard.getStatus");
 if (!r.ok) console.warn(r.error);
 ```
 
@@ -109,9 +109,8 @@ Return shape: `{ ok, result?, error?, errorCode?, errorData? }`. See [Frame Pars
 1. **Launch Serial Studio**
 
 2. **Enable the API Server**:
-   - Go to **Preferences → Miscellaneous** 
-   - Check **"Enable API Server (Port 7777)"** or **"API Server Enabled"**
-   - (Optional) Change the **API Server Port** if needed (default: 7777)
+   - Go to **Preferences → General → Advanced**
+   - Turn on **"Enable API Server (Port 7777)"**
    - Click **OK**
 
 3. **Test the connection** using curl (or any TCP client):
@@ -129,7 +128,7 @@ Return shape: `{ ok, result?, error?, errorCode?, errorData? }`. See [Frame Pars
 
 1. Open Serial Studio
 2. Click **Preferences** (wrench icon) or press **Ctrl/Cmd+,**
-3. Navigate to the **Miscellaneous** group
+3. On the **General** tab, scroll to the **Advanced** section
 4. Find **"Enable API Server (Port 7777)"**
 5. Toggle the switch to **ON**
 6. Click **OK** to apply
@@ -161,13 +160,11 @@ Expected output:
 
 ### Port Configuration
 
-Currently, the API Server uses **port 7777** by default. By default this port is:
+The API Server always listens on **port 7777**; the port is not configurable. By default it is:
 - **Localhost-only**: Only accepts connections from 127.0.0.1 (same machine)
 - **No authentication**: Any local process can connect
 
 When external connections are enabled, the server binds to all interfaces and non-loopback clients must authenticate with an access token. See [Authentication for External Connections](#authentication-for-external-connections).
-
-> **Note**: Future versions may support custom ports.
 
 ## Security Considerations
 
@@ -198,7 +195,7 @@ The access token gate applies **only to non-loopback clients** and **only when e
 
 **Where to find the token**
 
-1. Open **Preferences -> Miscellaneous**.
+1. Open **Preferences -> General -> Advanced**.
 2. Enable **Allow External API Connections**.
 3. The **API Access Token** field shows a 64-character hexadecimal token. Use the refresh button beside it to issue a new token. Regenerating leaves already-authenticated sessions connected; new connections must use the new token.
 
@@ -517,9 +514,10 @@ client1 = connect_to_api()  # Control connection
 client2 = connect_to_api()  # Monitoring connection
 client3 = connect_to_api()  # Data export control
 
-# All clients receive the same responses
+# Command responses go only to the socket that sent the command.
+# Push messages (frames, raw data, lifecycle events) go to every client.
 status = client1.send("io.getStatus")
-# All changes are visible to all clients
+# State changes made by one client are visible to all clients
 ```
 
 **Connection lifecycle:**
@@ -663,11 +661,23 @@ The API supports two message types:
 - Commands execute sequentially in order
 - All commands execute even if one fails (no short-circuit)
 
+### Server-Push Messages
+
+Besides command responses, the server writes unsolicited JSON lines to **every** connected client:
+
+| Message | When it is sent |
+|---------|-----------------|
+| `{"frames": [{"data": {...}}, ...]}` | Batch of parsed dashboard frames, pushed as data arrives |
+| `{"data": "<base64>"}` | Raw bytes received from the device, base64-encoded |
+| `{"event": "connected"}` / `{"event": "disconnected"}` | Device connection lifecycle changes |
+
+A client that issues commands on a long-lived socket while a device is streaming must demultiplex incoming lines: a line whose `type` field is `"response"` answers a command (match it to the request by `id`); lines with a `frames`, `data`, or `event` key are push messages. A naive `recv()` after `send()` can pick up a frame batch instead of the response.
+
 ## Complete Command Reference
 
-The API provides **165 total commands** across multiple modules:
+The API provides **300+ commands** across multiple modules; enumerate the live surface with `api.getCommands`:
 
-**GPL Build (93 commands):**
+**GPL Build:**
 - API introspection: 1 command
 - I/O Manager: 12 commands
 - UART Driver: 12 commands
@@ -679,7 +689,7 @@ The API provides **165 total commands** across multiple modules:
 - Dashboard Configuration: 7 commands
 - Project Management: 19 commands
 
-**Pro Build Additional (72 commands):**
+**Pro Build Additional:**
 - Modbus Driver: 21 commands
 - CAN Bus Driver: 9 commands
 - MQTT Client: 27 commands
@@ -728,10 +738,13 @@ Get current connection status and configuration.
   "isConnected": false,
   "paused": false,
   "busType": 0,
+  "busTypeLabel": "UART (serial port)",
+  "busTypeSlug": "uart",
   "configurationOk": true,
   "readOnly": false,
   "readWrite": true,
-  "busTypeName": "UART/COM"
+  "busTypeName": "UART/COM",
+  "_summary": "Not connected. UART (serial port) is configured and ready to open."
 }
 ```
 
@@ -1959,173 +1972,81 @@ Enable or disable CAN FD.
 **Parameters:**
 - `enabled` (bool): true to enable CAN FD, false for standard CAN
 
-### MQTT Client Commands - Pro (27)
+### MQTT Commands - Pro (6)
 
 **Note:** These commands require a Serial Studio Pro license.
 
-#### 🔵 `mqtt.getConfig`
-Get current MQTT configuration.
+MQTT is split into two independent surfaces, each configured with a single
+patch-style `setConfig` command instead of one command per field. The
+**publisher** forwards dashboard data to a broker and runs alongside any data
+source. The **subscriber** is the MQTT data-source driver: configure it here,
+then open it with `io.setBusType` + `io.connect` like any other driver.
+
+Shared rules for both `setConfig` commands:
+
+- Pass only the keys you want to change; omitted keys keep their values.
+- Setting `password` requires `username` in the same call. The pair is stored
+  in the encrypted credential vault, never in the project file, and is never
+  returned by `getConfig` (check `hasCredentials` instead). Pass empty strings
+  for both to clear the stored pair.
+- Enum-valued fields (`mqttVersion`, `sslProtocol`, `peerVerifyMode`) take
+  integer indices; `getConfig` returns the canonical lookup tables
+  (`mqttVersions`, `sslProtocols`, `peerVerifyModes`).
+
+#### 🔵 `project.mqtt.publisher.getConfig`
+Read the publisher configuration (broker, mode, TLS). Includes the enum lookup
+tables and `hasCredentials`.
 
 **Parameters:** None
 
-#### 🔵 `mqtt.getConnectionStatus`
-Get MQTT connection status.
+#### 🔵 `project.mqtt.publisher.setConfig`
+Patch one or more publisher fields. Setting `enabled: true` starts publishing.
 
-**Returns:**
-```json
-{
-  "isConnected": false,
-  "isPublisher": false,
-  "isSubscriber": true
-}
-```
+**Parameters (all optional):**
+- `enabled` (bool): Start or stop publishing
+- `hostname` (string), `port` (int): Broker endpoint
+- `clientId` (string), `customClientId` (bool): Client identity; with
+  `customClientId: false` the ID regenerates automatically
+- `username`, `password` (string): Credential pair (vault rules above)
+- `topicBase` (string): Publish topic root
+- `mode` (int): 0=RawRxData, 1=ScriptDriven, 2=DashboardCsv, 3=DashboardJson
+- `publishFrequency` (int): Publish rate in Hz (1-30)
+- `publishNotifications` (bool), `notificationTopic` (string): Forward app
+  notifications to MQTT
+- `cleanSession` (bool), `keepAlive` (int): Session settings
+- `mqttVersion`, `sslEnabled`, `sslProtocol`, `peerVerifyMode`,
+  `peerVerifyDepth`: Protocol and TLS settings
 
-#### 🔵 `mqtt.listModes`
-Get available MQTT modes.
-
-**Returns:**
-```json
-{
-  "modes": [
-    {"index": 0, "name": "Publisher"},
-    {"index": 1, "name": "Subscriber"}
-  ]
-}
-```
-
-#### 🔵 `mqtt.setMode`
-Set MQTT mode.
-
-**Parameters:**
-- `modeIndex` (int): 0=Publisher, 1=Subscriber
-
-#### 🔵 `mqtt.setHostname`
-Set MQTT broker hostname.
-
-**Parameters:**
-- `hostname` (string): Broker hostname or IP
-
-#### 🔵 `mqtt.setPort`
-Set MQTT broker port.
-
-**Parameters:**
-- `port` (int): Port number (1-65535)
-
-#### 🔵 `mqtt.setClientId`
-Set MQTT client ID.
-
-**Parameters:**
-- `clientId` (string): Client ID
-
-#### 🔵 `mqtt.setUsername`
-Set MQTT username.
-
-**Parameters:**
-- `username` (string): Username
-
-#### 🔵 `mqtt.setPassword`
-Set MQTT password.
-
-**Parameters:**
-- `password` (string): Password
-
-#### 🔵 `mqtt.setTopic`
-Set MQTT topic filter.
-
-**Parameters:**
-- `topic` (string): Topic (e.g., "sensors/temperature" or "sensors/#")
-
-#### 🔵 `mqtt.setCleanSession`
-Set clean session flag.
-
-**Parameters:**
-- `enabled` (bool): true for clean session, false for persistent
-
-#### 🔵 `mqtt.setMqttVersion`
-Set MQTT protocol version.
-
-**Parameters:**
-- `versionIndex` (int): MQTT version index
-
-#### 🔵 `mqtt.setKeepAlive`
-Set keep-alive interval.
-
-**Parameters:**
-- `seconds` (int): Keep-alive interval in seconds
-
-#### 🔵 `mqtt.setAutoKeepAlive`
-Enable or disable auto keep-alive.
-
-**Parameters:**
-- `enabled` (bool): true to enable, false to disable
-
-#### 🔵 `mqtt.setWillQos`
-Set will message QoS.
-
-**Parameters:**
-- `qos` (int): QoS level (0, 1, or 2)
-
-#### 🔵 `mqtt.setWillRetain`
-Set will message retain flag.
-
-**Parameters:**
-- `enabled` (bool): true to retain, false otherwise
-
-#### 🔵 `mqtt.setWillTopic`
-Set will message topic.
-
-**Parameters:**
-- `topic` (string): Will topic
-
-#### 🔵 `mqtt.setWillMessage`
-Set will message payload.
-
-**Parameters:**
-- `message` (string): Will message
-
-#### 🔵 `mqtt.setSslEnabled`
-Enable or disable SSL/TLS.
-
-**Parameters:**
-- `enabled` (bool): true to enable SSL, false to disable
-
-#### 🔵 `mqtt.setSslProtocol`
-Set SSL/TLS protocol.
-
-**Parameters:**
-- `protocolIndex` (int): SSL protocol index
-
-#### 🔵 `mqtt.setPeerVerifyMode`
-Set SSL peer verification mode.
-
-**Parameters:**
-- `modeIndex` (int): Verify mode index
-
-#### 🔵 `mqtt.setPeerVerifyDepth`
-Set SSL peer verification depth.
-
-**Parameters:**
-- `depth` (int): Verification depth
-
-#### 🔵 `mqtt.connect`
-Open MQTT connection.
+#### 🔵 `project.mqtt.publisher.getStatus`
+Snapshot of publisher live state (`connected`, `messagesSent`, broker
+endpoint). Does not trigger a connection attempt.
 
 **Parameters:** None
 
-#### 🔵 `mqtt.disconnect`
-Close MQTT connection.
+#### 🔵 `project.mqtt.subscriber.getConfig`
+Read the subscriber driver configuration, as used the next time `io.connect`
+runs with the MQTT bus type. Password is never returned.
 
 **Parameters:** None
 
-#### 🔵 `mqtt.refreshClientId`
-Generate a new random client ID.
+#### 🔵 `project.mqtt.subscriber.setConfig`
+Patch one or more subscriber driver fields. Changing fields while connected
+schedules a reconnect.
+
+**Parameters (all optional):**
+- `hostname` (string), `port` (int): Broker endpoint
+- `clientId` (string): Client identity
+- `username`, `password` (string): Credential pair (vault rules above)
+- `topicFilter` (string): Subscribe filter; `+` and `#` wildcards supported
+- `cleanSession` (bool), `keepAlive` (int), `autoKeepAlive` (bool): Session
+  settings
+- `mqttVersion`, `sslEnabled`, `sslProtocol`, `peerVerifyMode`,
+  `peerVerifyDepth`: Protocol and TLS settings
+
+#### 🔵 `project.mqtt.subscriber.getStatus`
+Snapshot of subscriber driver live state (`isOpen`, `hostname`, `port`).
 
 **Parameters:** None
-
-#### 🔵 Additional MQTT Query Commands
-- `mqtt.listMqttVersions`
-- `mqtt.listSslProtocols`
-- `mqtt.listPeerVerifyModes`
 
 ### MDF4 Export Commands - Pro (3)
 
@@ -2913,14 +2834,11 @@ while monitoring:
 
 **Solutions:**
 1. Verify Serial Studio is running
-2. Check API Server is enabled (Settings → Preferences or Settings → Extensions)
-3. Confirm port 7777 is correct
+2. Check API Server is enabled (Preferences → General → Advanced)
+3. Confirm you are connecting to port 7777
 4. Try: `telnet localhost 7777` or `nc localhost 7777`
-5. Check firewall settings
-6. Look for error messages in Serial Studio console
-7. Ensure Serial Studio is running
-8. Check the correct port (default: 7777)
-9. Check firewall isn't blocking localhost connections
+5. Check the firewall isn't blocking localhost connections
+6. Look for error messages in Serial Studio's console output
 
 ### Commands Return Errors
 
@@ -2931,7 +2849,7 @@ while monitoring:
 2. Check command spelling (case-sensitive)
 3. Verify parameter types (int vs string)
 4. Check if command requires Pro license
-5. Review API_REFERENCE.md for correct syntax
+5. Review the per-command sections on this page, or run `python test_api.py list` against the live server
 6. Check parameter ranges (e.g., port 1-65535, valid baud rates)
 7. Verify parameter types (int vs string vs bool)
 8. Use `listBaudRates`, `getPortList`, etc. to see valid values
@@ -3084,7 +3002,7 @@ Serial Studio includes a built-in **MCP (Model Context Protocol) server** that e
 
 ### How It Works
 
-The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant interface. Any MCP-capable AI client can discover and call Serial Studio's 182+ API commands as tools.
+The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant interface. Any MCP-capable AI client can discover and call all 300+ API commands as tools.
 
 ### Use Cases
 
@@ -3095,7 +3013,7 @@ The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant 
 
 ### Getting Started with MCP
 
-1. Enable the API Server in Serial Studio (Settings → API Server → Enable).
+1. Enable the API Server in Serial Studio (Preferences → General → Advanced → Enable API Server).
 2. Configure your MCP client (Claude Desktop, a custom MCP host, etc.) to connect to the Serial Studio MCP endpoint.
 3. The AI model can now call any API command as an MCP tool.
 
@@ -3108,8 +3026,7 @@ See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tr
 
 ## Additional Resources
 
-- **Example Code**: `examples/API Test/` directory
-- **API Reference**: `examples/API Test/API_REFERENCE.md`
+- **Example Code**: `examples/API Test/` directory (client, REPL, and smoke tests in `test_api.py`)
 - **Test Suite**: `examples/API Test/test_api.py test`
 - **MCP Client**: `examples/MCP Client/` directory
 - **GitHub Issues**: https://github.com/Serial-Studio/Serial-Studio/issues
@@ -3154,9 +3071,9 @@ See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tr
 
 The Serial Studio API Server is dual-licensed:
 
-- **GPL-3.0**: For use with Serial Studio GPL builds (93 commands)
+- **GPL-3.0**: For use with Serial Studio GPL builds (core command set)
 - **GPL-3.0-only**: For open-source use
-- **Commercial**: For use with Serial Studio Pro builds (all 165 commands)
+- **Commercial**: For use with Serial Studio Pro builds (the full command set)
 - **LicenseRef-SerialStudio-Commercial**: For commercial Pro features
 
 See the main LICENSE file for details.
@@ -3175,9 +3092,7 @@ Found a bug or have a suggestion?
 
 For security issues, please contact privately rather than creating a public issue.
 
-**Total Commands: 165**
-- GPL/Pro: 93 commands
-- Pro Only: 72 commands
+**Total Commands: 300+** — the registry grows with every release; enumerate the live surface with `api.getCommands`.
 
 **Made with ❤️ by the Serial Studio team**
 

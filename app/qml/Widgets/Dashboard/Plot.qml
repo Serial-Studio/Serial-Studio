@@ -54,6 +54,24 @@ Item {
   property int interpolationMode: SerialStudio.InterpolationLinear
 
   //
+  // Bipolar ranges anchor the fill at the zero line; all-negative ranges hang the
+  // fill from the range maximum so the mountain inverts with the data.
+  //
+  readonly property bool bipolarRange: root.model && root.model.minY < 0 && root.model.maxY > 0
+  readonly property bool areaFillVisible: root.showAreaUnderPlot
+       && root.interpolationMode !== SerialStudio.InterpolationNone
+       && root.interpolationMode !== SerialStudio.InterpolationStem
+  readonly property real areaFillBaseline: {
+    if (!root.model)
+      return 0
+
+    if (root.bipolarRange)
+      return 0
+
+    return root.model.maxY <= 0 ? root.model.maxY : root.model.minY
+  }
+
+  //
   // User-controlled visibility preferences (persisted, ANDed with size thresholds)
   //
   property bool userShowXLabel: true
@@ -173,7 +191,6 @@ Item {
   onInterpolationModeChanged: {
     scatterSeries.clear()
     upperSeries.clear()
-    lowerSeries.clear()
   }
   function updateWidgetOptions() {
     plot.yLabelVisible = root.userShowYLabel && (root.width >= 196)
@@ -203,19 +220,10 @@ Item {
 
     function onUiTimeout() {
       if (root.visible && root.model) {
-        if (root.interpolationMode === SerialStudio.InterpolationNone) {
+        if (root.interpolationMode === SerialStudio.InterpolationNone)
           root.model.draw(scatterSeries)
-        } else {
+        else
           root.model.draw(upperSeries)
-
-          if (root.showAreaUnderPlot) {
-            const baseline = (root.model.minY < 0 && root.model.maxY > 0)
-                             ? 0 : root.model.minY
-            lowerSeries.clear()
-            lowerSeries.append(root.model.minX, baseline)
-            lowerSeries.append(root.model.maxX, baseline)
-          }
-        }
       }
     }
   }
@@ -413,6 +421,10 @@ Item {
     xAxis.tickInterval: plot.xTickInterval
     yAxis.tickInterval: plot.yTickInterval
 
+    areaFillColor: root.color
+    areaFillBaseline: root.areaFillBaseline
+    areaFillSource: root.areaFillVisible ? upperSeries : null
+
     onZoomChanged: plotCommon.setDownsampleFactor(plot, model)
     onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
     onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
@@ -429,9 +441,7 @@ Item {
     }
 
     Component.onCompleted: {
-      graph.addSeries(areaSeries)
       graph.addSeries(upperSeries)
-      graph.addSeries(lowerSeries)
       graph.addSeries(scatterSeries)
     }
 
@@ -452,25 +462,6 @@ Item {
 
       width: 2
       visible: root.interpolationMode !== SerialStudio.InterpolationNone
-    }
-
-    LineSeries {
-      id: lowerSeries
-
-      width: 0
-      visible: false
-    }
-
-    AreaSeries {
-      id: areaSeries
-
-      upperSeries: upperSeries
-      lowerSeries: lowerSeries
-      borderColor: "transparent"
-      visible: root.showAreaUnderPlot
-           && root.interpolationMode !== SerialStudio.InterpolationNone
-           && root.interpolationMode !== SerialStudio.InterpolationStem
-      color: Qt.rgba(root.color.r, root.color.g, root.color.b, 0.2)
     }
   }
 }

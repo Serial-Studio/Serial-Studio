@@ -55,11 +55,20 @@ DataModel::ControlApiMarshaller::ControlApiMarshaller(QObject* parent) : QObject
 
 /**
  * @brief Runs an apiCall on the GUI thread so handlers never touch GUI objects off-thread.
+ *        Fails fast once shutdown is requested: a call drained late in teardown must never
+ *        execute a command against modules that are already torn down.
  */
 QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
                                                       const QVariantMap& params)
 {
   static std::atomic<quint64> s_requestSeq{0};
+
+  if (s_shutdownRequested.load(std::memory_order_acquire)) {
+    QVariantMap out;
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: application is shutting down"));
+    return out;
+  }
 
   API::CommandRequest request;
   request.id      = QStringLiteral("cs-%1").arg(s_requestSeq.fetch_add(1) + 1);

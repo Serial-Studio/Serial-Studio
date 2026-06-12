@@ -1,12 +1,12 @@
 # MQTT Topics & Semantics
 
-MQTT is the standard publish/subscribe protocol for IoT. It is the right transport when many devices share a network and publishers and subscribers should not have to know about each other directly. The header is small, it is robust over unreliable links, every constrained microcontroller has a client, and bridging it into a dashboard is straightforward.
+MQTT is the standard publish/subscribe protocol for IoT. It is the right transport when many devices share a network and publishers and subscribers should not have to know about each other directly. The header is small, it tolerates unreliable links, every constrained microcontroller has a client, and bridging it into a dashboard takes little work.
 
 This page is the protocol vocabulary used by Serial Studio's two MQTT surfaces: the [subscriber driver](Drivers-MQTT.md) (broker → Serial Studio) and the [publisher](MQTT-Publisher.md) (Serial Studio → broker). Both reference the concepts defined here; this is the place to learn them once.
 
 ## What is MQTT?
 
-MQTT stands for **Message Queuing Telemetry Transport**. The name is partly historical: MQTT does not provide queuing in the traditional sense, but the publish/subscribe and "telemetry over unreliable links" parts of the name still describe it accurately. The protocol was designed in 1999 by IBM for monitoring oil pipelines over satellite links and standardised as an OASIS specification in 2014. The current version is MQTT 5.0 (2019); MQTT 3.1.1 is still extremely common in the field.
+MQTT originally stood for **MQ Telemetry Transport**, after IBM's MQ product line; the OASIS standard treats the name as no longer an acronym. The "Message Queuing Telemetry Transport" expansion often seen is a back-formation, and a misleading one: MQTT does not provide queuing in the traditional sense, though the "telemetry over unreliable links" part still describes it accurately. The protocol was designed in 1999 by IBM for monitoring oil pipelines over satellite links and standardised as an OASIS specification in 2014. The current version is MQTT 5.0 (2019); MQTT 3.1.1 is still extremely common in the field. Serial Studio supports 3.1, 3.1.1, and 5.0 on both of its MQTT surfaces and defaults to 5.0.
 
 The core idea is decoupling. Publishers and subscribers do not connect to each other. They connect to a **broker**, and the broker handles routing.
 
@@ -70,6 +70,8 @@ MQTT publishes can carry one of three QoS levels:
 
 For telemetry, QoS 0 is usually adequate: if a temperature reading is lost, the next one is already on its way. Choose QoS 1 when loss is unacceptable but duplicates are (the application deduplicates). QoS 2 is for "must arrive exactly once" cases such as billing events and is rarely worth its cost for streaming data.
 
+Serial Studio's [subscriber driver](Drivers-MQTT.md) subscribes at QoS 0, and the [Publisher](MQTT-Publisher.md)'s built-in payload modes publish at QoS 0. Only the `mqttPublish()` script hook can request QoS 1 or 2.
+
 ```mermaid
 sequenceDiagram
     participant P as Publisher
@@ -98,29 +100,33 @@ A publisher can mark a message as **retained**. The broker remembers the last re
 
 Retained messages do not expire unless MQTT 5 message expiry is set. Publishing an empty payload to a topic with the retain flag clears the retained message.
 
+Serial Studio's Publisher uses a retained message for the CSV header on `<TopicBase>/header`, so a subscriber that joins late still receives the column schema (see [MQTT Publisher](MQTT-Publisher.md)).
+
 A retained message at a level *above* the live stream can mask new publishes for a fresh subscriber. If a dashboard connects and seems to receive stale data, subscribe to `your/topic/#` to see what the broker delivered on connect.
 
 ## Last Will and Testament
 
 When a client connects, it can register a **Last Will** message: a topic, payload, and QoS that the broker publishes if the client disconnects ungracefully. This is the standard way to detect dead clients. Each client publishes a retained "I'm here" message on connect and a Last Will of "I'm gone" on the same topic; subscribers always know which clients are alive.
 
+Serial Studio registers no Last Will of its own; the pattern matters here because devices publishing into a dashboard commonly use it for presence tracking.
+
 ## Sessions and clean session
 
 MQTT 3.x assumes persistent sessions by default: the broker remembers a client's subscriptions and queued messages across disconnects, keyed by the client ID. When the client reconnects, it resumes where it left off.
 
-For interactive clients (a dashboard connecting from a laptop) persistent sessions usually cause more confusion than they solve. **Clean session = on** is the right default for most Serial Studio uses; the broker forgets the client between connections. Persistent sessions are useful when an offline subscriber must catch up on every message it missed; in that case turn clean session off, set a stable client ID, and make sure the publisher uses QoS ≥ 1 (QoS 0 messages are not queued for offline clients).
+For interactive clients (a dashboard connecting from a laptop) persistent sessions usually cause more confusion than they solve. **Clean session = on**, Serial Studio's default on both the subscriber driver and the Publisher, is right for most uses; the broker forgets the client between connections. Persistent sessions are useful when an offline subscriber must catch up on every message it missed; in that case turn clean session off, set a stable client ID, and make sure the publisher uses QoS ≥ 1 (QoS 0 messages are not queued for offline clients).
 
 ## Keep alive
 
 The keep-alive interval, negotiated at CONNECT time, is the maximum time the broker waits between packets from the client before considering it dead. The client sends a PINGREQ when idle; the broker replies with PINGRESP and the timer resets. If the broker stops receiving anything within roughly 1.5 × keep-alive, it assumes the connection is gone, drops it, and publishes the Last Will message.
 
-Pick a keep-alive that is comfortably shorter than the shortest network timeout in the path (NAT entries, corporate firewalls, mobile-network idle disconnects). Sixty seconds is a reasonable default; on flaky cellular links, drop to 30 or 15. Keep alive at `0` disables the mechanism entirely — the broker will only notice a dead client when TCP itself does, which can take minutes.
+Pick a keep-alive that is comfortably shorter than the shortest network timeout in the path (NAT entries, corporate firewalls, mobile-network idle disconnects). Sixty seconds, Serial Studio's default, is reasonable; on flaky cellular links, drop to 30 or 15. Keep alive at `0` disables the mechanism entirely — the broker will only notice a dead client when TCP itself does, which can take minutes.
 
 ## Client IDs
 
-Every MQTT client on a broker needs a unique client ID. Serial Studio generates a random 16-character string for every fresh source and for the Publisher. **Regenerate** in the form picks a new ID; do this whenever you suspect a collision.
+Every MQTT client on a broker needs a unique client ID. Serial Studio generates a random 16-character ID for the subscriber driver (kept until you change it) and for the Publisher (regenerated on every project load unless **Custom Client ID** is on). **Regenerate** in the subscriber's Setup pane picks a new one; do this whenever you suspect a collision.
 
-If two clients connect to the same broker with the same client ID, the broker disconnects the older one. Two Serial Studio instances pointed at the same broker need distinct client IDs. So do two MQTT sources within the same project if you keep clean session off.
+If two clients connect to the same broker with the same client ID, the broker disconnects the older one. Two Serial Studio instances pointed at the same broker need distinct client IDs. So do two MQTT sources within the same project.
 
 ## Popular brokers
 
@@ -141,8 +147,8 @@ Do not use public brokers for anything that should stay private. They are public
 
 - AWS IoT Core.
 - Azure IoT Hub.
-- Google Cloud IoT Core.
 - HiveMQ Cloud.
+- EMQX Cloud.
 
 ## Further reading
 
@@ -157,6 +163,7 @@ Do not use public brokers for anything that should stay private. They are public
 
 - [MQTT Driver (Subscriber)](Drivers-MQTT.md): how the protocol vocabulary maps onto a per-source driver.
 - [MQTT Publisher](MQTT-Publisher.md): the project-level outbound side and its payload modes.
+- [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step MQTT setup in the project editor.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Drivers: Network](Drivers-Network.md): raw TCP / UDP, the transport MQTT runs on.
 - [Pro vs Free Features](Pro-vs-Free.md): MQTT is a Pro feature.

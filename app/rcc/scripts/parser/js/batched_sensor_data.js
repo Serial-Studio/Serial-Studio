@@ -116,6 +116,8 @@ function parse(frame) {
 
 // VARIATION 2: Base64-encoded binary data
 // Input: Base64 string with header + packed samples
+// NOTE: QJSEngine has no built-in atob(); polyfill it first.
+// base64_encoded.js in this script library contains the polyfill.
 /*
 function parse(frame) {
   var bytes = atob(frame).split('').map(function(c) {

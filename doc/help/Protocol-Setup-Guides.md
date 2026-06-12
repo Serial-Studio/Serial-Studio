@@ -1,6 +1,6 @@
 # Protocol Setup Guides
 
-Step-by-step setup instructions for every communication protocol supported by Serial Studio. Each guide walks through the exact UI steps required to establish a connection. For protocol overviews and selection guidance, see [Communication Protocols](Communication-Protocols.md).
+Step-by-step setup instructions for every communication protocol supported by Serial Studio. Each guide walks through the exact UI steps required to establish a connection. For protocol overviews and selection guidance, see [Communication Protocols](Communication-Protocols.md); for the driver model and multi-device projects, see [Data Sources](Data-Sources.md).
 
 ## Serial/UART Setup
 
@@ -11,19 +11,21 @@ Step-by-step setup instructions for every communication protocol supported by Se
 ### Steps
 
 1. Open Serial Studio.
-2. In the **Setup Panel**, select **Serial Port** from the I/O Interface dropdown. Alternatively, click the **UART** button in the toolbar if visible.
-3. Select the COM port (Windows) or `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux/macOS) from the **Port** dropdown. If the port does not appear, check the Troubleshooting section below.
-4. Set the **Baud Rate** to match your device. Common values: 9600, 115200, 921600.
+2. In the **Setup Panel**, select **UART/COM** from the I/O Interface dropdown. Alternatively, click the **UART** button in the toolbar if visible.
+3. Select the COM port (Windows) or `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux/macOS) from the **COM Port** dropdown. If the port does not appear, check the Troubleshooting entries for this driver.
+4. Set the **Baud Rate** to match your device. Default: 9600. Common values: 9600, 115200, 921600. The field is editable, so rates not in the list can be typed directly.
 5. Set **Data Bits** (usually 8), **Parity** (usually None), **Stop Bits** (usually 1), and **Flow Control** (usually None).
-6. Optionally enable **DTR** if your device uses DTR for reset signaling (common with Arduino).
-7. Optionally enable **Auto Reconnect** to automatically reconnect if the device is unplugged and re-plugged.
+6. Leave **Send DTR Signal** enabled (the default) if your device uses DTR for reset signaling, as Arduino boards do; disable it if a DTR pulse resets your device unexpectedly.
+7. Optionally enable **Auto Reconnect** (off by default) to reconnect when the device is unplugged and re-plugged.
 8. Click **Connect**.
 
 ### Troubleshooting
 
 - **Port not listed:** On Linux, add your user to the `dialout` group: `sudo usermod -aG dialout $USER`, then log out and back in. On Windows, install the appropriate USB-serial driver. On all platforms, try a different USB cable or port.
-- **No data after connecting:** Verify the baud rate matches the device exactly. Check that your frame delimiters are configured correctly. Try toggling the DTR signal.
+- **No data after connecting:** Verify the baud rate matches the device exactly. Check that your frame delimiters are configured correctly. Try toggling **Send DTR Signal**.
 - **Garbled data:** Baud rate mismatch is the most common cause. Double-check the device documentation.
+
+Full driver reference: [UART](Drivers-UART.md).
 
 ## TCP Network Setup
 
@@ -35,16 +37,20 @@ Step-by-step setup instructions for every communication protocol supported by Se
 
 1. In the **Setup Panel**, select **Network Socket** from the I/O Interface dropdown.
 2. Set the **Socket Type** to **TCP**.
-3. Enter the **Remote Address** (IP address or hostname of the device).
-4. Enter the **TCP Port** number the device is listening on.
+3. Enter the **Remote Address** (IP address or hostname of the device). Default: `127.0.0.1`.
+4. Enter the **Remote Port** the device is listening on. Default: 23.
 5. Click **Connect**.
 
-Serial Studio will resolve the hostname (if provided) and attempt a TCP connection. A spinner indicates DNS lookup is in progress.
+Serial Studio will resolve the hostname (if provided) and attempt a TCP connection. A spinner indicates DNS lookup is in progress, and the Connect button stays disabled until the name resolves.
+
+Serial Studio is a TCP client only: it dials out to a listening server and never accepts inbound connections. If the device expects to push data to a listener, run a small TCP relay in front of Serial Studio, or switch to UDP.
 
 ### Troubleshooting
 
 - **Connection refused:** Verify the device is listening on the specified port. Ping the device to confirm network reachability. Check firewall rules on both ends.
 - **Connection times out:** The device may be on a different subnet or behind a NAT. Verify the IP address.
+
+Full driver reference: [Network](Drivers-Network.md).
 
 ## UDP Network Setup
 
@@ -56,16 +62,18 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 
 1. In the **Setup Panel**, select **Network Socket** from the I/O Interface dropdown.
 2. Set the **Socket Type** to **UDP**.
-3. Enter the **Remote Address** (IP address of the device, or multicast group address).
-4. Enter the **UDP Remote Port** (port the device sends from or listens on).
-5. Set the **UDP Local Port** to the port your computer should bind to for receiving data. Use `0` for automatic port assignment.
-6. Optionally enable **UDP Multicast** if the remote address is a multicast group (e.g., `239.x.x.x`).
+3. Enter the **Remote Address** (IP address of the device, or multicast group address). Default: `127.0.0.1`.
+4. Enter the **Remote Port** (the destination port when Serial Studio writes data back). Default: 53. This field is hidden while **Multicast** is checked.
+5. Set the **Local Port** to the port your computer should bind to for receiving data. Use `0` (the default) for automatic port assignment; bind a fixed port when the device sends to a known destination.
+6. Optionally enable **Multicast** if the remote address is a multicast group (e.g., `239.x.x.x`). Serial Studio joins the group on connect.
 7. Click **Connect**.
 
 ### Troubleshooting
 
-- **No data received.** Check that the device is sending to your computer's IP and the correct local port. Check firewall rules: UDP is often blocked by default. If you're using multicast, make sure both devices are on the same multicast-capable network segment.
+- **No data received.** Check that the device is sending to your computer's IP and the correct local port. Check firewall rules: UDP is often blocked by default. If you're using multicast, verify both devices are on the same multicast-capable network segment.
 - **Data from wrong source:** UDP is connectionless. Any device sending to your bound port will be received. Use firewall rules or application-level filtering if needed.
+
+Full driver reference: [Network](Drivers-Network.md).
 
 ## Bluetooth LE Setup
 
@@ -76,7 +84,7 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 ### Steps
 
 1. In the **Setup Panel**, select **Bluetooth LE** from the I/O Interface dropdown.
-2. Ensure Bluetooth is enabled on your computer. Serial Studio will automatically start scanning for BLE devices.
+2. Ensure Bluetooth is enabled on your computer. Serial Studio starts scanning for BLE devices as soon as the driver is selected.
 3. Wait for device scanning to complete. Your device should appear in the **Device** dropdown.
 4. Select your device from the dropdown.
 5. If the device exposes multiple GATT services, select the appropriate **Service** from the dropdown.
@@ -88,6 +96,8 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 - **Device not found:** Ensure the device is advertising and not already paired with another host. Move the device closer. Restart Bluetooth on your computer. On macOS, grant Bluetooth permission to Serial Studio in System Settings.
 - **Connected but no data:** Verify you selected the correct service and characteristic. The characteristic must support notifications or indications. Check that the device is actively sending data.
 - **Adapter not available:** On Linux, ensure `bluetoothd` is running and the user is in the `bluetooth` group.
+
+Full driver reference: [Bluetooth LE](Drivers-Bluetooth-LE.md).
 
 ## MQTT Setup (Pro)
 
@@ -102,16 +112,18 @@ MQTT now has two distinct surfaces in Serial Studio. Pick the one that matches w
 
 ### Subscriber: add an MQTT source
 
+For a single-device setup, select **MQTT Subscriber** from the I/O Interface dropdown in the **Setup Panel** and fill in the same fields there. For multi-device projects:
+
 1. Open the project editor.
 2. Add a new source under **Devices** (or pick an existing one) and set its **Bus Type** to **MQTT Subscriber**.
 3. Under **Connection Settings**, enter:
-   - **Hostname** and **Port** (`1883` plaintext, `8883` TLS).
+   - **Hostname** and **Port** (`1883` plaintext, `8883` TLS; default `1883`).
    - **Username** / **Password** if the broker requires authentication.
    - **Client ID** (auto-generated; click **Regenerate** to pick a new one).
-   - **Topic Filter**. Examples: `sensors/#`, `device/+/telemetry`, `mydevice/data`.
-   - **MQTT Version** (3.1, 3.1.1, or 5.0).
+   - **Topic Filter**. Examples: `sensors/#`, `device/+/telemetry`, `mydevice/data`. Connecting is blocked while this is empty.
+   - **MQTT Version** (MQTT 3.1, 3.1.1, or 5.0).
    - **Clean Session** on (default) for interactive use.
-4. To use TLS, enable **SSL/TLS** and pick a protocol family and peer-verify mode. For a private CA, load the PEM certificates from a folder.
+4. To use TLS, enable **SSL/TLS** and pick an **SSL Protocol** and **Peer Verify** mode. For a private CA, set **CA Certificates** to **Load From Folder…** and pick the directory holding the PEM files.
 5. Configure frame detection on the source. Each MQTT message preserves payload boundaries, so **No Delimiters** is usually the right choice — one publish becomes one frame.
 6. Save the project and click **Connect** in the Setup panel.
 
@@ -129,7 +141,7 @@ See [MQTT Subscriber](Drivers-MQTT.md) for the full protocol primer.
    - **Raw RX Data** republishes the bytes that arrived on any active driver, unmodified.
    - **Custom Script** publishes the value returned by the `mqttPublish()` script hook.
 4. Set **Topic Base**. The Publisher silently produces no traffic when this is empty.
-5. Turn on **Publish Notifications** to mirror dashboard events to MQTT; set **Notification Topic** if you want them on a separate topic from the frame stream.
+5. Turn on **Publish Notifications** to mirror dashboard events to MQTT; set **Notification Topic** if you want them on a separate topic from the frame stream (it defaults to the Topic Base when empty).
 6. Under **Broker**, fill in hostname, port, credentials, protocol version, and keep-alive.
 7. For TLS, enable **Use SSL/TLS** and pick a protocol, peer-verify mode, and verify depth. Use **Load CA Certs** in the header bar to add PEM certificates for a private CA.
 8. Click **Test Connection** in the header bar to probe the broker without disturbing the live session. The result appears in a message box.
@@ -157,12 +169,12 @@ See [MQTT Publisher](MQTT-Publisher.md) for the full reference, including the `m
 3. Select the **Serial Port** corresponding to your RS-485 adapter.
 4. Set the **Baud Rate** to match the device (common: 9600, 19200, 115200).
 5. Set **Parity** (commonly Even for Modbus), **Data Bits** (usually 8), and **Stop Bits** (usually 1).
-6. Set the **Slave Address** (device address on the bus, 1--247).
-7. Add one or more **Register Groups**, each specifying:
-   - **Register Type**: Coil, Discrete Input, Input Register, or Holding Register.
-   - **Start Address**: The first register to read.
-   - **Count**: How many consecutive registers to read.
-8. Set the **Poll Interval** in milliseconds (e.g., 100 ms for 10 Hz polling).
+6. Set the **Slave Address** (device address on the bus, 1-247; default 1).
+7. Click **Configure Register Groups…** and add one or more groups, each specifying:
+   - **Register Type**: Holding Registers (0x03), Input Registers (0x04), Coils (0x01), or Discrete Inputs (0x02).
+   - **Start Address**: The first register to read (0-65535).
+   - **Register Count**: How many consecutive registers to read (1-125).
+8. Set the **Poll Interval (ms)**. Default: 100 ms, which polls at 10 Hz.
 9. Click **Connect**.
 
 ### Generate Project from Register Groups
@@ -170,17 +182,19 @@ See [MQTT Publisher](MQTT-Publisher.md) for the full reference, including the `m
 Once you have configured your register groups, you can auto-generate a Serial Studio project file instead of building one by hand:
 
 1. Configure all register groups as described above.
-2. Click **Generate Project** in the register groups dialog.
+2. Click **Generate Project** in the **Modbus Register Groups** dialog.
 3. You will be prompted to save the `.ssproj` file.
 4. The project editor opens for further customization.
 
-The generated project includes one group per register block, one dataset per register/coil, and a generated Lua frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) below for details on the frame parser.
+The generated project includes one group per register block, one dataset per register/coil, and a generated Lua frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on the frame parser.
 
 ### Troubleshooting
 
 - **No response:** Verify the slave address matches the device. Check RS-485 wiring polarity. Confirm the baud rate and parity match the device settings. Ensure termination resistors are in place.
 - **Timeout errors:** Increase the poll interval. Reduce the number of registers per group. Check the physical bus for noise or excessive cable length.
 - **CRC errors:** Almost always a wiring issue: swapped A/B lines, missing termination, or ground loop.
+
+Full driver reference: [Modbus](Drivers-Modbus.md).
 
 ## Modbus TCP Setup (Pro)
 
@@ -195,8 +209,8 @@ The generated project includes one group per register block, one dataset per reg
 3. Enter the **Host** (device IP address or hostname).
 4. Enter the **Port** (Serial Studio prefills 5020; standard Modbus TCP devices listen on 502).
 5. Set the **Slave Address** (usually 1 for TCP gateways, but may vary).
-6. Add one or more **Register Groups** as described in the Modbus RTU section above.
-7. Set the **Poll Interval**.
+6. Click **Configure Register Groups…** and add one or more groups, with the same fields as in the Modbus RTU steps.
+7. Set the **Poll Interval (ms)**.
 8. Click **Connect**.
 
 ### Troubleshooting
@@ -208,7 +222,7 @@ The generated project includes one group per register block, one dataset per reg
 
 **License:** Pro
 
-Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a Built-In frame parser, and appropriate dashboard widgets.
+Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a Lua frame parser, and appropriate dashboard widgets.
 
 ### Supported Formats
 
@@ -217,9 +231,9 @@ Serial Studio auto-detects the format from the file extension and accepts **CSV*
 ### How to Import
 
 1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
-2. Click **Import Register Map...**.
+2. Click **Import Register Map…**.
 3. Select a CSV, XML, or JSON register map file.
-4. Review the registers in the preview dialog.
+4. Review the registers in the **Modbus Register Map Preview** dialog.
 5. Click **Create Project**. You will be prompted to save the `.ssproj` file.
 6. The register groups are also loaded into the Modbus driver automatically.
 
@@ -244,7 +258,7 @@ CSV is the most common format for Modbus register maps. Most PLC vendors, SCADA 
 
 **Register type values:** `holding` (or `0x03`, `3`, `hr`), `input` (or `0x04`, `4`, `ir`), `coil` (or `0x01`, `1`), `discrete` (or `0x02`, `2`, `di`).
 
-**Data type values:** `uint16`, `int16`, `uint32`, `int32`, `float32`, `float64`, `bool`.
+**Data type values:** `uint16`, `int16`, `uint32`, `int32`, `uint64`, `int64`, `float32`, `float64`, `bool`. Unknown types fall back to `uint16`; `bool` defaults its range to 0-1.
 
 Lines starting with `#` are treated as comments and skipped.
 
@@ -266,7 +280,7 @@ Most Modbus device documentation provides register maps as tables in PDF or Exce
 
 1. **Identify the columns:** Look for register address, name/description, data type, and units.
 2. **Map register types:** Holding registers (function code 03), input registers (04), coils (01), discrete inputs (02).
-3. **Note multi-register values.** A `float32` value occupies two consecutive 16-bit registers. Set the address to the first register. Serial Studio handles the rest.
+3. **Note multi-register values.** A 32-bit value (`float32`, `uint32`, `int32`) occupies two consecutive 16-bit registers; a 64-bit value occupies four. Set the address to the first register. Serial Studio handles the rest.
 4. **Add scaling if needed:** If the device stores temperature as raw value × 0.1, add `scale,0.1` to the CSV.
 5. **Save as `.csv`** with UTF-8 encoding.
 
@@ -453,8 +467,8 @@ Frame with function `0x01` arrives → parser matches the coil block → extract
 
 - **Typical group count:** Most Modbus devices use 1–3 register groups. A single contiguous block of holding registers is the most common configuration.
 - **Synchronization.** Each poll cycle is sequential: group N+1 isn't polled until group N's response arrives. The parser also matches each response to a block by its Modbus function code, so it stays aligned even when block types differ.
-- **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser latches the previous values for that block and resynchronizes on the next matching response. At typical poll rates (100ms+), this causes at most a brief glitch.
-- **Customization:** The generated parser is a configured Built-In template, not editable script. To change which registers are decoded, adjust the register groups and regenerate the project.
+- **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser latches the previous values for that block and resynchronizes on the next matching response. At typical poll rates (100 ms or slower), this causes at most a brief glitch.
+- **Customization:** The generated parser is editable Lua. Each register is one line in the `BLOCKS` spec (`name`, `offset`, `type`, optional `scale`/`shift`); to add a register, add a line there plus a matching data-table register and a dataset that reads it back with `tableGet()`. For larger changes, adjust the register groups and regenerate the project.
 
 ## CAN Bus Setup (Pro)
 
@@ -465,13 +479,13 @@ Frame with function `0x01` arrives → parser matches the coil block → extract
 ### Steps
 
 1. In the **Setup Panel**, select **CAN Bus** from the I/O Interface dropdown.
-2. Select the **Plugin** (CAN backend):
-   - Linux: `socketcan`
-   - Windows: `peakcan`, `vectorcan`, or `systeccan`
+2. Select the **CAN Driver** (backend). The Qt plugins are `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, and `virtualcan`; Serial Studio adds its own `canable_gsusb` (CANable USB), `slcan` (Serial CAN), and `seeed_usbcan` (Seeed / Waveshare) backends.
 3. Select the **Interface** from the dropdown (e.g., `can0`, `PCAN_USBBUS1`).
-4. Set the **Bitrate** to match the CAN network exactly. Common values: 125000, 250000, 500000, 1000000 bps.
-5. Optionally enable **CAN FD** if the network uses Flexible Data-rate frames.
+4. Set the **Bitrate** to match the CAN network exactly. Default: 500000. Common values: 125000, 250000, 500000, 1000000 bps.
+5. Optionally enable **Flexible Data-Rate** if the network uses CAN FD frames. **Listen-Only** and **Loopback** toggles are available for passive monitoring and self-test.
 6. Click **Connect**.
+
+To skip writing a project by hand, click **Import DBC File…** under **DBC Database**: the importer generates a complete project from a CAN signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). Without a DBC, frames reach the [frame parser](JavaScript-API.md) as binary records (ID, DLC, payload); decode them with the Binary decoder and your own parse function.
 
 ### Linux SocketCAN Preparation
 
@@ -495,6 +509,8 @@ sudo ip link set up can0
 - **Interface not listed:** Ensure the adapter driver is installed. On Linux, verify the interface is up with `ip link show can0`. On Windows, check Device Manager for the CAN adapter.
 - **Error frames only:** Bitrate mismatch, missing termination, or bus contention. Check all physical connections.
 
+Full driver reference: [CAN Bus](Drivers-CAN-Bus.md).
+
 ## Audio Input Setup (Pro)
 
 **License:** Pro
@@ -503,20 +519,22 @@ sudo ip link set up can0
 
 ### Steps
 
-1. In the **Setup Panel**, select **Audio Input** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Audio** from the I/O Interface dropdown.
 2. Select the **Input Device** from the dropdown (lists all detected audio capture devices).
 3. Select the **Sample Rate**. Common: 44100 Hz, 48000 Hz. Available rates depend on the device.
-4. Select the **Sample Format** (bit depth). Common: 16-bit integer, 32-bit float.
-5. Select the **Channel Configuration** (Mono or Stereo).
+4. Select the **Sample Format**. Options, as supported by the device: Unsigned 8-bit, Signed 16-bit, Signed 24-bit, Signed 32-bit, Float 32-bit.
+5. Select the **Channels** layout (Mono, Stereo, or a multichannel layout, depending on the device).
 6. Click **Connect**.
 
-Audio data flows into the pipeline as PCM samples, which can be visualized with Plot and FFT Plot widgets.
+Audio data flows into the pipeline as PCM samples, which can be visualized with Plot, FFT Plot, and Waterfall widgets.
 
 ### Troubleshooting
 
 - **No audio detected:** Verify the input device is selected correctly in the dropdown. Check the OS audio settings to confirm the input is not muted and the level is adequate. On macOS, grant Microphone permission.
 - **Distorted signal:** Reduce the input gain in OS audio settings. Use a line-in input instead of a microphone input when connecting sensors.
 - **Wrong sample rate options:** The available sample rates are reported by the hardware. If the rate you need is not listed, try a different audio interface.
+
+Full driver reference: [Audio](Drivers-Audio.md).
 
 ## Raw USB Setup (Pro)
 
@@ -526,15 +544,15 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 ### Steps
 
-1. In the **Setup Panel**, select **Raw USB** from the I/O Interface dropdown.
-2. Pick the device from the dropdown. Devices are listed as `VID:PID – Manufacturer Product`.
+1. In the **Setup Panel**, select **USB Device** from the I/O Interface dropdown.
+2. Pick the device from the **USB Device** dropdown. Devices are listed as `VID:PID – Manufacturer Product`.
 3. Select the **Transfer Mode**:
    - **Bulk Stream** (default): Standard synchronous bulk IN/OUT. Works for most devices.
-   - **Advanced Control**: Bulk transfers plus vendor-specific control transfers. A confirmation dialog appears before enabling.
+   - **Advanced (Bulk + Control)**: Bulk transfers plus vendor-specific control transfers. A confirmation dialog appears before enabling, since incorrect control requests can crash or damage hardware.
    - **Isochronous**: Asynchronous isochronous transfers for fixed-rate streaming.
 4. Select the **IN Endpoint** (for reading data from the device).
 5. Select the **OUT Endpoint** (for writing data to the device), if applicable.
-6. For Isochronous mode, set the **ISO Packet Size**.
+6. For Isochronous mode, set the **Max Packet Size** to the maximum transfer size reported by the selected endpoint (prefilled from the endpoint descriptor).
 7. Click **Connect**.
 
 ### Troubleshooting
@@ -542,6 +560,8 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 - **Device not listed:** On Linux, add a `udev` rule granting your user access to the device's VID/PID, then run `sudo udevadm control --reload-rules && sudo udevadm trigger`. On Windows, use Zadig to install a WinUSB driver for the device. On macOS, the device should appear if no kernel driver has claimed it.
 - **Permission denied:** On Linux, verify the `udev` rule is correct and the user is in the appropriate group. Running as root is a quick test but not recommended for production.
 - **No data:** Verify the correct IN endpoint is selected. Check that the device firmware is sending data on that endpoint.
+
+Full driver reference: [USB](Drivers-USB.md).
 
 ## HID Setup (Pro)
 
@@ -551,9 +571,9 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 ### Steps
 
-1. In the **Setup Panel**, select **HID** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **HID Device** from the I/O Interface dropdown.
 2. Wait for device enumeration. HID devices are re-enumerated every 2 seconds automatically.
-3. Pick the device from the dropdown. Devices are listed as `Product Name (VID:PID)`.
+3. Pick the device from the **HID Device** dropdown. Devices are listed as `Product Name (VID:PID)`.
 4. Review the **Usage Page** and **Usage** fields to confirm the correct device function is selected.
 5. Click **Connect**.
 
@@ -561,6 +581,8 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 - **Device not listed:** On Linux, add a `udev` rule for `hidraw` access: create a file in `/etc/udev/rules.d/` with `KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666"` (or a more restrictive rule targeting your VID/PID). On Windows and macOS, HID devices are generally accessible without additional configuration.
 - **No data:** Verify the device is actively sending HID reports. Some HID devices only send reports when there is a state change (e.g., button press on a gamepad).
+
+Full driver reference: [HID](Drivers-HID.md).
 
 ## Process I/O setup: Launch mode (Pro)
 
@@ -570,11 +592,11 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 ### Steps
 
-1. In the **Setup Panel**, select **Process I/O** from the I/O Interface dropdown.
-2. Set the **Mode** to **Launch**.
-3. Enter the **Executable** path, or click the browse button to select it. Serial Studio searches standard PATH locations.
+1. In the **Setup Panel**, select **Process** from the I/O Interface dropdown.
+2. Set the **Mode** to **Launch Process**.
+3. Enter the **Executable** path, or click **Browse** to select it. Bare command names are resolved through the PATH.
 4. Enter **Arguments** (command-line arguments for the process), if any.
-5. Optionally set the **Working Directory** for the process.
+5. Optionally set the **Working Dir** for the process.
 6. Click **Connect**.
 
 Serial Studio spawns the process, reads its merged stdout and stderr, and feeds the output into the data pipeline. You can write to the process's stdin via the console.
@@ -585,6 +607,8 @@ Serial Studio spawns the process, reads its merged stdout and stderr, and feeds 
 - **No data:** Ensure the script flushes its stdout (Python: use `flush=True` in `print()` or run with `python3 -u`). Buffered output will not appear until the buffer fills.
 - **Process crashes immediately:** Check the working directory and arguments. Review the console output for error messages from the process.
 
+Full driver reference: [Process I/O](Drivers-Process-IO.md).
+
 ## Process I/O setup: Named Pipe mode (Pro)
 
 **License:** Pro
@@ -593,12 +617,13 @@ Serial Studio spawns the process, reads its merged stdout and stderr, and feeds 
 
 ### Steps
 
-1. In the **Setup Panel**, select **Process I/O** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Process** from the I/O Interface dropdown.
 2. Set the **Mode** to **Named Pipe**.
-3. Enter the **Pipe Path**, or click the browse button to select it.
+3. Enter the **Pipe Path**, or click **Browse** to select it.
    - Linux/macOS: `/tmp/myfifo` (create with `mkfifo /tmp/myfifo` beforehand).
    - Windows: `\\.\pipe\MyPipeName`.
-4. Click **Connect**.
+4. Optionally click **Pick Running Process…** to choose a running process and derive a pipe-path suggestion from it.
+5. Click **Connect**.
 
 Serial Studio opens the named pipe for reading and streams data into the pipeline. The external process must open the pipe for writing.
 
@@ -607,9 +632,14 @@ Serial Studio opens the named pipe for reading and streams data into the pipelin
 - **Cannot open pipe:** Verify the pipe exists before connecting. On Linux/macOS, create it with `mkfifo /path/to/pipe`. On Windows, the pipe must be created by the writing process before Serial Studio connects.
 - **No data:** Ensure the external process is actively writing to the pipe. Named pipes block until both reader and writer are connected.
 
+Full driver reference: [Process I/O](Drivers-Process-IO.md).
+
 ## See Also
 
 - [Communication Protocols](Communication-Protocols.md): protocol overview and comparison.
+- [Data Sources](Data-Sources.md): the driver model, multi-device projects, and per-driver summaries.
+- [Auto-Generating Projects](Auto-Generating-Projects.md): DBC, Modbus map, and Protobuf importers.
+- [Frame Parser Scripting](JavaScript-API.md): writing a `parse(frame)` function for custom data formats.
 - [MQTT Topics & Semantics](MQTT-Topics.md): protocol vocabulary used by both MQTT surfaces.
 - [MQTT Subscriber](Drivers-MQTT.md): in-depth subscriber-driver documentation.
 - [MQTT Publisher](MQTT-Publisher.md): project-level publisher documentation.

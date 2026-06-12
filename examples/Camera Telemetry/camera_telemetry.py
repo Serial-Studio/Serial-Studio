@@ -2,16 +2,18 @@
 """
 Camera Telemetry for Serial Studio
 
-Captures frames from the system camera and streams them over UDP as fast as
-possible.  Only FPS and frame count are sent as telemetry — no analytics.
+Captures frames from the system camera and streams them over UDP at a paced
+target rate (default 30 FPS).  Only FPS and frame count are sent as telemetry,
+no analytics.
 
 Everything goes through the same byte stream to 127.0.0.1:9000:
   - JPEG image frames (raw bytes, autodetected by Serial Studio's Image widget)
-  - CSV telemetry frames ($fps,frame_count;\\n)
+  - Binary telemetry frames: AB CD EF + "fps,frame_count" + FE ED
 
-Serial Studio's FrameReader handles CSV frames (delimited by $ / ;) while the
-Image widget's ImageFrameReader independently scans the same raw byte stream for
-JPEG magic bytes (FF D8 FF ... FF D9), completely bypassing the telemetry path.
+Serial Studio's FrameReader extracts telemetry frames between the AB CD EF
+start and FE ED end sentinels while the Image widget's ImageFrameReader
+independently scans the same raw byte stream for JPEG magic bytes
+(FF D8 FF ... FF D9), completely bypassing the telemetry path.
 
 Usage:
   python3 camera_telemetry.py               # camera index 0, port 9000

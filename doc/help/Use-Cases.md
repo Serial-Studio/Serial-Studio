@@ -77,7 +77,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Solution:** Serial Studio records accelerometer data from Arduino + MPU6050 attached to pendulum:
 - Real-time acceleration plots (X, Y, Z axes)
-- FFT widget (Pro) shows frequency spectrum to identify resonance
+- FFT widget shows frequency spectrum to identify resonance
 - CSV export for offline analysis in Python/MATLAB
 - Multiple lab stations use the same JSON project file
 
@@ -352,7 +352,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Solution:** SDR dongle + GNU Radio outputs I/Q data via UDP:
 - Serial Studio receives UDP packets
-- FFT widget (Pro) displays frequency spectrum
+- FFT widget displays frequency spectrum
 - Signal strength plotted over time
 - Waterfall widget (Pro) for time-frequency band monitoring
 
@@ -366,7 +366,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 **Solution:** NanoVNA antenna analyzer exports data via USB serial:
 - Serial Studio plots:
   - SWR across frequency sweep (2-30 MHz)
-  - Smith chart (with custom JavaScript widget)
+  - Smith chart (Painter widget, Pro)
   - Return loss (S11 parameter)
 
 **Hardware:** NanoVNA or custom RF bridge + AD8302
@@ -643,7 +643,9 @@ template
 ### Step 3: Select Serial Studio Mode
 - **Quick Plot:** For simple comma-separated values
 - **Project File:** For custom dashboards with multiple widgets
-- **Device JSON:** For embedded devices that define their own dashboard
+- **Console Only:** Raw terminal view for protocol bring-up and debugging
+
+See [Operation Modes](Operation-Modes.md) for how the three modes compare.
 
 ### Step 4: Prototype and Test
 - Start with Quick Plot mode to verify data flow

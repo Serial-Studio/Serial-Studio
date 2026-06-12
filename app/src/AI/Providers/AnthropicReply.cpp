@@ -21,7 +21,7 @@
 #include "API/CommandRegistry.h"
 #include "Misc/JsonValidator.h"
 
-static constexpr int kInitialResponseTimeoutMs = 30 * 1000;
+static constexpr int kInitialResponseTimeoutMs = 120 * 1000;
 static const char* kEndpoint                   = "https://api.anthropic.com/v1/messages";
 
 /**

@@ -25,7 +25,7 @@
 #include "API/CommandRegistry.h"
 #include "Misc/JsonValidator.h"
 
-static constexpr int kInitialResponseTimeoutMs = 30 * 1000;
+static constexpr int kInitialResponseTimeoutMs = 120 * 1000;
 static const char* const kOpenAIEndpoint       = "https://api.openai.com/v1/chat/completions";
 static const char* const kOpenAIAuthHeader     = "Authorization";
 
@@ -79,11 +79,15 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
                 apiKey,
                 requestBody,
                 QStringLiteral("OpenAI"),
+                -1,
+                false,
                 parent)
 {}
 
 /**
  * @brief Generic constructor for any OpenAI-compatible endpoint (DeepSeek, Local, etc.).
+ *        transferTimeoutMs <= 0 selects the default; parseThinkTags routes inline
+ *        <think> blocks (llama.cpp/Ollama style) into the thinking channel.
  */
 AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
                              const QString& endpointUrl,
@@ -91,6 +95,8 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
                              const QString& apiKey,
                              const QByteArray& requestBody,
                              const QString& providerLabel,
+                             int transferTimeoutMs,
+                             bool parseThinkTags,
                              QObject* parent)
   : Reply(parent)
   , m_nam(nam)
@@ -101,6 +107,9 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
   , m_requestBody(requestBody)
   , m_reply(nullptr)
   , m_sse(new SseEventReader(this))
+  , m_transferTimeoutMs(transferTimeoutMs > 0 ? transferTimeoutMs : kInitialResponseTimeoutMs)
+  , m_parseThinkTags(parseThinkTags)
+  , m_thinkScan(ThinkScan::Detect)
   , m_finished(false)
 {
   connect(m_sse, &SseEventReader::frameReceived, this, &OpenAIReply::onSseEvent);
@@ -120,7 +129,7 @@ void AI::OpenAIReply::issueRequest()
     req.setRawHeader(m_authHeader.toUtf8(), QStringLiteral("Bearer %1").arg(m_apiKey).toUtf8());
 
   req.setRawHeader("accept", "text/event-stream");
-  req.setTransferTimeout(kInitialResponseTimeoutMs);
+  req.setTransferTimeout(m_transferTimeoutMs);
 
   qCDebug(serialStudioAI) << "POST" << m_providerLabel << m_endpointUrl
                           << "key=" << KeyVault::redact(m_apiKey)
@@ -207,7 +216,7 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
   if (contentValue.isString()) {
     const auto chunk = contentValue.toString();
     if (!chunk.isEmpty())
-      Q_EMIT partialText(chunk);
+      routeContentChunk(chunk);
   }
 
   const auto toolCallsValue = delta.value(QStringLiteral("tool_calls"));
@@ -234,6 +243,83 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
     const auto argsValue = fn.value(QStringLiteral("arguments"));
     if (argsValue.isString())
       state.arguments.append(argsValue.toString().toUtf8());
+  }
+}
+
+/**
+ * @brief Forwards a content chunk as text, or through the <think> scanner when local
+ *        servers stream reasoning inline instead of in a reasoning delta field.
+ */
+void AI::OpenAIReply::routeContentChunk(const QString& chunk)
+{
+  if (!m_parseThinkTags || m_thinkScan == ThinkScan::Passthrough) {
+    Q_EMIT partialText(chunk);
+    return;
+  }
+
+  m_thinkCarry.append(chunk);
+  processThinkCarry(false);
+}
+
+/**
+ * @brief Drains the buffered carry across scanner states, holding back only bytes that
+ *        could still complete a tag split across chunks. atEnd flushes everything.
+ */
+void AI::OpenAIReply::processThinkCarry(bool atEnd)
+{
+  static const auto kOpen  = QStringLiteral("<think>");
+  static const auto kClose = QStringLiteral("</think>");
+  const int max_passes     = m_thinkCarry.size() + 2;
+
+  for (int pass = 0; pass < max_passes && !m_thinkCarry.isEmpty(); ++pass) {
+    if (m_thinkScan == ThinkScan::Passthrough) {
+      Q_EMIT partialText(m_thinkCarry);
+      m_thinkCarry.clear();
+      return;
+    }
+
+    if (m_thinkScan == ThinkScan::Detect) {
+      int ws = 0;
+      while (ws < m_thinkCarry.size() && m_thinkCarry.at(ws).isSpace())
+        ++ws;
+
+      if (ws > 0)
+        m_thinkCarry.remove(0, ws);
+
+      if (m_thinkCarry.isEmpty())
+        return;
+
+      if (m_thinkCarry.startsWith(kOpen)) {
+        m_thinkCarry.remove(0, kOpen.size());
+        m_thinkScan = ThinkScan::Thinking;
+        continue;
+      }
+
+      if (!atEnd && m_thinkCarry.size() < kOpen.size() && kOpen.startsWith(m_thinkCarry))
+        return;
+
+      m_thinkScan = ThinkScan::Passthrough;
+      continue;
+    }
+
+    const int close_at = m_thinkCarry.indexOf(kClose);
+    if (close_at >= 0) {
+      if (close_at > 0)
+        Q_EMIT partialThinking(m_thinkCarry.left(close_at));
+
+      m_thinkCarry.remove(0, close_at + kClose.size());
+      m_thinkScan = ThinkScan::Detect;
+      continue;
+    }
+
+    const int keep = atEnd ? 0 : kClose.size() - 1;
+    const int cut  = m_thinkCarry.size() - keep;
+    if (cut > 0) {
+      Q_EMIT partialThinking(m_thinkCarry.left(cut));
+      m_thinkCarry.remove(0, cut);
+    }
+
+    return;
   }
 }
 
@@ -350,6 +436,9 @@ void AI::OpenAIReply::onReplyFinished()
   }
 
   m_sse->feed({});
+  if (m_parseThinkTags)
+    processThinkCarry(true);
+
   emitPendingToolCalls();
 
   if (m_finishReason == QStringLiteral("tool_calls") && m_toolCalls.isEmpty()) {

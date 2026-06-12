@@ -28,16 +28,21 @@ function transmit(value) {
 
 Return either:
 
-- a **String**: encoded using the widget's configured TX encoding and sent,
-- a **byte array** (`Uint8Array` or `Array<number>`): sent verbatim,
+- a **String**: encoded using the widget's configured TX encoding and sent.
+  For binary payloads build a byte-string with `String.fromCharCode(...)`
+  the way the bundled modbus/can helpers do — plain `Array<number>` returns
+  are dropped (they convert to an empty byte array),
 - `null` / `undefined` / an empty result: nothing is sent.
 
 There is a maximum payload size; oversized returns are dropped with an error.
 
 ## Injected protocol helpers (globals)
 
-Only a small set of Modbus/CAN helpers are injected as globals. Everything
-else you build yourself in the function body (see the bundled reference
+The Modbus/CAN helpers below are injected as globals, alongside the full
+host API: `apiCall`, `tableGet`/`tableSet`, `datasetGetRaw`/`datasetGetFinal`,
+`deviceWrite`, `actionFire`, `notify*`, the dashboard helpers, and the
+generated `SerialStudio` SDK. Protocol logic beyond these helpers you build
+yourself in the function body (see the bundled reference
 scripts below — they self-contain their protocol logic, they are NOT globals).
 
 ```js

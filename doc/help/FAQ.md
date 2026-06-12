@@ -19,13 +19,13 @@ Answers to common questions about Serial Studio, from installation to advanced u
 
 Serial Studio is an open source tool for visualizing data from devices in real time. You can monitor sensors, debug hardware, and build custom dashboards without writing code.
 
-It works with any device that sends data via serial port, Bluetooth, MQTT, Modbus TCP/RTU, CAN Bus, or the network.
+It works with any device that sends data via serial port, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, raw USB, HID, audio input, the output of another program (Process I/O), or TCP/UDP sockets.
 
 ### Is Serial Studio open source?
 
 The core is open source, with two flavors:
 
-1. **GPL version (open source).** Built from source under GPL-3.0. Includes core features, but leaves out Pro modules like MQTT, Modbus, CAN Bus, 3D visualization, and advanced plotting.
+1. **GPL version (open source).** Built from source under GPL-3.0. Includes core features, but leaves out Pro modules like MQTT, Modbus, CAN Bus, 3D and XY plotting, and the Waterfall widget.
 2. **Pro version (proprietary).** Official binary with everything, plus a 14-day trial. A license runs about $9.99 to $179.00 (check current pricing at [store.serial-studio.com](https://store.serial-studio.com/)).
 
 Pro features are proprietary. They're not open source. See the [License Agreement](License-Agreement.md) and [Pro vs GPL](#pro-vs-gpl) for details.
@@ -47,15 +47,15 @@ Serial Studio adds:
 - 15+ widgets: gauges, maps, FFT, accelerometers, and others.
 - Custom dashboards through the Project Editor.
 - Save data to CSV.
-- Parse complex data with JavaScript.
+- Parse custom or binary protocols with JavaScript, Lua, or Built-In parser templates.
 
 See [Pro vs Free](Pro-vs-Free.md) for a detailed comparison.
 
 ### Can I use Serial Studio for commercial projects?
 
-**Official binaries:** yes, but you need a Pro license for commercial use (business, revenue-generating projects, closed-source products). Pro features are proprietary.
+**Official binaries:** yes, with a Pro license. Commercial use covers business use, revenue-generating projects, client-facing systems, and grant- or privately-funded research.
 
-**GPL build:** yes, if you build from source and comply with GPL-3.0 (your project has to be open source too). GPL builds don't include Pro features like MQTT, Modbus, CAN Bus, or 3D visualization.
+**GPL build:** no. Serial Studio's license terms reserve commercial use for Pro license holders, even when you build from source with GPL modules only. GPL builds are intended for personal, educational, and open source projects, and they don't include Pro features like MQTT, Modbus, CAN Bus, or 3D visualization.
 
 See the [License Agreement](License-Agreement.md) for the full dual-licensing details.
 
@@ -358,13 +358,17 @@ See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md
 - Gyroscope (3-axis).
 - FFT spectrum analyzer.
 - GPS maps (OpenStreetMap).
+- LED panel.
+- Terminal.
 
 **Pro only:**
 
 - XY plots (parametric plots).
-- 3D visualizations.
-- Advanced plotting features.
+- 3D plots.
+- Waterfall (scrolling spectrogram with order tracking).
 - Image View (live JPEG/PNG camera feed widget).
+- Painter (scriptable Canvas2D-style widget).
+- Output widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel (see [Output Controls](Output-Controls.md)).
 
 ### How do I export data to CSV?
 
@@ -426,7 +430,7 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the full guide.
 
 **Data bits, parity, stop bits.** Usually 8N1 (8 data bits, no parity, 1 stop bit). Change it in Serial Studio's settings if your device uses something else.
 
-**Frame delimiters.** Serial Studio expects newline (`\n`) by default. If your device uses something different (`\r\n`, a semicolon, a custom byte), change it in Settings → Frame Detection.
+**Frame delimiters.** Serial Studio expects newline (`\n`) by default. If your device uses something different (`\r\n`, a semicolon, a custom byte), change the **Frame Detection** settings for the source in the Project Editor.
 
 ### My plots look wrong or don't update
 
@@ -444,7 +448,7 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the full guide.
 
 ### How do I parse binary or custom protocols?
 
-Use the **JavaScript frame parser**.
+Use a **frame parser**. Parsers can be written in JavaScript or Lua, or configured (not coded) as a Built-In template; see [Frame Parser Scripting](JavaScript-API.md). JavaScript example:
 
 1. In the Project Editor, click the **Frame Parser** icon in the project tree.
 2. Write a JavaScript function that parses the raw data:
@@ -502,7 +506,9 @@ The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the 
 | XY plots                         | ❌                         | ✅                             |
 | 3D visualization                 | ❌                         | ✅                             |
 | FFT spectrum analyzer            | ✅                         | ✅                             |
-| Advanced plotting                | ❌                         | ✅                             |
+| Waterfall (spectrogram)          | ❌                         | ✅                             |
+| Painter (scriptable widget)      | ❌                         | ✅                             |
+| Output (control) widgets         | ❌                         | ✅                             |
 | Image View (camera/image stream) | ❌                         | ✅                             |
 | Raw USB (libusb)                 | ❌                         | ✅                             |
 | HID devices (hidapi)             | ❌                         | ✅                             |
@@ -510,8 +516,10 @@ The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the 
 | Multi-device projects            | ❌                         | ✅                             |
 | CSV export and playback          | ✅                         | ✅                             |
 | MDF4 playback and export         | ❌                         | ✅                             |
+| Session Database (SQLite)        | ❌                         | ✅                             |
+| File transfer (X/Y/ZMODEM)       | ❌                         | ✅                             |
 | DBC file import (CAN)            | ❌                         | ✅                             |
-| Commercial use                   | ⚠️ GPL compliant only      | ✅                             |
+| Commercial use                   | ❌ Non-commercial only     | ✅                             |
 | Priority support                 | ❌                         | ✅                             |
 | Source availability              | ✅ Open source             | ⚠️ Visible but proprietary     |
 
@@ -693,8 +701,11 @@ Yes. The Console panel has a send line: type text (or hex), pick a line ending, 
 
 **Other options:**
 
+- Add [Output Controls](Output-Controls.md) (Pro): buttons, toggles, sliders, knobs, and text fields on the dashboard. Each one runs a JavaScript template (GCode, SCPI, Modbus, NMEA, custom binary) that converts the control's state into outgoing bytes.
 - Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/tree/master/app/src/API) in your preferred language or framework that shares the device with Serial Studio.
 - Use MQTT (Pro). Serial Studio can publish commands to MQTT topics that your device subscribes to.
+
+## Advanced topics
 
 ### Can I integrate Serial Studio with my CI/CD pipeline?
 
@@ -735,13 +746,21 @@ Open a GitHub issue with:
 
 ### Is there a command-line interface (CLI)?
 
-Yes. Serial Studio accepts command-line options. Run it with `--help` to list them. Highlights:
+Yes. Serial Studio accepts command-line options. Run it with `--help` to list them, or see the [Command-Line Interface](Command-Line-Interface.md) reference. Highlights:
 
 - `--headless` runs without a GUI (server mode), and `--api-server` enables the API server on startup (port 7777).
-- You can pass a project file, set up a connection (`--uart`, `--tcp`, `--udp`, and on Pro builds `--modbus-*` and `--canbus`), and enable exports (CSV, MDF4) from the command line.
-- `--activate`/`--deactivate` manage a license key for CI/headless setup.
+- You can pass a project file (`--project`), set up a connection (`--uart`, `--tcp`, `--udp`, and on Pro builds `--modbus-*` and `--canbus`), and enable exports (`--csv-export`, `--mdf-export`) from the command line.
+- `--activate`/`--deactivate` manage a license key for CI/headless setup (Pro builds).
 
 This covers automated testing, headless data logging, and server deployments.
+
+### Does Serial Studio have an API for external tools?
+
+Yes. A JSON-RPC API with 300+ commands runs over TCP port 7777, with a gRPC server and an MCP (Model Context Protocol) wrapper on the same command surface. Scripts and AI agents can read live values, edit projects, manage sessions, and control exports. See [API Reference](API-Reference.md) and [gRPC Server](gRPC-Server.md).
+
+### Does Serial Studio include an AI assistant?
+
+Yes (Pro). The in-app AI Assistant is a bring-your-own-key chat panel that works with Anthropic, OpenAI, Google Gemini, and other providers, including OpenAI-compatible local servers for offline use. Read-only commands run automatically, anything that mutates the project shows an Approve/Deny card, and device control (connect/disconnect, port settings) stays blocked unless you enable the **Allow device control** toggle. See [AI Assistant](AI-Assistant.md).
 
 ### Can Serial Studio run on Raspberry Pi?
 
@@ -847,7 +866,7 @@ Yes. Serial Studio is a desktop app that runs entirely offline. No internet is r
 - MQTT (if the broker lives on the internet).
 - GPS map tiles (cached after first download).
 - Update checks (can be turned off).
-- License verification every 30 days.
+- Pro license revalidation. The license re-checks online when a connection is available; a 30-day offline grace period applies before Pro features lock.
 
 ## Still have questions?
 
@@ -856,4 +875,4 @@ Yes. Serial Studio is a desktop app that runs entirely offline. No internet is r
 - **Issues:** [GitHub Issues](https://github.com/Serial-Studio/Serial-Studio/issues).
 - **Email:** alex@serial-studio.com (Pro users get priority).
 
-**Last updated:** 2026-06-08
+**Last updated:** 2026-06-12

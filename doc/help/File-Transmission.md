@@ -2,7 +2,7 @@
 
 Serial Studio can send files to a connected device using plain text, raw binary, or industry-standard transfer protocols (XMODEM, XMODEM-1K, YMODEM, ZMODEM). It's handy for uploading firmware, configuration files, scripts, or any other data to an embedded target over an active connection.
 
-> **Availability.** File transmission is currently in the nightly build. It ships in the public release starting with version 3.2.8.
+> **Availability.** File transmission is currently in the nightly build. It ships in the public release starting with version 3.2.8. The toolbar entry appears in commercial builds only; GPL builds compiled from source do not include it.
 
 ## Protocol overview
 

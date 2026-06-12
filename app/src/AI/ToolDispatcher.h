@@ -28,7 +28,9 @@ public:
   explicit ToolDispatcher(QObject* parent = nullptr);
 
   [[nodiscard]] QJsonArray availableTools(const QString& category = {}) const;
-  [[nodiscard]] QJsonObject listCommands(const QString& prefix = {}) const;
+  [[nodiscard]] QJsonObject listCommands(const QString& prefix = {},
+                                         int offset            = 0,
+                                         int limit             = 0) const;
   [[nodiscard]] QJsonObject listCategories() const;
   [[nodiscard]] QString canonicalToolName(const QString& name) const;
   [[nodiscard]] QJsonObject describeCommand(const QString& name) const;

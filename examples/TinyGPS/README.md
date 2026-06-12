@@ -2,22 +2,21 @@
 
 ## Overview
 
-This project shows how to use Serial Studio to visualize GPS location data from a GPS module (GY-NEO6MV2) connected to an Arduino Mega 2560. The Arduino reads GPS data (latitude, longitude, altitude) and sends it to Serial Studio over serial for display on a map.
+This project shows how to use Serial Studio to visualize GPS location data from a GPS module (GY-NEO6MV2) connected to an Arduino. The Arduino reads GPS data (latitude, longitude, altitude) and sends it to Serial Studio over serial for display on a map.
 
 ![GPS data in Serial Studio](doc/screenshot.png)
 
-**Compatibility.** Works with any GPS module that outputs NMEA sentences at 9600 baud. Adjust wiring and serial port configuration if you use a different Arduino board (Uno, Nano, and so on).
+**Compatibility.** Works with any GPS module that outputs NMEA sentences at 9600 baud. The sketch ships configured for an Uno or Nano; switching to a Mega 2560 (or any board with a spare hardware serial port) is a two-line change in the sketch.
 
 ## Hardware setup
 
-You need a GY-NEO6MV2 GPS module and an Arduino Mega 2560. Connect the TX pin of the GPS module to the RX pin of the Arduino Mega 2560 (`Serial1`). Make sure the GPS module is set to 9600 baud, which matches the default in the Arduino sketch.
+You need a GY-NEO6MV2 GPS module and an Arduino. As shipped, the sketch reads the GPS through `SoftwareSerial` on an Uno or Nano: connect the TX pin of the GPS module to Arduino pin 2 (the sketch's software-serial RX pin). The GPS module must run at 9600 baud, which matches the default in the Arduino sketch.
 
-If you're on an Uno or Nano, which don't have multiple hardware serial ports, you can use a software serial port instead. Uncomment this code:
+On a Mega 2560 (or any board with a spare hardware serial port), use `Serial1` instead: connect the GPS module's TX pin to the Mega's `RX1` pin and swap these two lines in the sketch, uncommenting the first and removing the second:
 
 ```cpp
-// Uncomment for Uno/Nano:
-// #include <SoftwareSerial.h>
-// SoftwareSerial gpsSerial(2, 3); // RX, TX pins for SoftwareSerial
+//HardwareSerial &gpsSerial = Serial1;
+SoftwareSerial gpsSerial(2, 3); // For Arduino UNO/Nano
 ```
 
 ## Step by step
@@ -28,7 +27,7 @@ Install the **TinyGPS** library:
 
 - Open the Arduino IDE, go to **Sketch > Include Library > Manage Libraries**, search for "TinyGPS", and install it.
 
-Once installed, open `TinyGPS.ino`, connect the GPS module to `Serial1` on the Mega 2560, and upload. The GPS data is transmitted with these delimiters:
+Once installed, open `TinyGPS.ino`, wire the GPS module per the hardware setup, and upload. The GPS data is transmitted with these delimiters:
 
 - **Start delimiter (`$`).** Marks the start of a frame.
 - **End delimiter (`;`).** Marks the end of the frame.
@@ -70,7 +69,7 @@ To get the most out of the mapping features, you may need API keys for some map 
 
 Once Serial Studio is configured:
 
-- Connect to the Arduino by picking the correct serial port and setting the baud rate to 115200 (matching the Arduino sketch).
+- The bundled `TinyGPS.ssproj` configures a UART source at 115200 baud (matching the Arduino sketch). Pick the Arduino's serial port and connect.
 - You'll see the real-time GPS position on the map widget. Altitude can be logged to a CSV file for later analysis.
 
 ### Troubleshooting

@@ -18,16 +18,15 @@ Frame format (ProjectFile mode, frameStart='$', frameEnd='\n'):
     $KEY1=value1|KEY2=value2|...\n
 
 Index layout (1-based, matches .ssproj dataset indices):
-   1  OS              8  CPU_USAGE      15  CPU_TEMP
-   2  HOSTNAME        9  RAM_USAGE      16  SWAP_USED
-   3  CPU_MODEL      10  RAM_USED       17  NET_SENT
-   4  CPU_CORES      11  DISK_USAGE     18  NET_RECV
-   5  CPU_THREADS    12  DISK_USED      19  PROCESSES
-   6  RAM_TOTAL      13  CORE0          ...
-   7  DISK_TOTAL     14  CORE1          44  CORE31
-                                        45  PROC0
+   1  OS              8  CPU_USAGE      15  NET_SENT
+   2  HOSTNAME        9  RAM_USAGE      16  NET_RECV
+   3  CPU_MODEL      10  RAM_USED       17  PROCESSES
+   4  CPU_CORES      11  DISK_USAGE     18  CORE0
+   5  CPU_THREADS    12  DISK_USED      ...
+   6  RAM_TOTAL      13  CPU_TEMP       49  CORE31
+   7  DISK_TOTAL     14  SWAP_USED      50  PROC0
                                         ...
-                                        54  PROC9
+                                        59  PROC9
 
 Dependencies:
     pip install psutil py-cpuinfo

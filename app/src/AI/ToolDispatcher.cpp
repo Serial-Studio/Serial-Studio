@@ -130,7 +130,8 @@ static QJsonObject datasetInputSchema()
   props[QStringLiteral("path")] =
     makeProperty(QStringLiteral("string"),
                  QStringLiteral("Preferred human address: 'Group/Dataset' or "
-                                "'Source/Group/Dataset'."));
+                                "'Source/Group/Dataset'. A bare name without '/' falls back "
+                                "to an exact title match."));
   props[QStringLiteral("title")] =
     makeProperty(QStringLiteral("string"), QStringLiteral("Exact dataset title."));
   props[Keys::UniqueId] =
@@ -764,9 +765,14 @@ static QJsonObject resolveDataset(const QJsonObject& args)
     }
   }
 
-  if (resolved.isEmpty() && !args.value(QStringLiteral("title")).toString().isEmpty()) {
+  const auto path = args.value(QStringLiteral("path")).toString();
+  QString title   = args.value(QStringLiteral("title")).toString();
+  if (title.isEmpty() && !path.isEmpty() && !path.contains(QLatin1Char('/')))
+    title = path;
+
+  if (resolved.isEmpty() && !title.isEmpty()) {
     QJsonObject params;
-    params[QStringLiteral("title")] = args.value(QStringLiteral("title")).toString();
+    params[QStringLiteral("title")] = title;
     if (args.contains(QStringLiteral("groupId")))
       params[QStringLiteral("groupId")] = args.value(QStringLiteral("groupId")).toInt();
 
@@ -785,6 +791,10 @@ static QJsonObject resolveDataset(const QJsonObject& args)
     out[QStringLiteral("ok")]       = false;
     out[QStringLiteral("error")]    = QStringLiteral("dataset_not_resolved");
     out[QStringLiteral("attempts")] = attempts;
+    out[QStringLiteral("hint")] =
+      QStringLiteral("path expects 'Group/Dataset' or 'Source/Group/Dataset'; a bare name is "
+                     "also matched as an exact title. Call assistant.snapshot to see every "
+                     "group and dataset, or pass uniqueId.");
     return out;
   }
 
@@ -1818,9 +1828,52 @@ QJsonArray AI::ToolDispatcher::availableTools(const QString& category) const
   return tools;
 }
 
+/**
+ * @brief Name + one-line description for every meta.* tool advertised by Conversation.cpp; must
+ *        stay in sync with the makeMetaTool calls there so meta.listCommands can enumerate them.
+ */
+static const QVector<detail::AssistantToolDef>& metaToolRoster()
+{
+  static const QVector<detail::AssistantToolDef> kRoster = {
+    {    QStringLiteral("meta.listCategories"),
+     QStringLiteral("List the top-level command scopes with descriptions and command counts."),
+     {}},
+    {          QStringLiteral("meta.snapshot"),
+     QStringLiteral("One-shot composite of every readable status endpoint."),
+     {}},
+    {      QStringLiteral("meta.listCommands"),
+     QStringLiteral("List every available command (name + 1-line description), optionally "
+     "filtered by dotted prefix, paged with offset/limit."),
+     {}},
+    {   QStringLiteral("meta.describeCommand"),
+     QStringLiteral("Fetch the full input schema and description for one command."),
+     {}},
+    {    QStringLiteral("meta.executeCommand"),
+     QStringLiteral("Execute any command by name with an arguments object."),
+     {}},
+    {         QStringLiteral("meta.fetchHelp"),
+     QStringLiteral("Fetch a Serial Studio documentation page from the canonical help source."),
+     {}},
+    {QStringLiteral("meta.fetchScriptingDocs"),
+     QStringLiteral("Fetch the scripting reference for one scripting context (frame parser, "
+     "transform, painter, output widget, SDK source)."),
+     {}},
+    {             QStringLiteral("meta.howTo"),
+     QStringLiteral("Fetch a step-by-step recipe for a common Serial Studio workflow."),
+     {}},
+    {         QStringLiteral("meta.loadSkill"),
+     QStringLiteral("Load a focused skill reference for one area of Serial Studio."),
+     {}},
+    {        QStringLiteral("meta.searchDocs"),
+     QStringLiteral("Semantic search over bundled docs, skills, templates, and example scripts."),
+     {}},
+  };
+  return kRoster;
+}
+
 /** @brief Returns a compact name+description list of every command, optionally
- *         filtered by prefix. Useful as a discovery tool for the AI. */
-QJsonObject AI::ToolDispatcher::listCommands(const QString& prefix) const
+ *         filtered by prefix and windowed by offset/limit (limit 0 = all). */
+QJsonObject AI::ToolDispatcher::listCommands(const QString& prefix, int offset, int limit) const
 {
   const auto& commands = API::CommandRegistry::instance().commands();
   const auto& aiReg    = AI::CommandRegistry::instance();
@@ -1839,6 +1892,7 @@ QJsonObject AI::ToolDispatcher::listCommands(const QString& prefix) const
   };
   appendVirtual(assistantToolDefs());
   appendVirtual(fsToolDefs());
+  appendVirtual(metaToolRoster());
 
   for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
     const auto& def = it.value();
@@ -1854,10 +1908,22 @@ QJsonObject AI::ToolDispatcher::listCommands(const QString& prefix) const
     entries.append(row);
   }
 
+  const int total = entries.size();
+  const int start = qBound(0, offset, total);
+  const int count = limit > 0 ? qMin(limit, total - start) : total - start;
+
+  QJsonArray window;
+  for (int i = start; i < start + count; ++i)
+    window.append(entries.at(i));
+
   QJsonObject reply;
   reply[QStringLiteral("ok")]       = true;
-  reply[QStringLiteral("count")]    = entries.size();
-  reply[QStringLiteral("commands")] = entries;
+  reply[QStringLiteral("total")]    = total;
+  reply[QStringLiteral("count")]    = window.size();
+  reply[QStringLiteral("commands")] = window;
+  if (start + count < total)
+    reply[QStringLiteral("nextOffset")] = start + count;
+
   return reply;
 }
 
@@ -1880,8 +1946,6 @@ static const QHash<QString, QString>& scopeDescriptions()
      QStringLiteral("Terminal display, send raw frames, console export.")},
     {QStringLiteral("consoleExport"),
      QStringLiteral("Console capture export to file.")},
-    {QStringLiteral("csv"),
-     QStringLiteral("CSV export status and control.")},
     {QStringLiteral("csvExport"),
      QStringLiteral("CSV export to file.")},
     {QStringLiteral("csvPlayer"),
@@ -1890,8 +1954,12 @@ static const QHash<QString, QString>& scopeDescriptions()
      QStringLiteral("MDF4 export to file (Pro).")},
     {QStringLiteral("mdf4Player"),
      QStringLiteral("MDF4 file replay (Pro).")},
-    {QStringLiteral("mqtt"),
-     QStringLiteral("MQTT broker connectivity, authentication, SSL, topics (Pro).")},
+    {QStringLiteral("controlscript"),
+     QStringLiteral("Project control script (setup/loop automation): get/set code, "
+                    "dry-run, runtime status.")},
+    {QStringLiteral("scripts"),
+     QStringLiteral("Bundled reference scripts: list and fetch parser/transform/"
+                    "painter/output examples.")},
     {QStringLiteral("dashboard"),
      QStringLiteral("Live dashboard data, FPS, point limits, operation mode.")},
     {QStringLiteral("ui"),
@@ -1937,9 +2005,7 @@ QJsonObject AI::ToolDispatcher::listCategories() const
     counts[scope]       += 1;
   }
 
-  if (!counts.contains(QStringLiteral("meta")))
-    counts[QStringLiteral("meta")] = 6;
-
+  counts[QStringLiteral("meta")]      = metaToolRoster().size();
   counts[QStringLiteral("assistant")] = assistantToolDefs().size();
   counts[QStringLiteral("fs")]        = fsToolDefs().size();
 
@@ -2173,7 +2239,8 @@ QJsonObject AI::ToolDispatcher::getSnapshot() const
     QStringLiteral("consoleExport.getStatus"),
     QStringLiteral("csvExport.getStatus"),
     QStringLiteral("csvPlayer.getStatus"),
-    QStringLiteral("mqtt.getConnectionStatus"),
+    QStringLiteral("project.mqtt.publisher.getStatus"),
+    QStringLiteral("project.mqtt.subscriber.getStatus"),
     QStringLiteral("sessions.getStatus"),
     QStringLiteral("mdf4Export.getStatus"),
     QStringLiteral("mdf4Player.getStatus"),

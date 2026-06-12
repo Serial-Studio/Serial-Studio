@@ -150,7 +150,7 @@
                     "xAxis": -1
                 }
             ],
-            "title": "Three Axis Acceleromter",
+            "title": "Three Axis Accelerometer",
             "widget": "multiplot"
         }
     ],

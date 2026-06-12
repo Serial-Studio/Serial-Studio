@@ -23,7 +23,13 @@ The examples were built on [Arch Linux](https://archlinux.org/), where you can:
 
 - Build it with [cmake](/#development).
 
-Data from the HUAWEI K5161H is pulled from the URL API `http://192.168.9.1/api/device/signal`. Python is used to receive, process, and generate data frames.
+Data from the HUAWEI K5161H is pulled from the URL API `http://192.168.9.1/api/device/signal`. Python is used to receive, process, and generate data frames. All three scripts read the API with the **requests** library:
+
+```
+sudo pacman -S python-requests
+```
+
+Each frame carries five values, matching the datasets in `LTE Modem.ssproj`: cell ID, RSRQ (dB), RSRP (dBm), RSSI (dBm), and SINR (dB). The serial and UDP scripts wrap each frame in the project's `/*` and `*/` start and end sequences.
 
 <a name="method_1"></a>
 
@@ -71,7 +77,7 @@ Data from the HUAWEI K5161H is pulled from the URL API `http://192.168.9.1/api/d
 
 - Run Serial Studio.
 - Go to **DEVICE SETUP** → I/O Interface: Serial Port.
-- Go to **FRAME PARSING** → Parse via JSON Project File.
+- Go to **FRAME PARSING** → Parse via Project File.
 - Pick **Project file** → `LTE Modem.ssproj`.
 - Manually enter **COM Port** → `/tmp/ttyV0` and press Enter.
 - Pick **Baud Rate** → 9600.
@@ -120,7 +126,7 @@ After the first frame of data arrives, Serial Studio opens the dashboard with pl
 ### Serial Studio configuration for MQTT
 
 - Run Serial Studio.
-- Go to **FRAME PARSING** → Parse via JSON Project File.
+- Go to **FRAME PARSING** → Parse via Project File.
 - Pick **Project file** → `LTE Modem.ssproj`.
 - Click **MQTT** in the top bar.
 - Set **Host** → 127.0.0.1.
@@ -150,7 +156,7 @@ python lte_udp.py
 
 - Run Serial Studio.
 - Go to **DEVICE SETUP** → I/O Interface: Network Socket.
-- Go to **FRAME PARSING** → Parse via JSON Project File.
+- Go to **FRAME PARSING** → Parse via Project File.
 - Pick **Project file** → `LTE Modem.ssproj`.
 - Pick **Socket type** → UDP.
 - Set **Remote address** → 127.0.0.1.

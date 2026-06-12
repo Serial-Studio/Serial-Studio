@@ -43,13 +43,25 @@ class ModuleManager : public QObject {
              READ  automaticUpdates
              WRITE setAutomaticUpdates
              NOTIFY automaticUpdatesChanged)
+  Q_PROPERTY(bool performanceMode
+             READ  performanceMode
+             WRITE setPerformanceMode
+             NOTIFY performanceModeChanged)
+  Q_PROPERTY(bool inhibitIdleSleep
+             READ  inhibitIdleSleep
+             WRITE setInhibitIdleSleep
+             NOTIFY inhibitIdleSleepChanged)
   // clang-format on
 
 signals:
+  void performanceModeChanged();
+  void inhibitIdleSleepChanged();
   void automaticUpdatesChanged();
 
 public:
   ModuleManager();
+  [[nodiscard]] bool performanceMode() const noexcept;
+  [[nodiscard]] bool inhibitIdleSleep() const noexcept;
   [[nodiscard]] bool autoUpdaterEnabled() const noexcept;
   [[nodiscard]] bool automaticUpdates() const noexcept;
   [[nodiscard]] const QQmlApplicationEngine& engine() const noexcept;
@@ -60,6 +72,8 @@ public slots:
   void registerQmlTypes();
   void initializeQmlInterface();
   void setHeadless(const bool headless);
+  void setPerformanceMode(const bool enabled);
+  void setInhibitIdleSleep(const bool enabled);
   void setAutomaticUpdates(const bool enabled);
 
 private:
@@ -76,6 +90,8 @@ private:
   bool m_quitHandled;
   QSettings m_settings;
   bool m_automaticUpdates;
+  bool m_performanceMode;
+  bool m_inhibitIdleSleep;
   NativeWindow m_nativeWindow;
   QQmlApplicationEngine m_engine;
 };

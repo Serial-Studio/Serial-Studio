@@ -1,3 +1,5 @@
+# Pro vs Free
+
 A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 ## Quick summary
@@ -13,8 +15,13 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 - Everything in the free version, plus:
 - Advanced protocols: MQTT, Modbus, CAN Bus, Audio Input, raw USB, HID, Process I/O.
 - Pro widgets: 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera feed), Painter (user-scripted Canvas2D widget).
-- Binary Direct mode (high-performance parsing).
+- Output (control) widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel.
+- Multi-device projects (several data sources in one dashboard).
+- Binary Direct mode (byte-array parsing without string conversion).
 - MDF4 file export and playback.
+- Session Database recording, explorer, and PDF reports.
+- File transfers over XMODEM, YMODEM, and ZMODEM.
+- In-app AI Assistant (bring your own API key).
 - Commercial use rights.
 - Email support.
 
@@ -33,6 +40,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Raw USB (bulk/isochronous via libusb) | ❌ | ✅ |
 | | HID Devices (gamepads, custom HIDs via hidapi) | ❌ | ✅ |
 | | Process I/O (child process stdout / named pipe) | ❌ | ✅ |
+| | Multi-Device Projects | ❌ | ✅ |
 | **Operation Modes** | | | |
 | | Console Only Mode | ✅ | ✅ |
 | | Quick Plot Mode | ✅ | ✅ |
@@ -42,7 +50,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Hexadecimal Decoding | ✅ | ✅ |
 | | Base64 Decoding | ✅ | ✅ |
 | | Binary (Direct) Mode | ❌ | ✅ |
-| | Custom JavaScript Parser | ✅ | ✅ |
+| | Frame Parsers (JavaScript, Lua, Built-In templates) | ✅ | ✅ |
 | | Checksum Validation | ✅ | ✅ |
 | **Visualization Widgets** | | | |
 | | Plot (time-series) | ✅ | ✅ |
@@ -61,16 +69,21 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Waterfall (spectrogram, order tracking) | ❌ | ✅ |
 | | Image View (live camera/image feed) | ❌ | ✅ |
 | | Painter (user-scripted Canvas2D widget) | ❌ | ✅ |
+| | Output (Control) Widgets + Output Panel | ❌ | ✅ |
 | **Data Export** | | | |
 | | CSV Export | ✅ | ✅ |
 | | CSV Playback/Import | ✅ | ✅ |
 | | MDF4 (MF4) Export | ❌ | ✅ |
 | | MDF4 Playback | ❌ | ✅ |
+| | Session Database (SQLite recording + reports) | ❌ | ✅ |
 | **Dashboard Features** | | | |
 | | Real-time 60 FPS Updates | ✅ | ✅ |
 | | Multi-window Support | ✅ | ✅ |
 | | Customizable Layouts | ✅ | ✅ |
 | | Taskbar Integration | ✅ | ✅ |
+| | File Transmission (XMODEM/YMODEM/ZMODEM) | ❌ | ✅ |
+| | In-App AI Assistant | ❌ | ✅ |
+| | Operator Deployment Generation | ❌ | ✅ |
 | **Project Editor** | | | |
 | | Visual Project Editor | ✅ | ✅ |
 | | JavaScript Code Editor | ✅ | ✅ |
@@ -234,7 +247,7 @@ function parse(frame) {
 - Signal correlation analysis
 - Pressure-volume diagrams
 
-**Learn more:** [Widget Reference - 3D Plot](Widget-Reference.md#3d-plot-pro)
+**Learn more:** [Widget Reference - Plot](Widget-Reference.md#plot) (set a dataset's X-axis source to another dataset)
 
 ### Waterfall Widget
 
@@ -366,7 +379,47 @@ function parse(frame) {
 - Integration with professional analysis tools
 - Long-duration logging (file size matters)
 
-**Learn more:** [Protocol Setup Guide](Protocol-Setup-Guides.md#can-bus-setup-pro)
+**Learn more:** [MDF4 Playback and Export](MDF4.md)
+
+### Output (Control) Widgets
+
+**What it is:** Dashboard controls that send data *to* the device: buttons, toggles, sliders, knobs, text fields, and a freeform Output Panel.
+
+**How it works:** Each control runs a JavaScript transmit template (GCode, SCPI, Modbus, NMEA, CAN, SLCAN, GRBL, or custom binary) that converts the control's state into outgoing bytes. A Transmit Test Dialog previews the wire output before the real command is sent. In multi-device projects, each control targets a specific source.
+
+**Learn more:** [Output Controls](Output-Controls.md)
+
+### Multi-Device Projects
+
+**What it is:** Several data sources in one project file, each with its own bus type, connection settings, frame detection, and parser.
+
+**How it works:** All configured devices connect at the same time, each source's data routes to its own groups and widgets, and CSV/MDF4 export captures every source in one file. Sources are configured in the Project Editor under the Sources section.
+
+**Learn more:** [Data Sources - Multi-device mode](Data-Sources.md#multi-device-mode)
+
+### Session Database
+
+**What it is:** Recording of complete sessions (parsed frames, raw bytes, data-table snapshots, and project metadata) into a single SQLite `.db` file.
+
+**How it works:** The Database Explorer browses, tags, and exports stored sessions. The SQLite Player replays a recorded session through the live pipeline, so dashboards behave identically on recorded data. Session Reports turn the same database into a styled PDF with charts.
+
+**Learn more:** [Session Database](Session-Database.md) | [Session Reports](Session-Reports.md)
+
+### File Transmission
+
+**What it is:** Sending files to a connected device over the active connection, as plain text, raw binary, or via XMODEM, XMODEM-1K, YMODEM, or ZMODEM.
+
+**Used for:** Firmware uploads, configuration files, scripts, and any device that speaks one of the classic transfer protocols. ZMODEM includes crash recovery (ZRPOS).
+
+**Learn more:** [File Transmission](File-Transmission.md)
+
+### In-App AI Assistant
+
+**What it is:** A bring-your-own-key chat panel that reads the live dashboard and edits the project on request.
+
+**How it works:** Providers include Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, OpenRouter, and Mistral, plus any OpenAI-compatible local server (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Read-only commands run automatically; mutations show an Approve/Deny card; device control stays blocked unless the **Allow device control** toggle is on.
+
+**Learn more:** [AI Assistant](AI-Assistant.md)
 
 ### Commercial Use Rights
 
@@ -403,8 +456,10 @@ systems, non-commercial university research, and home automation.
 - Commercial and business use rights.
 - MQTT, Modbus, CAN Bus, and Audio Input.
 - Raw USB (bulk/isochronous via libusb), HID, and Process I/O.
-- 3D and XY plots, Waterfall (spectrogram), and live Image View (camera feeds).
-- MDF4 export and playback.
+- 3D and XY plots, Waterfall (spectrogram), Painter, and live Image View (camera feeds).
+- Output (control) widgets and multi-device projects.
+- MDF4 export and playback, plus the Session Database.
+- File transfers (XMODEM/YMODEM/ZMODEM) and the in-app AI Assistant.
 - Binary Direct mode.
 - Email support.
 
@@ -420,7 +475,7 @@ commercial products, and enterprise deployments.
   (20 device activations), and Enterprise (100 device activations)
 - Monthly and yearly licenses renew until cancelled; the lifetime license
   is a one-time perpetual purchase (currently offered for individual use)
-- Educational discounts available (.edu email required)
+- Educational discounts available (institutional email required)
 
 **Free Trial:**
 - 14-day trial included with official binary download
@@ -436,8 +491,8 @@ commercial products, and enterprise deployments.
 1. Purchase a license from [serial-studio.com](https://serial-studio.com).
 2. Download the official binary (if you were using a GPL build).
 3. Open Serial Studio.
-4. Go to **Help -> Activate License**.
-5. Enter the license key.
+4. Click **Activate** in the toolbar to open the License Management dialog.
+5. Paste the license key and click **Activate**.
 
 Pro features unlock once the key is accepted.
 
@@ -448,21 +503,23 @@ vice versa, with no migration step.
 
 ### Offline use
 
-A network connection is needed only for the initial activation. After that the
-license is tied to the hardware ID and works offline.
+A network connection is needed for the initial activation. After that the
+license is tied to the hardware ID and is cached locally; Serial Studio
+revalidates it online when a connection is available, and a 30-day offline
+grace period covers machines that stay disconnected between checks.
 
 ## Educational Discounts
 
 Students and educators can get discounted Pro licenses:
 
 **Requirements:**
-- Valid .edu email address
+- Valid institutional email address (.edu or your institution's equivalent)
 - Proof of enrollment/employment
 - Academic use only
 
 **How to apply:**
 - Email: alex@serial-studio.com
-- Include: .edu email, institution name, use case
+- Include: institutional email, institution name, use case
 - Response within 2 business days
 
 ## Earning a license through contributions
@@ -494,7 +551,7 @@ Pro features become locked. You can:
 
 ### Can I transfer my Pro license to another computer?
 
-**Yes.** Deactivate on one machine (Help → Deactivate License), then activate on another. You can transfer activations as needed, up to your plan's activation limit (5, 20, or 100 depending on the tier).
+**Yes.** Deactivate on one machine (the **Deactivate** button in the License Management dialog), then activate on another. You can transfer activations as needed, up to your plan's activation limit (5, 20, or 100 depending on the tier).
 
 ### Is there a subscription?
 
@@ -522,16 +579,16 @@ contact alex@serial-studio.com.
 
 Each plan includes a fixed number of device activations (5, 20, or 100
 depending on the tier). You can run Pro on that many machines at once and move
-activations between computers as needed (Help -> Deactivate License, then
-activate elsewhere).
+activations between computers as needed (deactivate in the License Management
+dialog, then activate elsewhere).
 
 ### Is the source code available for Pro features?
 
-Pro features are proprietary and not open-source. However, the core platform (GPL modules) is open-source and visible.
+Pro module source code is visible in the public repository, but it is proprietary: reading the code grants no right to use, compile, or distribute it (see the [License Agreement](License-Agreement.md)). The core platform (GPL modules) is open source.
 
 ### Does Pro work offline?
 
-**Yes.** After initial activation, Pro works fully offline. Internet only needed for license activation.
+**Yes.** After initial activation, Pro works offline. The cached license revalidates online when a connection is available, with a 30-day offline grace period; a machine that stays offline longer than that needs a brief connection to re-check the license.
 
 ### What payment methods do you accept?
 
@@ -598,12 +655,12 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 |---|--------------|-----|
 | **Best for** | Hobbyists, students, open-source | Professionals, businesses, industry |
 | **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, Audio, Raw USB, HID, Process I/O) |
-| **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View, Painter |
+| **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View, Painter, Output widgets |
 | **Performance** | Hex/Base64 decoding | Binary Direct mode |
 | **Export** | CSV | CSV + MDF4 |
 | **Commercial use** | ❌ | ✅ |
 | **Support** | Community | Email + Community |
-| **Cost** | Free | One-time purchase |
+| **Cost** | Free | Monthly, yearly, or lifetime license |
 
 ## More information
 

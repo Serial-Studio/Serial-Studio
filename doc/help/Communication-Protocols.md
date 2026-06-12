@@ -26,7 +26,7 @@ flowchart TD
 | MQTT               | Pro     | Internet / LAN          | Network-dependent          | IoT cloud, distributed systems         |
 | Modbus             | Pro     | RS-485 / Ethernet       | 9600 bps to network speed  | PLCs, SCADA, industrial equipment      |
 | CAN Bus            | Pro     | Twisted pair            | Up to 8 Mbps (CAN FD)      | Automotive, industrial machinery       |
-| Audio input        | Pro     | Analog audio            | Up to 48 kHz sample rate   | Sound analysis, vibration monitoring   |
+| Audio input        | Pro     | Analog audio            | Device-dependent, up to 384 kHz sampling | Sound analysis, vibration monitoring   |
 | Raw USB            | Pro     | USB cable               | Up to 480 Mbps (USB 2.0)   | Custom firmware, bulk/iso endpoints    |
 | HID                | Pro     | USB cable               | Up to 64 KB/s              | Gamepads, custom HID sensors           |
 | Process I/O        | Pro     | Local IPC               | OS-dependent               | Scripts, simulators, named pipes       |
@@ -144,12 +144,11 @@ MQTT (Message Queuing Telemetry Transport) is a lightweight publish/subscribe me
 - **Client ID.** Auto-generated 16-character random string. Regenerate via the button.
 - **Username / password.** Broker authentication.
 - **MQTT version.** 3.1, 3.1.1, or 5.0.
-- **Mode.** Publisher or Subscriber.
-- **Topic filter.** Topic to subscribe to or publish on. Supports MQTT wildcards (`+` single level, `#` multi-level).
-- **QoS.** 0 (at most once), 1 (at least once), or 2 (exactly once) for the will message.
-- **TLS/SSL.** Optional encryption with configurable protocol version, peer verification mode, and CA certificates.
-- **Will message.** Last Will and Testament sent by the broker if the client disconnects unexpectedly.
+- **Topic filter.** Topic the subscriber listens on. Supports MQTT wildcards (`+` single level, `#` multi-level). The publisher uses a separate per-project topic base configured on the [MQTT Publisher](MQTT-Publisher.md) page.
+- **TLS/SSL.** Optional encryption with configurable protocol version, peer verification mode, peer verification depth, and CA certificates.
 - **Keep alive.** Interval in seconds for PING packets. Supports automatic keep-alive.
+
+Subscriptions are made at QoS 0, and Last Will configuration is not exposed. The subscriber and publisher are configured separately: the subscriber is a per-source bus type, the publisher a project-level export.
 
 **Platform considerations:**
 
@@ -213,7 +212,7 @@ Controller Area Network (CAN) is a vehicle and industrial bus standard. Serial S
   - macOS: limited. Needs third-party drivers.
 - **Interface.** The CAN interface name (for example `can0`, `PCAN_USBBUS1`).
 - **Bitrate.** Has to match the network exactly. Common: 125, 250, 500 kbps, 1 Mbps.
-- **CAN FD.** Enable for Flexible Data-rate frames (29-bit identifiers, up to 64 bytes payload).
+- **CAN FD.** Enable for Flexible Data-rate frames (up to 64 data bytes per frame).
 
 **CAN frame format emitted by the driver.** The driver converts each received CAN frame into a byte array. Standard frames (11-bit identifiers) use `[ID_high, ID_low, DLC, data_0, data_1, ...]`; extended frames (29-bit identifiers) carry the full identifier in four bytes with bit 7 of the first byte set: `[0x80|ID_28..24, ID_23..16, ID_15..8, ID_7..0, DLC, data_0, ...]`. Standard identifiers never exceed 0x7FF, so the first byte's top bit tells the two forms apart. This array is passed to Serial Studio's frame parser for decoding.
 

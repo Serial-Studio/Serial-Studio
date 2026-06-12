@@ -35,12 +35,14 @@ Widgets.MiniWindow {
   state: "normal"
   width: minimumWidth
   height: minimumHeight
+  animationsEnabled: false
   implicitWidth: minimumWidth
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
   windowControlsVisible: !Cpp_UI_TaskbarSettings.taskbarHidden
-  visible: root.state === "normal" || root.state === "maximized"
   shadowEnabled: root.state === "normal" && !windowManager.autoLayoutEnabled
+  visible: root.state === "normal" || root.state === "maximized"
+           || root.hideAnimationRunning
 
   //
   // Input properties
@@ -234,7 +236,10 @@ Widgets.MiniWindow {
                          && !Cpp_Benchmark_Runner.running
                          && !Cpp_IO_Manager.isDeviceConnected(root.deviceIndex)
   }
-  Component.onCompleted: _refreshSourceConnection()
+  Component.onCompleted: {
+    _refreshSourceConnection()
+    Qt.callLater(function() { root.animationsEnabled = true })
+  }
   onDeviceIndexChanged: _refreshSourceConnection()
   Connections {
     target: Cpp_Benchmark_Runner

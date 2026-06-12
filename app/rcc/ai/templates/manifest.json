@@ -16,7 +16,7 @@
     {
       "id": "gps_uart_nmea",
       "title": "GPS over UART (NMEA 0183)",
-      "description": "UART source for GPS receivers that output NMEA 0183 sentences. Latitude, longitude, altitude, ground speed, satellite count.",
+      "description": "UART source for GPS receivers that output NMEA 0183 sentences. Latitude, longitude, altitude, satellites, HDOP, fix quality.",
       "file": "gps_uart_nmea.json"
     },
     {
@@ -28,7 +28,7 @@
     {
       "id": "telemetry_udp",
       "title": "Network telemetry (UDP)",
-      "description": "UDP listener on port 1234 with a CSV frame parser. Generic telemetry: timestamp, value1, value2, value3, value4. Edit the parser/datasets after applying.",
+      "description": "CSV frame parser with 5 generic telemetry channels: timestamp, value1, value2, value3, value4. Configure the UDP listener via io.network.* after applying; edit the parser/datasets as needed.",
       "file": "telemetry_udp.json"
     },
     {

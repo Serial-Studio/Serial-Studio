@@ -4,7 +4,7 @@ This example turns Serial Studio into a live system dashboard, like a minimal ht
 
 ![Screenshot](doc/screenshot.png)
 
-Serial Studio spawns `system-monitor.py` (or the platform launcher), and the script continuously writes metrics to `stdout` at about 30 Hz. Serial Studio parses each line as a frame and drives gauges, multiplots, bar graphs, and data grids in real time.
+Serial Studio spawns `system-monitor.py` (or the platform launcher), and the script continuously writes metrics to `stdout` at about 30 Hz. Serial Studio parses each line as a frame and drives plots, multiplots, bar graphs, and data grids in real time.
 
 > The Process I/O driver needs a Serial Studio Pro license. See [serial-studio.com](https://serial-studio.com/) for details.
 
@@ -12,13 +12,13 @@ Serial Studio spawns `system-monitor.py` (or the platform launcher), and the scr
 
 | Metric                    | Widget              | Notes |
 |---------------------------|---------------------|-------|
-| CPU usage                 | Gauge + line plot   | Overall utilization (%) |
-| CPU temperature           | Bar                 | °C; `N/A` if unavailable (for example macOS) |
+| CPU usage                 | Line plot           | Overall utilization (%), alarm above 90 |
+| CPU temperature           | Value (logged)      | °C; `N/A` if unavailable (for example macOS) |
 | Per-core CPU              | Multiplot           | One curve per logical core. Cores beyond the machine's count are hidden via `-1` sentinel |
-| RAM usage                 | Gauge + line plot   | Memory pressure (%) |
-| RAM used                  | Bar                 | Absolute consumption (GB) |
+| RAM usage                 | Line plot           | Memory pressure (%), alarm above 90 |
+| RAM used                  | Bar + line plot     | Absolute consumption (GB) |
 | Swap used                 | Bar                 | Page-file / swap used (GB) |
-| Disk usage                | Gauge + line plot   | Root partition (%) |
+| Disk usage                | Line plot           | Root partition (%), alarm above 95 |
 | Disk used                 | Bar                 | Space consumed (GB) |
 | Network upload / download | Multiplot           | MB/s delta since last frame |
 | Process count             | Bar                 | Total running processes |

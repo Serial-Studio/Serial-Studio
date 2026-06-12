@@ -34,8 +34,8 @@ The waveforms are useful for:
 ### Requirements
 
 - GCC or any compatible C compiler.
-- A system with POSIX support for UDP sockets (Linux, macOS, or Windows with WSL).
-- [Serial Studio](https://serial-studio.github.io/) for real-time visualization.
+- Linux, macOS, or Windows (the program uses Winsock natively, so MinGW works without WSL).
+- [Serial Studio](https://serial-studio.com/) for real-time visualization.
 
 ### 1. Compile the program
 
@@ -72,7 +72,7 @@ gcc -o udp_function_generator.exe udp_function_generator.c -lws2_32 -lm
 
 ### 3. Visualize data in Serial Studio
 
-1. **Download and install Serial Studio.** Visit the [official site](https://serial-studio.github.io/) to download and install.
+1. **Download and install Serial Studio.** Visit the [official site](https://serial-studio.com/) to download and install.
 2. **Configure Serial Studio.**
    - Set **I/O Interface** to **Network Socket**.
    - Pick **UDP** as the socket type.

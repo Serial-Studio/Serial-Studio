@@ -87,21 +87,32 @@ The advantage over raw libusb is that HID devices are typically already claimed 
 The HID driver wraps hidapi. The setup flow is:
 
 1. Wait for **device enumeration**. Serial Studio re-enumerates HID devices every 2 seconds for hotplug detection.
-2. Pick a device by **VID:PID, Product Name** from the dropdown.
-3. Confirm the **Usage Page** and **Usage** fields. A composite device may register multiple HID interfaces; pick the one you need.
-4. Connect.
+2. Pick a device from the **HID Device** dropdown. Entries are listed as `Product Name (VID:PID)` with VID and PID in uppercase hex. Interfaces of a composite device that share VID, PID, and serial number are merged into a single entry.
+3. Connect. The **Usage Page** and **Usage** fields appear below the device selector once connected; they are read-only hex values (for example `0x0001` and `0x0004`) reporting the opened device's usage.
 
-From that point, every input report's payload bytes become a frame that flows through the standard FrameReader pipeline.
+From that point, every input report arrives as a chunk of raw bytes in the standard FrameReader pipeline; frame detection and parsing work the same as for any other driver. Writes from the console go out through `hid_write`, where the first payload byte is the report ID (`0x00` for devices without numbered reports).
 
 ### Threading
 
-The HID driver runs a dedicated read thread that issues blocking `hid_read` calls. When data arrives, the thread captures a `SteadyClock::now()` timestamp and posts the data to the main thread via `Qt::AutoConnection`, which resolves to `Qt::QueuedConnection` for the cross-thread hop. See [Threading and Timing Guarantees](Threading-and-Timing.md).
+The HID driver runs a dedicated read thread that issues blocking `hid_read_timeout` calls (100 ms timeout, 65-byte buffer: one report ID byte plus a 64-byte report). Each call returns at most one input report. When data arrives, the thread captures a `SteadyClock::now()` timestamp and posts the data to the main thread via `Qt::AutoConnection`, which resolves to `Qt::QueuedConnection` for the cross-thread hop. See [Threading and Timing Guarantees](Threading-and-Timing.md).
 
 ### Frame parsing
 
 HID data is just bytes. If the device declares a custom report format (for example 8-byte reports with two `int16` axes and a `uint8` packed button byte), write a frame parser to decode it as you would any other binary protocol. The HID report descriptor itself is advisory at the protocol level; the host does not require you to honour it.
 
 For step-by-step setup, see the [Protocol Setup Guides, HID section](Protocol-Setup-Guides.md).
+
+### Remote API commands
+
+The TCP API and the in-app AI assistant configure this driver through the `io.hid.*` scope:
+
+| Command | Parameters | Returns |
+|---------|------------|---------|
+| `io.hid.listDevices` | none | `devices` array and `selectedIndex` (index 0 is the "Select Device" placeholder) |
+| `io.hid.setDeviceIndex` | `deviceIndex` (integer) | Selected index and device name |
+| `io.hid.getConfig` | none | `deviceIndex`, `usagePage`, `usage` |
+
+Transport details and command safety tiers are in the [API Reference](API-Reference.md).
 
 ## Common pitfalls
 
@@ -110,8 +121,8 @@ For step-by-step setup, see the [Protocol Setup Guides, HID section](Protocol-Se
   /etc/udev/rules.d/99-hidraw.rules:
   KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666"
   ```
-  Prefer scoping the rule to a specific VID/PID rather than opening every hidraw node. Windows and macOS expose HID without extra setup.
-- **Multiple entries for the same device.** A composite device can register several HID interfaces (for example one for the keyboard interface and one for vendor data). Use the Usage Page / Usage fields to pick the right interface.
+  Prefer scoping the rule to a specific VID/PID rather than opening every hidraw node. The same rule fixes devices that appear in the list but fail to open. Windows and macOS expose HID without extra setup.
+- **Composite device opens the wrong interface.** A composite device can register several HID interfaces (for example one for the keyboard interface and one for vendor data). Serial Studio merges interfaces that share VID, PID, and serial number into one list entry and opens the first interface hidapi reports. Check the read-only Usage Page / Usage fields after connecting; if the wrong interface opened, the firmware-side fix is to expose the data interface with a distinct serial number or its own VID:PID.
 - **Connected but no data arrives.** Some HID devices only send reports on state change. A gamepad reports when a button is pressed or an axis moves; if it is idle, nothing arrives. Move the device to confirm.
 - **Reports look corrupted.** Check whether the device uses *numbered* reports. If so, the first byte of each read is the report ID, not data. The frame parser must skip it, or split by ID when multiple report formats exist.
 - **macOS reads work but writes do not.** On macOS, output reports sometimes require `hid_send_feature_report` instead of `hid_write`, depending on how the device declares its output endpoints. This is a hidapi-level quirk; the workaround usually has to be made on the firmware side.

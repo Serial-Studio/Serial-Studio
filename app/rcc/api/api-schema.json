@@ -136,25 +136,24 @@
         ]
     },
     {
-        "description": "Validate a script by kind without writing. Routes to project.frameParser.dryRun, project.dataset.transform.dryRun, or project.painter.dryRun based on `kind`. All other params are forwarded verbatim (code, language, values, plus for frame_parser the pipeline inputs inputBytesHex / decoderMethod / frameDetection / frameStart / frameEnd / hexadecimalDelimiters / checksumAlgorithm / operationMode).",
+        "description": "Validate a script by kind without writing. Routes to project.frameParser.dryRun, project.dataset.transform.dryRun, project.painter.dryRun, project.outputWidget.dryRun, or project.dryRun.endToEnd based on `kind`. All other params are forwarded verbatim (code, language, values, inputValue / hex for output_widget, sampleFrame / sampleFrames for end_to_end, plus for frame_parser the pipeline inputs inputBytesHex / decoderMethod / frameDetection / frameStart / frameEnd / hexadecimalDelimiters / checksumAlgorithm / operationMode).",
         "name": "assistant.script.dryRun",
         "properties": {
             "code": {
-                "description": "Script source.",
+                "description": "Script source. Required for every kind except end_to_end, which defaults to the live project parser.",
                 "type": "string"
             },
             "kind": {
-                "description": "One of: frame_parser, transform, painter.",
+                "description": "One of: frame_parser, transform, painter, output_widget, end_to_end.",
                 "type": "string"
             },
             "language": {
-                "description": "0 = JavaScript, 1 = Lua (frame_parser / transform).",
+                "description": "0 = JavaScript, 1 = Lua (frame_parser / transform / end_to_end).",
                 "type": "integer"
             }
         },
         "required": [
-            "kind",
-            "code"
+            "kind"
         ]
     },
     {
@@ -2765,7 +2764,7 @@
         "name": "project.dataset.getByUniqueId",
         "properties": {
             "uniqueId": {
-                "description": "Computed as sourceId*1000000 + groupId*10000 + datasetId. Treat as opaque.",
+                "description": "Opaque persisted handle allocated at dataset creation; stable across reorders. Read it from list/snapshot responses, never compute it.",
                 "type": "integer"
             }
         },
@@ -3023,7 +3022,7 @@
         ]
     },
     {
-        "description": "End-to-end dry run: takes a sample frame body, runs the project's frame parser, then applies every dataset's transform in execution order, and returns the final per-dataset values WITHOUT touching live state. Use this to verify the full parse->transform pipeline before issuing setCode/setTransformCode. Note: the table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal) is NOT injected; transforms that depend on it should be tested with project.dataset.transform.dryRun individually.",
+        "description": "End-to-end dry run: takes a sample frame body, runs the project's frame parser, then applies every dataset's transform in execution order, and returns the final per-dataset values WITHOUT touching live state. Required: sampleFrame (single body) OR sampleFrames (array of bodies); everything else defaults to the live project. Use this to verify the full parse->transform pipeline before issuing setCode/setTransformCode. Note: the table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal) is NOT injected; transforms that depend on it should be tested with project.dataset.transform.dryRun individually.",
         "name": "project.dryRun.endToEnd",
         "properties": {
             "code": {
@@ -3035,11 +3034,11 @@
                 "type": "integer"
             },
             "sampleFrame": {
-                "description": "Single frame body (without delimiters). Use sampleFrames for an array.",
+                "description": "Single frame body (without delimiters). Use sampleFrames for an array. One of sampleFrame / sampleFrames is required.",
                 "type": "string"
             },
             "sampleFrames": {
-                "description": "Array of frame bodies; runs sequentially in one parser engine instance.",
+                "description": "Array of frame bodies; runs sequentially in one parser engine instance. One of sampleFrame / sampleFrames is required.",
                 "items": {
                     "type": "string"
                 },
@@ -3055,12 +3054,6 @@
             }
         },
         "required": [
-            "sampleFrame",
-            "sampleFrames",
-            "sourceId",
-            "code",
-            "language",
-            "verbose"
         ]
     },
     {
@@ -3094,7 +3087,7 @@
         "name": "project.frameParser.dryRun",
         "properties": {
             "checksumAlgorithm": {
-                "description": "Checksum name to validate trailing bytes. Empty = none.",
+                "description": "Checksum name to validate trailing bytes. Empty (default) = none.",
                 "type": "string"
             },
             "code": {
@@ -3102,31 +3095,31 @@
                 "type": "string"
             },
             "decoderMethod": {
-                "description": "0=PlainText (UTF-8 -> QString, mojibakes binary), 1=Hexadecimal (toHex -> QString), 2=Base64 (toBase64 -> QString), 3=Binary (raw QByteArray, only mode that's safe for binary protocols).",
+                "description": "0=PlainText (default; UTF-8 -> QString, mojibakes binary), 1=Hexadecimal (toHex -> QString), 2=Base64 (toBase64 -> QString), 3=Binary (raw QByteArray, only mode that's safe for binary protocols).",
                 "type": "integer"
             },
             "frameDetection": {
-                "description": "0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly.",
+                "description": "0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly.",
                 "type": "integer"
             },
             "frameEnd": {
-                "description": "End delimiter. Hex when hexadecimalDelimiters is true.",
+                "description": "End delimiter. Hex when hexadecimalDelimiters is true. Default: none.",
                 "type": "string"
             },
             "frameStart": {
-                "description": "Start delimiter. Hex when hexadecimalDelimiters is true.",
+                "description": "Start delimiter. Hex when hexadecimalDelimiters is true. Default: none.",
                 "type": "string"
             },
             "hexadecimalDelimiters": {
-                "description": "When true, frameStart / frameEnd are parsed as hex bytes.",
+                "description": "When true, frameStart / frameEnd are parsed as hex bytes. Default false.",
                 "type": "boolean"
             },
             "inputBytes": {
-                "description": "Raw stream bytes as UTF-8 text. Lossy for binary payloads -- prefer inputBytesHex for COBS / Modbus / non-ASCII.",
+                "description": "Raw stream bytes as UTF-8 text. Lossy for binary payloads -- prefer inputBytesHex for COBS / Modbus / non-ASCII. One of inputBytes / inputBytesHex must be a non-empty string.",
                 "type": "string"
             },
             "inputBytesHex": {
-                "description": "Raw stream bytes as a hex string (space-tolerant). Binary-safe; use this for COBS or any non-ASCII protocol.",
+                "description": "Raw stream bytes as a hex string (space-tolerant). Binary-safe; use this for COBS or any non-ASCII protocol. One of inputBytes / inputBytesHex must be a non-empty string.",
                 "type": "string"
             },
             "language": {
@@ -3140,16 +3133,7 @@
         },
         "required": [
             "code",
-            "language",
-            "inputBytes",
-            "inputBytesHex",
-            "decoderMethod",
-            "frameDetection",
-            "frameStart",
-            "frameEnd",
-            "hexadecimalDelimiters",
-            "checksumAlgorithm",
-            "operationMode"
+            "language"
         ]
     },
     {
@@ -3678,7 +3662,7 @@
                 "type": "string"
             },
             "hex": {
-                "description": "Treat inputValue as space-separated hex bytes",
+                "description": "Treat inputValue as space-separated hex bytes. Default false.",
                 "type": "boolean"
             },
             "inputValue": {
@@ -3687,9 +3671,7 @@
             }
         },
         "required": [
-            "code",
-            "inputValue",
-            "hex"
+            "code"
         ]
     },
     {
@@ -3773,11 +3755,11 @@
         ]
     },
     {
-        "description": "Set the painter widget code for a group (params: groupId, code). **JavaScript only** -- painter scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx) and an optional onFrame(value) callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.",
+        "description": "Set the painter widget code for a group (params: groupId, code). **JavaScript only** -- painter scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.",
         "name": "project.painter.setCode",
         "properties": {
             "code": {
-                "description": "Painter widget JS source. Must define paint(ctx) and may define onFrame(value). Replaces any existing code for the group.",
+                "description": "Painter widget JS source. Must define paint(ctx, w, h) and may define a zero-arg onFrame(). Replaces any existing code for the group.",
                 "type": "string"
             },
             "groupId": {
@@ -3991,7 +3973,7 @@
         ]
     },
     {
-        "description": "Replace the current project with a starter template -- the right first move when the user says \"set me up an X project\" rather than \"add an X to my existing project\". DESTRUCTIVE: discards any unsaved current state; auto-save will write the new template to disk shortly after. After applying, narrate what landed (groups, datasets) so the user knows what they got, then proceed with any follow-up edits the user requested. Available templates and their best fit:\n  blank: empty project, one default UART source. Use when the user wants to build everything themselves.\n  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the frame parser if your device frames differ.\n  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n  scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.\n  telemetry_udp: UDP listener on port 1234, CSV body parser, 5 generic value channels. Adapt port + parser to your protocol.\n  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure the broker via project.mqtt.subscriber.setConfig.\nPass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates.",
+        "description": "Replace the current project with a starter template -- the right first move when the user says \"set me up an X project\" rather than \"add an X to my existing project\". DESTRUCTIVE: discards any unsaved current state; auto-save will write the new template to disk shortly after. After applying, narrate what landed (groups, datasets) so the user knows what they got, then proceed with any follow-up edits the user requested. Available templates and their best fit:\n  blank: empty project, one default UART source. Use when the user wants to build everything themselves.\n  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the frame parser if your device frames differ.\n  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n  scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.\n  telemetry_udp: CSV body parser with 5 generic value channels, intended for UDP telemetry. The template does NOT configure the connection -- set up the UDP listener via io.network.* after applying.\n  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure the broker via project.mqtt.subscriber.setConfig.\nPass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates.",
         "name": "project.template.apply",
         "properties": {
             "dryRun": {

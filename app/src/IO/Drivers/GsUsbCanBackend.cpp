@@ -686,6 +686,7 @@ void IO::Drivers::GsUsbCanBackend::stopReadThread()
   m_running.store(false, std::memory_order_release);
 
   if (m_readThread.isRunning()) {
+    m_readThread.quit();
     if (!m_readThread.wait(2000))
       m_readThread.terminate();
 

@@ -34,6 +34,7 @@ struct ProviderCapabilities {
   bool developerRole          = false;
   bool structuredToolResults  = false;
   bool needsSmallToolSurface  = true;
+  bool slowFirstToken         = false;
   int toolResultByteBudget    = 4096;
 };
 

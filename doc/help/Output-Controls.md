@@ -4,7 +4,7 @@
 
 Output controls are interactive dashboard widgets that send data back to a connected device. While standard widgets visualize incoming telemetry, output controls transmit commands, setpoints, and parameters from the Serial Studio dashboard, so the dashboard can both read from and write to the device.
 
-Each output control uses a user-defined JavaScript `transmit(value)` function that converts widget interactions (button clicks, slider drags, text input) into the exact bytes your device expects. That makes output controls protocol-agnostic: the same slider widget can drive a plain-text serial command, a JSON payload, or a binary packet, just by changing the transmit function.
+Each output control uses a user-defined JavaScript `transmit(value)` function that converts widget interactions (button clicks, slider drags, text input) into the exact bytes your device expects. That makes output controls protocol-agnostic: the same slider widget can drive a plain-text serial command, a JSON payload, or a binary packet by changing only the transmit function.
 
 Output controls require a **Pro license**.
 
@@ -19,7 +19,7 @@ flowchart LR
 
 1. The user interacts with a control on the dashboard (clicks a button, moves a slider, types text, etc.).
 2. The widget calls its JavaScript `transmit(value)` function with the interaction value.
-3. The function returns a string or byte sequence.
+3. The function returns a string (binary payloads are byte-strings built with `String.fromCharCode`).
 4. Serial Studio transmits the result to the connected device.
 
 Transmission is rate-limited to a minimum of 50 ms between sends, preventing device buffer overflows during continuous interactions like slider drags.
@@ -104,6 +104,8 @@ function transmit(value) {
   return "CMD " + value + "\r\n";
 }
 ```
+
+The return value must be a string. For binary protocols, build a byte-string with `String.fromCharCode(...)` (see the Binary Packet template); returning a plain array of numbers transmits nothing. Payloads are capped at 65536 bytes, and a `transmit()` call that runs longer than 500 ms is stopped by a watchdog. Both conditions surface as a transmit error on the widget.
 
 ### Built-in Templates
 
@@ -540,7 +542,7 @@ function transmit(value) {
 - Test with the Console view open to see exactly what bytes are being transmitted.
 - Combine output controls with input widgets in the same dashboard for full closed-loop monitoring (e.g., a slider to set a target temperature alongside a gauge showing the actual temperature).
 - Use the built-in protocol helpers (`modbusWriteRegister`, `canSendFrame`, and so on) instead of packing binary bytes by hand. See [Protocol Helper Functions](#protocol-helper-functions) above.
-- For complex protocols beyond the built-in helpers, write custom helper functions inside the transmit function scope. Variables declared outside `transmit()` persist across calls.
+- For protocols beyond the built-in helpers, define your own helper functions next to `transmit()` in the same script. Variables declared outside `transmit()` persist across calls.
 
 ## See Also
 

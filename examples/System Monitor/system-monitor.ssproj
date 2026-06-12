@@ -1535,10 +1535,10 @@
             "checksumAlgorithm": "",
             "connection": {
                 "arguments": "",
-                "executable": "/Users/alex/Documents/GitHub/Serial-Studio/examples/System Monitor/system-monitor.sh",
+                "executable": "",
                 "mode": 0,
-                "pipePath": "/tmp/myapp.fifo",
-                "workingDir": "/tmp"
+                "pipePath": "",
+                "workingDir": ""
             },
             "decoder": 0,
             "decoderMethod": 0,

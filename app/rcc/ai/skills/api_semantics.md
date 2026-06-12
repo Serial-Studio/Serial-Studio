@@ -84,7 +84,7 @@ workspaces start at 5000.
    │ TimestampedFramePtr published once, shared by all consumers │
    └─────────────────────────────────────────────────────────────┘
          │
-         ├─► Dashboard widgets (visualization update on UI tick ~24 Hz)
+         ├─► Dashboard widgets (visualization update on UI tick, 60 Hz default)
          │       └─► Painter onFrame() then paint(ctx,w,h) per painter widget
          ├─► CSV / MDF4 export workers (lock-free queue, batch on worker thread)
          ├─► API / gRPC / MQTT publishers
@@ -104,7 +104,9 @@ The cycle in prose form, for each parsed frame in a source:
         either by an earlier dataset in this frame OR by any dataset
         in a previous frame. Computed registers persist; nothing wipes
         them between frames.
-      - Raw values of EVERY dataset (already populated above).
+      - Raw values of EARLIER datasets in this frame only (single-pass
+        walk); a later dataset's raw register still holds the previous
+        frame's value.
       - Final values of EARLIER datasets in this frame only.
    4. Write the result to the data table: `setDatasetFinal(uniqueId, value)`.
 2. **TimestampedFramePtr fans out.** One shared object reaches the
@@ -117,7 +119,8 @@ groups). It cannot read final values of D or later, because they haven't
 run yet.
 
 **Painters run on the UI refresh tick, NOT on every parsed frame.** The
-dashboard repaints at ~24 Hz; if frames arrive faster, the painter
+dashboard repaints at 60 Hz by default (configurable 1-240 via
+`dashboard.setFps`); if frames arrive faster, the painter
 samples whichever frame was latest at tick time. A painter reading
 `datasetGetFinal(uid)` always sees the most recent fully-processed
 value, but might skip intermediate frames between two `onFrame()`

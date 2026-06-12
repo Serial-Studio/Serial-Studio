@@ -37,17 +37,18 @@ The editor window has three areas: a toolbar across the top, a tree view on the 
 
 ### Toolbar
 
-- **New project.** Create a blank project.
-- **Open project.** Load an existing `.json` or `.ssproj` file.
-- **Save project** (Ctrl+S / Cmd+S). Save the current project.
-- **Add action.** Add a new action button.
-- **Add data grid.** Add a group with the Data Grid widget.
-- **Add multiple plots.** Add a group with the Multiple Plot widget.
-- **Add accelerometer.** Add a group pre-configured for 3-axis acceleration.
-- **Add gyroscope.** Add a group pre-configured for 3-axis rotation.
-- **Add map.** Add a group for GPS data (latitude, longitude, altitude).
-- **Add container.** Add a group with no group-level widget.
-- **Import > Protobuf** (Pro). Generate a project from a Protocol Buffers (`.proto`) schema. See [Auto-Generating Projects](Auto-Generating-Projects.md).
+File actions sit on the left; the rest of the toolbar is "add" buttons grouped by what they create.
+
+- **New / Open / Save / Save As.** File actions. **Save** (Ctrl+S / Cmd+S) writes the project to disk; **Open** loads an existing `.json` or `.ssproj` file.
+- **Protobuf** (Pro). Generate a project from a Protocol Buffers (`.proto`) schema. See [Auto-Generating Projects](Auto-Generating-Projects.md).
+- **Restore.** Restore a recent automatic snapshot. See [Backups & Recovery](Backup-Recovery.md).
+- **Lock.** Set a password and lock the editor. See [Project Lock](Project-Lock.md).
+- **Add Device** (Pro). Add another data source for multi-device projects.
+- **Output / Action / Slider / Toggle / Knob / Text Field / Button.** Add an [output control](Output-Controls.md) panel or an [action](Actions.md).
+- **Dataset / Plot / FFT Plot / Gauge / Level Indicator / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
+- **Group / Image / Painter / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image and Painter are Pro).
+
+Every button, with its icon, is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#project-editor-toolbar).
 
 ### Tree view (left panel)
 
@@ -138,7 +139,7 @@ Writing a Lua or JavaScript `parse()` function is covered in Step 7 below. The B
 
 Groups organize related datasets and determine which group-level widget is used on the dashboard.
 
-1. Click one of the "Add ..." buttons in the toolbar, or right-click "Groups" in the tree.
+1. Click one of the group buttons in the toolbar (**Group** for a plain container, or **Table**, **Multi-Plot**, **Accelerometer**, **Gyroscope**, **GPS Map**, and so on for a pre-configured one).
 2. Select the new group in the tree to configure it.
 3. Set the **Title** (for example "Environmental Sensors").
 4. Set the **Widget Type**:
@@ -159,7 +160,7 @@ Groups organize related datasets and determine which group-level widget is used 
 Datasets map to individual data fields in your device's output.
 
 1. Select a group in the tree.
-2. Use the secondary toolbar (or right-click) to **Add Dataset**.
+2. Click **Dataset** in the toolbar (or one of the dataset widget buttons next to it: **Plot**, **FFT Plot**, **Gauge**, **Level Indicator**, **Compass**, **LED Indicator**).
 3. Configure the dataset properties:
 
 **General**
@@ -167,7 +168,7 @@ Datasets map to individual data fields in your device's output.
 - **Title.** Display label (for example "Temperature").
 - **Units.** Measurement suffix (for example "deg C", "hPa", "%").
 - **Frame Index.** 1-based position in the parsed data array. If your device sends `23.5,1013,45.2`, then Temperature = 1, Pressure = 2, Humidity = 3.
-- **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, or None. Bar, Gauge, and Meter each render on the dashboard as a two-page swipe view — page 0 is the analog visualization and page 1 is a large monospace digital readout. The active page is saved per widget in the project file.
+- **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, or None. All four render on the dashboard as a two-page swipe view — page 0 is the analog visualization and page 1 is a large monospace digital readout. The active page is saved per widget in the project file.
 
 **Plotting**
 
@@ -203,16 +204,16 @@ Datasets map to individual data fields in your device's output.
 
 Actions place buttons on the dashboard that send commands to the connected device.
 
-1. Click **Add Action** in the toolbar, or right-click "Actions" in the tree.
+1. Click **Action** in the toolbar.
 2. Configure the action:
 
-- **Title.** Button label (for example "Reset Device").
-- **Icon.** Pick from the built-in icon set.
-- **TX Data.** The string or bytes to transmit (for example `RST`).
-- **EOL.** Append a line ending: `\n`, `\r`, `\r\n`, or nothing.
-- **Binary.** When checked, TX Data is interpreted as hexadecimal bytes instead of ASCII.
+- **Action Title.** Button label (for example "Reset Device").
+- **Action Icon.** Pick from the built-in icon set.
+- **Send as Binary.** When checked, the payload is entered as hexadecimal bytes instead of text.
+- **Transmit Data.** The string or hex bytes to transmit (for example `RST`).
+- **End-of-Line Sequence.** Append a line ending: New Line (`\n`), Carriage Return (`\r`), CRLF (`\r\n`), or None. Disabled in binary mode.
 - **Auto-Execute on Connect.** Send the command automatically when the device connects.
-- **Timer mode:**
+- **Timer Mode:**
 
 | Mode               | Behavior |
 |--------------------|----------|
@@ -222,14 +223,16 @@ Actions place buttons on the dashboard that send commands to the connected devic
 | Toggle on Trigger  | Each click toggles the repeating timer on or off. |
 | Repeat N Times     | Each click sends the command a fixed number of times (Repeat Count), spaced by the configured interval. |
 
-- **Timer Interval.** Repeat interval in milliseconds (default 100 ms). Disabled when the mode is Off.
+- **Interval (ms).** Repeat interval in milliseconds (default 100 ms). Disabled when the mode is Off.
 - **Repeat Count.** Number of sends in Repeat N Times mode (default 3).
+
+The full action reference, including multi-source targeting and worked examples, is on the [Actions](Actions.md) page.
 
 ### Step 6: add sources (multi-device projects)
 
 Sources define where data comes from. Single-device projects have one implicit source. Multi-device projects use explicit sources.
 
-1. Right-click "Sources" in the tree and add a source.
+1. Click **Add Device** in the toolbar (Pro).
 2. Configure:
    - **Title.** Descriptive label (for example "Arduino Uno").
    - **Bus Type.** Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio Input, Modbus, CAN Bus, Raw USB, HID Device, Process, MQTT Subscriber.
@@ -281,7 +284,7 @@ function parse(frame) {
 - The function has to be named `parse` and has to accept exactly one argument.
 - It has to return a table (Lua) or array (JavaScript). Each element maps to a dataset frame index.
 - Global variables declared outside `parse()` persist between calls. Useful for stateful protocols.
-- Use `console.log()` (both languages) or `print()` (Lua shorthand) to print debug messages to the Serial Studio terminal. The full `console` table (`log`, `debug`, `info`, `warn`, `error`) is available in JavaScript and Lua alike; `warn` and `error` also raise application notifications.
+- Use `console.log()` (both languages) or `print()` (Lua shorthand) to print debug messages to the Serial Studio terminal. The full `console` table (`log`, `debug`, `info`, `warn`, `error`) is available in JavaScript and Lua alike; `error` also raises an application notification, and `warn` does too when **Route Warnings to Notifications** is enabled in Settings (off by default).
 
 **Example: binary protocol (Lua).**
 
@@ -352,7 +355,16 @@ When a project has multiple sources, each source represents a separate physical 
 - Click **Save** (Ctrl+S / Cmd+S) to write the project to disk as a `.ssproj` file.
 - You can reopen it later with **Open**, or load it automatically if it's set as the default project.
 - Serial Studio prompts to save unsaved changes when you close the editor or open a different file.
-- Use the **Examples** browser (Help menu) to open working project files as reference.
+- Use the **Examples** browser (main toolbar) to open working project files as reference.
+
+### If the project file changes on disk
+
+Serial Studio watches the open project file. The check compares file content rather than timestamps, so the app's own saves never trigger it; only an external change does.
+
+- **Modified by another program** (a text editor, a git checkout, a sync tool): a "Project file changed on disk" prompt asks whether to reload it. When you have unsaved changes, the prompt warns that reloading discards them. Answering **No** keeps the in-memory project and marks it modified, so the next save overwrites the external edit.
+- **Deleted or renamed**: a warning notification posts and the project is marked modified. Save the project to recreate the file at its original path.
+
+Reloading replaces the in-memory project. The **Restore** dialog still lists the snapshots taken before the reload, so an unwanted reload can be undone from [Backups & Recovery](Backup-Recovery.md).
 
 ## Common mistakes
 

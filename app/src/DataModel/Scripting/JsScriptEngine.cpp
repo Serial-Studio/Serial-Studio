@@ -571,12 +571,12 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
     return false;
   }
 
-  if (sourceId == 0) {
-    if (!validateParseSignature(script, showMessageBoxes)) {
-      restorePrevious();
-      return false;
-    }
+  if (!validateParseSignature(script, showMessageBoxes)) {
+    restorePrevious();
+    return false;
+  }
 
+  if (sourceId == 0) {
     if (!probeParseFunction(parseFunction, sourceId, showMessageBoxes)) {
       restorePrevious();
       return false;

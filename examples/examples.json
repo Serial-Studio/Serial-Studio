@@ -210,6 +210,17 @@
     "requiresPro": false
   },
   {
+    "id": "Protobuf Example",
+    "title": "Protobuf Telemetry Decoding",
+    "description": "Imports a Protocol Buffers schema to generate a Lua frame parser and dashboard, then decodes live protobuf telemetry streamed over UDP with per-frame message auto-detection.",
+    "category": "Networking",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "Protobuf Example.ssproj",
+    "hasScreenshot": true,
+    "requiresPro": false
+  },
+  {
     "id": "PulseSensor",
     "title": "Pulse Sensor (PPG) Monitor",
     "description": "Visualizes heart pulse data from a photoplethysmography sensor with low-pass and moving average filtering for real-time waveform display.",

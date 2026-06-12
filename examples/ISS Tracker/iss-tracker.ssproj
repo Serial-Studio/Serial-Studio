@@ -83,7 +83,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Altitude",
-                    "units": "m",
+                    "units": "km",
                     "value": "",
                     "widget": "alt",
                     "widgetMax": 0,

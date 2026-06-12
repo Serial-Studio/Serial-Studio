@@ -109,7 +109,7 @@ APIs, which is why slugs exist.)
 | Gauge         | `"gauge"`       | `widget: "gauge"`      | `8`              | `11`             |
 | Compass       | `"compass"`     | `widget: "compass"`    | `16`             | `12`             |
 | LED           | `"led"`         | `led: true`            | `32`             | `8`              |
-| Waterfall     | `"waterfall"`   | `waterfall: true`      | `64`             | `19` (Pro)       |
+| Waterfall     | `"waterfall"`   | `waterfall: true`      | `64`             | `20` (Pro)       |
 | Meter         | `"meter"`       | `widget: "meter"`      | `128`            | `13`             |
 
 Slug usage:
@@ -240,8 +240,8 @@ DIFFERENT enum: `GroupWidget`.
 | `4`             | MultiPlot      | `2`  (DashboardMultiPlot)        |
 | `5`             | NoGroupWidget  | (none; group has no native tile) |
 | `6`             | Plot3D (Pro)   | `6`  (DashboardPlot3D)           |
-| `7`             | ImageView (Pro)| `16` (DashboardImageView)        |
-| `8`             | Painter (Pro)  | `20` (DashboardPainter)          |
+| `7`             | ImageView (Pro)| `17` (DashboardImageView)        |
+| `8`             | Painter (Pro)  | `21` (DashboardPainter)          |
 
 Reading the API:
 - `project.group.add{widgetType: <int>}` is REQUIRED at creation; this

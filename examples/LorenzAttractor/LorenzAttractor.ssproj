@@ -29,7 +29,7 @@
                     "widget": "",
                     "widgetMax": 20,
                     "widgetMin": -20,
-                    "xAxis": 2
+                    "xAxis": 1
                 },
                 {
                     "datasetId": 1,
@@ -83,7 +83,7 @@
                     "widget": "",
                     "widgetMax": 50,
                     "widgetMin": 0,
-                    "xAxis": 1
+                    "xAxis": 0
                 }
             ],
             "title": "2D Visualization",

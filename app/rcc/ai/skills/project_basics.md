@@ -38,11 +38,9 @@ If the user's task involves editing more than ~5 datasets/groups/widgets,
 or creating an array of similar datasets, **scroll to the "Bulk edits"
 section now**. `project.batch` and `project.dataset.addMany` are the
 canonical answers, and using them up-front saves an entire conversation
-turn over discovering them after a 30-call sequence stalls. They are
-NOT in the default essentials list of every Serial Studio model
-deployment, so you will not always see their schema until you call
-`meta.describeCommand{name: "project.batch"}`. That call keeps you
-from inventing parameter names.
+turn over discovering them after a 30-call sequence stalls. Before the
+first use, call `meta.describeCommand{name: "project.batch"}`. That
+call keeps you from inventing parameter names.
 
 ## Listing the project
 
@@ -87,9 +85,9 @@ the whole picture in one shot.
 - `uniqueId` (on datasets): OPAQUE runtime handle used by
   `datasetGetRaw/datasetGetFinal` and the system `__datasets__` table.
   Read it from `project.dataset.getByPath`, `project.dataset.list`, or
-  `project.snapshot`. **Don't compute it.** It's derived from
-  `(sourceId, groupId, datasetId)`, but reordering changes those, and
-  arithmetic on the value will silently break.
+  `project.snapshot`. **Don't compute it.** It's allocated from a
+  persisted project-level counter at creation and stays stable across
+  reorders and moves; never derive it arithmetically.
 - `index` (on datasets): the position in the parser's output array.
   1-based. The user sets this; the parser's `parse(frame)[i]` maps to
   the dataset whose `index` is `i + 1`. **Patchable** via
@@ -367,10 +365,10 @@ still recommended for clarity.
 
 `project.dataset.move { uniqueId, newPosition }` and
 `project.group.move { groupId, newPosition }` reorder in place.
-Workspace refs re-anchor automatically. **uniqueIds change** for the
-moved item and any items it crossed; read fresh values from the
-response or a follow-up snapshot before issuing more uniqueId-based
-calls.
+Workspace refs re-anchor automatically. A move renumbers `datasetId` /
+`groupId` only; **uniqueIds survive reorders**. Read fresh positional
+ids from the response or a follow-up snapshot before issuing more
+datasetId/groupId-keyed calls.
 
 ### Schema version metadata (already in every saved project)
 

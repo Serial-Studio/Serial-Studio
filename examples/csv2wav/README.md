@@ -15,22 +15,24 @@ No extra hardware needed. Just Serial Studio, a microphone or audio source, and 
 Serial Studio logs audio samples to CSV like this:
 
 ```csv
-RX Date/Time,Audio Input/Channel 1,Audio Input/Channel 2,...
-2025/08/02 23:43:57::950,0.000000,0.002541,...
+Elapsed (s),Audio Input/Channel 1,Audio Input/Channel 2,...
+0.000000,0.000000,0.002541,...
 ```
 
-- **First column.** Timestamp (ignored by this tool).
-- **Remaining columns.** Audio samples for each channel (float, typically normalized).
+- **First column.** `Elapsed (s)` relative timestamp, used to auto-detect the sample rate.
+- **Remaining columns.** Audio samples for each channel; any header ending in `Channel <n>` counts.
 - **Channel count.** Mono, stereo, surround, and so on, depending on how many channels are logged.
 
 ## Features
 
 - Converts any Serial Studio CSV into a valid `.wav` file.
 - Supports mono, stereo, and multichannel audio.
+- Auto-detects the sample rate from the `Elapsed (s)` column (fallback 44,100 Hz).
 - CLI options for:
-  - Output sample rate (default 44,100 Hz).
-  - Sample format (`float32`, `int16`, `int24`, `int32`, `uint8`).
-- Normalizes audio automatically if needed.
+  - Sample rate override (`--rate`).
+  - Input sample format (`--in_format`: `float32`, `int16`, `int24`, `int32`, `uint8`).
+  - TPDF dither before quantization (`--dither`).
+- Removes DC offset and normalizes each channel automatically.
 - Helps debug Serial Studio pipelines by letting you listen to the reconstructed audio.
 
 ## How to use
@@ -51,7 +53,7 @@ python3 csv2wav.py path/to/audio.csv
 You can optionally specify an output path, sample rate, and format:
 
 ```bash
-python3 csv2wav.py path/to/audio.csv output.wav --rate 48000 --format int16
+python3 csv2wav.py path/to/audio.csv output.wav --rate 48000 --in_format int16
 ```
 
 ### 3. Listen to the result
@@ -60,7 +62,7 @@ python3 csv2wav.py path/to/audio.csv output.wav --rate 48000 --format int16
 - Compare it to your original source (mic recording, test tone, and so on).
 - Clean, accurate playback means the data path works end to end.
 
-## Supported sample formats
+## Supported input sample formats
 
 | Format   | Bit depth | Range                       |
 |----------|-----------|-----------------------------|
@@ -70,7 +72,7 @@ python3 csv2wav.py path/to/audio.csv output.wav --rate 48000 --format int16
 | int32    | 32-bit    | -2147483648 to 2147483647   |
 | uint8    | 8-bit     | 0 to 255 (biased unsigned)  |
 
-Default is `float32`. For playback compatibility, `int16` is usually a safe bet.
+Default is `float32`. The format describes the values stored in the CSV; the output WAV is always 16-bit PCM.
 
 ## Example use case
 
@@ -100,13 +102,14 @@ pip install numpy
 ## Command-line usage
 
 ```bash
-python3 csv2wav.py input.csv [output.wav] [--rate <hz>] [--in_format <type>]
+python3 csv2wav.py input.csv [output.wav] [--rate <hz>] [--in_format <type>] [--dither]
 ```
 
 - `input.csv`: CSV file exported from Serial Studio.
 - `output.wav`: optional name for the output WAV file.
-- `--rate`: optional sample rate in Hz (default 44100).
+- `--rate`: optional sample rate in Hz; when omitted it is derived from the `Elapsed (s)` column, falling back to 44100.
 - `--in_format`: input format (`float32`, `int16`, `int24`, `int32`, `uint8`).
+- `--dither`: apply TPDF dither before int16 quantization.
 
 > [!TIP]
 > For advanced resampling, route audio through a [virtual loopback device](https://existential.audio/blackhole/) and set the target frequency with [Serial Studio](https://github.com/Serial-Studio/Serial-Studio). Then run `csv2wav.py` to export at the new frequency. This produces clean downsampling results suitable for slowed and reverb style mixes.

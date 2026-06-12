@@ -59,7 +59,8 @@ both, or none) and pulls out one logical frame at a time.
 - Single-delimiter modes use the KMP fast path.
 - Multi-delimiter modes use `CircularBuffer::findFirstOfPatterns()`, a single-pass scan with
   a stack-allocated `PatInfo` array of up to eight patterns; it never touches the heap.
-- Optional CRC validation (CRC-8, CRC-16, CRC-32) runs immediately after extraction.
+- Optional checksum validation (`XOR-8`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`,
+  `Fletcher-16`, `CRC-32`) runs immediately after extraction.
 
 Each completed frame is enqueued into a lock-free
 `moodycamel::ReaderWriterQueue<CapturedDataPtr>` with 65536 slots. When that queue is full,
@@ -221,7 +222,8 @@ A few things to keep in mind:
 - The parser runs once per frame; transforms run once per frame *per dataset that defines
   one*. Heavy work in a transform that runs at 10 kHz across 50 datasets adds up quickly.
 - Transforms can read raw values from any dataset and final values from datasets that come
-  earlier in group / dataset order. They can also publish to computed registers in the
+  earlier in group / dataset order; reading a later dataset's final value returns the
+  previous frame's result. They can also publish to computed registers in the
   project's [Data Tables](Data-Tables.md), which other transforms can then read, in the
   same frame or in any later frame, since computed registers persist.
 - Computed registers hold their last written value indefinitely. For per-dataset state

@@ -165,6 +165,7 @@ function parse(frame) {
 
 **Key behaviors:**
 
+- `parse()` takes exactly one argument. The two-argument `parse(frame, separator)` form from Serial Studio v2 projects is rejected when the script loads.
 - The returned array is mapped to datasets by index: element 0 goes to dataset index 1, element 1 goes to dataset index 2, and so on.
 - **Multi-frame return.** Return an array of arrays to emit multiple frames from a single parse call: `[[row1_val1, row1_val2], [row2_val1, row2_val2]]`.
 - **Mixed scalar/vector.** Returning `[scalar, [vec1, vec2, vec3]]` auto-expands the inner array into separate dataset values.

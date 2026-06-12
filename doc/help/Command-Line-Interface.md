@@ -18,6 +18,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `-f`, `--fullscreen` | | Launch the dashboard in fullscreen. |
 | `--headless` | | Run without a GUI (headless / server mode). |
 | `--api-server` | | Enable the API server on startup (port 7777). |
+| `--dump-api-schema` | `file` | Write the API command registry (name, description, parameter schema per command) to a JSON file and exit. Input for SDK generators. |
 | `-p`, `--project` | `file` | Load the specified project file. |
 | `-q`, `--quick-plot` | | Enable quick-plot mode (auto-detect CSV data). |
 | `-t`, `--fps` | `Hz` | Set the visualization refresh rate. |
@@ -43,6 +44,9 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--benchmark-frames` | `count` | Frames to push through the benchmark (default 1000000). |
 | `--benchmark-seconds` | `seconds` | Wall-clock seconds the benchmark must sustain (default 10). |
 | `--benchmark-output` | `file` | File the benchmark report is written to (default: stdout only, no file). |
+
+Passing any of `--min-fps`, `--benchmark-frames`, or `--benchmark-seconds` also runs the
+benchmark; `--benchmark-hotpath` alone uses the defaults shown above.
 
 This is the headless form used in CI and deployment gating. For the interactive version with a
 per-phase results table, run it from the GUI via **About > Benchmark**; see the
@@ -78,14 +82,14 @@ pipeline.
 | Option | Argument | Description |
 |--------|----------|-------------|
 | `--modbus-rtu` | `port` | Connect to a Modbus RTU device. |
-| `--modbus-tcp` | `host:port` | Connect to a Modbus TCP server. |
+| `--modbus-tcp` | `host[:port]` | Connect to a Modbus TCP server (port defaults to 502). |
 | `--modbus-slave` | `address` | Slave address (1-247, default 1). |
 | `--modbus-poll` | `interval` | Poll interval in ms (50-60000, default 100). |
 | `--modbus-baud` | `rate` | RTU baud rate (default 9600). |
 | `--modbus-parity` | `type` | RTU parity: `none`, `even`, `odd`, `space`, `mark` (default `none`). |
 | `--modbus-databits` | `bits` | RTU data bits: `5`, `6`, `7`, `8` (default 8). |
 | `--modbus-stopbits` | `bits` | RTU stop bits: `1`, `1.5`, `2` (default 1). |
-| `--modbus-register` | `spec` | Add a register group `type:start:count` (repeatable). |
+| `--modbus-register` | `spec` | Add a register group `type:start:count`; type is `holding`, `input`, `coils`, or `discrete`; start 0-65535, count 1-125 (repeatable). |
 
 ## CAN Bus (Pro)
 

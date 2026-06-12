@@ -8,7 +8,7 @@ Support of any kind funds development, testing on real hardware, documentation, 
 
 ### Buy a Pro license
 
-The most direct way to support the project. A Pro license unlocks MQTT, Modbus, CAN Bus, MDF4 export, 3D visualization, and other features, and it funds ongoing development. If you use Serial Studio at work, your purchasing or IT department can handle the transaction.
+The most direct way to support the project. A Pro license unlocks MQTT, Modbus, CAN Bus, MDF4 export, 3D visualization, and other features (the full list is in [Pro vs Free](Pro-vs-Free.md)), and it funds ongoing development. If you use Serial Studio at work, your purchasing or IT department can handle the transaction.
 
 Store: <https://store.serial-studio.com/>
 

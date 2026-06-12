@@ -243,6 +243,25 @@ Item {
     }
   }
 
+  //
+  // The canvas is created lazily after the dashboard is already built (dataReset and
+  // widgetCountChanged fired before the Connections below existed), so restore once here
+  //
+  Component.onCompleted: externalWindowRestoreTimer.restart()
+
+  //
+  // Close pop-out windows with the rest of the app instead of dying at C++ teardown;
+  // the quitting guard in each window's closing handler keeps the saved open-state.
+  //
+  Connections {
+    target: app
+
+    function onQuittingChanged() {
+      if (app.quitting)
+        root.closeExternalWidgetWindows()
+    }
+  }
+
   Connections {
     target: Cpp_UI_Dashboard
 

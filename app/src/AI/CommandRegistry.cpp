@@ -69,6 +69,7 @@ void AI::CommandRegistry::load()
 
   const auto root          = result.document.object();
   const auto safe          = root.value(QStringLiteral("safe")).toArray();
+  const auto confirm       = root.value(QStringLiteral("confirm")).toArray();
   const auto blocked       = root.value(QStringLiteral("blocked")).toArray();
   const auto deviceGated   = root.value(QStringLiteral("deviceGated")).toArray();
   const auto alwaysConfirm = root.value(QStringLiteral("alwaysConfirm")).toArray();
@@ -76,6 +77,10 @@ void AI::CommandRegistry::load()
   for (const auto& entry : safe)
     if (entry.isString())
       m_tags.insert(entry.toString(), Safety::Safe);
+
+  for (const auto& entry : confirm)
+    if (entry.isString())
+      m_tags.insert(entry.toString(), Safety::Confirm);
 
   for (const auto& entry : blocked)
     if (entry.isString())
@@ -90,8 +95,9 @@ void AI::CommandRegistry::load()
       m_tags.insert(entry.toString(), Safety::AlwaysConfirm);
 
   qCDebug(serialStudioAI) << "Loaded AI command safety tags:" << safe.size() << "safe,"
-                          << blocked.size() << "blocked," << m_deviceGated.size() << "deviceGated,"
-                          << alwaysConfirm.size() << "alwaysConfirm.";
+                          << confirm.size() << "confirm," << blocked.size() << "blocked,"
+                          << m_deviceGated.size() << "deviceGated," << alwaysConfirm.size()
+                          << "alwaysConfirm.";
 }
 
 //--------------------------------------------------------------------------------------------------

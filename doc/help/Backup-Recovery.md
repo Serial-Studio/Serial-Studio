@@ -17,6 +17,8 @@ Serial Studio writes a snapshot:
 
 Identical content is never written twice: if the project bytes match the previous snapshot, the existing file is kept instead of writing a duplicate.
 
+Snapshots cover edits made inside Serial Studio. Changes that another program makes to the `.ssproj` file itself are handled separately: Serial Studio watches the open file and prompts to reload when its content changes on disk. See [Project Editor → If the project file changes on disk](Project-Editor.md#if-the-project-file-changes-on-disk).
+
 ## Where backups live
 
 Snapshots are plain `.ssproj` files (the same format as your project, stored compactly), grouped by project name:

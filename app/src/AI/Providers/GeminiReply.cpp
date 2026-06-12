@@ -23,7 +23,7 @@
 #include "AI/SseEventReader.h"
 #include "Misc/JsonValidator.h"
 
-static constexpr int kInitialResponseTimeoutMs = 30 * 1000;
+static constexpr int kInitialResponseTimeoutMs = 120 * 1000;
 
 /**
  * @brief Returns a redacted form of a Gemini URL with the key query stripped.

@@ -11,8 +11,8 @@ QJSEngine API surface. There is no Lua canvas API to expose; porting
 one would be a large effort for marginal benefit. Don't try to author
 painter code in Lua; it will not compile.
 
-To pin a painter to a workspace, use `widgetType: "painter"` (or the
-integer enum `18`) on `addWidget`.
+To pin a painter to a workspace, use `widgetType: "painter"`
+(preferred; the back-compat integer enum is `21`) on `addWidget`.
 
 ## Decision: when to use a painter
 
@@ -30,7 +30,8 @@ group.
 
 ## Entry points
 
-- **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (~24 Hz) to
+- **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (60 Hz
+  default, configurable 1-240 via `dashboard.setFps`) to
   redraw the canvas. The function name is `paint`, not `draw`, not
   `render`. The engine looks up `globalThis.paint` by name.
 - **`onFrame()`: optional.** Called immediately before
@@ -42,10 +43,10 @@ group.
 
 ### When `onFrame` actually fires (timing reality)
 
-`onFrame` runs at the **dashboard's UI tick rate (~24 Hz)**, NOT once
-per parsed frame. If frames arrive at 1 kHz, `onFrame` still fires only
-~24 times per second, sampling whichever dataset values were latest at
-tick time. So:
+`onFrame` runs at the **dashboard's UI tick rate (60 Hz default,
+configurable 1-240)**, NOT once per parsed frame. If frames arrive at
+1 kHz, `onFrame` still fires only ~60 times per second, sampling
+whichever dataset values were latest at tick time. So:
 
 - **Per-tick work (FFT, downsampling, formatting, computing visible
   ranges)** → put it in `onFrame`. Doing it in `paint` makes you pay
@@ -76,8 +77,8 @@ function onFrame() {
   ring[head] = v;
   head = (head + 1) % SAMPLES;
 
-  // Run FFT on tick (24 Hz), not on every parsed frame -- a 48 kHz
-  // audio source emits 48000 frames/s; we only render 24/s, so doing
+  // Run FFT on tick (60 Hz default), not on every parsed frame -- a 48 kHz
+  // audio source emits 48000 frames/s; we only render ~60/s, so doing
   // FFT here gets us a ~2 kHz redraw rate against a recent window.
   spectrum = computeFFT(ring, head);
 }
@@ -145,7 +146,7 @@ setActiveWorkspace(idOrName)  // workspaceId (>= 1000) OR title (case-insensitiv
 ```
 
 `deviceWrite`, `actionFire`, and the dashboard helpers: call from
-`onFrame()`, NOT `paint()`. `paint` runs every UI tick (~24 Hz);
+`onFrame()`, NOT `paint()`. `paint` runs every UI tick (60 Hz default);
 writing or `clearPlots`-ing on every tick saturates the link / yanks
 the plot. Use `onFrame()` (once per parsed frame) or guard with state.
 
@@ -184,10 +185,10 @@ before you tune visuals:
   the value AND whether it's normal in one glance. The dataset's
   `.units`, `.widgetMin`, `.widgetMax` already carry this; read them
   off the proxy.
-- **Doherty threshold: stay under 400 ms.** `paint` runs at ~24 Hz
-  (~42 ms budget) and `onFrame` runs immediately before each `paint`.
-  If a single tick's `onFrame + paint` cost exceeds ~40 ms, the UI feels
-  laggy regardless of how good the visualization is. Push heavy math
+- **Doherty threshold: stay under 400 ms.** `paint` runs at 60 Hz by
+  default (~16 ms budget) and `onFrame` runs immediately before each
+  `paint`. If a single tick's `onFrame + paint` cost exceeds ~16 ms,
+  the UI feels laggy regardless of how good the visualization is. Push heavy math
   into transforms (per-frame, runs on the frame thread); keep `onFrame`
   bounded; keep `paint` to layout + draw against cached arrays.
 - **Peak-End on time-series.** When the painter renders a rolling window,
@@ -226,17 +227,20 @@ Fill/stroke: `fill`, `stroke`, `clearRect`, `fillRect`, `strokeRect`.
 Transforms: `save`, `restore`, `translate`, `rotate`, `scale`,
 `setTransform`, `resetTransform`.
 Text: `font`, `textAlign`, `textBaseline`, `fillText`, `strokeText`,
-`measureText` (returns `{width, ascent, descent, ...}`),
+`measureText` (returns `{width, actualBoundingBoxAscent,
+actualBoundingBoxDescent, fontBoundingBoxAscent, fontBoundingBoxDescent}`),
 `measureTextWidth` (returns just a number).
 Gradients: `createLinearGradient`, `createRadialGradient`,
 `gradient.addColorStop`.
+Images/patterns: `createPattern`, plus `drawImage` / `drawImageScaled`
+for sandbox-resolved local paths (not URLs).
 
-NOT supported: `drawImage` from URLs, `createPattern`, `putImageData`,
-`getImageData`.
+NOT supported: `putImageData`, `getImageData`.
 
 ## Performance
 
-Paint runs at 24 Hz. Cheap: `lineTo`, `arc`, `fillText`, arithmetic.
+Paint runs at 60 Hz by default (configurable 1-240 via
+`dashboard.setFps`). Cheap: `lineTo`, `arc`, `fillText`, arithmetic.
 Avoid: `JSON.stringify`, allocating arrays per frame, creating new
 gradients per call (cache in a top-level `var`).
 

@@ -49,7 +49,7 @@ while True:
     print(
         f'{datetime.datetime.now().strftime("%H-%M-%S")} CELL={cell} RSRQ={rsrq} RSRP={rsrp} RSSI={rssi} SINR={sinr}'
     )
-    data_frame = f"{cell},{rsrq},{rsrp},{rssi},{sinr}\n"
+    data_frame = f"/*{cell} ,{rsrq},{rsrp},{rssi},{sinr}*/\n"
     print(data_frame)
     mqttc.publish(mqtt_topic, data_frame)
 

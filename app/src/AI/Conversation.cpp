@@ -603,7 +603,9 @@ void AI::Conversation::runMetaListCommands(const QString& callId,
 {
   appendToolCallCard(callId, name, arguments, CallStatus::Running);
   const auto prefix = arguments.value(QStringLiteral("prefix")).toString();
-  const auto reply  = m_dispatcher->listCommands(prefix);
+  const int offset  = arguments.value(QStringLiteral("offset")).toInt(0);
+  const int limit   = arguments.value(QStringLiteral("limit")).toInt(0);
+  const auto reply  = m_dispatcher->listCommands(prefix, offset, limit);
   recordToolResult(callId, name, reply);
   updateToolCallCard(callId, CallStatus::Done, reply);
   releaseOutstandingToolResult();
@@ -716,8 +718,7 @@ static QString skillForCommand(const QString& commandName)
       || commandName == QStringLiteral("project.dataset.setOptions"))
     return QStringLiteral("dashboard_layout");
 
-  if (commandName.startsWith(QStringLiteral("project.frameParser."))
-      || commandName.startsWith(QStringLiteral("project.parser.")))
+  if (commandName.startsWith(QStringLiteral("project.frameParser.")))
     return QStringLiteral("frame_parsers");
 
   if (commandName.startsWith(QStringLiteral("project.painter.")))
@@ -796,7 +797,8 @@ void AI::Conversation::runMetaScriptingDocs(const QString& callId,
     result[QStringLiteral("error")] =
       QStringLiteral("Unknown kind '%1'. Valid: frame_parser_js, "
                      "frame_parser_lua, transform_js, transform_lua, "
-                     "output_widget_js, painter_js, control_script_js.")
+                     "output_widget_js, painter_js, control_script_js, "
+                     "sdk_js, sdk_lua.")
         .arg(kind);
     updateToolCallCard(callId, CallStatus::Error, result);
   } else {
@@ -1081,7 +1083,13 @@ void AI::Conversation::issueRequest()
 
   beginAssistantMessage();
 
-  m_assistantThinking   = tr("Sending request to %1...").arg(m_provider->displayName());
+  if (m_provider->capabilities().slowFirstToken)
+    m_assistantThinking = tr("Waiting for %1 to respond. Loading the model and processing "
+                             "the prompt can take a while on local hardware...")
+                            .arg(m_provider->displayName());
+  else
+    m_assistantThinking = tr("Sending request to %1...").arg(m_provider->displayName());
+
   m_thinkingIsSynthetic = true;
   if (m_assistantIndex >= 0 && m_assistantIndex < m_uiMessages.size()) {
     auto map = m_uiMessages.at(m_assistantIndex).toMap();
@@ -2056,15 +2064,17 @@ static void appendBasicMetaTools(QJsonArray& out)
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = QJsonObject();
-    out.append(makeMetaTool(
-      QStringLiteral("meta.listCategories"),
-      QStringLiteral("List the top-level command scopes (project, io, console, csv, "
-                     "csvPlayer, mqtt, dashboard, ui, sessions, licensing, notifications, "
-                     "extensions, meta) with one-line descriptions and command counts. "
-                     "Call this FIRST when you need to know what is even possible -- "
-                     "it's much smaller than meta.listCommands and tells you which "
-                     "prefix to drill into next."),
-      schema));
+    out.append(
+      makeMetaTool(QStringLiteral("meta.listCategories"),
+                   QStringLiteral("List the top-level command scopes (project, io, console, "
+                                  "consoleExport, csvExport, csvPlayer, mdf4Export, mdf4Player, "
+                                  "controlscript, scripts, dashboard, ui, sessions, licensing, "
+                                  "notifications, extensions, assistant, fs, meta) with one-line "
+                                  "descriptions and command counts. "
+                                  "Call this FIRST when you need to know what is even possible -- "
+                                  "it's much smaller than meta.listCommands and tells you which "
+                                  "prefix to drill into next."),
+                   schema));
   }
 
   {
@@ -2076,7 +2086,8 @@ static void appendBasicMetaTools(QJsonArray& out)
                    QStringLiteral("One-shot composite of every readable status endpoint "
                                   "(project.getStatus, io.getStatus, dashboard.getStatus, "
                                   "console.getConfig, csvExport/Player.getStatus, "
-                                  "mqtt.getConnectionStatus, sessions.getStatus, "
+                                  "project.mqtt.publisher/subscriber.getStatus, "
+                                  "sessions.getStatus, "
                                   "mdf4Export/Player.getStatus, licensing.getStatus, "
                                   "notifications.getUnreadCount). Use when you want a global "
                                   "picture without making 10+ separate calls."),
@@ -2084,14 +2095,31 @@ static void appendBasicMetaTools(QJsonArray& out)
   }
 
   {
-    auto schema = objectSchemaWithProperty(
-      QStringLiteral("prefix"),
-      stringProp(QStringLiteral("Optional dotted prefix filter, e.g. \"project.\" or "
-                                "\"io.\".")),
-      false);
+    QJsonObject schema;
+    schema[QStringLiteral("type")] = QStringLiteral("object");
+    QJsonObject props;
+    props[QStringLiteral("prefix")] =
+      stringProp(QStringLiteral("Optional dotted prefix filter, e.g. \"project.\" or \"io.\"."));
+    QJsonObject offsetProp;
+    offsetProp[QStringLiteral("type")] = QStringLiteral("integer");
+    offsetProp[QStringLiteral("description")] =
+      QStringLiteral("Skip this many entries before returning results (default 0). Use the "
+                     "nextOffset from a previous reply to page through long lists.");
+    offsetProp[QStringLiteral("minimum")] = 0;
+    props[QStringLiteral("offset")]       = offsetProp;
+    QJsonObject limitProp;
+    limitProp[QStringLiteral("type")] = QStringLiteral("integer");
+    limitProp[QStringLiteral("description")] =
+      QStringLiteral("Max entries to return (default 0 = all). Combine with offset when a "
+                     "result reports truncated:true.");
+    limitProp[QStringLiteral("minimum")] = 0;
+    props[QStringLiteral("limit")]       = limitProp;
+    schema[QStringLiteral("properties")] = props;
     out.append(makeMetaTool(QStringLiteral("meta.listCommands"),
                             QStringLiteral("List every available command (name + 1-line "
-                                           "description) optionally filtered by dotted prefix. "
+                                           "description) optionally filtered by dotted prefix "
+                                           "and paged with offset/limit; replies carry total "
+                                           "and nextOffset when a window was applied. "
                                            "Prefer meta.listCategories first when you don't yet "
                                            "know the scope."),
                             schema));
@@ -2182,7 +2210,7 @@ static void appendReferenceMetaTools(QJsonArray& out)
 {
   {
     auto kindProp =
-      stringProp(QStringLiteral("Which scripting reference to fetch. The first six return the "
+      stringProp(QStringLiteral("Which scripting reference to fetch. The doc kinds return the "
                                 "canonical API surface, idiomatic patterns, and worked examples "
                                 "for that scripting context. sdk_js / sdk_lua return the actual "
                                 "generated SerialStudio SDK source -- the authoritative listing "
@@ -2194,14 +2222,16 @@ static void appendReferenceMetaTools(QJsonArray& out)
                             QStringLiteral("transform_lua"),
                             QStringLiteral("output_widget_js"),
                             QStringLiteral("painter_js"),
+                            QStringLiteral("control_script_js"),
                             QStringLiteral("sdk_js"),
                             QStringLiteral("sdk_lua")});
     auto schema = objectSchemaWithProperty(QStringLiteral("kind"), kindProp, true);
     out.append(makeMetaTool(QStringLiteral("meta.fetchScriptingDocs"),
                             QStringLiteral("Fetch the Serial Studio scripting reference for one "
-                                           "of the six scripting contexts (frame parser JS / "
+                                           "scripting context (frame parser JS / "
                                            "Lua, value transform JS / Lua, output-widget JS, "
-                                           "painter JS). Call this BEFORE writing or modifying "
+                                           "painter JS, control script JS, or the generated "
+                                           "SDK source). Call this BEFORE writing or modifying "
                                            "any user script -- the available APIs differ "
                                            "between contexts and you must not invent function "
                                            "names. Returns markdown."),
@@ -2243,12 +2273,13 @@ static void appendReferenceMetaTools(QJsonArray& out)
     out.append(
       makeMetaTool(QStringLiteral("meta.loadSkill"),
                    QStringLiteral("Load a focused skill reference into context for one area of "
-                                  "Serial Studio (project basics, frame parsers, transforms, "
-                                  "painter, output widgets, mqtt, can/modbus, dashboard layout, "
-                                  "debugging, tool discovery, behavioral). Load skills "
-                                  "ON-DEMAND when you start work in that area -- the system "
-                                  "prompt is intentionally compact. Don't load all of them "
-                                  "preemptively."),
+                                  "Serial Studio (see the enum: project basics, frame parsers, "
+                                  "transforms, painter, output widgets, control script, mqtt, "
+                                  "can/modbus, dashboard layout, workspace design, filesystem, "
+                                  "api semantics, debugging, tool discovery, behavioral). Load "
+                                  "skills ON-DEMAND when you start work in that area -- the "
+                                  "system prompt is intentionally compact. Don't load all of "
+                                  "them preemptively."),
                    schema));
   }
 }

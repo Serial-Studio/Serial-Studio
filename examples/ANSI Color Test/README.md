@@ -6,19 +6,23 @@ This example exercises Serial Studio's ANSI color and VT-100 terminal emulation 
 
 ## Features Tested
 
+### Text Attributes
+- Normal, bold, dim, italic, underline (single, double, curly)
+- Blink, reverse, hidden, strikethrough
+- Combined attributes (bold + underline, bold + reverse, italic + strikethrough)
+
 ### 4-bit Colors (Standard ANSI)
 - Standard foreground colors (30-37): Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
 - Bright foreground colors (90-97): Bright variants of all standard colors
 - Standard background colors (40-47)
 - Bright background colors (100-107)
-- Combined foreground and background colors
+- FG × BG matrix: every foreground rendered over every background
 
 ### 8-bit Colors (256 Color Palette)
-- Standard colors (0-15)
+- System colors (0-15)
 - 6×6×6 RGB color cube (16-231): 216 colors
 - 24-step grayscale ramp (232-255)
-- Foreground colors: `\033[38;5;Nm`
-- Background colors: `\033[48;5;Nm`
+- Rendered as background swatches: `\033[48;5;Nm`
 
 ### 24-bit RGB Colors (True Color)
 - RGB foreground: `\033[38;2;R;G;Bm`
@@ -26,19 +30,19 @@ This example exercises Serial Studio's ANSI color and VT-100 terminal emulation 
 - Full 16.7 million color support
 
 ### VT-100 Control Sequences
-- Cursor movement (up, down, forward, backward)
-- Bold text styling
+- Cursor up (`\033[1A`) and cursor back (`\033[3D`) with overwrite
+- Erase to end of line (`\033[K`)
 - Combined text styles with colors
 
 ### Visual Displays
-- 16-color ANSI palette table
+- 4-bit FG × BG matrix table
 - 256-color palette organized display
-- Color boxes with labels
-- RGB gradients (red, green, blue, cyan-magenta, grayscale)
+- Named truecolor swatches with their escape codes (CSS/X11 reference)
+- Channel ramps and color gradients (red→blue, green→yellow, cyan→magenta, black→white, navy→orange)
 
 ### Creative Effects
-- Rainbow text using both 8-bit and 24-bit RGB
-- Color gradients (red→yellow, blue, grayscale)
+- HSV hue, saturation, and value sweeps
+- Animated 2D plasma field (per-cell 24-bit sine-field rendering)
 
 ## Requirements
 
@@ -49,9 +53,9 @@ This example exercises Serial Studio's ANSI color and VT-100 terminal emulation 
 
 1. **Configure Serial Studio**:
    - Open Serial Studio
-   - Go to **Setup** → **Hardware** → **Network**
-   - Set mode to **UDP Server**
-   - Set port to **9000**
+   - In the **Setup** panel, select the **Network Socket** device
+   - Set **Socket Type** to **UDP**
+   - Set **Local Port** to **9000**
    - Click **Connect**
 
 2. **Enable ANSI Colors**:
@@ -81,17 +85,29 @@ The script sends a full suite of ANSI color and VT-100 test sequences to Serial 
 You can also run individual test sections:
 
 ```bash
-# Display 16-color ANSI palette
-python3 test_ansi_colors.py --16colors
+# Text attributes (bold, italic, underline, ...)
+python3 test_ansi_colors.py --attributes
 
-# Display 256-color palette
-python3 test_ansi_colors.py --256colors
+# 16-color foreground, background, and FG x BG matrix
+python3 test_ansi_colors.py --4bit
 
-# Display simple color boxes
-python3 test_ansi_colors.py --boxes
+# 4-bit FG x BG color matrix only
+python3 test_ansi_colors.py --matrix
 
-# Display RGB gradients
-python3 test_ansi_colors.py --gradients
+# 256-color (8-bit) palette
+python3 test_ansi_colors.py --256
+
+# 24-bit truecolor ramps, gradients, HSV sweeps
+python3 test_ansi_colors.py --truecolor
+
+# Named truecolor samples (CSS/X11 reference)
+python3 test_ansi_colors.py --named
+
+# VT-100 cursor, erase, and attribute sequences
+python3 test_ansi_colors.py --vt100
+
+# 2D truecolor rendering test (sine-field plasma)
+python3 test_ansi_colors.py --plasma
 
 # Show help message
 python3 test_ansi_colors.py --help
@@ -99,10 +115,10 @@ python3 test_ansi_colors.py --help
 
 ## How It Works
 
-The script connects to `localhost:9000` via UDP and sends formatted test sequences. Each test section includes:
+The script sends formatted test sequences as UDP datagrams to `127.0.0.1:9000`. Each test section includes:
 
 1. **Visual output**: Colored text/backgrounds displayed in the terminal
-2. **ANSI codes**: The escape sequences used (e.g., `\033[38;5;206m`)
+2. **ANSI codes**: The escape sequences used (e.g., `\033[38;2;255;20;147m`)
 3. **Descriptions**: What each test demonstrates
 
 ## Color Code Reference
@@ -170,12 +186,13 @@ Multiple codes can be combined with semicolons:
 When you run the test, you should see colorful output in the Serial Studio console like:
 
 ```
-╔════════════════════════════════════════════════════════════╗
-║          4-BIT COLOR TESTS (Standard ANSI)                 ║
-╚════════════════════════════════════════════════════════════╝
-Red        (\033[31m)
-Green      (\033[32m)
-Blue       (\033[34m)
+[2] 4-bit Colors  (16 standard ANSI colors)
+────────────────────────────────────────────────────────────────
+
+  Foreground — normal (30–37):
+    Black           \033[30m
+    Red             \033[31m
+    Green           \033[32m
 ...
 ```
 
@@ -185,7 +202,7 @@ Each color will be rendered in its actual color, with backgrounds displaying beh
 
 You can modify `test_ansi_colors.py` to:
 
-- Change the UDP host/port (default: `localhost:9000`)
+- Change the UDP host/port (`HOST`/`PORT` constants, default `127.0.0.1:9000`)
 - Add custom color combinations
 - Adjust timing delays between messages
 - Create your own color effects

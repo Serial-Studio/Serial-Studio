@@ -56,6 +56,7 @@
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QFileOpenEvent>
+#include <QSettings>
 #include <QWheelEvent>
 
 #ifdef Q_OS_LINUX
@@ -426,23 +427,31 @@ char** injectPlatformArg(int& argc, char** argv, const char* platform)
 // code-verify on
 
 /**
- * @brief Performs platform fixups, fractional scaling, and WebEngine init.
+ * @brief Performs platform fixups, fractional scaling, and WebEngine init. The performance
+ *        hints honor "App/PerformanceMode" (Misc::ModuleManager), read here via raw QSettings
+ *        because this runs before QApplication and the singletons exist.
  */
 void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath)
 {
+  const bool performanceMode = QSettings().value("App/PerformanceMode", true).toBool();
+
 #if defined(Q_OS_WIN)
   attachToConsole();
   setWindowsAppUserModelId(shortcutPath);
-  enableWindowsPerformanceMode();
+  if (performanceMode)
+    enableWindowsPerformanceMode();
+
   argv = adjustArgumentsForFreeType(argc, argv);
 #else
   Q_UNUSED(argc);
   Q_UNUSED(argv);
   Q_UNUSED(shortcutPath);
 #  if defined(Q_OS_LINUX)
-  enableLinuxPerformanceMode();
+  if (performanceMode)
+    enableLinuxPerformanceMode();
 #  elif defined(Q_OS_MACOS)
-  enableMacPerformanceMode();
+  if (performanceMode)
+    enableMacPerformanceMode();
 #  endif
 #endif
 
@@ -460,13 +469,16 @@ void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath)
 }
 
 /**
- * @brief Tells the OS to keep the system and display awake for the lifetime of the
- *        process: long recording sessions must survive an untouched laptop. Every
- *        inhibition below is process-scoped, so the OS releases it on exit; call
- *        after QApplication exists (the Linux path needs the session D-Bus).
+ * @brief Keeps the system and display awake for the process lifetime so long recording
+ *        sessions survive an untouched laptop; the OS releases every inhibition on exit.
+ *        Call after QApplication exists (the Linux path needs the session D-Bus).
+ *        No-op when "App/InhibitIdleSleep" (Misc::ModuleManager) is disabled.
  */
 void inhibitIdleSleep()
 {
+  if (!QSettings().value("App/InhibitIdleSleep", true).toBool())
+    return;
+
 #if defined(Q_OS_WIN)
   (void)SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
 #elif defined(Q_OS_MACOS)

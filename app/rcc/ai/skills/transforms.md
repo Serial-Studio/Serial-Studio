@@ -164,8 +164,10 @@ declare `let alpha = 0.2` without clobbering each other.
    Returns the per-input outputs. Iterate on the code until outputs look
    right.
 3. Push: `assistant.script.apply{kind:"transform", groupId, datasetId,
-   code, language, values, virtual}`. It dry-runs first, optionally marks
-   compute-only datasets virtual, then calls `project.dataset.setTransformCode`.
+   code, language, values}`. It dry-runs first, then calls
+   `project.dataset.setTransformCode`. It does NOT set the `virtual`
+   flag (a `virtual` param is ignored); flip it separately via
+   `project.dataset.setVirtual` or `project.dataset.update`.
 
 ## Tables: the central data bus
 
@@ -202,10 +204,13 @@ datasetGetFinal(uniqueId)                      // EARLIER datasets only
 Datasets are processed in group-array then dataset-array order. Inside a
 transform you can read:
 
-- raw values of **all** datasets in this frame (parser already ran)
+- raw values of **earlier** datasets in this frame (single-pass walk;
+  a later dataset's raw register still holds the previous frame's value)
 - final values of **earlier** datasets only
 
-Trying to read `datasetGetFinal` of a dataset processed later returns 0.
+Trying to read `datasetGetFinal` of a dataset processed later returns
+the previous frame's (stale) value — or nil/undefined plus a one-shot
+warning before the first-ever write — never a guaranteed 0.
 
 ## When to use what
 

@@ -54,10 +54,16 @@ Item {
   }
 
   //
-  // Row sizing
+  // Row sizing tracks the widget font so large custom scales grow rows instead of clipping
   //
-  readonly property real rowHeight: 30
-  readonly property real headerHeight: 32
+  TextMetrics {
+    id: rowFontMetrics
+
+    text: "0"
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+  }
+  readonly property real rowHeight: Math.max(30, rowFontMetrics.height + 12)
+  readonly property real headerHeight: Math.max(32, rowFontMetrics.height + 14)
 
   //
   // Toolbar: Pause/Resume affordance (only when there's room)
@@ -266,7 +272,7 @@ Item {
               Layout.preferredWidth: table.columnWidth
               verticalAlignment: Label.AlignVCenter
               horizontalAlignment: Label.AlignLeft
-              font: Cpp_Misc_CommonFonts.widgetFont()
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               color: Cpp_ThemeManager.colors["table_text"]
 
               HoverHandler {
@@ -306,7 +312,7 @@ Item {
               Layout.preferredWidth: table.columnWidth
               verticalAlignment: Label.AlignVCenter
               horizontalAlignment: Label.AlignLeft
-              font: Cpp_Misc_CommonFonts.widgetFont()
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               color: rowItem.value.length > 0
                      ? Cpp_ThemeManager.colors["table_text"]
                      : Cpp_ThemeManager.colors["placeholder_text"]

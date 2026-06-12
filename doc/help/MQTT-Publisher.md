@@ -4,7 +4,7 @@ The MQTT Publisher pushes the data Serial Studio is already processing out to an
 
 The Publisher is a per-project singleton, not a per-source driver. One Serial Studio instance has exactly one Publisher; what it broadcasts depends on the project, not on which physical bus the data came in on.
 
-Broker I/O lives entirely on a dedicated worker thread (the same `FrameConsumer` pattern used by CSV / MDF4 / Session-DB export), so a slow or unreliable network never blocks frame parsing, the dashboard, or the UI. The configured **Publish Rate** caps how often the worker drains its queue. At 30 Hz the worker publishes at most thirty times per second regardless of how fast frames arrive. Everything that landed in the queue during the tick is aggregated and pushed as one bulk MQTT message, not one publish per frame.
+Broker I/O lives entirely on a dedicated worker thread (the same `FrameConsumer` pattern used by CSV / MDF4 / Session-DB export), so a slow or unreliable network never blocks frame parsing, the dashboard, or the UI. The configured **Publish Rate** (1-30 Hz, default 10) caps how often the worker drains its queue. At 30 Hz the worker publishes at most thirty times per second regardless of how fast frames arrive. Everything that landed in the queue during the tick is aggregated and pushed as one bulk MQTT message, not one publish per frame.
 
 Use this when:
 
@@ -30,13 +30,15 @@ Project
 └─ ...
 ```
 
-The header bar above the form shows the live connection state (green LED + "Connected to broker" when up, red LED + "Not connected" otherwise) and three actions:
+The header bar above the form shows the live connection state (green LED + "Connected to broker" when up, red LED + "Not connected" otherwise) and three actions, all disabled until **Enable Publishing** is on:
 
 - **Test Connection.** Spins up a one-shot probe client with the current settings, waits up to five seconds, and reports the outcome in a message box. Independent of the long-lived publishing connection; safe to run while the Publisher is connected.
 - **Edit Script.** Visible only when **Payload** is `Custom Script`. Opens the script editor dialog (see [Custom Script mode](#custom-script)).
-- **Load CA Certs.** Visible only when TLS is enabled. Adds PEM certificates from a folder to the per-project trust store.
+- **Load CA Certs.** Enabled only when **Use SSL/TLS** is on. Adds PEM certificates from a folder to the in-memory trust store; the certificates are not saved with the project.
 
-The Publisher connects automatically whenever **Enable Publishing** is on and a hostname / port / topic base are valid. Changing any broker setting while connected triggers an automatic disconnect-and-reconnect with the new values.
+The Publisher connects automatically whenever **Enable Publishing** is on and hostname and port are set; an empty **Topic Base** leaves the connection up but suppresses all traffic. Changing any broker setting while connected triggers an automatic disconnect-and-reconnect with the new values.
+
+The same configuration is scriptable through the [API](API-Reference.md) commands `project.mqtt.publisher.getConfig`, `project.mqtt.publisher.setConfig`, and `project.mqtt.publisher.getStatus`. `setConfig` patches only the keys you pass; passwords go to the encrypted credential vault, never to the project file.
 
 ## Form fields
 
@@ -46,23 +48,23 @@ The Publisher connects automatically whenever **Enable Publishing** is on and a 
 |-------|--------|
 | **Enable Publishing** | Master toggle. When off, nothing leaves the broker side regardless of what the rest of the project does. |
 | **Payload** | Selects the wire format. See [Payload modes](#payload-modes) below for the four options. |
-| **Publish Rate (Hz)** | How many times per second the publisher drains its queues and pushes to the broker. Clamped to 1-30 Hz. The hotpath enqueues at full speed; the worker thread aggregates everything that arrived during the tick into one bulk publish at this cadence, so a slow broker or unreliable network never blocks frame parsing or the dashboard. |
-| **Topic Base** | Base topic for the published payload. Required; when empty, the Publisher silently produces no traffic. |
-| **Script Topic** | (Custom Script mode only) Topic the user script publishes to. Defaults to **Topic Base** when blank. |
+| **Publish Rate (Hz)** | How many times per second the publisher drains its queues and pushes to the broker. Clamped to 1-30 Hz; default 10. The hotpath enqueues at full speed; the worker thread aggregates everything that arrived during the tick into one bulk publish at this cadence, so a slow broker or unreliable network never blocks frame parsing or the dashboard. |
+| **Topic Base** | Base topic for the published payload. Required for traffic; when empty, the Publisher stays connected but publishes nothing. |
+| **Script Topic** | (Visible only when **Payload** is `Custom Script`.) Topic the user script publishes to. Defaults to **Topic Base** when blank. |
 | **Publish Notifications** | When on, dashboard notifications are mirrored to MQTT. |
-| **Notification Topic** | Topic used for notifications. Defaults to **Topic Base** when blank. |
+| **Notification Topic** | (Visible only when **Publish Notifications** is on.) Topic used for notifications. Defaults to **Topic Base** when blank. |
 
 ### Broker
 
 | Field | Effect |
 |-------|--------|
-| **Hostname** | Broker address (IP or hostname). |
-| **Port** | TCP port. `1883` plaintext, `8883` TLS. |
+| **Hostname** | Broker address (IP or hostname). Default `127.0.0.1`. |
+| **Port** | TCP port. `1883` plaintext (default), `8883` TLS. |
 | **Custom Client ID** | Off by default: a fresh random 16-char id is generated on every project load. Turn this on only if your broker requires a stable identifier (e.g. an ACL keyed by client ID, or session persistence with `Clean Session = no`). When on, the **Client ID** row appears below. |
 | **Client ID** | (Visible only when **Custom Client ID** is on.) Identifier sent on CONNECT. The value is persisted with the project; the auto-generated id is not. |
 | **Username / Password** | Optional authentication. |
-| **Protocol Version** | MQTT 3.1, 3.1.1, or 5.0. |
-| **Keep Alive (s)** | Seconds between PING packets when idle. |
+| **Protocol Version** | MQTT 3.1, 3.1.1, or 5.0. Default MQTT 5.0. |
+| **Keep Alive (s)** | Seconds between PING packets when idle. Default 60. |
 | **Clean Session** | Discard persistent session state on CONNECT. Default on. |
 
 ### SSL / TLS
@@ -71,9 +73,9 @@ The Publisher connects automatically whenever **Enable Publishing** is on and a 
 
 | Field | Effect |
 |-------|--------|
-| **Protocol** | Negotiated TLS protocol family (TLS 1.2, TLS 1.3, or auto-negotiate). |
-| **Peer Verify** | `None`, `Query Peer`, `Verify Peer`, or `Auto Verify Peer`. |
-| **Verify Depth** | Maximum certificate chain length accepted. `0` = unlimited. |
+| **Protocol** | Negotiated TLS protocol family: TLS 1.2, TLS 1.3, TLS 1.3 or Later, DTLS 1.2 or Later, Any Protocol, or Secure Protocols Only (default). |
+| **Peer Verify** | `None`, `Query Peer`, `Verify Peer`, or `Auto Verify Peer` (default). |
+| **Verify Depth** | Maximum certificate chain length accepted. Default `10`; `0` = unlimited. |
 
 For brokers using a private CA, click **Load CA Certs** in the header bar after enabling TLS.
 
@@ -128,16 +130,16 @@ Click **Edit Script** in the header to open the editor dialog. It has the same l
   - **Sparkplug B (NDATA)**: Eclipse Sparkplug B-shaped JSON surrogate; swap the body for a protobuf encoder in production.
   - **AWS IoT / Azure IoT Shadow**: `{"state":{"reported":{...}}}` payload accepted by both clouds.
 - Code editor with syntax highlighting, Ctrl-I to format the selection, Ctrl-Shift-I to format the document.
-- Test row at the bottom: paste sample bytes in **Frame**, tick **Hex** if they are hex-encoded, click **Test**, and the dialog shows the string the script would publish (or the error). This runs in a disposable engine on the editor thread and never touches the live broker session.
+- Test row at the bottom: paste sample bytes in **Frame**, tick **Hex** if they are hex-encoded, click **Test**, and the dialog shows the string the script would publish (or the error). This runs in a disposable engine and never touches the live broker session.
 - **Apply** saves the script into the project; **Cancel** discards changes.
 
-The script is compiled lazily on the worker thread the first time a frame arrives after a code change. Compile errors and runtime errors are surfaced as `scriptError` signals; you can wire them into your project's notification flow if needed.
+The script is compiled lazily on the worker thread the first time a frame arrives after a code change. A frame whose script call fails is skipped; the rest of the batch still publishes. JavaScript runs under a 500 ms watchdog per call: exceed the budget and the call is killed and that frame skipped. Lua scripts run in a sandbox limited to the `table`, `string`, and `math` libraries; `load`, `loadfile`, and `dofile` are removed. Catch compile and runtime errors with the editor's **Test** button before applying.
 
 ### Dashboard Data (CSV)
 
 One CSV row per parsed frame, with columns matching the project's dataset layout (same column order as the CSV export). Every frame that arrived during a publish-rate tick is concatenated into a single multi-line publish on **Topic Base**.
 
-The CSV header is published once as a **retained** message on `<TopicBase>/header`, so any subscriber that joins later receives the schema immediately and can map column positions to dataset titles without having to know the project in advance. The header is automatically republished if the dataset layout changes or the broker reconnects.
+The CSV header is published once as a **retained** message on `<TopicBase>/header`, so any subscriber that joins later receives the schema immediately and can map column positions to dataset titles without having to know the project in advance. The header is republished automatically when the publisher detects a schema change or its broker configuration is re-applied.
 
 Use this when the consumer is a CSV-friendly tool (Telegraf, an `mqtt-csv` bridge, a logging script) and you want a stream of plain values with no JSON overhead.
 
@@ -171,7 +173,7 @@ When **Publish Notifications** is on, every event posted to the [Notification Ce
 
 The **Test Connection** action probes the broker without disturbing the live publishing session. It:
 
-1. Validates that hostname and port are populated and that the licence permits MQTT publishing.
+1. Validates that hostname and port are populated and that the license permits MQTT publishing.
 2. Creates a short-lived `QMqttClient` using the current credentials, TLS configuration, and client ID (suffixed with `-probe` to avoid colliding with the live session).
 3. Waits up to five seconds for the broker to either reach the **Connected** state or surface an error.
 4. Reports the outcome in a message box: an informational confirmation including hostname and port on success, a critical message with the broker error code on failure, or a timeout message if nothing happened.
@@ -180,24 +182,24 @@ Run this after editing broker credentials or TLS settings to catch authenticatio
 
 ## Publishing from frame parsers
 
-The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = false)` slot that can be called from any user script (not just from the Custom Script mode) on the data hotpath. From a frame parser, a dataset transform, or an action handler it lets you push computed values to arbitrary topics independent of the **Payload** radio:
+The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = false)` function, injected wherever the [Data Tables](Data-Tables.md) scripting API is available: frame parsers, dataset transforms, and [Painter widget](Painter-Widget.md) scripts. It pushes computed values to arbitrary topics independent of the **Payload** mode:
 
 - Emitting derived metrics (a rolling average, a CRC-validated subset of fields) on their own topics.
 - Mirroring a small fraction of high-rate data to a low-rate topic for cheap remote dashboards.
-- Acting on dashboard events: publish to a control topic from an Action handler.
+- Publishing a retained "current state" value (pass `retain = true`) so late subscribers receive the latest reading on connect.
 
-The slot returns `1` once the publish is queued for the worker, or `-1` if the publisher is not connected or the license check fails. The actual broker send happens asynchronously on the worker thread, so the returned value is not the broker message ID. QoS is clamped to `0..2`.
+The call returns `1` once the publish is queued for the worker, or `-1` if the publisher is not connected or the license check fails. The actual broker send happens asynchronously on the worker thread, so the returned value is not the broker message ID. QoS is clamped to `0..2`.
 
 Use **Custom Script** mode when the script's main job is shaping the publish payload; use `mqttPublish()` from a frame parser when the script's main job is parsing the frame and the publish is a side-effect.
 
 ## Common pitfalls
 
-- **Test Connection succeeds, Enable Publishing produces nothing.** The probe ignores **Enable Publishing**, the live session does not. Toggle **Enable Publishing** on, then verify the LED is green.
+- **Test Connection succeeds, yet no data reaches the broker.** The probe only verifies that a CONNECT with the current credentials succeeds; it never publishes anything. Verify that the header LED shows "Connected to broker" and that **Topic Base** is set.
 - **Connected but no traffic on the broker.** **Topic Base** is empty. The Publisher silently drops frames in that case; there is no error to surface.
 - **Custom Script mode is selected but nothing publishes.** The script must define a function named exactly `mqtt(frame)` (not `parse`, not `publish`). The editor's Apply discards the code if no such function is detected. Use the **Test** button in the editor to verify a sample input produces the expected output.
 - **Duplicates between Publisher and Subscriber on the same project.** Publishing to a topic the project also subscribes to creates a loop: the broker echoes the publish back to the subscriber driver, which feeds it into the FrameReader, which is then published again. Use different base topics, or disable one side.
 - **Two instances on different machines hit "Client ID rejected".** Two Publishers must use different client IDs. The default (Custom Client ID off) generates a fresh random id on every load, so this only happens when **Custom Client ID** is on with the same typed value across machines.
-- **TLS handshake fails after editing CA certificates.** **Load CA Certs** appends to the in-memory trust store but does not re-open the connection. Disconnect and reconnect (or run **Test Connection**) to apply the new chain.
+- **TLS worked in the last session but fails after restarting Serial Studio.** Certificates added with **Load CA Certs** live in memory only; they are not saved to the project file. Load them again after every launch. (Loading them while connected triggers an automatic reconnect with the new chain.)
 - **CSV consumers don't see the header.** They must subscribe to `<TopicBase>/header` in addition to `<TopicBase>`. The header is retained, so it is delivered immediately on subscribe.
 
 ## See also
@@ -207,5 +209,7 @@ Use **Custom Script** mode when the script's main job is shaping the publish pay
 - [Notifications](Notifications.md): the event source that feeds **Publish Notifications**.
 - [API Reference](API-Reference.md): the JSON frame schema used by `Dashboard Data (JSON)` mode.
 - [Frame Parser Scripting](JavaScript-API.md): where `mqttPublish()` is callable from.
+- [Data Tables](Data-Tables.md): the scripting environment that injects `mqttPublish()`.
+- [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step MQTT setup in the project editor.
 - [Pro vs Free Features](Pro-vs-Free.md): MQTT publishing is a Pro feature.
 - [Troubleshooting](Troubleshooting.md): general troubleshooting guide.

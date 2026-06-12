@@ -47,11 +47,14 @@ directly to `setCode` to flip and replace in one call.
      (raw stream bytes, not pre-extracted).
    - If disconnected: ask for a sample. Hex (`01 A2 FF`) is the
      binary-safe form; UTF-8 text is fine for ASCII / CSV protocols.
-3. **Compile-only**: `assistant.script.dryRun{kind:"frame_parser", code,
-   language}` routes to `project.frameParser.dryCompile`. Verifies the
-   script parses and `parse(frame)` is defined without executing.
-   Cheapest way to catch the wrong-language silent failure (Lua code
-   with `language: 0`, or the reverse).
+3. **Compile-only**: call `project.frameParser.dryCompile{code,
+   language}` directly. Verifies the script parses and `parse(frame)`
+   is defined without executing. Cheapest way to catch the
+   wrong-language silent failure (Lua code with `language: 0`, or the
+   reverse). Note: `assistant.script.dryRun` forwards to
+   `project.frameParser.dryRun`, which requires input bytes — it is
+   `assistant.script.apply` that falls back to dryCompile when no
+   bytes are given.
 4. **Dry-run (pipeline)**: `assistant.script.dryRun{kind:"frame_parser",
    code, language, inputBytesHex, decoderMethod, frameDetection,
    frameStart, frameEnd, hexadecimalDelimiters, checksumAlgorithm}`.
@@ -152,7 +155,7 @@ need to flip detection mode too.
 | 0 | PlainText | A UTF-8 string built by `QString::fromUtf8(bytes)`. | **Binary bytes are corrupted.** Any non-UTF-8 byte (most of `0x80..0xFF`, every `0x00`) becomes `U+FFFD` and the original byte is lost. Picking PlainText for COBS / Modbus / protobuf is the #1 silent failure. |
 | 1 | Hexadecimal | A hex string, no spaces (`48656C6C6F`). | Doubles the byte count; works on any input. Use when you want to read bytes from a string-only parser. |
 | 2 | Base64 | A Base64 string. | When the device already emits Base64; otherwise just a coding overhead. |
-| 3 | Binary | Raw bytes: a 1-indexed byte table in Lua, a length-keyed object in JS. | The only decoder that round-trips arbitrary binary. Pick this for every non-text protocol. |
+| 3 | Binary | Raw bytes: a 1-indexed byte table in Lua, an Array of byte values in JS. | The only decoder that round-trips arbitrary binary. Pick this for every non-text protocol. |
 
 Rule of thumb: **if the user mentions COBS, Modbus, protobuf, CAN,
 audio, or "binary", `decoderMethod: 3` is right.** If they mention
@@ -176,10 +179,10 @@ function parse(frame) {
   return [kv.speed || 0, kv.heading || 0];
 }
 
-// Binary little-endian (frame is a byte string)
+// Binary little-endian (decoderMethod 3: frame is an Array of byte values)
 function parse(frame) {
   const buf = new Uint8Array(frame.length);
-  for (let i = 0; i < frame.length; i++) buf[i] = frame.charCodeAt(i);
+  for (let i = 0; i < frame.length; i++) buf[i] = frame[i];
   const view = new DataView(buf.buffer);
   return [view.getFloat32(0, true), view.getInt16(4, true)];
 }

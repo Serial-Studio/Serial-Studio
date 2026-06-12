@@ -61,8 +61,8 @@ By default `loop()` runs as fast as the worker can schedule it (the next call is
 
 ```javascript
 function loop() {
-  apiCall("io.writeData", { data: "UkVBRA0K" });   // ask for a sample
-  delay(500);                                       // ~2 Hz
+  io.writeData("READ\r\n", SerialStudio.Text);   // ask for a sample
+  delay(500);                                    // ~2 Hz
 }
 ```
 

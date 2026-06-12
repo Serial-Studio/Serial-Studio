@@ -1,25 +1,27 @@
 # Vibration test rig
 
-A Python script that simulates a small electric motor on a test bench: a single accelerometer channel sees rotational imbalance, misalignment, a non-integer bearing-defect harmonic, and broadband noise; a stereo microphone in the enclosure picks up the airborne sound. The script sweeps the motor's RPM up and down so the **Waterfall** widget renders an order-tracking spectrogram, and the **Painter** widget drives an audio VU meter and a smoothed dial gauge, all from the same UDP stream.
+A Python script that simulates a small electric motor on a test bench: a single accelerometer channel sees rotational imbalance, misalignment, a non-integer bearing-defect harmonic, and broadband noise; a stereo microphone in the enclosure picks up the airborne sound. The script sweeps the motor's RPM up and down so the **Waterfall** widget renders an order-tracking spectrogram, and two **Painter** widgets draw an audio VU meter and a live system schematic, all from the same UDP stream.
 
 ## Overview
 
 This example exercises both new Pro widgets introduced in v3.3:
 
 - **Waterfall (Campbell mode).** The vibration channel feeds a 512-sample FFT at 1 kHz. The waterfall's Y axis is bound to the RPM dataset, so the spectrogram becomes a Campbell diagram (frequency on X, RPM on Y, amplitude as colour). Order lines (1×, 2×, 3×) appear as straight rays through the origin; the bearing harmonic at 5.43× shows up as a diagonal line at a different slope.
-- **Painter (audio VU meter).** Broadcast-style stereo VU with green/yellow/red zones, peak-hold markers that decay over 1.5 s, and dB-scale tick labels. All drawn in ~70 lines of JavaScript inside the project file.
-- **Painter (vibration dial).** Analog-style needle with three coloured zones, smooth inter-frame interpolation (no snapping), peak marker, and a numeric readout. ~80 lines of JavaScript.
+- **Painter (audio VU meter).** Broadcast-style stereo VU with green/yellow/red zones, peak-hold markers that hold for 1.4 s before falling away, and dB-scale tick labels. All drawn in ~200 lines of JavaScript inside the project file.
+- **Painter (system schematic).** Live diagram of the rig: motor, bracket with accelerometer, and stereo microphones, each stage animated from its own dataset. The motor spins with RPM, the trace follows the vibration channel, and the mics pulse with level. ~380 lines of JavaScript.
 
-A line plot of motor RPM rounds out the dashboard so you can correlate spectrogram features with the sweep position.
+Gauges for motor RPM and RMS vibration (computed by a rolling-RMS Lua transform on the vibration dataset) round out the dashboard so you can correlate spectrogram features with the sweep position.
 
 ## Widgets exercised
 
-| Widget                       | Datasets                          | Purpose                                                                |
-|------------------------------|-----------------------------------|------------------------------------------------------------------------|
-| Waterfall (Pro)              | Vibration, with RPM as Y axis     | Order-tracking spectrogram (Campbell diagram)                          |
-| Painter (Pro)                | Mic L, Mic R                      | Stereo VU meter with peak hold                                         |
-| Painter (Pro)                | Vibration                         | Smoothed dial gauge with peak marker                                   |
-| Plot                         | Motor RPM                         | RPM sweep trend                                                        |
+| Widget                       | Datasets                           | Purpose                                                                |
+|------------------------------|------------------------------------|------------------------------------------------------------------------|
+| Waterfall (Pro)              | Vibration, with Motor RPM as Y axis | Order-tracking spectrogram (Campbell diagram)                         |
+| Painter (Pro)                | Mic L, Mic R                       | Stereo VU meter with peak hold                                         |
+| Painter (Pro)                | Vibration, Motor RPM, Mic L, Mic R | Animated system schematic                                              |
+| Gauge                        | Vibration (RMS)                    | Rolling RMS level via a Lua transform                                  |
+| Gauge                        | Motor RPM                          | RPM sweep position                                                     |
+| Plot                         | Vibration, Mic L, Mic R            | Time-domain traces                                                     |
 
 ## Data format
 
@@ -79,18 +81,18 @@ The script logs frame count and current RPM/vibration every two seconds.
 
 You should see:
 
-- The **Vibration waterfall** group rendering the Campbell diagram. Order lines from the imbalance harmonics will trace out as the RPM sweeps.
-- The **Audio VU (Painter)** group with two horizontal bars rising and falling, with white peak-hold markers that linger for ~1.5 s.
-- The **Vibration peak dial (Painter)** group with a needle that smoothly tracks the magnitude, plus a yellow tick that marks the running peak.
-- The **RPM trend** group plotting the cosine sweep.
+- The **Vibration (Campbell)** group rendering the Campbell diagram. Order lines from the imbalance harmonics will trace out as the RPM sweeps.
+- The **VU Meter** group with two horizontal bars rising and falling, with peak-hold markers that linger for ~1.4 s.
+- The **System Schematic** group animating the motor, bracket, and microphones in step with the live data.
+- The **Vibration Gauge** and **RPM trend** gauges tracking the rolling RMS level and the cosine sweep.
 
 ## What to play with
 
-- Open the **Project Editor** and pick either Painter group — the JS source is right there in the editor. Tweak the colour zones, the peak-hold time, the needle damping. Hit **Apply** and the widget recompiles live.
+- Open the **Project Editor** and pick either Painter group — the JS source is right there in the editor. Tweak the colour zones, the peak-hold time, the motor animation. Hit **Apply** and the widget recompiles live.
 - Disable the bearing harmonic (`--bearing-amp 0`) and watch the diagonal line in the waterfall disappear, leaving only the rays from the integer harmonics.
 - Lower `--rate` to 250 Hz and notice how the waterfall still renders cleanly because the FFT sampling rate is fixed at 1 kHz inside the project — what changes is how often the Painter widgets' `onFrame()` ticks.
 
 ## Files
 
 - `vibration_test_rig.py` — the UDP emitter.
-- `VibrationTestRig.ssproj` — Serial Studio project: 4 groups, two Painter scripts, Waterfall in Campbell mode, CSV parser.
+- `VibrationTestRig.ssproj` — Serial Studio project: 5 groups, two Painter scripts, Waterfall in Campbell mode, Lua CSV parser.

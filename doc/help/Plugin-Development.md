@@ -91,6 +91,8 @@ if __name__ == "__main__":
     main()
 ```
 
+> While a device is streaming, the server also pushes frame batches (`{"frames": [...]}`), raw data, and lifecycle events on the same socket. A production plugin should read line by line and treat only lines with `"type": "response"` as command responses, matching them to requests by `id`. See [Server-Push Messages](API-Reference.md#server-push-messages).
+
 ### Minimal Python Plugin (gRPC)
 
 For real-time frame streaming, use gRPC:
@@ -323,6 +325,9 @@ Platform keys use the format `os/arch` or `os/*` (for universal builds):
 | `linux/arm64` | Linux ARM64 (Raspberry Pi, etc.) |
 | `windows/*` | Windows (any architecture) |
 | `windows/x86_64` | Windows x86_64 only |
+| `*` | Any platform (generic fallback) |
+
+Resolution order: exact `os/arch` key first, then `os/*`, then `*`.
 
 - Platform-specific `files` are **merged** with the base `files` array during installation.
 - If a plugin has no matching platform entry, the **Install** button is disabled and an **Unavailable** badge is shown.
@@ -367,7 +372,7 @@ Plugins that were running when Serial Studio closed are remembered and automatic
 
 ## Lifecycle Events
 
-The API server broadcasts events to all connected clients. Plugins should listen for these to coordinate with Serial Studio:
+The API server broadcasts events to all connected TCP/JSON clients as standalone JSON lines. Plugins should listen for these to coordinate with Serial Studio. gRPC clients do not receive lifecycle events; they can poll `io.getStatus` or watch stream activity instead.
 
 | Event | When | Typical Plugin Action |
 |-------|------|----------------------|

@@ -50,11 +50,11 @@ Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both. Thes
 
 A scrolling plot is good for watching a signal drift over time, but it is poor for reading the shape of a repeating waveform: each cycle slides past before you can study it. **Sweep / Trigger mode** solves this the way a benchtop oscilloscope does. It starts every sweep at the same point on the waveform, so the trace holds still and you can read it.
 
-Turn it on with the **Sweep** button, then open the **Trigger** dialog to set it up.
+Turn it on with the **Sweep** button, then open the **Trigger Settings** dialog to set it up.
 
 ### Trigger: what starts each sweep
 
-A **trigger** is the event that begins a new sweep. You choose the value the signal must cross (the **level**) and the direction of the crossing (the **edge**, rising or falling). Each time the signal crosses that level in that direction, a fresh sweep starts at exactly that point, which is what keeps successive sweeps aligned on top of each other.
+A **trigger** is the event that begins a new sweep. You choose the value the signal must cross (the **Level**) and the direction of the crossing (the **Slope**, Rising or Falling). Each time the signal crosses that level in that direction, a fresh sweep starts at exactly that point, which is what keeps successive sweeps aligned on top of each other.
 
 There are three **modes**:
 

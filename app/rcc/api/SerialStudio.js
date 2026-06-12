@@ -401,10 +401,9 @@ assistant.script.apply = function(kind, code, options) {
   return apiCall('assistant.script.apply', p);
 };
 
-assistant.script.dryRun = function(kind, code, options) {
+assistant.script.dryRun = function(kind, options) {
   var p = {};
   p['kind'] = kind;
-  p['code'] = code;
   if (options) for (var k in options) p[k] = options[k];
   return apiCall('assistant.script.dryRun', p);
 };
@@ -1685,14 +1684,9 @@ project.dataset.update = function(groupId, datasetId) {
   return apiCall('project.dataset.update', p);
 };
 
-project.dryRun.endToEnd = function(sampleFrame, sampleFrames, sourceId, code, language, verbose) {
+project.dryRun.endToEnd = function(options) {
   var p = {};
-  p['sampleFrame'] = sampleFrame;
-  p['sampleFrames'] = sampleFrames;
-  p['sourceId'] = sourceId;
-  p['code'] = code;
-  p['language'] = language;
-  p['verbose'] = verbose;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.dryRun.endToEnd', p);
 };
 
@@ -1708,19 +1702,11 @@ project.frameParser.dryCompile = function(code, language) {
   return apiCall('project.frameParser.dryCompile', p);
 };
 
-project.frameParser.dryRun = function(code, language, inputBytes, inputBytesHex, decoderMethod, frameDetection, frameStart, frameEnd, hexadecimalDelimiters, checksumAlgorithm, operationMode) {
+project.frameParser.dryRun = function(code, language, options) {
   var p = {};
   p['code'] = code;
   p['language'] = language;
-  p['inputBytes'] = inputBytes;
-  p['inputBytesHex'] = inputBytesHex;
-  p['decoderMethod'] = decoderMethod;
-  p['frameDetection'] = frameDetection;
-  p['frameStart'] = frameStart;
-  p['frameEnd'] = frameEnd;
-  p['hexadecimalDelimiters'] = hexadecimalDelimiters;
-  p['checksumAlgorithm'] = checksumAlgorithm;
-  p['operationMode'] = operationMode;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.frameParser.dryRun', p);
 };
 
@@ -1895,11 +1881,10 @@ project.outputWidget.delete = function(groupId, widgetId) {
   return apiCall('project.outputWidget.delete', p);
 };
 
-project.outputWidget.dryRun = function(code, inputValue, hex) {
+project.outputWidget.dryRun = function(code, options) {
   var p = {};
   p['code'] = code;
-  p['inputValue'] = inputValue;
-  p['hex'] = hex;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.outputWidget.dryRun', p);
 };
 

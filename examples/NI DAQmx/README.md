@@ -54,13 +54,15 @@ SAMPLES_PER_READ = 1          # 1 = lowest latency
 
 ### Channel configuration
 
+The default configuration declares six channels (four voltage, two current). One of each:
+
 ```python
 CHANNEL_CONFIG = [
     # Voltage measurement
     {"channel": "ai0", "type": "voltage", "voltage_range": (-10.0, 10.0), "terminal": "RSE", "name": "Voltage_0"},
 
     # Current measurement (I = V / shunt_resistor)
-    {"channel": "ai2", "type": "current", "voltage_range": (-10.0, 10.0), "terminal": "RSE", "name": "Current_0", "shunt_resistor": 0.1},
+    {"channel": "ai2", "type": "current", "voltage_range": (-10.0, 10.0), "terminal": "RSE", "name": "Current_0", "shunt_resistor": 500},
 ]
 ```
 
@@ -114,9 +116,9 @@ def process_readings(raw_data: np.ndarray, channel_config: list) -> np.ndarray:
             output[ch_idx, :] = raw_data[ch_idx, :] / shunt
 
     # ADD YOUR CUSTOM PROCESSING HERE
-    # output[0, :] = raw_data[0, :] * 1.0234        # Calibration factor
-    # output[1, :] = raw_data[1, :] - 0.0125        # Offset correction
-    # output[4, :] = output[0, :] * output[2, :]    # Power = V × I
+    # Example:
+    #   output[0, :] = raw_data[0, :] * 2.0  # Scale channel 0
+    #   output[1, :] = np.clip(raw_data[1, :], -5, 5)  # Clamp channel 1
 
     return output
 ```

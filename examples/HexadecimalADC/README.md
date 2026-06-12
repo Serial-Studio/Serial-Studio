@@ -4,7 +4,7 @@
 
 This project shows how to combine binary data parsing, custom serial actions, timed execution, and checksum validation in a Serial Studio workflow with Arduino. It's a full example of a command-driven interface for sensor data acquisition, ready for real-time plotting and FFT analysis.
 
-The Arduino reads analog values from six input channels (A0 to A5), processes them, wraps the result in a binary protocol frame with a CRC-16-CCITT checksum, and only sends data when asked via a custom `poll-data` action. Serial Studio triggers the action manually or via timer modes like auto-start or toggle-on-trigger.
+The Arduino reads analog values from six input channels (A0 to A5), processes them, wraps the result in a binary protocol frame with a CRC-16-CCITT checksum, and only sends data when asked via a custom `poll-data` command. Serial Studio triggers the command manually or on a timer; this project's `Data Polling` action toggles a 5 ms timer and starts automatically on connect.
 
 ## Key features
 
@@ -51,21 +51,28 @@ This sketch configures the ADC, listens for serial commands like `poll-data`, re
 
 **Frame format:**
 
-- **Mode:** `Binary (direct)`.
+- **Mode:** `Binary (Direct)`.
+- **Frame detection:** start delimiter only (the sketch sends no end sequence).
 - **Start sequence:** `0xC0 0xDE`.
 - **Checksum:** `CRC-16-CCITT`.
 
-**Actions.** You can define custom actions in your `.json` project to send:
+**Datasets.** Six channels (`ADC 0` to `ADC 5`) in volts, shown in an `ADC Readings` multiplot and data grid, with FFT enabled on the plot group.
 
-- `poll-data` on button press or toggle.
-- `poll-data` on a timer.
-- Other configuration commands on connect.
+**Actions.** `HexadecimalADC.ssproj` defines three actions, each terminated with `\n` (the sketch reads commands with `readStringUntil('\n')`):
+
+- `Data Polling`: sends `poll-data` on a toggled 5 ms timer and starts automatically on connect.
+- `Enable Pull-Up Resistor`: sends `enable-pull-up`.
+- `Disable Pull-Up Resistor`: sends `disable-pull-up`.
 
 **JavaScript frame parser:**
 
 ```javascript
 /**
- * Convert each byte (0 to 255) into a voltage between 0 and 5 V.
+ * This function parses a binary data frame (passed as a byte array) and converts
+ * each byte into a decimal value scaled from 0 to 5 volts.
+ *
+ * @param[in]  frame  A JS array of byte values (0–255), passed from C++.
+ * @return     Array of floats representing the scaled voltage values.
  */
 function parse(frame) {
     let dataArray = [];
@@ -83,15 +90,15 @@ For help on the parser function, see the [Serial Studio documentation](https://g
 
 ### 3. Visualize with FFT
 
-1. Start Serial Studio.
+1. Start Serial Studio and load `HexadecimalADC.ssproj`.
 2. Pick the serial port.
 3. Set the baud rate to 115200.
-4. Click your `poll-data` action.
+4. Click **Connect**. The `Data Polling` action starts on its own and polls every 5 ms; click it to pause or resume.
 5. Use the FFT widget to inspect signal frequency.
 
 ## Troubleshooting
 
-- **No output.** Make sure `poll-data` is being sent.
+- **No output.** Confirm the `Data Polling` action is running (it toggles on each click).
 - **Noisy values.** Normal for floating pins. Connect sensors for more control.
 - **Invalid frames.** Check CRC settings and delimiters.
 - **Slow updates.** Increase the timer rate or switch to manual polling.

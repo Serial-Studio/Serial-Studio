@@ -104,7 +104,7 @@ workspace:
 project.workspace.setCustomizeMode{enabled: true}
 project.workspace.addWidget{workspaceId, widgetType: "output-panel",
                             groupId}
-// integer form (back-compat): widgetType: 15
+// integer form (back-compat): widgetType: 18
 // relativeIndex defaults to next free slot when omitted
 ```
 
@@ -114,8 +114,11 @@ Don't add one tile per output widget — that's not how it's structured.
 ## Hardware writes go through the user, not you
 
 You cannot transmit bytes yourself. `console.send`, `io.writeData`,
-`io.connect`, and `io.disconnect` are Blocked at the dispatcher.
-Tools that hit those paths return `category: "hardware_write_blocked"`
+`io.connect`, and `io.disconnect` are deviceGated at the dispatcher:
+blocked while the user's "Allow device control" toggle is off; with it
+on they resolve to AlwaysConfirm, so each call still needs explicit
+approval. Tools that hit those paths while blocked return
+`category: "hardware_write_blocked"`
 (distinct from `permission_denied`, which is OS-level only).
 
 The whole point of an output widget is that the *user* presses the

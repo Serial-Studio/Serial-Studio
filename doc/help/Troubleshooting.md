@@ -1,3 +1,5 @@
+# Troubleshooting
+
 Quick solutions to common Serial Studio issues. If you can't find your problem here, check the [Getting More Help](#getting-more-help) section at the bottom.
 
 ## Table of Contents
@@ -197,8 +199,8 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
    - Disconnect device and see which port disappears
    - Reconnect and select that port
 
-4. **Try toggling DTR signal:**
-   - Setup Panel → Disable "DTR Signal"
+4. **Try toggling the DTR signal:**
+   - Setup Panel → turn off **Send DTR Signal**
    - Some devices reset when DTR is asserted
 
 5. **Check frame delimiters:**
@@ -609,12 +611,11 @@ Common issues:
 **Solutions:**
 
 1. **Check license status:**
-   - Help → About Serial Studio
-   - Check if "Pro License" or "Trial" is shown
+   - Click **Activate** in the toolbar to open the License Management dialog
+   - It shows whether a Pro license or trial is active
 
 2. **Activate license key:**
-   - Help → Activate License
-   - Enter purchase email and license key
+   - In the License Management dialog, paste your license key and click **Activate**
    - Internet connection required for activation
 
 3. **Download official binary:**

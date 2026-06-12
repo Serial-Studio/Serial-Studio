@@ -32,6 +32,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QRegularExpression>
 
 #include "API/CommandRegistry.h"
 #include "API/EnumLabels.h"
@@ -351,6 +352,27 @@ static void appendUnknownFieldsWarning(QJsonObject& result,
                           "(e.g. 'var', 'let', 'const', '=>'). The script will "
                           "fail to compile silently. Either pass language=0 "
                           "(JavaScript) or rewrite the code in Lua.");
+
+  return QString();
+}
+
+/**
+ * @brief Builds the likely-cause suffix for a frame-parser compile failure (legacy two-parameter
+ *        parse signature or a language/syntax mismatch); returns an empty string when neither
+ *        heuristic fires.
+ */
+[[nodiscard]] static QString frameParserCompileHint(const QString& code, int language)
+{
+  static const QRegularExpression kTwoArgParse(QStringLiteral(
+    R"(\bparse\b\s*(?:=\s*)?(?:function)?\s*\(\s*[a-zA-Z_$][\w$]*\s*,\s*[a-zA-Z_$][\w$]*\s*\))"));
+  if (kTwoArgParse.match(code).hasMatch())
+    return QStringLiteral(" Likely cause: the code defines the legacy two-parameter "
+                          "parse(frame, separator) signature, which is rejected. Define "
+                          "parse(frame) with a single parameter and split the frame yourself.");
+
+  const auto mismatch = detectLanguageMismatch(code, language);
+  if (!mismatch.isEmpty())
+    return QStringLiteral(" Likely cause: ") + mismatch;
 
   return QString();
 }
@@ -1282,7 +1304,8 @@ void API::Handlers::ProjectHandler::registerResolverCommands()
       {QString(Keys::UniqueId),
        QStringLiteral("integer"),
        QStringLiteral(
-         "Computed as sourceId*1000000 + groupId*10000 + datasetId. Treat as opaque.")}
+         "Opaque persisted handle allocated at dataset creation; stable across reorders. "
+         "Read it from list/snapshot responses, never compute it.")}
   }),
     &datasetGetByUniqueId);
 
@@ -3718,7 +3741,7 @@ static QJsonObject buildGroupExplanations(const DataModel::Group& group)
 
   if (!group.painterCode.isEmpty())
     ex[QStringLiteral("painterCode")] =
-      QStringLiteral("Group has %1 bytes of painter JS (paint(ctx) entry point).")
+      QStringLiteral("Group has %1 bytes of painter JS (paint(ctx, w, h) entry point).")
         .arg(group.painterCode.size());
 
   return ex;
@@ -4210,7 +4233,8 @@ void API::Handlers::ProjectHandler::registerPainterCodeCommands()
                    "**JavaScript only** -- painter scripts run in QJSEngine, not Lua. "
                    "Available globals: ctx (2D canvas context, QPainter-like), w, h "
                    "(canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The "
-                   "entry point is paint(ctx) and an optional onFrame(value) callback. "
+                   "entry point is paint(ctx, w, h) and an optional zero-arg onFrame() "
+                   "callback. "
                    "Validate with project.painter.dryRun before setCode. **Always call "
                    "meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API "
                    "surface and worked examples -- don't invent canvas methods from JS "
@@ -4218,11 +4242,11 @@ void API::Handlers::ProjectHandler::registerPainterCodeCommands()
     makeSchema({
       {QStringLiteral("groupId"),
        QStringLiteral("integer"),
-       QStringLiteral("Target group id (from project.group.list)") },
+       QStringLiteral("Target group id (from project.group.list)")              },
       {   QStringLiteral("code"),
        QStringLiteral("string"),
-       QStringLiteral("Painter widget JS source. Must define paint(ctx) and may define "
-       "onFrame(value). Replaces any existing code for the group.")}
+       QStringLiteral("Painter widget JS source. Must define paint(ctx, w, h) and may "
+       "define a zero-arg onFrame(). Replaces any existing code for the group.")}
   }),
     &painterSetCode);
 
@@ -4429,46 +4453,53 @@ void API::Handlers::ProjectHandler::registerFrameParserDryRunCommands()
       "consumedBytes / remainingBytes / droppedFrames. For binary protocols (COBS, Modbus, "
       "custom binary) pick decoderMethod=3 (Binary); the text decoders run through "
       "QString::fromUtf8 and corrupt non-ASCII bytes."),
-    makeSchema({
-      {              QStringLiteral("code"),QStringLiteral("string"),QStringLiteral("Frame parser source")                          },
-      {          QStringLiteral("language"),
-       QStringLiteral("integer"),
-       QStringLiteral("0 = JavaScript, 1 = Lua")                                  },
-      {        QStringLiteral("inputBytes"),
-       QStringLiteral("string"),
-       QStringLiteral("Raw stream bytes as UTF-8 text. Lossy for binary payloads -- prefer "
-       "inputBytesHex for COBS / Modbus / non-ASCII.")                            },
-      {     QStringLiteral("inputBytesHex"),
-       QStringLiteral("string"),
-       QStringLiteral("Raw stream bytes as a hex string (space-tolerant). Binary-safe; use "
-       "this for COBS or any non-ASCII protocol.")                                },
-      {        QString(Keys::DecoderMethod),
-       QStringLiteral("integer"),
-       QStringLiteral("0=PlainText (UTF-8 -> QString, mojibakes binary), 1=Hexadecimal "
-       "(toHex -> QString), 2=Base64 (toBase64 -> QString), 3=Binary (raw "
-       "QByteArray, only mode that's safe for binary protocols).")                },
-      {       QString(Keys::FrameDetection),
-       QStringLiteral("integer"),
-       QStringLiteral("0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, "
-       "3=StartDelimiterOnly.")                                                   },
-      {           QString(Keys::FrameStart),
-       QStringLiteral("string"),
-       QStringLiteral("Start delimiter. Hex when hexadecimalDelimiters is true.") },
-      {             QString(Keys::FrameEnd),
-       QStringLiteral("string"),
-       QStringLiteral("End delimiter. Hex when hexadecimalDelimiters is true.")   },
-      {QString(Keys::HexadecimalDelimiters),
-       QStringLiteral("boolean"),
-       QStringLiteral("When true, frameStart / frameEnd are parsed as hex bytes.")},
-      {    QString(Keys::ChecksumAlgorithm),
-       QStringLiteral("string"),
-       QStringLiteral("Checksum name to validate trailing bytes. Empty = none.")  },
-      {     QStringLiteral("operationMode"),
-       QStringLiteral("integer"),
-       QStringLiteral("0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line "
-       "extractor, comma-split, parser is bypassed). 1=ConsoleOnly is invalid "
-       "for dryRun.")                                                             }
-  }),
+    makeSchema(
+      {
+        {    QStringLiteral("code"),QStringLiteral("string"),QStringLiteral("Frame parser source")            },
+        {QStringLiteral("language"),
+         QStringLiteral("integer"),
+         QStringLiteral("0 = JavaScript, 1 = Lua")}
+  },
+      {{QStringLiteral("inputBytes"),
+        QStringLiteral("string"),
+        QStringLiteral("Raw stream bytes as UTF-8 text. Lossy for binary payloads -- prefer "
+                       "inputBytesHex for COBS / Modbus / non-ASCII. One of inputBytes / "
+                       "inputBytesHex must be a non-empty string.")},
+       {QStringLiteral("inputBytesHex"),
+        QStringLiteral("string"),
+        QStringLiteral("Raw stream bytes as a hex string (space-tolerant). Binary-safe; use "
+                       "this for COBS or any non-ASCII protocol. One of inputBytes / "
+                       "inputBytesHex must be a non-empty string.")},
+       {QString(Keys::DecoderMethod),
+        QStringLiteral("integer"),
+        QStringLiteral("0=PlainText (default; UTF-8 -> QString, mojibakes binary), "
+                       "1=Hexadecimal (toHex -> QString), 2=Base64 (toBase64 -> QString), "
+                       "3=Binary (raw QByteArray, only mode that's safe for binary "
+                       "protocols).")},
+       {QString(Keys::FrameDetection),
+        QStringLiteral("integer"),
+        QStringLiteral("0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, "
+                       "3=StartDelimiterOnly.")},
+       {QString(Keys::FrameStart),
+        QStringLiteral("string"),
+        QStringLiteral("Start delimiter. Hex when hexadecimalDelimiters is true. Default: "
+                       "none.")},
+       {QString(Keys::FrameEnd),
+        QStringLiteral("string"),
+        QStringLiteral("End delimiter. Hex when hexadecimalDelimiters is true. Default: "
+                       "none.")},
+       {QString(Keys::HexadecimalDelimiters),
+        QStringLiteral("boolean"),
+        QStringLiteral("When true, frameStart / frameEnd are parsed as hex bytes. Default "
+                       "false.")},
+       {QString(Keys::ChecksumAlgorithm),
+        QStringLiteral("string"),
+        QStringLiteral("Checksum name to validate trailing bytes. Empty (default) = none.")},
+       {QStringLiteral("operationMode"),
+        QStringLiteral("integer"),
+        QStringLiteral("0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line "
+                       "extractor, comma-split, parser is bypassed). 1=ConsoleOnly is invalid "
+                       "for dryRun.")}}),
     &frameParserDryRun);
 
   registry.registerCommand(
@@ -4539,17 +4570,18 @@ void API::Handlers::ProjectHandler::registerScriptDryRunCommands()
                    "Pass inputValue (and hex:true for hex byte input) to also execute it once "
                    "and return the produced bytes (outputHex + byteCount). Validate here "
                    "BEFORE project.outputWidget.update."),
-    makeSchema({
-      {      QStringLiteral("code"),
-       QStringLiteral("string"),
-       QStringLiteral("Transmit source. Must define transmit(value)")   },
-      {QStringLiteral("inputValue"),
-       QStringLiteral("string"),
-       QStringLiteral("Optional sample value to run transmit() against")},
-      {       QStringLiteral("hex"),
-       QStringLiteral("boolean"),
-       QStringLiteral("Treat inputValue as space-separated hex bytes")  }
-  }),
+    makeSchema(
+      {
+        {QStringLiteral("code"),
+         QStringLiteral("string"),
+         QStringLiteral("Transmit source. Must define transmit(value)")}
+  },
+      {{QStringLiteral("inputValue"),
+        QStringLiteral("string"),
+        QStringLiteral("Optional sample value to run transmit() against")},
+       {QStringLiteral("hex"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Treat inputValue as space-separated hex bytes. Default false.")}}),
     &outputWidgetDryRun);
 }
 
@@ -4565,34 +4597,40 @@ void API::Handlers::ProjectHandler::registerEndToEndDryRunCommand()
     QStringLiteral("End-to-end dry run: takes a sample frame body, runs the project's "
                    "frame parser, then applies every dataset's transform in execution "
                    "order, and returns the final per-dataset values WITHOUT touching "
-                   "live state. Use this to verify the full parse->transform pipeline "
+                   "live state. Required: sampleFrame (single body) OR sampleFrames "
+                   "(array of bodies); everything else defaults to the live project. "
+                   "Use this to verify the full parse->transform pipeline "
                    "before issuing setCode/setTransformCode. Note: the table API "
                    "(tableGet/tableSet/datasetGetRaw/datasetGetFinal) is NOT injected; "
                    "transforms that depend on it should be tested with "
                    "project.dataset.transform.dryRun individually."),
-    makeSchema({
-      {QStringLiteral("sampleFrame"),
-       QStringLiteral("string"),
-       QStringLiteral("Single frame body (without delimiters). Use sampleFrames for an array.")   },
-      typedArrayProp(
-        QStringLiteral("sampleFrames"),
-        QStringLiteral("Array of frame bodies; runs sequentially in one parser engine instance."),
-        QStringLiteral("string")),
-      {      QString(Keys::SourceId),
-       QStringLiteral("integer"),
-       QStringLiteral("Source index to use for parser code + dataset transforms (default 0)")     },
-      {       QStringLiteral("code"),
-       QStringLiteral("string"),
-       QStringLiteral("Optional override for the frame parser source (default: use live project)")},
-      {   QStringLiteral("language"),
-       QStringLiteral("integer"),
-       QStringLiteral(
-       "Optional override: 0 = JavaScript, 1 = Lua (default: live source language)")              },
-      {    QStringLiteral("verbose"),
-       QStringLiteral("boolean"),
-       QStringLiteral(
-       "Include raw cell values alongside final transformed values (default false)")              }
-  }),
+    makeSchema(
+      {
+  },
+      {{QStringLiteral("sampleFrame"),
+        QStringLiteral("string"),
+        QStringLiteral("Single frame body (without delimiters). Use sampleFrames for an "
+                       "array. One of sampleFrame / sampleFrames is required.")},
+       typedArrayProp(
+         QStringLiteral("sampleFrames"),
+         QStringLiteral("Array of frame bodies; runs sequentially in one parser engine "
+                        "instance. One of sampleFrame / sampleFrames is required."),
+         QStringLiteral("string")),
+       {QString(Keys::SourceId),
+        QStringLiteral("integer"),
+        QStringLiteral("Source index to use for parser code + dataset transforms (default 0)")},
+       {QStringLiteral("code"),
+        QStringLiteral("string"),
+        QStringLiteral("Optional override for the frame parser source (default: use live "
+                       "project)")},
+       {QStringLiteral("language"),
+        QStringLiteral("integer"),
+        QStringLiteral("Optional override: 0 = JavaScript, 1 = Lua (default: live source "
+                       "language)")},
+       {QStringLiteral("verbose"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Include raw cell values alongside final transformed values (default "
+                       "false)")}}),
     &endToEndDryRun);
 }
 
@@ -5518,8 +5556,10 @@ void API::Handlers::ProjectHandler::registerTemplateCommands()
                    "  scope_multichannel_uart: 8 generic channels over UART, "
                    "comma-separated, all plot-enabled. Adapt for ADC streams or sensor "
                    "arrays.\n"
-                   "  telemetry_udp: UDP listener on port 1234, CSV body parser, 5 "
-                   "generic value channels. Adapt port + parser to your protocol.\n"
+                   "  telemetry_udp: CSV body parser with 5 generic value channels, "
+                   "intended for UDP telemetry. The template does NOT configure the "
+                   "connection -- set up the UDP listener via io.network.* after "
+                   "applying.\n"
                    "  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After "
                    "applying, configure the broker via project.mqtt.subscriber.setConfig.\n"
                    "Pass dryRun:true to return wouldDiscard + wouldApply summaries "
@@ -5830,17 +5870,16 @@ static QByteArray dryRunDelimiter(const QJsonObject& params, const QString& key,
 }
 
 /**
- * @brief Decodes the caller-supplied raw stream bytes (inputBytesHex preferred over inputBytes).
+ * @brief Decodes the caller-supplied raw stream bytes; non-empty inputBytesHex wins, an empty
+ *        string in either field counts as absent so the other field can still supply the data.
  */
 static QByteArray dryRunInputBytes(const QJsonObject& params)
 {
-  if (params.contains(QStringLiteral("inputBytesHex")))
-    return SerialStudio::hexToBytes(params.value(QStringLiteral("inputBytesHex")).toString());
+  const auto hex = params.value(QStringLiteral("inputBytesHex")).toString();
+  if (!hex.trimmed().isEmpty())
+    return SerialStudio::hexToBytes(hex);
 
-  if (params.contains(QStringLiteral("inputBytes")))
-    return params.value(QStringLiteral("inputBytes")).toString().toUtf8();
-
-  return {};
+  return params.value(QStringLiteral("inputBytes")).toString().toUtf8();
 }
 
 /**
@@ -5894,7 +5933,10 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun(const QStr
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
-      QStringLiteral("inputBytes / inputBytesHex were provided but decoded to zero bytes."));
+      QStringLiteral("inputBytes / inputBytesHex were provided but decoded to zero bytes. "
+                     "Pass the raw stream in exactly one of them: inputBytesHex as hex digits "
+                     "(e.g. '61 2C 62') or inputBytes as UTF-8 text. Empty strings count as "
+                     "absent."));
 
   const auto code     = params.value(QStringLiteral("code")).toString();
   const auto language = params.value(QStringLiteral("language")).toInt();
@@ -5923,8 +5965,13 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun(const QStr
   }
 
   const auto run = DataModel::runFrameParserPipelineWithCode(bytes, spec, code, language);
-  if (!run.stageError.isEmpty())
-    return CommandResponse::makeError(id, ErrorCode::ExecutionError, run.stageError);
+  if (!run.stageError.isEmpty()) {
+    QString message = run.stageError;
+    if (run.stageWhere == QStringLiteral("compile"))
+      message += frameParserCompileHint(code, language);
+
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, message);
+  }
 
   QJsonArray frameResults;
   int totalRows = 0;
@@ -6433,7 +6480,8 @@ API::CommandResponse API::Handlers::ProjectHandler::endToEndDryRun(const QString
     return CommandResponse::makeError(
       id,
       ErrorCode::ExecutionError,
-      QStringLiteral("Frame parser failed to compile or define parse(frame)"));
+      QStringLiteral("Frame parser failed to compile or define parse(frame).")
+        + frameParserCompileHint(code, language));
 
   std::map<int, std::unique_ptr<DataModel::IScriptEngine>> transformEngines;
   std::map<int, bool> transformEngineOk;

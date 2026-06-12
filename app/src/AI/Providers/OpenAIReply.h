@@ -40,7 +40,9 @@ public:
               const QString& apiKey,
               const QByteArray& requestBody,
               const QString& providerLabel,
-              QObject* parent = nullptr);
+              int transferTimeoutMs = -1,
+              bool parseThinkTags   = false,
+              QObject* parent       = nullptr);
 
   void abort() override;
 
@@ -55,12 +57,23 @@ private:
     bool emitted;
   };
 
+  /**
+   * @brief Scanner state for inline <think>...</think> blocks in the content stream.
+   */
+  enum class ThinkScan : int {
+    Detect      = 0,
+    Thinking    = 1,
+    Passthrough = 2,
+  };
+
   void onSseEvent(const QString& name, const QJsonObject& data);
   void onSseError(const QString& reason);
   void onReplyReadyRead();
   void onReplyFinished();
 
   void processChoiceDelta(const QJsonObject& choice);
+  void routeContentChunk(const QString& chunk);
+  void processThinkCarry(bool atEnd);
   void emitPendingToolCalls();
   void finishOk();
   void finishWithError(const QString& message);
@@ -79,6 +92,10 @@ private:
   SseEventReader* m_sse;
   QHash<int, ToolCallState> m_toolCalls;
   QString m_finishReason;
+  int m_transferTimeoutMs;
+  bool m_parseThinkTags;
+  ThinkScan m_thinkScan;
+  QString m_thinkCarry;
   bool m_finished;
 };
 

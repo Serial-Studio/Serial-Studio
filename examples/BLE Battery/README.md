@@ -41,7 +41,7 @@ Most BLE-enabled phones and peripherals support it. Serial Studio connects to th
 /**
  * @brief Converts a byte-like iterable into an array of numbers.
  *
- * @param frame An iterable containing byte values (0 to 255).
+ * @param frame An iterable containing byte values (0–255).
  * @return Array of numeric byte values.
  */
 function parse(frame) {
@@ -51,8 +51,9 @@ function parse(frame) {
 
 ### Setup
 
-1. Select Bluetooth LE as the input source.
-2. Pick your BLE device (for example your iPhone) and click Connect.
-3. Pick the Battery Service (0x180F).
-4. Pick the Battery Level characteristic (0x2A19).
-5. Watch the gauge update in real time.
+1. Open Serial Studio and load `BLE Battery Level.ssproj`.
+2. Select Bluetooth LE as the input source.
+3. Pick your BLE device (for example your iPhone) and click Connect.
+4. Pick the Battery Service (0x180F).
+5. Pick the Battery Level characteristic (0x2A19).
+6. Watch the gauge update in real time.

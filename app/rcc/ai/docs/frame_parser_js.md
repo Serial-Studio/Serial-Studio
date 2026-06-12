@@ -5,35 +5,44 @@ the array of dataset values the dashboard consumes.
 
 ## Contract
 
-You define a single function:
+You define a single function taking exactly **one** parameter:
 
 ```js
-function parse(frame, separator) {
+function parse(frame) {
   // returns Array<number | string>
 }
 ```
 
-- `frame` is a `String` containing the bytes of one logical frame, decoded by
-  the source's selected text decoder (UTF-8, Latin-1, etc.).
-- `separator` is the configured CSV separator for sources that pre-split.
-  When the source uses a binary frame, `separator` is irrelevant — work
-  directly off `frame`.
+- `frame`'s shape depends on the source's selected decoder: PlainText gives
+  a UTF-8 `String`, Hexadecimal/Base64 give the encoded text as a `String`,
+  and Binary gives an `Array` of byte values (0–255).
+- **Never write `parse(frame, separator)`.** That two-parameter signature is
+  a Serial Studio v2 relic, removed years ago; the validator rejects it when
+  the script is loaded for authoring or dry-run, and even where a legacy
+  script slips through, `separator` is `undefined`. There is no separator
+  argument — split the frame yourself with the delimiter your protocol uses
+  (e.g. `frame.split(',')`).
 - Return an `Array` whose values map **positionally** to the datasets in the
   project (in group/dataset declaration order).
-- Returning `[]` or `null` skips the frame silently. Returning the wrong
-  length silently truncates or pads with `0`.
+- Returning `[]` or `null` skips the frame silently. Extra values are
+  ignored; datasets whose index exceeds the returned length keep their
+  previous value.
 
 ## Sandbox
 
-The QJSEngine running parsers is isolated. Only `console`, `gc()`, plain JS
-built-ins, and `String.prototype` regex APIs are available:
+The QJSEngine running parsers is isolated from the host system. Available:
+`console`, `gc()`, plain JS built-ins, and the injected host API —
+`deviceWrite`, `actionFire`, the seven dashboard helpers,
+`tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`, `notify*`,
+`apiCall`, and the generated `SerialStudio` SDK (`io.*`, `project.*`, ...):
 
 - **No** `XMLHttpRequest`, `fetch`, `setTimeout`, `setInterval`.
 - **No** filesystem, network, or Qt API access.
 - **No** `import`/`require`. Single-file scripts only.
 
-Top-level `var` declarations are wrapped in an IIFE per source, so your
-script's globals don't bleed into other parsers on the same engine.
+Each source runs its parser in its own engine; top-level `var` declarations
+are real globals within that per-source engine, so they don't bleed into
+other sources' parsers.
 
 ## Performance
 
@@ -56,15 +65,15 @@ Avoid:
 ### CSV split (most common)
 
 ```js
-function parse(frame, separator) {
-  return frame.split(separator);
+function parse(frame) {
+  return frame.split(',');
 }
 ```
 
 ### Tab-delimited with numeric coercion
 
 ```js
-function parse(frame /*, separator */) {
+function parse(frame) {
   const parts = frame.split('\t');
   const out = new Array(parts.length);
   for (let i = 0; i < parts.length; ++i)
@@ -78,7 +87,7 @@ function parse(frame /*, separator */) {
 ```js
 const RE = /^\$([A-Z]+),(-?\d+\.\d+),(-?\d+\.\d+),(-?\d+)\*([0-9A-F]{2})/;
 
-function parse(frame /*, separator */) {
+function parse(frame) {
   const m = frame.match(RE);
   if (!m)
     return [];
@@ -89,7 +98,7 @@ function parse(frame /*, separator */) {
 ### JSON-line
 
 ```js
-function parse(frame /*, separator */) {
+function parse(frame) {
   try {
     const obj = JSON.parse(frame);
     return [obj.x, obj.y, obj.z];
@@ -105,7 +114,7 @@ If your device emits multiple sensor rows per frame, return a 2-D array;
 the FrameBuilder will flatten to multiple frames.
 
 ```js
-function parse(frame /*, separator */) {
+function parse(frame) {
   const rows = frame.split(';');
   return rows.map(r => r.split(',').map(parseFloat));
 }

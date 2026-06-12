@@ -59,7 +59,7 @@ Plugins are external processes that connect to Serial Studio to receive live dat
 
 - The API server has to be enabled (Serial Studio will prompt you if it isn't).
 - Python plugins need Python 3.6+ installed.
-- Plugins that use gRPC need the `grpcio` Python package (auto-installed on first run).
+- Plugins that use gRPC need the `grpcio` Python package. Repository plugins include a launcher script that installs it into a local virtual environment on first run.
 - All running plugins are stopped automatically when Serial Studio exits.
 
 ### Platform support
@@ -194,7 +194,7 @@ https://raw.githubusercontent.com/your-org/extensions/main/manifest.json
 
 Plugin state (open windows, settings, configurations) is saved in the project file alongside widget layout data. That means different projects can have different plugin setups.
 
-State is saved automatically when the device disconnects, when the plugin is stopped, or when Serial Studio exits. It's restored when the plugin starts or when a new device connects. Plugins that were running when Serial Studio closed are relaunched automatically on the next startup.
+State is saved automatically when the device disconnects, when the plugin is stopped, or when Serial Studio exits. It's restored when the plugin starts or when a new device connects. Plugins that were running when Serial Studio closed are relaunched automatically the next time the dashboard becomes available (a device connects or a file player opens), unless you stopped them by hand.
 
 For details on using the state persistence API from code, see the [Plugin Development](Plugin-Development.md) guide.
 
@@ -217,7 +217,7 @@ The Extension Manager is accessible via the [API](API-Reference.md) on TCP port 
 
 ## Installed extension location
 
-Extensions are installed to your workspace under `Extensions/`:
+Extensions are installed to your workspace folder (Documents/Serial Studio by default; configurable in Settings) under `Extensions/`:
 
 ```
 ~/Documents/Serial Studio/Extensions/

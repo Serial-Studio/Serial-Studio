@@ -6,14 +6,21 @@ you want Lua's table semantics for batched parsing.
 
 ## Contract
 
+You define a single function taking exactly **one** parameter:
+
 ```lua
-function parse(frame, separator)
+function parse(frame)
   -- returns array-like table of numbers / strings
 end
 ```
 
-- `frame` is a Lua string (one logical frame).
-- `separator` is the source's configured CSV separator string.
+- `frame` is a Lua string (one logical frame) with the PlainText,
+  Hexadecimal, or Base64 decoder; with the Binary decoder it is a
+  1-indexed table of byte integers (0–255), not a string.
+- **Never write `parse(frame, separator)`.** That two-parameter signature is
+  a Serial Studio v2 relic, removed years ago and unsupported. There is no
+  separator argument — split the frame yourself with the delimiter your
+  protocol uses (e.g. `frame:split(",")`).
 - Return a sequence (1-indexed table) whose entries map positionally to
   datasets.
 - Return `{}` to skip a frame silently.
@@ -46,15 +53,17 @@ against Lua 5.1/5.2 conventions still work:
 ## Console logging
 
 `print(...)` and a JS-style `console` table route to the application
-console — the same sink as JS `console.log`. Nothing goes to stdout.
+console — the same sink as JS `console.log`. Script log lines are also
+mirrored to stdout by the application's message handler.
 
 ```lua
 print("frame:", frame)          -- debug level
 console.log("parsed", n)        -- debug
 console.debug("raw byte", b)    -- debug
 console.info("fix acquired")    -- info
-console.warn("crc mismatch")    -- warning (also raises an app notification)
-console.error("bad header")     -- critical (also raises an app notification)
+console.warn("crc mismatch")    -- warning (notifies only if "Route warnings
+                                -- to notifications" is enabled; off by default)
+console.error("bad header")     -- critical (always raises an app notification)
 ```
 
 Arguments are joined tab-separated; `__tostring` metamethods are honored.
@@ -76,8 +85,8 @@ upvalues).
 ### CSV split
 
 ```lua
-function parse(frame, separator)
-  return frame:split(separator)
+function parse(frame)
+  return frame:split(",")
 end
 ```
 
@@ -107,13 +116,16 @@ function parse(frame)
 end
 ```
 
-### Binary frame (escape with `string.byte`)
+### Binary frame (index the byte table)
+
+With the Binary decoder, `frame` is a 1-indexed table of byte integers —
+index it directly (`string.byte(frame, ...)` errors on a table):
 
 ```lua
 function parse(frame)
-  if #frame < 8 then return {} end
-  local x = string.byte(frame, 1) * 256 + string.byte(frame, 2)
-  local y = string.byte(frame, 3) * 256 + string.byte(frame, 4)
+  if #frame < 4 then return {} end
+  local x = frame[1] * 256 + frame[2]
+  local y = frame[3] * 256 + frame[4]
   return { x, y }
 end
 ```

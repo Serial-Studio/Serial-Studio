@@ -64,6 +64,12 @@ Widgets.SmartDialog {
       }
 
       TabButton {
+        text: qsTr("Startup")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+
+      TabButton {
         text: qsTr("Dashboard")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
@@ -102,6 +108,7 @@ Widgets.SmartDialog {
       Layout.topMargin: -parent.spacing - 1
       implicitHeight: Math.max(
                         generalTab.implicitHeight,
+                        startupTab.implicitHeight,
                         dashboardTab.implicitHeight,
                         taskbarTab.implicitHeight,
                         consoleTab.implicitHeight,
@@ -191,7 +198,7 @@ Widgets.SmartDialog {
           } Label {
             Layout.columnSpan: 2
             Layout.topMargin: 6
-            text: qsTr("Files & Updates")
+            text: qsTr("Files")
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -232,20 +239,6 @@ Widgets.SmartDialog {
             }
           }
 
-          Label {
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Automatically Check for Updates")
-          } Switch {
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            checked: Cpp_Misc_ModuleManager.automaticUpdates
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_Misc_ModuleManager.automaticUpdates)
-                Cpp_Misc_ModuleManager.automaticUpdates = checked
-            }
-          }
-
           Item {
             implicitHeight: 2
             Layout.columnSpan: 2
@@ -264,39 +257,6 @@ Widgets.SmartDialog {
           } Item {
             implicitHeight: 2
             Layout.columnSpan: 2
-          }
-
-          Label {
-            text: qsTr("Rendering Backend")
-            visible: Cpp_Misc_GraphicsBackend.configurable
-            color: Cpp_ThemeManager.colors["text"]
-          } Widgets.Combo {
-            id: _rhiBackend
-
-            Layout.fillWidth: true
-            visible: Cpp_Misc_GraphicsBackend.configurable
-            model: Cpp_Misc_GraphicsBackend.availableBackends.map(e => e.label)
-            currentIndex: {
-              const list = Cpp_Misc_GraphicsBackend.availableBackends
-              for (let i = 0; i < list.length; ++i)
-                if (list[i].id === Cpp_Misc_GraphicsBackend.currentBackend)
-                  return i
-
-              return 0
-            }
-
-            onActivated: (index) => {
-              const list = Cpp_Misc_GraphicsBackend.availableBackends
-              if (index < 0 || index >= list.length)
-                return
-
-              const id = list[index].id
-              if (id === Cpp_Misc_GraphicsBackend.currentBackend)
-                return
-
-              Cpp_Misc_GraphicsBackend.currentBackend = id
-              Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
-            }
           }
 
           Label {
@@ -391,6 +351,204 @@ Widgets.SmartDialog {
             onClicked: {
               if (Cpp_GrpcAvailable && Cpp_GRPC_Server)
                 Cpp_GRPC_Server.exportProto()
+            }
+          }
+
+          Item { Layout.fillHeight: true }
+          Item { Layout.fillHeight: true }
+        }
+      }
+
+      //
+      // Startup tab
+      //
+      Item {
+        id: startupTab
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: startupLayout.implicitHeight + 16
+
+        Rectangle {
+          radius: 2
+          border.width: 1
+          anchors.fill: parent
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        GridLayout {
+          id: startupLayout
+
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          anchors.margins: 8
+          anchors.fill: parent
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_Misc_GraphicsBackend.configurable
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Graphics")
+            visible: Cpp_Misc_GraphicsBackend.configurable
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            visible: Cpp_Misc_GraphicsBackend.configurable
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_Misc_GraphicsBackend.configurable
+          }
+
+          Label {
+            text: qsTr("Rendering Backend")
+            visible: Cpp_Misc_GraphicsBackend.configurable
+            color: Cpp_ThemeManager.colors["text"]
+          } Widgets.Combo {
+            id: _rhiBackend
+
+            Layout.fillWidth: true
+            visible: Cpp_Misc_GraphicsBackend.configurable
+            model: Cpp_Misc_GraphicsBackend.availableBackends.map(e => e.label)
+            currentIndex: {
+              const list = Cpp_Misc_GraphicsBackend.availableBackends
+              for (let i = 0; i < list.length; ++i)
+                if (list[i].id === Cpp_Misc_GraphicsBackend.currentBackend)
+                  return i
+
+              return 0
+            }
+
+            onActivated: (index) => {
+              const list = Cpp_Misc_GraphicsBackend.availableBackends
+              if (index < 0 || index >= list.length)
+                return
+
+              const id = list[index].id
+              if (id === Cpp_Misc_GraphicsBackend.currentBackend)
+                return
+
+              Cpp_Misc_GraphicsBackend.currentBackend = id
+              Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
+            }
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: Cpp_Misc_GraphicsBackend.configurable ? 6 : 2
+            text: qsTr("System")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Apply Performance Hints")
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Misc_ModuleManager.performanceMode
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Misc_ModuleManager.performanceMode)
+                Cpp_Misc_ModuleManager.performanceMode = checked
+            }
+          }
+
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Keep Display Awake")
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Misc_ModuleManager.inhibitIdleSleep
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Misc_ModuleManager.inhibitIdleSleep)
+                Cpp_Misc_ModuleManager.inhibitIdleSleep = checked
+            }
+          }
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.topMargin: -2
+            opacity: 0.7
+            wrapMode: Text.WordWrap
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Performance hints raise process priority and opt out of OS "
+                       + "power throttling. Changes take effect the next time Serial "
+                       + "Studio starts.")
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Updates & News")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Automatically Check for Updates")
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Misc_ModuleManager.automaticUpdates
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Misc_ModuleManager.automaticUpdates)
+                Cpp_Misc_ModuleManager.automaticUpdates = checked
+            }
+          }
+
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Show What's New on Startup")
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Misc_WhatsNew.showWhatsNewOnStartup
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Misc_WhatsNew.showWhatsNewOnStartup)
+                Cpp_Misc_WhatsNew.showWhatsNewOnStartup = checked
             }
           }
 
@@ -1351,6 +1509,8 @@ Widgets.SmartDialog {
           Cpp_API_Server.enabled = false
           Cpp_API_Server.externalConnections = false
           Cpp_Misc_ModuleManager.automaticUpdates = true
+          Cpp_Misc_ModuleManager.performanceMode = true
+          Cpp_Misc_ModuleManager.inhibitIdleSleep = true
           Cpp_UI_Dashboard.autoHideToolbar = false
           Cpp_UI_TaskbarSettings.resetToDefaults()
           Cpp_Console_Handler.fontFamily = Cpp_Misc_CommonFonts.monoFont.family

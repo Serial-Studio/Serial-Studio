@@ -29,7 +29,7 @@ A transform can also read and write **shared data tables**: constants defined at
 
 ### Signature
 
-**Lua (default):**
+**Lua:**
 
 ```lua
 function transform(value)
@@ -53,9 +53,9 @@ Non-numeric dataset values are still passed to the transform as a string. If the
 
 ### Output
 
-The function has to return a number. The returned value replaces the raw value everywhere: dashboard widgets, plots, CSV export, MDF4 export, and the API.
+The function returns a number, or a string for text datasets (a returned string is kept as the dataset value). The returned value replaces the raw value everywhere: dashboard widgets, plots, CSV export, MDF4 export, and the API.
 
-If the function returns `nil` (Lua), `undefined`/`NaN`/`Infinity` (JS), or if an error happens, the raw value is kept unchanged and no error is shown, so the data stream isn't interrupted.
+If the function returns `nil` (Lua), `undefined`/`NaN`/`Infinity` (JS), or if an error happens, the raw value is kept unchanged so the data stream isn't interrupted. JavaScript exceptions fall back silently; a Lua error also logs a warning (with the error message and dataset ID) to the application log.
 
 ## Persistent state
 
@@ -251,7 +251,7 @@ function transform(value, info) {
 
 `info.timestampMs` is a **monotonic** millisecond counter taken from the OS steady clock. It increases between consecutive frames but is not wall-clock time and does not match `Date.now()`. Use it for deltas (`info.timestampMs - lastTs`), not for "what time is it now".
 
-`info.frameNumber` is per-source. Resets to 0 on disconnect / project reload.
+`info.frameNumber` is per-source and restarts at 1 after a disconnect or project reload.
 
 ### Example: rate-limit a control update
 
@@ -405,7 +405,7 @@ Full reference, including argument types and longer examples (GPS fix reset, mod
 1. Select a dataset in the Project Editor tree.
 2. Click the **Transform** button in the dataset toolbar.
 3. The Transform Editor opens with:
-   - **Language selector.** Lua (default) or JavaScript. Follows the source's frame parser language.
+   - **Language selector.** Lua or JavaScript. Defaults to the source's frame parser language, but each dataset can pick its own.
    - **Template dropdown.** 34 ready-made transforms for common operations.
    - **Code editor.** Syntax-highlighted, with auto-completion.
    - **Test area.** Enter a raw value, click Test, see the transformed output.
@@ -581,10 +581,10 @@ end
 ## Rules and limitations
 
 1. The function has to be named `transform` (case-sensitive).
-2. It has to accept exactly one parameter (`value`).
-3. It has to return a number.
-4. Returning `nil`, `NaN`, or `Infinity` silently falls back to the raw value.
-5. The transform language matches the source's frame parser language (Lua or JavaScript).
+2. It takes one required parameter (`value`), plus an optional second parameter (`info`) with frame metadata (`frameNumber`, `sourceId`, `timestampMs`).
+3. It has to return a number, or a string for text datasets (a returned string is kept as the dataset value).
+4. Returning `nil`, `NaN`, or `Infinity` falls back to the raw value, as does a script error (silent in JavaScript; logged in Lua).
+5. Each dataset picks its own transform language (Lua or JavaScript); datasets on the same source can mix the two. The source's frame parser language is only the default when none is picked.
 6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. Declare stateful variables with `local` in Lua or `var` in JavaScript and they won't collide with other datasets. Bare globals in Lua (and `function foo() end` at chunk top level) DO leak across datasets. Always use `local`.
 7. The engine is sandboxed: no file I/O, no network, no OS commands.
 8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation.

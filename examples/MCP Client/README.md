@@ -16,7 +16,7 @@ This example demonstrates how to use the **Model Context Protocol (MCP)** with S
 ### 2. Run the Example Client
 
 ```bash
-cd examples/mcp
+cd "examples/MCP Client"
 python3 client.py
 ```
 
@@ -26,9 +26,9 @@ python3 client.py
 ✓ Connected to Serial Studio at localhost:7777
 ✓ Initialized MCP session
   Server: Serial Studio
-  Version: 3.2.7
+  Version: <your Serial Studio version>
 
-✓ Available tools (~290):
+✓ Available tools (...):
   • api.getCommands: Get list of all available commands
   • io.connect: Open the configured connection
   • io.disconnect: Close the current connection
@@ -38,8 +38,10 @@ python3 client.py
   ...
 
 ✓ Available resources (2):
-  • serialstudio://frame/current: The most recent telemetry frame
-  • serialstudio://frame/history: Last 100 telemetry frames
+  • serialstudio://frame/current: Current Frame
+    The most recent telemetry frame received
+  • serialstudio://frame/history: Frame History
+    Last 100 telemetry frames
 
 ✓ Resource 'serialstudio://frame/current' read successfully
 {
@@ -87,7 +89,7 @@ Serial Studio uses a **hybrid protocol** approach:
 
 ## MCP Capabilities
 
-### 1. Tools (50+ Available)
+### 1. Tools
 
 Every Serial Studio API command is exposed as an MCP tool:
 
@@ -152,7 +154,7 @@ Resources support **subscription** for real-time updates.
 See `client.py` for a complete example. Key methods:
 
 ```python
-from mcp_client import MCPClient
+from client import MCPClient
 
 client = MCPClient()
 client.connect()
@@ -309,10 +311,10 @@ In Claude Desktop, try asking:
 "Can you list all available Serial Studio tools?"
 ```
 
-Claude should respond with a list of 182+ tools like:
+Claude should respond with a list of tools like:
 - `io.connect`
 - `io.uart.setBaudRate`
-- `project.openFromFile`
+- `project.open`
 - etc.
 
 #### Step 6: Use It!
@@ -451,7 +453,7 @@ if b'"method":"tools/call"' in line:
 MCP connections use the same security as the legacy API:
 
 - **Localhost only** - Server binds to 127.0.0.1
-- **Rate limiting** - 10,000 messages/second per client
+- **Rate limiting** - 200 messages/second per client
 - **Buffer limits** - 4MB max buffer, 1MB max message
 - **JSON depth** - Max 64 nesting levels
 - **Client limit** - Max 32 concurrent connections
@@ -498,7 +500,7 @@ history = client.read_resource("serialstudio://frame/history")
 
 ```python
 # Change baud rate
-client.call_tool("io.uart.setBaudRate", {"value": "115200"})
+client.call_tool("io.uart.setBaudRate", {"baudRate": 115200})
 
 # Reconnect
 client.call_tool("io.disconnect")

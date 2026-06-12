@@ -26,9 +26,10 @@ the body references the `value` argument, leave `virtual` alone.
 
 ## Isolation
 
-The runtime invokes `luaL_dostring(your_code)` once per dataset. Top-level
-`local` declarations become **upvalues** captured by the `transform`
-closure, so two datasets that define `local ema = 0` get independent
+Each dataset's chunk is loaded with its own per-dataset environment table
+(an `_ENV` sandbox), so even globals — including `function transform` —
+are private per dataset; top-level `local` declarations are additionally
+chunk-private. Two datasets that define `local ema = 0` get independent
 state, even though the Lua state itself is shared across the source.
 
 ```lua
@@ -70,8 +71,10 @@ Same shim as the parser API:
 ## Console logging
 
 Same API as the parser: `print(...)` plus `console.log/debug/info/warn/error`
-all land in the application console (`warn`/`error` also raise app
-notifications); nothing goes to stdout. Transforms run on every frame for
+all land in the application console (`error` always raises an app
+notification; `warn` notifies only when *Route warnings to notifications*
+is enabled, off by default); script log lines are also mirrored to stdout
+by the application's message handler. Transforms run on every frame for
 every dataset — latch or rate-limit logging with a local flag, and remove it
 from shipped projects.
 

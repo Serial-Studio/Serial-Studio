@@ -42,7 +42,7 @@ The Arduino program uses the Euler method for numerical integration to evolve th
 
 ### Requirements
 
-- **Arduino board.** Uno, Mega, Nano, or compatible.
+- **Arduino board.** Uno, Mega, Nano, or compatible. An ESP32 port is included in `LorenzAttractor_ESP32/`.
 - **Serial Studio.** Download the latest version from [here](https://serial-studio.github.io/).
 
 ### Connections
@@ -106,6 +106,14 @@ void loop() {
 }
 ```
 
+## ESP32 variant
+
+`LorenzAttractor_ESP32/LorenzAttractor_ESP32.ino` ports the simulation to the ESP32. It
+computes the same system with fixed-point arithmetic (values scaled by 1000) and splits the
+work into two FreeRTOS tasks: one integrates the equations, the other transmits the queued
+samples. The comma-separated output format and the 115200 baud rate are the same, so the
+project file works without changes.
+
 ## Serial Studio configuration
 
 ### 1. Setting up the project
@@ -117,11 +125,18 @@ void loop() {
    - Dataset $y$: use $z$ as the X-axis source.
    - Dataset $z$: use $x$ as the X-axis source.
 
+The bundled project already contains both visualizations: a Multi-Plot group
+(`2D Visualization`) and a 3D plot group (`3D Visualization`). Each newline-terminated
+`x,y,z` line is split by the project's Lua CSV frame parser, so the same parser serves the
+serial and UDP sources.
+
 ### 2. Plotting the Lorenz attractor
 
 1. Open the project in Serial Studio.
-2. Connect to the Arduino using the correct serial port, set the baud rate to 115200.
-3. Add a Multi-Plot widget to visualize the attractor.
+2. The project's data source is preconfigured for UDP on port 9000 (the Python version
+   described later). For the Arduino, switch the bus type to the board's serial port and set
+   the baud rate to 115200.
+3. Click **Connect**; both the 2D and 3D attractor views update in real time.
 
 Here's how the project editor should look:
 
@@ -151,13 +166,11 @@ For testing without Arduino hardware, `lorenz_udp.py` sends Lorenz attractor dat
    ```
 
 2. In Serial Studio:
-   - Select **Network** as the data source.
-   - Choose **UDP** protocol.
-   - Set the port to **9000**.
-   - Load the `LorenzAttractor.ssproj` project file.
+   - Load the `LorenzAttractor.ssproj` project file. Its data source is already set to a
+     UDP socket on local port **9000**.
    - Click **Connect**.
 
-The script sends Lorenz attractor data to `127.0.0.1:9000` continuously.
+The script sends one `x,y,z` sample per millisecond to `127.0.0.1:9000` until stopped.
 
 ## Troubleshooting
 
@@ -167,4 +180,4 @@ The script sends Lorenz attractor data to `127.0.0.1:9000` continuously.
   - For the UDP version: make sure Serial Studio is listening on port 9000 and the Python script is running.
 - **Chaotic output.**
   - Make sure `transmissionInterval` in the Arduino sketch fits your system.
-  - For the UDP version: adjust the `transmission_interval` parameter in the Python script if needed.
+  - For the UDP version: adjust the `transmission_interval` variable in `lorenz_udp.py` if needed.

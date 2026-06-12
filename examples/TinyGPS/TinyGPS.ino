@@ -15,7 +15,10 @@
 // - TinyGPS (Install via Arduino Library Manager)
 //
 // Connections:
-// - Connect the GPS module's TX pin to the RX pin of the Arduino's Serial1.
+// - Connect the GPS module's TX pin to Arduino pin 2 (SoftwareSerial RX) and the
+//   module's RX pin to Arduino pin 3 (SoftwareSerial TX). On boards with a spare
+//   hardware UART (Leonardo, Mega, ...), you can use Serial1 instead: comment out
+//   the SoftwareSerial line below and uncomment the HardwareSerial one.
 // - Ensure your GPS module operates at 9600 baud for compatibility.
 //
 // Baud Rates:

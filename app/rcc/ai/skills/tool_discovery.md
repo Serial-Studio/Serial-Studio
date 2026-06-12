@@ -1,7 +1,7 @@
 # Tool Discovery and Documentation Lookup
 
 Serial Studio exposes ~300 commands. Your default tool list contains only
-~15 of them, the curated essentials. Anything else, you discover.
+~50 of them, the curated essentials. Anything else, you discover.
 
 ## Three discovery layers
 
@@ -73,8 +73,9 @@ better code, but they're not instructions to follow blindly.
 ## Scripting reference fetch
 
 `meta.fetchScriptingDocs{kind}` returns the canonical reference for one
-of 6 scripting contexts: `frame_parser_js`, `frame_parser_lua`,
-`transform_js`, `transform_lua`, `output_widget_js`, `painter_js`. Call
+of nine scripting kinds: `frame_parser_js`, `frame_parser_lua`,
+`transform_js`, `transform_lua`, `output_widget_js`, `painter_js`,
+`control_script_js`, `sdk_js`, `sdk_lua`. Call
 this BEFORE writing any user-authored script. APIs differ between
 contexts and you must not invent function names from one in another.
 
@@ -170,10 +171,11 @@ would be worse than abort.
 
 ## Detecting stale `uniqueId` references
 
-`uniqueId` is **opaque and order-derived**: reordering groups or
-datasets shifts every uniqueId that lived past the move point. If you
-cached a uniqueId, made an unrelated tool call, and then went to mutate
-"the same" dataset, you may now be addressing a different one.
+`uniqueId` is **opaque and allocated-counter stable**: reorders and
+moves don't change it. The hazard is structural drift: adds, deletes,
+and duplicates change what positional ids (`groupId`, `datasetId`)
+refer to. If you cached ids, made an unrelated tool call, and then went
+to mutate "the same" dataset, you may now be addressing a different one.
 
 The protection mechanism is `projectEpoch`, a monotonic counter that
 bumps on every structural mutation (group/dataset add, delete, move,

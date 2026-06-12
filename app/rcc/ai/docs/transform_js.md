@@ -89,16 +89,18 @@ numbers. Resolve once via the API and pass the resulting integer into
 
 ## Processing order
 
-Datasets are processed in group-array then dataset-array order. A transform
-can read:
+Datasets are processed in group-array then dataset-array order, in a
+single pass. A transform can read:
 
-- raw values of **all** datasets in this frame (parser already ran)
-- final values of **earlier** datasets only
+- raw and final values of **earlier** datasets (in execution order):
+  this frame's
+- raw and final values of **later** datasets: the **previous** frame's
 
-Trying to read `datasetGetFinal` of a dataset processed later returns
-nil/empty AND logs a one-shot warning to the runtime console. Use
+Reading `datasetGetRaw`/`datasetGetFinal` of a dataset processed later
+silently returns the previous frame's (stale) value; the one-shot warning
+fires only for an unknown `uniqueId`. Use
 `project.dataset.getExecutionOrder` to confirm the order of execution
-when peer reads return stale or empty values.
+when peer reads return stale values.
 
 ## When to use a table vs a transform local
 
@@ -277,5 +279,5 @@ These affect the active dashboard window only. They do NOT modify the project fi
 ## Errors
 
 Returning `NaN` or `Infinity` falls back to the raw value silently. Throwing
-an exception logs a watchdog warning and uses the raw value. Don't rely on
-exceptions for control flow.
+an exception also falls back to the raw value silently (no log); only
+timeouts log. Don't rely on exceptions for control flow.

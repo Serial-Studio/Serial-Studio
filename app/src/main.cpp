@@ -28,6 +28,7 @@
 
 #include "AppInfo.h"
 #include "AppState.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/CLI.h"
 #include "Misc/CrashTracker.h"
 #include "Misc/GraphicsBackend.h"
@@ -153,27 +154,32 @@ int main(int argc, char** argv)
 #endif
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("module-manager-bootstrap"));
-  Misc::ModuleManager moduleManager;
-  if (!bootstrapModuleManager(moduleManager, cli, headless, shortcutPath)) {
-    qCritical() << "Critical QML error";
-    return EXIT_FAILURE;
-  }
+  int status = EXIT_SUCCESS;
+  {
+    Misc::ModuleManager moduleManager;
+    if (!bootstrapModuleManager(moduleManager, cli, headless, shortcutPath)) {
+      qCritical() << "Critical QML error";
+      return EXIT_FAILURE;
+    }
 
-  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("event-loop"));
+    Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("event-loop"));
 
-  cli.applyProjectAndAutoConnect(app);
+    cli.applyProjectAndAutoConnect(app);
 
 #ifdef BUILD_COMMERCIAL
-  if (cli.runtimeMode())
-    cli.applyOperatorRuntimeSettings();
-  else
-    cli.applyExportToggles();
+    if (cli.runtimeMode())
+      cli.applyOperatorRuntimeSettings();
+    else
+      cli.applyExportToggles();
 #endif
 
-  cli.applyVisualizationOptions();
-  cli.applyBusConfiguration();
+    cli.applyVisualizationOptions();
+    cli.applyBusConfiguration();
 
-  const auto status = app.exec();
+    status = app.exec();
+  }
+
+  IO::ConnectionManager::instance().shutdownDrivers();
 
   Platform::AppPlatform::releaseAdjustedArgv(argc, argv);
   return status;

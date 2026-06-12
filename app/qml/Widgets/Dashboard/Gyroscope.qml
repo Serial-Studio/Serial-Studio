@@ -46,9 +46,38 @@ Item {
   //
   // Custom properties
   //
+  property real rollAngle: 0
   property real yawAngle: root.model.yaw
-  property real rollAngle: root.model.roll
   property real pitchAngle: root.model.pitch
+
+  //
+  // Spring followers track moving targets continuously like a real instrument; roll
+  // feeds an unbounded accumulator so 179 -> -179 takes the short way around.
+  //
+  Behavior on rollAngle {
+    SpringAnimation {
+      spring: 4.5
+      damping: 0.4
+    }
+  }
+  Behavior on pitchAngle {
+    SpringAnimation {
+      spring: 4.5
+      damping: 0.4
+    }
+  }
+
+  Connections {
+    target: root.model
+    function onUpdated() {
+      const target = root.normalize180(root.model.roll)
+      const base   = root.normalize180(root.rollAngle)
+      let delta    = target - base
+      if (delta > 180)  delta -= 360
+      else if (delta < -180) delta += 360
+      root.rollAngle += delta
+    }
+  }
 
   //
   // Constants

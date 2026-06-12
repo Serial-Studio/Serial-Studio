@@ -8,7 +8,7 @@ In Project File mode, the frame parser turns raw device data into the array of v
 
 **Built-In** templates are compiled C++ parsers for common formats (delimited text, key=value, JSON, NMEA, Modbus, TLV and more). You pick a template, adjust its parameters in a form, and read the bundled documentation page for the wire format and channel mapping. No code is involved, and it is the fastest option by a wide margin. New projects start with the Built-In *Delimited text* template configured for comma-separated values.
 
-**Lua** is the recommended scripting language. It runs faster and uses less overhead than JavaScript, which is a good fit for high-throughput telemetry. JavaScript is still fully supported for existing projects. Scripting is the most flexible way to handle custom protocols: you write a `parse()` function with full control over the frame.
+**Lua** is the recommended scripting language. It runs faster than JavaScript and holds up better at high data rates. JavaScript is still fully supported for existing projects. Scripting is the most flexible way to handle custom protocols: you write a `parse()` function with full control over the frame.
 
 You can switch between platforms at any time using the **Platform** dropdown in the frame parser editor toolbar. Every switch converts the current template to its closest equivalent on the new platform: the CSV/TSV/pipe/semicolon script templates map to and from the Built-In *Delimited text* separator, and the other formats map by name. Custom script code that does not match a template is replaced by the default template, as with any platform switch.
 
@@ -22,7 +22,7 @@ You can switch between platforms at any time using the **Platform** dropdown in 
 | **Integer support** | Full native range | Native 64-bit integers | Numbers are IEEE 754 doubles only |
 | **Timeout** | Not needed (bounded parsers) | 500 ms per call | 500 ms per call |
 | **Isolation** | Separate instance per source | Separate engine per source | Separate engine per source |
-| **Sandboxing** | No user code runs | `base`, `table`, `string`, `math`, `utf8` libraries | Console and GC extensions |
+| **Sandboxing** | No user code runs | `base`, `table`, `string`, `math`, `utf8`, `coroutine` libraries | Console and GC extensions |
 
 ## Built-In Templates
 
@@ -50,7 +50,7 @@ The Built-In configuration persists in the project file as `frameParserTemplate`
 - `project.frameParser.getTemplateSchema` returns the parameter schema for a template id.
 - `project.frameParser.setTemplate` applies a template (with optional params) to a source and switches it to the Built-In language.
 - `project.frameParser.getTemplate` reads the current template and params for a source.
-- `project.frameParser.dryRun` accepts `language: 2` with the JSON descriptor `{"template": "delimited", "params": {"separator": ";"}}` as the `code` payload to preview parsing without touching the project.
+- `project.frameParser.dryRun` accepts `language: 2` with the JSON descriptor `{"template": "delimited", "params": {"separator": ";"}}` as the `code` payload to preview parsing without touching the project. Every `dryRun` call requires `code`, `language`, and one non-empty input (`inputBytesHex`, binary-safe and preferred, or `inputBytes` for UTF-8 text); the pipeline parameters (detection, delimiters, decoder, checksum) are optional and have defaults.
 
 ### When to Write a Script Instead
 
@@ -552,7 +552,7 @@ They never throw. They never block. They are available from frame parsers, datas
 
 `clearPlots` only resets the plot data buffers. Widget settings, dataset definitions, FFT configuration, axis bounds, and actions are left alone. After the call, plots continue to draw the next incoming sample as usual.
 
-`setPlotPoints` takes the same effect as the user changing the **Points** value: every line plot reconfigures its rolling buffer. Calling it on every frame is wasteful; call it once after detecting a regime change.
+`setPlotPoints` has the same effect as the user changing the **Points** value: every line plot reconfigures its rolling buffer. Calling it on every frame is wasteful; call it once after detecting a regime change.
 
 The four visibility helpers map one-to-one to the user-facing **Show terminal / notifications / clock / stopwatch** toggles. Per-window: the change applies to whichever dashboard window is active.
 
@@ -709,7 +709,7 @@ end
 
 ## Calling any API command: `apiCall()`
 
-Beyond the focused helpers above, parsers can invoke **any** of Serial Studio's ~290 API commands directly through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, and Painter widgets.
+Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, and Painter widgets. The gateway is default-deny: only a small read-only allow-list is callable with no setup (`project.*` getters, `dashboard.getStatus` / `dashboard.getData` / `dashboard.tailFrames`, `notifications.list` / `notifications.post`, `sessions.list` / `sessions.get`, `controlscript.get` / `controlscript.getStatus`, `api.getCommands`); every other command returns `METHOD_NOT_ALLOWED` unless the project opts in via `apiCall.allowFullSurface`. Calls are also rate-limited per source: a 100 calls/s token bucket, at most 8 concurrent calls, and a 1 MiB cap on request bodies and responses.
 
 ```text
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
@@ -733,7 +733,7 @@ A second helper, `apiCallList()`, returns an array of every registered command n
 
 ### Examples
 
-**Lua -- bring up the right workspace when a fault flag goes high:**
+**Lua -- bring up the right workspace when a fault flag goes high (`ui.window.setActiveGroup` is not in the default allow-list, so this requires the `apiCall.allowFullSurface` opt-in):**
 
 ```lua
 local lastFaultBit = 0
@@ -755,15 +755,15 @@ function parse(frame)
 end
 ```
 
-**JavaScript -- forward a parser event back to the device:**
+**JavaScript -- check the dashboard state when an alert arrives (`dashboard.getStatus` is on the default allow-list; no opt-in needed):**
 
 ```javascript
 function parse(frame) {
     const values = frame.split(",");
     if (values[0] === "ALERT") {
-        apiCall("console.send", {
-            data: "ALERT-ACK:" + values.slice(1).join("|") + "\n"
-        });
+        const status = apiCall("dashboard.getStatus");
+        if (status.ok && status.result.running)
+            console.warn("ALERT received, dashboard at " + status.result.fps + " fps");
     }
     return values;
 }
@@ -788,9 +788,9 @@ end
 ### When NOT to use it
 
 - **One-shot, fire-and-forget.** `apiCall` runs synchronously on the dashboard thread. Heavy work (mass mutations, project save, MDF4 export) blocks frame processing. Gate every call on an event transition; never `apiCall` on every frame.
-- **Prefer the focused helpers.** Runtime UI orchestration (clearing plots, toggling panes, switching the active workspace) is exposed only as the dedicated `clearPlots()` / `setPlotPoints()` / `setActiveWorkspace()` shortcuts, not as `apiCall` commands. Use the shortcuts for those tasks; reach for `apiCall` for the rest of the command surface.
+- **Prefer the focused helpers.** Runtime UI orchestration (clearing plots, toggling panes, switching the active workspace) has `apiCall` equivalents under `ui.*` / `dashboard.*`, but those sit behind the `apiCall.allowFullSurface` opt-in. The dedicated `clearPlots()` / `setPlotPoints()` / `setActiveWorkspace()` shortcuts bypass the allow-list, so use the shortcuts for those tasks; reach for `apiCall` for the rest of the command surface.
 - **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming hotpath.
-- **Pro features stay gated.** Commands behind the commercial tier (Modbus, CAN, sessions, MDF4, MQTT...) return `{ ok = false, errorCode = "EXECUTION_ERROR" }` in GPL builds. Check `result.ok` before assuming success.
+- **Pro features stay gated.** Commands behind the commercial tier (Modbus, CAN, sessions, MDF4, MQTT...) return `{ ok = false, errorCode = "EXECUTION_ERROR" }` in GPL builds. Check `ok` before assuming success.
 
 ## Built-in Template Scripts
 
@@ -841,7 +841,7 @@ Each source runs in an isolated engine instance. Global variables in one source 
 2. It must accept exactly **one parameter**.
 3. It must return a table (Lua) or array (JavaScript). Not a string, number, or nil.
 4. Return an empty table/array for invalid or incomplete frames.
-5. **Synchronous only.** No coroutines (Lua) or Promises/async (JavaScript).
+5. **Synchronous only.** The engine never yields to the host, so the result must be ready when `parse()` returns. Lua's `coroutine` library is available, but it cannot make `parse()` asynchronous; the same goes for JavaScript Promises/async.
 6. **500 ms execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
 7. **No file system access**, no network access, no module imports.
 8. Lua: `io`, `os`, `debug`, `package` libraries are not available. JavaScript: No DOM, `window`, `require`.
@@ -896,7 +896,7 @@ function parse(frame) {
 }
 ```
 
-Output appears in Serial Studio's console/terminal panel. Lua provides the same `console` table as JavaScript (`console.log`, `console.debug`, `console.info`, `console.warn`, `console.error`), with `print()` as shorthand for `console.log()`; in both languages, `console.warn` and `console.error` also raise application notifications. Arguments are joined with tab separators.
+Output appears in Serial Studio's console/terminal panel. Lua provides the same `console` table as JavaScript (`console.log`, `console.debug`, `console.info`, `console.warn`, `console.error`), with `print()` as shorthand for `console.log()`; in both languages, `console.error` also raises an application notification, and `console.warn` does too when **Route Warnings to Notifications** is enabled in Settings (off by default). Arguments are joined with tab separators.
 
 ## Performance Tips
 

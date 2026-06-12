@@ -26,6 +26,8 @@
 #include "AI/Providers/OpenAIReply.h"
 #include "Misc/JsonValidator.h"
 
+static constexpr int kLocalTransferTimeoutMs = 5 * 60 * 1000;
+
 namespace detail {
 
 /**
@@ -157,6 +159,7 @@ AI::ProviderCapabilities AI::LocalProvider::capabilities() const
   ProviderCapabilities caps;
   caps.needsSmallToolSurface = true;
   caps.toolResultByteBudget  = 3072;
+  caps.slowFirstToken        = true;
   return caps;
 }
 
@@ -309,7 +312,9 @@ void AI::LocalProvider::refreshModels()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the Chat Completions request body and returns a streaming Reply.
+ * @brief Builds the Chat Completions request body and returns a streaming Reply. Uses a
+ *        long transfer timeout (cold model load + prompt eval can sit silent for minutes)
+ *        and inline <think> parsing so local reasoning models stream their thinking.
  */
 AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history,
                                           const QJsonArray& tools,
@@ -347,6 +352,12 @@ AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history,
   qCDebug(serialStudioAI) << "Local request:" << chatEndpoint() << "tools=" << tools.size()
                           << "history=" << history.size() << "bytes=" << bytes.size();
 
-  return new OpenAIReply(
-    m_nam, chatEndpoint(), QString(), QString(), bytes, QStringLiteral("Local"));
+  return new OpenAIReply(m_nam,
+                         chatEndpoint(),
+                         QString(),
+                         QString(),
+                         bytes,
+                         QStringLiteral("Local"),
+                         kLocalTransferTimeoutMs,
+                         true);
 }

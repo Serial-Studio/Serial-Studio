@@ -85,15 +85,17 @@
     "pointCount": 4000,
     "sources": [
         {
-            "busType": 1,
+            "busType": 0,
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "address": "127.0.0.1",
-                "socketTypeIndex": 1,
-                "udpLocalPort": 9000,
-                "udpMulticast": false,
-                "udpRemotePort": 9000
+                "autoReconnect": true,
+                "baudRate": 115200,
+                "dataBitsIndex": 3,
+                "dtr": true,
+                "flowControlIndex": 0,
+                "parityIndex": 0,
+                "stopBitsIndex": 0
             },
             "decoder": 0,
             "decoderMethod": 0,

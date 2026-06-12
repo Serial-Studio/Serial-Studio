@@ -20,10 +20,10 @@ The electric field oscillates along the Y axis, the magnetic field along the Z a
 
 ## Widgets exercised
 
-| Widget type  | Data source                                 |
-|--------------|---------------------------------------------|
-| 3D Plot      | X (propagation), E-field (Y), B-field (Z)   |
-| Multi-Plot   | E-field and B-field vs propagation axis     |
+| Widget type  | Group              | Datasets                                                   |
+|--------------|--------------------|------------------------------------------------------------|
+| 3D Plot      | `EM Wave — 3D`     | `X (Propagation)`, `E-field (Y axis)`, `B-field (Z axis)`  |
+| Multi-Plot   | `Field Components` | the same three datasets plotted against the propagation axis |
 
 ## Usage
 
@@ -54,7 +54,7 @@ python3 em_wave_udp.py --wavelength 6.0 --sigma 10.0 --samples 120
 ### 2. Configure Serial Studio
 
 1. Open Serial Studio and load `EMWaveSimulator.ssproj` as the project file.
-2. Set the I/O source to **UDP** on port **9000**.
+2. Confirm the I/O source is **UDP** on local port **9000** (the project file stores this configuration).
 3. Click **Connect**.
 
 ### 3. Observe
@@ -71,7 +71,7 @@ On every frame, the simulator samples the spatial window at `--samples` evenly s
 x,ey,bz\n
 ```
 
-Serial Studio receives 80 lines per frame (one per spatial sample) and plots them using the custom X-axis feature: the propagation position (`x`) drives the horizontal axis, and the field amplitudes are plotted vertically (and in 3D, along their respective perpendicular axes).
+Serial Studio receives one line per spatial sample (80 per frame with the default `--samples`) and plots them using the custom X-axis feature: the propagation position (`x`) drives the horizontal axis, and the field amplitudes are plotted vertically (and in 3D, along their respective perpendicular axes).
 
 ## Frame format
 

@@ -16,14 +16,14 @@ This example validates and demos Serial Studio widgets using a realistic RC plan
 | Accelerometer  | X, Y, Z body-frame acceleration (m/s²)   |
 | GPS Map        | Latitude, Longitude, Altitude            |
 | Compass        | Heading (0 to 360°)                      |
-| Gauge          | Airspeed (km/h), Battery (V)             |
-| Bar            | Throttle (%), RSSI (%), Motor Temp       |
-| Time plots     | Gyro rates, accel axes, altitude, battery, RSSI |
+| Gauge          | Airspeed (km/h)                          |
+| Bar            | Throttle (%)                             |
+| Time plots     | Altitude, Battery (V), RSSI (%), Motor Temp (°C) |
 
-## Flight profile (~170 seconds)
+## Flight profile (~157 seconds)
 
 ```
-Preflight → Engine Start → Taxi → Takeoff → Climb →
+Preflight → Engine Start → Taxi → Takeoff Roll → Liftoff → Climb →
 Level Flight → Gentle Turns → Steep Turns → Figure-8 →
 Loop → Aileron Roll → Knife Edge → Inverted →
 Dive & Pull-up → Zero-G Push → Recovery →
@@ -33,7 +33,7 @@ Cruise Home → Approach → Flare → Rollout → Shutdown
 ## Usage
 
 1. Open Serial Studio and load `RC Plane Simulator.ssproj` as the project file.
-2. Set the I/O source to **UDP** on port **9000**.
+2. Confirm the I/O source is **Network (UDP)** on local port **9000** (the project file sets this on load).
 3. Run the simulator:
 
 ```bash
@@ -51,7 +51,7 @@ python3 rc_plane_simulator.py --port 8000  # Custom UDP port
 
 ## Frame format
 
-CSV over UDP with `$` start delimiter and `;` end delimiter:
+CSV over UDP to `127.0.0.1`, sent at 20 Hz by default, with `$` start delimiter and `;` end delimiter:
 
 ```
 $gx,gy,gz,ax,ay,az,lat,lon,alt,heading,airspeed,throttle,battery,rssi,motor_temp;\n
