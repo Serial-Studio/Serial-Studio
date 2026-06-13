@@ -697,6 +697,9 @@ void Widgets::Plot::calculateAutoScaleRange()
         computeMinMaxValues(m_minX, m_maxX, dx, false, [](const QPointF& p) { return p.x(); });
     }
   }
+#else
+  if (false) {
+  }
 #endif
 
   else if (!m_timeAxis) {
