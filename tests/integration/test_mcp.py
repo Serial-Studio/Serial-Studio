@@ -453,12 +453,21 @@ class TestToolsList:
         assert props["enabled"]["type"] == "boolean"
 
     def test_no_tool_has_generic_value_param(self, mcp):
-        """No tool should fall back to the old generic 'value: string' schema."""
+        """No tool should fall back to the old generic 'value: string' schema.
+
+        A 'value' property is allowed only when it carries an explicit,
+        domain-specific type (e.g. dataTable.setValue takes a typed runtime
+        value). The thing we reject is the old catch-all heuristic that
+        emitted a bare {'value': {'type': 'string'}} for unrecognized commands.
+        """
         for tool in mcp.tools_list():
             props = tool.get("inputSchema", {}).get("properties", {})
+            value = props.get("value")
+            if value is None:
+                continue
             assert (
-                "value" not in props
-            ), f"Tool {tool['name']} still has the generic 'value' fallback param"
+                value.get("type") != "string"
+            ), f"Tool {tool['name']} still has the generic 'value: string' fallback param"
 
 
 # ---------------------------------------------------------------------------
