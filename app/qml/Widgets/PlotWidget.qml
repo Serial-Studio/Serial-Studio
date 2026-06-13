@@ -57,6 +57,12 @@ Item {
   property color areaFillColor: "transparent"
 
   //
+  // GPU curve layer: dashboard widgets parent PlotCurve items here (anchors.fill the
+  // layer); it sits above the area fill and below the crosshair overlay
+  //
+  property alias curveLayer: _curveLayer
+
+  //
   // Emitted when the user drags the trigger-level line; the parent writes the
   // new level back into the data model (triggerLevel is a one-way binding).
   //
@@ -664,6 +670,20 @@ Item {
     visible: root.areaFillSource !== null
     yMax: root.yVisibleMin + root.yVisibleRange
     xMax: root.xVisibleMin + root.xVisibleRange
+  }
+
+  //
+  // GPU curve layer, tracking the plot area so PlotCurve children map world
+  // coordinates with the same visible-window transform as the fill and cursors
+  //
+  Item {
+    id: _curveLayer
+
+    clip: true
+    width: _graph.plotArea.width
+    height: _graph.plotArea.height
+    x: _graph.x + _graph.plotArea.x
+    y: _graph.y + _graph.plotArea.y
   }
 
   //

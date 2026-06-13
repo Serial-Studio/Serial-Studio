@@ -46,6 +46,11 @@ Item {
   property bool hasToolbar: true
 
   //
+  // Size-aware font scale: shrinks colorbar text as the window gets small
+  //
+  readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(Math.min(width, height), 260)
+
+  //
   // Default minimum size for toolbar visibility
   //
   onWidthChanged: updateWidgetOptions()
@@ -334,7 +339,8 @@ Item {
         color: Cpp_ThemeManager.colors["text"]
         anchors.horizontalCenter: parent.horizontalCenter
         text: model ? model.maxDb.toFixed(0) + " dB" : ""
-        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(1.0))
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+               Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
       }
 
       Rectangle {
@@ -420,7 +426,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-               Cpp_Misc_CommonFonts.widgetFont(1.0))
+               Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
       }
     }
   }

@@ -941,7 +941,14 @@ end
 
 local cursor = 1
 
+-- The Binary decoder hands parse() the frame as a 1-indexed table of byte
+-- values; string.unpack needs a string, so convert once up front (Modbus
+-- ADUs are at most 256 bytes).
 function parse(frame)
+  if type(frame) == "table" then
+    frame = string.char(table.unpack(frame))
+  end
+
   if #frame < 3 then
     return {}
   end

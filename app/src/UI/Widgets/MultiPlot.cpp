@@ -61,6 +61,8 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
+  , m_visLoX(std::numeric_limits<double>::quiet_NaN())
+  , m_visHiX(std::numeric_limits<double>::quiet_NaN())
   , m_timeAxis(false)
   , m_interpolationMode(SerialStudio::InterpolationLinear)
   , m_sweepEnabled(false)
@@ -401,6 +403,34 @@ void Widgets::MultiPlot::setRunning(const bool enabled)
 }
 
 /**
+ * @brief Stores the visible X window pushed by the view (zoom/pan slice). Time-axis
+ *        draws downsample only this window at screen resolution, so zooming in scans
+ *        fewer samples instead of re-bucketing the full range at zoom resolution.
+ */
+void Widgets::MultiPlot::setVisibleXWindow(const double lo, const double hi)
+{
+  m_visLoX = lo;
+  m_visHiX = hi;
+}
+
+/**
+ * @brief Intersects [lo, hi] with the view-pushed visible X window when it is valid.
+ *        The window grows by two render columns per side so edge-crossing segments
+ *        survive the cut and the curve runs through the viewport edges.
+ */
+void Widgets::MultiPlot::clampToVisibleX(double& lo, double& hi) const
+{
+  Q_ASSERT(lo <= hi);
+
+  if (!std::isfinite(m_visLoX) || !std::isfinite(m_visHiX) || !(m_visLoX < m_visHiX))
+    return;
+
+  const double margin = (m_visHiX - m_visLoX) * (2.0 / std::max(2, m_dataW));
+  lo                  = std::max(lo, m_visLoX - margin);
+  hi                  = std::min(hi, m_visHiX + margin);
+}
+
+/**
  * @brief Updates the interpolation mode used by the multiplot.
  */
 void Widgets::MultiPlot::setInterpolationMode(SerialStudio::InterpolationMode mode)
@@ -565,6 +595,10 @@ void Widgets::MultiPlot::updateData()
   syncStringCurves();
 
   if (m_timeAxis && m_sweepEnabled) {
+    double xLo = m_minX;
+    double xHi = m_maxX;
+    clampToVisibleX(xLo, xHi);
+
     const auto& engine        = UI::Dashboard::instance().multiplotSweep(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(engine.front.size());
     if (m_data.size() != plotCount)
@@ -576,7 +610,7 @@ void Widgets::MultiPlot::updateData()
 
       const auto& ring = engine.display(static_cast<size_t>(i));
       (void)DSP::downsampleWindowAbsolute(
-        ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data[i], &ws);
+        ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data[i], &ws);
     }
 
     calculateAutoScaleRange();
@@ -584,6 +618,10 @@ void Widgets::MultiPlot::updateData()
   }
 
   if (m_timeAxis) {
+    double xLo = m_minX;
+    double xHi = m_maxX;
+    clampToVisibleX(xLo, xHi);
+
     const auto& rings         = UI::Dashboard::instance().multiplotTimeRings(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(rings.size());
     if (m_data.size() != plotCount)
@@ -595,7 +633,7 @@ void Widgets::MultiPlot::updateData()
 
       const auto& ring = rings[static_cast<size_t>(i)];
       (void)DSP::downsampleTimeWindow(
-        ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data[i], &ws);
+        ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data[i], &ws);
     }
 
     calculateAutoScaleRange();

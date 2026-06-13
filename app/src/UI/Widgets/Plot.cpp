@@ -44,6 +44,8 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
+  , m_visLoX(std::numeric_limits<double>::quiet_NaN())
+  , m_visHiX(std::numeric_limits<double>::quiet_NaN())
   , m_monotonicData(true)
   , m_timeAxis(false)
   , m_interpolationMode(SerialStudio::InterpolationLinear)
@@ -334,6 +336,17 @@ void Widgets::Plot::setRunning(const bool enabled)
 }
 
 /**
+ * @brief Stores the visible X window pushed by the view (zoom/pan slice). Time-axis
+ *        draws downsample only this window at screen resolution, so zooming in scans
+ *        fewer samples instead of re-bucketing the full range at zoom resolution.
+ */
+void Widgets::Plot::setVisibleXWindow(const double lo, const double hi)
+{
+  m_visLoX = lo;
+  m_visHiX = hi;
+}
+
+/**
  * @brief Updates the interpolation mode used by the plot.
  */
 void Widgets::Plot::setInterpolationMode(SerialStudio::InterpolationMode mode)
@@ -484,16 +497,21 @@ void Widgets::Plot::updateData()
     return;
 
   if (m_timeAxis && m_sweepEnabled) {
+    double xLo = m_minX;
+    double xHi = m_maxX;
+    clampToVisibleX(xLo, xHi);
     const auto& ring = UI::Dashboard::instance().plotSweep(m_index).display(0);
     (void)DSP::downsampleWindowAbsolute(
-      ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data, &ws);
+      ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
     return;
   }
 
   if (m_timeAxis) {
+    double xLo = m_minX;
+    double xHi = m_maxX;
+    clampToVisibleX(xLo, xHi);
     const auto& ring = UI::Dashboard::instance().plotTimeRing(m_index);
-    (void)DSP::downsampleTimeWindow(
-      ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data, &ws);
+    (void)DSP::downsampleTimeWindow(ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
     return;
   }
 
@@ -527,6 +545,23 @@ void Widgets::Plot::updateData()
     xIdx = (xIdx + 1) & xMask;
     yIdx = (yIdx + 1) & yMask;
   }
+}
+
+/**
+ * @brief Intersects [lo, hi] with the view-pushed visible X window when it is valid.
+ *        The window grows by two render columns per side so edge-crossing segments
+ *        survive the cut and the curve runs through the viewport edges.
+ */
+void Widgets::Plot::clampToVisibleX(double& lo, double& hi) const
+{
+  Q_ASSERT(lo <= hi);
+
+  if (!std::isfinite(m_visLoX) || !std::isfinite(m_visHiX) || !(m_visLoX < m_visHiX))
+    return;
+
+  const double margin = (m_visHiX - m_visLoX) * (2.0 / std::max(2, m_dataW));
+  lo                  = std::max(lo, m_visLoX - margin);
+  hi                  = std::min(hi, m_visHiX + margin);
 }
 
 /**

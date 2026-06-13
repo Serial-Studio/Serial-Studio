@@ -468,6 +468,54 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
    - Base64: `frame` is base64 string
    - Binary (Direct) (Pro): `frame` is byte array
 
+### Parse error: "string expected, got table" / "frame.split is not a function"
+
+**Problem:** The console repeats one of these on every frame:
+
+- Lua: `bad argument #1 to 'byte' (string expected, got table)`
+- Lua: `attempt to index a table value (local 'frame')`
+- JavaScript: `TypeError: frame.split is not a function` (or `frame.match`, `frame.charCodeAt`)
+
+**Cause:** The source uses the **Binary (Direct)** decoder, which hands `parse()` the frame
+as raw byte values (a 1-indexed table in Lua, an array in JavaScript), but the parser code
+was written for a string input.
+
+**Solutions:**
+
+1. **Index the bytes directly** instead of using string functions:
+
+   ```lua
+   -- Lua: frame[1] is the first byte (1-indexed)
+   function parse(frame)
+     if #frame < 4 then return {} end
+     return { (frame[1] << 8) | frame[2], (frame[3] << 8) | frame[4] }
+   end
+   ```
+
+   ```javascript
+   // JavaScript: frame[0] is the first byte (0-indexed)
+   function parse(frame) {
+       if (frame.length < 4) return [];
+       return [(frame[0] << 8) | frame[1], (frame[2] << 8) | frame[3]];
+   }
+   ```
+
+2. **Need `string.unpack` (floats, multi-byte fields)?** Convert the table to a string once
+   at the top of `parse()`:
+
+   ```lua
+   function parse(frame)
+     if type(frame) == "table" then
+       frame = string.char(table.unpack(frame))
+     end
+     -- string functions work from here on
+   end
+   ```
+
+3. **Or switch the decoder** to Plain Text/Hexadecimal in the Project Editor if the device
+   sends text — the decoder and the parser must agree on the frame type. See the decoder
+   table in [Frame Parser Scripting](JavaScript-API.md).
+
 ### Dataset transform not working
 
 **Problem:** You applied a `transform(value)` function but the dashboard still shows raw values.

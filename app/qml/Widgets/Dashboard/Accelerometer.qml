@@ -53,6 +53,11 @@ Item {
   property real currentMagnitude: root.model.magnitude
 
   //
+  // Size-aware font scale: shrinks widget text as the window gets small
+  //
+  readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(Math.min(width, height), 260)
+
+  //
   // Suppresses the change auto-save while restore assigns persisted values
   //
   property bool restoringSettings: false
@@ -240,7 +245,8 @@ Item {
             text: qsTr("G-FORCE")
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
           }
 
           Label {
@@ -248,7 +254,8 @@ Item {
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
 
             // code-verify off
             text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
@@ -276,7 +283,8 @@ Item {
             text: qsTr("PITCH ↕")
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
           }
 
           Label {
@@ -284,7 +292,8 @@ Item {
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
 
             // code-verify off
             text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
@@ -311,7 +320,8 @@ Item {
             text: qsTr("ROLL ↔")
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
           }
 
           Label {
@@ -319,7 +329,8 @@ Item {
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
 
             // code-verify off
             text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
@@ -496,7 +507,8 @@ Item {
             text: angle + "°"
             // code-verify on
             color: Cpp_ThemeManager.colors["polar_foreground"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.6))
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.6 * root.uiScale))
           }
         }
       }
@@ -627,7 +639,8 @@ Item {
             text: cursorTracker.cursorMagnitude.toFixed(2) + "G @ " +
                   cursorTracker.cursorAngle.toFixed(0) + "°"
             // code-verify on
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.7 * root.uiScale))
           }
         }
       }

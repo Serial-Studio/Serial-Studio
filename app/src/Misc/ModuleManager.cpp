@@ -87,6 +87,7 @@
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
 #include "UI/Widgets/PlotAreaFill.h"
+#include "UI/Widgets/PlotCurve.h"
 #include "UI/Widgets/Terminal.h"
 #include "UI/WindowManager.h"
 
@@ -385,6 +386,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");
   qmlRegisterType<Widgets::Plot>("SerialStudio", 1, 0, "PlotModel");
   qmlRegisterType<Widgets::PlotAreaFill>("SerialStudio", 1, 0, "PlotAreaFill");
+  qmlRegisterType<Widgets::PlotCurve>("SerialStudio", 1, 0, "PlotCurve");
   qmlRegisterType<Widgets::Gauge>("SerialStudio", 1, 0, "GaugeModel");
   qmlRegisterType<Widgets::Compass>("SerialStudio", 1, 0, "CompassModel");
   qmlRegisterType<Widgets::FFTPlot>("SerialStudio", 1, 0, "FFTPlotModel");

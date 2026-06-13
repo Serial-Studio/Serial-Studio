@@ -229,6 +229,7 @@ set(SOURCES
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
   src/UI/Widgets/PlotAreaFill.cpp
+  src/UI/Widgets/PlotCurve.cpp
   src/UI/Widgets/Compass.cpp
   src/UI/Widgets/Bar.cpp
   src/UI/Widgets/Meter.cpp
@@ -350,6 +351,7 @@ set(HEADERS
   src/UI/Widgets/Gauge.h
   src/UI/Widgets/Plot.h
   src/UI/Widgets/PlotAreaFill.h
+  src/UI/Widgets/PlotCurve.h
   src/UI/Widgets/DataGrid.h
   src/UI/Widgets/FFTPlot.h
   src/UI/Widgets/Gyroscope.h

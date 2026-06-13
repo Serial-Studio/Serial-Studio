@@ -108,6 +108,21 @@ function parse(frame) {
 }
 ```
 
+### Binary frame (index the byte array)
+
+With the Binary decoder, `frame` is an `Array` of byte values (0–255), not a
+string — string methods throw (`frame.split is not a function`). Index it
+directly; wrap it in a `DataView` for multi-byte or float fields:
+
+```js
+function parse(frame) {
+  if (frame.length < 6)
+    return [];
+  const view = new DataView(Uint8Array.from(frame).buffer);
+  return [view.getFloat32(0, true), view.getInt16(4, true)];
+}
+```
+
 ### Batched samples (one frame yields N rows)
 
 If your device emits multiple sensor rows per frame, return a 2-D array;

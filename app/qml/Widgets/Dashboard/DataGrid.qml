@@ -45,6 +45,12 @@ Item {
   readonly property bool hasToolbar: root.height >= 220
 
   //
+  // Size-aware font scale: narrow windows shrink row text (and with it the
+  // metrics-driven row heights) so more of the table stays readable
+  //
+  readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(width, 280)
+
+  //
   // Pause/resume binding
   //
   property bool running: true
@@ -60,10 +66,10 @@ Item {
     id: rowFontMetrics
 
     text: "0"
-    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
   }
-  readonly property real rowHeight: Math.max(30, rowFontMetrics.height + 12)
-  readonly property real headerHeight: Math.max(32, rowFontMetrics.height + 14)
+  readonly property real rowHeight: Math.max(Math.round(30 * uiScale), rowFontMetrics.height + 12)
+  readonly property real headerHeight: Math.max(Math.round(32 * uiScale), rowFontMetrics.height + 14)
 
   //
   // Toolbar: Pause/Resume affordance (only when there's room)
@@ -171,7 +177,8 @@ Item {
           Layout.preferredWidth: table.columnWidth
           verticalAlignment: Label.AlignVCenter
           horizontalAlignment: Label.AlignLeft
-          font: Cpp_Misc_CommonFonts.boldUiFont
+          font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                 Cpp_Misc_CommonFonts.customUiFont(root.uiScale, true))
           color: Cpp_ThemeManager.colors["table_fg_header"]
         }
 
@@ -192,7 +199,8 @@ Item {
           Layout.preferredWidth: table.columnWidth
           verticalAlignment: Label.AlignVCenter
           horizontalAlignment: Label.AlignLeft
-          font: Cpp_Misc_CommonFonts.boldUiFont
+          font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                 Cpp_Misc_CommonFonts.customUiFont(root.uiScale, true))
           color: Cpp_ThemeManager.colors["table_fg_header"]
         }
       }
@@ -272,7 +280,8 @@ Item {
               Layout.preferredWidth: table.columnWidth
               verticalAlignment: Label.AlignVCenter
               horizontalAlignment: Label.AlignLeft
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
               color: Cpp_ThemeManager.colors["table_text"]
 
               HoverHandler {
@@ -312,7 +321,8 @@ Item {
               Layout.preferredWidth: table.columnWidth
               verticalAlignment: Label.AlignVCenter
               horizontalAlignment: Label.AlignLeft
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
               color: rowItem.value.length > 0
                      ? Cpp_ThemeManager.colors["table_text"]
                      : Cpp_ThemeManager.colors["placeholder_text"]

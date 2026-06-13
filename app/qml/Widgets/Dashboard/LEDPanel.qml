@@ -72,6 +72,14 @@ Item {
       Repeater {
         model: root.model.count
         delegate: Rectangle {
+          id: cell
+
+          //
+          // Shrink fonts, paddings and the LED dot as the cell narrows so
+          // the labels always fit inside the rectangle
+          //
+          readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(width, 180)
+
           border.width: 1
           Layout.fillWidth: true
           Layout.minimumHeight: 32
@@ -83,13 +91,13 @@ Item {
           RowLayout {
             id: layout
 
-            spacing: 12
             anchors.margins: 4
-            anchors.leftMargin: 24
-            anchors.rightMargin: 12
             anchors.left: parent.left
             anchors.right: parent.right
+            spacing: Math.round(12 * cell.uiScale)
             anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: Math.round(24 * cell.uiScale)
+            anchors.rightMargin: Math.round(12 * cell.uiScale)
 
             Rectangle {
               id: led
@@ -102,8 +110,8 @@ Item {
               property bool flashOn: true
 
               border.width: 1
-              implicitWidth: 18
-              implicitHeight: 18
+              implicitWidth: Math.round(18 * cell.uiScale)
+              implicitHeight: Math.round(18 * cell.uiScale)
               radius: implicitWidth / 2
               Layout.alignment: Qt.AlignVCenter
               border.color: Cpp_ThemeManager.colors["widget_border"]
@@ -128,20 +136,27 @@ Item {
               Layout.alignment: Qt.AlignVCenter
               horizontalAlignment: Label.AlignLeft
               color: Cpp_ThemeManager.colors["widget_text"]
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(cell.uiScale))
 
               Behavior on color {ColorAnimation{}}
             }
 
+            //
+            // Status label: shrinkable (fillWidth + capped maximumWidth) so
+            // narrow cells elide the text instead of overflowing the cell
+            //
             Label {
               elide: Qt.ElideRight
+              Layout.fillWidth: true
               visible: text.length > 0
               text: root.model.labels[index]
               Layout.alignment: Qt.AlignVCenter
               horizontalAlignment: Label.AlignRight
-              Layout.maximumWidth: layout.width * 0.45
+              Layout.maximumWidth: Math.min(implicitWidth, layout.width * 0.45)
               color: led.lit ? led.ledColor : Cpp_ThemeManager.colors["widget_text"]
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(cell.uiScale))
 
               Behavior on color {ColorAnimation{}}
             }

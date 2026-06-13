@@ -31,14 +31,26 @@ QtObject {
                                              SerialStudio.InterpolationZoh,
                                              SerialStudio.InterpolationStem]
 
+  //
+  // Time-axis plots downsample only the visible X window at screen resolution (zoom
+  // narrows the sample scan); other plots keep the zoom-scaled full-range detail.
+  //
   function setDownsampleFactor(plot, model)
   {
     if (!plot || !model)
       return
 
-    const z = plot.zoom
-    model.dataW = plot.plotArea.width * z
-    model.dataH = plot.plotArea.height * z
+    if (plot.timeAxis) {
+      model.dataW = plot.plotArea.width
+      model.dataH = plot.plotArea.height
+      model.setVisibleXWindow(plot.xVisibleMin, plot.xVisibleMax)
+    }
+
+    else {
+      const z = plot.zoom
+      model.dataW = plot.plotArea.width * z
+      model.dataH = plot.plotArea.height * z
+    }
   }
 
   function normalizeInterpolationMode(value)

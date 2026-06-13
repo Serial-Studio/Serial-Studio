@@ -274,12 +274,12 @@ Item {
           }
         }
         MultiEffect {
-          shadowBlur: 0.50
+          shadowBlur: 0.60
           source: chromeShape
           shadowEnabled: true
-          shadowOpacity: 0.28
+          shadowOpacity: 0.15
           shadowColor: "#000000"
-          shadowVerticalOffset: 2
+          shadowVerticalOffset: 1
           anchors.fill: chromeShape
           visible: Cpp_Misc_GraphicsBackend.effectsEnabled
           enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
@@ -299,7 +299,7 @@ Item {
           readonly property real bottomExtension: Math.max(0, meterArea.labelBaseHeight - meterArea.chromeW)
 
           ShapePath {
-            strokeColor: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.25)
+            strokeColor: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.40)
             strokeWidth: 1.5
             capStyle: ShapePath.FlatCap
             joinStyle: ShapePath.RoundJoin
@@ -505,7 +505,7 @@ Item {
               centerY: meterArea.faceCy
               centerRadius: bezelShadow.rOut
               GradientStop { position: bezelShadow.rIn / bezelShadow.rOut; color: "transparent" }
-              GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.15) }
+              GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.10) }
             }
 
             startY: meterArea.faceCy

@@ -166,6 +166,7 @@ public slots:
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
+  void setVisibleXWindow(const double lo, const double hi);
   void setInterpolationMode(SerialStudio::InterpolationMode mode);
 
   void armSweep();
@@ -188,6 +189,7 @@ private slots:
 private:
   void pushSweepConfig();
   void syncStringCurves();
+  void clampToVisibleX(double& lo, double& hi) const;
   [[nodiscard]] bool computeRangeFromDatasets();
   void scanCurvesForRange();
   void padDerivedRange();
@@ -201,6 +203,8 @@ private:
   double m_maxX;
   double m_minY;
   double m_maxY;
+  double m_visLoX;
+  double m_visHiX;
   bool m_timeAxis;
   QString m_yLabel;
   QString m_xLabel;

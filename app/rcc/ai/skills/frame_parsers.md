@@ -199,6 +199,13 @@ reference parsers for these patterns. Adapt the closest match.
 - `parse()` must return an **array** (JS) or **table** (Lua). Returning
   an object / map / `nil` silently fails; the dashboard sees zero
   datasets.
+- A string-shaped parser under `decoderMethod: 3` fails on every frame
+  with Lua `bad argument #1 to 'byte' (string expected, got table)` or
+  JS `frame.split is not a function`. NEVER use `string.byte` /
+  `charCodeAt` / `split` on a Binary frame: index it directly
+  (`frame[1]` Lua, `frame[0]` JS). When Lua `string.unpack` is needed
+  (floats, endian fields), convert once at the top of `parse()`:
+  `if type(frame) == "table" then frame = string.char(table.unpack(frame)) end`.
 - Each return-array index `i` maps to the dataset whose `index` is
   `i + 1`. Off-by-one errors are common; verify with a dryRun first.
 - The string vs binary distinction is set by `decoderMethod`, NOT by

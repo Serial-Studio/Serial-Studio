@@ -105,6 +105,28 @@ The `frame` parameter type depends on the Decoder Method selected in the Project
 
 **Binary (Direct)** passes byte values directly. In Lua, this is a 1-indexed table; in JavaScript, a 0-indexed array. Requires a Pro license.
 
+> **Binary trap:** with Binary (Direct), `frame` is **not a string**, so string functions fail on it. In Lua, `string.byte(frame, 1)` raises `bad argument #1 to 'byte' (string expected, got table)` and `frame:match(...)` raises `attempt to index a table value`; in JavaScript, `frame.split(",")` throws `frame.split is not a function`. Read bytes by indexing (`frame[1]` in Lua, `frame[0]` in JavaScript), as in Example 3 below. When you need `string.unpack` for multi-byte or float fields, convert the table to a string once at the top of `parse()`:
+>
+> ```lua
+> function parse(frame)
+>   if type(frame) == "table" then
+>     frame = string.char(table.unpack(frame))
+>   end
+>   if #frame < 6 then return {} end
+>   return { string.unpack("<f", frame, 1), string.unpack("<i2", frame, 5) }
+> end
+> ```
+>
+> The JavaScript equivalent for multi-byte fields is a `DataView` over the byte array:
+>
+> ```javascript
+> function parse(frame) {
+>     if (frame.length < 6) return [];
+>     var view = new DataView(Uint8Array.from(frame).buffer);
+>     return [view.getFloat32(0, true), view.getInt16(4, true)];
+> }
+> ```
+
 ### Return Value
 
 Must return a table (Lua) or array (JavaScript). The index maps to the dataset Frame Index in your project definition.
@@ -194,7 +216,7 @@ The Lua engine loads a safe subset of the standard library. The following module
 | Module | Key Functions |
 |--------|--------------|
 | **base** | `print`, `type`, `tonumber`, `tostring`, `pairs`, `ipairs`, `select`, `error`, `pcall`, `xpcall`, `assert`, `rawget`, `rawset`, `rawlen`, `rawequal`, `next`, `setmetatable`, `getmetatable` |
-| **string** | `string.byte`, `string.char`, `string.find`, `string.format`, `string.gmatch`, `string.gsub`, `string.len`, `string.lower`, `string.upper`, `string.match`, `string.rep`, `string.reverse`, `string.sub` |
+| **string** | `string.byte`, `string.char`, `string.find`, `string.format`, `string.gmatch`, `string.gsub`, `string.len`, `string.lower`, `string.upper`, `string.match`, `string.pack`, `string.packsize`, `string.rep`, `string.reverse`, `string.sub`, `string.unpack` |
 | **table** | `table.concat`, `table.insert`, `table.remove`, `table.sort`, `table.move`, `table.pack`, `table.unpack` |
 | **math** | `math.abs`, `math.ceil`, `math.floor`, `math.max`, `math.min`, `math.sqrt`, `math.sin`, `math.cos`, `math.tan`, `math.pi`, `math.huge`, `math.log`, `math.exp`, `math.random` |
 | **utf8** | `utf8.char`, `utf8.codes`, `utf8.codepoint`, `utf8.len`, `utf8.offset` |

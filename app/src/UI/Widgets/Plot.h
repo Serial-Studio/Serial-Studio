@@ -137,6 +137,7 @@ public slots:
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
+  void setVisibleXWindow(const double lo, const double hi);
   void setInterpolationMode(SerialStudio::InterpolationMode mode);
 
   void armSweep();
@@ -155,6 +156,7 @@ private slots:
 private:
   void pushSweepConfig();
   void updateInterpolatedData();
+  void clampToVisibleX(double& lo, double& hi) const;
   void resolveXAxis(const DataModel::Dataset& yDataset);
 
   template<typename Extractor>
@@ -175,6 +177,8 @@ private:
   double m_maxX;
   double m_minY;
   double m_maxY;
+  double m_visLoX;
+  double m_visHiX;
   QString m_yLabel;
   QString m_xLabel;
 

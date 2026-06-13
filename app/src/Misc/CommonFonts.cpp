@@ -224,6 +224,22 @@ QFont Misc::CommonFonts::widgetFont(const double fraction, const bool bold) cons
   return font;
 }
 
+/**
+ * @brief Returns the size-aware fraction for widgetFont(): 1.0 while the widget's driving
+ *        dimension is at or above reference, shrinking linearly to a 0.7 readability floor
+ *        below it. Shared by dashboard widgets so small windows tighten uniformly.
+ */
+double Misc::CommonFonts::autoScale(const double size, const double reference) const
+{
+  Q_ASSERT(reference > 0);
+  Q_ASSERT(size >= 0);
+
+  if (reference <= 0)
+    return 1.0;
+
+  return qBound(0.7, size / reference, 1.0);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Font configuration setters
 //--------------------------------------------------------------------------------------------------

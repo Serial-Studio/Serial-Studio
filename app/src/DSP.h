@@ -829,56 +829,109 @@ inline void spanFromFixedQueue(
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Bounds and finite-range result returned by dsScanFiniteRange().
+ * @brief First index in [0, n) whose X value is >= bound. Binary search: X must be
+ *        monotonic non-decreasing (len halves per step, so 64 iterations suffice).
  */
-struct DownsampleBounds {
-  ssfp_t xmin;
-  ssfp_t xmax;
-  ssfp_t ymin;
-  ssfp_t ymax;
-  std::size_t firstFinite;
-  std::size_t lastFinite;
-};
-
-/**
- * @brief Scan ring-buffer spans to compute finite (X,Y) bounds and endpoints.
- */
-template<typename XAt, typename YAt>
-inline DownsampleBounds dsScanFiniteRange(std::size_t n, XAt xAt, YAt yAt)
+template<typename XAt>
+[[nodiscard]] inline std::size_t dsLowerBound(std::size_t n, XAt xAt, const ssfp_t bound)
 {
-  DownsampleBounds b;
-  b.firstFinite = n;
-  b.lastFinite  = n;
-  b.xmin        = std::numeric_limits<ssfp_t>::infinity();
-  b.ymin        = std::numeric_limits<ssfp_t>::infinity();
-  b.xmax        = -std::numeric_limits<ssfp_t>::infinity();
-  b.ymax        = -std::numeric_limits<ssfp_t>::infinity();
+  std::size_t lo  = 0;
+  std::size_t len = n;
+  for (int step = 0; step < 64 && len > 0; ++step) {
+    const std::size_t half = len / 2;
+    const std::size_t mid  = lo + half;
+    if (xAt(mid) < bound) {
+      lo  = mid + 1;
+      len = len - half - 1;
+    }
 
-  for (std::size_t i = 0; i < n; ++i) {
-    const ssfp_t xv = xAt(i);
-    const ssfp_t yv = yAt(i);
-    if (!std::isfinite(xv) || !std::isfinite(yv))
-      continue;
-
-    if (xv < b.xmin)
-      b.xmin = xv;
-
-    if (xv > b.xmax)
-      b.xmax = xv;
-
-    if (yv < b.ymin)
-      b.ymin = yv;
-
-    if (yv > b.ymax)
-      b.ymax = yv;
-
-    if (b.firstFinite == n)
-      b.firstFinite = i;
-
-    b.lastFinite = i;
+    else
+      len = half;
   }
 
-  return b;
+  return lo;
+}
+
+/**
+ * @brief First index in [0, n) whose X value is > bound. Binary search: X must be
+ *        monotonic non-decreasing (len halves per step, so 64 iterations suffice).
+ */
+template<typename XAt>
+[[nodiscard]] inline std::size_t dsUpperBound(std::size_t n, XAt xAt, const ssfp_t bound)
+{
+  std::size_t lo  = 0;
+  std::size_t len = n;
+  for (int step = 0; step < 64 && len > 0; ++step) {
+    const std::size_t half = len / 2;
+    const std::size_t mid  = lo + half;
+    if (xAt(mid) <= bound) {
+      lo  = mid + 1;
+      len = len - half - 1;
+    }
+
+    else
+      len = half;
+  }
+
+  return lo;
+}
+
+/**
+ * @brief Finds the first and last indices whose (X, Y) pair is fully finite. Returns
+ *        false when no finite pair exists. O(1) for clean data, O(n) worst case.
+ */
+template<typename XAt, typename YAt>
+[[nodiscard]] inline bool dsFiniteEnds(
+  std::size_t n, XAt xAt, YAt yAt, std::size_t& first, std::size_t& last)
+{
+  first = n;
+  for (std::size_t i = 0; i < n; ++i) {
+    if (std::isfinite(xAt(i)) && std::isfinite(yAt(i))) {
+      first = i;
+      break;
+    }
+  }
+
+  if (first == n)
+    return false;
+
+  last = first;
+  for (std::size_t i = n; i > first; --i) {
+    if (std::isfinite(xAt(i - 1)) && std::isfinite(yAt(i - 1))) {
+      last = i - 1;
+      break;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * @brief Extracts the global Y bounds from the filled workspace columns (O(columns),
+ *        replacing a second full pass over the samples). Returns false when no column
+ *        received a finite sample.
+ */
+[[nodiscard]] inline bool dsColumnYBounds(const DownsampleWorkspace* ws,
+                                          std::size_t C,
+                                          ssfp_t& ymin,
+                                          ssfp_t& ymax)
+{
+  Q_ASSERT(ws != nullptr);
+  Q_ASSERT(ws->cnt.size() >= C);
+
+  bool any = false;
+  ymin     = std::numeric_limits<ssfp_t>::infinity();
+  ymax     = -std::numeric_limits<ssfp_t>::infinity();
+  for (std::size_t c = 0; c < C; ++c) {
+    if (ws->cnt[c] == 0)
+      continue;
+
+    any  = true;
+    ymin = std::min(ymin, ws->minY[c]);
+    ymax = std::max(ymax, ws->maxY[c]);
+  }
+
+  return any;
 }
 
 /**
@@ -1005,6 +1058,9 @@ inline void dsEmitColumnPoints(std::size_t c,
 
 /**
  * @brief Downsample a 2D series (X,Y) into screen-space pixels, preserving extremes.
+ *        X must be monotonic non-decreasing: the X bounds come from the finite
+ *        endpoints and the Y bounds from the filled columns, so the samples are
+ *        walked once (bucket accumulation) instead of twice.
  */
 inline bool downsampleMonotonic(
   const AxisData& X, const AxisData& Y, int w, int h, QList<QPointF>& out, DownsampleWorkspace* ws)
@@ -1026,22 +1082,30 @@ inline bool downsampleMonotonic(
     return (i < yn0) ? yp0[i] : yp1[i - yn0];
   };
 
-  const DownsampleBounds b = dsScanFiniteRange(n, xAt, yAt);
-  if (b.firstFinite == n)
+  std::size_t firstFinite = 0;
+  std::size_t lastFinite  = 0;
+  if (!dsFiniteEnds(n, xAt, yAt, firstFinite, lastFinite))
     return false;
 
-  if (!(b.xmin < b.xmax)) {
-    dsEmitSteppedFallback(n, w, b.firstFinite, b.lastFinite, xAt, yAt, out);
+  const ssfp_t xmin = xAt(firstFinite);
+  const ssfp_t xmax = xAt(lastFinite);
+  if (!(xmin < xmax)) {
+    dsEmitSteppedFallback(n, w, firstFinite, lastFinite, xAt, yAt, out);
     return true;
   }
 
   const std::size_t C = std::size_t(w);
   ws->reset(C);
 
-  const auto scaleX = static_cast<ssfp_t>(w - 1) / std::max(1e-12, b.xmax - b.xmin);
-  const auto scaleY = static_cast<ssfp_t>(h) / std::max(1e-12, b.ymax - b.ymin);
+  const auto scaleX = static_cast<ssfp_t>(w - 1) / std::max(1e-12, xmax - xmin);
+  dsAccumulateBuckets(n, w, xmin, scaleX, xAt, yAt, ws);
 
-  dsAccumulateBuckets(n, w, b.xmin, scaleX, xAt, yAt, ws);
+  ssfp_t ymin = 0;
+  ssfp_t ymax = 0;
+  if (!dsColumnYBounds(ws, C, ymin, ymax))
+    return false;
+
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max(1e-12, ymax - ymin);
 
   out.reserve(w * 3 / 2 + 8);
   for (std::size_t c = 0; c < C; ++c) {
@@ -1064,10 +1128,10 @@ inline bool downsampleMonotonic(
 }
 
 /**
- * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render columns.
- *        Times are rebased so the newest sample sits at 0 (axis [-T, 0]); the linear span
- *        scan requires monotonic time. Buckets sit on an absolute column-width lattice:
- *        a newest-anchored grid re-bucketed every render and shimmered like heat haze.
+ * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render
+ *        columns. Times rebase so the newest sample sits at 0 (axis [-T, 0]); monotonic
+ *        time resolves the window as two binary searches and the slice is walked once.
+ *        Buckets sit on an absolute newest-anchored column-width lattice (shimmer fix).
  */
 inline bool downsampleTimeWindow(const AxisData& timeX,
                                  const AxisData& valueY,
@@ -1100,13 +1164,8 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
     return xAbs(i) - newest;
   };
 
-  std::size_t lo = 0;
-  while (lo < n && tRel(lo) < xLo)
-    ++lo;
-
-  std::size_t hi = lo;
-  while (hi < n && tRel(hi) <= xHi)
-    ++hi;
+  const std::size_t lo = dsLowerBound(n, xAbs, xLo + newest);
+  const std::size_t hi = dsUpperBound(n, xAbs, xHi + newest);
 
   const std::size_t visible = (hi > lo) ? (hi - lo) : 0;
   if (visible == 0)
@@ -1131,13 +1190,14 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
     return tRel(lo + i) + anchorShift;
   };
 
-  const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);
-  if (b.firstFinite == visible)
+  dsAccumulateBuckets(visible, w, xLo, scaleX, xBkt, yWin, ws);
+
+  ssfp_t ymin = 0;
+  ssfp_t ymax = 0;
+  if (!dsColumnYBounds(ws, C, ymin, ymax))
     return false;
 
-  const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, b.ymax - b.ymin);
-
-  dsAccumulateBuckets(visible, w, xLo, scaleX, xBkt, yWin, ws);
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, ymax - ymin);
 
   out.reserve(w * 3 / 2 + 8);
   for (std::size_t c = 0; c < C; ++c) {
@@ -1152,8 +1212,9 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
 
 /**
  * @brief Decimate the [xLo, xHi] slice of a ring whose times are already window-relative.
- *        The forward linear scan that finds the visible span is correct only because the
- *        sweep time is monotonic non-decreasing.
+ *        Monotonic non-decreasing sweep time lets the visible span resolve as two binary
+ *        searches; the slice is walked once (bucket accumulation; Y bounds come from the
+ *        filled columns).
  */
 inline bool downsampleWindowAbsolute(const AxisData& timeX,
                                      const AxisData& valueY,
@@ -1181,13 +1242,8 @@ inline bool downsampleWindowAbsolute(const AxisData& timeX,
     return (i < yn0) ? yp0[i] : yp1[i - yn0];
   };
 
-  std::size_t lo = 0;
-  while (lo < n && xAbs(lo) < xLo)
-    ++lo;
-
-  std::size_t hi = lo;
-  while (hi < n && xAbs(hi) <= xHi)
-    ++hi;
+  const std::size_t lo = dsLowerBound(n, xAbs, xLo);
+  const std::size_t hi = dsUpperBound(n, xAbs, xHi);
 
   const std::size_t visible = (hi > lo) ? (hi - lo) : 0;
   if (visible == 0)
@@ -1203,15 +1259,17 @@ inline bool downsampleWindowAbsolute(const AxisData& timeX,
   const std::size_t C = std::size_t(w);
   ws->reset(C);
 
-  const ssfp_t span        = std::max<ssfp_t>(1e-12, xHi - xLo);
-  const auto scaleX        = static_cast<ssfp_t>(w - 1) / span;
-  const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);
-  if (b.firstFinite == visible)
-    return false;
-
-  const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, b.ymax - b.ymin);
+  const ssfp_t span = std::max<ssfp_t>(1e-12, xHi - xLo);
+  const auto scaleX = static_cast<ssfp_t>(w - 1) / span;
 
   dsAccumulateBuckets(visible, w, xLo, scaleX, xWin, yWin, ws);
+
+  ssfp_t ymin = 0;
+  ssfp_t ymax = 0;
+  if (!dsColumnYBounds(ws, C, ymin, ymax))
+    return false;
+
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, ymax - ymin);
 
   out.reserve(w * 3 / 2 + 8);
   for (std::size_t c = 0; c < C; ++c) {

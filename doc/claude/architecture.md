@@ -471,6 +471,36 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   + `timeUnitFactor`/`timeUnitName`): the title and ticks switch between `s` / `ms` / `us` from
   the span, so e.g. a 10 ms window reads `Time (ms)` with `10 8 6 4 2 0`. Dataset-X plots, FFT,
   GPS, 3D keep the raw-ring + downsample path.
+- **Downsampler cost model** (`DSP.h`): all three downsamplers (`downsampleMonotonic`,
+  `downsampleTimeWindow`, `downsampleWindowAbsolute`) are single-pass — the visible span resolves
+  via `dsLowerBound`/`dsUpperBound` binary searches (monotonic X/time is a hard precondition,
+  including for `downsampleMonotonic`'s endpoint-derived X bounds), the bucket accumulation is the
+  only walk over the samples, and the Y bounds come from the filled columns (`dsColumnYBounds`,
+  O(columns)). **Visible-window push**: `PlotCommon.setDownsampleFactor` differentiates — time-axis
+  plots get `dataW = plotArea.width` (no zoom multiplier) plus `model.setVisibleXWindow(xVisibleMin,
+  xVisibleMax)` (re-pushed from `onXVisibleMinChanged`, so pan updates it too), and the models
+  intersect it with the full range (`clampToVisibleX`) before downsampling — zooming in *narrows*
+  the binary-searched sample scan instead of re-bucketing the full range at zoom resolution.
+  Non-time plots (FFT, dataset-X, samples-axis) keep `dataW = width * zoom`. Draw cadence is
+  `TimerEvents::uiTimeout` — 60 Hz default, user-configurable 1-240 (`uiRefreshRate` setting), so
+  per-draw costs scale with that, not a fixed rate.
+- **GPU curve rendering** (`Widgets::PlotCurve`): Plot, FFT, and MultiPlot curves render through a
+  custom scene-graph item (independent per-segment quads, 8 verts + 18 indices per visible segment,
+  each extruded along its own perpendicular — shared join cross-sections collapse to hairlines on
+  near-reversals — with a 1 px feather band straddling the stroke edge for AA without MSAA) instead
+  of QtGraphs `LineSeries` — the
+  QtGraphs `PointRenderer` strokes through `QQuickShape`/`QPainterPath`, re-triangulating on the
+  CPU every update, which stalled on audio-rate curves. The `LineSeries` objects remain as pure
+  **data carriers** (the models still `draw()` into them; `PlotCurve.source` follows the series'
+  `update()` signal) but are **never added to the graph**; only the `ScatterSeries` stay in the
+  `GraphsView` (interpolation None + axis anchoring). `PlotCurve` items live in
+  `PlotWidget.curveLayer` (a clipped item tracking the plot area, above `PlotAreaFill`, below the
+  crosshair overlay) and map world coordinates with the same visible-window transform as the
+  cursors. Offscreen stretches are culled by per-segment X-interval overlap, so zoomed series cost
+  the visible slice; NaNs break the ribbon into runs (true gaps). MultiPlot instantiates one
+  `PlotCurve` per curve with an inline carrier (`source: LineSeries {}`), and its `onUiTimeout`
+  loop draws the carriers from the `_curves` Instantiator (graph `seriesList` now only holds
+  scatter).
 - **Plot Time Range**: `Dashboard::plotTimeRange` (seconds, default 10, **1 ms min**) is the ring
   window `T`; `setPlotTimeRange` rebuilds each `TimeRing` at the new capacity (configurePlot /
   configureMultiPlot in `Dashboard.cpp`). **Per-project, mirroring `pointCount`**: in ProjectFile
@@ -489,14 +519,22 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 - **AxisRangeDialog** hides its X section for time plots (`timeAxis` from the widget model); the manual
   X min/max is meaningless when X is the Time Range. Y range stays editable.
 - **Area-under-plot fill** (`Widgets::PlotAreaFill`, driven via `PlotWidget.qml`'s `areaFillSource` /
-  `areaFillBaseline` / `areaFillColor`): one GPU triangle strip with per-vertex alpha (0.04 at the
-  baseline, 0.40 at the data's per-sign extreme — the gradient anchors to the data, not the axis range),
-  overlaid on the GraphsView plot area and tracking `xVisibleMin`/`yVisibleMin` under zoom/pan. It
-  replaced the QtGraphs `AreaSeries` (whose per-tick CPU shape re-triangulation stalled audio-rate
-  curves) and the bipolar `drawClamped` split series. Baseline rules: Plot = 0 when bipolar, `maxY`
-  when all-negative (inverted mountain), else `minY`; FFT always uses `minY` (floor). The fill renders
-  above the curve stroke (same hue, no visible difference) and below the crosshair overlay; it follows
-  the curve series' `update()` signal, so paused plots freeze it for free.
+  `areaFillBaseline` / `areaFillColor`): the curve is rasterized into per-pixel-column min/max
+  envelopes (one O(points) pass; segments bridge every column they cross, clipped to the visible
+  window with a `kMaxBridgedColumns` budget for non-monotonic curves), then emitted as one
+  degenerate-stitched GPU triangle strip with a peak quad above and a valley quad below the baseline
+  per column. Geometry is O(item width), independent of point density — a zoomed audio-rate series
+  costs the same as a sparse one — and columns are watertight (the old per-point strip self-crossed
+  into bowtie quads at every baseline crossing, washing out dense bipolar fills). Per-vertex alpha:
+  0.12 at the baseline, 0.50 at the data's per-sign extreme (gradient anchors to the data, not the
+  axis range); the fill color is a saturation-deepened (`1-(1-s)^2`, hue-preserving) variant of the
+  curve color so pastel themes stay vivid. Overlaid on the GraphsView plot area, tracking
+  `xVisibleMin`/`yVisibleMin` under zoom/pan. It replaced the QtGraphs `AreaSeries` (whose per-tick
+  CPU shape re-triangulation stalled audio-rate curves) and the bipolar `drawClamped` split series.
+  Baseline rules: Plot = 0 when bipolar, `maxY` when all-negative (inverted mountain), else `minY`;
+  FFT always uses `minY` (floor). NaN samples break the column run and leave a real gap. The fill
+  renders above the curve stroke and below the crosshair overlay; it follows the curve series'
+  `update()` signal, so paused plots freeze it for free.
 - **Plot Sweep / Trigger mode (Pro)**: oscilloscope sweep for **time-axis** Plot/MultiPlot. `DSP::SweepEngine`
   (`DSP.h`) owns a front/back decimating `TimeRing` per curve; `advance(now, trigValue)` runs on the hotpath
   (alloc-free), detects a level+edge crossing (interpolated `t0`), honors holdoff + Auto/Normal/Single, and

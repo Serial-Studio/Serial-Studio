@@ -111,7 +111,7 @@ Item {
   }
 
   //
-  // Update curve at 24 Hz
+  // Update curve at the UI refresh rate (60 Hz default, Settings-configurable)
   //
   Connections {
     target: Cpp_Misc_TimerEvents
@@ -301,10 +301,7 @@ Item {
     onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
     onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
 
-    Component.onCompleted: {
-      graph.addSeries(upperSeries)
-      graph.addSeries(scatterSeries)
-    }
+    Component.onCompleted: graph.addSeries(scatterSeries)
 
     ScatterSeries {
       id: scatterSeries
@@ -318,10 +315,24 @@ Item {
       }
     }
 
+    //
+    // Data carrier only (never added to the graph): the model draws into it and
+    // the GPU PlotCurve below renders it
+    //
     LineSeries {
       id: upperSeries
+    }
 
-      width: 2
+    PlotCurve {
+      lineWidth: 2
+      color: root.color
+      source: upperSeries
+      anchors.fill: parent
+      xMin: plot.xVisibleMin
+      xMax: plot.xVisibleMax
+      yMin: plot.yVisibleMin
+      yMax: plot.yVisibleMax
+      parent: plot.curveLayer
       visible: root.interpolationMode !== SerialStudio.InterpolationNone
     }
   }

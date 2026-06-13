@@ -130,6 +130,20 @@ function parse(frame)
 end
 ```
 
+`string.unpack` (floats, multi-byte integers, endianness) needs a string —
+convert the table once at the top of `parse()` (one small allocation per
+frame; frames are short):
+
+```lua
+function parse(frame)
+  if type(frame) == "table" then
+    frame = string.char(table.unpack(frame))
+  end
+  if #frame < 6 then return {} end
+  return { string.unpack("<f", frame, 1), string.unpack("<i2", frame, 5) }
+end
+```
+
 ## Device output: `deviceWrite()`
 
 ```lua

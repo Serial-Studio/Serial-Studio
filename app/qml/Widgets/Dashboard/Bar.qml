@@ -178,11 +178,11 @@ Item {
             color: Cpp_ThemeManager.colors["widget_base"]
           }
           MultiEffect {
-            shadowBlur: 0.45
+            shadowBlur: 0.55
             shadowEnabled: true
-            shadowOpacity: 0.25
+            shadowOpacity: 0.13
             shadowColor: "#000000"
-            shadowVerticalOffset: 2
+            shadowVerticalOffset: 1
             source: progressBarShadowSrc
             anchors.fill: progressBarShadowSrc
             visible: Cpp_Misc_GraphicsBackend.effectsEnabled

@@ -28,16 +28,15 @@
 #include <QQuickItem>
 #include <QSGGeometry>
 #include <QXYSeries>
-#include <vector>
 
 namespace Widgets {
 /**
- * @brief GPU area-under-curve fill: rasterizes the curve into per-pixel-column min/max
- *        envelopes, rendered as one baseline-anchored column pair per filled column in
- *        a single per-vertex-gradient triangle strip. Geometry is O(item width), not
- *        O(points), so audio-rate curves cost the same as sparse ones.
+ * @brief GPU polyline for plot curves: renders a curve series as independent
+ *        per-segment quads with per-vertex feathered edges (anti-aliasing without
+ *        MSAA), built directly on the scene graph. Replaces the QtGraphs LineSeries
+ *        stroke, which re-triangulates a QQuickShape path on the CPU every update.
  */
-class PlotAreaFill : public QQuickItem {
+class PlotCurve : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QXYSeries* source
@@ -48,10 +47,10 @@ class PlotAreaFill : public QQuickItem {
              READ color
              WRITE setColor
              NOTIFY colorChanged)
-  Q_PROPERTY(double baselineValue
-             READ baselineValue
-             WRITE setBaselineValue
-             NOTIFY rangeChanged)
+  Q_PROPERTY(double lineWidth
+             READ lineWidth
+             WRITE setLineWidth
+             NOTIFY lineWidthChanged)
   Q_PROPERTY(double xMin
              READ xMin
              WRITE setXMin
@@ -74,13 +73,14 @@ signals:
   void rangeChanged();
   void colorChanged();
   void sourceChanged();
+  void lineWidthChanged();
 
 public:
-  explicit PlotAreaFill(QQuickItem* parent = nullptr);
+  explicit PlotCurve(QQuickItem* parent = nullptr);
 
   [[nodiscard]] QXYSeries* source() const noexcept;
   [[nodiscard]] const QColor& color() const noexcept;
-  [[nodiscard]] double baselineValue() const noexcept;
+  [[nodiscard]] double lineWidth() const noexcept;
   [[nodiscard]] double xMin() const noexcept;
   [[nodiscard]] double xMax() const noexcept;
   [[nodiscard]] double yMin() const noexcept;
@@ -89,7 +89,7 @@ public:
 public slots:
   void setSource(QXYSeries* series);
   void setColor(const QColor& color);
-  void setBaselineValue(const double value);
+  void setLineWidth(const double width);
   void setXMin(const double value);
   void setXMax(const double value);
   void setYMin(const double value);
@@ -99,36 +99,30 @@ protected:
   QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data) override;
 
 private:
-  [[nodiscard]] static QColor vividFillColor(const QColor& color);
-
-  void accumulatePoint(const int col, const double y);
-  [[nodiscard]] int scanColumns(double& refPositive, double& refNegative) const;
-  void accumulateColumns(const QList<QPointF>& points, const int cols, const double w);
-  void bridgeSegment(const double px0,
-                     const double y0,
-                     const double px1,
-                     const double y1,
-                     const double w,
-                     const int cols,
-                     int& budget);
-  void emitColumns(QSGGeometry::ColoredPoint2D* vertices,
-                   const int vertexCount,
-                   const double w,
-                   const double h,
-                   const double refPositive,
-                   const double refNegative) const;
+  [[nodiscard]] bool segmentVisible(const QPointF* pts,
+                                    const qsizetype count,
+                                    const qsizetype i) const;
+  void countRibbon(const QPointF* pts,
+                   const qsizetype count,
+                   int& vertexCount,
+                   int& indexCount) const;
+  void emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
+                  quint32* indices,
+                  const int vertexCount,
+                  const int indexCount,
+                  const QPointF* pts,
+                  const qsizetype count,
+                  const double w,
+                  const double h) const;
 
 private:
   QColor m_color;
-  QColor m_fillColor;
-  double m_baseline;
+  double m_lineWidth;
   double m_xMin;
   double m_xMax;
   double m_yMin;
   double m_yMax;
 
-  std::vector<double> m_colMin;
-  std::vector<double> m_colMax;
   QPointer<QXYSeries> m_source;
   QMetaObject::Connection m_sourceConnection;
 };

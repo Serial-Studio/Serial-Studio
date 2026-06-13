@@ -52,6 +52,11 @@ Item {
   property int interpolationMode: SerialStudio.InterpolationLinear
 
   //
+  // Size-aware font scale: shrinks legend text as the window gets small
+  //
+  readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(Math.min(width, height), 260)
+
+  //
   // User-controlled visibility preferences (persisted, ANDed with size thresholds)
   //
   property bool userShowXLabel: true
@@ -206,24 +211,45 @@ Item {
   }
 
   //
-  // Update widget at 24 Hz
+  // Re-downsamples the visible window and redraws every curve; zoom/pan call it via
+  // Qt.callLater because updateData() emits rangeChanged (binding loop if synchronous)
+  //
+  function redrawCurves() {
+    if (!root.visible)
+      return
+
+    plotCommon.setDownsampleFactor(plot, model)
+    root.model.updateData()
+
+    const count = plot.graph.seriesList.length
+    for (let i = 0; i < count; ++i) {
+      let ptr = plot.graph.seriesList[i]
+      if (ptr.curveVisible)
+        root.model.draw(ptr, ptr.curveIndex)
+      else
+        ptr.clear()
+    }
+
+    for (let i = 0; i < _curves.count; ++i) {
+      const curve = _curves.objectAt(i)
+      if (!curve)
+        continue
+
+      if (curve.curveVisible)
+        root.model.draw(curve.source, curve.curveIndex)
+      else if (curve.source.count > 0)
+        curve.source.clear()
+    }
+  }
+
+  //
+  // Update widget at the UI refresh rate (60 Hz default, Settings-configurable)
   //
   Connections {
     target: Cpp_Misc_TimerEvents
 
     function onUiTimeout() {
-      if (root.visible) {
-        root.model.updateData()
-
-        const count = plot.graph.seriesList.length
-        for (let i = 0; i < count; ++i) {
-          let ptr = plot.graph.seriesList[i]
-          if (ptr.curveVisible)
-            root.model.draw(ptr, ptr.curveIndex)
-          else
-            ptr.clear()
-        }
-      }
+      root.redrawCurves()
     }
   }
 
@@ -416,7 +442,8 @@ Item {
       xAxis.tickInterval: plot.xTickInterval
       yAxis.tickInterval: plot.yTickInterval
 
-      onZoomChanged: plotCommon.setDownsampleFactor(plot, model)
+      onZoomChanged: Qt.callLater(root.redrawCurves)
+      onXVisibleMinChanged: Qt.callLater(root.redrawCurves)
       onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
       onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
       onTriggerLevelChangeRequested: (level) => {
@@ -425,15 +452,27 @@ Item {
       }
 
       //
-      // Register line series
+      // GPU curves, each owning its data-carrier series (never added to the graph:
+      // the model draws into the carrier and PlotCurve renders it)
       //
       Instantiator {
+        id: _curves
+
         model: root.model.count
-        delegate: LineSeries {
+        delegate: PlotCurve {
+          parent: plot.curveLayer
+          anchors.fill: parent
+          lineWidth: 2
+          source: LineSeries {}
+          color: root.model.colors[index]
+          xMin: plot.xVisibleMin
+          xMax: plot.xVisibleMax
+          yMin: plot.yVisibleMin
+          yMax: plot.yVisibleMax
+          visible: curveVisible
           property int curveIndex: index
           property bool curveVisible: root.interpolationMode !== SerialStudio.InterpolationNone
                                      && root.model.visibleCurves[index]
-          Component.onCompleted: plot.graph.addSeries(this)
         }
       }
 
@@ -509,7 +548,8 @@ Item {
                 checked: root.model.visibleCurves[index]
                 palette.highlight: root.model.colors[index]
                 palette.text: Cpp_ThemeManager.colors["widget_text"]
-                font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
+                font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                       Cpp_Misc_CommonFonts.widgetFont(0.8 * root.uiScale))
               }
             }
           }

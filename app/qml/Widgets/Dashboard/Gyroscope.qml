@@ -51,6 +51,11 @@ Item {
   property real pitchAngle: root.model.pitch
 
   //
+  // Size-aware font scale: shrinks widget text as the window gets small
+  //
+  readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(Math.min(width, height), 260)
+
+  //
   // Spring followers track moving targets continuously like a real instrument; roll
   // feeds an unbounded accumulator so 179 -> -179 takes the short way around.
   //
@@ -404,14 +409,16 @@ Item {
               color: "#ffffff"
               text: qsTr("ROLL ↔")
               anchors.horizontalCenter: parent.horizontalCenter
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
             }
 
             Text {
               color: "#ffffff"
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.rollAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
             }
           }
         }
@@ -432,14 +439,16 @@ Item {
               color: "#ffffff"
               text: qsTr("YAW ↻")
               anchors.horizontalCenter: parent.horizontalCenter
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
             }
 
             Text {
               color: "#ffffff"
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.yawAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
             }
           }
         }
@@ -460,14 +469,16 @@ Item {
               color: "#ffffff"
               text: qsTr("PITCH ↕")
               anchors.horizontalCenter: parent.horizontalCenter
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
             }
 
             Text {
               color: "#ffffff"
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.pitchAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
             }
           }
         }

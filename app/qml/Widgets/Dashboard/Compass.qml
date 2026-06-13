@@ -146,12 +146,12 @@ Item {
           }
         }
         MultiEffect {
-          shadowBlur: 0.50
+          shadowBlur: 0.60
           source: chromeRing
           shadowEnabled: true
-          shadowOpacity: 0.28
+          shadowOpacity: 0.15
           shadowColor: "#000000"
-          shadowVerticalOffset: 2
+          shadowVerticalOffset: 1
           anchors.fill: chromeRing
           visible: Cpp_Misc_GraphicsBackend.effectsEnabled
           enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
@@ -178,12 +178,12 @@ Item {
           Rectangle {
             id: gaugeInnerFace
 
-            border.width: 1
+            border.width: 1.5
             radius: width / 2
             antialiasing: true
             anchors.fill: parent
             anchors.margins: parent.border.width
-            border.color: Qt.rgba(0, 0, 0, 0.22)
+            border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.40)
             gradient: Gradient {
               GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.18) }
               GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.06) }
@@ -273,7 +273,7 @@ Item {
 
             readonly property real cx: width / 2
             readonly property real cy: height / 2
-            readonly property real rOut: width / 2 - gaugeFace.border.width
+            readonly property real rOut: width / 2 - gaugeFace.border.width - 1.5
             readonly property real rIn: bezelShadow.rOut - Math.max(5, width * 0.05)
 
             ShapePath {
@@ -287,7 +287,7 @@ Item {
                 centerY: bezelShadow.cy
                 centerRadius: bezelShadow.rOut
                 GradientStop { position: bezelShadow.rIn / bezelShadow.rOut; color: "transparent" }
-                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.15) }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.10) }
               }
 
               startY: bezelShadow.cy

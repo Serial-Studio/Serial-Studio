@@ -50,7 +50,7 @@ Item {
   //
   // Custom properties
   //
-  property bool showAreaUnderPlot: false
+  property bool showAreaUnderPlot: true
   property int interpolationMode: SerialStudio.InterpolationLinear
 
   //
@@ -213,18 +213,28 @@ Item {
   }
 
   //
-  // Update curve at 24 Hz
+  // Re-downsamples the visible window and redraws the active series; zoom/pan call it
+  // via Qt.callLater because draw() emits rangeChanged (binding loop if synchronous)
+  //
+  function redrawCurves() {
+    if (!root.visible || !root.model)
+      return
+
+    plotCommon.setDownsampleFactor(plot, model)
+    if (root.interpolationMode === SerialStudio.InterpolationNone)
+      root.model.draw(scatterSeries)
+    else
+      root.model.draw(upperSeries)
+  }
+
+  //
+  // Update curve at the UI refresh rate (60 Hz default, Settings-configurable)
   //
   Connections {
     target: Cpp_Misc_TimerEvents
 
     function onUiTimeout() {
-      if (root.visible && root.model) {
-        if (root.interpolationMode === SerialStudio.InterpolationNone)
-          root.model.draw(scatterSeries)
-        else
-          root.model.draw(upperSeries)
-      }
+      root.redrawCurves()
     }
   }
 
@@ -425,7 +435,8 @@ Item {
     areaFillBaseline: root.areaFillBaseline
     areaFillSource: root.areaFillVisible ? upperSeries : null
 
-    onZoomChanged: plotCommon.setDownsampleFactor(plot, model)
+    onZoomChanged: Qt.callLater(root.redrawCurves)
+    onXVisibleMinChanged: Qt.callLater(root.redrawCurves)
     onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
     onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
     onTriggerLevelChangeRequested: (level) => {
@@ -440,10 +451,7 @@ Item {
       }
     }
 
-    Component.onCompleted: {
-      graph.addSeries(upperSeries)
-      graph.addSeries(scatterSeries)
-    }
+    Component.onCompleted: graph.addSeries(scatterSeries)
 
     ScatterSeries {
       id: scatterSeries
@@ -457,10 +465,24 @@ Item {
       }
     }
 
+    //
+    // Data carrier only (never added to the graph): the model draws into it and
+    // the GPU PlotCurve below renders it
+    //
     LineSeries {
       id: upperSeries
+    }
 
-      width: 2
+    PlotCurve {
+      lineWidth: 2
+      color: root.color
+      source: upperSeries
+      anchors.fill: parent
+      xMin: plot.xVisibleMin
+      xMax: plot.xVisibleMax
+      yMin: plot.yVisibleMin
+      yMax: plot.yVisibleMax
+      parent: plot.curveLayer
       visible: root.interpolationMode !== SerialStudio.InterpolationNone
     }
   }
