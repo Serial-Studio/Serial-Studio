@@ -317,11 +317,15 @@ Item {
     }
 
     //
-    // Action cards stack below the frame-parser column with TX arrows back to the device.
+    // Stack floor: clear the group y-cursor AND the frame-parser cards (same colFP
+    // column), so the stack never overlaps the parser even with zero groups.
     //
     let blockCursor = pad
     for (const sid in groupY)
       blockCursor = Math.max(blockCursor, groupY[sid])
+
+    for (const sid in fpNodeY)
+      blockCursor = Math.max(blockCursor, fpNodeY[sid] + nodeH)
 
     if (actions.length > 0) {
       const actBlockTop = blockCursor + vGap * 2
