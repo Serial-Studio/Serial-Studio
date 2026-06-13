@@ -59,6 +59,7 @@ Item {
   //
   readonly property bool bipolarRange: root.model && root.model.minY < 0 && root.model.maxY > 0
   readonly property bool areaFillVisible: root.showAreaUnderPlot
+       && !(root.model && root.model.xyPlot)
        && root.interpolationMode !== SerialStudio.InterpolationNone
        && root.interpolationMode !== SerialStudio.InterpolationStem
   readonly property real areaFillBaseline: {
@@ -217,7 +218,7 @@ Item {
   // via Qt.callLater because draw() emits rangeChanged (binding loop if synchronous)
   //
   function redrawCurves() {
-    if (!root.visible || !root.model)
+    if (!root.visible || !root.model || !plotCommon)
       return
 
     plotCommon.setDownsampleFactor(plot, model)
@@ -225,6 +226,15 @@ Item {
       root.model.draw(scatterSeries)
     else
       root.model.draw(upperSeries)
+  }
+
+  //
+  // Guards the plotCommon call so geometry signals firing during teardown (anchors
+  // detaching) don't dereference the child QtObject after its context is invalid
+  //
+  function setDownsample() {
+    if (root.model && plotCommon)
+      plotCommon.setDownsampleFactor(plot, model)
   }
 
   //
@@ -286,6 +296,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       checked: root.showAreaUnderPlot
       ToolTip.text: qsTr("Show Area Under Plot")
+      visible: !(root.model && root.model.xyPlot)
       icon.source: "qrc:/icons/dashboard-buttons/area.svg"
       enabled: plotCommon.canShowAreaUnderPlot(root.interpolationMode)
     }
@@ -437,8 +448,8 @@ Item {
 
     onZoomChanged: Qt.callLater(root.redrawCurves)
     onXVisibleMinChanged: Qt.callLater(root.redrawCurves)
-    onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
-    onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
+    onWidthChanged: root.setDownsample()
+    onHeightChanged: root.setDownsample()
     onTriggerLevelChangeRequested: (level) => {
       if (root.model)
         root.model.triggerLevel = level

@@ -104,6 +104,15 @@ Item {
   }
 
   //
+  // Guards the plotCommon call so geometry/zoom signals firing during teardown (anchors
+  // detaching) don't dereference the child QtObject after its context is invalid
+  //
+  function setDownsample() {
+    if (root.model && plotCommon)
+      plotCommon.setDownsampleFactor(plot, model)
+  }
+
+  //
   // Axis range configuration dialog
   //
   Dialogs.AxisRangeDialog {
@@ -297,9 +306,9 @@ Item {
          && root.interpolationMode !== SerialStudio.InterpolationStem
                     ? upperSeries : null
 
-    onZoomChanged: plotCommon.setDownsampleFactor(plot, model)
-    onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
-    onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
+    onZoomChanged: root.setDownsample()
+    onWidthChanged: root.setDownsample()
+    onHeightChanged: root.setDownsample()
 
     Component.onCompleted: graph.addSeries(scatterSeries)
 

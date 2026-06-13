@@ -202,6 +202,7 @@
         "topicBase": ""
     },
     "nextUniqueId": 10005,
+    "plotTimeRange": 10,
     "pointCount": 4000,
     "schemaVersion": 3,
     "sources": [
@@ -234,34 +235,34 @@
         "layout:1000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 477,
-                "canvasWidth": 974,
+                "canvasHeight": 500,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 469,
-                        "id": 0,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 483,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 469,
+                        "height": 500,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
+                        "widgetType": 2,
+                        "width": 518,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 500,
+                        "id": 2,
+                        "relativeIndex": 0,
+                        "state": "normal",
                         "widgetType": 6,
-                        "width": 483,
-                        "x": 486,
-                        "y": 4
+                        "width": 518,
+                        "x": 517,
+                        "y": 0
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
-                    0,
-                    1
+                    1,
+                    2
                 ],
                 "windowOrderTyped": [
                     {
@@ -275,59 +276,70 @@
                 ]
             }
         },
-        "layout:1002": {
+        "layout:1001": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 557,
-                "canvasWidth": 1022,
+                "canvasHeight": 500,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 275,
-                        "id": 0,
+                        "height": 250,
+                        "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 507,
-                        "x": 4,
-                        "y": 4
+                        "width": 518,
+                        "x": 0,
+                        "y": 0
                     },
                     {
-                        "height": 275,
-                        "id": 2,
+                        "height": 250,
+                        "id": 6,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 507,
-                        "x": 510,
-                        "y": 4
+                        "width": 518,
+                        "x": 517,
+                        "y": 0
                     },
                     {
-                        "height": 275,
-                        "id": 3,
+                        "height": 250,
+                        "id": 7,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 507,
-                        "x": 4,
-                        "y": 278
+                        "width": 345,
+                        "x": 0,
+                        "y": 249
                     },
                     {
-                        "height": 275,
-                        "id": 4,
+                        "height": 250,
+                        "id": 8,
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 507,
-                        "x": 510,
-                        "y": 278
+                        "width": 345,
+                        "x": 344,
+                        "y": 249
+                    },
+                    {
+                        "height": 250,
+                        "id": 2,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 345,
+                        "x": 688,
+                        "y": 249
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
-                    0,
-                    2,
-                    3,
-                    4
+                    1,
+                    6,
+                    7,
+                    8,
+                    2
                 ],
                 "windowOrderTyped": [
                     {
@@ -345,6 +357,113 @@
                     {
                         "relativeIndex": 2,
                         "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
+                    }
+                ]
+            }
+        },
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 250,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "minimized",
+                        "widgetType": 2,
+                        "width": 518,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 500,
+                        "id": 6,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 517,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
+                        "id": 7,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 519,
+                        "x": 516,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
+                        "id": 8,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 519,
+                        "x": 516,
+                        "y": 249
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1,
+                    6,
+                    7,
+                    8
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        },
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 2,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 1035,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    2
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
                     }
                 ]
             }

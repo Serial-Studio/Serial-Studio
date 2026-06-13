@@ -2459,14 +2459,12 @@ void UI::Dashboard::configureLineSeries()
     else if (const auto& tk2 = Licensing::CommercialToken::current();
              m_datasets.contains(yDataset.xAxisId) && tk2.isValid() && SS_LICENSE_GUARD()
              && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
-#else
-    else if (false) {
-#endif
       DSP::LineSeries series;
       series.x = &m_xAxisData[yDataset.xAxisId];
       series.y = &m_yAxisData[yDataset.uniqueId];
       m_pltValues.append(series);
     }
+#endif
 
     else {
       DSP::LineSeries series;

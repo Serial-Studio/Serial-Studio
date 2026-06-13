@@ -215,7 +215,7 @@ Item {
   // Qt.callLater because updateData() emits rangeChanged (binding loop if synchronous)
   //
   function redrawCurves() {
-    if (!root.visible)
+    if (!root.visible || !root.model || !plotCommon)
       return
 
     plotCommon.setDownsampleFactor(plot, model)
@@ -240,6 +240,15 @@ Item {
       else if (curve.source.count > 0)
         curve.source.clear()
     }
+  }
+
+  //
+  // Guards the plotCommon call so geometry signals firing during teardown (anchors
+  // detaching) don't dereference the child QtObject after its context is invalid
+  //
+  function setDownsample() {
+    if (root.model && plotCommon)
+      plotCommon.setDownsampleFactor(plot, model)
   }
 
   //
@@ -444,8 +453,8 @@ Item {
 
       onZoomChanged: Qt.callLater(root.redrawCurves)
       onXVisibleMinChanged: Qt.callLater(root.redrawCurves)
-      onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
-      onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
+      onWidthChanged: root.setDownsample()
+      onHeightChanged: root.setDownsample()
       onTriggerLevelChangeRequested: (level) => {
         if (root.model)
           root.model.triggerLevel = level

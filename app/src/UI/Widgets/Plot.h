@@ -72,6 +72,9 @@ class Plot : public QQuickItem {
   Q_PROPERTY(bool timeAxis
              READ timeAxis
              CONSTANT)
+  Q_PROPERTY(bool xyPlot
+             READ xyPlot
+             CONSTANT)
   Q_PROPERTY(bool sweepEnabled
              READ sweepEnabled
              WRITE setSweepEnabled
@@ -125,6 +128,7 @@ public:
   [[nodiscard]] const QString& yLabel() const noexcept;
   [[nodiscard]] const QString& xLabel() const noexcept;
   [[nodiscard]] bool timeAxis() const noexcept;
+  [[nodiscard]] bool xyPlot() const noexcept;
   [[nodiscard]] bool sweepEnabled() const noexcept;
   [[nodiscard]] double triggerLevel() const noexcept;
   [[nodiscard]] double holdoff() const noexcept;

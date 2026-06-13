@@ -218,6 +218,14 @@ bool Widgets::Plot::timeAxis() const noexcept
   return m_timeAxis;
 }
 
+/**
+ * @brief Returns true when this plot renders against an X dataset (XY mode).
+ */
+bool Widgets::Plot::xyPlot() const noexcept
+{
+  return !m_timeAxis && !m_monotonicData;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Sweep / trigger getters
 //--------------------------------------------------------------------------------------------------
@@ -662,15 +670,13 @@ void Widgets::Plot::calculateAutoScaleRange()
   if (const auto& tk2 = Licensing::CommercialToken::current();
       !m_timeAxis && tk2.isValid() && SS_LICENSE_GUARD()
       && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
-#else
-  if (false) {
-#endif
     if (UI::Dashboard::instance().datasets().contains(dy.xAxisId)) {
       const auto& dx = UI::Dashboard::instance().datasets()[dy.xAxisId];
       xChanged =
         computeMinMaxValues(m_minX, m_maxX, dx, false, [](const QPointF& p) { return p.x(); });
     }
   }
+#endif
 
   else if (!m_timeAxis) {
     const auto points = UI::Dashboard::instance().points();
