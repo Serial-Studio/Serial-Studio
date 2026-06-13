@@ -150,6 +150,9 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
     if (msg.contains("QSocketNotifier::Exception is not supported on iOS"))
       return;
 
+    if (msg.contains("QQmlVMEMetaObject: Internal error"))
+      return;
+
     if (msg.startsWith("QThread::start: Failed to set thread priority"))
       return;
   }

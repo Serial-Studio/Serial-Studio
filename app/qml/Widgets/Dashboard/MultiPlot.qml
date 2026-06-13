@@ -75,6 +75,13 @@ Item {
   //
   property bool restoringSweep: false
 
+  //
+  // Cleared first during teardown so the UI-timer Connection detaches before the
+  // dynamically-created widget's context is invalidated (singleton keeps firing)
+  //
+  property bool alive: true
+  Component.onDestruction: root.alive = false
+
   PlotCommon {
     id: plotCommon
   }
@@ -215,7 +222,8 @@ Item {
   // Qt.callLater because updateData() emits rangeChanged (binding loop if synchronous)
   //
   function redrawCurves() {
-    if (!root.visible || !root.model || !plotCommon)
+    if (!root.visible || !root.model
+        || typeof plotCommon.setDownsampleFactor !== "function")
       return
 
     plotCommon.setDownsampleFactor(plot, model)
@@ -247,7 +255,7 @@ Item {
   // detaching) don't dereference the child QtObject after its context is invalid
   //
   function setDownsample() {
-    if (root.model && plotCommon)
+    if (root.model && typeof plotCommon.setDownsampleFactor === "function")
       plotCommon.setDownsampleFactor(plot, model)
   }
 
@@ -255,6 +263,7 @@ Item {
   // Update widget at the UI refresh rate (60 Hz default, Settings-configurable)
   //
   Connections {
+    enabled: root.alive
     target: Cpp_Misc_TimerEvents
 
     function onUiTimeout() {

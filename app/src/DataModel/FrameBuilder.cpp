@@ -888,7 +888,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
 
   const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
 
-  if (trySpanLane(sourceId, true, ensureSourceFrame(sourceId), data) >= 0) {
+  const int published = trySpanLane(sourceId, true, ensureSourceFrame(sourceId), data);
+  if (published >= 0) {
+    m_parsedFrameCount += static_cast<quint64>(published);
     parseBudgetAccount(t0);
     return;
   }
@@ -918,6 +920,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
 
     applyDatasetValues(srcFrame, channels, info);
     hotpathTxFrame(acquireFrame(srcFrame, frameTs));
+    ++m_parsedFrameCount;
   }
 
   parseBudgetAccount(t0);

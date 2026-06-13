@@ -57,6 +57,13 @@ Item {
   property bool userShowXLabel: true
   property bool userShowYLabel: true
 
+  //
+  // Cleared first during teardown so the UI-timer Connection detaches before the
+  // dynamically-created widget's context is invalidated (singleton keeps firing)
+  //
+  property bool alive: true
+  Component.onDestruction: root.alive = false
+
   PlotCommon {
     id: plotCommon
   }
@@ -108,7 +115,7 @@ Item {
   // detaching) don't dereference the child QtObject after its context is invalid
   //
   function setDownsample() {
-    if (root.model && plotCommon)
+    if (root.model && typeof plotCommon.setDownsampleFactor === "function")
       plotCommon.setDownsampleFactor(plot, model)
   }
 
@@ -123,6 +130,7 @@ Item {
   // Update curve at the UI refresh rate (60 Hz default, Settings-configurable)
   //
   Connections {
+    enabled: root.alive
     target: Cpp_Misc_TimerEvents
 
     function onUiTimeout() {
