@@ -63,6 +63,12 @@ class Plot : public QQuickItem {
   Q_PROPERTY(double maxY
              READ maxY
              NOTIFY rangeChanged)
+  Q_PROPERTY(bool dataBipolar
+             READ dataBipolar
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double dataMaxY
+             READ dataMaxY
+             NOTIFY rangeChanged)
   Q_PROPERTY(QString yLabel
              READ yLabel
              CONSTANT)
@@ -123,6 +129,8 @@ public:
   [[nodiscard]] double maxX() const noexcept;
   [[nodiscard]] double minY() const noexcept;
   [[nodiscard]] double maxY() const noexcept;
+  [[nodiscard]] bool dataBipolar() const noexcept;
+  [[nodiscard]] double dataMaxY() const noexcept;
   [[nodiscard]] bool running() const noexcept;
   [[nodiscard]] SerialStudio::InterpolationMode interpolationMode() const noexcept;
   [[nodiscard]] const QString& yLabel() const noexcept;
@@ -159,6 +167,7 @@ private slots:
 
 private:
   void pushSweepConfig();
+  bool updateDataExtremes(const DataModel::Dataset& dataset);
   void updateInterpolatedData();
   void clampToVisibleX(double& lo, double& hi) const;
   void resolveXAxis(const DataModel::Dataset& yDataset);
@@ -181,6 +190,8 @@ private:
   double m_maxX;
   double m_minY;
   double m_maxY;
+  double m_dataMinY;
+  double m_dataMaxY;
   double m_visLoX;
   double m_visHiX;
   QString m_yLabel;

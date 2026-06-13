@@ -44,6 +44,8 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
+  , m_dataMinY(0)
+  , m_dataMaxY(0)
   , m_visLoX(std::numeric_limits<double>::quiet_NaN())
   , m_visHiX(std::numeric_limits<double>::quiet_NaN())
   , m_monotonicData(true)
@@ -168,6 +170,24 @@ double Widgets::Plot::minY() const noexcept
 double Widgets::Plot::maxY() const noexcept
 {
   return m_maxY;
+}
+
+/**
+ * @brief Reports whether the real samples straddle zero, so the area fill anchors at
+ *        the zero line; a configured axis range that merely spans zero does not count.
+ */
+bool Widgets::Plot::dataBipolar() const noexcept
+{
+  return m_dataMinY < 0.0 && m_dataMaxY > 0.0;
+}
+
+/**
+ * @brief Returns the largest finite sample value, used to anchor a strictly-negative
+ *        fill from the range top instead of the range floor.
+ */
+double Widgets::Plot::dataMaxY() const noexcept
+{
+  return m_dataMaxY;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -601,7 +621,7 @@ void Widgets::Plot::updateInterpolatedData()
 
   if (m_interpolationMode == SerialStudio::InterpolationStem) {
     constexpr double kNan = std::numeric_limits<double>::quiet_NaN();
-    const double base     = (m_minY < 0.0 && m_maxY > 0.0) ? 0.0 : m_minY;
+    const double base     = dataBipolar() ? 0.0 : m_minY;
 
     m_renderData.resize(3 * n);
     QPointF* out      = m_renderData.data();
@@ -664,7 +684,8 @@ void Widgets::Plot::calculateAutoScaleRange()
   bool yChanged = false;
 
   const auto& dy = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-  yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true, [](const QPointF& p) { return p.y(); });
+  yChanged  = computeMinMaxValues(m_minY, m_maxY, dy, true, [](const QPointF& p) { return p.y(); });
+  yChanged |= updateDataExtremes(dy);
 
 #ifdef BUILD_COMMERCIAL
   if (const auto& tk2 = Licensing::CommercialToken::current();
@@ -690,6 +711,59 @@ void Widgets::Plot::calculateAutoScaleRange()
 
   if (xChanged || yChanged)
     Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Reports whether a configured plot range hard-clamps the data into one sign,
+ *        so the samples cannot be bipolar and the per-frame scan can be skipped. A
+ *        degenerate range (pltMin == pltMax, including both zero) auto-scales instead,
+ *        so it is not a clamp.
+ */
+static bool signClampedRange(const DataModel::Dataset& dataset)
+{
+  if (!DSP::notEqual(dataset.pltMin, dataset.pltMax))
+    return false;
+
+  return (dataset.pltMin >= 0.0 && dataset.pltMax >= 0.0)
+      || (dataset.pltMin <= 0.0 && dataset.pltMax <= 0.0);
+}
+
+/**
+ * @brief Refreshes the finite Y extremes that drive the area fill's bipolarity from
+ *        real data. A sign-clamped configured range short-circuits the per-frame scan;
+ *        otherwise the current samples are swept. Returns true when the bipolar or
+ *        all-negative verdict flips, so the caller refreshes the baseline binding.
+ */
+bool Widgets::Plot::updateDataExtremes(const DataModel::Dataset& dataset)
+{
+  const bool wasBipolar     = dataBipolar();
+  const bool wasAllNegative = m_dataMaxY <= 0.0;
+
+  if (signClampedRange(dataset)) {
+    m_dataMinY = qMin(dataset.pltMin, dataset.pltMax);
+    m_dataMaxY = qMax(dataset.pltMin, dataset.pltMax);
+    return wasBipolar != dataBipolar() || wasAllNegative != (m_dataMaxY <= 0.0);
+  }
+
+  double dataMin = std::numeric_limits<double>::max();
+  double dataMax = std::numeric_limits<double>::lowest();
+  for (auto i = 0; i < m_data.size(); ++i) {
+    const double value = m_data[i].y();
+    if (std::isfinite(value)) {
+      dataMin = qMin(dataMin, value);
+      dataMax = qMax(dataMax, value);
+    }
+  }
+
+  if (dataMin > dataMax) {
+    m_dataMinY = 0.0;
+    m_dataMaxY = 0.0;
+  } else {
+    m_dataMinY = dataMin;
+    m_dataMaxY = dataMax;
+  }
+
+  return wasBipolar != dataBipolar() || wasAllNegative != (m_dataMaxY <= 0.0);
 }
 
 /**

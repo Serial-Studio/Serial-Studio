@@ -54,10 +54,10 @@ Item {
   property int interpolationMode: SerialStudio.InterpolationLinear
 
   //
-  // Bipolar ranges anchor the fill at the zero line; all-negative ranges hang the
-  // fill from the range maximum so the mountain inverts with the data.
+  // Bipolarity keys off the real samples, not the axis range: a strictly-positive
+  // signal stays a solid mountain even when the configured range spans zero.
   //
-  readonly property bool bipolarRange: root.model && root.model.minY < 0 && root.model.maxY > 0
+  readonly property bool bipolarRange: root.model && root.model.dataBipolar
   readonly property bool areaFillVisible: root.showAreaUnderPlot
        && !(root.model && root.model.xyPlot)
        && root.interpolationMode !== SerialStudio.InterpolationNone
@@ -69,7 +69,7 @@ Item {
     if (root.bipolarRange)
       return 0
 
-    return root.model.maxY <= 0 ? root.model.maxY : root.model.minY
+    return root.model.dataMaxY <= 0 ? root.model.maxY : root.model.minY
   }
 
   //
