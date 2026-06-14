@@ -447,6 +447,14 @@ Rectangle {
       }
 
       Widgets.ToolbarButton {
+        text: qsTr("Web View")
+        Layout.alignment: Qt.AlignVCenter
+        ToolTip.text: qsTr("Add an web viewer")
+        icon.source: "qrc:/icons/project-editor/toolbar/add-webview.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Web View"), SerialStudio.WebView)
+      }
+
+      Widgets.ToolbarButton {
         readonly property bool hasPro: Cpp_CommercialBuild
                                         && (Cpp_Licensing_LemonSqueezy.isActivated
                                             || Cpp_Licensing_Trial.trialEnabled)

@@ -1,7 +1,7 @@
 {
     "actions": [
     ],
-    "customizeWorkspaces": true,
+    "controlScriptCode": "/**\n * Dual Drone Telemetry - Control Script\n *\n * Launches the bundled Python data generator (dual_drone_telemetry.py) automatically just before\n * the connection opens (via onConnect), so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/dual_drone_telemetry.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction onConnect() {\n  startHelper();\n}\n\nfunction setup() {}\n\nfunction loop() {\n  delay(1000);\n}\n",
     "groups": [
         {
             "datasets": [
@@ -10,15 +10,15 @@
             "imgEndSequence": "A1 FE ED 01",
             "imgStartSequence": "A1 CA FE 01",
             "title": "Alpha Camera",
+            "uniqueId": 1150011,
             "widget": "image"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -34,18 +34,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Latitude",
+                    "uniqueId": 10000,
                     "units": "°",
                     "value": "",
                     "widget": "lat",
                     "widgetMax": 90,
                     "widgetMin": -90,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -61,18 +61,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Longitude",
+                    "uniqueId": 10001,
                     "units": "°",
                     "value": "",
                     "widget": "lon",
                     "widgetMax": 180,
                     "widgetMin": -180,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -88,24 +88,25 @@
                     "plotMax": 300,
                     "plotMin": 0,
                     "title": "Alpha Altitude",
+                    "uniqueId": 10002,
                     "units": "m",
                     "value": "",
                     "widget": "alt",
                     "widgetMax": 500,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Alpha Navigation",
+            "uniqueId": 1150012,
             "widget": "map"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -121,24 +122,25 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Heading",
+                    "uniqueId": 20000,
                     "units": "°",
                     "value": "",
                     "widget": "compass",
                     "widgetMax": 360,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Alpha Heading",
+            "uniqueId": 1150013,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -154,18 +156,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Roll",
+                    "uniqueId": 30000,
                     "units": "°",
                     "value": "",
                     "widget": "roll",
                     "widgetMax": 45,
                     "widgetMin": -45,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -181,18 +183,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Pitch",
+                    "uniqueId": 30001,
                     "units": "°",
                     "value": "",
                     "widget": "pitch",
                     "widgetMax": 30,
                     "widgetMin": -30,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -208,24 +210,25 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Yaw",
+                    "uniqueId": 30002,
                     "units": "°",
                     "value": "",
                     "widget": "yaw",
                     "widgetMax": 360,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Alpha Attitude",
+            "uniqueId": 1150014,
             "widget": "gyro"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -241,18 +244,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Airspeed",
+                    "uniqueId": 40000,
                     "units": "m/s",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 40,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -268,18 +271,18 @@
                     "plotMax": 300,
                     "plotMin": 0,
                     "title": "Alpha Altitude",
+                    "uniqueId": 40001,
                     "units": "m",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 300,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -295,24 +298,32 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha V/S",
+                    "uniqueId": 40002,
                     "units": "m/s",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 10,
                     "widgetMin": -10,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Alpha Flight",
+            "uniqueId": 1150015,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": true,
-                    "alarmHigh": 21,
-                    "alarmLow": 0,
+                    "alarmBands": [
+                        {
+                            "max": 25.2,
+                            "min": 21,
+                            "severity": 2
+                        }
+                    ],
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -328,18 +339,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Voltage",
+                    "uniqueId": 50000,
                     "units": "V",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 25.2,
                     "widgetMin": 18,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -355,18 +366,25 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Current",
+                    "uniqueId": 50001,
                     "units": "A",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 40,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": true,
-                    "alarmHigh": 20,
-                    "alarmLow": 0,
+                    "alarmBands": [
+                        {
+                            "max": 100,
+                            "min": 20,
+                            "severity": 2
+                        }
+                    ],
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -382,15 +400,17 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Battery",
+                    "uniqueId": 50002,
                     "units": "%",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Alpha Power",
+            "uniqueId": 1150016,
             "widget": ""
         },
         {
@@ -401,15 +421,15 @@
             "imgStartSequence": "B2 CA FE 02",
             "sourceId": 1,
             "title": "Bravo Camera",
+            "uniqueId": 1150017,
             "widget": "image"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -425,18 +445,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Latitude",
+                    "uniqueId": 1070000,
                     "units": "°",
                     "value": "",
                     "widget": "lat",
                     "widgetMax": 90,
                     "widgetMin": -90,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -452,18 +472,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Longitude",
+                    "uniqueId": 1070001,
                     "units": "°",
                     "value": "",
                     "widget": "lon",
                     "widgetMax": 180,
                     "widgetMin": -180,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -479,25 +499,26 @@
                     "plotMax": 300,
                     "plotMin": 0,
                     "title": "Bravo Altitude",
+                    "uniqueId": 1070002,
                     "units": "m",
                     "value": "",
                     "widget": "alt",
                     "widgetMax": 500,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "sourceId": 1,
             "title": "Bravo Navigation",
+            "uniqueId": 1150018,
             "widget": "map"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -513,25 +534,26 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Heading",
+                    "uniqueId": 1080000,
                     "units": "°",
                     "value": "",
                     "widget": "compass",
                     "widgetMax": 360,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "sourceId": 1,
             "title": "Bravo Heading",
+            "uniqueId": 1150019,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -547,18 +569,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Roll",
+                    "uniqueId": 1090000,
                     "units": "°",
                     "value": "",
                     "widget": "roll",
                     "widgetMax": 45,
                     "widgetMin": -45,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -574,18 +596,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Pitch",
+                    "uniqueId": 1090001,
                     "units": "°",
                     "value": "",
                     "widget": "pitch",
                     "widgetMax": 30,
                     "widgetMin": -30,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -601,25 +623,26 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Yaw",
+                    "uniqueId": 1090002,
                     "units": "°",
                     "value": "",
                     "widget": "yaw",
                     "widgetMax": 360,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "sourceId": 1,
             "title": "Bravo Attitude",
+            "uniqueId": 1150020,
             "widget": "gyro"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -635,18 +658,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Airspeed",
+                    "uniqueId": 1100000,
                     "units": "m/s",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 40,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -662,18 +685,18 @@
                     "plotMax": 300,
                     "plotMin": 0,
                     "title": "Bravo Altitude",
+                    "uniqueId": 1100001,
                     "units": "m",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 300,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -689,25 +712,33 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo V/S",
+                    "uniqueId": 1100002,
                     "units": "m/s",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 10,
                     "widgetMin": -10,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "sourceId": 1,
             "title": "Bravo Flight",
+            "uniqueId": 1150021,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": true,
-                    "alarmHigh": 21,
-                    "alarmLow": 0,
+                    "alarmBands": [
+                        {
+                            "max": 25.2,
+                            "min": 21,
+                            "severity": 2
+                        }
+                    ],
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -723,18 +754,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Voltage",
+                    "uniqueId": 1110000,
                     "units": "V",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 25.2,
                     "widgetMin": 18,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -750,18 +781,25 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Current",
+                    "uniqueId": 1110001,
                     "units": "A",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 40,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": true,
-                    "alarmHigh": 20,
-                    "alarmLow": 0,
+                    "alarmBands": [
+                        {
+                            "max": 100,
+                            "min": 20,
+                            "severity": 2
+                        }
+                    ],
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -777,16 +815,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Battery",
+                    "uniqueId": 1110002,
                     "units": "%",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "sourceId": 1,
             "title": "Bravo Power",
+            "uniqueId": 1150022,
             "widget": ""
         },
         {
@@ -871,6 +911,7 @@
                 }
             ],
             "title": "Alpha Controls",
+            "uniqueId": 1150023,
             "widget": ""
         },
         {
@@ -956,15 +997,15 @@
             ],
             "sourceId": 1,
             "title": "Bravo Controls",
+            "uniqueId": 1150024,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -980,18 +1021,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Latitude",
+                    "uniqueId": 140000,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1007,18 +1048,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Longitude",
+                    "uniqueId": 140001,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1034,18 +1075,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Heading",
+                    "uniqueId": 140002,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1061,18 +1102,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Altitude",
+                    "uniqueId": 140003,
                     "units": "m",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1088,18 +1129,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Airspeed",
+                    "uniqueId": 140004,
                     "units": "m/s",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1115,18 +1156,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha V/S",
+                    "uniqueId": 140005,
                     "units": "m/s",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1142,18 +1183,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Roll",
+                    "uniqueId": 140006,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 7,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1169,18 +1210,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Pitch",
+                    "uniqueId": 140007,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 8,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1196,18 +1237,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Voltage",
+                    "uniqueId": 140008,
                     "units": "V",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 9,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1223,18 +1264,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Current",
+                    "uniqueId": 140009,
                     "units": "A",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 10,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1250,25 +1291,26 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Battery",
+                    "uniqueId": 140010,
                     "units": "%",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "painterCode": "// Live drone state visualizer for the Dual Drone Telemetry example.\n//\n// Bound datasets (in order):\n//   datasets[0]  = latitude\n//   datasets[1]  = longitude\n//   datasets[2]  = heading        (deg, 0-360)\n//   datasets[3]  = altitude       (m)\n//   datasets[4]  = airspeed       (m/s)\n//   datasets[5]  = vertical speed (m/s, +up)\n//   datasets[6]  = roll           (deg)\n//   datasets[7]  = pitch          (deg)\n//   datasets[8]  = voltage        (V)\n//   datasets[9]  = current        (A)\n//   datasets[10] = battery        (%)\n//\n// Theme (Alpha = green HUD, Bravo = amber FLIR) is selected from\n// group.sourceId so the same code drops into both painter groups.\n//\n// The widget reflows for three layout regimes:\n//   FULL    -- wide and tall: side tapes + stage + bottom strip\n//   SQUARE  -- close to 1:1:    big centred stage, condensed corner readouts\n//   COMPACT -- small or thin:   just the dial; everything else is suppressed\n\nconst TWO_PI = Math.PI * 2;\n\n// State\nlet propPhase   = 0;\nlet lastTs      = 0;\nlet chase       = 0;\nlet altHistory  = [];\nconst HIST_N    = 96;\n\nfunction clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }\nfunction deg2rad(d) { return d * Math.PI / 180; }\n\nfunction theme() {\n  const isAlpha = (group.sourceId === 0) ||\n                   (group.title && group.title.indexOf(\"Alpha\") >= 0);\n  if (isAlpha) {\n    return {\n      name:    \"ALPHA\",\n      bg:      \"#0b1410\",\n      panel:   \"#0f1a14\",\n      border:  \"#173823\",\n      grid:    \"#143524\",\n      accent:  \"#22c55e\",\n      accent2: \"#86efac\",\n      muted:   \"#3f6b50\",\n      text:    \"#e2f5e8\",\n      dim:     \"#7fa890\",\n      warn:    \"#facc15\",\n      bad:     \"#ef4444\",\n      body:    \"#1e3a2a\",\n      bodyEdge:\"#0a3a1f\",\n      arm:     \"#1f2937\",\n      armEdge: \"#102a18\",\n      cap:     \"#22c55e\"\n    };\n  }\n  return {\n    name:    \"BRAVO\",\n    bg:      \"#1a0f04\",\n    panel:   \"#21160a\",\n    border:  \"#4a2a10\",\n    grid:    \"#3a200d\",\n    accent:  \"#f59e0b\",\n    accent2: \"#fbbf24\",\n    muted:   \"#7a4a18\",\n    text:    \"#fff7ec\",\n    dim:     \"#c8a070\",\n    warn:    \"#facc15\",\n    bad:     \"#ef4444\",\n    body:    \"#3a2410\",\n    bodyEdge:\"#1f1208\",\n    arm:     \"#2c1a08\",\n    armEdge: \"#150a04\",\n    cap:     \"#fbbf24\"\n  };\n}\n\nfunction infer_state(alt, vspeed, airspeed, battery) {\n  if (alt < 1.5 && Math.abs(vspeed) < 0.5 && airspeed < 1.0) return \"GROUNDED\";\n  if (vspeed > 5.0 && alt < 100)                              return \"TAKEOFF\";\n  if (vspeed < -1.5 && alt < 50)                              return \"LANDING\";\n  if (airspeed < 5.0 && alt > 30)                             return \"RETURN\";\n  return \"CRUISE\";\n}\n\nfunction pick_layout(w, h) {\n  // Pick a layout regime from the cell aspect ratio and absolute size. The\n  // breakpoints were tuned for typical Serial Studio dashboard cell sizes.\n  const aspect = w / h;\n  if (w < 240 || h < 200)               return \"compact\";\n  if (aspect > 1.6 && w >= 420)         return \"full\";\n  if (aspect < 0.85 && h >= 360)        return \"full\";\n  return \"square\";\n}\n\nfunction onFrame() {\n  const now = Date.now();\n  const dt  = lastTs > 0 ? Math.max(0, (now - lastTs) * 1e-3) : 0.016;\n  lastTs    = now;\n\n  if (datasets.length < 11) return;\n\n  const airspeed = Number(datasets[4].value) || 0;\n  const alt      = Number(datasets[3].value) || 0;\n\n  const wMin   = 6.0;\n  const wScale = 1.4;\n  propPhase = (propPhase + (wMin + airspeed * wScale) * dt) % TWO_PI;\n\n  chase = (chase + dt * 1.2) % 1.0;\n\n  altHistory.push(alt);\n  if (altHistory.length > HIST_N) altHistory.shift();\n}\n\n// -- generic helpers ------------------------------------------------------\n\nfunction draw_panel(ctx, x, y, w, h, t, label, labelSize) {\n  if (w < 6 || h < 6) return;\n  ctx.fillStyle = t.panel;\n  ctx.fillRect(x, y, w, h);\n  ctx.strokeStyle = t.border;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  if (label && h > 18) {\n    ctx.fillStyle = t.muted;\n    ctx.font      = \"bold \" + (labelSize || 9) + \"px monospace\";\n    ctx.textAlign = \"start\";\n    ctx.textBaseline = \"alphabetic\";\n    ctx.fillText(label, x + 6, y + (labelSize ? labelSize + 2 : 11));\n  }\n}\n\nfunction draw_compass(ctx, cx, cy, r, hdg, t, opts) {\n  if (r < 12) return;\n  const showLabels = !opts || opts.labels !== false;\n  const ticksOnly  = !!(opts && opts.ticksOnly);\n\n  ctx.strokeStyle = t.grid;\n  ctx.lineWidth   = 1;\n  ctx.beginPath();\n  ctx.moveTo(cx + r, cy);\n  ctx.arc(cx, cy, r, 0, TWO_PI);\n  ctx.stroke();\n\n  if (!ticksOnly) {\n    ctx.beginPath();\n    ctx.moveTo(cx + r * 0.78, cy);\n    ctx.arc(cx, cy, r * 0.78, 0, TWO_PI);\n    ctx.stroke();\n  }\n\n  for (let a = 0; a < 360; a += 30) {\n    const rad = deg2rad(a - 90);\n    const r0  = r * 0.92;\n    const r1  = (a % 90 === 0) ? r * 0.74 : r * 0.84;\n    ctx.beginPath();\n    ctx.moveTo(cx + Math.cos(rad) * r0, cy + Math.sin(rad) * r0);\n    ctx.lineTo(cx + Math.cos(rad) * r1, cy + Math.sin(rad) * r1);\n    ctx.stroke();\n  }\n\n  if (showLabels && r >= 26) {\n    const labelSize = r >= 60 ? 10 : 9;\n    ctx.fillStyle    = t.dim;\n    ctx.font         = \"bold \" + labelSize + \"px monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"middle\";\n    const lr = r * 0.62;\n    ctx.fillText(\"N\", cx,        cy - lr);\n    ctx.fillText(\"S\", cx,        cy + lr);\n    ctx.fillText(\"E\", cx + lr,   cy);\n    ctx.fillText(\"W\", cx - lr,   cy);\n    ctx.textBaseline = \"alphabetic\";\n  }\n\n  // Heading needle.\n  const hRad = deg2rad(hdg - 90);\n  ctx.save();\n  ctx.translate(cx, cy);\n  ctx.rotate(hRad);\n\n  ctx.fillStyle = t.accent;\n  ctx.beginPath();\n  ctx.moveTo(r * 0.72, 0);\n  ctx.lineTo(0,         -4);\n  ctx.lineTo(0,          4);\n  ctx.closePath();\n  ctx.fill();\n\n  ctx.fillStyle = t.muted;\n  ctx.beginPath();\n  ctx.moveTo(0, -3);\n  ctx.lineTo(-r * 0.32, 0);\n  ctx.lineTo(0, 3);\n  ctx.closePath();\n  ctx.fill();\n\n  ctx.restore();\n}\n\nfunction draw_quad(ctx, cx, cy, span, t, roll) {\n  if (span < 30) return;\n  const armLen = span * 0.42;\n  const motorR = Math.max(4, span * 0.13);\n  const propR  = motorR * 1.55;\n\n  ctx.save();\n  ctx.translate(cx, cy);\n  ctx.rotate(deg2rad(roll));\n\n  // Forward indicator (translucent triangle ahead of body).\n  ctx.fillStyle = t.cap;\n  ctx.globalAlpha = 0.4;\n  ctx.beginPath();\n  ctx.moveTo(0, -armLen * 0.55);\n  ctx.lineTo(-6, -armLen * 0.30);\n  ctx.lineTo( 6, -armLen * 0.30);\n  ctx.closePath();\n  ctx.fill();\n  ctx.globalAlpha = 1.0;\n\n  // Arms (X-frame).\n  const armW = clamp(span * 0.04, 3, 8);\n  ctx.strokeStyle = t.armEdge;\n  ctx.lineWidth   = armW + 2;\n  ctx.lineCap     = \"round\";\n  ctx.beginPath();\n  ctx.moveTo(-armLen, -armLen);\n  ctx.lineTo( armLen,  armLen);\n  ctx.moveTo( armLen, -armLen);\n  ctx.lineTo(-armLen,  armLen);\n  ctx.stroke();\n\n  ctx.strokeStyle = t.arm;\n  ctx.lineWidth   = armW;\n  ctx.beginPath();\n  ctx.moveTo(-armLen, -armLen);\n  ctx.lineTo( armLen,  armLen);\n  ctx.moveTo( armLen, -armLen);\n  ctx.lineTo(-armLen,  armLen);\n  ctx.stroke();\n\n  ctx.lineCap = \"butt\";\n\n  // Body (central capsule).\n  const bodyW = span * 0.22;\n  const bodyH = span * 0.16;\n  ctx.fillStyle = t.body;\n  ctx.fillRect(-bodyW * 0.5, -bodyH * 0.5, bodyW, bodyH);\n  ctx.strokeStyle = t.bodyEdge;\n  ctx.lineWidth   = 1;\n  ctx.strokeRect(-bodyW * 0.5 + 0.5, -bodyH * 0.5 + 0.5, bodyW - 1, bodyH - 1);\n\n  // Sensor lens.\n  ctx.fillStyle = t.cap;\n  ctx.beginPath();\n  ctx.moveTo(3, -bodyH * 0.10);\n  ctx.arc(0, -bodyH * 0.10, 3, 0, TWO_PI);\n  ctx.fill();\n\n  // Motors.\n  const motors = [\n    [-armLen, -armLen, +1],\n    [ armLen, -armLen, -1],\n    [-armLen,  armLen, -1],\n    [ armLen,  armLen, +1]\n  ];\n\n  for (let i = 0; i < motors.length; ++i) {\n    const mx = motors[i][0];\n    const my = motors[i][1];\n    const dir = motors[i][2];\n\n    ctx.fillStyle = t.bodyEdge;\n    ctx.beginPath();\n    ctx.moveTo(mx + motorR + 1, my);\n    ctx.arc(mx, my, motorR + 1, 0, TWO_PI);\n    ctx.fill();\n\n    ctx.fillStyle = t.body;\n    ctx.beginPath();\n    ctx.moveTo(mx + motorR, my);\n    ctx.arc(mx, my, motorR, 0, TWO_PI);\n    ctx.fill();\n\n    ctx.save();\n    ctx.translate(mx, my);\n    ctx.rotate(propPhase * dir);\n\n    ctx.strokeStyle = t.accent2;\n    ctx.globalAlpha = 0.55;\n    ctx.lineWidth   = 1.5;\n    ctx.beginPath();\n    ctx.moveTo(propR, 0);\n    ctx.arc(0, 0, propR, 0, TWO_PI);\n    ctx.stroke();\n    ctx.globalAlpha = 1.0;\n\n    ctx.strokeStyle = t.accent;\n    ctx.lineWidth   = 1.5;\n    ctx.lineCap     = \"round\";\n    ctx.globalAlpha = 0.85;\n    ctx.beginPath();\n    ctx.moveTo(-propR, 0);\n    ctx.lineTo( propR, 0);\n    ctx.stroke();\n    ctx.globalAlpha = 0.35;\n    ctx.beginPath();\n    ctx.moveTo(0, -propR);\n    ctx.lineTo(0,  propR);\n    ctx.stroke();\n    ctx.globalAlpha = 1.0;\n    ctx.lineCap     = \"butt\";\n\n    ctx.fillStyle = t.cap;\n    ctx.beginPath();\n    ctx.moveTo(2.5, 0);\n    ctx.arc(0, 0, 2.5, 0, TWO_PI);\n    ctx.fill();\n    ctx.restore();\n  }\n\n  ctx.restore();\n}\n\nfunction draw_pitch_indicator(ctx, x, y, w, h, pitch, t) {\n  if (w < 26 || h < 30) return;\n  draw_panel(ctx, x, y, w, h, t, null);\n\n  const labelH   = h >= 60 ? 12 : 0;\n  if (labelH > 0) {\n    ctx.fillStyle    = t.muted;\n    ctx.font         = \"bold 8px monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"alphabetic\";\n    ctx.fillText(\"PITCH\", x + w / 2, y + 10);\n  }\n  const innerY = y + labelH + 2;\n  const readH  = h >= 60 ? 12 : 0;\n  const innerH = h - labelH - 4 - readH;\n  const cx = x + w / 2;\n  const cy = innerY + innerH / 2;\n  const pxPerDeg = innerH / 60;\n  const offset   = clamp(pitch, -45, 45) * pxPerDeg;\n\n  ctx.save();\n  ctx.beginPath();\n  ctx.rect(x + 2, innerY, w - 4, innerH);\n  ctx.clip();\n\n  ctx.strokeStyle = t.accent;\n  ctx.lineWidth   = 1.5;\n  ctx.beginPath();\n  ctx.moveTo(x + 4,     cy + offset);\n  ctx.lineTo(x + w - 4, cy + offset);\n  ctx.stroke();\n\n  ctx.strokeStyle = t.grid;\n  ctx.lineWidth   = 1;\n  for (let p = -30; p <= 30; p += 10) {\n    if (p === 0) continue;\n    const ly = cy + offset - p * pxPerDeg;\n    ctx.beginPath();\n    ctx.moveTo(cx - 8, ly);\n    ctx.lineTo(cx + 8, ly);\n    ctx.stroke();\n  }\n  ctx.restore();\n\n  ctx.strokeStyle = t.cap;\n  ctx.lineWidth   = 2;\n  ctx.beginPath();\n  ctx.moveTo(cx - 8, cy);\n  ctx.lineTo(cx - 3, cy);\n  ctx.moveTo(cx + 3, cy);\n  ctx.lineTo(cx + 8, cy);\n  ctx.stroke();\n\n  if (readH > 0) {\n    ctx.fillStyle    = t.text;\n    ctx.font         = \"bold 10px monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"alphabetic\";\n    ctx.fillText(pitch.toFixed(0) + \"°\", x + w / 2, y + h - 4);\n  }\n}\n\nfunction draw_tape(ctx, x, y, w, h, value, vmin, vmax, label, units, t) {\n  if (w < 24 || h < 50) return;\n  draw_panel(ctx, x, y, w, h, t, label);\n\n  const padTop = h > 80 ? 16 : 12;\n  const padBot = (h > 70) ? 28 : 14;\n  const top    = y + padTop;\n  const bot    = y + h - padBot;\n  const span   = bot - top;\n  if (span < 8) return;\n\n  ctx.strokeStyle = t.grid;\n  ctx.lineWidth   = 1;\n  for (let i = 0; i <= 5; ++i) {\n    const ty = top + (span * i / 5);\n    ctx.beginPath();\n    ctx.moveTo(x + 4, ty);\n    ctx.lineTo(x + w - 4, ty);\n    ctx.stroke();\n  }\n\n  const norm = clamp((value - vmin) / Math.max(0.001, (vmax - vmin)), 0, 1);\n  const barH = span * norm;\n  ctx.fillStyle = t.accent;\n  ctx.globalAlpha = 0.85;\n  ctx.fillRect(x + 4, bot - barH, w - 8, barH);\n  ctx.globalAlpha = 1.0;\n\n  ctx.strokeStyle = t.accent2;\n  ctx.lineWidth   = 1.5;\n  ctx.beginPath();\n  ctx.moveTo(x + 2,     bot - barH);\n  ctx.lineTo(x + w - 2, bot - barH);\n  ctx.stroke();\n\n  ctx.fillStyle    = t.text;\n  ctx.font         = \"bold 11px monospace\";\n  ctx.textAlign    = \"center\";\n  ctx.textBaseline = \"alphabetic\";\n  if (h > 70) {\n    ctx.fillText(value.toFixed(1), x + w / 2, y + h - 14);\n    ctx.fillStyle = t.dim;\n    ctx.font      = \"9px monospace\";\n    ctx.fillText(units, x + w / 2, y + h - 4);\n  } else {\n    ctx.fillText(value.toFixed(0), x + w / 2, y + h - 4);\n  }\n}\n\nfunction draw_battery(ctx, x, y, w, h, pct, voltage, current, t) {\n  if (w < 80 || h < 30) return;\n  draw_panel(ctx, x, y, w, h, t, \"POWER\");\n\n  const tight  = h < 50 || w < 140;\n  const barTop = tight ? y + 14 : y + 22;\n  const barX   = x + 8;\n  const barW   = w - 16;\n  const barH   = tight ? 10 : 14;\n\n  ctx.strokeStyle = t.border;\n  ctx.lineWidth   = 1;\n  ctx.strokeRect(barX + 0.5, barTop + 0.5, barW - 1, barH - 1);\n\n  const fillW = (barW - 4) * clamp(pct / 100, 0, 1);\n  let color   = t.accent;\n  if (pct < 35) color = t.warn;\n  if (pct < 15) color = t.bad;\n  ctx.fillStyle = color;\n  ctx.fillRect(barX + 2, barTop + 2, fillW, barH - 4);\n\n  ctx.strokeStyle = t.grid;\n  for (let i = 1; i < 4; ++i) {\n    const tx = barX + (barW * i) / 4;\n    ctx.beginPath();\n    ctx.moveTo(tx, barTop + 2);\n    ctx.lineTo(tx, barTop + barH - 2);\n    ctx.stroke();\n  }\n\n  // Readouts -- two rows for narrow panels, one row otherwise.\n  ctx.fillStyle    = t.text;\n  ctx.font         = \"bold 12px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.fillText(pct.toFixed(0) + \"%\", x + 8, y + h - 8);\n\n  const numericRow = voltage.toFixed(1) + \"V \" + current.toFixed(1) + \"A\";\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"10px monospace\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(numericRow, x + w - 8, y + h - 8);\n}\n\nfunction draw_alt_history(ctx, x, y, w, h, t) {\n  if (w < 50 || h < 30) return;\n  draw_panel(ctx, x, y, w, h, t, \"ALT TRACE\");\n  if (altHistory.length < 2) return;\n\n  let lo = altHistory[0], hi = altHistory[0];\n  for (let i = 1; i < altHistory.length; ++i) {\n    const v = altHistory[i];\n    if (v < lo) lo = v;\n    if (v > hi) hi = v;\n  }\n  if (hi - lo < 5) {\n    const c = (hi + lo) * 0.5;\n    lo = c - 3;\n    hi = c + 3;\n  }\n  const padT = 16, padB = 6, padL = 4, padR = 4;\n  const innerW = w - padL - padR;\n  const innerH = h - padT - padB;\n  if (innerW < 10 || innerH < 6) return;\n\n  ctx.strokeStyle = t.accent;\n  ctx.lineWidth   = 1.5;\n  ctx.beginPath();\n  for (let i = 0; i < altHistory.length; ++i) {\n    const tx = x + padL + (i / (HIST_N - 1)) * innerW;\n    const norm = (altHistory[i] - lo) / (hi - lo);\n    const ty = y + padT + (1 - norm) * innerH;\n    if (i === 0) ctx.moveTo(tx, ty);\n    else         ctx.lineTo(tx, ty);\n  }\n  ctx.stroke();\n}\n\nfunction draw_state_badge(ctx, x, y, w, h, state, battery, t) {\n  let color = t.muted;\n  if (state === \"TAKEOFF\" || state === \"RETURN\") color = t.warn;\n  if (state === \"GROUNDED\")                       color = t.dim;\n  if (state === \"CRUISE\")                         color = t.accent;\n  if (state === \"LANDING\")                        color = t.accent2;\n  if (battery < 15)                               color = t.bad;\n\n  ctx.fillStyle = color;\n  ctx.fillRect(x, y, w, h);\n  ctx.fillStyle    = \"#0a0a0a\";\n  ctx.font         = \"bold \" + (h >= 18 ? 11 : 9) + \"px monospace\";\n  ctx.textAlign    = \"center\";\n  ctx.textBaseline = \"middle\";\n  ctx.fillText(state, x + w / 2, y + h / 2);\n  ctx.textBaseline = \"alphabetic\";\n}\n\nfunction draw_link_bar(ctx, x, y, w, h, t) {\n  if (w < 16 || h < 8) return;\n  ctx.fillStyle = t.panel;\n  ctx.fillRect(x, y, w, h);\n  ctx.strokeStyle = t.border;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  const dotX = x + 2 + chase * (w - 4);\n  ctx.fillStyle = t.accent;\n  ctx.beginPath();\n  ctx.moveTo(dotX + 2, y + h * 0.5);\n  ctx.arc(dotX, y + h * 0.5, 2, 0, TWO_PI);\n  ctx.fill();\n}\n\nfunction draw_mini_battery(ctx, x, y, w, h, pct, t) {\n  if (w < 30 || h < 6) return;\n  ctx.strokeStyle = t.border;\n  ctx.lineWidth   = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  const fillW = (w - 4) * clamp(pct / 100, 0, 1);\n  let color   = t.accent;\n  if (pct < 35) color = t.warn;\n  if (pct < 15) color = t.bad;\n  ctx.fillStyle = color;\n  ctx.fillRect(x + 2, y + 2, fillW, h - 4);\n}\n\n// -- header ---------------------------------------------------------------\n\nfunction draw_header(ctx, w, t, lat, lon, heading, state, battery, mode) {\n  const compact = (mode === \"compact\");\n  const headerH = compact ? 18 : 32;\n\n  ctx.fillStyle    = t.text;\n  ctx.font         = compact ? \"bold 10px monospace\" : \"bold 12px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  ctx.fillText(compact ? t.name : \"DRONE  \" + t.name, 10, compact ? 13 : 16);\n\n  if (!compact) {\n    ctx.fillStyle = t.dim;\n    ctx.font      = \"10px monospace\";\n    ctx.fillText(lat.toFixed(4) + \"  \" + lon.toFixed(4), 10, 28);\n  }\n\n  const badgeW = compact ? 52 : Math.min(80, w * 0.30);\n  const badgeH = compact ? 12 : 18;\n  const badgeX = w - badgeW - 8;\n  const badgeY = compact ? 4 : 6;\n  draw_state_badge(ctx, badgeX, badgeY, badgeW, badgeH, state, battery, t);\n\n  if (!compact) {\n    ctx.fillStyle = t.dim;\n    ctx.font      = \"10px monospace\";\n    ctx.textAlign = \"end\";\n    ctx.fillText(\"HDG  \" + heading.toFixed(0).padStart(3, \"0\") + \"°\", w - 8, 36);\n  }\n\n  return headerH;\n}\n\n// -- layouts --------------------------------------------------------------\n\nfunction paint_full(ctx, w, h, vals, t, headerH) {\n  const top    = headerH + 4;\n  const bottom = h - 6;\n  const padX   = 8;\n\n  // Side tape widths shrink slightly on tighter widgets.\n  const tapeW   = clamp(w * 0.10, 44, 56);\n  const stage_x = padX + tapeW + 6;\n  const stage_w = Math.max(140, w - padX * 2 - tapeW * 2 - 12);\n\n  // Reserve a bottom strip of 56 px for power/history/link.\n  const bottomH = clamp(h * 0.18, 48, 64);\n  const stage_h = Math.max(120, (bottom - top) - bottomH - 6);\n\n  // Tapes.\n  draw_tape(ctx, padX, top, tapeW, stage_h, vals.alt,      0, 320, \"ALT\", \"m\",   t);\n  draw_tape(ctx, w - padX - tapeW, top, tapeW, stage_h, vals.airspeed, 0, 50, \"AS\",  \"m/s\", t);\n\n  // Stage panel.\n  draw_panel(ctx, stage_x, top, stage_w, stage_h, t, \"ATTITUDE / HEADING\");\n\n  const cx     = stage_x + stage_w * 0.5;\n  const cy     = top + stage_h * 0.5 + 4;\n  const radius = Math.min(stage_w, stage_h) * 0.40;\n  draw_compass(ctx, cx, cy, radius, vals.heading, t);\n  draw_quad   (ctx, cx, cy, radius * 1.55, t, vals.roll);\n\n  // Pitch column inside the stage.\n  const piW = clamp(stage_w * 0.13, 44, 56);\n  const piH = Math.min(stage_h * 0.55, 90);\n  draw_pitch_indicator(ctx, stage_x + 6, top + 18, piW, piH, vals.pitch, t);\n\n  // Bottom-of-stage readouts.\n  ctx.fillStyle    = t.dim;\n  ctx.font         = \"10px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  ctx.fillText(\"ROLL  \" + vals.roll.toFixed(1).padStart(6) + \"°\",\n               stage_x + 8, top + stage_h - 22);\n  ctx.fillText(\"AS    \" + vals.airspeed.toFixed(1).padStart(6) + \" m/s\",\n               stage_x + 8, top + stage_h - 8);\n\n  const vsLabel = (vals.vspeed >= 0 ? \"+\" : \"\") + vals.vspeed.toFixed(1) + \" m/s\";\n  ctx.fillStyle = (vals.vspeed > 0.5) ? t.accent : (vals.vspeed < -0.5 ? t.warn : t.dim);\n  ctx.font      = \"bold 11px monospace\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(\"V/S \" + vsLabel, stage_x + stage_w - 8, top + stage_h - 22);\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"10px monospace\";\n  ctx.fillText(vals.state, stage_x + stage_w - 8, top + stage_h - 8);\n\n  // Bottom strip.\n  const bY = top + stage_h + 6;\n  const bH = Math.max(40, bottom - bY);\n  const linkW = clamp(w * 0.12, 60, 86);\n  const slot  = Math.max(120, w - padX * 2 - linkW - 12);\n  const powW  = Math.max(140, slot * 0.55);\n  const histW = Math.max(40,  slot - powW - 6);\n  const histX = padX + powW + 6;\n  draw_battery    (ctx, padX,                bY, powW,  bH, vals.battery, vals.voltage, vals.current, t);\n  draw_alt_history(ctx, histX,               bY, histW, bH, t);\n  draw_link_bar   (ctx, w - padX - linkW,    bY, linkW, bH, t);\n}\n\nfunction paint_square(ctx, w, h, vals, t, headerH) {\n  const padX   = 8;\n  const top    = headerH + 4;\n  const bottom = h - 6;\n\n  // One stage that fills nearly everything; tapes collapse into a thin strip\n  // along the bottom; pitch indicator sits inside the stage.\n  const bottomH = clamp(h * 0.16, 40, 56);\n  const stage_w = w - padX * 2;\n  const stage_h = Math.max(120, bottom - top - bottomH - 6);\n\n  draw_panel(ctx, padX, top, stage_w, stage_h, t, \"ATTITUDE / HEADING\");\n\n  const cx     = padX + stage_w * 0.5;\n  const cy     = top + stage_h * 0.5 + 4;\n  const radius = Math.min(stage_w, stage_h) * 0.40;\n  draw_compass(ctx, cx, cy, radius, vals.heading, t);\n  draw_quad   (ctx, cx, cy, radius * 1.55, t, vals.roll);\n\n  // Pitch indicator -- inside the stage, top-left.\n  const piW = clamp(stage_w * 0.10, 36, 56);\n  const piH = Math.min(stage_h * 0.55, 88);\n  draw_pitch_indicator(ctx, padX + 6, top + 18, piW, piH, vals.pitch, t);\n\n  // Corner readouts inside the stage. Use the four corners cleanly.\n  ctx.fillStyle    = t.dim;\n  ctx.font         = \"10px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  // bottom-left: ROLL\n  ctx.fillText(\"ROLL  \" + vals.roll.toFixed(1).padStart(6) + \"°\",\n               padX + 8, top + stage_h - 22);\n  ctx.fillText(\"AS    \" + vals.airspeed.toFixed(1).padStart(6) + \" m/s\",\n               padX + 8, top + stage_h - 8);\n  // top-right: ALT (since we dropped the tape)\n  ctx.textAlign = \"end\";\n  ctx.fillStyle = t.text;\n  ctx.font      = \"bold 12px monospace\";\n  ctx.fillText(vals.alt.toFixed(0) + \" m\", padX + stage_w - 8, top + 22);\n  // bottom-right: V/S + state\n  const vsLabel = (vals.vspeed >= 0 ? \"+\" : \"\") + vals.vspeed.toFixed(1) + \" m/s\";\n  ctx.fillStyle = (vals.vspeed > 0.5) ? t.accent : (vals.vspeed < -0.5 ? t.warn : t.dim);\n  ctx.font      = \"bold 11px monospace\";\n  ctx.fillText(\"V/S \" + vsLabel, padX + stage_w - 8, top + stage_h - 22);\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"10px monospace\";\n  ctx.fillText(vals.state, padX + stage_w - 8, top + stage_h - 8);\n\n  // Bottom strip: condensed power + link.\n  const bY = top + stage_h + 6;\n  const bH = Math.max(36, bottom - bY);\n  const linkW = clamp(w * 0.16, 50, 80);\n  const powW  = Math.max(140, w - padX * 2 - linkW - 6);\n  draw_battery (ctx, padX,             bY, powW,  bH, vals.battery, vals.voltage, vals.current, t);\n  draw_link_bar(ctx, w - padX - linkW, bY, linkW, bH, t);\n}\n\nfunction paint_compact(ctx, w, h, vals, t, headerH) {\n  // Tiny variant: drop the panel chrome, just show the dial centred plus\n  // a stack of small numeric readouts on the right edge.\n  const padX = 6;\n  const top  = headerH + 2;\n\n  const colW = Math.min(76, w * 0.32);\n  const stage_w = w - padX * 2 - colW - 4;\n  const stage_h = h - top - 6;\n\n  // Centre the dial in the available stage area.\n  const cx = padX + stage_w * 0.5;\n  const cy = top + stage_h * 0.5;\n  const radius = Math.max(20, Math.min(stage_w, stage_h) * 0.46);\n  draw_compass(ctx, cx, cy, radius, vals.heading, t, { ticksOnly: true, labels: radius >= 32 });\n  draw_quad   (ctx, cx, cy, radius * 1.55, t, vals.roll);\n\n  // Right-side numeric column.\n  const rx = padX + stage_w + 6;\n  const ry = top;\n  const rw = colW - 2;\n  const rh = h - top - 6;\n  const lineH = Math.max(13, Math.min(18, rh / 6));\n\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n\n  // Battery mini-bar across the top of the column.\n  const bbH = 8;\n  draw_mini_battery(ctx, rx, ry, rw, bbH, vals.battery, t);\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"9px monospace\";\n  ctx.fillText(vals.battery.toFixed(0) + \"%  \"\n               + vals.voltage.toFixed(1) + \"V\", rx, ry + bbH + 10);\n\n  // Stack the rest.\n  const startY = ry + bbH + 22;\n  const rows = [\n    { label: \"ALT\",  value: vals.alt.toFixed(0)      + \" m\",   color: t.text },\n    { label: \"AS\",   value: vals.airspeed.toFixed(1) + \" m/s\", color: t.text },\n    { label: \"V/S\",  value: (vals.vspeed >= 0 ? \"+\" : \"\")\n                              + vals.vspeed.toFixed(1) + \" m/s\",\n                     color: vals.vspeed > 0.5 ? t.accent : vals.vspeed < -0.5 ? t.warn : t.dim },\n    { label: \"HDG\",  value: vals.heading.toFixed(0).padStart(3, \"0\") + \"°\", color: t.text },\n    { label: \"ROLL\", value: vals.roll.toFixed(0)  + \"°\", color: t.dim },\n    { label: \"PTCH\", value: vals.pitch.toFixed(0) + \"°\", color: t.dim }\n  ];\n\n  for (let i = 0; i < rows.length; ++i) {\n    const ly = startY + i * lineH;\n    if (ly + lineH > h - 4) break;\n    ctx.fillStyle = t.muted;\n    ctx.font      = \"9px monospace\";\n    ctx.textAlign = \"start\";\n    ctx.fillText(rows[i].label, rx, ly);\n    ctx.fillStyle = rows[i].color;\n    ctx.font      = \"bold 10px monospace\";\n    ctx.textAlign = \"end\";\n    ctx.fillText(rows[i].value, rx + rw, ly);\n  }\n}\n\n// -- entry point ----------------------------------------------------------\n\nfunction paint(ctx, w, h) {\n  const t = theme();\n\n  ctx.fillStyle = t.bg;\n  ctx.fillRect(0, 0, w, h);\n\n  if (datasets.length < 11) {\n    ctx.fillStyle    = t.dim;\n    ctx.font         = (w < 320 ? \"9px\" : \"11px\") + \" monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"middle\";\n    ctx.fillText(\"Waiting for telemetry...\", w / 2, h / 2);\n    return;\n  }\n\n  const vals = {\n    lat:      Number(datasets[0].value)  || 0,\n    lon:      Number(datasets[1].value)  || 0,\n    heading:  Number(datasets[2].value)  || 0,\n    alt:      Number(datasets[3].value)  || 0,\n    airspeed: Number(datasets[4].value)  || 0,\n    vspeed:   Number(datasets[5].value)  || 0,\n    roll:     Number(datasets[6].value)  || 0,\n    pitch:    Number(datasets[7].value)  || 0,\n    voltage:  Number(datasets[8].value)  || 0,\n    current:  Number(datasets[9].value)  || 0,\n    battery:  Number(datasets[10].value) || 0\n  };\n  vals.state = infer_state(vals.alt, vals.vspeed, vals.airspeed, vals.battery);\n\n  const mode    = pick_layout(w, h);\n  const headerH = draw_header(ctx, w, t, vals.lat, vals.lon, vals.heading,\n                              vals.state, vals.battery, mode);\n\n  if      (mode === \"full\")    paint_full   (ctx, w, h, vals, t, headerH);\n  else if (mode === \"square\")  paint_square (ctx, w, h, vals, t, headerH);\n  else                          paint_compact(ctx, w, h, vals, t, headerH);\n}\n",
             "title": "Alpha State",
+            "uniqueId": 1150025,
             "widget": "painter"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1284,18 +1326,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Latitude",
+                    "uniqueId": 1150000,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1311,18 +1353,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Longitude",
+                    "uniqueId": 1150001,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1338,18 +1380,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Heading",
+                    "uniqueId": 1150002,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1365,18 +1407,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Altitude",
+                    "uniqueId": 1150003,
                     "units": "m",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1392,18 +1434,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Airspeed",
+                    "uniqueId": 1150004,
                     "units": "m/s",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1419,18 +1461,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo V/S",
+                    "uniqueId": 1150005,
                     "units": "m/s",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1446,18 +1488,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Roll",
+                    "uniqueId": 1150006,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 7,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1473,18 +1515,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Pitch",
+                    "uniqueId": 1150007,
                     "units": "°",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 8,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1500,18 +1542,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Voltage",
+                    "uniqueId": 1150008,
                     "units": "V",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 9,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1527,18 +1569,18 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Current",
+                    "uniqueId": 1150009,
                     "units": "A",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 10,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1554,23 +1596,48 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Battery",
+                    "uniqueId": 1150010,
                     "units": "%",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "painterCode": "// Live drone state visualizer for the Dual Drone Telemetry example.\n//\n// Bound datasets (in order):\n//   datasets[0]  = latitude\n//   datasets[1]  = longitude\n//   datasets[2]  = heading        (deg, 0-360)\n//   datasets[3]  = altitude       (m)\n//   datasets[4]  = airspeed       (m/s)\n//   datasets[5]  = vertical speed (m/s, +up)\n//   datasets[6]  = roll           (deg)\n//   datasets[7]  = pitch          (deg)\n//   datasets[8]  = voltage        (V)\n//   datasets[9]  = current        (A)\n//   datasets[10] = battery        (%)\n//\n// Theme (Alpha = green HUD, Bravo = amber FLIR) is selected from\n// group.sourceId so the same code drops into both painter groups.\n//\n// The widget reflows for three layout regimes:\n//   FULL    -- wide and tall: side tapes + stage + bottom strip\n//   SQUARE  -- close to 1:1:    big centred stage, condensed corner readouts\n//   COMPACT -- small or thin:   just the dial; everything else is suppressed\n\nconst TWO_PI = Math.PI * 2;\n\n// State\nlet propPhase   = 0;\nlet lastTs      = 0;\nlet chase       = 0;\nlet altHistory  = [];\nconst HIST_N    = 96;\n\nfunction clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }\nfunction deg2rad(d) { return d * Math.PI / 180; }\n\nfunction theme() {\n  const isAlpha = (group.sourceId === 0) ||\n                   (group.title && group.title.indexOf(\"Alpha\") >= 0);\n  if (isAlpha) {\n    return {\n      name:    \"ALPHA\",\n      bg:      \"#0b1410\",\n      panel:   \"#0f1a14\",\n      border:  \"#173823\",\n      grid:    \"#143524\",\n      accent:  \"#22c55e\",\n      accent2: \"#86efac\",\n      muted:   \"#3f6b50\",\n      text:    \"#e2f5e8\",\n      dim:     \"#7fa890\",\n      warn:    \"#facc15\",\n      bad:     \"#ef4444\",\n      body:    \"#1e3a2a\",\n      bodyEdge:\"#0a3a1f\",\n      arm:     \"#1f2937\",\n      armEdge: \"#102a18\",\n      cap:     \"#22c55e\"\n    };\n  }\n  return {\n    name:    \"BRAVO\",\n    bg:      \"#1a0f04\",\n    panel:   \"#21160a\",\n    border:  \"#4a2a10\",\n    grid:    \"#3a200d\",\n    accent:  \"#f59e0b\",\n    accent2: \"#fbbf24\",\n    muted:   \"#7a4a18\",\n    text:    \"#fff7ec\",\n    dim:     \"#c8a070\",\n    warn:    \"#facc15\",\n    bad:     \"#ef4444\",\n    body:    \"#3a2410\",\n    bodyEdge:\"#1f1208\",\n    arm:     \"#2c1a08\",\n    armEdge: \"#150a04\",\n    cap:     \"#fbbf24\"\n  };\n}\n\nfunction infer_state(alt, vspeed, airspeed, battery) {\n  if (alt < 1.5 && Math.abs(vspeed) < 0.5 && airspeed < 1.0) return \"GROUNDED\";\n  if (vspeed > 5.0 && alt < 100)                              return \"TAKEOFF\";\n  if (vspeed < -1.5 && alt < 50)                              return \"LANDING\";\n  if (airspeed < 5.0 && alt > 30)                             return \"RETURN\";\n  return \"CRUISE\";\n}\n\nfunction pick_layout(w, h) {\n  // Pick a layout regime from the cell aspect ratio and absolute size. The\n  // breakpoints were tuned for typical Serial Studio dashboard cell sizes.\n  const aspect = w / h;\n  if (w < 240 || h < 200)               return \"compact\";\n  if (aspect > 1.6 && w >= 420)         return \"full\";\n  if (aspect < 0.85 && h >= 360)        return \"full\";\n  return \"square\";\n}\n\nfunction onFrame() {\n  const now = Date.now();\n  const dt  = lastTs > 0 ? Math.max(0, (now - lastTs) * 1e-3) : 0.016;\n  lastTs    = now;\n\n  if (datasets.length < 11) return;\n\n  const airspeed = Number(datasets[4].value) || 0;\n  const alt      = Number(datasets[3].value) || 0;\n\n  const wMin   = 6.0;\n  const wScale = 1.4;\n  propPhase = (propPhase + (wMin + airspeed * wScale) * dt) % TWO_PI;\n\n  chase = (chase + dt * 1.2) % 1.0;\n\n  altHistory.push(alt);\n  if (altHistory.length > HIST_N) altHistory.shift();\n}\n\n// -- generic helpers ------------------------------------------------------\n\nfunction draw_panel(ctx, x, y, w, h, t, label, labelSize) {\n  if (w < 6 || h < 6) return;\n  ctx.fillStyle = t.panel;\n  ctx.fillRect(x, y, w, h);\n  ctx.strokeStyle = t.border;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  if (label && h > 18) {\n    ctx.fillStyle = t.muted;\n    ctx.font      = \"bold \" + (labelSize || 9) + \"px monospace\";\n    ctx.textAlign = \"start\";\n    ctx.textBaseline = \"alphabetic\";\n    ctx.fillText(label, x + 6, y + (labelSize ? labelSize + 2 : 11));\n  }\n}\n\nfunction draw_compass(ctx, cx, cy, r, hdg, t, opts) {\n  if (r < 12) return;\n  const showLabels = !opts || opts.labels !== false;\n  const ticksOnly  = !!(opts && opts.ticksOnly);\n\n  ctx.strokeStyle = t.grid;\n  ctx.lineWidth   = 1;\n  ctx.beginPath();\n  ctx.moveTo(cx + r, cy);\n  ctx.arc(cx, cy, r, 0, TWO_PI);\n  ctx.stroke();\n\n  if (!ticksOnly) {\n    ctx.beginPath();\n    ctx.moveTo(cx + r * 0.78, cy);\n    ctx.arc(cx, cy, r * 0.78, 0, TWO_PI);\n    ctx.stroke();\n  }\n\n  for (let a = 0; a < 360; a += 30) {\n    const rad = deg2rad(a - 90);\n    const r0  = r * 0.92;\n    const r1  = (a % 90 === 0) ? r * 0.74 : r * 0.84;\n    ctx.beginPath();\n    ctx.moveTo(cx + Math.cos(rad) * r0, cy + Math.sin(rad) * r0);\n    ctx.lineTo(cx + Math.cos(rad) * r1, cy + Math.sin(rad) * r1);\n    ctx.stroke();\n  }\n\n  if (showLabels && r >= 26) {\n    const labelSize = r >= 60 ? 10 : 9;\n    ctx.fillStyle    = t.dim;\n    ctx.font         = \"bold \" + labelSize + \"px monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"middle\";\n    const lr = r * 0.62;\n    ctx.fillText(\"N\", cx,        cy - lr);\n    ctx.fillText(\"S\", cx,        cy + lr);\n    ctx.fillText(\"E\", cx + lr,   cy);\n    ctx.fillText(\"W\", cx - lr,   cy);\n    ctx.textBaseline = \"alphabetic\";\n  }\n\n  // Heading needle.\n  const hRad = deg2rad(hdg - 90);\n  ctx.save();\n  ctx.translate(cx, cy);\n  ctx.rotate(hRad);\n\n  ctx.fillStyle = t.accent;\n  ctx.beginPath();\n  ctx.moveTo(r * 0.72, 0);\n  ctx.lineTo(0,         -4);\n  ctx.lineTo(0,          4);\n  ctx.closePath();\n  ctx.fill();\n\n  ctx.fillStyle = t.muted;\n  ctx.beginPath();\n  ctx.moveTo(0, -3);\n  ctx.lineTo(-r * 0.32, 0);\n  ctx.lineTo(0, 3);\n  ctx.closePath();\n  ctx.fill();\n\n  ctx.restore();\n}\n\nfunction draw_quad(ctx, cx, cy, span, t, roll) {\n  if (span < 30) return;\n  const armLen = span * 0.42;\n  const motorR = Math.max(4, span * 0.13);\n  const propR  = motorR * 1.55;\n\n  ctx.save();\n  ctx.translate(cx, cy);\n  ctx.rotate(deg2rad(roll));\n\n  // Forward indicator (translucent triangle ahead of body).\n  ctx.fillStyle = t.cap;\n  ctx.globalAlpha = 0.4;\n  ctx.beginPath();\n  ctx.moveTo(0, -armLen * 0.55);\n  ctx.lineTo(-6, -armLen * 0.30);\n  ctx.lineTo( 6, -armLen * 0.30);\n  ctx.closePath();\n  ctx.fill();\n  ctx.globalAlpha = 1.0;\n\n  // Arms (X-frame).\n  const armW = clamp(span * 0.04, 3, 8);\n  ctx.strokeStyle = t.armEdge;\n  ctx.lineWidth   = armW + 2;\n  ctx.lineCap     = \"round\";\n  ctx.beginPath();\n  ctx.moveTo(-armLen, -armLen);\n  ctx.lineTo( armLen,  armLen);\n  ctx.moveTo( armLen, -armLen);\n  ctx.lineTo(-armLen,  armLen);\n  ctx.stroke();\n\n  ctx.strokeStyle = t.arm;\n  ctx.lineWidth   = armW;\n  ctx.beginPath();\n  ctx.moveTo(-armLen, -armLen);\n  ctx.lineTo( armLen,  armLen);\n  ctx.moveTo( armLen, -armLen);\n  ctx.lineTo(-armLen,  armLen);\n  ctx.stroke();\n\n  ctx.lineCap = \"butt\";\n\n  // Body (central capsule).\n  const bodyW = span * 0.22;\n  const bodyH = span * 0.16;\n  ctx.fillStyle = t.body;\n  ctx.fillRect(-bodyW * 0.5, -bodyH * 0.5, bodyW, bodyH);\n  ctx.strokeStyle = t.bodyEdge;\n  ctx.lineWidth   = 1;\n  ctx.strokeRect(-bodyW * 0.5 + 0.5, -bodyH * 0.5 + 0.5, bodyW - 1, bodyH - 1);\n\n  // Sensor lens.\n  ctx.fillStyle = t.cap;\n  ctx.beginPath();\n  ctx.moveTo(3, -bodyH * 0.10);\n  ctx.arc(0, -bodyH * 0.10, 3, 0, TWO_PI);\n  ctx.fill();\n\n  // Motors.\n  const motors = [\n    [-armLen, -armLen, +1],\n    [ armLen, -armLen, -1],\n    [-armLen,  armLen, -1],\n    [ armLen,  armLen, +1]\n  ];\n\n  for (let i = 0; i < motors.length; ++i) {\n    const mx = motors[i][0];\n    const my = motors[i][1];\n    const dir = motors[i][2];\n\n    ctx.fillStyle = t.bodyEdge;\n    ctx.beginPath();\n    ctx.moveTo(mx + motorR + 1, my);\n    ctx.arc(mx, my, motorR + 1, 0, TWO_PI);\n    ctx.fill();\n\n    ctx.fillStyle = t.body;\n    ctx.beginPath();\n    ctx.moveTo(mx + motorR, my);\n    ctx.arc(mx, my, motorR, 0, TWO_PI);\n    ctx.fill();\n\n    ctx.save();\n    ctx.translate(mx, my);\n    ctx.rotate(propPhase * dir);\n\n    ctx.strokeStyle = t.accent2;\n    ctx.globalAlpha = 0.55;\n    ctx.lineWidth   = 1.5;\n    ctx.beginPath();\n    ctx.moveTo(propR, 0);\n    ctx.arc(0, 0, propR, 0, TWO_PI);\n    ctx.stroke();\n    ctx.globalAlpha = 1.0;\n\n    ctx.strokeStyle = t.accent;\n    ctx.lineWidth   = 1.5;\n    ctx.lineCap     = \"round\";\n    ctx.globalAlpha = 0.85;\n    ctx.beginPath();\n    ctx.moveTo(-propR, 0);\n    ctx.lineTo( propR, 0);\n    ctx.stroke();\n    ctx.globalAlpha = 0.35;\n    ctx.beginPath();\n    ctx.moveTo(0, -propR);\n    ctx.lineTo(0,  propR);\n    ctx.stroke();\n    ctx.globalAlpha = 1.0;\n    ctx.lineCap     = \"butt\";\n\n    ctx.fillStyle = t.cap;\n    ctx.beginPath();\n    ctx.moveTo(2.5, 0);\n    ctx.arc(0, 0, 2.5, 0, TWO_PI);\n    ctx.fill();\n    ctx.restore();\n  }\n\n  ctx.restore();\n}\n\nfunction draw_pitch_indicator(ctx, x, y, w, h, pitch, t) {\n  if (w < 26 || h < 30) return;\n  draw_panel(ctx, x, y, w, h, t, null);\n\n  const labelH   = h >= 60 ? 12 : 0;\n  if (labelH > 0) {\n    ctx.fillStyle    = t.muted;\n    ctx.font         = \"bold 8px monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"alphabetic\";\n    ctx.fillText(\"PITCH\", x + w / 2, y + 10);\n  }\n  const innerY = y + labelH + 2;\n  const readH  = h >= 60 ? 12 : 0;\n  const innerH = h - labelH - 4 - readH;\n  const cx = x + w / 2;\n  const cy = innerY + innerH / 2;\n  const pxPerDeg = innerH / 60;\n  const offset   = clamp(pitch, -45, 45) * pxPerDeg;\n\n  ctx.save();\n  ctx.beginPath();\n  ctx.rect(x + 2, innerY, w - 4, innerH);\n  ctx.clip();\n\n  ctx.strokeStyle = t.accent;\n  ctx.lineWidth   = 1.5;\n  ctx.beginPath();\n  ctx.moveTo(x + 4,     cy + offset);\n  ctx.lineTo(x + w - 4, cy + offset);\n  ctx.stroke();\n\n  ctx.strokeStyle = t.grid;\n  ctx.lineWidth   = 1;\n  for (let p = -30; p <= 30; p += 10) {\n    if (p === 0) continue;\n    const ly = cy + offset - p * pxPerDeg;\n    ctx.beginPath();\n    ctx.moveTo(cx - 8, ly);\n    ctx.lineTo(cx + 8, ly);\n    ctx.stroke();\n  }\n  ctx.restore();\n\n  ctx.strokeStyle = t.cap;\n  ctx.lineWidth   = 2;\n  ctx.beginPath();\n  ctx.moveTo(cx - 8, cy);\n  ctx.lineTo(cx - 3, cy);\n  ctx.moveTo(cx + 3, cy);\n  ctx.lineTo(cx + 8, cy);\n  ctx.stroke();\n\n  if (readH > 0) {\n    ctx.fillStyle    = t.text;\n    ctx.font         = \"bold 10px monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"alphabetic\";\n    ctx.fillText(pitch.toFixed(0) + \"°\", x + w / 2, y + h - 4);\n  }\n}\n\nfunction draw_tape(ctx, x, y, w, h, value, vmin, vmax, label, units, t) {\n  if (w < 24 || h < 50) return;\n  draw_panel(ctx, x, y, w, h, t, label);\n\n  const padTop = h > 80 ? 16 : 12;\n  const padBot = (h > 70) ? 28 : 14;\n  const top    = y + padTop;\n  const bot    = y + h - padBot;\n  const span   = bot - top;\n  if (span < 8) return;\n\n  ctx.strokeStyle = t.grid;\n  ctx.lineWidth   = 1;\n  for (let i = 0; i <= 5; ++i) {\n    const ty = top + (span * i / 5);\n    ctx.beginPath();\n    ctx.moveTo(x + 4, ty);\n    ctx.lineTo(x + w - 4, ty);\n    ctx.stroke();\n  }\n\n  const norm = clamp((value - vmin) / Math.max(0.001, (vmax - vmin)), 0, 1);\n  const barH = span * norm;\n  ctx.fillStyle = t.accent;\n  ctx.globalAlpha = 0.85;\n  ctx.fillRect(x + 4, bot - barH, w - 8, barH);\n  ctx.globalAlpha = 1.0;\n\n  ctx.strokeStyle = t.accent2;\n  ctx.lineWidth   = 1.5;\n  ctx.beginPath();\n  ctx.moveTo(x + 2,     bot - barH);\n  ctx.lineTo(x + w - 2, bot - barH);\n  ctx.stroke();\n\n  ctx.fillStyle    = t.text;\n  ctx.font         = \"bold 11px monospace\";\n  ctx.textAlign    = \"center\";\n  ctx.textBaseline = \"alphabetic\";\n  if (h > 70) {\n    ctx.fillText(value.toFixed(1), x + w / 2, y + h - 14);\n    ctx.fillStyle = t.dim;\n    ctx.font      = \"9px monospace\";\n    ctx.fillText(units, x + w / 2, y + h - 4);\n  } else {\n    ctx.fillText(value.toFixed(0), x + w / 2, y + h - 4);\n  }\n}\n\nfunction draw_battery(ctx, x, y, w, h, pct, voltage, current, t) {\n  if (w < 80 || h < 30) return;\n  draw_panel(ctx, x, y, w, h, t, \"POWER\");\n\n  const tight  = h < 50 || w < 140;\n  const barTop = tight ? y + 14 : y + 22;\n  const barX   = x + 8;\n  const barW   = w - 16;\n  const barH   = tight ? 10 : 14;\n\n  ctx.strokeStyle = t.border;\n  ctx.lineWidth   = 1;\n  ctx.strokeRect(barX + 0.5, barTop + 0.5, barW - 1, barH - 1);\n\n  const fillW = (barW - 4) * clamp(pct / 100, 0, 1);\n  let color   = t.accent;\n  if (pct < 35) color = t.warn;\n  if (pct < 15) color = t.bad;\n  ctx.fillStyle = color;\n  ctx.fillRect(barX + 2, barTop + 2, fillW, barH - 4);\n\n  ctx.strokeStyle = t.grid;\n  for (let i = 1; i < 4; ++i) {\n    const tx = barX + (barW * i) / 4;\n    ctx.beginPath();\n    ctx.moveTo(tx, barTop + 2);\n    ctx.lineTo(tx, barTop + barH - 2);\n    ctx.stroke();\n  }\n\n  // Readouts -- two rows for narrow panels, one row otherwise.\n  ctx.fillStyle    = t.text;\n  ctx.font         = \"bold 12px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.fillText(pct.toFixed(0) + \"%\", x + 8, y + h - 8);\n\n  const numericRow = voltage.toFixed(1) + \"V \" + current.toFixed(1) + \"A\";\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"10px monospace\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(numericRow, x + w - 8, y + h - 8);\n}\n\nfunction draw_alt_history(ctx, x, y, w, h, t) {\n  if (w < 50 || h < 30) return;\n  draw_panel(ctx, x, y, w, h, t, \"ALT TRACE\");\n  if (altHistory.length < 2) return;\n\n  let lo = altHistory[0], hi = altHistory[0];\n  for (let i = 1; i < altHistory.length; ++i) {\n    const v = altHistory[i];\n    if (v < lo) lo = v;\n    if (v > hi) hi = v;\n  }\n  if (hi - lo < 5) {\n    const c = (hi + lo) * 0.5;\n    lo = c - 3;\n    hi = c + 3;\n  }\n  const padT = 16, padB = 6, padL = 4, padR = 4;\n  const innerW = w - padL - padR;\n  const innerH = h - padT - padB;\n  if (innerW < 10 || innerH < 6) return;\n\n  ctx.strokeStyle = t.accent;\n  ctx.lineWidth   = 1.5;\n  ctx.beginPath();\n  for (let i = 0; i < altHistory.length; ++i) {\n    const tx = x + padL + (i / (HIST_N - 1)) * innerW;\n    const norm = (altHistory[i] - lo) / (hi - lo);\n    const ty = y + padT + (1 - norm) * innerH;\n    if (i === 0) ctx.moveTo(tx, ty);\n    else         ctx.lineTo(tx, ty);\n  }\n  ctx.stroke();\n}\n\nfunction draw_state_badge(ctx, x, y, w, h, state, battery, t) {\n  let color = t.muted;\n  if (state === \"TAKEOFF\" || state === \"RETURN\") color = t.warn;\n  if (state === \"GROUNDED\")                       color = t.dim;\n  if (state === \"CRUISE\")                         color = t.accent;\n  if (state === \"LANDING\")                        color = t.accent2;\n  if (battery < 15)                               color = t.bad;\n\n  ctx.fillStyle = color;\n  ctx.fillRect(x, y, w, h);\n  ctx.fillStyle    = \"#0a0a0a\";\n  ctx.font         = \"bold \" + (h >= 18 ? 11 : 9) + \"px monospace\";\n  ctx.textAlign    = \"center\";\n  ctx.textBaseline = \"middle\";\n  ctx.fillText(state, x + w / 2, y + h / 2);\n  ctx.textBaseline = \"alphabetic\";\n}\n\nfunction draw_link_bar(ctx, x, y, w, h, t) {\n  if (w < 16 || h < 8) return;\n  ctx.fillStyle = t.panel;\n  ctx.fillRect(x, y, w, h);\n  ctx.strokeStyle = t.border;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  const dotX = x + 2 + chase * (w - 4);\n  ctx.fillStyle = t.accent;\n  ctx.beginPath();\n  ctx.moveTo(dotX + 2, y + h * 0.5);\n  ctx.arc(dotX, y + h * 0.5, 2, 0, TWO_PI);\n  ctx.fill();\n}\n\nfunction draw_mini_battery(ctx, x, y, w, h, pct, t) {\n  if (w < 30 || h < 6) return;\n  ctx.strokeStyle = t.border;\n  ctx.lineWidth   = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  const fillW = (w - 4) * clamp(pct / 100, 0, 1);\n  let color   = t.accent;\n  if (pct < 35) color = t.warn;\n  if (pct < 15) color = t.bad;\n  ctx.fillStyle = color;\n  ctx.fillRect(x + 2, y + 2, fillW, h - 4);\n}\n\n// -- header ---------------------------------------------------------------\n\nfunction draw_header(ctx, w, t, lat, lon, heading, state, battery, mode) {\n  const compact = (mode === \"compact\");\n  const headerH = compact ? 18 : 32;\n\n  ctx.fillStyle    = t.text;\n  ctx.font         = compact ? \"bold 10px monospace\" : \"bold 12px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  ctx.fillText(compact ? t.name : \"DRONE  \" + t.name, 10, compact ? 13 : 16);\n\n  if (!compact) {\n    ctx.fillStyle = t.dim;\n    ctx.font      = \"10px monospace\";\n    ctx.fillText(lat.toFixed(4) + \"  \" + lon.toFixed(4), 10, 28);\n  }\n\n  const badgeW = compact ? 52 : Math.min(80, w * 0.30);\n  const badgeH = compact ? 12 : 18;\n  const badgeX = w - badgeW - 8;\n  const badgeY = compact ? 4 : 6;\n  draw_state_badge(ctx, badgeX, badgeY, badgeW, badgeH, state, battery, t);\n\n  if (!compact) {\n    ctx.fillStyle = t.dim;\n    ctx.font      = \"10px monospace\";\n    ctx.textAlign = \"end\";\n    ctx.fillText(\"HDG  \" + heading.toFixed(0).padStart(3, \"0\") + \"°\", w - 8, 36);\n  }\n\n  return headerH;\n}\n\n// -- layouts --------------------------------------------------------------\n\nfunction paint_full(ctx, w, h, vals, t, headerH) {\n  const top    = headerH + 4;\n  const bottom = h - 6;\n  const padX   = 8;\n\n  // Side tape widths shrink slightly on tighter widgets.\n  const tapeW   = clamp(w * 0.10, 44, 56);\n  const stage_x = padX + tapeW + 6;\n  const stage_w = Math.max(140, w - padX * 2 - tapeW * 2 - 12);\n\n  // Reserve a bottom strip of 56 px for power/history/link.\n  const bottomH = clamp(h * 0.18, 48, 64);\n  const stage_h = Math.max(120, (bottom - top) - bottomH - 6);\n\n  // Tapes.\n  draw_tape(ctx, padX, top, tapeW, stage_h, vals.alt,      0, 320, \"ALT\", \"m\",   t);\n  draw_tape(ctx, w - padX - tapeW, top, tapeW, stage_h, vals.airspeed, 0, 50, \"AS\",  \"m/s\", t);\n\n  // Stage panel.\n  draw_panel(ctx, stage_x, top, stage_w, stage_h, t, \"ATTITUDE / HEADING\");\n\n  const cx     = stage_x + stage_w * 0.5;\n  const cy     = top + stage_h * 0.5 + 4;\n  const radius = Math.min(stage_w, stage_h) * 0.40;\n  draw_compass(ctx, cx, cy, radius, vals.heading, t);\n  draw_quad   (ctx, cx, cy, radius * 1.55, t, vals.roll);\n\n  // Pitch column inside the stage.\n  const piW = clamp(stage_w * 0.13, 44, 56);\n  const piH = Math.min(stage_h * 0.55, 90);\n  draw_pitch_indicator(ctx, stage_x + 6, top + 18, piW, piH, vals.pitch, t);\n\n  // Bottom-of-stage readouts.\n  ctx.fillStyle    = t.dim;\n  ctx.font         = \"10px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  ctx.fillText(\"ROLL  \" + vals.roll.toFixed(1).padStart(6) + \"°\",\n               stage_x + 8, top + stage_h - 22);\n  ctx.fillText(\"AS    \" + vals.airspeed.toFixed(1).padStart(6) + \" m/s\",\n               stage_x + 8, top + stage_h - 8);\n\n  const vsLabel = (vals.vspeed >= 0 ? \"+\" : \"\") + vals.vspeed.toFixed(1) + \" m/s\";\n  ctx.fillStyle = (vals.vspeed > 0.5) ? t.accent : (vals.vspeed < -0.5 ? t.warn : t.dim);\n  ctx.font      = \"bold 11px monospace\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(\"V/S \" + vsLabel, stage_x + stage_w - 8, top + stage_h - 22);\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"10px monospace\";\n  ctx.fillText(vals.state, stage_x + stage_w - 8, top + stage_h - 8);\n\n  // Bottom strip.\n  const bY = top + stage_h + 6;\n  const bH = Math.max(40, bottom - bY);\n  const linkW = clamp(w * 0.12, 60, 86);\n  const slot  = Math.max(120, w - padX * 2 - linkW - 12);\n  const powW  = Math.max(140, slot * 0.55);\n  const histW = Math.max(40,  slot - powW - 6);\n  const histX = padX + powW + 6;\n  draw_battery    (ctx, padX,                bY, powW,  bH, vals.battery, vals.voltage, vals.current, t);\n  draw_alt_history(ctx, histX,               bY, histW, bH, t);\n  draw_link_bar   (ctx, w - padX - linkW,    bY, linkW, bH, t);\n}\n\nfunction paint_square(ctx, w, h, vals, t, headerH) {\n  const padX   = 8;\n  const top    = headerH + 4;\n  const bottom = h - 6;\n\n  // One stage that fills nearly everything; tapes collapse into a thin strip\n  // along the bottom; pitch indicator sits inside the stage.\n  const bottomH = clamp(h * 0.16, 40, 56);\n  const stage_w = w - padX * 2;\n  const stage_h = Math.max(120, bottom - top - bottomH - 6);\n\n  draw_panel(ctx, padX, top, stage_w, stage_h, t, \"ATTITUDE / HEADING\");\n\n  const cx     = padX + stage_w * 0.5;\n  const cy     = top + stage_h * 0.5 + 4;\n  const radius = Math.min(stage_w, stage_h) * 0.40;\n  draw_compass(ctx, cx, cy, radius, vals.heading, t);\n  draw_quad   (ctx, cx, cy, radius * 1.55, t, vals.roll);\n\n  // Pitch indicator -- inside the stage, top-left.\n  const piW = clamp(stage_w * 0.10, 36, 56);\n  const piH = Math.min(stage_h * 0.55, 88);\n  draw_pitch_indicator(ctx, padX + 6, top + 18, piW, piH, vals.pitch, t);\n\n  // Corner readouts inside the stage. Use the four corners cleanly.\n  ctx.fillStyle    = t.dim;\n  ctx.font         = \"10px monospace\";\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  // bottom-left: ROLL\n  ctx.fillText(\"ROLL  \" + vals.roll.toFixed(1).padStart(6) + \"°\",\n               padX + 8, top + stage_h - 22);\n  ctx.fillText(\"AS    \" + vals.airspeed.toFixed(1).padStart(6) + \" m/s\",\n               padX + 8, top + stage_h - 8);\n  // top-right: ALT (since we dropped the tape)\n  ctx.textAlign = \"end\";\n  ctx.fillStyle = t.text;\n  ctx.font      = \"bold 12px monospace\";\n  ctx.fillText(vals.alt.toFixed(0) + \" m\", padX + stage_w - 8, top + 22);\n  // bottom-right: V/S + state\n  const vsLabel = (vals.vspeed >= 0 ? \"+\" : \"\") + vals.vspeed.toFixed(1) + \" m/s\";\n  ctx.fillStyle = (vals.vspeed > 0.5) ? t.accent : (vals.vspeed < -0.5 ? t.warn : t.dim);\n  ctx.font      = \"bold 11px monospace\";\n  ctx.fillText(\"V/S \" + vsLabel, padX + stage_w - 8, top + stage_h - 22);\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"10px monospace\";\n  ctx.fillText(vals.state, padX + stage_w - 8, top + stage_h - 8);\n\n  // Bottom strip: condensed power + link.\n  const bY = top + stage_h + 6;\n  const bH = Math.max(36, bottom - bY);\n  const linkW = clamp(w * 0.16, 50, 80);\n  const powW  = Math.max(140, w - padX * 2 - linkW - 6);\n  draw_battery (ctx, padX,             bY, powW,  bH, vals.battery, vals.voltage, vals.current, t);\n  draw_link_bar(ctx, w - padX - linkW, bY, linkW, bH, t);\n}\n\nfunction paint_compact(ctx, w, h, vals, t, headerH) {\n  // Tiny variant: drop the panel chrome, just show the dial centred plus\n  // a stack of small numeric readouts on the right edge.\n  const padX = 6;\n  const top  = headerH + 2;\n\n  const colW = Math.min(76, w * 0.32);\n  const stage_w = w - padX * 2 - colW - 4;\n  const stage_h = h - top - 6;\n\n  // Centre the dial in the available stage area.\n  const cx = padX + stage_w * 0.5;\n  const cy = top + stage_h * 0.5;\n  const radius = Math.max(20, Math.min(stage_w, stage_h) * 0.46);\n  draw_compass(ctx, cx, cy, radius, vals.heading, t, { ticksOnly: true, labels: radius >= 32 });\n  draw_quad   (ctx, cx, cy, radius * 1.55, t, vals.roll);\n\n  // Right-side numeric column.\n  const rx = padX + stage_w + 6;\n  const ry = top;\n  const rw = colW - 2;\n  const rh = h - top - 6;\n  const lineH = Math.max(13, Math.min(18, rh / 6));\n\n  ctx.textAlign    = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n\n  // Battery mini-bar across the top of the column.\n  const bbH = 8;\n  draw_mini_battery(ctx, rx, ry, rw, bbH, vals.battery, t);\n  ctx.fillStyle = t.dim;\n  ctx.font      = \"9px monospace\";\n  ctx.fillText(vals.battery.toFixed(0) + \"%  \"\n               + vals.voltage.toFixed(1) + \"V\", rx, ry + bbH + 10);\n\n  // Stack the rest.\n  const startY = ry + bbH + 22;\n  const rows = [\n    { label: \"ALT\",  value: vals.alt.toFixed(0)      + \" m\",   color: t.text },\n    { label: \"AS\",   value: vals.airspeed.toFixed(1) + \" m/s\", color: t.text },\n    { label: \"V/S\",  value: (vals.vspeed >= 0 ? \"+\" : \"\")\n                              + vals.vspeed.toFixed(1) + \" m/s\",\n                     color: vals.vspeed > 0.5 ? t.accent : vals.vspeed < -0.5 ? t.warn : t.dim },\n    { label: \"HDG\",  value: vals.heading.toFixed(0).padStart(3, \"0\") + \"°\", color: t.text },\n    { label: \"ROLL\", value: vals.roll.toFixed(0)  + \"°\", color: t.dim },\n    { label: \"PTCH\", value: vals.pitch.toFixed(0) + \"°\", color: t.dim }\n  ];\n\n  for (let i = 0; i < rows.length; ++i) {\n    const ly = startY + i * lineH;\n    if (ly + lineH > h - 4) break;\n    ctx.fillStyle = t.muted;\n    ctx.font      = \"9px monospace\";\n    ctx.textAlign = \"start\";\n    ctx.fillText(rows[i].label, rx, ly);\n    ctx.fillStyle = rows[i].color;\n    ctx.font      = \"bold 10px monospace\";\n    ctx.textAlign = \"end\";\n    ctx.fillText(rows[i].value, rx + rw, ly);\n  }\n}\n\n// -- entry point ----------------------------------------------------------\n\nfunction paint(ctx, w, h) {\n  const t = theme();\n\n  ctx.fillStyle = t.bg;\n  ctx.fillRect(0, 0, w, h);\n\n  if (datasets.length < 11) {\n    ctx.fillStyle    = t.dim;\n    ctx.font         = (w < 320 ? \"9px\" : \"11px\") + \" monospace\";\n    ctx.textAlign    = \"center\";\n    ctx.textBaseline = \"middle\";\n    ctx.fillText(\"Waiting for telemetry...\", w / 2, h / 2);\n    return;\n  }\n\n  const vals = {\n    lat:      Number(datasets[0].value)  || 0,\n    lon:      Number(datasets[1].value)  || 0,\n    heading:  Number(datasets[2].value)  || 0,\n    alt:      Number(datasets[3].value)  || 0,\n    airspeed: Number(datasets[4].value)  || 0,\n    vspeed:   Number(datasets[5].value)  || 0,\n    roll:     Number(datasets[6].value)  || 0,\n    pitch:    Number(datasets[7].value)  || 0,\n    voltage:  Number(datasets[8].value)  || 0,\n    current:  Number(datasets[9].value)  || 0,\n    battery:  Number(datasets[10].value) || 0\n  };\n  vals.state = infer_state(vals.alt, vals.vspeed, vals.airspeed, vals.battery);\n\n  const mode    = pick_layout(w, h);\n  const headerH = draw_header(ctx, w, t, vals.lat, vals.lon, vals.heading,\n                              vals.state, vals.battery, mode);\n\n  if      (mode === \"full\")    paint_full   (ctx, w, h, vals, t, headerH);\n  else if (mode === \"square\")  paint_square (ctx, w, h, vals, t, headerH);\n  else                          paint_compact(ctx, w, h, vals, t, headerH);\n}\n",
             "sourceId": 1,
             "title": "Bravo State",
+            "uniqueId": 1150026,
             "widget": "painter"
         }
     ],
     "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 1150027,
+    "plotTimeRange": 5,
     "pointCount": 100,
-    "schemaVersion": 1,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 1,
@@ -1687,100 +1754,164 @@
         "layout:1000": {
             "data": {
                 "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1058,
                 "geometries": [
                     {
-                        "height": 247,
-                        "id": 10,
-                        "state": "normal",
-                        "width": 340,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 6,
-                        "state": "normal",
-                        "width": 340,
-                        "x": 343,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 8,
-                        "state": "normal",
-                        "width": 340,
-                        "x": 682,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
+                        "height": 250,
                         "id": 4,
-                        "state": "closed",
-                        "width": 254,
-                        "x": 765,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 2,
-                        "state": "closed",
-                        "width": 203,
-                        "x": 815,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 11,
+                        "relativeIndex": 1,
                         "state": "normal",
-                        "width": 340,
-                        "x": 4,
-                        "y": 250
+                        "widgetType": 4,
+                        "width": 212,
+                        "x": 0,
+                        "y": 0
                     },
                     {
-                        "height": 246,
-                        "id": 5,
-                        "state": "closed",
-                        "width": 204,
-                        "x": 207,
-                        "y": 250
+                        "height": 250,
+                        "id": 6,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 5,
+                        "width": 212,
+                        "x": 211,
+                        "y": 0
                     },
                     {
-                        "height": 246,
+                        "height": 250,
+                        "id": 10,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 18,
+                        "width": 212,
+                        "x": 422,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
+                        "id": 12,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 19,
+                        "width": 211,
+                        "x": 633,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
+                        "id": 15,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 22,
+                        "width": 211,
+                        "x": 843,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
                         "id": 3,
-                        "state": "closed",
-                        "width": 255,
-                        "x": 258,
-                        "y": 250
-                    },
-                    {
-                        "height": 247,
-                        "id": 7,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 340,
-                        "x": 343,
-                        "y": 250
+                        "widgetType": 4,
+                        "width": 212,
+                        "x": 0,
+                        "y": 249
                     },
                     {
-                        "height": 247,
+                        "height": 250,
+                        "id": 5,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 5,
+                        "width": 212,
+                        "x": 211,
+                        "y": 249
+                    },
+                    {
+                        "height": 250,
                         "id": 9,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 340,
-                        "x": 682,
-                        "y": 250
+                        "widgetType": 18,
+                        "width": 212,
+                        "x": 422,
+                        "y": 249
+                    },
+                    {
+                        "height": 250,
+                        "id": 11,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 19,
+                        "width": 211,
+                        "x": 633,
+                        "y": 249
+                    },
+                    {
+                        "height": 250,
+                        "id": 14,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 22,
+                        "width": 211,
+                        "x": 843,
+                        "y": 249
                     }
                 ],
                 "userReordered": true,
                 "windowOrder": [
-                    10,
-                    6,
-                    8,
                     4,
-                    2,
-                    11,
-                    5,
+                    6,
+                    10,
+                    12,
+                    15,
                     3,
-                    7,
-                    9
+                    5,
+                    9,
+                    11,
+                    14
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 4
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 5
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 18
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 19
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 22
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 4
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 5
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 18
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 19
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 22
+                    }
                 ]
             }
         },
@@ -2283,488 +2414,6 @@
             }
         }
     },
-    "workspaces": [
-        {
-            "icon": "qrc:/icons/panes/overview.svg",
-            "title": "Overview",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 14
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 1,
-                    "widgetType": 14
-                },
-                {
-                    "groupId": 12,
-                    "relativeIndex": 0,
-                    "widgetType": 15
-                },
-                {
-                    "groupId": 13,
-                    "relativeIndex": 1,
-                    "widgetType": 15
-                },
-                {
-                    "groupId": 14,
-                    "relativeIndex": 0,
-                    "widgetType": 18
-                },
-                {
-                    "groupId": 15,
-                    "relativeIndex": 1,
-                    "widgetType": 18
-                }
-            ],
-            "workspaceId": 1000
-        },
-        {
-            "icon": "qrc:/icons/panes/dashboard.svg",
-            "title": "All Data",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 14
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 5
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 0,
-                    "widgetType": 12
-                },
-                {
-                    "groupId": 3,
-                    "relativeIndex": 0,
-                    "widgetType": 4
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 0,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 0,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 1,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 1,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 0,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 2,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 2,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 3,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 1,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 2,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 4,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 1,
-                    "widgetType": 14
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 1,
-                    "widgetType": 5
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 1,
-                    "widgetType": 12
-                },
-                {
-                    "groupId": 9,
-                    "relativeIndex": 1,
-                    "widgetType": 4
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 5,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 4,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 6,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 7,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 5,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 8,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 4,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 5,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 9,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 12,
-                    "relativeIndex": 0,
-                    "widgetType": 15
-                },
-                {
-                    "groupId": 13,
-                    "relativeIndex": 1,
-                    "widgetType": 15
-                },
-                {
-                    "groupId": 14,
-                    "relativeIndex": 0,
-                    "widgetType": 18
-                },
-                {
-                    "groupId": 15,
-                    "relativeIndex": 1,
-                    "widgetType": 18
-                }
-            ],
-            "workspaceId": 1001
-        },
-        {
-            "title": "Alpha Camera",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 14
-                }
-            ],
-            "workspaceId": 1002
-        },
-        {
-            "title": "Alpha Navigation",
-            "widgetRefs": [
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 5
-                }
-            ],
-            "workspaceId": 1003
-        },
-        {
-            "title": "Alpha Heading",
-            "widgetRefs": [
-                {
-                    "groupId": 2,
-                    "relativeIndex": 0,
-                    "widgetType": 12
-                }
-            ],
-            "workspaceId": 1004
-        },
-        {
-            "title": "Alpha Attitude",
-            "widgetRefs": [
-                {
-                    "groupId": 3,
-                    "relativeIndex": 0,
-                    "widgetType": 4
-                }
-            ],
-            "workspaceId": 1005
-        },
-        {
-            "title": "Alpha Flight",
-            "widgetRefs": [
-                {
-                    "groupId": 4,
-                    "relativeIndex": 0,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 0,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 1,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 1,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 0,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 4,
-                    "relativeIndex": 2,
-                    "widgetType": 9
-                }
-            ],
-            "workspaceId": 1006
-        },
-        {
-            "title": "Alpha Power",
-            "widgetRefs": [
-                {
-                    "groupId": 5,
-                    "relativeIndex": 2,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 3,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 1,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 2,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 5,
-                    "relativeIndex": 4,
-                    "widgetType": 9
-                }
-            ],
-            "workspaceId": 1007
-        },
-        {
-            "title": "Bravo Camera",
-            "widgetRefs": [
-                {
-                    "groupId": 6,
-                    "relativeIndex": 1,
-                    "widgetType": 14
-                }
-            ],
-            "workspaceId": 1008
-        },
-        {
-            "title": "Bravo Navigation",
-            "widgetRefs": [
-                {
-                    "groupId": 7,
-                    "relativeIndex": 1,
-                    "widgetType": 5
-                }
-            ],
-            "workspaceId": 1009
-        },
-        {
-            "title": "Bravo Heading",
-            "widgetRefs": [
-                {
-                    "groupId": 8,
-                    "relativeIndex": 1,
-                    "widgetType": 12
-                }
-            ],
-            "workspaceId": 1010
-        },
-        {
-            "title": "Bravo Attitude",
-            "widgetRefs": [
-                {
-                    "groupId": 9,
-                    "relativeIndex": 1,
-                    "widgetType": 4
-                }
-            ],
-            "workspaceId": 1011
-        },
-        {
-            "title": "Bravo Flight",
-            "widgetRefs": [
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 5,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 4,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 6,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 7,
-                    "widgetType": 9
-                }
-            ],
-            "workspaceId": 1012
-        },
-        {
-            "title": "Bravo Power",
-            "widgetRefs": [
-                {
-                    "groupId": 11,
-                    "relativeIndex": 5,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 8,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 4,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 5,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 9,
-                    "widgetType": 9
-                }
-            ],
-            "workspaceId": 1013
-        },
-        {
-            "title": "Alpha Controls",
-            "widgetRefs": [
-                {
-                    "groupId": 12,
-                    "relativeIndex": 0,
-                    "widgetType": 15
-                }
-            ],
-            "workspaceId": 1014
-        },
-        {
-            "title": "Bravo Controls",
-            "widgetRefs": [
-                {
-                    "groupId": 13,
-                    "relativeIndex": 1,
-                    "widgetType": 15
-                }
-            ],
-            "workspaceId": 1015
-        },
-        {
-            "title": "Alpha State",
-            "widgetRefs": [
-                {
-                    "groupId": 14,
-                    "relativeIndex": 0,
-                    "widgetType": 18
-                }
-            ],
-            "workspaceId": 1016
-        },
-        {
-            "title": "Bravo State",
-            "widgetRefs": [
-                {
-                    "groupId": 15,
-                    "relativeIndex": 1,
-                    "widgetType": 18
-                }
-            ],
-            "workspaceId": 1017
-        }
-    ],
     "writerVersion": "3.2.7",
     "writerVersionAtCreation": "3.2.7"
 }

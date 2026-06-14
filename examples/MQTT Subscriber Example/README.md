@@ -44,7 +44,6 @@ Each MQTT message wraps a Vehicle Position object under the `VP` key:
 - Speed meter with an in-project value transform that converts m/s to km/h.
 - Data grid showing route designation, direction, timestamp, and heading.
 - Pure JavaScript MQTT stream parser, no native code required.
-- Pre-configured `Summary` workspace with map + meter + grid side by side.
 
 ## How the parser works
 
@@ -76,7 +75,7 @@ After the first matching message arrives (a second or two while the broker pushe
 ## Visualizations
 
 - **Map widget.** Live position of the target vehicle by latitude and longitude.
-- **Speed meter.** Instantaneous velocity in km/h, with an alarm above 110.
+- **Speed meter.** Instantaneous velocity in km/h.
 - **Data grid.** Vehicle ID, route designation, direction, timestamp, speed, and heading.
 
 ## Files

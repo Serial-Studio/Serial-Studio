@@ -1,15 +1,23 @@
 {
     "actions": [
     ],
+    "controlScriptCode": "/**\n * Modbus PLC Simulator - Control Script\n *\n * Launches the bundled Python data generator (plc_simulator.py) automatically just before\n * the connection opens (via onConnect), so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok) {\n    return;\n  }\n\n  var script = dir.result.directory + \"/plc_simulator.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok) {\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  }\n\n  if (r.ok) {\n    helperPid = r.result.processId;\n  }\n}\n\nfunction onConnect() {\n  startHelper();\n}\n\nfunction setup() {}\n\nfunction loop() {\n  delay(1000);\n}\n",
     "customizeWorkspaces": true,
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "On",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -25,18 +33,29 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Emergency Stop",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Emergency Stop\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 0,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "On",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -52,18 +71,21 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Start LED",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Start LED\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 1,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -79,24 +101,27 @@
                     "plotMax": 180,
                     "plotMin": 72,
                     "title": "Temperature",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Temperature\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 2,
                     "units": "°F",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 180,
-                    "widgetMin": 72,
-                    "xAxis": -1
+                    "widgetMin": 60,
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 0,
                     "index": 4,
                     "led": false,
@@ -106,24 +131,27 @@
                     "plotMax": 3000,
                     "plotMin": 0,
                     "title": "Pressure",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Pressure\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 3,
                     "units": "PSI",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
                     "widgetMax": 3000,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 9,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 0,
                     "index": 5,
                     "led": false,
@@ -133,24 +161,27 @@
                     "plotMax": 3600,
                     "plotMin": 0,
                     "title": "Motor RPM",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Motor RPM\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 4,
                     "units": "RPM",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
-                    "widgetMax": 3600,
+                    "widgetMax": 4000,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 0,
                     "index": 6,
                     "led": false,
@@ -160,18 +191,21 @@
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "Valve Position",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Valve Position\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 5,
                     "units": "%",
                     "value": "",
+                    "virtual": true,
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 6,
+                    "displayFormat": "1d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -187,24 +221,27 @@
                     "plotMax": 500,
                     "plotMin": 0,
                     "title": "Flow Rate",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Flow Rate\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 6,
                     "units": "GPM",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 500,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 7,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 0,
                     "index": 8,
                     "led": false,
@@ -214,18 +251,21 @@
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "Motor Load",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Motor Load\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 7,
                     "units": "%",
                     "value": "",
+                    "virtual": true,
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 8,
+                    "displayFormat": "1d",
+                    "displayTickCount": 4,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -241,115 +281,150 @@
                     "plotMax": 150,
                     "plotMin": 0,
                     "title": "Vibration",
+                    "transformCode": "function transform(value)\n  return tableGet(\"Holding Registers\", \"Vibration\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 8,
                     "units": "mm/s",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 150,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "Holding Registers",
+            "uniqueId": 10000,
             "widget": "datagrid"
         }
     ],
     "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 10001,
+    "plotTimeRange": 5,
     "pointCount": 1000,
-    "schemaVersion": 1,
+    "schemaVersion": 3,
     "sources": [
         {
-            "busType": 3,
+            "busType": 4,
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "host": "localhost",
-                "pollInterval": 100,
-                "port": 5020,
-                "protocolIndex": 1,
                 "registerGroups": [
                     {
                         "count": 9,
                         "start": 0,
                         "type": 0
                     }
-                ],
-                "slaveAddress": 1
+                ]
             },
             "decoder": 3,
             "decoderMethod": 3,
             "frameDetection": 2,
             "frameEnd": "",
-            "frameParserCode": "/**\n * Modbus Register Map Parser\n * Auto-generated from: modbus_plc_simulator.csv\n *\n * Groups: 1, Datasets: 9\n * Frame: [slaveAddr, funcCode, byteCount, ...data]\n */\n\nvar values = new Array(9).fill(0);\nvar currentGroup = 0;\n\nfunction parse(frame) {\n  if (frame.length < 3)\n    return values;\n\n  var data = frame.slice(3);\n\n  switch (currentGroup) {\n    case 0: // Holding Registers @ 0\n      values[0] = (data[0] << 8) | data[1]; // Emergency Stop\n      values[1] = (data[2] << 8) | data[3]; // Start LED\n      values[2] = (data[4] << 8) | data[5]; // Temperature\n      values[3] = (data[6] << 8) | data[7]; // Pressure\n      values[4] = (data[8] << 8) | data[9]; // Motor RPM\n      values[5] = (data[10] << 8) | data[11]; // Valve Position\n      values[6] = (data[12] << 8) | data[13]; values[6] = values[6] * 0.1 + 0; // Flow Rate\n      values[7] = (data[14] << 8) | data[15]; // Motor Load\n      values[8] = (data[16] << 8) | data[17]; values[8] = values[8] * 0.1 + 0; // Vibration\n      break;\n  }\n\n  currentGroup = (currentGroup + 1) % 1;\n  return values;\n}\n",
+            "frameParserCode": "--[[\n  Modbus register-map parser generated by the Serial Studio Modbus importer.\n  Source map: modbus_plc_simulator.csv\n\n  Wire format (response ADU): [slave, function, byteCount, data...]\n\n  The Modbus driver polls the configured register blocks round-robin.\n  Responses carry no block identity, so parse() advances a cursor through\n  BLOCKS and resyncs on the response function code when a reply is dropped.\n\n  Data flow:\n    parse() decodes every entry of the matched block and publishes the\n    engineering value with tableSet(\"<block>\", \"<register>\", value); each\n    dataset reads its value back with tableGet() inside its transform.\n\n  To add a register:\n    1. Add one line to BLOCKS below (offset is relative to the block start;\n       remember to extend the driver's polled register groups if needed).\n    2. Add a register with the same name to the block's data table.\n    3. Add a dataset whose transform reads it back with tableGet().\n]]\n\n-- Entry fields: offset = register offset within the block (words for\n-- registers, bit index for coils/discrete inputs); type drives decoding;\n-- scale/shift convert raw values to engineering units (omitted = 1 / 0).\nlocal BLOCKS = {\n  {\n    func = 0x03,\n    table = \"Holding Registers\",\n    entries = {\n      { name = \"Emergency Stop\", offset = 0, type = \"bool\" },\n      { name = \"Start LED\", offset = 1, type = \"bool\" },\n      { name = \"Temperature\", offset = 2, type = \"uint16\" },\n      { name = \"Pressure\", offset = 3, type = \"uint16\" },\n      { name = \"Motor RPM\", offset = 4, type = \"uint16\" },\n      { name = \"Valve Position\", offset = 5, type = \"uint16\" },\n      { name = \"Flow Rate\", offset = 6, type = \"uint16\", scale = 0.1 },\n      { name = \"Motor Load\", offset = 7, type = \"uint16\" },\n      { name = \"Vibration\", offset = 8, type = \"uint16\", scale = 0.1 },\n    },\n  },\n}\n\n-- string.unpack formats per entry type: Modbus payloads are big-endian.\nlocal FORMATS = {\n  uint16 = \">I2\", int16 = \">i2\",\n  uint32 = \">I4\", int32 = \">i4\",\n  uint64 = \">I8\", int64 = \">i8\",\n  float32 = \">f\", float64 = \">d\",\n  bool = \">I2\",\n}\n\n-- Decodes one entry; \"bit\" reads an LSB-first packed coil/discrete bit,\n-- \"bool\" reads a whole 16-bit register as 0/1 truthiness.\nlocal function decode(frame, limit, entry)\n  if entry.type == \"bit\" then\n    local byte_idx = 4 + (entry.offset // 8)\n    if byte_idx > limit then\n      return nil\n    end\n\n    return (string.byte(frame, byte_idx) >> (entry.offset % 8)) & 1\n  end\n\n  local fmt = FORMATS[entry.type] or \">I2\"\n  local first = 4 + entry.offset * 2\n  if first + string.packsize(fmt) - 1 > limit then\n    return nil\n  end\n\n  local raw = string.unpack(fmt, frame, first)\n  if entry.type == \"bool\" then\n    return (raw ~= 0) and 1 or 0\n  end\n\n  return raw * (entry.scale or 1) + (entry.shift or 0)\nend\n\nlocal cursor = 1\n\n-- The Binary decoder hands parse() the frame as a 1-indexed table of byte\n-- values; string.unpack needs a string, so convert once up front (Modbus\n-- ADUs are at most 256 bytes).\nfunction parse(frame)\n  if type(frame) == \"table\" then\n    frame = string.char(table.unpack(frame))\n  end\n\n  if #frame < 3 then\n    return {}\n  end\n\n  local func = string.byte(frame, 2)\n  if func >= 0x80 then\n    return {} -- Modbus exception response\n  end\n\n  local block = nil\n  for probe = 0, #BLOCKS - 1 do\n    local candidate = ((cursor - 1 + probe) % #BLOCKS) + 1\n    if BLOCKS[candidate].func == func then\n      block = BLOCKS[candidate]\n      cursor = (candidate % #BLOCKS) + 1\n      break\n    end\n  end\n\n  if not block then\n    return {}\n  end\n\n  local limit = math.min(3 + string.byte(frame, 3), #frame)\n  for _, entry in ipairs(block.entries) do\n    local value = decode(frame, limit, entry)\n    if value ~= nil then\n      tableSet(block.table, entry.name, value)\n    end\n  end\n\n  return { 0 } -- values flow through tableSet; datasets read them back\nend\n",
+            "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
             "title": "Modbus"
         }
     ],
+    "tables": [
+        {
+            "name": "Holding Registers",
+            "registers": [
+                {
+                    "name": "Emergency Stop",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Start LED",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Temperature",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Pressure",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Motor RPM",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Valve Position",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Flow Rate",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Motor Load",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Vibration",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        }
+    ],
     "title": "Modbus PLC Simulator",
+    "widgetSettings": {
+        "externalWindows": {
+            "data": [
+            ]
+        }
+    },
     "workspaces": [
         {
             "title": "Holding Registers",
             "widgetRefs": [
                 {
-                    "groupId": 0,
+                    "groupId": 10000,
                     "relativeIndex": 0,
                     "widgetType": 1
                 },
                 {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 1,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 1,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 1,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 2,
-                    "widgetType": 9
-                }
-            ],
-            "workspaceId": 1002
-        },
-        {
-            "icon": "qrc:/rcc/icons/panes/overview.svg",
-            "title": "Overview",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 0,
+                    "groupId": 10000,
                     "relativeIndex": 0,
                     "widgetType": 8
                 }
             ],
-            "workspaceId": 1000
+            "workspaceId": 5001
         }
     ],
     "writerVersion": "3.2.7",

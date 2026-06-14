@@ -494,6 +494,7 @@ private:
 
   [[nodiscard]] int allocateUniqueId();
   void seedNextUniqueIdFromGroups();
+  void deduplicateUniqueIds();
   void migrateLegacyWorkspaceRefs();
   void migrateLegacyXAxisIds();
   void migrateLegacyWaterfallYAxisIds();

@@ -418,6 +418,8 @@ private:
 
   void buildGroupGeneralSection(const DataModel::Group& group);
   void buildGroupSourceSection(const DataModel::Group& group);
+  void buildGroupXAxisRow(const DataModel::Group& group);
+  void buildGroupWebViewRow(const DataModel::Group& group);
   void buildGroupImageSection(const DataModel::Group& group);
 
   void buildSourceCommonRows(const DataModel::Source& source);

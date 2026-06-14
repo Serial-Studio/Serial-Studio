@@ -36,6 +36,7 @@
 #include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/ScriptsHandler.h"
 #include "API/Handlers/SourceHandler.h"
+#include "API/Handlers/SystemHandler.h"
 #include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/WindowHandler.h"
 #include "API/Handlers/WorkspacesHandler.h"
@@ -242,6 +243,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::WorkspacesHandler::registerCommands();
   Handlers::ScriptsHandler::registerCommands();
   Handlers::ControlScriptHandler::registerCommands();
+  Handlers::SystemHandler::registerCommands();
   Handlers::AssistantHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL

@@ -216,10 +216,12 @@ private:
   [[nodiscard]] bool configureTcpClient(QString& target);
   [[nodiscard]] bool configureRtuClient(QString& target);
   [[nodiscard]] bool finalizeAndConnect(const QString& target);
+  [[nodiscard]] bool connectWithRetry();
   [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
   void appendTcpProperties(QList<IO::DriverProperty>& props) const;
   void appendRtuProperties(QList<IO::DriverProperty>& props) const;
 
+  bool m_connecting;
   QTimer* m_pollTimer;
   QModbusClient* m_device;
   QModbusReply* m_lastReply;

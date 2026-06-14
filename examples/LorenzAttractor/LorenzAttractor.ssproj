@@ -1,6 +1,7 @@
 {
     "actions": [
     ],
+    "controlScriptCode": "/**\n * Lorenz Attractor - Control Script\n *\n * Launches the bundled Python data generator (lorenz_udp.py) automatically when\n * the connection opens, so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/lorenz_udp.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction setup() {\n  startHelper();\n}\n\nfunction loop() {\n  delay(1000);\n}\n",
     "groups": [
         {
             "datasets": [
@@ -29,7 +30,7 @@
                     "widget": "",
                     "widgetMax": 20,
                     "widgetMin": -20,
-                    "xAxis": 1
+                    "xAxis": -2
                 },
                 {
                     "datasetId": 1,
@@ -56,7 +57,7 @@
                     "widget": "",
                     "widgetMax": 30,
                     "widgetMin": -30,
-                    "xAxis": 2
+                    "xAxis": -2
                 },
                 {
                     "datasetId": 2,
@@ -83,7 +84,7 @@
                     "widget": "",
                     "widgetMax": 50,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "2D Visualization",
@@ -231,12 +232,24 @@
     ],
     "title": "Lorenz Attractor",
     "widgetSettings": {
+        "2:0:-1": {
+            "holdoff": 0,
+            "sweepEnabled": false,
+            "sweepMode": 0,
+            "sweepTimebase": 0,
+            "triggerEdge": 0,
+            "triggerLevel": 0,
+            "triggerSource": 0
+        },
+        "6:1:-1": {
+            "interpolationEnabled": true
+        },
         "activeGroup": 1000,
         "layout:1000": {
             "data": {
                 "autoLayout": true,
                 "canvasHeight": 500,
-                "canvasWidth": 1035,
+                "canvasWidth": 1058,
                 "geometries": [
                     {
                         "height": 500,
@@ -244,7 +257,7 @@
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 518,
+                        "width": 529,
                         "x": 0,
                         "y": 0
                     },
@@ -254,12 +267,12 @@
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 6,
-                        "width": 518,
-                        "x": 517,
+                        "width": 529,
+                        "x": 528,
                         "y": 0
                     }
                 ],
-                "userReordered": false,
+                "userReordered": true,
                 "windowOrder": [
                     1,
                     2
@@ -375,20 +388,20 @@
                         "height": 250,
                         "id": 1,
                         "relativeIndex": 0,
-                        "state": "minimized",
+                        "state": "normal",
                         "widgetType": 2,
                         "width": 518,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 500,
+                        "height": 250,
                         "id": 6,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 517,
-                        "x": 0,
+                        "width": 518,
+                        "x": 517,
                         "y": 0
                     },
                     {
@@ -397,9 +410,9 @@
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 519,
-                        "x": 516,
-                        "y": 0
+                        "width": 518,
+                        "x": 0,
+                        "y": 249
                     },
                     {
                         "height": 250,
@@ -407,8 +420,8 @@
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 519,
-                        "x": 516,
+                        "width": 518,
+                        "x": 517,
                         "y": 249
                     }
                 ],

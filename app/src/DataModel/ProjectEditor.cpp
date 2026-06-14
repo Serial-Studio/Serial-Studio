@@ -99,6 +99,8 @@ typedef enum {
   kGroupView_Title,
   kGroupView_Widget,
   kGroupView_Source,
+  kGroupView_xAxis,
+  kGroupView_WebUrl,
   kGroupView_ImgMode,
   kGroupView_ImgStart,
   kGroupView_ImgEnd,
@@ -2304,6 +2306,46 @@ void DataModel::ProjectEditor::buildGroupImageSection(const DataModel::Group& gr
 }
 
 /**
+ * @brief Appends the multiplot X-Axis selector (Time or Samples) to the group model.
+ */
+void DataModel::ProjectEditor::buildGroupXAxisRow(const DataModel::Group& group)
+{
+  QStringList options;
+  options << tr("Time") << tr("Samples");
+
+  const bool samples = !group.datasets.empty() && group.datasets.front().xAxisId == kXAxisSamples;
+
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(ComboBox, WidgetType);
+  item->setData(options, ComboBoxData);
+  item->setData(samples ? 1 : 0, EditableValue);
+  item->setData(kGroupView_xAxis, ParameterType);
+  item->setData(tr("X-Axis Source"), ParameterName);
+  item->setData(tr("Plot every curve against time or against the sample number"),
+                ParameterDescription);
+  m_groupModel->appendRow(item);
+}
+
+/**
+ * @brief Appends the URL row used by the web-view group widget.
+ */
+void DataModel::ProjectEditor::buildGroupWebViewRow(const DataModel::Group& group)
+{
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(TextField, WidgetType);
+  item->setData(group.webViewUrl, EditableValue);
+  item->setData(kGroupView_WebUrl, ParameterType);
+  item->setData(tr("URL"), ParameterName);
+  item->setData(QStringLiteral("https://"), PlaceholderValue);
+  item->setData(tr("Web address to load in this widget"), ParameterDescription);
+  m_groupModel->appendRow(item);
+}
+
+/**
  * @brief Rebuilds the group-settings form model for the given group.
  */
 void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
@@ -2344,6 +2386,12 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
                         ParameterDescription);
     m_groupModel->appendRow(widgetItem);
   }
+
+  if (group.widget == QStringLiteral("multiplot"))
+    buildGroupXAxisRow(group);
+
+  if (group.widget == QStringLiteral("webview"))
+    buildGroupWebViewRow(group);
 
   buildGroupImageSection(group);
 
@@ -3608,6 +3656,7 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
   m_groupWidgets.insert(QStringLiteral("image"), tr("Image View"));
   m_groupWidgets.insert(QStringLiteral("painter"), tr("Painter Widget"));
+  m_groupWidgets.insert(QStringLiteral("webview"), tr("Web View"));
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
   m_datasetWidgets.clear();
@@ -3703,6 +3752,23 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     return;
   }
 
+  if (id == kGroupView_xAxis) {
+    const int xAxisId = (value.toInt() == 1) ? kXAxisSamples : kXAxisTime;
+    for (auto& dataset : m_selectedGroup.datasets)
+      dataset.xAxisId = xAxisId;
+
+    pm.updateGroup(groupId, m_selectedGroup);
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
+
+  if (id == kGroupView_WebUrl) {
+    m_selectedGroup.webViewUrl = value.toString();
+    pm.updateGroup(groupId, m_selectedGroup);
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
+
 #ifdef BUILD_COMMERCIAL
   if (id == kGroupView_ImgMode) {
     if (applyGroupImgModeEdit(value.toInt(), groupId))
@@ -3788,6 +3854,7 @@ bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
     {       "plot3d",        SerialStudio::Plot3D},
     {        "image",     SerialStudio::ImageView},
     {      "painter",       SerialStudio::Painter},
+    {      "webview",       SerialStudio::WebView},
     {             "", SerialStudio::NoGroupWidget},
   };
 

@@ -23,9 +23,13 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QJSEngine>
+#include <QJSValue>
 
 #include "AppState.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
+#include "DataModel/Scripting/JsWatchdog.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -175,6 +179,43 @@ void DataModel::ControlScript::setCode(const QString& code)
     stopWorker();
     startWorker();
   }
+}
+
+/**
+ * @brief Runs the script's optional onConnect() hook synchronously BEFORE the connection opens,
+ *        so a control script can launch a server (TCP/Modbus) that Serial Studio then connects
+ *        to as a client. Uses a throwaway GUI-thread engine where apiCall dispatches inline, so
+ *        there is no deadlock with the connect path that called this.
+ */
+void DataModel::ControlScript::runOnConnect()
+{
+  if (m_shutdown || m_code.trimmed().isEmpty()
+      || AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  QJSEngine engine;
+  engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+  DataModel::ScriptApiCall::installAll(&engine, 0);
+
+  DataModel::JsWatchdog watchdog(&engine, 2000, QStringLiteral("Control script onConnect"));
+  watchdog.arm();
+  const auto evaluated = engine.evaluate(m_code, QStringLiteral("control-script.js"));
+  watchdog.disarm();
+  if (engine.isInterrupted())
+    engine.setInterrupted(false);
+
+  if (evaluated.isError())
+    return;
+
+  QJSValue onConnectFn = engine.globalObject().property(QStringLiteral("onConnect"));
+  if (!onConnectFn.isCallable())
+    return;
+
+  const QJSValue result = watchdog.call(onConnectFn, QJSValueList());
+  if (result.isError())
+    Q_EMIT error(QStringLiteral("onConnect() line %1: %2")
+                   .arg(result.property(QStringLiteral("lineNumber")).toInt())
+                   .arg(result.toString()));
 }
 
 //--------------------------------------------------------------------------------------------------

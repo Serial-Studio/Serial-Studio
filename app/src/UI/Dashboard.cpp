@@ -71,6 +71,16 @@ static int timeRingCapacity(const double plotTimeRangeSec)
   return std::max(kDefaultPlotBuckets, static_cast<int>(want));
 }
 
+/**
+ * @brief Composite snapshot key: dataset uniqueIds repeat across sources, so the time-ring
+ *        snapshot must include the sourceId or two plots collapse onto one entry and the second
+ *        restore move-assigns a moved-from (null-buffer) ring, crashing appendDecimated.
+ */
+static qint64 ringSnapshotKey(const int sourceId, const int uniqueId)
+{
+  return (static_cast<qint64>(sourceId) << 32) | static_cast<quint32>(uniqueId);
+}
+
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
 //--------------------------------------------------------------------------------------------------
@@ -139,13 +149,8 @@ UI::Dashboard::Dashboard()
   , m_updateRetryInProgress(false)
   , m_layoutValid(false)
   , m_streamAvailable(false)
-  , m_plotTimeOriginSet(false)
-  , m_plotGroupCount(0)
   , m_plotTimeRange(10.0)
-  , m_relativeFrameTimeSec(0)
   , m_plotDisplayTimeSec(0)
-  , m_plotGroupStartSec(0)
-  , m_plotSamplePeriodSec(0)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
 {
@@ -161,6 +166,7 @@ UI::Dashboard::Dashboard()
     m_sourceRawFrames.clear();
     m_datasetReferences.clear();
     m_valuePushes.clear();
+    m_plotClocks.clear();
   }, Qt::QueuedConnection);
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [=, this] {
     const auto mode = AppState::instance().operationMode();
@@ -956,7 +962,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_multiplotTimeRings.clear();
   m_plotSweep.clear();
   m_multiplotSweep.clear();
-  m_plotTimeOriginSet = false;
+  m_plotClocks.clear();
 
   m_widgetCount = 0;
   m_widgetMap.clear();
@@ -1022,7 +1028,7 @@ void UI::Dashboard::clearPlotData()
   for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
     it.value().resetState();
 
-  m_plotTimeOriginSet = false;
+  m_plotClocks.clear();
 
   for (auto& multiSeries : m_multipltValues)
     for (auto& yAxis : multiSeries.y)
@@ -1365,10 +1371,10 @@ void UI::Dashboard::armMultiplotSweep(const int index)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Processes an incoming data frame and updates the dashboard. The display clock never runs
- *        backwards; it only smooths small forward jitter for sub-ms-cadence sources, snapping
- *        low-rate sources and large gaps to real arrival time. A matching cached publisher
- *        generation skips the per-frame compare_frames() walk (it changes only on pool rebuild).
+ * @brief Processes a frame and updates the dashboard. Each source owns its plot clock
+ *        (m_plotClocks[sid]); the per-source display clock never runs backwards and is published
+ *        to the m_plotDisplayTimeSec scalar the append/advance sites read. A matching cached
+ *        publisher generation skips the per-frame compare_frames() walk (changes only on rebuild).
  */
 void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 {
@@ -1381,44 +1387,50 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   if (payload.groups.size() <= 0 || !m_streamAvailable) [[unlikely]]
     return;
 
-  if (!m_plotTimeOriginSet) [[unlikely]] {
-    m_plotTimeOrigin      = frame->timestamp;
-    m_plotTimeOriginSet   = true;
-    m_plotGroupCount      = 0;
-    m_plotGroupStartSec   = 0;
-    m_plotDisplayTimeSec  = 0;
-    m_plotSamplePeriodSec = 0;
-  }
-  m_relativeFrameTimeSec =
-    std::chrono::duration<double>(frame->timestamp - m_plotTimeOrigin).count();
+  const int sid = payload.sourceId;
 
-  ++m_plotGroupCount;
-  if (m_relativeFrameTimeSec > m_plotGroupStartSec) {
-    const int n      = (m_plotGroupCount > 1) ? (m_plotGroupCount - 1) : 1;
-    const double gap = m_relativeFrameTimeSec - m_plotGroupStartSec;
+  // code-verify off
+  // clk must be fully resolved here: reconfigureDashboard (below) move-assigns m_plotClocks and
+  // dangles this reference, so nothing after the structureChanged block may read clk.
+  PlotClock& clk = m_plotClocks[sid];
+  // code-verify on
+
+  if (!clk.originSet) [[unlikely]] {
+    clk.origin          = frame->timestamp;
+    clk.originSet       = true;
+    clk.groupCount      = 0;
+    clk.groupStartSec   = 0;
+    clk.displayTimeSec  = 0;
+    clk.samplePeriodSec = 0;
+  }
+  clk.relativeFrameTimeSec = std::chrono::duration<double>(frame->timestamp - clk.origin).count();
+
+  ++clk.groupCount;
+  if (clk.relativeFrameTimeSec > clk.groupStartSec) {
+    const int n      = (clk.groupCount > 1) ? (clk.groupCount - 1) : 1;
+    const double gap = clk.relativeFrameTimeSec - clk.groupStartSec;
 
     // code-verify off
     // Divide only for rare multi-sample coarse-clock groups; fine-timestamp sources hit n == 1.
     const double period = (n > 1) ? (gap / n) : gap;
     // code-verify on
 
-    m_plotSamplePeriodSec =
-      (m_plotSamplePeriodSec > 0) ? (0.8 * m_plotSamplePeriodSec + 0.2 * period) : period;
-    m_plotGroupStartSec = m_relativeFrameTimeSec;
-    m_plotGroupCount    = 1;
+    clk.samplePeriodSec =
+      (clk.samplePeriodSec > 0) ? (0.8 * clk.samplePeriodSec + 0.2 * period) : period;
+    clk.groupStartSec = clk.relativeFrameTimeSec;
+    clk.groupCount    = 1;
   }
-  const double expected = m_plotDisplayTimeSec + m_plotSamplePeriodSec;
+  const double expected = clk.displayTimeSec + clk.samplePeriodSec;
 
-  double displayNext = qMax(expected, m_relativeFrameTimeSec);
+  double displayNext = qMax(expected, clk.relativeFrameTimeSec);
 
-  const double forwardError = m_relativeFrameTimeSec - expected;
-  if (m_plotSamplePeriodSec > 0 && m_plotSamplePeriodSec < kSmoothMaxPeriodSec && forwardError > 0
+  const double forwardError = clk.relativeFrameTimeSec - expected;
+  if (clk.samplePeriodSec > 0 && clk.samplePeriodSec < kSmoothMaxPeriodSec && forwardError > 0
       && forwardError < kSmoothMaxForwardSec)
     displayNext = expected;
 
+  clk.displayTimeSec   = displayNext;
   m_plotDisplayTimeSec = displayNext;
-
-  const int sid = payload.sourceId;
 
   const auto genIt = m_sourceStructureGen.constFind(sid);
   const bool genKnown =
@@ -1431,19 +1443,8 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
     const bool hadProFeatures = containsCommercialFeatures();
     m_sourceStructureGen[sid] = frame->structureGeneration;
     m_sourceRawFrames[sid]    = payload;
-    DataModel::Frame combined;
-    combined.title   = payload.title;
-    combined.actions = payload.actions;
 
-    // code-verify off
-    for (const auto& sf : std::as_const(m_sourceRawFrames)) {
-      combined.containsCommercialFeatures |= sf.containsCommercialFeatures;
-      for (const auto& g : sf.groups)
-        combined.groups.push_back(g);
-    }
-    // code-verify on
-
-    reconfigureDashboard(combined);
+    reconfigureDashboard(combineSourceFrames(payload));
 
     if (hadProFeatures != containsCommercialFeatures())
       Q_EMIT containsCommercialFeaturesChanged();
@@ -1494,7 +1495,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
     return;
   }
 
-  reconfigureDashboard(frame);
+  m_sourceRawFrames[frame.sourceId] = frame;
+  reconfigureDashboard(combineSourceFrames(frame));
 
   m_updateRetryInProgress = true;
   updateDashboardData(frame);
@@ -1592,6 +1594,31 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
 }
 
 /**
+ * @brief Merges every cached per-source frame into one layout frame. The reconfigure path must
+ *        register the union of all sources because buildValuePushes() walks m_sourceRawFrames;
+ *        a single-source frame would leave the other sources' push tables unresolved (INT_MIN)
+ *        and trip handleMissingDataset() forever on multi-source projects.
+ */
+DataModel::Frame UI::Dashboard::combineSourceFrames(const DataModel::Frame& seed) const
+{
+  Q_ASSERT(seed.sourceId >= 0);
+
+  DataModel::Frame combined;
+  combined.title   = seed.title;
+  combined.actions = seed.actions;
+
+  // code-verify off
+  for (const auto& sf : std::as_const(m_sourceRawFrames)) {
+    combined.containsCommercialFeatures |= sf.containsCommercialFeatures;
+    for (const auto& g : sf.groups)
+      combined.groups.push_back(g);
+  }
+  // code-verify on
+
+  return combined;
+}
+
+/**
  * @brief Reconfigures the dashboard layout and widgets based on the new frame. Time rings
  *        and the per-source cache are snapshotted before resetData() and restored after,
  *        so a cosmetic project edit that rebuilds the layout does not erase in-flight plot
@@ -1605,6 +1632,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   const bool pro = SerialStudio::proWidgetsEnabled();
 
   auto savedSourceFrames = m_sourceRawFrames;
+  auto savedClocks       = m_plotClocks;
 
   auto savedPlotRings      = snapshotPlotTimeRings();
   auto savedMultiplotRings = snapshotMultiplotTimeRings();
@@ -1612,6 +1640,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   resetData(false);
 
   m_sourceRawFrames = std::move(savedSourceFrames);
+  m_plotClocks      = std::move(savedClocks);
 
   m_lastFrame = frame;
 
@@ -1925,19 +1954,38 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   updateWaterfallSeries(sourceId);
 #endif
 
+  auto feedMultiRings = [this](const MultiPush& p) {
+    auto rIt = m_multiplotTimeRings.find(p.groupIndex);
+    if (rIt == m_multiplotTimeRings.end())
+      return;
+
+    auto& rings = rIt.value();
+    for (const auto& tc : p.timeCurves)
+      if (tc.curveIndex >= 0 && static_cast<std::size_t>(tc.curveIndex) < rings.size())
+        rings[tc.curveIndex].appendDecimated(m_plotDisplayTimeSec, *tc.value);
+  };
+
   auto feedMultiSweep = [this](const MultiPush& p) {
-    if (!p.sweep || !p.sweep->enabled || p.timeCurves.empty())
+    if (p.timeCurves.empty())
+      return;
+
+    auto sIt = m_multiplotSweep.find(p.groupIndex);
+    if (sIt == m_multiplotSweep.end())
+      return;
+
+    DSP::SweepEngine& sweep = sIt.value();
+    if (!sweep.enabled)
       return;
 
     const int last  = static_cast<int>(p.timeCurves.size()) - 1;
-    const int tc    = qBound(0, p.sweep->triggerCurve, last);
-    const double st = p.sweep->advance(m_plotDisplayTimeSec, *p.timeCurves[tc].value);
+    const int tc    = qBound(0, sweep.triggerCurve, last);
+    const double st = sweep.advance(m_plotDisplayTimeSec, *p.timeCurves[tc].value);
     if (st < 0)
       return;
 
-    const std::size_t n = std::min(p.sweep->back.size(), p.timeCurves.size());
+    const std::size_t n = std::min(sweep.back.size(), p.timeCurves.size());
     for (std::size_t j = 0; j < n; ++j)
-      p.sweep->back[j].appendDecimated(st, *p.timeCurves[j].value);
+      sweep.back[j].appendDecimated(st, *p.timeCurves[j].value);
   };
 
   Q_ASSERT(static_cast<int>(m_multiplotPushes.size()) == multiCount);
@@ -1948,9 +1996,7 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    for (const auto& tc : p.timeCurves)
-      tc.ring->appendDecimated(m_plotDisplayTimeSec, *tc.value);
-
+    feedMultiRings(p);
     feedMultiSweep(p);
 
     for (const auto& s : p.samples)
@@ -2055,21 +2101,30 @@ void UI::Dashboard::updateLineSeries(int sourceId)
     fire(p);
 
   auto feedSweep = [this](const TimePush& p) {
-    if (!p.sweep || !p.sweep->enabled || p.sweep->back.empty())
+    auto sIt = m_plotSweep.find(p.plotIndex);
+    if (sIt == m_plotSweep.end())
       return;
 
-    const double st = p.sweep->advance(m_plotDisplayTimeSec, *p.value);
+    DSP::SweepEngine& sweep = sIt.value();
+    if (!sweep.enabled || sweep.back.empty())
+      return;
+
+    const double st = sweep.advance(m_plotDisplayTimeSec, *p.value);
     if (st >= 0)
-      p.sweep->back[0].appendDecimated(st, *p.value);
+      sweep.back[0].appendDecimated(st, *p.value);
   };
 
   for (const auto& p : m_timePushes) {
+    auto rIt = m_plotTimeRings.find(p.plotIndex);
+    if (rIt == m_plotTimeRings.end()) [[unlikely]]
+      continue;
+
     for (const auto& c : p.consumers) {
       if (sourceId >= 0 && c.sourceId != sourceId)
         continue;
 
       if (*c.activeFlag) {
-        p.ring->appendDecimated(m_plotDisplayTimeSec, *p.value);
+        rIt.value().appendDecimated(m_plotDisplayTimeSec, *p.value);
         feedSweep(p);
         break;
       }
@@ -2262,9 +2317,9 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
 /**
  * @brief Snapshots plot time-ring contents keyed by dataset uniqueId.
  */
-QHash<int, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
+QHash<qint64, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
 {
-  QHash<int, DSP::TimeRing> out;
+  QHash<qint64, DSP::TimeRing> out;
   const int n = widgetCount(SerialStudio::DashboardPlot);
   for (int i = 0; i < n; ++i) {
     const auto it = m_plotTimeRings.find(i);
@@ -2272,7 +2327,7 @@ QHash<int, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
       continue;
 
     const auto& d = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    out.insert(d.uniqueId, it.value());
+    out.insert(ringSnapshotKey(d.sourceId, d.uniqueId), it.value());
   }
 
   return out;
@@ -2281,9 +2336,9 @@ QHash<int, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
 /**
  * @brief Snapshots multiplot time-ring contents keyed by group uniqueId.
  */
-QHash<int, std::vector<DSP::TimeRing>> UI::Dashboard::snapshotMultiplotTimeRings() const
+QHash<qint64, std::vector<DSP::TimeRing>> UI::Dashboard::snapshotMultiplotTimeRings() const
 {
-  QHash<int, std::vector<DSP::TimeRing>> out;
+  QHash<qint64, std::vector<DSP::TimeRing>> out;
   const int n = widgetCount(SerialStudio::DashboardMultiPlot);
   for (int i = 0; i < n; ++i) {
     const auto it = m_multiplotTimeRings.find(i);
@@ -2291,7 +2346,7 @@ QHash<int, std::vector<DSP::TimeRing>> UI::Dashboard::snapshotMultiplotTimeRings
       continue;
 
     const auto& g = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    out.insert(g.uniqueId, it.value());
+    out.insert(ringSnapshotKey(g.sourceId, g.uniqueId), it.value());
   }
 
   return out;
@@ -2312,7 +2367,7 @@ static void replayTimeRing(const DSP::TimeRing& saved, DSP::TimeRing& target)
  * @brief Restores saved plot rings into the currently configured widget slots. Splices when
  *        the new ring shape matches the saved one, replays through appendDecimated otherwise.
  */
-void UI::Dashboard::restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot)
+void UI::Dashboard::restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot)
 {
   if (snapshot.isEmpty())
     return;
@@ -2324,24 +2379,28 @@ void UI::Dashboard::restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot)
       continue;
 
     const auto& d = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    auto savedIt  = snapshot.find(d.uniqueId);
+    auto savedIt  = snapshot.find(ringSnapshotKey(d.sourceId, d.uniqueId));
     if (savedIt == snapshot.end())
       continue;
 
     auto& live = ringIt.value();
     auto& kept = savedIt.value();
+    if (kept.time.raw() == nullptr)
+      continue;
 
     if (live.time.capacity() == kept.time.capacity() && qFuzzyCompare(live.interval, kept.interval))
       live = std::move(kept);
     else
       replayTimeRing(kept, live);
+
+    snapshot.erase(savedIt);
   }
 }
 
 /**
  * @brief Restores saved multiplot rings; matches by group uniqueId and per-curve shape.
  */
-void UI::Dashboard::restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot)
+void UI::Dashboard::restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::TimeRing>>& snapshot)
 {
   if (snapshot.isEmpty())
     return;
@@ -2353,7 +2412,7 @@ void UI::Dashboard::restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRi
       continue;
 
     const auto& g = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    auto savedIt  = snapshot.find(g.uniqueId);
+    auto savedIt  = snapshot.find(ringSnapshotKey(g.sourceId, g.uniqueId));
     if (savedIt == snapshot.end())
       continue;
 
@@ -2361,12 +2420,18 @@ void UI::Dashboard::restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRi
     auto& kept = savedIt.value();
 
     const std::size_t count = std::min(live.size(), kept.size());
-    for (std::size_t j = 0; j < count; ++j)
+    for (std::size_t j = 0; j < count; ++j) {
+      if (kept[j].time.raw() == nullptr)
+        continue;
+
       if (live[j].time.capacity() == kept[j].time.capacity()
           && qFuzzyCompare(live[j].interval, kept[j].interval))
         live[j] = std::move(kept[j]);
       else
         replayTimeRing(kept[j], live[j]);
+    }
+
+    snapshot.erase(savedIt);
   }
 }
 
@@ -2483,14 +2548,11 @@ void UI::Dashboard::configureLineSeries()
     const LinePush::Consumer consumer{yDataset.sourceId, &m_activePlots[i]};
 
     if (useTimeXAxis(yDataset)) {
-      auto rIt = m_plotTimeRings.find(i);
-      if (rIt != m_plotTimeRings.end()) {
-        auto sIt = m_plotSweep.find(i);
+      if (m_plotTimeRings.contains(i)) {
         TimePush tp;
         tp.consumers.push_back(consumer);
-        tp.ring  = &rIt.value();
-        tp.value = &yDataset.numericValue;
-        tp.sweep = (sIt != m_plotSweep.end()) ? &sIt.value() : nullptr;
+        tp.plotIndex = i;
+        tp.value     = &yDataset.numericValue;
         m_timePushes.push_back(std::move(tp));
       }
 
@@ -2658,17 +2720,15 @@ void UI::Dashboard::buildMultiplotPushes()
 
     MultiPush push;
     push.sourceId   = group.sourceId;
+    push.groupIndex = i;
     push.activeFlag = &m_activeMultiplots[i];
-
-    auto swIt  = m_multiplotSweep.find(i);
-    push.sweep = (swIt != m_multiplotSweep.end()) ? &swIt.value() : nullptr;
 
     auto rIt = m_multiplotTimeRings.find(i);
     if (rIt != m_multiplotTimeRings.end()) {
       auto& rings        = rIt.value();
       const size_t count = std::min(group.datasets.size(), rings.size());
       for (size_t j = 0; j < count; ++j)
-        push.timeCurves.push_back({&rings[j], &group.datasets[j].numericValue});
+        push.timeCurves.push_back({static_cast<int>(j), &group.datasets[j].numericValue});
     }
 
     else {

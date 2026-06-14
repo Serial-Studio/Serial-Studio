@@ -164,6 +164,7 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardTerminal:
     case DashboardClock:
     case DashboardStopwatch:
+    case DashboardWebView:
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
     case DashboardOutputPanel:
@@ -254,6 +255,9 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
       break;
     case DashboardPlot3D:
       return iconPath + "plot3d.svg";
+      break;
+    case DashboardWebView:
+      return iconPath + "webview.svg";
       break;
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
@@ -378,6 +382,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardPlot3D:
       return tr("3D Plots");
       break;
+    case DashboardWebView:
+      return tr("Web Views");
+      break;
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
       return tr("Image Views");
@@ -445,6 +452,9 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
 
   if (widget == "stopwatch")
     return DashboardStopwatch;
+
+  if (widget == "webview")
+    return DashboardWebView;
 
 #ifdef BUILD_COMMERCIAL
   if (widget == "image")
@@ -540,6 +550,9 @@ QString SerialStudio::groupWidgetId(const GroupWidget widget)
     case Plot3D:
       return "plot3d";
       break;
+    case WebView:
+      return "webview";
+      break;
 #ifdef BUILD_COMMERCIAL
     case ImageView:
       return "image";
@@ -579,6 +592,9 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString& id)
 
   if (id == "plot3d")
     return Plot3D;
+
+  if (id == "webview")
+    return WebView;
 
 #ifdef BUILD_COMMERCIAL
   if (id == "image")

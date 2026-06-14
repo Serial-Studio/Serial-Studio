@@ -2,9 +2,9 @@
 
 ## Overview
 
-This project visualizes the real-time position and velocity of the International Space Station (ISS) in Serial Studio. Telemetry data is fetched from a public API and streamed over UDP. Serial Studio parses the data and shows it on interactive widgets, including a map and gauges.
+This project visualizes the real-time position of the International Space Station (ISS) in Serial Studio. A built-in control script polls a public API directly over TCP, so there is no companion program to run and no extra hardware. Serial Studio parses the response and shows the station on an interactive map alongside a live 3D view.
 
-Real-time satellite tracking with no extra hardware. You only need Python, Serial Studio, and an internet connection.
+Real-time satellite tracking with nothing but Serial Studio and an internet connection.
 
 > Some Serial Studio features need a paid license. See [serial-studio.com](https://serial-studio.com/) for details.
 
@@ -12,85 +12,67 @@ Real-time satellite tracking with no extra hardware. You only need Python, Seria
 
 ## Telemetry source
 
-ISS data is pulled from the [Where the ISS at?](https://wheretheiss.at/) API, which provides regularly updated satellite telemetry. The following fields are extracted:
+ISS position is pulled from the [Open Notify](http://open-notify.org/Open-Notify-API/ISS-Location-Now/) `iss-now.json` API. The project's control script opens a TCP connection to `api.open-notify.org:80`, issues an HTTP `GET /iss-now.json` request every few seconds, and lets the frame parser read the response. Two fields are extracted:
 
 - `latitude`: geographic latitude in degrees.
 - `longitude`: geographic longitude in degrees.
-- `altitude`: altitude above Earth in kilometers.
-- `velocity`: orbital velocity in kilometers per hour.
 
 ## Project features
 
 - Real-time map tracking of the ISS.
-- Altitude bar graph scaled from 300 to 700 km.
-- Velocity gauge scaled from 27,000 to 28,500 km/h.
-- UDP-based telemetry stream using a simple JSON format.
-- Visual layout configured entirely in Serial Studio's project editor.
+- Interactive 3D view of the station rendered in the dashboard.
+- API polling driven entirely by an in-project control script, no external program.
+- TCP source with a JSON frame parser, configured in Serial Studio's project editor.
 
 ## Data format
 
-Each UDP frame is a newline-terminated JSON object. The script forwards the full API
-response; the frame parser reads these four fields:
+The API returns a JSON object. The project's frame delimiters isolate the
+`iss_position` block, and the parser reads its two fields:
 
 ```json
 {
-  "latitude": 29.35,
-  "longitude": -94.98,
-  "altitude": 419.75,
-  "velocity": 27650.0
+  "iss_position": { "latitude": "29.35", "longitude": "-94.98" },
+  "timestamp": 1747294302,
+  "message": "success"
 }
 ```
 
-Serial Studio parses the JSON into an array:
+Serial Studio parses the position into an array:
 
 ```json
-[29.35, -94.98, 419.75, 27650.0]
+[29.35, -94.98]
 ```
 
 The widgets then map to array indices:
 
 - `Latitude`: index 1.
 - `Longitude`: index 2.
-- `Altitude`: index 3, used twice (the `ISS Position` map group and the `Sensor Readings` bar graph).
-- `Speed`: index 4.
+- `Altitude`: index 3 (the `ISS Position` map group's altitude channel).
 
 ## How to run
 
-1. **Start the telemetry stream:**
+1. Open Serial Studio and load `iss-tracker.ssproj` (project file included).
+2. Click **Connect**.
 
-   ```bash
-   python3 iss-tracker.py
-   ```
-
-   The Python script:
-   - Pulls ISS data every second.
-   - Sends it via UDP to `127.0.0.1:9000`.
-
-2. **Open Serial Studio:**
-   - Load `iss-tracker.ssproj` (project file included).
-   - Set the input source to **Network Socket**, and pick **UDP** as the socket type.
-   - Use port **9000**.
-   - Click **Connect** to start visualizing.
+That is all. The bundled control script opens the TCP connection to the API and polls it for you, so the map and 3D view start updating on their own. The source is preconfigured as a **Network Socket** in **TCP** mode pointing at `api.open-notify.org`, port **80**.
 
 ## Visualizations
 
 - **Map widget.** Live ISS position by latitude and longitude.
-- **Bar graph.** Altitude in kilometers, on a 300 to 700 km scale.
-- **Gauge.** Orbital speed, on a 27,000 to 28,500 km/h scale.
+- **ISS 3D View.** A Heavens-Above-style render of the station over a sunlit
+  Earth limb, with a starfield, an inset mini-globe showing the ground track
+  and heading, and a heads-up readout (location, heading, sun altitude, frames
+  per second). The view is interactive: **drag** to orbit the camera, **scroll**
+  to zoom, and **double-click** to reset. It animates continuously, so the scene
+  stays alive between telemetry updates.
 
 ## Files
 
-- `iss-tracker.py`: Python script that fetches and streams ISS data via UDP.
-- `iss-tracker.ssproj`: Serial Studio project file (pre-configured).
+- `iss-tracker.ssproj`: Serial Studio project file (pre-configured, includes the control script).
 - `README.md`: project documentation.
 - `doc/screenshot.png`: visualization screenshot.
 
-## Dependencies
-
-- Python 3.x.
-- `requests` module (install via `pip install requests`).
-
 ## Notes
 
-- The API occasionally returns incomplete or missing fields. The parser assumes valid JSON is always received. Add error handling if needed.
-- The default port (`9000`) can be changed in both the Python script and Serial Studio.
+- The API occasionally returns incomplete or missing fields. The parser skips a frame that fails to decode and waits for the next poll.
+- The open-notify API exposes only latitude and longitude; altitude and orbital velocity are not part of this feed.

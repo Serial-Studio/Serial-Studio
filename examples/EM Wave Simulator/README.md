@@ -23,11 +23,13 @@ The electric field oscillates along the Y axis, the magnetic field along the Z a
 | Widget type  | Group              | Datasets                                                   |
 |--------------|--------------------|------------------------------------------------------------|
 | 3D Plot      | `EM Wave — 3D`     | `X (Propagation)`, `E-field (Y axis)`, `B-field (Z axis)`  |
-| Multi-Plot   | `Field Components` | the same three datasets plotted against the propagation axis |
+| Multi-Plot   | `Field Components` | the same three datasets plotted against sample index       |
 
 ## Usage
 
 ### 1. Start the simulator
+
+The project includes a control script that launches `em_wave_udp.py` automatically when you connect, so you normally just open the project and click **Connect**. Run it by hand only if you want custom options:
 
 ```bash
 python3 em_wave_udp.py
@@ -60,7 +62,7 @@ python3 em_wave_udp.py --wavelength 6.0 --sigma 10.0 --samples 120
 ### 3. Observe
 
 - The 3D Plot widget shows the E-field and B-field vectors oscillating in perpendicular planes as the wave packet propagates along the X axis.
-- The Multi-Plot widget shows the E-field and B-field waveforms plotted against the propagation axis.
+- The Multi-Plot widget shows the X, E-field, and B-field waveforms over the sample window.
 - The wave packet enters from the left, travels through the view, exits on the right, then loops back.
 
 ## How it works
@@ -71,7 +73,7 @@ On every frame, the simulator samples the spatial window at `--samples` evenly s
 x,ey,bz\n
 ```
 
-Serial Studio receives one line per spatial sample (80 per frame with the default `--samples`) and plots them using the custom X-axis feature: the propagation position (`x`) drives the horizontal axis, and the field amplitudes are plotted vertically (and in 3D, along their respective perpendicular axes).
+Serial Studio receives one line per spatial sample (80 per frame with the default `--samples`). The 3D Plot uses the custom X-axis feature so the propagation position (`x`) drives the horizontal axis and the field amplitudes run along their respective perpendicular axes. The Multi-Plot draws the same three datasets against the sample index, giving a side view of the packet as it sweeps through the window.
 
 ## Frame format
 

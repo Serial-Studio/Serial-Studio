@@ -4500,6 +4500,59 @@
         ]
     },
     {
+        "description": "Launch a helper process (e.g. \"python\" with a script path). Control script only -- rejected over the network/SDK. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.",
+        "name": "system.exec",
+        "properties": {
+            "args": {
+                "description": "Command-line arguments",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "program": {
+                "description": "Executable to run (resolved from PATH or an absolute path)",
+                "type": "string"
+            },
+            "workingDir": {
+                "description": "Working directory (defaults to the project directory)",
+                "type": "string"
+            }
+        },
+        "required": [
+            "program"
+        ]
+    },
+    {
+        "description": "Terminate a managed helper process by id. Control script only.",
+        "name": "system.kill",
+        "properties": {
+            "processId": {
+                "description": "Process id",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "processId"
+        ]
+    },
+    {
+        "description": "Return the loaded project's directory, file path, and file name. Use this to resolve paths relative to the .ssproj (e.g. a sibling Python script) before calling system.exec.",
+        "name": "system.projectDir",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "List the helper processes currently managed by system.exec.",
+        "name": "system.runningProcesses",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Get serialized layout JSON from WindowManager",
         "name": "ui.window.getLayout",
         "properties": {

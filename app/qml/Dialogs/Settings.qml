@@ -655,6 +655,31 @@ Widgets.SmartDialog {
           }
 
           Label {
+            text: qsTr("Point Count")
+            color: Cpp_ThemeManager.colors["text"]
+          } SpinBox {
+            id: _pointCount
+
+            from: 10
+            to: 100000
+            stepSize: 10
+            editable: true
+            Layout.fillWidth: true
+            value: Cpp_UI_Dashboard.points
+            onValueChanged: {
+              if (value !== Cpp_UI_Dashboard.points)
+                Cpp_UI_Dashboard.points = value
+            }
+
+            Connections {
+              target: Cpp_UI_Dashboard
+              function onPointsChanged() {
+                _pointCount.value = Cpp_UI_Dashboard.points
+              }
+            }
+          }
+
+          Label {
             text: qsTr("UI Refresh Rate (Hz)")
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
@@ -1505,6 +1530,7 @@ Widgets.SmartDialog {
         onClicked: {
           Cpp_ThemeManager.theme = 0
           Cpp_UI_Dashboard.plotTimeRange = 10
+          Cpp_UI_Dashboard.points = 1000
           Cpp_Misc_TimerEvents.fps = 60
           Cpp_API_Server.enabled = false
           Cpp_API_Server.externalConnections = false

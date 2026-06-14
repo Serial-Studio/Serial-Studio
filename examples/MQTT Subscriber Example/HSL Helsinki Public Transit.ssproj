@@ -1,14 +1,10 @@
 {
     "actions": [
     ],
-    "customizeWorkspaces": true,
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -27,6 +23,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Latitude",
+                    "uniqueId": 0,
                     "units": "°",
                     "value": "",
                     "widget": "lat",
@@ -35,9 +32,6 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -56,6 +50,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Longitude",
+                    "uniqueId": 1,
                     "units": "°",
                     "value": "",
                     "widget": "lon",
@@ -64,9 +59,6 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -85,6 +77,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Altitude",
+                    "uniqueId": 2,
                     "units": "m",
                     "value": "",
                     "widget": "alt",
@@ -94,14 +87,12 @@
                 }
             ],
             "title": "Vehicle Position (GPS)",
+            "uniqueId": 10006,
             "widget": "map"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -120,6 +111,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Vehicle ID",
+                    "uniqueId": 10000,
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -128,9 +120,6 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -149,6 +138,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Line Designation",
+                    "uniqueId": 10001,
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -157,9 +147,6 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -178,6 +165,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Direction",
+                    "uniqueId": 10002,
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -186,9 +174,6 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 3,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -207,6 +192,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Timestamp",
+                    "uniqueId": 10003,
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -215,9 +201,13 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": true,
-                    "alarmHigh": 110,
-                    "alarmLow": 0,
+                    "alarmBands": [
+                        {
+                            "max": 120,
+                            "min": 110,
+                            "severity": 2
+                        }
+                    ],
                     "datasetId": 4,
                     "displayFormat": "0d",
                     "displayTickCount": 13,
@@ -238,6 +228,7 @@
                     "title": "Speed",
                     "transformCode": "/**\n * Speed Transform: m/s → km/h\n * \n * Converts instantaneous velocity from meters per second (HSL native format)\n * to kilometers per hour (human-readable).\n * \n * Formula: speed_kmh = speed_ms × 3.6\n * \n * Handles:\n *   - Null/missing values → returns 0\n *   - Negative values → passes through (shouldn't occur in practice)\n */\n\nfunction transform(value) {\n  const speedKmh = (value || 0) * 3.6;\n  return Math.round(speedKmh * 10) / 10;  \n}\n",
                     "transformLanguage": 0,
+                    "uniqueId": 10004,
                     "units": "km/h",
                     "value": "",
                     "widget": "meter",
@@ -246,9 +237,6 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 5,
                     "displayFormat": "0d",
                     "displayTickCount": 5,
@@ -267,6 +255,7 @@
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Heading",
+                    "uniqueId": 10005,
                     "units": "",
                     "value": "",
                     "widget": "compass",
@@ -276,6 +265,7 @@
                 }
             ],
             "title": "Vehicle Dashboard",
+            "uniqueId": 10007,
             "widget": "datagrid"
         }
     ],
@@ -301,8 +291,10 @@
         "sslProtocol": 5,
         "topicBase": ""
     },
+    "nextUniqueId": 10008,
+    "plotTimeRange": 5,
     "pointCount": 10000,
-    "schemaVersion": 2,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 9,
@@ -627,34 +619,6 @@
             }
         }
     },
-    "workspaces": [
-        {
-            "title": "Summary",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 5
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 13
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 12
-                }
-            ],
-            "workspaceId": 5000
-        }
-    ],
     "writerVersion": "3.2.7",
     "writerVersionAtCreation": "3.2.7"
 }

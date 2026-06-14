@@ -64,6 +64,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | GPS Map | ✅ | ✅ |
 | | Data Grid | ✅ | ✅ |
 | | LED Panel | ✅ | ✅ |
+| | Web View (embedded web page) | ✅ | ✅ |
 | | 3D Plot | ❌ | ✅ |
 | | XY Plot (phase diagrams) | ❌ | ✅ |
 | | Waterfall (spectrogram, order tracking) | ❌ | ✅ |

@@ -1303,6 +1303,18 @@ Item {
                                        menuController.targetSourceId()))
     }
     Action {
+      id: actAddGroupWebView
+
+      icon.width: 16
+      icon.height: 16
+      text: qsTr("Web View")
+      icon.source: "qrc:/icons/project-editor/toolbar/add-webview.svg"
+      onTriggered: menuController.locked(() =>
+        Cpp_JSON_ProjectModel.addGroup(qsTr("Web View"),
+                                       SerialStudio.WebView,
+                                       menuController.targetSourceId()))
+    }
+    Action {
       id: actAddGroupDataGrid
 
       icon.width: 16
@@ -1529,6 +1541,7 @@ Item {
       MenuItem { action: actAddGroupPlot3D }
       MenuItem { action: actAddGroupImage }
       MenuItem { action: actAddGroupPainter }
+      MenuItem { action: actAddGroupWebView }
       MenuItem { action: actAddGroupDataGrid }
     }
     Menu {
@@ -1604,6 +1617,7 @@ Item {
       MenuItem { action: actAddGroupPlot3D }
       MenuItem { action: actAddGroupImage }
       MenuItem { action: actAddGroupPainter }
+      MenuItem { action: actAddGroupWebView }
       MenuItem { action: actAddGroupDataGrid }
     }
     Menu {
@@ -1691,6 +1705,7 @@ Item {
       MenuItem { action: actAddGroupPlot3D }
       MenuItem { action: actAddGroupImage }
       MenuItem { action: actAddGroupPainter }
+      MenuItem { action: actAddGroupWebView }
       MenuItem { action: actAddGroupDataGrid }
     }
     Menu {

@@ -30,6 +30,7 @@
 #include <QCoreApplication>
 #include <QQmlContext>
 
+#include "API/ProcessLauncher.h"
 #include "API/Server.h"
 #include "AppInfo.h"
 #include "AppState.h"
@@ -89,6 +90,7 @@
 #include "UI/Widgets/PlotAreaFill.h"
 #include "UI/Widgets/PlotCurve.h"
 #include "UI/Widgets/Terminal.h"
+#include "UI/Widgets/WebView.h"
 #include "UI/WindowManager.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -400,6 +402,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Gyroscope>("SerialStudio", 1, 0, "GyroscopeModel");
   qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0, "AccelerometerModel");
   qmlRegisterType<Widgets::Meter>("SerialStudio", 1, 0, "MeterModel");
+  qmlRegisterType<Widgets::WebView>("SerialStudio", 1, 0, "WebViewWidget");
 
 #ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
@@ -494,6 +497,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   DataModel::FrameParser::instance().setupExternalConnections();
   DataModel::ProjectModel::instance().setupExternalConnections();
   Misc::BackupManager::instance().setupExternalConnections();
+  API::ProcessLauncher::instance().setupExternalConnections();
   DataModel::FrameBuilder::instance().setupExternalConnections();
   DataModel::ControlScript::instance().setupExternalConnections();
   Console::Export::instance().setupExternalConnections();

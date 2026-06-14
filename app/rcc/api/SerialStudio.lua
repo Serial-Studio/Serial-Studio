@@ -105,6 +105,7 @@ project.template = project.template or {}
 project.workspace = project.workspace or {}
 scripts = scripts or {}
 sessions = sessions or {}
+system = system or {}
 ui = ui or {}
 ui.window = ui.window or {}
 
@@ -1976,6 +1977,29 @@ function sessions.setNotes(sessionId, notes)
   p['sessionId'] = sessionId
   p['notes'] = notes
   return apiCall('sessions.setNotes', p)
+end
+
+function system.exec(program, options)
+  local p = {}
+  p['program'] = program
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('system.exec', p)
+end
+
+function system.kill(processId)
+  local p = {}
+  p['processId'] = processId
+  return apiCall('system.kill', p)
+end
+
+function system.projectDir()
+  local p = {}
+  return apiCall('system.projectDir', p)
+end
+
+function system.runningProcesses()
+  local p = {}
+  return apiCall('system.runningProcesses', p)
 end
 
 function ui.window.getLayout()

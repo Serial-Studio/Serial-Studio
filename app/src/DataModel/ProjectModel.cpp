@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QSaveFile>
+#include <QSet>
 #include <QTimer>
 
 #include "AppInfo.h"
@@ -658,6 +659,53 @@ void DataModel::ProjectModel::seedNextUniqueIdFromGroups()
   for (auto& group : m_groups)
     if (group.uniqueId < 0)
       group.uniqueId = m_nextUniqueId++;
+
+  deduplicateUniqueIds();
+}
+
+/**
+ * @brief Enforces globally unique dataset+group uniqueIds across all sources. Downstream
+ *        dashboard/export maps are keyed by uid alone, so a uid reused across sources (possible on
+ * a hand-edited/merged/stale project, since persisted uids are read verbatim) bleeds one source's
+ * data into the other's. Runs after the allocator is bumped past every uid.
+ */
+void DataModel::ProjectModel::deduplicateUniqueIds()
+{
+  QSet<int> seenGroups;
+  QSet<int> seenDatasets;
+  QMap<int, int> datasetRemap;
+  for (auto& group : m_groups) {
+    if (seenGroups.contains(group.uniqueId)) {
+      qWarning() << "ProjectModel: duplicate group uniqueId" << group.uniqueId
+                 << "- reassigning to keep per-source maps unambiguous";
+      group.uniqueId = m_nextUniqueId++;
+    }
+    seenGroups.insert(group.uniqueId);
+
+    for (auto& dataset : group.datasets) {
+      dataset.sourceId = group.sourceId;
+      if (seenDatasets.contains(dataset.uniqueId)) {
+        qWarning() << "ProjectModel: duplicate dataset uniqueId" << dataset.uniqueId
+                   << "- reassigning to keep per-source maps unambiguous";
+        const int newId = m_nextUniqueId++;
+        datasetRemap.insert(dataset.uniqueId, newId);
+        dataset.uniqueId = newId;
+      }
+      seenDatasets.insert(dataset.uniqueId);
+    }
+  }
+
+  if (datasetRemap.isEmpty())
+    return;
+
+  for (auto& group : m_groups)
+    for (auto& dataset : group.datasets) {
+      if (dataset.xAxisId > 0)
+        dataset.xAxisId = datasetRemap.value(dataset.xAxisId, dataset.xAxisId);
+
+      if (dataset.waterfallYAxis > 0)
+        dataset.waterfallYAxis = datasetRemap.value(dataset.waterfallYAxis, dataset.waterfallYAxis);
+    }
 }
 
 /**
@@ -689,7 +737,7 @@ void DataModel::ProjectModel::migrateLegacyXAxisIds()
   for (auto& group : m_groups) {
     const auto indexMap = uidByIndex.value(group.sourceId);
     for (auto& dataset : group.datasets) {
-      if (dataset.xAxisId == kXAxisTime)
+      if (dataset.xAxisId == kXAxisTime || dataset.xAxisId == kXAxisSamples)
         continue;
 
       if (dataset.xAxisId <= 0)
@@ -760,12 +808,13 @@ int DataModel::ProjectModel::groupUniqueIdForGroupId(int groupId) const
 }
 
 /**
- * @brief Returns "Time" plus every dataset label, sorted by uniqueId.
+ * @brief Returns "Time", "Samples", then every dataset label sorted by uniqueId.
  */
 QStringList DataModel::ProjectModel::xDataSources() const
 {
   QStringList list;
   list.append(tr("Time"));
+  list.append(tr("Samples"));
 
   QMap<int, QString> datasets;
   for (const auto& group : m_groups) {
@@ -784,12 +833,13 @@ QStringList DataModel::ProjectModel::xDataSources() const
 
 /**
  * @brief Parallel to xDataSources(): the dataset uniqueId at each combo position
- *        (position 0 -> -2 "Time", then dataset uniqueIds).
+ *        (position 0 -> -2 "Time", 1 -> -1 "Samples", then dataset uniqueIds).
  */
 QList<int> DataModel::ProjectModel::xDataSourceUniqueIds() const
 {
   QList<int> out;
   out.append(kXAxisTime);
+  out.append(kXAxisSamples);
 
   QMap<int, bool> seen;
   for (const auto& group : m_groups) {
@@ -4272,6 +4322,11 @@ bool DataModel::ProjectModel::applyGroupWidget(DataModel::Group& grp,
 
   if (widget == SerialStudio::ImageView) {
     grp.widget = "image";
+    return true;
+  }
+
+  if (widget == SerialStudio::WebView) {
+    grp.widget = "webview";
     return true;
   }
 

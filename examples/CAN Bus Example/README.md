@@ -47,7 +47,7 @@ Look at the summary, then click **Create Project**.
 
 ### Step 4: Save the Project
 1. Serial Studio generates:
-   - JavaScript frame parser (decodes CAN frames automatically)
+   - Lua frame parser (decodes CAN frames automatically)
    - Groups for each CAN message
    - Datasets for each signal
    - Auto-assigned widgets (Gauges, Plots, Bars)
@@ -108,7 +108,7 @@ The ECU simulator sends realistic automotive data:
 
 - **`ecu_simulator.py`**: All-in-one simulator (VirtualCAN, PCAN, SocketCAN, Vector)
 - **`ecu_simulator.dbc`**: DBC database file
-- **`ecu_simulator.ssproj`**: Ready-made project generated from the DBC file (load it to skip the import steps)
+- **`ecu_simulator.ssproj`**: Ready-made project built from the DBC file, then tidied into data grids so every signal is visible at a glance (load it to skip the import steps)
 - **`README.md`**: This file
 
 ## Usage Options

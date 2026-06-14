@@ -30,11 +30,15 @@ Project
 
 The editor toolbar mirrors the Frame Parser editor: **Reset** loads the starter template, **Open** imports a `.js` file, then the usual undo / redo / clipboard actions, and **Validate** compiles the script and reports the first syntax error (or confirms it is clean) without running it. A status dot shows whether the script is currently running, and **Help** opens this page.
 
-## The two functions
+## The lifecycle functions
 
 ```javascript
+function onConnect() {
+  // Runs once, just BEFORE the connection opens.
+}
+
 function setup() {
-  // Runs once, right after the device connects.
+  // Runs once, right AFTER the device connects.
 }
 
 function loop() {
@@ -42,7 +46,9 @@ function loop() {
 }
 ```
 
-You may define either or both. A device that streams on its own after a one-time handshake needs only `setup()`. A device that must be polled needs `loop()`. The script is restarted on each new connection, so `setup()` runs again every time you reconnect.
+You may define any combination of the three. A device that streams on its own after a one-time handshake needs only `setup()`. A device that must be polled needs `loop()`. The script is restarted on each new connection, so `setup()` runs again every time you reconnect.
+
+`onConnect()` is the exception: it runs *before* Serial Studio opens the connection, so it is the place to start something the connection then depends on. When Serial Studio is the client (a TCP socket, a Modbus master) the server it connects to must already be listening, and the server may be a helper process you launch with `system.exec`. Putting that launch in `setup()` would be too late, because `setup()` only runs once the connection is already open. Because `onConnect()` runs before any device is attached, it cannot read frames or write to the device; use it only for setup that must precede the connection.
 
 Top-level variables declared in the file persist across `loop()` iterations, so the script can keep counters, buffers, or a small state machine between ticks:
 
@@ -94,6 +100,38 @@ The most useful I/O calls for a control script:
 - `io.ble.setNotifyCharacteristic(uuid)` -- subscribe to incoming notifications (e.g. `"fff2"`).
 - `io.ble.writeCharacteristic(uuid, data, encoding)` -- write to a specific BLE characteristic (e.g. `"fff1"`), independent of the notify one.
 - `io.getStatus()` -- returns `{ isConnected, paused, ... }`.
+
+## Launching helper processes: the system.* API
+
+A control script can launch a helper program and let Serial Studio manage its lifetime. This is how the bundled examples start their Python data generators automatically: you click **Connect** and the generator is running, with nothing to type in a terminal. The calls live under the `system.` namespace and, for safety, are available **only to the control script**; they are rejected over the network API and the SDK.
+
+- `system.projectDir()` -- returns `{ directory, filePath, fileName }` for the loaded project. Use `directory` to build a path to a script that sits next to the `.ssproj` file.
+- `system.exec(program, { args, workingDir })` -- launch `program` with optional `args` (an array) and `workingDir` (defaults to the project directory). Returns `{ processId }`.
+- `system.kill(processId)` -- stop one launched process.
+- `system.runningProcesses()` -- list the processes Serial Studio is currently managing.
+
+Serial Studio stops every process it launched when the device disconnects, when the project changes, and when the app quits, so a helper never lingers after you are done with it.
+
+The program name is resolved cross-platform: a bare `"python3"` or `"python"` is looked up on the system `PATH` plus the usual install locations a GUI app does not otherwise see (Homebrew, pyenv, and user-local directories), so the interpreter that has your installed packages is the one that runs. The launched program's standard output and standard error are captured and written to Serial Studio's console, tagged with the process id, so you can see what the helper prints.
+
+A typical launcher pairs `system.projectDir()` with `system.exec()` and tries `python3` first, falling back to `python`:
+
+```javascript
+function startHelper() {
+  var dir = system.projectDir();
+  if (!dir.ok)
+    return;
+
+  var script = dir.result.directory + "/generator.py";
+  var r = system.exec("python3", { args: ["-u", script], workingDir: dir.result.directory });
+  if (!r.ok)
+    r = system.exec("python", { args: ["-u", script], workingDir: dir.result.directory });
+}
+```
+
+Pass `-u` (as above) when launching Python so its output is unbuffered and appears in the console line by line instead of in bursts.
+
+Put the launch in `setup()` when Serial Studio listens for the data it generates (a UDP source), and in `onConnect()` when Serial Studio connects to it as a client (a TCP socket or a Modbus master), because the server has to be listening before the connection is opened.
 
 ## Reading data: See, Decide, Act
 

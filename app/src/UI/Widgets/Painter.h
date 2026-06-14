@@ -13,12 +13,15 @@
 
 #ifdef BUILD_COMMERCIAL
 
+#  include <QHoverEvent>
 #  include <QImage>
 #  include <QJSEngine>
 #  include <QJSValue>
+#  include <QMouseEvent>
 #  include <QQuickPaintedItem>
 #  include <QString>
 #  include <QVariantList>
+#  include <QWheelEvent>
 
 #  include "DataModel/Frame.h"
 #  include "DataModel/Scripting/JsWatchdog.h"
@@ -50,6 +53,14 @@ public:
   [[nodiscard]] bool runtimeOk() const noexcept;
   [[nodiscard]] QString lastError() const;
 
+protected:
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
+  void hoverMoveEvent(QHoverEvent* event) override;
+  void wheelEvent(QWheelEvent* event) override;
+
 public slots:
   void setUserCode(const QString& code);
   void setPreviewMode(bool enabled);
@@ -67,6 +78,8 @@ private:
   void installTheme();
   void invalidateCompilation();
   void renderFrame();
+  void animateTick();
+  void dispatchPointer(QJSValue& fn, const QJSValueList& args);
 
   void setRuntimeOk(bool ok);
   void setLastError(const QString& error);
@@ -79,7 +92,10 @@ private:
   bool m_hasOnFrame;
   bool m_previewMode;
   bool m_slowPaintWarned;
+  bool m_pointerDown;
   int m_slowPaintStreak;
+  qreal m_lastPointerX;
+  qreal m_lastPointerY;
   qulonglong m_frameSeq;
   DataModel::Group m_previewGroup;
 
@@ -90,6 +106,12 @@ private:
   DataModel::JsWatchdog m_watchdog;
   QJSValue m_paintFn;
   QJSValue m_onFrameFn;
+  QJSValue m_onPressFn;
+  QJSValue m_onDragFn;
+  QJSValue m_onReleaseFn;
+  QJSValue m_onMoveFn;
+  QJSValue m_onWheelFn;
+  QJSValue m_onDoubleClickFn;
   QJSValue m_ctxValue;
 
   PainterContext* m_ctx;

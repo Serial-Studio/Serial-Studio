@@ -246,6 +246,7 @@
         <file>icons/dashboard-large/stopwatch.svg</file>
         <file>icons/dashboard-large/terminal.svg</file>
         <file>icons/dashboard-large/waterfall.svg</file>
+        <file>icons/dashboard-large/webview.svg</file>
         <file>icons/dashboard-small/accelerometer.svg</file>
         <file>icons/dashboard-small/bar.svg</file>
         <file>icons/dashboard-small/clock.svg</file>
@@ -268,6 +269,7 @@
         <file>icons/dashboard-small/stopwatch.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
         <file>icons/dashboard-small/waterfall.svg</file>
+        <file>icons/dashboard-small/webview.svg</file>
         <file>icons/database/close.svg</file>
         <file>icons/database/delete.svg</file>
         <file>icons/database/export-csv.svg</file>
@@ -415,6 +417,7 @@
         <file>icons/project-editor/toolbar/add-painter.svg</file>
         <file>icons/project-editor/toolbar/add-plot.svg</file>
         <file>icons/project-editor/toolbar/add-plot3d.svg</file>
+        <file>icons/project-editor/toolbar/add-webview.svg</file>
         <file>icons/project-editor/toolbar/device.svg</file>
         <file>icons/project-editor/toolbar/help.svg</file>
         <file>icons/project-editor/toolbar/image.svg</file>
@@ -873,5 +876,11 @@
         <file>icons/buttons/mqtt-off.svg</file>
         <file>icons/buttons/mqtt-on.svg</file>
         <file>icons/buttons/help.svg</file>
+        <file>ai/build_search_index.py</file>
+        <file>api/api-schema.json</file>
+        <file>api/prelude.js</file>
+        <file>api/prelude.lua</file>
+        <file>icons/project-editor/treeview/webview.svg</file>
+        <file>icons/toolbar/add-gauge.svg</file>
     </qresource>
 </RCC>

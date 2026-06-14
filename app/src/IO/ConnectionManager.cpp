@@ -30,6 +30,7 @@
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ControlScript.h"
 #include "IO/Drivers/BluetoothLE.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/UART.h"
@@ -641,6 +642,9 @@ void IO::ConnectionManager::connectDevice()
     return;
   }
 #endif
+
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    DataModel::ControlScript::instance().runOnConnect();
 
   QApplication::setOverrideCursor(Qt::WaitCursor);
 

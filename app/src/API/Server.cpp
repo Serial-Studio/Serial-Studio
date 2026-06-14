@@ -622,6 +622,15 @@ bool API::Server::authorizeDeviceWrite()
  */
 bool API::Server::authorizeRemoteCommand(const QString& command)
 {
+  static const QSet<QString> kControlScriptOnlyCommands = {
+    QStringLiteral("system.exec"),
+    QStringLiteral("system.kill"),
+    QStringLiteral("system.runningProcesses"),
+  };
+
+  if (kControlScriptOnlyCommands.contains(command))
+    return false;
+
   static const QSet<QString> kDeviceWriteCommands = {
     QStringLiteral("io.writeData"),
     QStringLiteral("io.ble.writeCharacteristic"),

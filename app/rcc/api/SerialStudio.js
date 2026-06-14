@@ -355,6 +355,7 @@ project.template = project.template || {};
 project.workspace = project.workspace || {};
 var scripts = (typeof scripts !== 'undefined') ? scripts : {};
 var sessions = (typeof sessions !== 'undefined') ? sessions : {};
+var system = (typeof system !== 'undefined') ? system : {};
 var ui = (typeof ui !== 'undefined') ? ui : {};
 ui.window = ui.window || {};
 
@@ -2226,6 +2227,29 @@ sessions.setNotes = function(sessionId, notes) {
   p['sessionId'] = sessionId;
   p['notes'] = notes;
   return apiCall('sessions.setNotes', p);
+};
+
+system.exec = function(program, options) {
+  var p = {};
+  p['program'] = program;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('system.exec', p);
+};
+
+system.kill = function(processId) {
+  var p = {};
+  p['processId'] = processId;
+  return apiCall('system.kill', p);
+};
+
+system.projectDir = function() {
+  var p = {};
+  return apiCall('system.projectDir', p);
+};
+
+system.runningProcesses = function() {
+  var p = {};
+  return apiCall('system.runningProcesses', p);
 };
 
 ui.window.getLayout = function() {

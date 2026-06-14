@@ -7,20 +7,20 @@ This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project vis
 ## What it does
 
 - Connects to BLE devices using Serial Studio's native BLE support.
-- Subscribes to the Battery Level characteristic (0x2A19).
+- Reads the Battery Level characteristic (0x2A19).
 - Shows the battery percentage (0 to 100) on a live gauge and a plot.
 - Parses raw binary data with no delimiters or framing.
 
-Works with any device that exposes the standard BLE Battery Service.
+The project includes a control script that selects the service and characteristic for you on connect.
 
-## BLE Battery Service
+## BLE service
 
-Bluetooth Low Energy defines a standard Battery Service:
+Bluetooth Low Energy exposes battery level through the Battery Level characteristic, `0x2A19` (`uint8`, 0 to 100):
 
-- **Service UUID:** `0x180F`.
+- **Service UUID:** `0x180A`. This project is wired to the Device Information Service, where the test device (an iPhone) advertises its battery characteristic. Devices that follow the standard expose it under the Battery Service, `0x180F` instead; change the service UUID in the control script to match your hardware.
 - **Characteristic UUID:** `0x2A19`. Battery Level (`uint8`, 0 to 100).
 
-Most BLE-enabled phones and peripherals support it. Serial Studio connects to the characteristic and decodes the raw value with a 1-byte binary read.
+The bundled control script picks the configured service, selects its first characteristic, subscribes to notifications (falling back to polling), and decodes the raw value with a 1-byte binary read.
 
 ## Project configuration
 
@@ -54,6 +54,5 @@ function parse(frame) {
 1. Open Serial Studio and load `BLE Battery Level.ssproj`.
 2. Select Bluetooth LE as the input source.
 3. Pick your BLE device (for example your iPhone) and click Connect.
-4. Pick the Battery Service (0x180F).
-5. Pick the Battery Level characteristic (0x2A19).
-6. Watch the gauge update in real time.
+4. The control script selects the service (`0x180A` as shipped) and its battery characteristic (`0x2A19`) automatically.
+5. Watch the gauge update in real time.

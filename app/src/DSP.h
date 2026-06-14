@@ -435,6 +435,18 @@ struct TimeRing {
     Q_ASSERT(interval > 0.0);
     Q_ASSERT(time.capacity() == value.capacity());
 
+    if (time.raw() == nullptr || value.raw() == nullptr) [[unlikely]]
+      return;
+
+    if (!std::isfinite(t) || !std::isfinite(v)) [[unlikely]]
+      return;
+
+    if (time.size() > 0 && t < time[time.size() - 1]) [[unlikely]]
+      t = time[time.size() - 1];
+
+    if (cellSlots > static_cast<int>(time.size())) [[unlikely]]
+      cellSlots = static_cast<int>(time.size());
+
     if (time.size() == 0 || t >= nextEmit) {
       nextEmit   = (std::floor(t / interval) + 1.0) * interval;
       accMin     = v;
@@ -476,7 +488,10 @@ struct TimeRing {
     }
 
     const std::size_t n = time.size();
-    if (cellSlots == 2) {
+    if (n == 0) [[unlikely]]
+      return;
+
+    if (cellSlots == 2 && n >= 2) {
       time[n - 2]  = t0;
       value[n - 2] = v0;
     }

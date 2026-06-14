@@ -36,6 +36,19 @@
 #include "UI/Widgets/Meter.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
+#include "UI/Widgets/WebView.h"
+
+/**
+ * @brief Builds a web-view widget for slot @p index, seeding its URL from the project.
+ */
+[[nodiscard]] static QQuickItem* makeWebViewWidget(int index, QQuickItem* parent)
+{
+  auto* w = new Widgets::WebView(index, parent);
+  const auto& group =
+    UI::Dashboard::instance().getGroupWidget(SerialStudio::DashboardWebView, index);
+  w->setUrl(group.webViewUrl);
+  return w;
+}
 
 #ifdef BUILD_COMMERCIAL
 #  include "UI/Widgets/ImageView.h"
@@ -296,6 +309,10 @@ void UI::DashboardWidget::buildWidgetForType()
     case SerialStudio::DashboardLED:
       m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
       m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/LEDPanel.qml";
+      break;
+    case SerialStudio::DashboardWebView:
+      m_dbWidget = makeWebViewWidget(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/WebView.qml";
       break;
 #ifdef BUILD_COMMERCIAL
     case SerialStudio::DashboardPlot3D:

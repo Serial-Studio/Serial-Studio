@@ -24,6 +24,8 @@ A plot's X axis is one of two kinds, chosen automatically from the dataset confi
 
 A **time** plot scrolls: it shows the most recent window of data, spanning `[-T, 0]` where `T` is the dashboard time range. The newest reading is always pinned at the right edge.
 
+Two settings control how much history a plot keeps, and both sit next to each other in two places: the **Time Range** and **Point Count** fields in the Project Editor's project toolbar, and the same two fields on the **Dashboard** tab of the **Settings** dialog. **Time Range** is the width `T` of the scrolling time window, in seconds (it sets how far back a time plot looks). **Point Count** is the number of samples retained per signal, which sizes the history buffer and is the window width for a plot drawn against sample number rather than time. The Project Editor values are saved into the project file (as `plotTimeRange` and `pointCount`); the Settings dialog applies them to the live dashboard.
+
 A **custom X axis** plots one dataset against another instead of against time, producing XY traces (a phase plot, an I-V curve, a Lissajous figure).
 
 The Y axis auto-scales to fit the data by default. Pin it to a fixed range with `pltMin` / `pltMax` in the Project Editor, or from the **Axis Range** dialog on the toolbar.

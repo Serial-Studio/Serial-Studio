@@ -16,7 +16,7 @@ flowchart TD
 
     Group --> G1["Data Grid · MultiPlot<br/>Accelerometer · Gyroscope"]
     Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
-    Group --> G3["Painter (user-scripted)"]
+    Group --> G3["Painter (user-scripted)<br/>Web View"]
 
     Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass · Meter"]
 
@@ -126,6 +126,17 @@ flowchart TD
 - Repaints at the dashboard refresh rate (60 Hz by default, configurable 1-240 Hz). A 250 ms watchdog terminates the script if a single call does not return.
 - See the [Painter Widget](Painter-Widget.md) reference for the full API.
 - Pro license required.
+
+### Web View
+
+- Widget key: `"webview"`.
+- Embeds a web page inside a dashboard group, backed by Qt WebEngine (Chromium).
+- The only configuration is a URL, set in the group's settings in the Project Editor.
+- Group-level configuration fields:
+  - `webViewUrl`: the address to load.
+- No datasets required inside the group.
+- Best for: embedding a live map, a 3D model viewer, a hardware vendor's web dashboard, or any HTML content alongside your telemetry. The ISS Tracker example uses it to show a NASA glTF model of the station.
+- Requires a build compiled with Qt WebEngine. On builds without it, the widget shows a "Web View Unavailable" placeholder instead of failing to load the project.
 
 ## Dataset widgets
 
@@ -252,6 +263,7 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | 3D Plot       | Group   | `plot3d`       | 3            | x, y, z coords (Pro)                         |
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
 | Painter       | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
+| Web View      | Group   | `webview`      | 0            | `webViewUrl` (Qt WebEngine build)            |
 | Plot          | Dataset | auto           | n/a          | `graph: true`, `pltMin`/`pltMax`             |
 | FFT Plot      | Dataset | auto           | n/a          | `fft: true`, `fftSamples`, `fftSamplingRate` |
 | Waterfall     | Dataset | auto           | n/a          | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
@@ -301,7 +313,7 @@ Every dataset in a project file supports these visualization-related fields:
 - Right-click the canvas for a context menu: tile windows, set wallpaper.
 - Widget positions and sizes are saved per project via `widgetSettings` and persist between sessions.
 - The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
-- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
+- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, Web View, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
 
 Most widgets carry a small toolbar of icon buttons along their top edge that appears once the widget is large enough to fit it. Every button on every widget toolbar is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#dashboard-widget-toolbars).
 
@@ -321,6 +333,7 @@ Most widgets carry a small toolbar of icon buttons along their top edge that app
 | Mixed numeric and text values    | Data Grid (group)           |
 | 3D trajectory or position        | 3D Plot (group, Pro)        |
 | Live camera or image stream      | Image View (group, Pro)     |
+| Embedded web page / map / 3D model | Web View (group)          |
 | Wall-clock time / session timestamp | Clock (utility)          |
 | Manual elapsed-time / lap timing | Stopwatch (utility)         |
 

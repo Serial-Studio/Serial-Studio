@@ -265,6 +265,8 @@ QString API::EnumLabels::groupWidgetSlug(int value)
       return QStringLiteral("image-view");
     case SerialStudio::Painter:
       return QStringLiteral("painter");
+    case SerialStudio::WebView:
+      return QStringLiteral("web-view");
   }
   return QStringLiteral("unknown");
 }
@@ -293,6 +295,8 @@ QString API::EnumLabels::groupWidgetLabel(int value)
       return QStringLiteral("Image view");
     case SerialStudio::Painter:
       return QStringLiteral("Painter (custom canvas)");
+    case SerialStudio::WebView:
+      return QStringLiteral("Web view (embedded browser)");
   }
   return QStringLiteral("Unknown");
 }
@@ -423,6 +427,8 @@ QString API::EnumLabels::dashboardWidgetSlug(int value)
       return QStringLiteral("clock");
     case SerialStudio::DashboardStopwatch:
       return QStringLiteral("stopwatch");
+    case SerialStudio::DashboardWebView:
+      return QStringLiteral("webview");
     case SerialStudio::DashboardNoWidget:
       return QStringLiteral("none");
 #ifdef BUILD_COMMERCIAL
@@ -494,6 +500,9 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
 
   if (s == QLatin1String("stopwatch"))
     return SerialStudio::DashboardStopwatch;
+
+  if (s == QLatin1String("webview") || s == QLatin1String("web-view"))
+    return SerialStudio::DashboardWebView;
 
   if (s == QLatin1String("none"))
     return SerialStudio::DashboardNoWidget;

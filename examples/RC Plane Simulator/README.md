@@ -34,7 +34,9 @@ Cruise Home → Approach → Flare → Rollout → Shutdown
 
 1. Open Serial Studio and load `RC Plane Simulator.ssproj` as the project file.
 2. Confirm the I/O source is **Network (UDP)** on local port **9000** (the project file sets this on load).
-3. Run the simulator:
+3. Click **Connect**.
+
+The project includes a control script that launches `rc_plane_simulator.py` automatically when you connect, so you normally don't run it by hand. Start it yourself only if you want one of the options below (in which case skip the auto-launch and run it before connecting):
 
 ```bash
 python3 rc_plane_simulator.py

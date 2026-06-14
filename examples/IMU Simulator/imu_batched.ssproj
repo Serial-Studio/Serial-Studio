@@ -1,97 +1,91 @@
 {
     "actions": [
     ],
-    "checksum": "",
-    "dashboardLayout": {
-        "autoLayout": true,
-        "windowOrder": [
-            0,
-            1,
-            2
-        ]
-    },
-    "decoder": 0,
-    "frameDetection": 1,
-    "frameEnd": "*/",
-    "frameParser": "/**\n * IMU Frame Parser - Multi-Frame Expansion\n *\n * This parser demonstrates Serial Studio's multi-frame parsing feature.\n *\n * Input: One JSON packet per second containing:\n *   - battery: Scalar (battery voltage)\n *   - temperature: Scalar (temperature in C)\n *   - accel_x: Array of 120 accelerometer X samples\n *   - accel_y: Array of 120 accelerometer Y samples  \n *   - accel_z: Array of 120 accelerometer Z samples\n *\n * Output: Mixed scalar/vector array that gets automatically expanded\n *   [battery, temperature, [x1,x2,...,x120], [y1,y2,...,y120], [z1,z2,...,z120]]\n *   \n * Serial Studio automatically generates 120 frames from each packet:\n *   Frame 1: [battery, temperature, x1, y1, z1]\n *   Frame 2: [battery, temperature, x2, y2, z2]\n *   ...\n *   Frame 120: [battery, temperature, x120, y120, z120]\n *\n * This enables smooth visualization of high-frequency sensor data\n * without manually duplicating the scalar values in JavaScript.\n */\nfunction parse(frame) {\n    if (frame.length > 0) {\n        let data = JSON.parse(frame);\n        return [\n            data.battery,\n            data.temperature,\n            data.accel_x,\n            data.accel_y,\n            data.accel_z\n        ];\n    }\n    \n    return [];\n}",
-    "frameStart": "/*",
+    "controlScriptCode": "/**\n * IMU Simulator - Control Script\n *\n * Launches the bundled Python data generator (imu_simulator.py) automatically when\n * the connection opens, so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/imu_simulator.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction setup() {\n  startHelper();\n}\n\nfunction loop() {\n  delay(1000);\n}\n",
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
                     "fftSamples": 1024,
                     "fftSamplingRate": -1,
                     "graph": false,
+                    "groupId": 0,
                     "index": 1,
                     "led": false,
                     "ledHigh": 4.2,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 4.2,
                     "plotMin": 3,
                     "title": "Battery",
+                    "uniqueId": 0,
                     "units": "V",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 4.2,
                     "widgetMin": 3,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 40,
                     "fftMin": 15,
                     "fftSamples": 1024,
                     "fftSamplingRate": -1,
                     "graph": false,
+                    "groupId": 0,
                     "index": 2,
                     "led": false,
                     "ledHigh": 0,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 40,
                     "plotMin": 15,
                     "title": "Temperature",
+                    "uniqueId": 1,
                     "units": "°C",
                     "value": "",
                     "widget": "bar",
                     "widgetMax": 40,
                     "widgetMin": 15,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "System Status",
+            "uniqueId": 10003,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 1,
                     "index": 3,
                     "led": false,
                     "ledHigh": 80,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "X",
+                    "uniqueId": 10000,
                     "units": "m/s²",
                     "value": "",
                     "widget": "",
@@ -100,23 +94,25 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 1,
                     "index": 4,
                     "led": false,
                     "ledHigh": 80,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Y",
+                    "uniqueId": 10001,
                     "units": "m/s²",
                     "value": "",
                     "widget": "",
@@ -125,23 +121,25 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 1,
                     "index": 5,
                     "led": false,
                     "ledHigh": 80,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Z",
+                    "uniqueId": 10002,
                     "units": "m/s²",
                     "value": "",
                     "widget": "",
@@ -151,9 +149,195 @@
                 }
             ],
             "title": "Three Axis Accelerometer",
+            "uniqueId": 10004,
             "widget": "multiplot"
         }
     ],
     "hexadecimalDelimiters": false,
-    "title": "IMU Batched Data"
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 10005,
+    "plotTimeRange": 20,
+    "pointCount": 1000,
+    "schemaVersion": 3,
+    "sources": [
+        {
+            "busType": 1,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9000,
+                "udpMulticast": false,
+                "udpRemotePort": 53
+            },
+            "decoder": 0,
+            "decoderMethod": 0,
+            "frameDetection": 1,
+            "frameEnd": "*/",
+            "frameParserCode": "/**\n * IMU Frame Parser - Multi-Frame Expansion\n *\n * This parser demonstrates Serial Studio's multi-frame parsing feature.\n *\n * Input: One JSON packet per second containing:\n *   - battery: Scalar (battery voltage)\n *   - temperature: Scalar (temperature in C)\n *   - accel_x: Array of 120 accelerometer X samples\n *   - accel_y: Array of 120 accelerometer Y samples  \n *   - accel_z: Array of 120 accelerometer Z samples\n *\n * Output: Mixed scalar/vector array that gets automatically expanded\n *   [battery, temperature, [x1,x2,...,x120], [y1,y2,...,y120], [z1,z2,...,z120]]\n *   \n * Serial Studio automatically generates 120 frames from each packet:\n *   Frame 1: [battery, temperature, x1, y1, z1]\n *   Frame 2: [battery, temperature, x2, y2, z2]\n *   ...\n *   Frame 120: [battery, temperature, x120, y120, z120]\n *\n * This enables smooth visualization of high-frequency sensor data\n * without manually duplicating the scalar values in JavaScript.\n */\nfunction parse(frame) {\n    if (frame.length > 0) {\n        let data = JSON.parse(frame);\n        return [\n            data.battery,\n            data.temperature,\n            data.accel_x,\n            data.accel_y,\n            data.accel_z\n        ];\n    }\n    \n    return [];\n}",
+            "frameStart": "/*",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
+    "title": "IMU Batched Data",
+    "widgetSettings": {
+        "activeGroup": 1001,
+        "layout:1001": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 517,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
+                        "id": 6,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 519,
+                        "x": 516,
+                        "y": 0
+                    },
+                    {
+                        "height": 250,
+                        "id": 5,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 519,
+                        "x": 516,
+                        "y": 249
+                    }
+                ],
+                "userReordered": true,
+                "windowOrder": [
+                    1,
+                    6,
+                    5
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 10
+                    }
+                ]
+            }
+        },
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1058,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 5,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 529,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 500,
+                        "id": 6,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 529,
+                        "x": 528,
+                        "y": 0
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    5,
+                    6
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 10
+                    }
+                ]
+            }
+        },
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 1035,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    }
+                ]
+            }
+        }
+    },
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.2.7"
 }

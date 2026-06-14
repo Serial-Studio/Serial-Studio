@@ -147,7 +147,7 @@ To import:
 
 ## Frame parser
 
-Serial Studio auto-generates a JavaScript frame parser based on the register map. The parser embedded in this project:
+Serial Studio's Modbus Map Importer auto-generates a Lua frame parser based on the register map. The parser embedded in this project:
 
 - Reads the register payload from each Modbus response (`[slaveAddr, funcCode, byteCount, ...data]`).
 - Decodes the nine 16-bit big-endian holding registers.
@@ -226,7 +226,7 @@ This simulator can double as a template for connecting to real industrial PLCs:
 
 - Make sure a poll interval is set (100 ms is a good default).
 - Check that register count is 9 and start address is 0.
-- Look at the JavaScript console for frame parser errors.
+- Look at the console for frame parser errors.
 
 **Problem: Erratic readings or NaN values.**
 

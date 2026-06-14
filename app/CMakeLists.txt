@@ -240,11 +240,13 @@ set(SOURCES
   src/UI/Widgets/Gyroscope.cpp
   src/UI/Widgets/GPS.cpp
   src/UI/Widgets/MultiPlot.cpp
+  src/UI/Widgets/WebView.cpp
   src/API/Server.cpp
   src/API/CommandRegistry.cpp
   src/API/CommandHandler.cpp
   src/API/MCPHandler.cpp
   src/API/PathPolicy.cpp
+  src/API/ProcessLauncher.cpp
   src/API/EnumLabels.cpp
   src/API/Handlers/IOManagerHandler.cpp
   src/API/Handlers/UARTHandler.cpp
@@ -260,6 +262,7 @@ set(SOURCES
   src/API/Handlers/DataTablesHandler.cpp
   src/API/Handlers/WindowHandler.cpp
   src/API/Handlers/SourceHandler.cpp
+  src/API/Handlers/SystemHandler.cpp
   src/API/Handlers/WorkspacesHandler.cpp
   src/API/Handlers/ScriptsHandler.cpp
   src/API/Handlers/AssistantHandler.cpp
@@ -348,6 +351,7 @@ set(HEADERS
   src/UI/WidgetRegistry.h
   src/UI/Widgets/GPS.h
   src/UI/Widgets/MultiPlot.h
+  src/UI/Widgets/WebView.h
   src/UI/Widgets/Gauge.h
   src/UI/Widgets/Plot.h
   src/UI/Widgets/PlotAreaFill.h
@@ -368,6 +372,7 @@ set(HEADERS
   src/API/CommandHandler.h
   src/API/MCPHandler.h
   src/API/PathPolicy.h
+  src/API/ProcessLauncher.h
   src/API/EnumLabels.h
   src/API/Handlers/IOManagerHandler.h
   src/API/Handlers/UARTHandler.h
@@ -383,6 +388,7 @@ set(HEADERS
   src/API/Handlers/DataTablesHandler.h
   src/API/Handlers/WindowHandler.h
   src/API/Handlers/SourceHandler.h
+  src/API/Handlers/SystemHandler.h
   src/API/Handlers/WorkspacesHandler.h
   src/API/Handlers/ScriptsHandler.h
   src/API/Handlers/AssistantHandler.h
@@ -534,6 +540,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Gauge.qml
   qml/Widgets/Dashboard/Meter.qml
   qml/Widgets/Dashboard/GPS.qml
+  qml/Widgets/Dashboard/WebView.qml
   qml/Widgets/Dashboard/Gyroscope.qml
   qml/Widgets/Dashboard/LEDPanel.qml
   qml/Widgets/Dashboard/MultiPlot.qml
@@ -576,6 +583,7 @@ set(QML_SOURCES
 
 if(WITH_WEBENGINE)
   list(APPEND QML_SOURCES qml/Widgets/MarkdownWebView.qml)
+  list(APPEND QML_SOURCES qml/Widgets/Dashboard/WebEngineSurface.qml)
 endif()
 
 if(BUILD_COMMERCIAL)

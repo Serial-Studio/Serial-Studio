@@ -1,237 +1,246 @@
 {
     "actions": [
     ],
+    "controlScriptCode": "/**\n * CAN Bus ECU Simulator - Control Script\n *\n * Launches the bundled Python data generator (ecu_simulator.py) automatically just before\n * the connection opens (via onConnect), so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/ecu_simulator.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script, \"--virtual\"], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script, \"--virtual\"], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction onConnect() {\n  startHelper();\n}\n\nfunction setup() {}\n\nfunction loop() {\n  delay(1000);\n}\n",
+    "customizeWorkspaces": true,
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
-                    "fft": false,
-                    "fftMax": 7000,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 0,
-                    "index": 1,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 7000,
-                    "plotMin": 0,
-                    "title": "EngineRPM",
-                    "units": "rpm",
-                    "value": "",
-                    "widget": "meter",
-                    "widgetMax": 8000,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 0,
-                    "index": 2,
+                    "index": 1,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
                     "title": "VehicleSpeed",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_RPM_SPEED\", \"VehicleSpeed\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 0,
                     "units": "km/h",
                     "value": "",
+                    "virtual": true,
                     "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 9,
+                    "fft": false,
+                    "fftMax": 7000,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 7000,
+                    "plotMin": 0,
+                    "title": "EngineRPM",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_RPM_SPEED\", \"EngineRPM\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 1,
+                    "units": "rpm",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "meter",
+                    "widgetMax": 8000,
+                    "widgetMin": 0,
+                    "xAxis": -2
                 }
             ],
             "title": "ENGINE_RPM_SPEED",
-            "widget": "multiplot"
-        },
-        {
-            "datasets": [
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 0,
-                    "displayFormat": "0d",
-                    "displayTickCount": 6,
-                    "fft": false,
-                    "fftMax": 100,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 1,
-                    "index": 3,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 100,
-                    "plotMin": 0,
-                    "title": "EngineLoad",
-                    "units": "%",
-                    "value": "",
-                    "widget": "bar",
-                    "widgetMax": 100,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "0d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 215,
-                    "fftMin": -40,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 1,
-                    "index": 4,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 215,
-                    "plotMin": -40,
-                    "title": "CoolantTemp",
-                    "units": "degC",
-                    "value": "",
-                    "widget": "bar",
-                    "widgetMax": 250,
-                    "widgetMin": -50,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 2,
-                    "displayFormat": "0d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 215,
-                    "fftMin": -40,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 1,
-                    "index": 5,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 215,
-                    "plotMin": -40,
-                    "title": "IntakeTemp",
-                    "units": "degC",
-                    "value": "",
-                    "widget": "bar",
-                    "widgetMax": 250,
-                    "widgetMin": -50,
-                    "xAxis": -1
-                }
-            ],
-            "title": "ENGINE_TEMP_LOAD",
-            "widget": "multiplot"
-        },
-        {
-            "datasets": [
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 0,
-                    "displayFormat": "0d",
-                    "displayTickCount": 6,
-                    "fft": false,
-                    "fftMax": 1000,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 2,
-                    "index": 6,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 1000,
-                    "plotMin": 0,
-                    "title": "FuelPressure",
-                    "units": "kPa",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 1000,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "1d",
-                    "displayTickCount": 6,
-                    "fft": false,
-                    "fftMax": 100,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 2,
-                    "index": 7,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 100,
-                    "plotMin": 0,
-                    "title": "ThrottlePosition",
-                    "units": "%",
-                    "value": "",
-                    "widget": "bar",
-                    "widgetMax": 100,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                }
-            ],
-            "title": "ENGINE_THROTTLE",
+            "uniqueId": 140000,
             "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
                     "displayFormat": "0d",
-                    "displayTickCount": 9,
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 1,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "EngineLoad",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_TEMP_LOAD\", \"EngineLoad\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 10000,
+                    "units": "%",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
+                    "fft": false,
+                    "fftMax": 215,
+                    "fftMin": -40,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 1,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 215,
+                    "plotMin": -40,
+                    "title": "CoolantTemp",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_TEMP_LOAD\", \"CoolantTemp\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 10001,
+                    "units": "degC",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 250,
+                    "widgetMin": -50,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
+                    "fft": false,
+                    "fftMax": 215,
+                    "fftMin": -40,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 1,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 215,
+                    "plotMin": -40,
+                    "title": "IntakeTemp",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_TEMP_LOAD\", \"IntakeTemp\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 10002,
+                    "units": "degC",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 250,
+                    "widgetMin": -50,
+                    "xAxis": -2
+                }
+            ],
+            "title": "ENGINE_TEMP_LOAD",
+            "uniqueId": 140001,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "ThrottlePosition",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_THROTTLE\", \"ThrottlePosition\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 20000,
+                    "units": "%",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 1000,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 7,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 1000,
+                    "plotMin": 0,
+                    "title": "FuelPressure",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ENGINE_THROTTLE\", \"FuelPressure\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 20001,
+                    "units": "kPa",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 1000,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "ENGINE_THROTTLE",
+            "uniqueId": 140002,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 255,
                     "fftMin": 0,
@@ -241,87 +250,99 @@
                     "groupId": 3,
                     "index": 8,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
-                    "plotMax": 8,
+                    "plotMax": 255,
                     "plotMin": 0,
                     "title": "CurrentGear",
+                    "transformCode": "local LABELS = {\n  [0] = \"Park/Neutral\",\n  [1] = \"1st\",\n  [2] = \"2nd\",\n  [3] = \"3rd\",\n  [4] = \"4th\",\n  [5] = \"5th\",\n  [6] = \"6th\",\n  [255] = \"Reverse\",\n}\n\nfunction transform(value)\n  local raw = math.floor((tableGet(\"TRANSMISSION_GEAR\", \"CurrentGear\") or 0) + 0.5)\n  return LABELS[raw] or (\"Unknown (\" .. raw .. \")\")\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 30000,
                     "units": "",
                     "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 8,
+                    "virtual": true,
+                    "widget": "",
+                    "widgetMax": 300,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
                     "displayFormat": "0d",
-                    "displayTickCount": 6,
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 3,
                     "index": 9,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "TorqueConverterSlip",
+                    "transformCode": "function transform(value)\n  return tableGet(\"TRANSMISSION_GEAR\", \"TorqueConverterSlip\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 30001,
                     "units": "%",
                     "value": "",
+                    "virtual": true,
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
                     "displayFormat": "0d",
-                    "displayTickCount": 7,
+                    "displayTickCount": 13,
                     "fft": false,
                     "fftMax": 215,
                     "fftMin": -40,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 3,
                     "index": 10,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 215,
                     "plotMin": -40,
                     "title": "TransmissionTemp",
+                    "transformCode": "function transform(value)\n  return tableGet(\"TRANSMISSION_GEAR\", \"TransmissionTemp\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 30002,
                     "units": "degC",
                     "value": "",
+                    "virtual": true,
                     "widget": "bar",
                     "widgetMax": 250,
                     "widgetMin": -50,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "TRANSMISSION_GEAR",
+            "uniqueId": 140003,
             "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 0,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -339,18 +360,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "TurnSignalLeft",
+                    "title": "Headlights",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_LIGHTS\", \"Headlights\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 40000,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 1,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -368,18 +398,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "HazardLights",
+                    "title": "HighBeams",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_LIGHTS\", \"HighBeams\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 40001,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 2,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -397,18 +436,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "TurnSignalRight",
+                    "title": "TurnSignalLeft",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_LIGHTS\", \"TurnSignalLeft\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 40002,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 3,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -426,18 +474,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "Headlights",
+                    "title": "TurnSignalRight",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_LIGHTS\", \"TurnSignalRight\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 40003,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 4,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -455,24 +512,34 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "HighBeams",
+                    "title": "HazardLights",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_LIGHTS\", \"HazardLights\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 40004,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "BCM_LIGHTS",
-            "widget": ""
+            "uniqueId": 140004,
+            "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 0,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -490,18 +557,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "DoorFrontRight",
+                    "title": "DoorFrontLeft",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_DOORS\", \"DoorFrontLeft\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 50000,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 1,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -519,18 +595,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "DoorFrontLeft",
+                    "title": "Trunk",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_DOORS\", \"Trunk\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 50001,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 2,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -549,17 +634,26 @@
                     "plotMax": 1,
                     "plotMin": 0,
                     "title": "DoorRearLeft",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_DOORS\", \"DoorRearLeft\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 50002,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 3,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -577,18 +671,27 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "DoorRearRight",
+                    "title": "DoorFrontRight",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_DOORS\", \"DoorFrontRight\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 50003,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmBands": [
+                        {
+                            "label": "Active",
+                            "max": 1,
+                            "min": 0.5,
+                            "severity": 1
+                        }
+                    ],
                     "datasetId": 4,
                     "displayFormat": "0d",
                     "displayTickCount": 6,
@@ -606,91 +709,126 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "Trunk",
+                    "title": "DoorRearRight",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BCM_DOORS\", \"DoorRearRight\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 50004,
                     "units": "",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "BCM_DOORS",
-            "widget": ""
-        },
-        {
-            "datasets": [
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 0,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 500,
-                    "fftMin": -500,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 6,
-                    "index": 21,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 500,
-                    "plotMin": -500,
-                    "title": "PackCurrent",
-                    "units": "A",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 600,
-                    "widgetMin": -600,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "1d",
-                    "displayTickCount": 6,
-                    "fft": false,
-                    "fftMax": 850,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 6,
-                    "index": 22,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 850,
-                    "plotMin": 0,
-                    "title": "PackVoltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 1000,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                }
-            ],
-            "title": "BMS_VOLTAGE_CURRENT",
+            "uniqueId": 140005,
             "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
                     "displayFormat": "0d",
-                    "displayTickCount": 6,
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 850,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 6,
+                    "index": 21,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 850,
+                    "plotMin": 0,
+                    "title": "PackVoltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_VOLTAGE_CURRENT\", \"PackVoltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 60000,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 1000,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
+                    "fft": false,
+                    "fftMax": 500,
+                    "fftMin": -500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 6,
+                    "index": 22,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 500,
+                    "plotMin": -500,
+                    "title": "PackCurrent",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_VOLTAGE_CURRENT\", \"PackCurrent\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 60001,
+                    "units": "A",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 600,
+                    "widgetMin": -600,
+                    "xAxis": -2
+                }
+            ],
+            "title": "BMS_VOLTAGE_CURRENT",
+            "uniqueId": 140006,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
+                    "fft": false,
+                    "fftMax": 215,
+                    "fftMin": -40,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 7,
+                    "index": 23,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 215,
+                    "plotMin": -40,
+                    "title": "PackTemperature",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_SOC_TEMP\", \"PackTemperature\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 70000,
+                    "units": "degC",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 250,
+                    "widgetMin": -50,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -698,298 +836,280 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 7,
-                    "index": 23,
+                    "index": 24,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "StateOfCharge",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_SOC_TEMP\", \"StateOfCharge\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 70001,
                     "units": "%",
                     "value": "",
+                    "virtual": true,
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "0d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 215,
-                    "fftMin": -40,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 7,
-                    "index": 24,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 215,
-                    "plotMin": -40,
-                    "title": "PackTemperature",
-                    "units": "degC",
-                    "value": "",
-                    "widget": "bar",
-                    "widgetMax": 250,
-                    "widgetMin": -50,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "BMS_SOC_TEMP",
+            "uniqueId": 140007,
             "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
-                    "displayFormat": "1d",
+                    "displayFormat": "0d",
                     "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 8,
                     "index": 25,
                     "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell2Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 26,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell3Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 2,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 27,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell6Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 3,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 28,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell5Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 4,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 29,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell4Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 5,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 30,
-                    "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 4.2,
                     "plotMin": 3,
                     "title": "Cell8Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell8Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80000,
                     "units": "V",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
                     "widgetMax": 4.2,
                     "widgetMin": 3,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 6,
-                    "displayFormat": "1d",
+                    "datasetId": 1,
+                    "displayFormat": "0d",
                     "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 8,
-                    "index": 31,
+                    "index": 26,
                     "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell1Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 7,
-                    "displayFormat": "1d",
-                    "displayTickCount": 7,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 32,
-                    "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 4.2,
                     "plotMin": 3,
                     "title": "Cell7Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell7Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80001,
                     "units": "V",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
                     "widgetMax": 4.2,
                     "widgetMin": 3,
-                    "xAxis": -1
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 8,
+                    "index": 27,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell3Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell3Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80002,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 8,
+                    "index": 28,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell5Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell5Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80003,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 8,
+                    "index": 29,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell2Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell2Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80004,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 8,
+                    "index": 30,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell4Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell4Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80005,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 8,
+                    "index": 31,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell6Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell6Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80006,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 7,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 8,
+                    "index": 32,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell1Voltage",
+                    "transformCode": "function transform(value)\n  return tableGet(\"BMS_CELL_VOLTAGES\", \"Cell1Voltage\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 80007,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -2
                 }
             ],
             "title": "BMS_CELL_VOLTAGES",
-            "widget": "multiplot"
+            "uniqueId": 140008,
+            "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
                     "displayFormat": "1d",
                     "displayTickCount": 6,
@@ -1002,23 +1122,24 @@
                     "groupId": 9,
                     "index": 33,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 999999.9,
                     "plotMin": 0,
                     "title": "Odometer",
+                    "transformCode": "function transform(value)\n  return tableGet(\"CLUSTER_ODOMETER\", \"Odometer\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 90000,
                     "units": "km",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 1000000,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
                     "displayFormat": "1d",
                     "displayTickCount": 6,
@@ -1031,278 +1152,295 @@
                     "groupId": 9,
                     "index": 34,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 9999.9,
                     "plotMin": 0,
                     "title": "TripDistance",
+                    "transformCode": "function transform(value)\n  return tableGet(\"CLUSTER_ODOMETER\", \"TripDistance\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 90001,
                     "units": "km",
                     "value": "",
+                    "virtual": true,
                     "widget": "",
                     "widgetMax": 10000,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "CLUSTER_ODOMETER",
+            "uniqueId": 140009,
             "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
-                    "displayFormat": "1d",
-                    "displayTickCount": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 50,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 10,
                     "index": 35,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 50,
                     "plotMin": 0,
                     "title": "FuelConsumption",
+                    "transformCode": "function transform(value)\n  return tableGet(\"CLUSTER_FUEL\", \"FuelConsumption\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 100000,
                     "units": "L/100km",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
                     "widgetMax": 50,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
                     "displayFormat": "0d",
-                    "displayTickCount": 6,
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 10,
                     "index": 36,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "FuelLevel",
+                    "transformCode": "function transform(value)\n  return tableGet(\"CLUSTER_FUEL\", \"FuelLevel\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 100001,
                     "units": "%",
                     "value": "",
+                    "virtual": true,
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "CLUSTER_FUEL",
-            "widget": "multiplot"
+            "uniqueId": 140010,
+            "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 11,
                     "index": 37,
                     "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 200,
-                    "plotMin": 0,
-                    "title": "WheelSpeedFL",
-                    "units": "km/h",
-                    "value": "",
-                    "widget": "meter",
-                    "widgetMax": 200,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
-                    "fft": false,
-                    "fftMax": 200,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 11,
-                    "index": 38,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 200,
-                    "plotMin": 0,
-                    "title": "WheelSpeedRR",
-                    "units": "km/h",
-                    "value": "",
-                    "widget": "meter",
-                    "widgetMax": 200,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 2,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
-                    "fft": false,
-                    "fftMax": 200,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 11,
-                    "index": 39,
-                    "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
                     "title": "WheelSpeedRL",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ABS_WHEEL_SPEEDS\", \"WheelSpeedRL\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 110000,
                     "units": "km/h",
                     "value": "",
+                    "virtual": true,
                     "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 3,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 11,
-                    "index": 40,
+                    "index": 38,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
                     "title": "WheelSpeedFR",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ABS_WHEEL_SPEEDS\", \"WheelSpeedFR\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 110001,
                     "units": "km/h",
                     "value": "",
+                    "virtual": true,
                     "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
-                    "xAxis": -1
-                }
-            ],
-            "title": "ABS_WHEEL_SPEEDS",
-            "widget": "multiplot"
-        },
-        {
-            "datasets": [
+                    "xAxis": -2
+                },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 0,
-                    "displayFormat": "1d",
-                    "displayTickCount": 5,
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
+                    "groupId": 11,
+                    "index": 39,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 200,
+                    "plotMin": 0,
+                    "title": "WheelSpeedRR",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ABS_WHEEL_SPEEDS\", \"WheelSpeedRR\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 110002,
+                    "units": "km/h",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "meter",
+                    "widgetMax": 200,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 200,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 11,
+                    "index": 40,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 200,
+                    "plotMin": 0,
+                    "title": "WheelSpeedFL",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ABS_WHEEL_SPEEDS\", \"WheelSpeedFL\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 110003,
+                    "units": "km/h",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "meter",
+                    "widgetMax": 200,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "ABS_WHEEL_SPEEDS",
+            "uniqueId": 140011,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 200,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
                     "groupId": 12,
                     "index": 41,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
                     "title": "BrakePressure",
+                    "transformCode": "function transform(value)\n  return tableGet(\"ABS_BRAKE_PRESSURE\", \"BrakePressure\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 120000,
                     "units": "bar",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
                     "widgetMax": 200,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "ABS_BRAKE_PRESSURE",
-            "widget": ""
+            "uniqueId": 140012,
+            "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
-                    "displayFormat": "1d",
+                    "displayFormat": "0d",
                     "displayTickCount": 9,
                     "fft": false,
                     "fftMax": 720,
                     "fftMin": -720,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 13,
                     "index": 42,
                     "led": false,
-                    "ledHigh": 0,
+                    "ledHigh": 80,
                     "log": true,
                     "numericValue": 0,
                     "plotMax": 720,
                     "plotMin": -720,
                     "title": "SteeringAngle",
+                    "transformCode": "function transform(value)\n  return tableGet(\"STEERING_ANGLE\", \"SteeringAngle\") or 0\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 130000,
                     "units": "deg",
                     "value": "",
+                    "virtual": true,
                     "widget": "gauge",
                     "widgetMax": 800,
                     "widgetMin": -800,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "STEERING_ANGLE",
-            "widget": ""
+            "uniqueId": 140013,
+            "widget": "datagrid"
         }
     ],
     "hexadecimalDelimiters": false,
@@ -1327,8 +1465,10 @@
         "sslProtocol": 5,
         "topicBase": ""
     },
+    "nextUniqueId": 140014,
+    "plotTimeRange": 5,
     "pointCount": 4000,
-    "schemaVersion": 2,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 5,
@@ -1338,7 +1478,7 @@
             "decoderMethod": 3,
             "frameDetection": 2,
             "frameEnd": "",
-            "frameParserCode": "--\n-- CAN DBC Frame Parser\n--\n-- Auto-generated from: ecu_simulator.dbc\n--\n-- Total signals: 42\n-- Total messages: 14\n--\n-- Frame format:\n--   Byte 1-2: CAN ID (big-endian, 16-bit)\n--   Byte 3:   Data Length Code (DLC)\n--   Byte 4+:  CAN data payload\n--\n-- Multiplex notes:\n--   Selector signals are listed as [selector] and extracted first.\n--   Muxed signals are listed as [mux N] and only updated when the\n--   selector raw value equals N. Extended multiplexing is not supported.\n--\n\nlocal values = {}\nfor i = 1, 42 do values[i] = 0 end\n\nlocal function extractSignal(data, startBit, length, isBigEndian, isSigned)\n  local value = 0\n\n  if isBigEndian then\n    local startByte = startBit // 8\n    local numBytes = (length + 7) // 8\n\n    -- Byte-aligned fast path\n    if startBit % 8 == 0 and length % 8 == 0 then\n      for i = 0, numBytes - 1 do\n        if startByte + i + 1 <= #data then\n          value = (value << 8) | data[startByte + i + 1]\n        end\n      end\n    else\n      -- Non-byte-aligned: bit-by-bit extraction\n      for bit = 0, length - 1 do\n        local bitPos = startBit + bit\n        local byteIdx = bitPos // 8 + 1\n        local bitIdx = 7 - (bitPos % 8)\n        if byteIdx <= #data then\n          value = (value << 1) | ((data[byteIdx] >> bitIdx) & 1)\n        end\n      end\n    end\n  else\n    -- Intel (little-endian)\n    local startByte = startBit // 8\n    local startBitInByte = startBit % 8\n    local bitsRead = 0\n\n    local i = startByte\n    while i + 1 <= #data and bitsRead < length do\n      local bitsInThisByte\n      if i == startByte then\n        bitsInThisByte = math.min(8 - startBitInByte, length - bitsRead)\n      else\n        bitsInThisByte = math.min(8, length - bitsRead)\n      end\n      local shift = (i == startByte) and startBitInByte or 0\n      local mask = ((1 << bitsInThisByte) - 1) << shift\n      local bits = (data[i + 1] & mask) >> shift\n      value = value | (bits << bitsRead)\n      bitsRead = bitsRead + bitsInThisByte\n      i = i + 1\n    end\n  end\n\n  -- Apply signed conversion\n  if isSigned and (value & (1 << (length - 1))) ~= 0 then\n    value = value - (1 << length)\n  end\n\n  return value\nend\n\n--\n-- Decodes CAN message: ENGINE_RPM_SPEED (ID: 0x100)\n--\n-- Signals (2):\n--   [1] EngineRPM (rpm)\n--   [2] VehicleSpeed (km/h)\n--\nlocal function decode_100(data)\n  -- EngineRPM [rpm]\n  local raw_EngineRPM = extractSignal(data, 0, 16, false, false)\n  local value_EngineRPM = (raw_EngineRPM * 0.25) + 0\n  values[1] = value_EngineRPM\n\n  -- VehicleSpeed [km/h]\n  local raw_VehicleSpeed = extractSignal(data, 16, 16, false, false)\n  local value_VehicleSpeed = (raw_VehicleSpeed * 0.01) + 0\n  values[2] = value_VehicleSpeed\nend\n\n--\n-- Decodes CAN message: ENGINE_TEMP_LOAD (ID: 0x101)\n--\n-- Signals (3):\n--   [3] EngineLoad (%)\n--   [4] CoolantTemp (degC)\n--   [5] IntakeTemp (degC)\n--\nlocal function decode_101(data)\n  -- EngineLoad [%]\n  local raw_EngineLoad = extractSignal(data, 16, 8, false, false)\n  local value_EngineLoad = (raw_EngineLoad * 1) + 0\n  values[3] = value_EngineLoad\n\n  -- CoolantTemp [degC]\n  local raw_CoolantTemp = extractSignal(data, 0, 8, false, false)\n  local value_CoolantTemp = (raw_CoolantTemp * 1) + -40\n  values[4] = value_CoolantTemp\n\n  -- IntakeTemp [degC]\n  local raw_IntakeTemp = extractSignal(data, 8, 8, false, false)\n  local value_IntakeTemp = (raw_IntakeTemp * 1) + -40\n  values[5] = value_IntakeTemp\nend\n\n--\n-- Decodes CAN message: ENGINE_THROTTLE (ID: 0x102)\n--\n-- Signals (2):\n--   [6] FuelPressure (kPa)\n--   [7] ThrottlePosition (%)\n--\nlocal function decode_102(data)\n  -- FuelPressure [kPa]\n  local raw_FuelPressure = extractSignal(data, 8, 16, false, false)\n  local value_FuelPressure = (raw_FuelPressure * 1) + 0\n  values[6] = value_FuelPressure\n\n  -- ThrottlePosition [%]\n  local raw_ThrottlePosition = extractSignal(data, 0, 8, false, false)\n  local value_ThrottlePosition = (raw_ThrottlePosition * 0.392157) + 0\n  values[7] = value_ThrottlePosition\nend\n\n--\n-- Decodes CAN message: TRANSMISSION_GEAR (ID: 0x200)\n--\n-- Signals (3):\n--   [8] CurrentGear (no unit)\n--   [9] TorqueConverterSlip (%)\n--   [10] TransmissionTemp (degC)\n--\nlocal function decode_200(data)\n  -- CurrentGear\n  local raw_CurrentGear = extractSignal(data, 0, 8, false, false)\n  local value_CurrentGear = (raw_CurrentGear * 1) + 0\n  values[8] = value_CurrentGear\n\n  -- TorqueConverterSlip [%]\n  local raw_TorqueConverterSlip = extractSignal(data, 16, 8, false, false)\n  local value_TorqueConverterSlip = (raw_TorqueConverterSlip * 1) + 0\n  values[9] = value_TorqueConverterSlip\n\n  -- TransmissionTemp [degC]\n  local raw_TransmissionTemp = extractSignal(data, 8, 8, false, false)\n  local value_TransmissionTemp = (raw_TransmissionTemp * 1) + -40\n  values[10] = value_TransmissionTemp\nend\n\n--\n-- Decodes CAN message: BCM_LIGHTS (ID: 0x300)\n--\n-- Signals (5):\n--   [11] TurnSignalLeft (no unit)\n--   [12] HazardLights (no unit)\n--   [13] TurnSignalRight (no unit)\n--   [14] Headlights (no unit)\n--   [15] HighBeams (no unit)\n--\nlocal function decode_300(data)\n  -- TurnSignalLeft\n  local raw_TurnSignalLeft = extractSignal(data, 2, 1, false, false)\n  local value_TurnSignalLeft = (raw_TurnSignalLeft * 1) + 0\n  values[11] = value_TurnSignalLeft\n\n  -- HazardLights\n  local raw_HazardLights = extractSignal(data, 4, 1, false, false)\n  local value_HazardLights = (raw_HazardLights * 1) + 0\n  values[12] = value_HazardLights\n\n  -- TurnSignalRight\n  local raw_TurnSignalRight = extractSignal(data, 3, 1, false, false)\n  local value_TurnSignalRight = (raw_TurnSignalRight * 1) + 0\n  values[13] = value_TurnSignalRight\n\n  -- Headlights\n  local raw_Headlights = extractSignal(data, 0, 1, false, false)\n  local value_Headlights = (raw_Headlights * 1) + 0\n  values[14] = value_Headlights\n\n  -- HighBeams\n  local raw_HighBeams = extractSignal(data, 1, 1, false, false)\n  local value_HighBeams = (raw_HighBeams * 1) + 0\n  values[15] = value_HighBeams\nend\n\n--\n-- Decodes CAN message: BCM_DOORS (ID: 0x301)\n--\n-- Signals (5):\n--   [16] DoorFrontRight (no unit)\n--   [17] DoorFrontLeft (no unit)\n--   [18] DoorRearLeft (no unit)\n--   [19] DoorRearRight (no unit)\n--   [20] Trunk (no unit)\n--\nlocal function decode_301(data)\n  -- DoorFrontRight\n  local raw_DoorFrontRight = extractSignal(data, 1, 1, false, false)\n  local value_DoorFrontRight = (raw_DoorFrontRight * 1) + 0\n  values[16] = value_DoorFrontRight\n\n  -- DoorFrontLeft\n  local raw_DoorFrontLeft = extractSignal(data, 0, 1, false, false)\n  local value_DoorFrontLeft = (raw_DoorFrontLeft * 1) + 0\n  values[17] = value_DoorFrontLeft\n\n  -- DoorRearLeft\n  local raw_DoorRearLeft = extractSignal(data, 2, 1, false, false)\n  local value_DoorRearLeft = (raw_DoorRearLeft * 1) + 0\n  values[18] = value_DoorRearLeft\n\n  -- DoorRearRight\n  local raw_DoorRearRight = extractSignal(data, 3, 1, false, false)\n  local value_DoorRearRight = (raw_DoorRearRight * 1) + 0\n  values[19] = value_DoorRearRight\n\n  -- Trunk\n  local raw_Trunk = extractSignal(data, 4, 1, false, false)\n  local value_Trunk = (raw_Trunk * 1) + 0\n  values[20] = value_Trunk\nend\n\n--\n-- Decodes CAN message: BMS_VOLTAGE_CURRENT (ID: 0x400)\n--\n-- Signals (2):\n--   [21] PackCurrent (A)\n--   [22] PackVoltage (V)\n--\nlocal function decode_400(data)\n  -- PackCurrent [A]\n  local raw_PackCurrent = extractSignal(data, 16, 16, false, true)\n  local value_PackCurrent = (raw_PackCurrent * 0.1) + 0\n  values[21] = value_PackCurrent\n\n  -- PackVoltage [V]\n  local raw_PackVoltage = extractSignal(data, 0, 16, false, false)\n  local value_PackVoltage = (raw_PackVoltage * 0.1) + 0\n  values[22] = value_PackVoltage\nend\n\n--\n-- Decodes CAN message: BMS_SOC_TEMP (ID: 0x401)\n--\n-- Signals (2):\n--   [23] StateOfCharge (%)\n--   [24] PackTemperature (degC)\n--\nlocal function decode_401(data)\n  -- StateOfCharge [%]\n  local raw_StateOfCharge = extractSignal(data, 0, 8, false, false)\n  local value_StateOfCharge = (raw_StateOfCharge * 1) + 0\n  values[23] = value_StateOfCharge\n\n  -- PackTemperature [degC]\n  local raw_PackTemperature = extractSignal(data, 8, 8, false, false)\n  local value_PackTemperature = (raw_PackTemperature * 1) + -40\n  values[24] = value_PackTemperature\nend\n\n--\n-- Decodes CAN message: BMS_CELL_VOLTAGES (ID: 0x402)\n--\n-- Signals (8):\n--   [25] Cell2Voltage (V)\n--   [26] Cell3Voltage (V)\n--   [27] Cell6Voltage (V)\n--   [28] Cell5Voltage (V)\n--   [29] Cell4Voltage (V)\n--   [30] Cell8Voltage (V)\n--   [31] Cell1Voltage (V)\n--   [32] Cell7Voltage (V)\n--\nlocal function decode_402(data)\n  -- Cell2Voltage [V]\n  local raw_Cell2Voltage = extractSignal(data, 8, 8, false, false)\n  local value_Cell2Voltage = (raw_Cell2Voltage * 0.00471) + 3\n  values[25] = value_Cell2Voltage\n\n  -- Cell3Voltage [V]\n  local raw_Cell3Voltage = extractSignal(data, 16, 8, false, false)\n  local value_Cell3Voltage = (raw_Cell3Voltage * 0.00471) + 3\n  values[26] = value_Cell3Voltage\n\n  -- Cell6Voltage [V]\n  local raw_Cell6Voltage = extractSignal(data, 40, 8, false, false)\n  local value_Cell6Voltage = (raw_Cell6Voltage * 0.00471) + 3\n  values[27] = value_Cell6Voltage\n\n  -- Cell5Voltage [V]\n  local raw_Cell5Voltage = extractSignal(data, 32, 8, false, false)\n  local value_Cell5Voltage = (raw_Cell5Voltage * 0.00471) + 3\n  values[28] = value_Cell5Voltage\n\n  -- Cell4Voltage [V]\n  local raw_Cell4Voltage = extractSignal(data, 24, 8, false, false)\n  local value_Cell4Voltage = (raw_Cell4Voltage * 0.00471) + 3\n  values[29] = value_Cell4Voltage\n\n  -- Cell8Voltage [V]\n  local raw_Cell8Voltage = extractSignal(data, 56, 8, false, false)\n  local value_Cell8Voltage = (raw_Cell8Voltage * 0.00471) + 3\n  values[30] = value_Cell8Voltage\n\n  -- Cell1Voltage [V]\n  local raw_Cell1Voltage = extractSignal(data, 0, 8, false, false)\n  local value_Cell1Voltage = (raw_Cell1Voltage * 0.00471) + 3\n  values[31] = value_Cell1Voltage\n\n  -- Cell7Voltage [V]\n  local raw_Cell7Voltage = extractSignal(data, 48, 8, false, false)\n  local value_Cell7Voltage = (raw_Cell7Voltage * 0.00471) + 3\n  values[32] = value_Cell7Voltage\nend\n\n--\n-- Decodes CAN message: CLUSTER_ODOMETER (ID: 0x500)\n--\n-- Signals (2):\n--   [33] Odometer (km)\n--   [34] TripDistance (km)\n--\nlocal function decode_500(data)\n  -- Odometer [km]\n  local raw_Odometer = extractSignal(data, 0, 32, false, false)\n  local value_Odometer = (raw_Odometer * 0.1) + 0\n  values[33] = value_Odometer\n\n  -- TripDistance [km]\n  local raw_TripDistance = extractSignal(data, 32, 16, false, false)\n  local value_TripDistance = (raw_TripDistance * 0.1) + 0\n  values[34] = value_TripDistance\nend\n\n--\n-- Decodes CAN message: CLUSTER_FUEL (ID: 0x501)\n--\n-- Signals (2):\n--   [35] FuelConsumption (L/100km)\n--   [36] FuelLevel (%)\n--\nlocal function decode_501(data)\n  -- FuelConsumption [L/100km]\n  local raw_FuelConsumption = extractSignal(data, 8, 16, false, false)\n  local value_FuelConsumption = (raw_FuelConsumption * 0.01) + 0\n  values[35] = value_FuelConsumption\n\n  -- FuelLevel [%]\n  local raw_FuelLevel = extractSignal(data, 0, 8, false, false)\n  local value_FuelLevel = (raw_FuelLevel * 1) + 0\n  values[36] = value_FuelLevel\nend\n\n--\n-- Decodes CAN message: ABS_WHEEL_SPEEDS (ID: 0x600)\n--\n-- Signals (4):\n--   [37] WheelSpeedFL (km/h)\n--   [38] WheelSpeedRR (km/h)\n--   [39] WheelSpeedRL (km/h)\n--   [40] WheelSpeedFR (km/h)\n--\nlocal function decode_600(data)\n  -- WheelSpeedFL [km/h]\n  local raw_WheelSpeedFL = extractSignal(data, 0, 16, false, false)\n  local value_WheelSpeedFL = (raw_WheelSpeedFL * 0.01) + 0\n  values[37] = value_WheelSpeedFL\n\n  -- WheelSpeedRR [km/h]\n  local raw_WheelSpeedRR = extractSignal(data, 48, 16, false, false)\n  local value_WheelSpeedRR = (raw_WheelSpeedRR * 0.01) + 0\n  values[38] = value_WheelSpeedRR\n\n  -- WheelSpeedRL [km/h]\n  local raw_WheelSpeedRL = extractSignal(data, 32, 16, false, false)\n  local value_WheelSpeedRL = (raw_WheelSpeedRL * 0.01) + 0\n  values[39] = value_WheelSpeedRL\n\n  -- WheelSpeedFR [km/h]\n  local raw_WheelSpeedFR = extractSignal(data, 16, 16, false, false)\n  local value_WheelSpeedFR = (raw_WheelSpeedFR * 0.01) + 0\n  values[40] = value_WheelSpeedFR\nend\n\n--\n-- Decodes CAN message: ABS_BRAKE_PRESSURE (ID: 0x601)\n--\n-- Signals (1):\n--   [41] BrakePressure (bar)\n--\nlocal function decode_601(data)\n  -- BrakePressure [bar]\n  local raw_BrakePressure = extractSignal(data, 0, 16, false, false)\n  local value_BrakePressure = (raw_BrakePressure * 0.1) + 0\n  values[41] = value_BrakePressure\nend\n\n--\n-- Decodes CAN message: STEERING_ANGLE (ID: 0x700)\n--\n-- Signals (1):\n--   [42] SteeringAngle (deg)\n--\nlocal function decode_700(data)\n  -- SteeringAngle [deg]\n  local raw_SteeringAngle = extractSignal(data, 0, 16, false, true)\n  local value_SteeringAngle = (raw_SteeringAngle * 0.1) + 0\n  values[42] = value_SteeringAngle\nend\n\nfunction parse(frame)\n  if #frame < 3 then return values end\n\n  local canId = (frame[1] << 8) | frame[2]\n  local dlc = frame[3]\n\n  -- Extract data payload (1-indexed)\n  local data = {}\n  for i = 1, dlc do\n    if 3 + i <= #frame then data[i] = frame[3 + i] end\n  end\n\n  -- Route CAN ID to the matching message decoder\n  if canId == 0x100 then\n    -- ENGINE_RPM_SPEED\n    decode_100(data)\n  elseif canId == 0x101 then\n    -- ENGINE_TEMP_LOAD\n    decode_101(data)\n  elseif canId == 0x102 then\n    -- ENGINE_THROTTLE\n    decode_102(data)\n  elseif canId == 0x200 then\n    -- TRANSMISSION_GEAR\n    decode_200(data)\n  elseif canId == 0x300 then\n    -- BCM_LIGHTS\n    decode_300(data)\n  elseif canId == 0x301 then\n    -- BCM_DOORS\n    decode_301(data)\n  elseif canId == 0x400 then\n    -- BMS_VOLTAGE_CURRENT\n    decode_400(data)\n  elseif canId == 0x401 then\n    -- BMS_SOC_TEMP\n    decode_401(data)\n  elseif canId == 0x402 then\n    -- BMS_CELL_VOLTAGES\n    decode_402(data)\n  elseif canId == 0x500 then\n    -- CLUSTER_ODOMETER\n    decode_500(data)\n  elseif canId == 0x501 then\n    -- CLUSTER_FUEL\n    decode_501(data)\n  elseif canId == 0x600 then\n    -- ABS_WHEEL_SPEEDS\n    decode_600(data)\n  elseif canId == 0x601 then\n    -- ABS_BRAKE_PRESSURE\n    decode_601(data)\n  elseif canId == 0x700 then\n    -- STEERING_ANGLE\n    decode_700(data)\n  end\n\n  return values\nend\n",
+            "frameParserCode": "--[[\n  CAN frame parser generated by the Serial Studio DBC importer.\n  Source database: ecu_simulator.dbc\n\n  Wire format (Serial Studio CAN driver):\n    standard:  [ID_hi, ID_lo, DLC, data0..dataN]\n    extended:  [0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC, data0..dataN]\n    parse() receives these bytes as a 1-indexed Lua table (Binary decoder).\n\n  Data flow:\n    parse() decodes every known signal and publishes its physical value\n    with tableSet(\"<message>\", \"<signal>\", value); each dataset reads the\n    value back with tableGet() inside its transform, so datasets never\n    depend on positional parser channels.\n\n  To add a signal:\n    1. Add one line to MESSAGES below (bit layout from the DBC).\n    2. Add a register with the same name to the message's data table.\n    3. Add a dataset whose transform reads it back with tableGet().\n]]\n\n-- Signal layout fields (omitted fields use the defaults):\n--   start    DBC start bit               len     bit length\n--   be       true = Motorola (@0)        signed  true = two's complement\n--   factor   raw -> physical multiplier  offset  raw -> physical offset\n--   selector marks the multiplexor       mux     gates the entry on a selector value\nlocal MESSAGES = {\n  -- ENGINE_RPM_SPEED @ 0x100: Engine RPM and vehicle speed\n  [0x100] = {\n    table = \"ENGINE_RPM_SPEED\",\n    signals = {\n      { name = \"VehicleSpeed\", start = 16, len = 16, factor = 0.01 }, -- Vehicle speed in km/h\n      { name = \"EngineRPM\", start = 0, len = 16, factor = 0.25 }, -- Engine speed in RPM\n    },\n  },\n  -- ENGINE_TEMP_LOAD @ 0x101: Engine temperatures and load\n  [0x101] = {\n    table = \"ENGINE_TEMP_LOAD\",\n    signals = {\n      { name = \"EngineLoad\", start = 16, len = 8 }, -- Calculated engine load percentage\n      { name = \"CoolantTemp\", start = 0, len = 8, offset = -40 }, -- Engine coolant temperature\n      { name = \"IntakeTemp\", start = 8, len = 8, offset = -40 }, -- Intake air temperature\n    },\n  },\n  -- ENGINE_THROTTLE @ 0x102: Throttle position and fuel pressure\n  [0x102] = {\n    table = \"ENGINE_THROTTLE\",\n    signals = {\n      { name = \"ThrottlePosition\", start = 0, len = 8, factor = 0.392157 },\n      { name = \"FuelPressure\", start = 8, len = 16 },\n    },\n  },\n  -- TRANSMISSION_GEAR @ 0x200: Transmission gear and temperature\n  [0x200] = {\n    table = \"TRANSMISSION_GEAR\",\n    signals = {\n      { name = \"CurrentGear\", start = 0, len = 8 }, -- Current transmission gear (0=P/N, 1-6=Forward, 255=R)\n      { name = \"TorqueConverterSlip\", start = 16, len = 8 },\n      { name = \"TransmissionTemp\", start = 8, len = 8, offset = -40 },\n    },\n  },\n  -- BCM_LIGHTS @ 0x300: Lighting status\n  [0x300] = {\n    table = \"BCM_LIGHTS\",\n    signals = {\n      { name = \"Headlights\", start = 0, len = 1 },\n      { name = \"HighBeams\", start = 1, len = 1 },\n      { name = \"TurnSignalLeft\", start = 2, len = 1 },\n      { name = \"TurnSignalRight\", start = 3, len = 1 },\n      { name = \"HazardLights\", start = 4, len = 1 },\n    },\n  },\n  -- BCM_DOORS @ 0x301: Door status\n  [0x301] = {\n    table = \"BCM_DOORS\",\n    signals = {\n      { name = \"DoorFrontLeft\", start = 0, len = 1 },\n      { name = \"Trunk\", start = 4, len = 1 },\n      { name = \"DoorRearLeft\", start = 2, len = 1 },\n      { name = \"DoorFrontRight\", start = 1, len = 1 },\n      { name = \"DoorRearRight\", start = 3, len = 1 },\n    },\n  },\n  -- BMS_VOLTAGE_CURRENT @ 0x400: Battery pack voltage and current\n  [0x400] = {\n    table = \"BMS_VOLTAGE_CURRENT\",\n    signals = {\n      { name = \"PackVoltage\", start = 0, len = 16, factor = 0.1 },\n      { name = \"PackCurrent\", start = 16, len = 16, signed = true, factor = 0.1 },\n    },\n  },\n  -- BMS_SOC_TEMP @ 0x401: Battery state of charge and temperature\n  [0x401] = {\n    table = \"BMS_SOC_TEMP\",\n    signals = {\n      { name = \"PackTemperature\", start = 8, len = 8, offset = -40 },\n      { name = \"StateOfCharge\", start = 0, len = 8 },\n    },\n  },\n  -- BMS_CELL_VOLTAGES @ 0x402: Individual cell voltages (sample of 8 cells)\n  [0x402] = {\n    table = \"BMS_CELL_VOLTAGES\",\n    signals = {\n      { name = \"Cell8Voltage\", start = 56, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell7Voltage\", start = 48, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell3Voltage\", start = 16, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell5Voltage\", start = 32, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell2Voltage\", start = 8, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell4Voltage\", start = 24, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell6Voltage\", start = 40, len = 8, factor = 0.00471, offset = 3 },\n      { name = \"Cell1Voltage\", start = 0, len = 8, factor = 0.00471, offset = 3 },\n    },\n  },\n  -- CLUSTER_ODOMETER @ 0x500: Odometer and trip distance\n  [0x500] = {\n    table = \"CLUSTER_ODOMETER\",\n    signals = {\n      { name = \"Odometer\", start = 0, len = 32, factor = 0.1 },\n      { name = \"TripDistance\", start = 32, len = 16, factor = 0.1 },\n    },\n  },\n  -- CLUSTER_FUEL @ 0x501: Fuel level and consumption\n  [0x501] = {\n    table = \"CLUSTER_FUEL\",\n    signals = {\n      { name = \"FuelConsumption\", start = 8, len = 16, factor = 0.01 },\n      { name = \"FuelLevel\", start = 0, len = 8 },\n    },\n  },\n  -- ABS_WHEEL_SPEEDS @ 0x600: Individual wheel speeds\n  [0x600] = {\n    table = \"ABS_WHEEL_SPEEDS\",\n    signals = {\n      { name = \"WheelSpeedRL\", start = 32, len = 16, factor = 0.01 },\n      { name = \"WheelSpeedFR\", start = 16, len = 16, factor = 0.01 },\n      { name = \"WheelSpeedRR\", start = 48, len = 16, factor = 0.01 },\n      { name = \"WheelSpeedFL\", start = 0, len = 16, factor = 0.01 },\n    },\n  },\n  -- ABS_BRAKE_PRESSURE @ 0x601: Brake system pressure\n  [0x601] = {\n    table = \"ABS_BRAKE_PRESSURE\",\n    signals = {\n      { name = \"BrakePressure\", start = 0, len = 16, factor = 0.1 },\n    },\n  },\n  -- STEERING_ANGLE @ 0x700: Steering wheel angle\n  [0x700] = {\n    table = \"STEERING_ANGLE\",\n    signals = {\n      { name = \"SteeringAngle\", start = 0, len = 16, signed = true, factor = 0.1 },\n    },\n  },\n}\n\n-- Extracts one raw signal value; base is the 1-based index of the first\n-- payload byte. The Binary decoder hands parse() the frame as a 1-indexed\n-- table of byte values. Motorola (big-endian) walks the in-byte bit index\n-- down and jumps +15 across byte boundaries (the DBC sawtooth); Intel\n-- (little-endian) reads LSB-first runs. Bytes past the frame read 0.\nlocal function extract(frame, base, sig)\n  local value = 0\n  if sig.be then\n    local bit_pos = sig.start\n    for _ = 1, sig.len do\n      local byte = frame[base + (bit_pos // 8)] or 0\n      value = (value << 1) | ((byte >> (bit_pos % 8)) & 1)\n      bit_pos = (bit_pos % 8 == 0) and (bit_pos + 15) or (bit_pos - 1)\n    end\n  else\n    local bits_read = 0\n    local bit_shift = sig.start % 8\n    local byte_idx = sig.start // 8\n    while bits_read < sig.len do\n      local byte = frame[base + byte_idx] or 0\n      local take = math.min(8 - bit_shift, sig.len - bits_read)\n      value = value | (((byte >> bit_shift) & ((1 << take) - 1)) << bits_read)\n      bits_read = bits_read + take\n      bit_shift = 0\n      byte_idx = byte_idx + 1\n    end\n  end\n\n  if sig.signed and (value & (1 << (sig.len - 1))) ~= 0 then\n    value = value - (1 << sig.len)\n  end\n\n  return value\nend\n\n-- Returns the CAN id and the 1-based index of the first payload byte: bit 7\n-- of byte 1 selects the extended (29-bit, 4-byte id) header form.\nlocal function frame_id(frame)\n  local b1 = frame[1]\n  if (b1 & 0x80) ~= 0 then\n    if #frame < 5 then\n      return nil\n    end\n\n    local id = ((b1 & 0x1F) << 24) | (frame[2] << 16)\n             | (frame[3] << 8) | frame[4]\n    return id, 6\n  end\n\n  return ((b1 << 8) | frame[2]), 4\nend\n\nfunction parse(frame)\n  if #frame < 3 then\n    return {}\n  end\n\n  local id, base = frame_id(frame)\n  local msg = id and MESSAGES[id]\n  if not msg then\n    return {}\n  end\n\n  local selector = nil\n  for _, sig in ipairs(msg.signals) do\n    if sig.mux == nil or sig.mux == selector then\n      local raw = extract(frame, base, sig)\n      if sig.selector then\n        selector = raw\n      end\n\n      tableSet(msg.table, sig.name, raw * (sig.factor or 1) + (sig.offset or 0))\n    end\n  end\n\n  return { 0 } -- values flow through tableSet; datasets read them back\nend\n",
             "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
@@ -1346,1644 +1486,548 @@
             "title": "CAN Bus"
         }
     ],
+    "tables": [
+        {
+            "name": "ENGINE_RPM_SPEED",
+            "registers": [
+                {
+                    "name": "VehicleSpeed",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "EngineRPM",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "ENGINE_TEMP_LOAD",
+            "registers": [
+                {
+                    "name": "EngineLoad",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "CoolantTemp",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "IntakeTemp",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "ENGINE_THROTTLE",
+            "registers": [
+                {
+                    "name": "ThrottlePosition",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "FuelPressure",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "TRANSMISSION_GEAR",
+            "registers": [
+                {
+                    "name": "CurrentGear",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "TorqueConverterSlip",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "TransmissionTemp",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "BCM_LIGHTS",
+            "registers": [
+                {
+                    "name": "Headlights",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "HighBeams",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "TurnSignalLeft",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "TurnSignalRight",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "HazardLights",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "BCM_DOORS",
+            "registers": [
+                {
+                    "name": "DoorFrontLeft",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Trunk",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "DoorRearLeft",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "DoorFrontRight",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "DoorRearRight",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "BMS_VOLTAGE_CURRENT",
+            "registers": [
+                {
+                    "name": "PackVoltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "PackCurrent",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "BMS_SOC_TEMP",
+            "registers": [
+                {
+                    "name": "PackTemperature",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "StateOfCharge",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "BMS_CELL_VOLTAGES",
+            "registers": [
+                {
+                    "name": "Cell8Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell7Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell3Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell5Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell2Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell4Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell6Voltage",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "Cell1Voltage",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "CLUSTER_ODOMETER",
+            "registers": [
+                {
+                    "name": "Odometer",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "TripDistance",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "CLUSTER_FUEL",
+            "registers": [
+                {
+                    "name": "FuelConsumption",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "FuelLevel",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "ABS_WHEEL_SPEEDS",
+            "registers": [
+                {
+                    "name": "WheelSpeedRL",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "WheelSpeedFR",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "WheelSpeedRR",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "WheelSpeedFL",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "ABS_BRAKE_PRESSURE",
+            "registers": [
+                {
+                    "name": "BrakePressure",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "STEERING_ANGLE",
+            "registers": [
+                {
+                    "name": "SteeringAngle",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        }
+    ],
     "title": "ecu_simulator",
     "widgetSettings": {
-        "activeGroup": 1000,
-        "layout:1000": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 165,
-                        "id": 5,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 206,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 165,
-                        "id": 6,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 206,
-                        "x": 209,
-                        "y": 4
-                    },
-                    {
-                        "height": 165,
-                        "id": 0,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 205,
-                        "x": 414,
-                        "y": 4
-                    },
-                    {
-                        "height": 165,
-                        "id": 1,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 205,
-                        "x": 618,
-                        "y": 4
-                    },
-                    {
-                        "height": 165,
-                        "id": 10,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 8,
-                        "width": 205,
-                        "x": 822,
-                        "y": 4
-                    },
-                    {
-                        "height": 164,
-                        "id": 11,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 8,
-                        "width": 206,
-                        "x": 4,
-                        "y": 168
-                    },
-                    {
-                        "height": 164,
-                        "id": 2,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 206,
-                        "x": 209,
-                        "y": 168
-                    },
-                    {
-                        "height": 164,
-                        "id": 3,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 205,
-                        "x": 414,
-                        "y": 168
-                    },
-                    {
-                        "height": 164,
-                        "id": 7,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 205,
-                        "x": 618,
-                        "y": 168
-                    },
-                    {
-                        "height": 164,
-                        "id": 4,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 205,
-                        "x": 822,
-                        "y": 168
-                    },
-                    {
-                        "height": 164,
-                        "id": 8,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 514,
-                        "x": 4,
-                        "y": 331
-                    },
-                    {
-                        "height": 164,
-                        "id": 9,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 513,
-                        "x": 517,
-                        "y": 331
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    5,
-                    6,
-                    0,
-                    1,
-                    10,
-                    11,
-                    2,
-                    3,
-                    7,
-                    4,
-                    8,
-                    9
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 8
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 8
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 2
-                    }
-                ]
-            }
-        },
-        "layout:1001": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 99,
-                        "id": 5,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 103,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 35,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 103,
-                        "x": 106,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 36,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 103,
-                        "x": 208,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 6,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 103,
-                        "x": 310,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 12,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 103,
-                        "x": 412,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 13,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 103,
-                        "x": 514,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 0,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 103,
-                        "x": 616,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 20,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 102,
-                        "x": 718,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 14,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 102,
-                        "x": 819,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 1,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 102,
-                        "x": 920,
-                        "y": 4
-                    },
-                    {
-                        "height": 99,
-                        "id": 21,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 4,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 15,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 103,
-                        "x": 106,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 16,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 103,
-                        "x": 208,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 10,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 8,
-                        "width": 103,
-                        "x": 310,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 11,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 8,
-                        "width": 103,
-                        "x": 412,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 2,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 103,
-                        "x": 514,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 22,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 616,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 23,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 102,
-                        "x": 718,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 3,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 102,
-                        "x": 819,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 17,
-                        "relativeIndex": 5,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 102,
-                        "x": 920,
-                        "y": 102
-                    },
-                    {
-                        "height": 99,
-                        "id": 18,
-                        "relativeIndex": 6,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 103,
-                        "x": 4,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 7,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 103,
-                        "x": 106,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 24,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 208,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 25,
-                        "relativeIndex": 5,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 310,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 26,
-                        "relativeIndex": 6,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 412,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 27,
-                        "relativeIndex": 7,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 514,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 28,
-                        "relativeIndex": 8,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 616,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 29,
-                        "relativeIndex": 9,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 102,
-                        "x": 718,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 30,
-                        "relativeIndex": 10,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 102,
-                        "x": 819,
-                        "y": 200
-                    },
-                    {
-                        "height": 99,
-                        "id": 31,
-                        "relativeIndex": 11,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 102,
-                        "x": 920,
-                        "y": 200
-                    },
-                    {
-                        "height": 98,
-                        "id": 4,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 103,
-                        "x": 4,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 8,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 103,
-                        "x": 106,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 32,
-                        "relativeIndex": 12,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 103,
-                        "x": 208,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 19,
-                        "relativeIndex": 7,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 103,
-                        "x": 310,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 9,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 103,
-                        "x": 412,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 37,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 103,
-                        "x": 514,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 38,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 103,
-                        "x": 616,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 39,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 102,
-                        "x": 718,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 40,
-                        "relativeIndex": 5,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 102,
-                        "x": 819,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 33,
-                        "relativeIndex": 13,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 102,
-                        "x": 920,
-                        "y": 298
-                    },
-                    {
-                        "height": 98,
-                        "id": 34,
-                        "relativeIndex": 14,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 1027,
-                        "x": 4,
-                        "y": 395
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    5,
-                    35,
-                    36,
-                    6,
-                    12,
-                    13,
-                    0,
-                    20,
-                    14,
-                    1,
-                    21,
-                    15,
-                    16,
-                    10,
-                    11,
-                    2,
-                    22,
-                    23,
-                    3,
-                    17,
-                    18,
-                    7,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    4,
-                    8,
-                    32,
-                    19,
-                    9,
-                    37,
-                    38,
-                    39,
-                    40,
-                    33,
-                    34
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 8
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 8
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 5,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 6,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 5,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 6,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 7,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 8,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 9,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 10,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 11,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 12,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 7,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 5,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 13,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 14,
-                        "widgetType": 11
-                    }
-                ]
-            }
-        },
-        "layout:1002": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 5,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 513,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 35,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 515,
-                        "x": 516,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 36,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 515,
-                        "x": 516,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    5,
-                    35,
-                    36
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 13
-                    }
-                ]
-            }
-        },
-        "layout:1003": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 6,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 513,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 12,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 515,
-                        "x": 516,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 13,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 515,
-                        "x": 516,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    6,
-                    12,
-                    13
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 10
-                    }
-                ]
-            }
-        },
-        "layout:1004": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 0,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 513,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 20,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 515,
-                        "x": 516,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 14,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 515,
-                        "x": 516,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    0,
-                    20,
-                    14
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 10
-                    }
-                ]
-            }
-        },
-        "layout:1005": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 247,
-                        "id": 1,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 514,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 21,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 514,
-                        "x": 517,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 15,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 514,
-                        "x": 4,
-                        "y": 250
-                    },
-                    {
-                        "height": 247,
-                        "id": 16,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 514,
-                        "x": 517,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    1,
-                    21,
-                    15,
-                    16
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 10
-                    }
-                ]
-            }
-        },
-        "layout:1006": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 10,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 8,
-                        "width": 1027,
-                        "x": 4,
-                        "y": 4
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    10
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 8
-                    }
-                ]
-            }
-        },
-        "layout:1007": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 11,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 8,
-                        "width": 1027,
-                        "x": 4,
-                        "y": 4
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    11
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 8
-                    }
-                ]
-            }
-        },
-        "layout:1008": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 2,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 513,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 22,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 515,
-                        "x": 516,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 23,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 515,
-                        "x": 516,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    2,
-                    22,
-                    23
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 11
-                    }
-                ]
-            }
-        },
-        "layout:1009": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 3,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 513,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 17,
-                        "relativeIndex": 5,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 515,
-                        "x": 516,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 18,
-                        "relativeIndex": 6,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 515,
-                        "x": 516,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    3,
-                    17,
-                    18
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 5,
-                        "widgetType": 10
-                    },
-                    {
-                        "relativeIndex": 6,
-                        "widgetType": 10
-                    }
-                ]
-            }
-        },
-        "layout:1010": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 247,
-                        "id": 7,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 206,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 24,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 206,
-                        "x": 209,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 25,
-                        "relativeIndex": 5,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 205,
-                        "x": 414,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 26,
-                        "relativeIndex": 6,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 205,
-                        "x": 618,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 27,
-                        "relativeIndex": 7,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 205,
-                        "x": 822,
-                        "y": 4
-                    },
-                    {
-                        "height": 246,
-                        "id": 28,
-                        "relativeIndex": 8,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 257,
-                        "x": 4,
-                        "y": 250
-                    },
-                    {
-                        "height": 246,
-                        "id": 29,
-                        "relativeIndex": 9,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 257,
-                        "x": 260,
-                        "y": 250
-                    },
-                    {
-                        "height": 246,
-                        "id": 30,
-                        "relativeIndex": 10,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 257,
-                        "x": 516,
-                        "y": 250
-                    },
-                    {
-                        "height": 246,
-                        "id": 31,
-                        "relativeIndex": 11,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 256,
-                        "x": 772,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    7,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 5,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 6,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 7,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 8,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 9,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 10,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 11,
-                        "widgetType": 11
-                    }
-                ]
-            }
-        },
-        "layout:1011": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 4,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 1027,
-                        "x": 4,
-                        "y": 4
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    4
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 1
-                    }
-                ]
-            }
-        },
-        "layout:1012": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 8,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 513,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 32,
-                        "relativeIndex": 12,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 515,
-                        "x": 516,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 19,
-                        "relativeIndex": 7,
-                        "state": "normal",
-                        "widgetType": 10,
-                        "width": 515,
-                        "x": 516,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    8,
-                    32,
-                    19
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 12,
-                        "widgetType": 11
-                    },
-                    {
-                        "relativeIndex": 7,
-                        "widgetType": 10
-                    }
-                ]
-            }
-        },
-        "layout:1013": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 247,
-                        "id": 9,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 514,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 37,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 514,
-                        "x": 517,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 38,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 343,
-                        "x": 4,
-                        "y": 250
-                    },
-                    {
-                        "height": 247,
-                        "id": 39,
-                        "relativeIndex": 4,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 343,
-                        "x": 346,
-                        "y": 250
-                    },
-                    {
-                        "height": 247,
-                        "id": 40,
-                        "relativeIndex": 5,
-                        "state": "normal",
-                        "widgetType": 13,
-                        "width": 343,
-                        "x": 688,
-                        "y": 250
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    9,
-                    37,
-                    38,
-                    39,
-                    40
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 3,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 4,
-                        "widgetType": 13
-                    },
-                    {
-                        "relativeIndex": 5,
-                        "widgetType": 13
-                    }
-                ]
-            }
-        },
-        "layout:1014": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 33,
-                        "relativeIndex": 13,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 1027,
-                        "x": 4,
-                        "y": 4
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    33
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 13,
-                        "widgetType": 11
-                    }
-                ]
-            }
-        },
-        "layout:1015": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 501,
-                "canvasWidth": 1035,
-                "geometries": [
-                    {
-                        "height": 493,
-                        "id": 34,
-                        "relativeIndex": 14,
-                        "state": "normal",
-                        "widgetType": 11,
-                        "width": 1027,
-                        "x": 4,
-                        "y": 4
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    34
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 14,
-                        "widgetType": 11
-                    }
-                ]
-            }
+        "externalWindows": {
+            "data": [
+            ]
         }
     },
+    "workspaces": [
+        {
+            "icon": "qrc:/icons/panes/overview.svg",
+            "title": "Overview",
+            "widgetRefs": [
+                {
+                    "groupId": 140000,
+                    "relativeIndex": 0,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140001,
+                    "relativeIndex": 1,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140002,
+                    "relativeIndex": 2,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140003,
+                    "relativeIndex": 3,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140004,
+                    "relativeIndex": 4,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140004,
+                    "relativeIndex": 0,
+                    "widgetType": 8
+                },
+                {
+                    "groupId": 140005,
+                    "relativeIndex": 5,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140005,
+                    "relativeIndex": 1,
+                    "widgetType": 8
+                },
+                {
+                    "groupId": 140006,
+                    "relativeIndex": 6,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140007,
+                    "relativeIndex": 7,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140008,
+                    "relativeIndex": 8,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140009,
+                    "relativeIndex": 9,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140010,
+                    "relativeIndex": 10,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140011,
+                    "relativeIndex": 11,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140012,
+                    "relativeIndex": 12,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140013,
+                    "relativeIndex": 13,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5000
+        },
+        {
+            "title": "ENGINE_RPM_SPEED",
+            "widgetRefs": [
+                {
+                    "groupId": 140000,
+                    "relativeIndex": 0,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5001
+        },
+        {
+            "title": "ENGINE_TEMP_LOAD",
+            "widgetRefs": [
+                {
+                    "groupId": 140001,
+                    "relativeIndex": 1,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5002
+        },
+        {
+            "title": "ENGINE_THROTTLE",
+            "widgetRefs": [
+                {
+                    "groupId": 140002,
+                    "relativeIndex": 2,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5003
+        },
+        {
+            "title": "TRANSMISSION_GEAR",
+            "widgetRefs": [
+                {
+                    "groupId": 140003,
+                    "relativeIndex": 3,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5004
+        },
+        {
+            "title": "BCM_LIGHTS",
+            "widgetRefs": [
+                {
+                    "groupId": 140004,
+                    "relativeIndex": 4,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140004,
+                    "relativeIndex": 0,
+                    "widgetType": 8
+                }
+            ],
+            "workspaceId": 5005
+        },
+        {
+            "title": "BCM_DOORS",
+            "widgetRefs": [
+                {
+                    "groupId": 140005,
+                    "relativeIndex": 5,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 140005,
+                    "relativeIndex": 1,
+                    "widgetType": 8
+                }
+            ],
+            "workspaceId": 5006
+        },
+        {
+            "title": "BMS_VOLTAGE_CURRENT",
+            "widgetRefs": [
+                {
+                    "groupId": 140006,
+                    "relativeIndex": 6,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5007
+        },
+        {
+            "title": "BMS_SOC_TEMP",
+            "widgetRefs": [
+                {
+                    "groupId": 140007,
+                    "relativeIndex": 7,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5008
+        },
+        {
+            "title": "BMS_CELL_VOLTAGES",
+            "widgetRefs": [
+                {
+                    "groupId": 140008,
+                    "relativeIndex": 8,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5009
+        },
+        {
+            "title": "CLUSTER_ODOMETER",
+            "widgetRefs": [
+                {
+                    "groupId": 140009,
+                    "relativeIndex": 9,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5010
+        },
+        {
+            "title": "CLUSTER_FUEL",
+            "widgetRefs": [
+                {
+                    "groupId": 140010,
+                    "relativeIndex": 10,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5011
+        },
+        {
+            "title": "ABS_WHEEL_SPEEDS",
+            "widgetRefs": [
+                {
+                    "groupId": 140011,
+                    "relativeIndex": 11,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5012
+        },
+        {
+            "title": "ABS_BRAKE_PRESSURE",
+            "widgetRefs": [
+                {
+                    "groupId": 140012,
+                    "relativeIndex": 12,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5013
+        },
+        {
+            "title": "STEERING_ANGLE",
+            "widgetRefs": [
+                {
+                    "groupId": 140013,
+                    "relativeIndex": 13,
+                    "widgetType": 1
+                }
+            ],
+            "workspaceId": 5014
+        }
+    ],
     "writerVersion": "3.2.7",
     "writerVersionAtCreation": "3.2.7"
 }

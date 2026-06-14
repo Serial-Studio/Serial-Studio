@@ -77,9 +77,10 @@ static std::atomic<bool> s_allowFullSurface{false};
 constexpr int kMaxJsonDepth = 64;
 
 /**
- * @brief Read-only command families safely callable from user scripts without opt-in. Names
- *        must match CommandRegistry registrations exactly; a stale name silently denies the
- *        command because hasCommand() is checked before this list.
+ * @brief Command families callable from local user scripts without opt-in: read-only queries
+ *        plus the system.* process launcher, which is still hard-denied to the network API by
+ *        the server. Names must match CommandRegistry registrations exactly; a stale name
+ *        silently denies the command because hasCommand() is checked before this list.
  */
 static const QSet<QString>& safeMethods()
 {
@@ -107,6 +108,10 @@ static const QSet<QString>& safeMethods()
     QStringLiteral("sessions.get"),
     QStringLiteral("controlscript.get"),
     QStringLiteral("controlscript.getStatus"),
+    QStringLiteral("system.projectDir"),
+    QStringLiteral("system.exec"),
+    QStringLiteral("system.kill"),
+    QStringLiteral("system.runningProcesses"),
   };
   return kSet;
 }

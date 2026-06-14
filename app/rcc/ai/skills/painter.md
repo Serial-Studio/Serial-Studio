@@ -32,21 +32,32 @@ group.
 
 - **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (60 Hz
   default, configurable 1-240 via `dashboard.setFps`) to
-  redraw the canvas. The function name is `paint`, not `draw`, not
-  `render`. The engine looks up `globalThis.paint` by name.
-- **`onFrame()`: optional.** Called immediately before
-  each `paint(ctx, w, h)`. No arguments. This is where you do
-  expensive per-tick computation so `paint` stays cheap.
+  redraw the canvas, **whether or not new data arrived**, so painters
+  can animate (clocks, eased camera moves) without waiting for a frame.
+  The function name is `paint`, not `draw`, not `render`. The engine
+  looks up `globalThis.paint` by name.
+- **`onFrame()`: optional.** Called immediately before a `paint` that
+  follows new data (NOT on idle animation ticks). No arguments. This is
+  where you sample fresh dataset values and do per-frame computation so
+  `paint` stays cheap.
+- **Input handlers: optional.** `onPress(x,y,button)`,
+  `onDrag(x,y,dx,dy)`, `onRelease(x,y)`, `onMove(x,y)`,
+  `onWheel(x,y,delta)`, `onDoubleClick(x,y)`. Coordinates are widget
+  pixels; each firing repaints immediately. Mutate top-level view state
+  (yaw/pitch/zoom/pan) in these and read it in `paint`. Active on the live
+  dashboard and in the editor preview. See `painter_js` docs for details.
 - `bootstrap()` does NOT exist. Top-level statements at the script's
   outer scope run once when the script compiles: that is your
   bootstrap.
 
 ### When `onFrame` actually fires (timing reality)
 
-`onFrame` runs at the **dashboard's UI tick rate (60 Hz default,
-configurable 1-240)**, NOT once per parsed frame. If frames arrive at
-1 kHz, `onFrame` still fires only ~60 times per second, sampling
-whichever dataset values were latest at tick time. So:
+`onFrame` runs on **dashboard data-update ticks, capped at the UI tick
+rate (60 Hz default, configurable 1-240)**, NOT once per parsed frame and
+NOT on idle animation ticks. If frames arrive at 1 kHz, `onFrame` still
+fires only ~60 times per second, sampling whichever dataset values were
+latest at tick time; if no data is arriving it does not fire at all, while
+`paint` keeps running so animation continues. So:
 
 - **Per-tick work (FFT, downsampling, formatting, computing visible
   ranges)** → put it in `onFrame`. Doing it in `paint` makes you pay

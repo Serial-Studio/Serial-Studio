@@ -12,13 +12,13 @@ Serial Studio spawns `system-monitor.py` (or the platform launcher), and the scr
 
 | Metric                    | Widget              | Notes |
 |---------------------------|---------------------|-------|
-| CPU usage                 | Line plot           | Overall utilization (%), alarm above 90 |
+| CPU usage                 | Line plot           | Overall utilization (%) |
 | CPU temperature           | Value (logged)      | °C; `N/A` if unavailable (for example macOS) |
 | Per-core CPU              | Multiplot           | One curve per logical core. Cores beyond the machine's count are hidden via `-1` sentinel |
-| RAM usage                 | Line plot           | Memory pressure (%), alarm above 90 |
+| RAM usage                 | Line plot           | Memory pressure (%) |
 | RAM used                  | Bar + line plot     | Absolute consumption (GB) |
 | Swap used                 | Bar                 | Page-file / swap used (GB) |
-| Disk usage                | Line plot           | Root partition (%), alarm above 95 |
+| Disk usage                | Line plot           | Root partition (%) |
 | Disk used                 | Bar                 | Space consumed (GB) |
 | Network upload / download | Multiplot           | MB/s delta since last frame |
 | Process count             | Bar                 | Total running processes |

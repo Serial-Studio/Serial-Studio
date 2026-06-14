@@ -1,123 +1,157 @@
 {
     "actions": [
     ],
-    "frameParser": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * Use this function to break a string (like \"value1,value2,value3\") into\n * individual pieces, which can then be displayed or processed in your project.\n *\n * @param[in]  frame   A string containing the data frame.\n *                     Example: \"value1,value2,value3\"\n *\n * @return     An array of strings with the split elements.\n *             Example: [\"value1\", \"value2\", \"value3\"]\n *\n * @note You can declare global variables outside this function if needed\n *       for storing settings or keeping state between calls.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+    "controlScriptCode": "/**\n * Hydrogen - Control Script\n *\n * Launches the bundled Python data generator (hydrogen.py) automatically when\n * the connection opens, so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/hydrogen.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction setup() {\n  startHelper();\n}\n\nfunction loop() {\n  delay(1000);\n}\n",
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 5,
                     "fftMin": -5,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 0,
                     "index": 1,
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 5,
                     "plotMin": -5,
                     "title": "X",
+                    "uniqueId": 0,
                     "units": "a₀",
                     "value": "",
                     "widget": "x",
                     "widgetMax": 5,
                     "widgetMin": -5,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 0,
                     "index": 2,
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Y",
+                    "uniqueId": 1,
                     "units": "a₀",
                     "value": "",
                     "widget": "y",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 0,
                     "index": 3,
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Z",
+                    "uniqueId": 2,
                     "units": "a₀",
                     "value": "",
                     "widget": "z",
                     "widgetMax": 0,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "3D Visualization",
+            "uniqueId": 10001,
             "widget": "plot3d"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0.4,
                     "fftMin": -0.1,
                     "fftSamples": 8192,
                     "fftSamplingRate": 1000,
                     "graph": true,
+                    "groupId": 1,
                     "index": 4,
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "overviewDisplay": true,
+                    "numericValue": 0,
                     "plotMax": 0.4,
                     "plotMin": -0.1,
                     "title": "ψ²",
+                    "uniqueId": 10000,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 0.4,
                     "widgetMin": -0.1,
-                    "xAxis": 1
+                    "xAxis": 0
                 }
             ],
             "title": "Probability Density",
+            "uniqueId": 10002,
             "widget": ""
         }
     ],
     "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 10003,
+    "plotTimeRange": 60,
     "pointCount": 1000,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 1,
@@ -141,5 +175,120 @@
             "title": "Device A"
         }
     ],
-    "title": "Hydrogen Atom: 1s Orbital"
+    "title": "Hydrogen Atom: 1s Orbital",
+    "widgetSettings": {
+        "6:0:-1": {
+            "autoCenter": false,
+            "interpolationEnabled": false
+        },
+        "9:1:4": {
+            "interpolationMode": 0,
+            "showAreaUnderPlot": false
+        },
+        "activeGroup": 1001,
+        "layout:1001": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1058,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 529,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 500,
+                        "id": 5,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 529,
+                        "x": 528,
+                        "y": 0
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1,
+                    5
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        },
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1058,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 1058,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
+                    }
+                ]
+            }
+        },
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 500,
+                "canvasWidth": 1058,
+                "geometries": [
+                    {
+                        "height": 500,
+                        "id": 5,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 1058,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    5
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        }
+    },
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.2.7"
 }

@@ -66,6 +66,7 @@ public:
 public slots:
   void shutdown();
   void setCode(const QString& code);
+  void runOnConnect();
 
 private slots:
   void onConnectedChanged();

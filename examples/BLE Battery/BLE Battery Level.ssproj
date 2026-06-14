@@ -1,41 +1,89 @@
 {
     "actions": [
     ],
+    "controlScriptCode": "const BATTERY_SERVICE_UUID = \"180A\";\nconst POLL_INTERVAL_MS = 1000;\n\nlet lastPollFrame = 0;\nlet frameCounter = 0;\nlet selectedCharacteristicUuid = null;\n\nfunction setup() {\n  // Select the Battery Service by UUID\n  const serviceResult = io.ble.selectServiceByUuid(BATTERY_SERVICE_UUID);\n  if (!serviceResult.ok) {\n    console.error(\"Failed to select Battery Service: \" + serviceResult.error);\n    return;\n  }\n  console.log(\"Battery Service selected successfully\");\n  \n  // List available characteristics in this service\n  const charsResult = io.ble.getCharacteristics();\n  if (!charsResult.ok) {\n    console.error(\"Failed to list characteristics: \" + charsResult.error);\n    return;\n  }\n  \n  const chars = charsResult.result;\n  console.log(\"Available characteristics in service: \" + chars.length);\n  \n  if (chars.length === 0) {\n    console.error(\"No characteristics found in Battery Service\");\n    return;\n  }\n  \n  // Log all available characteristics\n  for (let i = 0; i < chars.length; i++) {\n    console.log(\"  [\" + i + \"] UUID: \" + chars[i].uuid + \" Name: \" + chars[i].name);\n  }\n  \n  // Use the first readable characteristic\n  selectedCharacteristicUuid = chars[0].uuid;\n  console.log(\"Selected characteristic: \" + selectedCharacteristicUuid);\n  \n  // Try to subscribe to notifications on the selected characteristic\n  const notifyResult = io.ble.setNotifyCharacteristic(selectedCharacteristicUuid);\n  if (!notifyResult.ok) {\n    console.warn(\"Notifications not available for this characteristic: \" + notifyResult.error);\n  } else {\n    console.log(\"Subscribed to notifications\");\n  }\n}\n\nfunction loop() {\n  // Increment frame counter to track time passage\n  frameCounter++;\n  \n  // Poll the characteristic every ~1000ms (approximate, based on frame count)\n  if (frameCounter - lastPollFrame >= POLL_INTERVAL_MS) {\n    lastPollFrame = frameCounter;\n    \n    if (selectedCharacteristicUuid) {\n      // Send a read request to the selected characteristic\n      const readResult = io.ble.writeCharacteristic(selectedCharacteristicUuid, \"\", SerialStudio.Hex);\n      if (!readResult.ok) {\n        console.warn(\"Read request failed: \" + readResult.error);\n      }\n    }\n  }\n}\n",
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
+                    "alarmBands": [
+                        {
+                            "label": "Good",
+                            "max": 100,
+                            "min": 80,
+                            "severity": 1
+                        },
+                        {
+                            "label": "Warning",
+                            "max": 20,
+                            "min": 10,
+                            "severity": 2
+                        },
+                        {
+                            "label": "Critical",
+                            "max": 10,
+                            "min": 0,
+                            "severity": 3
+                        }
+                    ],
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": true,
+                    "graph": false,
+                    "groupId": 0,
                     "index": 1,
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "Battery Level",
+                    "uniqueId": 0,
                     "units": "%",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "Group",
+            "uniqueId": 1,
             "widget": ""
         }
     ],
     "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 2,
+    "plotTimeRange": 5,
     "pointCount": 100,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 2,
@@ -43,8 +91,12 @@
             "checksumAlgorithm": "",
             "connection": {
                 "characteristicIndex": -1,
-                "deviceIndex": 9,
-                "serviceUuid": ""
+                "deviceId": {
+                    "name": "Alex’s iPhone"
+                },
+                "deviceIndex": 6,
+                "notifyCharacteristicUuid": "{00002a19-0000-1000-8000-00805f9b34fb}",
+                "serviceUuid": "{0000180a-0000-1000-8000-00805f9b34fb}"
             },
             "decoder": 3,
             "decoderMethod": 3,
@@ -57,5 +109,13 @@
             "title": "Device A"
         }
     ],
-    "title": "BLE Battery Level"
+    "title": "BLE Battery Level",
+    "widgetSettings": {
+        "externalWindows": {
+            "data": [
+            ]
+        }
+    },
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.2.7"
 }

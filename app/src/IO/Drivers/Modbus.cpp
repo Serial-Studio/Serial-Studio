@@ -23,6 +23,7 @@
 #include "IO/Drivers/Modbus.h"
 
 #include <QDebug>
+#include <QEventLoop>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -31,8 +32,13 @@
 #include <QModbusTcpClient>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QThread>
 #include <QTimer>
 #include <stdexcept>
+
+static constexpr int kTcpConnectAttempts  = 5;
+static constexpr int kTcpConnectTimeoutMs = 800;
+static constexpr int kTcpConnectBackoffMs = 300;
 
 #include "AppState.h"
 #include "DataModel/Frame.h"
@@ -123,7 +129,8 @@
  * @brief Constructs the Modbus driver and restores persisted settings and register groups.
  */
 IO::Drivers::Modbus::Modbus()
-  : m_pollTimer(new QTimer(this))
+  : m_connecting(false)
+  , m_pollTimer(new QTimer(this))
   , m_device(nullptr)
   , m_lastReply(nullptr)
   , m_port(5020)
@@ -426,7 +433,7 @@ bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
           &IO::Drivers::Modbus::onErrorOccurred,
           Qt::UniqueConnection);
 
-  if (!m_device->connectDevice()) {
+  if (!connectWithRetry()) {
     QString error = m_device->errorString();
     m_device->deleteLater();
     m_device = nullptr;
@@ -445,6 +452,49 @@ bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
 
   Q_EMIT configurationChanged();
   return true;
+}
+
+/**
+ * @brief Connects the Modbus client. For TCP it retries a few times with a short backoff so a
+ *        server a control-script onConnect() just launched has time to start listening; the
+ *        per-attempt errors are swallowed via m_connecting. RTU connects once (no server race).
+ */
+bool IO::Drivers::Modbus::connectWithRetry()
+{
+  const int attempts = (m_protocolIndex == 1) ? kTcpConnectAttempts : 1;
+
+  m_connecting   = true;
+  bool connected = false;
+  for (int attempt = 0; attempt < attempts; ++attempt) {
+    if (m_device->connectDevice()) {
+      QEventLoop loop;
+      QTimer timeout;
+      timeout.setSingleShot(true);
+      connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
+      connect(
+        m_device, &QModbusClient::stateChanged, &loop, &QEventLoop::quit, Qt::UniqueConnection);
+      connect(
+        m_device, &QModbusClient::errorOccurred, &loop, &QEventLoop::quit, Qt::UniqueConnection);
+
+      timeout.start(kTcpConnectTimeoutMs);
+      // code-verify off
+      while (m_device->state() == QModbusDevice::ConnectingState && timeout.isActive())
+        loop.exec();
+      // code-verify on
+
+      if (m_device->state() == QModbusDevice::ConnectedState) {
+        connected = true;
+        break;
+      }
+    }
+
+    m_device->disconnectDevice();
+    if (attempt + 1 < attempts)
+      QThread::msleep(kTcpConnectBackoffMs);
+  }
+
+  m_connecting = false;
+  return connected;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1311,7 +1361,7 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
  */
 void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
 {
-  if (!m_device)
+  if (!m_device || m_connecting)
     return;
 
   if (error == QModbusDevice::NoError)

@@ -133,7 +133,10 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   , m_hasOnFrame(false)
   , m_previewMode(false)
   , m_slowPaintWarned(false)
+  , m_pointerDown(false)
   , m_slowPaintStreak(0)
+  , m_lastPointerX(0.0)
+  , m_lastPointerY(0.0)
   , m_frameSeq(0)
   , m_watchdog(&m_engine, kPainterWatchdogMs, QStringLiteral("Painter"))
   , m_ctx(new PainterContext(this))
@@ -141,7 +144,9 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
 {
   setOpaquePainting(false);
   setFlag(ItemHasContents, true);
-  setAcceptedMouseButtons(Qt::NoButton);
+  setAcceptedMouseButtons(Qt::AllButtons);
+  setAcceptHoverEvents(true);
+  setAcceptTouchEvents(false);
 
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
   DataModel::NotificationCenter::installScriptApi(&m_engine);
@@ -183,7 +188,7 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
     if (m_previewMode)
       tickPreview();
     else if (m_runtimeOk)
-      update();
+      animateTick();
   });
 }
 
@@ -430,6 +435,158 @@ void Widgets::Painter::tickPreview()
   update();
 }
 
+/**
+ * @brief Live-mode UI-tick repaint: re-runs paint() so animation and input-driven state advance
+ *        without waiting for an incoming frame. onFrame() is intentionally NOT called here; it
+ *        stays tied to new-data ticks in updateData() so per-frame script semantics hold.
+ */
+void Widgets::Painter::animateTick()
+{
+  if (m_previewMode || m_index < 0 || !m_runtimeOk)
+    return;
+
+  const auto* dashboard = &UI::Dashboard::instance();
+  if (m_index >= dashboard->widgetCount(SerialStudio::DashboardPainter))
+    return;
+
+  const auto& group = dashboard->getGroupWidget(SerialStudio::DashboardPainter, m_index);
+  m_bridge->setGroup(&group);
+
+  renderFrame();
+  update();
+}
+
+/**
+ * @brief Invokes a pointer-event JS callback under the watchdog and repaints on success.
+ */
+void Widgets::Painter::dispatchPointer(QJSValue& fn, const QJSValueList& args)
+{
+  if (!m_runtimeOk || !fn.isCallable())
+    return;
+
+  auto r = m_watchdog.call(fn, args);
+  if (r.isError()) [[unlikely]] {
+    setLastError(QStringLiteral("input: ") + r.property(QStringLiteral("message")).toString());
+    setRuntimeOk(false);
+    return;
+  }
+
+  renderFrame();
+  update();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Pointer input -> JS callbacks
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Routes a mouse press to onPress(x, y, button) and starts drag tracking.
+ */
+void Widgets::Painter::mousePressEvent(QMouseEvent* event)
+{
+  m_pointerDown  = true;
+  m_lastPointerX = event->position().x();
+  m_lastPointerY = event->position().y();
+
+  if (m_onPressFn.isCallable()) {
+    QJSValueList args;
+    args << QJSValue(m_lastPointerX) << QJSValue(m_lastPointerY) << QJSValue(int(event->button()));
+    dispatchPointer(m_onPressFn, args);
+  }
+
+  if (m_onPressFn.isCallable() || m_onDragFn.isCallable() || m_onReleaseFn.isCallable())
+    event->accept();
+  else
+    event->ignore();
+}
+
+/**
+ * @brief Routes a drag to onDrag(x, y, dx, dy) with deltas since the last move.
+ */
+void Widgets::Painter::mouseMoveEvent(QMouseEvent* event)
+{
+  const qreal x  = event->position().x();
+  const qreal y  = event->position().y();
+  const qreal dx = x - m_lastPointerX;
+  const qreal dy = y - m_lastPointerY;
+  m_lastPointerX = x;
+  m_lastPointerY = y;
+
+  if (m_pointerDown && m_onDragFn.isCallable()) {
+    QJSValueList args;
+    args << QJSValue(x) << QJSValue(y) << QJSValue(dx) << QJSValue(dy);
+    dispatchPointer(m_onDragFn, args);
+    event->accept();
+  } else {
+    event->ignore();
+  }
+}
+
+/**
+ * @brief Routes a mouse release to onRelease(x, y) and ends drag tracking.
+ */
+void Widgets::Painter::mouseReleaseEvent(QMouseEvent* event)
+{
+  m_pointerDown = false;
+  const qreal x = event->position().x();
+  const qreal y = event->position().y();
+
+  if (m_onReleaseFn.isCallable()) {
+    QJSValueList args;
+    args << QJSValue(x) << QJSValue(y);
+    dispatchPointer(m_onReleaseFn, args);
+    event->accept();
+  } else {
+    event->ignore();
+  }
+}
+
+/**
+ * @brief Routes a double-click to onDoubleClick(x, y) for reset-style gestures.
+ */
+void Widgets::Painter::mouseDoubleClickEvent(QMouseEvent* event)
+{
+  if (m_onDoubleClickFn.isCallable()) {
+    QJSValueList args;
+    args << QJSValue(event->position().x()) << QJSValue(event->position().y());
+    dispatchPointer(m_onDoubleClickFn, args);
+    event->accept();
+  } else {
+    event->ignore();
+  }
+}
+
+/**
+ * @brief Routes hover motion to onMove(x, y) when no button is held.
+ */
+void Widgets::Painter::hoverMoveEvent(QHoverEvent* event)
+{
+  m_lastPointerX = event->position().x();
+  m_lastPointerY = event->position().y();
+
+  if (m_onMoveFn.isCallable()) {
+    QJSValueList args;
+    args << QJSValue(m_lastPointerX) << QJSValue(m_lastPointerY);
+    dispatchPointer(m_onMoveFn, args);
+  }
+}
+
+/**
+ * @brief Routes wheel motion to onWheel(x, y, delta) where delta is normalized notch steps.
+ */
+void Widgets::Painter::wheelEvent(QWheelEvent* event)
+{
+  if (m_onWheelFn.isCallable()) {
+    const qreal delta = event->angleDelta().y() / 120.0;
+    QJSValueList args;
+    args << QJSValue(event->position().x()) << QJSValue(event->position().y()) << QJSValue(delta);
+    dispatchPointer(m_onWheelFn, args);
+    event->accept();
+  } else {
+    event->ignore();
+  }
+}
+
 //--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
@@ -509,10 +666,16 @@ QString Widgets::Painter::fallbackTemplate()
  */
 bool Widgets::Painter::compile(const QString& code)
 {
-  m_compileDirty = false;
-  m_paintFn      = QJSValue();
-  m_onFrameFn    = QJSValue();
-  m_hasOnFrame   = false;
+  m_compileDirty    = false;
+  m_paintFn         = QJSValue();
+  m_onFrameFn       = QJSValue();
+  m_onPressFn       = QJSValue();
+  m_onDragFn        = QJSValue();
+  m_onReleaseFn     = QJSValue();
+  m_onMoveFn        = QJSValue();
+  m_onWheelFn       = QJSValue();
+  m_onDoubleClickFn = QJSValue();
+  m_hasOnFrame      = false;
 
   if (!m_bootstrapOk) [[unlikely]] {
     setRuntimeOk(false);
@@ -556,6 +719,18 @@ bool Widgets::Painter::compile(const QString& code)
     m_hasOnFrame = true;
   }
 
+  const auto global  = m_engine.globalObject();
+  auto lookupHandler = [&global](const char* name) {
+    auto fn = global.property(QString::fromLatin1(name));
+    return fn.isCallable() ? fn : QJSValue();
+  };
+  m_onPressFn       = lookupHandler("onPress");
+  m_onDragFn        = lookupHandler("onDrag");
+  m_onReleaseFn     = lookupHandler("onRelease");
+  m_onMoveFn        = lookupHandler("onMove");
+  m_onWheelFn       = lookupHandler("onWheel");
+  m_onDoubleClickFn = lookupHandler("onDoubleClick");
+
   setRuntimeOk(true);
   setLastError(QString());
   return true;
@@ -569,6 +744,12 @@ void Widgets::Painter::invalidateCompilation()
   m_compileDirty    = true;
   m_paintFn         = QJSValue();
   m_onFrameFn       = QJSValue();
+  m_onPressFn       = QJSValue();
+  m_onDragFn        = QJSValue();
+  m_onReleaseFn     = QJSValue();
+  m_onMoveFn        = QJSValue();
+  m_onWheelFn       = QJSValue();
+  m_onDoubleClickFn = QJSValue();
   m_hasOnFrame      = false;
   m_slowPaintStreak = 0;
   m_slowPaintWarned = false;

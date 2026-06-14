@@ -227,6 +227,7 @@ private:
   void connectStreamAvailableInputs();
   void updateDashboardData(const DataModel::Frame& frame);
   void reconfigureDashboard(const DataModel::Frame& frame);
+  [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
                                     DataModel::Group& ledPanel);
   void handleMissingDataset(const DataModel::Frame& frame);
@@ -249,10 +250,10 @@ private:
   void buildMultiplotPushes();
   void configureActions(const DataModel::Frame& frame);
 
-  [[nodiscard]] QHash<int, DSP::TimeRing> snapshotPlotTimeRings() const;
-  [[nodiscard]] QHash<int, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;
-  void restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot);
-  void restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot);
+  [[nodiscard]] QHash<qint64, DSP::TimeRing> snapshotPlotTimeRings() const;
+  [[nodiscard]] QHash<qint64, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;
+  void restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot);
+  void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::TimeRing>>& snapshot);
   void restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
   void restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
 #ifdef BUILD_COMMERCIAL
@@ -283,27 +284,32 @@ private:
   };
 
   /**
-   * @brief Pre-resolved descriptor that appends one (time, value) into a decimating ring.
+   * @brief Pre-resolved descriptor that appends one (time, value) into a decimating ring. The
+   *        ring and sweep are addressed by plotIndex (key into m_plotTimeRings / m_plotSweep) and
+   *        resolved at use time, never cached as raw pointers: a layout rebuild that reallocates
+   *        those QMap nodes would dangle a cached pointer, so the index must be re-looked-up.
    */
   struct TimePush {
     std::vector<LinePush::Consumer> consumers;
-    DSP::TimeRing* ring;
+    int plotIndex;
     const double* value;
-    DSP::SweepEngine* sweep;
   };
 
   /**
-   * @brief Pre-resolved descriptor for one multiplot, time-ring or sample mode.
+   * @brief Pre-resolved descriptor for one multiplot, time-ring or sample mode. The time rings and
+   *        sweep are addressed by groupIndex (key into m_multiplotTimeRings / m_multiplotSweep) and
+   *        resolved at use time; only per-curve value pointers (stable across the build) are
+   * cached.
    */
   struct MultiPush {
     struct TimeCurve {
-      DSP::TimeRing* ring;
+      int curveIndex;
       const double* value;
     };
 
     int sourceId;
+    int groupIndex;
     const bool* activeFlag;
-    DSP::SweepEngine* sweep;
     std::vector<TimeCurve> timeCurves;
     std::vector<std::pair<DSP::AxisData*, const double*>> samples;
   };
@@ -361,6 +367,21 @@ private:
   };
 #endif
 
+  /**
+   * @brief Per-source plot clock: origin, smoothed sample period and forward-only display
+   *        time. Each source owns its own clock so interleaved frames from one source never
+   *        advance or rewind another source's plot rings.
+   */
+  struct PlotClock {
+    bool originSet                               = false;
+    int groupCount                               = 0;
+    double relativeFrameTimeSec                  = 0.0;
+    double displayTimeSec                        = 0.0;
+    double groupStartSec                         = 0.0;
+    double samplePeriodSec                       = 0.0;
+    std::chrono::steady_clock::time_point origin = {};
+  };
+
   QSettings m_settings;
   int m_points;
   int m_widgetCount;
@@ -379,14 +400,9 @@ private:
   bool m_layoutValid;
   bool m_streamAvailable;
 
-  bool m_plotTimeOriginSet;
-  int m_plotGroupCount;
   double m_plotTimeRange;
-  double m_relativeFrameTimeSec;
   double m_plotDisplayTimeSec;
-  double m_plotGroupStartSec;
-  double m_plotSamplePeriodSec;
-  std::chrono::steady_clock::time_point m_plotTimeOrigin;
+  QMap<int, PlotClock> m_plotClocks;
 
   DSP::AxisData m_pltXAxis;
   DSP::AxisData m_multipltXAxis;

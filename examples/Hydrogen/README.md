@@ -51,14 +51,10 @@ Example:
 
 The script needs Python 3.6 or later and uses only the standard library.
 
-1. Run the simulation:
+1. Open the `Hydrogen.ssproj` project file in Serial Studio.
+2. Click **Connect**.
 
-   `python3 hydrogen.py`
-
-2. In Serial Studio:
-   - Open the `Hydrogen.ssproj` project file.
-   - Confirm the input source is UDP on local port `9000` (the project file stores this configuration).
-   - Click **Connect**.
+The project includes a control script that launches `hydrogen.py` automatically when you connect, so there is nothing to start by hand. The input source is preconfigured as UDP on local port `9000`. To run the generator yourself instead, start `python3 hydrogen.py` before connecting.
 
 ## Visualizations
 

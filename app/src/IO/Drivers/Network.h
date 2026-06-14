@@ -159,11 +159,15 @@ private slots:
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
+  [[nodiscard]] bool connectTcp(const QString& hostAddr);
+
+private:
   QSettings m_settings;
 
   QString m_address;
   quint16 m_tcpPort;
   bool m_hostExists;
+  bool m_connecting;
   bool m_udpMulticast;
   bool m_lookupActive;
   quint16 m_udpLocalPort;

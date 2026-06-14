@@ -21,8 +21,14 @@
 
 #include "IO/Drivers/Network.h"
 
+#include <QThread>
+
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
+
+static constexpr int kTcpConnectAttempts  = 5;
+static constexpr int kTcpConnectTimeoutMs = 600;
+static constexpr int kTcpConnectBackoffMs = 300;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -31,7 +37,8 @@
 /**
  * @brief Constructs the Network driver and restores persisted socket settings.
  */
-IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_lookupActive(false)
+IO::Drivers::Network::Network()
+  : m_hostExists(false), m_connecting(false), m_udpMulticast(false), m_lookupActive(false)
 {
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
@@ -177,7 +184,10 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 
   if (socketType() == QAbstractSocket::TcpSocket) {
     socket = static_cast<QIODevice*>(&m_tcpSocket);
-    m_tcpSocket.connectToHost(hostAddr, tcpPort());
+    if (!connectTcp(hostAddr)) {
+      close();
+      return false;
+    }
   }
 
   else if (socketType() == QAbstractSocket::UdpSocket) {
@@ -199,6 +209,33 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 
   close();
   return false;
+}
+
+/**
+ * @brief Opens the TCP connection, retrying a few times with a short backoff so a server that a
+ *        control-script onConnect() just launched has time to start listening. The premature
+ *        per-attempt errors are swallowed via m_connecting; a real failure surfaces only after
+ *        every attempt is exhausted.
+ */
+bool IO::Drivers::Network::connectTcp(const QString& hostAddr)
+{
+  m_connecting = true;
+
+  bool connected = false;
+  for (int attempt = 0; attempt < kTcpConnectAttempts; ++attempt) {
+    m_tcpSocket.abort();
+    m_tcpSocket.connectToHost(hostAddr, tcpPort());
+    if (m_tcpSocket.waitForConnected(kTcpConnectTimeoutMs)) {
+      connected = true;
+      break;
+    }
+
+    if (attempt + 1 < kTcpConnectAttempts)
+      QThread::msleep(kTcpConnectBackoffMs);
+  }
+
+  m_connecting = false;
+  return connected;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -457,6 +494,9 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
+  if (m_connecting)
+    return;
+
   if (socketType() == QAbstractSocket::UdpSocket
       && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
     return;

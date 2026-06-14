@@ -157,6 +157,7 @@ public:
     Plot3D,
     ImageView,
     Painter,
+    WebView,
   };
   Q_ENUM(GroupWidget)
 
@@ -213,6 +214,7 @@ public:
     DashboardMeter,
     DashboardClock,
     DashboardStopwatch,
+    DashboardWebView,
     DashboardNoWidget,
 #ifdef BUILD_COMMERCIAL
     DashboardImageView,

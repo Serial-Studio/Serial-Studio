@@ -252,8 +252,6 @@ bool DataModel::read(Dataset& d, const QJsonObject& obj)
   d.waterfall      = ss_jsr(obj, Keys::Waterfall, false).toBool();
   d.waterfallYAxis = ss_jsr(obj, Keys::WaterfallYAxis, 0).toInt();
   d.xAxisId        = ss_jsr(obj, Keys::XAxis, kXAxisTime).toInt();
-  if (d.xAxisId == kXAxisSamples)
-    d.xAxisId = kXAxisTime;
 
   d.fftMin            = SerialStudio::toDouble(ss_jsr(obj, Keys::FFTMin, 0));
   d.fftMax            = SerialStudio::toDouble(ss_jsr(obj, Keys::FFTMax, 0));

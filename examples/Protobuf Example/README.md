@@ -22,8 +22,10 @@ Works on both GPL and Pro builds.
 ## Quick Start (no hardware required)
 
 The folder includes `Protobuf Example.ssproj`, the project this walkthrough
-produces, already switched to UDP. Open it directly and jump to step 3, or
-follow the import steps to generate it yourself.
+produces, already switched to UDP. Open it directly and click **Connect**:
+its control script launches `sensor_simulator.py` for you, so you can skip
+the import and the manual `python3 sensor_simulator.py` step. Or follow the
+import steps below to generate the project yourself.
 
 ### 1. Import the schema
 

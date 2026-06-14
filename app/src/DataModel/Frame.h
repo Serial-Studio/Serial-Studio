@@ -155,6 +155,9 @@ inline constexpr KeyView ImgEnd("imgEndSequence");
 inline constexpr KeyView PainterCode("painterCode");
 inline constexpr KeyView HideOnDashboard("hideOnDashboard");
 
+// Web-view-group keys
+inline constexpr KeyView WebViewUrl("webViewUrl");
+
 // Dashboard layout keys
 inline constexpr KeyView DashboardLayout("dashboardLayout");
 inline constexpr KeyView ActiveGroupId("activeGroupId");
@@ -438,6 +441,7 @@ struct alignas(8) Group {
   QString imgStartSequence;                 ///< Hex start delimiter (manual mode only)
   QString imgEndSequence;                   ///< Hex end delimiter (manual mode only)
   QString painterCode;                      ///< User JS for painter widget (paint/onFrame)
+  QString webViewUrl;                       ///< URL loaded by the web-view widget
 };
 
 static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");
@@ -1009,6 +1013,9 @@ void read_io_settings(QByteArray& frameStart,
   if (g.widget.simplified() == QLatin1String("painter") && !g.painterCode.isEmpty())
     obj.insert(Keys::PainterCode, g.painterCode);
 
+  if (g.widget.simplified() == QLatin1String("webview") && !g.webViewUrl.isEmpty())
+    obj.insert(Keys::WebViewUrl, g.webViewUrl);
+
   if (!g.outputWidgets.empty()) {
     QJsonArray owArray;
     for (const auto& ow : g.outputWidgets)
@@ -1169,11 +1176,12 @@ inline void normalizeDatasetRanges(Dataset& d)
   const bool isImageGroup   = (widget == QLatin1String("image"));
   const bool isOutputGroup  = (groupType == GroupType::Output);
   const bool isPainterGroup = (widget == QLatin1String("painter"));
+  const bool isWebViewGroup = (widget == QLatin1String("webview"));
 
   if (title.isEmpty())
     return false;
 
-  if (array.isEmpty() && !isImageGroup && !isOutputGroup && !isPainterGroup)
+  if (array.isEmpty() && !isImageGroup && !isOutputGroup && !isPainterGroup && !isWebViewGroup)
     return false;
 
   g.title     = title;
@@ -1192,6 +1200,9 @@ inline void normalizeDatasetRanges(Dataset& d)
 
   if (widget == QLatin1String("painter"))
     g.painterCode = ss_jsr(obj, Keys::PainterCode, "").toString();
+
+  if (widget == QLatin1String("webview"))
+    g.webViewUrl = ss_jsr(obj, Keys::WebViewUrl, "").toString();
 
   g.datasets.clear();
   g.datasets.reserve(array.count());

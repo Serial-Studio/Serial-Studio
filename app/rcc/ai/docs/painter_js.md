@@ -11,20 +11,24 @@ feed a painter; see "Reading peer datasets" below.
 
 ## Entry points
 
-The script defines TWO functions. Names must match exactly.
+The script defines one REQUIRED function plus several OPTIONAL ones.
+Names must match exactly.
 
 - **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (60 Hz default,
-  configurable 1–240 via `dashboard.setFps`), only while dashboard data is
-  updating, to redraw the canvas. `ctx` is a Canvas-2D-like context. `w`
-  and `h` are the current widget size in pixels. Treat the canvas as
-  ephemeral; clear what you need at the top of each call.
+  configurable 1–240 via `dashboard.setFps`) to redraw the canvas, whether
+  or not new data arrived. This means a painter can animate freely
+  (clocks, spinners, eased camera moves) without waiting for a frame. `ctx`
+  is a Canvas-2D-like context. `w` and `h` are the current widget size in
+  pixels. Treat the canvas as ephemeral; clear what you need at the top of
+  each call. Because `paint` runs even when idle, keep it to layout + draw
+  against cached state; do not put per-frame data logic here.
 
-- **`onFrame()`: OPTIONAL.** Called once per dashboard update tick (frames
-  are batched at high rates), immediately before each paint, with no
-  arguments. Read live values via
-  `datasets[i].value` (etc.) or via `datasetGetFinal(uniqueId)` and cache
-  them in top-level `var`s if you need to do per-tick computation outside
-  `paint`.
+- **`onFrame()`: OPTIONAL.** Called once per dashboard update tick
+  (immediately before the next `paint`), only when new data arrived, with
+  no arguments. This is the place to sample fresh dataset values. Read live
+  values via `datasets[i].value` (etc.) or via `datasetGetFinal(uniqueId)`
+  and cache them in top-level `var`s. Unlike `paint`, `onFrame` does NOT
+  fire on idle ticks, so per-frame work belongs here, not in `paint`.
 
 `bootstrap()` does **not** exist. Top-level statements at the script's
 outer scope run once when the script compiles; that is your "bootstrap".
@@ -32,6 +36,49 @@ outer scope run once when the script compiles; that is your "bootstrap".
 The function name is **`paint`**, not `draw`, not `render`. The engine
 looks up `globalThis.paint` by name and reports
 `missing paint(ctx, w, h) function` if it's absent.
+
+### Input events (OPTIONAL): make the painter interactive
+
+The painter receives mouse and wheel input. Define any of these globals to
+handle them. Coordinates are in widget pixels (same space as `paint`'s
+`w`/`h`). Each handler that fires triggers an immediate repaint, so you can
+mutate top-level state (camera angle, selection, pan offset) and see it on
+screen the same tick. They run under the same watchdog as `paint`.
+
+```js
+onPress(x, y, button)   // mouse button down. button: 1=left, 2=right, 4=middle
+onDrag(x, y, dx, dy)    // mouse moved with a button held; dx/dy = delta since last move
+onRelease(x, y)         // mouse button up
+onMove(x, y)            // hover (no button held)
+onWheel(x, y, delta)    // wheel; delta in notch steps (+up / -down), ~1.0 per notch
+onDoubleClick(x, y)     // double-click, e.g. to reset a view
+```
+
+Typical pattern: keep view state in top-level `var`s, mutate it in
+`onDrag` / `onWheel`, and read it in `paint`.
+
+```js
+var camYaw = 0, camPitch = 0, zoom = 1.0;
+
+function onDrag(x, y, dx, dy) {
+  camYaw   += dx * 0.01;
+  camPitch += dy * 0.01;
+}
+function onWheel(x, y, delta) {
+  zoom *= (1.0 + delta * 0.1);
+  if (zoom < 0.2) zoom = 0.2;
+  if (zoom > 5.0) zoom = 5.0;
+}
+function onDoubleClick(x, y) { camYaw = 0; camPitch = 0; zoom = 1.0; }
+
+function paint(ctx, w, h) {
+  // ...draw using camYaw / camPitch / zoom...
+}
+```
+
+Input handlers fire both on the live dashboard and in the project-editor
+preview dialog, so you can test interaction while authoring. A painter
+with no input handlers behaves exactly as before (events pass through).
 
 ## Globals injected before your script runs
 
