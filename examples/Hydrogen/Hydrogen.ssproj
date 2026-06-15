@@ -178,6 +178,7 @@
     "title": "Hydrogen Atom: 1s Orbital",
     "widgetSettings": {
         "6:0:-1": {
+            "anaglyphEnabled": false,
             "autoCenter": false,
             "interpolationEnabled": false
         },

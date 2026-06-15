@@ -30,7 +30,7 @@
                     "widget": "",
                     "widgetMax": 20,
                     "widgetMin": -20,
-                    "xAxis": -2
+                    "xAxis": 1
                 },
                 {
                     "datasetId": 1,
@@ -57,7 +57,7 @@
                     "widget": "",
                     "widgetMax": 30,
                     "widgetMin": -30,
-                    "xAxis": -2
+                    "xAxis": 2
                 },
                 {
                     "datasetId": 2,
@@ -84,7 +84,7 @@
                     "widget": "",
                     "widgetMax": 50,
                     "widgetMin": 0,
-                    "xAxis": -2
+                    "xAxis": 0
                 }
             ],
             "title": "2D Visualization",
@@ -248,27 +248,27 @@
         "layout:1000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1058,
+                "canvasHeight": 477,
+                "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 500,
+                        "height": 477,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 529,
+                        "width": 514,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 500,
+                        "height": 477,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 6,
-                        "width": 529,
-                        "x": 528,
+                        "width": 514,
+                        "x": 513,
                         "y": 0
                     }
                 ],
@@ -381,48 +381,48 @@
         "layout:1002": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1035,
+                "canvasHeight": 477,
+                "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 518,
+                        "width": 514,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 6,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 518,
-                        "x": 517,
+                        "width": 514,
+                        "x": 513,
                         "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 7,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 518,
+                        "width": 514,
                         "x": 0,
-                        "y": 249
+                        "y": 238
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 8,
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 518,
-                        "x": 517,
-                        "y": 249
+                        "width": 514,
+                        "x": 513,
+                        "y": 238
                     }
                 ],
                 "userReordered": false,
@@ -455,16 +455,16 @@
         "layout:1003": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1035,
+                "canvasHeight": 477,
+                "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 500,
+                        "height": 477,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 6,
-                        "width": 1035,
+                        "width": 1027,
                         "x": 0,
                         "y": 0
                     }
