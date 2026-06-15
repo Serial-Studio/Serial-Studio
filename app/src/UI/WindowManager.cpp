@@ -151,9 +151,21 @@ using detail::TileEnv;
 }
 
 /**
- * @brief Returns the manual-mode snap zone for the dragged window's edges.
+ * @brief Shrinks a snap rectangle when its bottom reaches the canvas floor,
+ *        keeping the border clear of the taskbar (canvas overlaps it 1px).
  */
-static std::optional<QRect> computeSnapBaseRect(
+static QRect liftSnapBottom(QRect rect, int ch)
+{
+  if (rect.y() + rect.height() >= ch)
+    rect.setHeight(rect.height() - 2);
+
+  return rect;
+}
+
+/**
+ * @brief Returns the manual-mode snap rectangle for the dragged window's edges.
+ */
+static std::optional<QRect> computeSnapRect(
   int left, int top, int right, int bottom, int cw, int ch)
 {
   if (left <= 0 && top <= 0)
@@ -163,57 +175,21 @@ static std::optional<QRect> computeSnapBaseRect(
     return QRect(cw / 2, 0, cw / 2, ch / 2);
 
   if (left <= 0 && bottom >= ch)
-    return QRect(0, ch / 2, cw / 2, ch / 2);
+    return liftSnapBottom(QRect(0, ch / 2, cw / 2, ch / 2), ch);
 
   if (right >= cw && bottom >= ch)
-    return QRect(cw / 2, ch / 2, cw / 2, ch / 2);
+    return liftSnapBottom(QRect(cw / 2, ch / 2, cw / 2, ch / 2), ch);
 
   if (top <= 0)
     return QRect(0, 0, cw, ch);
 
   if (left <= 0)
-    return QRect(0, 0, cw / 2, ch);
+    return liftSnapBottom(QRect(0, 0, cw / 2, ch), ch);
 
   if (right >= cw)
-    return QRect(cw / 2, 0, cw / 2, ch);
+    return liftSnapBottom(QRect(cw / 2, 0, cw / 2, ch), ch);
 
   return std::nullopt;
-}
-
-/**
- * @brief Insets a snap rectangle by 1px on each canvas boundary it touches so the
- *        indicator border stays fully visible (top/left/right edges; the right
- *        inset keeps x and shrinks width).
- */
-static QRect insetSnapIndicator(QRect rect, int cw)
-{
-  const bool touchesTop   = rect.y() <= 0;
-  const bool touchesLeft  = rect.x() <= 0;
-  const bool touchesRight = rect.x() + rect.width() >= cw;
-
-  if (touchesTop)
-    rect.adjust(0, 1, 0, 0);
-
-  if (touchesLeft)
-    rect.adjust(1, 0, 0, 0);
-
-  if (touchesRight)
-    rect.adjust(0, 0, -1, 0);
-
-  return rect;
-}
-
-/**
- * @brief Returns the manual-mode snap rectangle, inset to keep its border visible.
- */
-static std::optional<QRect> computeSnapRect(
-  int left, int top, int right, int bottom, int cw, int ch)
-{
-  const auto base = computeSnapBaseRect(left, top, right, bottom, cw, ch);
-  if (!base.has_value())
-    return std::nullopt;
-
-  return insetSnapIndicator(*base, cw);
 }
 
 /**
@@ -1307,19 +1283,14 @@ void UI::WindowManager::applyManualSnap()
   if (!m_dragWindow || !m_snapIndicatorVisible)
     return;
 
-  int x = m_snapIndicator.x();
-  int y = m_snapIndicator.y();
-  int w = m_snapIndicator.width();
-  int h = m_snapIndicator.height();
+  const int x = m_snapIndicator.x();
+  const int y = m_snapIndicator.y();
+  const int w = m_snapIndicator.width();
+  const int h = m_snapIndicator.height();
 
   if (x == 0 && y == 0 && w >= width() && h >= height()) {
     QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked");
     return;
-  }
-
-  if (y <= 1) {
-    y -= 1;
-    h += 1;
   }
 
   m_dragWindow->setX(x);
@@ -1799,9 +1770,8 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
   if (m_targetWindow && m_targetWindow != m_dragWindow) {
     m_dragWindow->setWidth(qMin(w, static_cast<int>(m_targetWindow->width())));
     m_dragWindow->setHeight(qMin(h, static_cast<int>(m_targetWindow->height())));
-    m_snapIndicator        = insetSnapIndicator(extractGeometry(m_targetWindow), canvasW);
+    m_snapIndicator        = liftSnapBottom(extractGeometry(m_targetWindow), canvasH);
     m_snapIndicatorVisible = true;
-
     Q_EMIT snapIndicatorChanged();
     event->accept();
     return;

@@ -367,6 +367,7 @@ Widgets.Pane {
       Item {
         id: _taskbarHost
 
+        z: 2000
         clip: true
         visible: !hidden
         Layout.fillWidth: true

@@ -134,6 +134,7 @@ private:
   [[nodiscard]] QQuickItem* topmostWindowAt(const QPointF& pos) const;
   [[nodiscard]] QQuickItem* manualResizeTargetAt(const QPointF& pos) const;
   [[nodiscard]] ResizeEdge detectResizeEdge(QQuickItem* target, const QPointF& pos) const;
+
   void applyResizeCursor(ResizeEdge edge);
   void applySavedGeometries(const QJsonObject& layout,
                             const QHash<detail::StableKey, int>& stableLookup,
@@ -141,14 +142,18 @@ private:
                             int marginCanvasH);
 
   [[nodiscard]] bool startManualPress(const QPointF& pos, Qt::MouseButton button);
+
   void handleDragMove(QMouseEvent* event, const QPoint& delta);
   void handleResizeMove(QMouseEvent* event, const QPoint& delta);
   void applyManualAnchors(int newWidth, int newHeight);
   void applyManualSnap();
+
   [[nodiscard]] bool tryReorderDraggedWindow();
+
   void commitManualGeometry(QQuickItem* window);
   void storeManualGeometry(int id, QQuickItem* item, int canvasWidth = -1, int canvasHeight = -1);
   void updateManualSnapIndicator(int newX, int newY, int w, int h, int canvasW, int canvasH);
+
   [[nodiscard]] QRect computeResizedGeometry(const QPoint& delta) const;
 
 protected:
@@ -158,6 +163,7 @@ protected:
   void mousePressEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;
   void mouseDoubleClickEvent(QMouseEvent* event) override;
+
   [[nodiscard]] bool childMouseEventFilter(QQuickItem* item, QEvent* event) override;
 
 private:

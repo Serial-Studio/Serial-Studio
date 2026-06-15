@@ -346,6 +346,7 @@ Item {
     id: windowCanvas
 
     anchors {
+      bottomMargin: -1
       left: parent.left
       right: parent.right
       bottom: parent.bottom
@@ -417,18 +418,31 @@ Item {
     }
 
     //
-    // Snap indicator
+    // Snap indicator: true snap geometry, border inset 1px per touched edge
     //
-    Rectangle {
-      border.width: 1
+    Item {
+      id: _snapIndicator
+
       z: _wm.zCounter + 9999
       x: _wm.snapIndicator.x
       y: _wm.snapIndicator.y
       width: _wm.snapIndicator.width
       height: _wm.snapIndicator.height
       visible: _wm.snapIndicatorVisible
-      color: Cpp_ThemeManager.colors["snap_indicator_background"]
-      border.color: Cpp_ThemeManager.colors["snap_indicator_border"]
+
+      readonly property bool touchesTop: y <= 0
+      readonly property bool touchesLeft: x <= 0
+      readonly property bool touchesRight: x + width >= windowCanvas.width
+
+      Rectangle {
+        border.width: 1
+        anchors.fill: parent
+        anchors.topMargin: _snapIndicator.touchesTop ? 1 : 0
+        anchors.leftMargin: _snapIndicator.touchesLeft ? 1 : 0
+        anchors.rightMargin: _snapIndicator.touchesRight ? 1 : 0
+        color: Cpp_ThemeManager.colors["snap_indicator_background"]
+        border.color: Cpp_ThemeManager.colors["snap_indicator_border"]
+      }
     }
 
     //
