@@ -3568,8 +3568,7 @@ void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
     entry.insert(QStringLiteral("min"), qMax(range_min, m_selectedDataset.ledHigh));
     entry.insert(QStringLiteral("max"), range_max);
     entry.insert(QStringLiteral("severity"), 1);
-    entry.insert(QStringLiteral("color"),
-                 SerialStudio::getDatasetColor(m_selectedDataset.index).name());
+    entry.insert(QStringLiteral("color"), QString());
     entry.insert(QStringLiteral("label"), tr("On"));
     entry.insert(QStringLiteral("blink"), false);
     bands.append(entry);

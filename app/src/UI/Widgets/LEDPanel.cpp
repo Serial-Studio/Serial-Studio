@@ -250,8 +250,9 @@ QString Widgets::LEDPanel::resolveBandColor(const LedBand& band, const QString& 
 }
 
 /**
- * @brief Re-resolves band and off-state colors from the current theme, then refreshes every
- *        LED's display arrays.
+ * @brief Re-resolves band colors from the current theme, derives each LED's off color from its
+ *        first band (the legacy ledHigh fallback resolves to the dataset color), then refreshes
+ *        every LED's display arrays.
  */
 void Widgets::LEDPanel::onThemeChanged()
 {
@@ -264,10 +265,10 @@ void Widgets::LEDPanel::onThemeChanged()
     auto& led        = m_leds[i];
     const auto color = SerialStudio::getDatasetColor(group.datasets[i].index).name();
 
-    led.offColor = color;
     for (auto& band : led.bands)
       band.resolvedColor = resolveBandColor(band, color);
 
+    led.offColor = led.bands.empty() ? color : led.bands.front().resolvedColor;
     refreshDisplayState(static_cast<int>(i));
   }
 
