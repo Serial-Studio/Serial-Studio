@@ -343,8 +343,8 @@ public slots:
   void addSource();
   void deleteSource(int sourceId, bool confirm = false);
   void duplicateSource(int sourceId);
-  void updateSource(int sourceId, const DataModel::Source& source);
-  void updateSourceTitle(int sourceId, const QString& title);
+  void updateSource(int sourceId, const DataModel::Source& source, bool rebuildTree = true);
+  void updateSourceTitle(int sourceId, const QString& title, bool rebuildTree = true);
   void updateSourceBusType(int sourceId, int busType);
   void updateSourceFrameParser(int sourceId, const QString& code);
   void captureSourceSettings(int sourceId);

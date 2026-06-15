@@ -237,8 +237,22 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
     },
     Qt::QueuedConnection);
   connect(&pm, &DataModel::ProjectModel::modifiedChanged, this, [this] {
-    if (m_currentView == ProjectView)
-      buildProjectModel();
+    if (m_currentView != ProjectView || !m_projectModel)
+      return;
+
+    const auto title = DataModel::ProjectModel::instance().title();
+    for (int i = 0; i < m_projectModel->rowCount(); ++i) {
+      auto* row = m_projectModel->item(i);
+      if (!row || row->data(ParameterType).toInt() != kProjectView_Title)
+        continue;
+
+      if (row->data(EditableValue).toString() != title)
+        buildProjectModel();
+
+      return;
+    }
+
+    buildProjectModel();
   });
   connect(&pm, &DataModel::ProjectModel::frameDetectionChanged, this, [this] {
     if (m_currentView == ProjectView)
@@ -2650,7 +2664,7 @@ void DataModel::ProjectEditor::handleSourceTitleChange(QStandardItem* item)
     return;
 
   m_selectedSource.title = newTitle;
-  DataModel::ProjectModel::instance().updateSourceTitle(m_selectedSource.sourceId, newTitle);
+  DataModel::ProjectModel::instance().updateSourceTitle(m_selectedSource.sourceId, newTitle, false);
 
   for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
     if (it.value().sourceId != m_selectedSource.sourceId)
@@ -2791,7 +2805,7 @@ void DataModel::ProjectEditor::handleSourceFrameStartEndChange(QStandardItem* it
   else
     updated.frameEnd = item->data(EditableValue).toString();
 
-  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  DataModel::ProjectModel::instance().updateSource(sid, updated, false);
   m_selectedSource = updated;
 }
 
@@ -3779,7 +3793,7 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 
   if (id == kGroupView_WebUrl) {
     m_selectedGroup.webViewUrl = value.toString();
-    pm.updateGroup(groupId, m_selectedGroup);
+    pm.updateGroup(groupId, m_selectedGroup, false);
     Q_EMIT editableOptionsChanged();
     return;
   }
@@ -3795,12 +3809,12 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 
   if (id == kGroupView_ImgStart) {
     m_selectedGroup.imgStartSequence = value.toString();
-    pm.updateGroup(groupId, m_selectedGroup);
+    pm.updateGroup(groupId, m_selectedGroup, false);
   }
 
   if (id == kGroupView_ImgEnd) {
     m_selectedGroup.imgEndSequence = value.toString();
-    pm.updateGroup(groupId, m_selectedGroup);
+    pm.updateGroup(groupId, m_selectedGroup, false);
   }
 #endif
 

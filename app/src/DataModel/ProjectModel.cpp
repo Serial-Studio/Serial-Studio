@@ -1379,7 +1379,9 @@ void DataModel::ProjectModel::duplicateSource(int sourceId)
 /**
  * @brief Updates the source with the given @p sourceId.
  */
-void DataModel::ProjectModel::updateSource(int sourceId, const DataModel::Source& source)
+void DataModel::ProjectModel::updateSource(int sourceId,
+                                           const DataModel::Source& source,
+                                           const bool rebuildTree)
 {
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
@@ -1398,21 +1400,26 @@ void DataModel::ProjectModel::updateSource(int sourceId, const DataModel::Source
   }
 
   setModified(true);
-  Q_EMIT sourcesChanged();
+  if (rebuildTree)
+    Q_EMIT sourcesChanged();
+
   Q_EMIT sourceChanged(sourceId);
 }
 
 /**
  * @brief Updates the title of the source with the given @p sourceId.
  */
-void DataModel::ProjectModel::updateSourceTitle(int sourceId, const QString& title)
+void DataModel::ProjectModel::updateSourceTitle(int sourceId,
+                                                const QString& title,
+                                                const bool rebuildTree)
 {
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
   m_sources[sourceId].title = title.simplified();
   setModified(true);
-  Q_EMIT sourcesChanged();
+  if (rebuildTree)
+    Q_EMIT sourcesChanged();
 }
 
 /**
