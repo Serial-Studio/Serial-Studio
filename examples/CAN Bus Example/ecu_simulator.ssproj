@@ -1794,88 +1794,77 @@
         "layout:5000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 508,
+                "canvasHeight": 509,
                 "canvasWidth": 1041,
                 "geometries": [
                     {
-                        "height": 254,
+                        "height": 255,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 261,
+                        "width": 347,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 254,
-                        "id": 2,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 260,
-                        "x": 260,
-                        "y": 0
-                    },
-                    {
-                        "height": 254,
+                        "height": 255,
                         "id": 3,
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 260,
-                        "x": 519,
-                        "y": 0
-                    },
-                    {
-                        "height": 254,
-                        "id": 4,
-                        "relativeIndex": 3,
-                        "state": "normal",
-                        "widgetType": 1,
-                        "width": 260,
-                        "x": 778,
-                        "y": 0
-                    },
-                    {
-                        "height": 254,
-                        "id": 9,
-                        "relativeIndex": 8,
-                        "state": "normal",
-                        "widgetType": 1,
                         "width": 347,
-                        "x": 0,
-                        "y": 253
+                        "x": 346,
+                        "y": 0
                     },
                     {
-                        "height": 254,
+                        "height": 255,
                         "id": 15,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 8,
                         "width": 347,
-                        "x": 346,
-                        "y": 253
+                        "x": 692,
+                        "y": 0
                     },
                     {
-                        "height": 254,
+                        "height": 255,
+                        "id": 4,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 347,
+                        "x": 0,
+                        "y": 254
+                    },
+                    {
+                        "height": 255,
+                        "id": 2,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 347,
+                        "x": 346,
+                        "y": 254
+                    },
+                    {
+                        "height": 255,
                         "id": 16,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 8,
                         "width": 347,
                         "x": 692,
-                        "y": 253
+                        "y": 254
                     }
                 ],
-                "userReordered": false,
+                "userReordered": true,
                 "windowOrder": [
                     1,
-                    2,
                     3,
-                    4,
-                    9,
                     15,
+                    4,
+                    2,
                     16
                 ],
                 "windowOrderTyped": [
@@ -1884,24 +1873,20 @@
                         "widgetType": 1
                     },
                     {
-                        "relativeIndex": 1,
+                        "relativeIndex": 2,
                         "widgetType": 1
                     },
                     {
-                        "relativeIndex": 2,
-                        "widgetType": 1
+                        "relativeIndex": 0,
+                        "widgetType": 8
                     },
                     {
                         "relativeIndex": 3,
                         "widgetType": 1
                     },
                     {
-                        "relativeIndex": 8,
+                        "relativeIndex": 1,
                         "widgetType": 1
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 8
                     },
                     {
                         "relativeIndex": 1,
