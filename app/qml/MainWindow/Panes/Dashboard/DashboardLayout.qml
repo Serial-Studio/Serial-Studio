@@ -252,6 +252,48 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
+      // Operator-mode titlebar strip (clears macOS traffic lights, draws title)
+      //
+      Rectangle {
+        id: operatorTitlebar
+
+        z: 0
+        Layout.fillWidth: true
+        visible: operatorMode && titlebarHeight > 0
+        color: Cpp_ThemeManager.colors["dashboard_background"]
+        Layout.preferredHeight: visible ? titlebarHeight : 0
+
+        property int titlebarHeight: operatorMode
+                                     ? Cpp_NativeWindow.titlebarHeight(mainWindow)
+                                     : 0
+
+        Connections {
+          target: mainWindow
+          function onVisibilityChanged() {
+            operatorTitlebar.titlebarHeight = operatorMode
+                                              ? Cpp_NativeWindow.titlebarHeight(mainWindow)
+                                              : 0
+          }
+        }
+
+        Label {
+          anchors.centerIn: parent
+          anchors.verticalCenterOffset: -2
+          text: mainWindow.title
+          color: Cpp_ThemeManager.colors["text"]
+          font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+        }
+
+        DragHandler {
+          target: null
+          onActiveChanged: {
+            if (active)
+              mainWindow.startSystemMove()
+          }
+        }
+      }
+
+      //
       // Actions panel
       //
       Rectangle {
@@ -308,6 +350,7 @@ Widgets.Pane {
       DashboardCanvas {
         id: _canvas
 
+        z: 1
         Layout.topMargin: -1
         taskBar: root.taskBar
         taskbarView: _taskbar
