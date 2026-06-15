@@ -220,7 +220,7 @@ Widgets.Pane {
     anchors.leftMargin: -9
     anchors.rightMargin: -9
     anchors.bottomMargin: (zeroBottom ? -14 : -9)
-    anchors.topMargin: (headerVisible ? -15 : -9)
+    anchors.topMargin: (headerVisible ? -16 : -9)
 
     //
     // Default background

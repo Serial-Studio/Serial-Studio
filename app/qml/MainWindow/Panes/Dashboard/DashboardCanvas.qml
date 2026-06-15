@@ -421,7 +421,7 @@ Item {
     //
     Rectangle {
       border.width: 1
-      z: _wm.zCounter
+      z: _wm.zCounter + 9999
       x: _wm.snapIndicator.x
       y: _wm.snapIndicator.y
       width: _wm.snapIndicator.width

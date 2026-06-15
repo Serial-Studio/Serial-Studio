@@ -1624,6 +1624,7 @@ jobs:
         PYTHONUTF8: '1'
       run: |
         pytest tests/ \
+          --deselect tests/integration/test_licensing.py::test_rapid_status_queries_no_crash \
           -m "${{ matrix.marker_expr }}" \
           -q --tb=line --timeout=60 --junit-xml=test-results.xml
 

@@ -1035,10 +1035,10 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
 
     # The four helpers must be declared and defined.
     for sig in (
-        "QHash<int, DSP::TimeRing> snapshotPlotTimeRings() const;",
-        "QHash<int, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;",
-        "void restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot);",
-        "void restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot);",
+        "QHash<qint64, DSP::TimeRing> snapshotPlotTimeRings() const;",
+        "QHash<qint64, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;",
+        "void restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot);",
+        "void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::TimeRing>>& snapshot);",
     ):
         assert sig in header, f"missing in Dashboard.h: {sig}"
 
@@ -1567,12 +1567,12 @@ def test_control_script_agent_surface():
     to validate before committing, and fetch the focused runtime reference."""
     handler = _read("app/src/API/Handlers/ControlScriptHandler.cpp")
     for cmd in (
-        "controlscript.get",
-        "controlscript.getCode",
-        "controlscript.set",
-        "controlscript.setCode",
-        "controlscript.dryRun",
-        "controlscript.getStatus",
+        "controlScript.get",
+        "controlScript.getCode",
+        "controlScript.set",
+        "controlScript.setCode",
+        "controlScript.dryRun",
+        "controlScript.getStatus",
     ):
         assert f'QStringLiteral("{cmd}")' in handler, f"missing command: {cmd}"
 
@@ -1586,11 +1586,11 @@ def test_control_script_agent_surface():
     assert "control_script_js" in _read("app/src/AI/ToolDispatcher.cpp")
     assert "ai/docs/control_script_js.md" in _read("app/rcc/rcc.qrc")
     doc = _read("app/rcc/ai/docs/control_script_js.md")
-    assert "controlscript.dryRun" in doc and "ageMs" in doc
+    assert "controlScript.dryRun" in doc and "ageMs" in doc
 
     # Safety tiers: reads + dryRun auto-execute; both install spellings always confirm.
     tiers = json.loads(_read("app/rcc/ai/command_safety.json"))
-    assert "controlscript.dryRun" in tiers["safe"]
-    assert "controlscript.getCode" in tiers["safe"]
-    assert "controlscript.setCode" in tiers["alwaysConfirm"]
-    assert "controlscript.set" in tiers["alwaysConfirm"]
+    assert "controlScript.dryRun" in tiers["safe"]
+    assert "controlScript.getCode" in tiers["safe"]
+    assert "controlScript.setCode" in tiers["alwaysConfirm"]
+    assert "controlScript.set" in tiers["alwaysConfirm"]
