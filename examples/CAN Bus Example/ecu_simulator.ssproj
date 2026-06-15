@@ -1474,6 +1474,18 @@
             "busType": 5,
             "checksum": "",
             "checksumAlgorithm": "",
+            "connection": {
+                "bitrate": 500000,
+                "canFD": false,
+                "deviceId": {
+                    "interface": "can0",
+                    "plugin": "virtualcan"
+                },
+                "interfaceIndex": 0,
+                "listenOnly": false,
+                "loopback": false,
+                "pluginIndex": 3
+            },
             "decoder": 3,
             "decoderMethod": 3,
             "frameDetection": 2,
@@ -1768,7 +1780,7 @@
             ]
         }
     ],
-    "title": "ecu_simulator",
+    "title": "ECU Simulator",
     "widgetSettings": {
         "externalWindows": {
             "data": [

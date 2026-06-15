@@ -150,7 +150,7 @@
     },
     "nextUniqueId": 10003,
     "plotTimeRange": 60,
-    "pointCount": 1000,
+    "pointCount": 8000,
     "schemaVersion": 3,
     "sources": [
         {
