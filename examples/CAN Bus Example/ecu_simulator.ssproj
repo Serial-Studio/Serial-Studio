@@ -1782,9 +1782,133 @@
     ],
     "title": "ECU Simulator",
     "widgetSettings": {
+        "9:0:2": {
+            "interpolationMode": 1,
+            "showAreaUnderPlot": true
+        },
+        "activeGroup": 5000,
         "externalWindows": {
             "data": [
             ]
+        },
+        "layout:5000": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 508,
+                "canvasWidth": 1041,
+                "geometries": [
+                    {
+                        "height": 254,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 261,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 254,
+                        "id": 2,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 260,
+                        "x": 260,
+                        "y": 0
+                    },
+                    {
+                        "height": 254,
+                        "id": 3,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 260,
+                        "x": 519,
+                        "y": 0
+                    },
+                    {
+                        "height": 254,
+                        "id": 4,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 260,
+                        "x": 778,
+                        "y": 0
+                    },
+                    {
+                        "height": 254,
+                        "id": 9,
+                        "relativeIndex": 8,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 347,
+                        "x": 0,
+                        "y": 253
+                    },
+                    {
+                        "height": 254,
+                        "id": 15,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 8,
+                        "width": 347,
+                        "x": 346,
+                        "y": 253
+                    },
+                    {
+                        "height": 254,
+                        "id": 16,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 8,
+                        "width": 347,
+                        "x": 692,
+                        "y": 253
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    9,
+                    15,
+                    16
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 8,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 8
+                    }
+                ]
+            }
         }
     },
     "workspaces": [
@@ -1814,63 +1938,13 @@
                 },
                 {
                     "groupId": 140004,
-                    "relativeIndex": 4,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140004,
                     "relativeIndex": 0,
                     "widgetType": 8
                 },
                 {
                     "groupId": 140005,
-                    "relativeIndex": 5,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140005,
                     "relativeIndex": 1,
                     "widgetType": 8
-                },
-                {
-                    "groupId": 140006,
-                    "relativeIndex": 6,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140007,
-                    "relativeIndex": 7,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140008,
-                    "relativeIndex": 8,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140009,
-                    "relativeIndex": 9,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140010,
-                    "relativeIndex": 10,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140011,
-                    "relativeIndex": 11,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140012,
-                    "relativeIndex": 12,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 140013,
-                    "relativeIndex": 13,
-                    "widgetType": 1
                 }
             ],
             "workspaceId": 5000
