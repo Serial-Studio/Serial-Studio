@@ -8,6 +8,8 @@ Real-time car telemetry with nothing but Serial Studio and a cheap OBD-II adapte
 
 > Some Serial Studio features need a paid license. See [serial-studio.com](https://serial-studio.com/) for details.
 
+![OBD-II vehicle telemetry in Serial Studio](doc/screenshot.png)
+
 ## Telemetry source
 
 OBD-II data is read from an ELM327-compatible adapter plugged into the vehicle's diagnostic port and connected to the computer as a serial (UART) device. The project's control script drives the whole exchange:
@@ -46,7 +48,7 @@ After writing the table, the script calls **`dashboardTick()`**, which forces th
 - Live gauges for engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage (any PID the vehicle does not support reads "No data").
 - Request/response polling driven entirely by an in-project control script, no external program.
 - Works with any OBD-II compliant vehicle through the standard ELM327 command set; the core RPM/speed/coolant gauges populate on almost every car.
-- Serial (UART) source configured in Serial Studio's project editor (default 38400 baud, the ELM327 power-up rate).
+- Serial (UART) source configured in Serial Studio's project editor (115200 baud, the OBDLink EX power-up rate; classic ELM327 clones default to 38400).
 
 ## Hardware setup
 
@@ -58,6 +60,7 @@ After writing the table, the script calls **`dashboardTick()`**, which forces th
 ## Files
 
 - `OBD-II.ssproj`: the Serial Studio project; it embeds the source, data table, gauges, the OBD-II poller control script, and a stub frame parser.
+- `doc/screenshot.png`: dashboard screenshot.
 
 ## Reference
 

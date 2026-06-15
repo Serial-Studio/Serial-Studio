@@ -43,7 +43,7 @@ static constexpr int kDelaySliceMs      = 50;
 static constexpr int kMaxDelayMs        = 3600000;
 static constexpr int kRuntimeWatchdogMs = 2000;
 static constexpr int kReplyPollSliceMs  = 5;
-static constexpr int kMaxReplyWaitMs    = 1500;
+static constexpr int kMaxReplyWaitMs    = 30000;
 
 static std::atomic<bool> s_shutdownRequested{false};
 
@@ -193,9 +193,9 @@ QVariantList DataModel::ControlApiBridge::listCommands()
 
 /**
  * @brief Writes @p data to @p sourceId then blocks the worker (never the GUI) until the reply
- *        satisfies @p until (terminator string, byte length, or undefined for first non-empty)
- *        or @p timeoutMs elapses. Sliced for shutdown, capped below the loop() watchdog budget,
- *        re-arming it after so device latency is not billed. Returns ok/data/bytesRead/timedOut.
+ *        satisfies @p until (terminator, byte length, or undefined for first non-empty) or
+ *        @p timeoutMs elapses, capped at kMaxReplyWaitMs. The C++ wait re-arms the watchdog after
+ *        (like delay()), so device latency is never billed to the JS budget. Shutdown-sliced.
  */
 QVariantMap DataModel::ControlApiBridge::writeAndWait(const QJSValue& data,
                                                       int timeoutMs,
