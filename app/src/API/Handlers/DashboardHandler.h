@@ -46,6 +46,7 @@ private:
   static CommandResponse getData(const QString& id, const QJsonObject& params);
   static CommandResponse tailFrames(const QString& id, const QJsonObject& params);
   static CommandResponse reprocess(const QString& id, const QJsonObject& params);
+  static CommandResponse tick(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace API::Handlers

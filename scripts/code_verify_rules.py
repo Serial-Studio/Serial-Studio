@@ -1031,6 +1031,72 @@ def _virtual_hotpath_findings(src_text: str, path: Path, fenced) -> list:
     return findings
 
 
+# API command scopes are <scope>.<verb>; compound scopes are camelCase
+# (consoleExport, csvPlayer, controlScript, ...), single-word ones are lowercase
+# (io, dashboard, project, ...). The June-2026 audit found `controlscript.*`
+# (lowercase) registered against an otherwise-camelCase surface. This rule flags
+# a registered scope that is a case-variant of a known canonical scope -- i.e.
+# the same letters with the hump in the wrong place -- which is the exact shape
+# of that regression. It does NOT guess at brand-new scopes (no false positives
+# on a genuinely new single-word scope).
+_API_CANONICAL_SCOPES = frozenset(
+    {
+        "api",
+        "assistant",
+        "console",
+        "consoleExport",
+        "controlScript",
+        "csvExport",
+        "csvPlayer",
+        "dashboard",
+        "extensions",
+        "io",
+        "licensing",
+        "mdf4Export",
+        "mdf4Player",
+        "meta",
+        "notifications",
+        "project",
+        "scripts",
+        "sessions",
+        "system",
+        "ui",
+    }
+)
+_API_SCOPE_LOWER = {s.lower(): s for s in _API_CANONICAL_SCOPES}
+_REGISTER_COMMAND_RE = re.compile(r'QStringLiteral\(\s*"([a-zA-Z][\w]*)\.[\w.]+"\s*\)')
+
+
+def _api_scope_naming_findings(src_text: str, path: Path, fenced) -> list:
+    """Flag a registerCommand scope spelled with the wrong case versus its
+    canonical camelCase form (e.g. controlscript.* vs controlScript.*). Only
+    runs on API handler sources; only fires on a case-variant of a KNOWN scope,
+    so a legitimately new scope is never flagged."""
+    if not path.name.endswith("Handler.cpp"):
+        return []
+
+    findings: list = []
+    for i, raw in enumerate(src_text.split("\n"), start=1):
+        if fenced(i) or "QStringLiteral" not in raw:
+            continue
+        m = _REGISTER_COMMAND_RE.search(raw)
+        if m is None:
+            continue
+        scope = m.group(1)
+        canonical = _API_SCOPE_LOWER.get(scope.lower())
+        if canonical is not None and scope != canonical:
+            findings.append(
+                Finding(
+                    i,
+                    "sdk-scope-casing",
+                    f"API scope `{scope}` should be `{canonical}` -- compound "
+                    f"command scopes are camelCase across the whole surface; a "
+                    f"lowercased spelling breaks SDK naming consistency",
+                )
+            )
+    return findings
+
+
 _QT_METACALL_REF_RE = re.compile(r"&\s*\w+(?:\s*::\s*\w+)*\s*::\s*(\w+)\b")
 
 
@@ -3107,11 +3173,17 @@ def analyze(path: Path, src_text: str, fence_mask: list[bool]) -> list[Finding]:
     in code-verify.py wraps each Finding as a Violation."""
     suffix = path.suffix.lower()
     out: list[Finding] = []
+
+    def fenced(line: int) -> bool:
+        idx = line - 1
+        return 0 <= idx < len(fence_mask) and fence_mask[idx]
+
     if suffix in (".cpp", ".cc", ".cxx", ".c", ".h", ".hpp", ".hxx", ".mm"):
         out.extend(_cpp_rules(src_text.encode("utf-8"), path, fence_mask))
         out.extend(_comment_narration_findings(src_text, path, fence_mask))
         out.extend(_trailing_doxy_findings(src_text, path, fence_mask))
         out.extend(_stdio_findings(src_text, path, fence_mask))
+        out.extend(_api_scope_naming_findings(src_text, path, fenced))
         return out
     if suffix == ".qml":
         out.extend(_qml_rules(src_text, path, fence_mask))

@@ -7,12 +7,12 @@ dedicated worker thread whenever a device is connected in Project mode.
 
 | Command | Purpose |
 |---|---|
-| `controlscript.get` / `controlscript.getCode` | Read the current source (aliases, same result `{code}`) |
-| `controlscript.dryRun` | Validate source WITHOUT installing it (params: `code`) |
-| `controlscript.set` / `controlscript.setCode` | Install source (params: `code`); persisted in the project, recompiled + restarted live |
-| `controlscript.getStatus` | `{running: bool}` |
+| `controlScript.get` / `controlScript.getCode` | Read the current source (aliases, same result `{code}`) |
+| `controlScript.dryRun` | Validate source WITHOUT installing it (params: `code`) |
+| `controlScript.set` / `controlScript.setCode` | Install source (params: `code`); persisted in the project, recompiled + restarted live |
+| `controlScript.getStatus` | `{running: bool}` |
 
-**Always `controlscript.dryRun` before `controlscript.set`.** The dry run compiles the script
+**Always `controlScript.dryRun` before `controlScript.set`.** The dry run compiles the script
 in a sandboxed engine with the full SDK prelude and returns
 `{valid, hasSetup, hasLoop, error?, line?}` — syntax errors come back with line numbers, and
 nothing executes (no `apiCall`, no `tableSet` side effects).

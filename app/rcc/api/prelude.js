@@ -161,6 +161,15 @@ if (typeof __ss_bridge !== 'undefined') {
     return __ss_bridge.call('dashboard.reprocess', {});
   };
 
+  // dashboardTick() forces a render from the current table/dataset state, synthesizing
+  // the project frame structure when no device frame has arrived yet. Call it after
+  // tableSet() writes so table-driven (virtual) datasets render from the first loop(),
+  // even while the device is silent. refreshDashboard() no-ops until a real frame exists;
+  // dashboardTick() does not.
+  dashboardTick = function() {
+    return __ss_bridge.call('dashboard.tick', {});
+  };
+
   var __ssGroupWidgets = {
     datagrid: 0, accelerometer: 1, gyroscope: 2, gps: 3,
     multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8

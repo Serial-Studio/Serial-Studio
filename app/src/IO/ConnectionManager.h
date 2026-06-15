@@ -23,7 +23,9 @@
 
 #include <atomic>
 #include <memory>
+#include <QHash>
 #include <QMap>
+#include <QMutex>
 #include <QObject>
 #include <QSettings>
 #include <QTimer>
@@ -163,6 +165,10 @@ public:
   [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
   [[nodiscard]] Q_INVOKABLE bool isDeviceConnected(int deviceId) const;
 
+  [[nodiscard]] qint64 writeAndArmReply(int deviceId, const QByteArray& data);
+  [[nodiscard]] QByteArray pollReplyBuffer(int deviceId) const;
+  void disarmReplyCapture(int deviceId);
+
 public slots:
   void connectDevice();
   void toggleConnection();
@@ -221,6 +227,10 @@ private:
   QTimer m_uiDriverSaveTimer;
 
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
+
+  std::atomic<bool> m_replyCaptureArmed;
+  mutable QMutex m_replyMutex;
+  QHash<int, QByteArray> m_replyBuffers;
 
   std::unique_ptr<IO::Drivers::UART> m_uartUi;
   std::unique_ptr<IO::Drivers::Network> m_networkUi;

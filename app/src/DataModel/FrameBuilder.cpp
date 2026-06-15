@@ -751,6 +751,27 @@ bool DataModel::FrameBuilder::reprocessFrames()
 }
 
 /**
+ * @brief Forces a dashboard render from the current table/dataset state even when the device is
+ *        silent and no frame has arrived yet: seeds each project source frame from the template
+ *        if missing, runs the transform-only pass, and publishes. Lets a control script update
+ *        tables then call dashboardTick() to make table-driven (virtual) datasets render at once.
+ */
+bool DataModel::FrameBuilder::dashboardTick()
+{
+  if (m_operationMode != SerialStudio::ProjectFile)
+    return false;
+
+  if (m_frame.groups.empty() || m_frame.title.isEmpty())
+    return false;
+
+  if (m_sourceFrames.isEmpty())
+    for (const auto& g : m_frame.groups)
+      (void)ensureSourceFrame(g.sourceId);
+
+  return reprocessFrames();
+}
+
+/**
  * @brief Handles connection transitions: recompiles transforms, reloads parser, fires
  *        auto-actions. The latest-frame store clears on both edges so io.getLatestFrame can
  *        never serve a previous connection's frame (the capture flag can stay on across the

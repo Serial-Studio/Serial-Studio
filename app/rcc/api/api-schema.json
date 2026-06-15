@@ -453,8 +453,8 @@
         ]
     },
     {
-        "description": "Validate control-script source WITHOUT installing or running it (params: code). Compiles the script in a sandboxed engine with the SDK prelude, reports syntax errors with line numbers, and checks that setup() and/or loop() are defined. setup()/loop() are never executed and apiCall/tableSet have no effect. Use before controlscript.set.",
-        "name": "controlscript.dryRun",
+        "description": "Validate control-script source WITHOUT installing or running it (params: code). Compiles the script in a sandboxed engine with the SDK prelude, reports syntax errors with line numbers, and checks that setup() and/or loop() are defined. setup()/loop() are never executed and apiCall/tableSet have no effect. Use before controlScript.set.",
+        "name": "controlScript.dryRun",
         "properties": {
             "code": {
                 "description": "Control script source",
@@ -467,15 +467,15 @@
     },
     {
         "description": "Get the project's setup()/loop() control script source code.",
-        "name": "controlscript.get",
+        "name": "controlScript.get",
         "properties": {
         },
         "required": [
         ]
     },
     {
-        "description": "Get the control script source (alias of controlscript.get; matches the project.frameParser.getCode naming convention).",
-        "name": "controlscript.getCode",
+        "description": "Get the control script source (alias of controlScript.get; matches the project.frameParser.getCode naming convention).",
+        "name": "controlScript.getCode",
         "properties": {
         },
         "required": [
@@ -483,15 +483,15 @@
     },
     {
         "description": "Returns whether the control script is currently running.",
-        "name": "controlscript.getStatus",
+        "name": "controlScript.getStatus",
         "properties": {
         },
         "required": [
         ]
     },
     {
-        "description": "Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlscript.dryRun.",
-        "name": "controlscript.set",
+        "description": "Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlScript.dryRun.",
+        "name": "controlScript.set",
         "properties": {
             "code": {
                 "description": "Control script source",
@@ -503,8 +503,8 @@
         ]
     },
     {
-        "description": "Replace the control script source (alias of controlscript.set; params: code; matches the project.frameParser.setCode naming convention).",
-        "name": "controlscript.setCode",
+        "description": "Replace the control script source (alias of controlScript.set; params: code; matches the project.frameParser.setCode naming convention).",
+        "name": "controlScript.setCode",
         "properties": {
             "code": {
                 "description": "Control script source",
@@ -717,6 +717,14 @@
                 },
                 "type": "array"
             }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists), this lets a control script that only writes tables (tableSet()) render table-driven virtual datasets from the very first loop(). SDK: dashboardTick().",
+        "name": "dashboard.tick",
+        "properties": {
         },
         "required": [
         ]
@@ -1102,7 +1110,8 @@
                 "type": "string"
             },
             "data": {
-                "description": "Base64-encoded bytes",
+                "binary": true,
+                "description": "Bytes to write, tagged with an encoding argument (SerialStudio.Hex / .Text / .Base64) in the SDK wrapper",
                 "type": "string"
             }
         },
@@ -2043,7 +2052,8 @@
         "name": "io.writeData",
         "properties": {
             "data": {
-                "description": "Base64-encoded raw bytes to transmit. The device receives the decoded bytes verbatim -- no line ending appended, no encoding applied. For text + line ending, use console.send instead.",
+                "binary": true,
+                "description": "Raw bytes to transmit, tagged with an encoding argument (SerialStudio.Hex / .Text / .Base64) in the SDK wrapper. The device receives the decoded bytes verbatim -- no line ending appended. For text + line ending, use console.send instead.",
                 "type": "string"
             }
         },
@@ -4047,8 +4057,8 @@
         },
         "required": [
             "workspaceId",
-            "widgetType",
-            "groupId"
+            "groupId",
+            "widgetType"
         ]
     },
     {

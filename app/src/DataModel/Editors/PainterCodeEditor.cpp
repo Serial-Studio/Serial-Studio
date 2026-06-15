@@ -151,7 +151,7 @@ bool DataModel::PainterCodeEditor::isModified() const noexcept
 bool DataModel::PainterCodeEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
-    return isModified() && m_widget.document()->isUndoAvailable();
+    return m_widget.document()->isUndoAvailable();
 
   return false;
 }
@@ -162,7 +162,7 @@ bool DataModel::PainterCodeEditor::undoAvailable() const noexcept
 bool DataModel::PainterCodeEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
-    return isModified() && m_widget.document()->isRedoAvailable();
+    return m_widget.document()->isRedoAvailable();
 
   return false;
 }

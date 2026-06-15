@@ -114,10 +114,12 @@ void API::Handlers::BluetoothLEHandler::registerSelectionCommands()
                    "Lets a control script drive split read/write devices. The device must be "
                    "connected and the owning service selected."),
     makeSchema({
-      {QStringLiteral("characteristicUuid"),
-       QStringLiteral("string"),
-       QStringLiteral("Target characteristic UUID (short or full form)")                                      },
-      {              QStringLiteral("data"), QStringLiteral("string"),  QStringLiteral("Base64-encoded bytes")}
+      SchemaProp{QStringLiteral("characteristicUuid"),
+                 QStringLiteral("string"),
+                 QStringLiteral("Target characteristic UUID (short or full form)")},
+      byteProp(QStringLiteral("data"),
+               QStringLiteral("Bytes to write, tagged with an encoding argument "
+                              "(SerialStudio.Hex / .Text / .Base64) in the SDK wrapper"))
   }),
     &writeCharacteristic);
 }

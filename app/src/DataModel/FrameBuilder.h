@@ -103,6 +103,7 @@ public:
   void setReplayColumnMap(std::unordered_map<int, std::unordered_map<int, int>> map);
 
   [[nodiscard]] bool reprocessFrames();
+  [[nodiscard]] bool dashboardTick();
 
 public slots:
   void setupExternalConnections();

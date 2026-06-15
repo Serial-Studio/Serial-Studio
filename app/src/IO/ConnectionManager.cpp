@@ -71,6 +71,7 @@ IO::ConnectionManager::ConnectionManager()
   , m_busType(SerialStudio::BusType::UART)
   , m_startSequence("/*")
   , m_finishSequence("*/")
+  , m_replyCaptureArmed(false)
   , m_uartUi(std::make_unique<IO::Drivers::UART>())
   , m_networkUi(std::make_unique<IO::Drivers::Network>())
   , m_bluetoothLEUi(std::make_unique<IO::Drivers::BluetoothLE>())
@@ -609,6 +610,50 @@ qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& 
   }
 
   return bytes;
+}
+
+/**
+ * @brief Arms reply capture for @p deviceId then writes @p data, atomically on this thread so
+ *        no inbound bytes can slip in between the arm and the write. Backs deviceWriteAndWait():
+ *        a control-script worker marshals here, then polls pollReplyBuffer() until satisfied.
+ */
+qint64 IO::ConnectionManager::writeAndArmReply(int deviceId, const QByteArray& data)
+{
+  Q_ASSERT(deviceId >= 0);
+  Q_ASSERT(!data.isEmpty());
+
+  {
+    QMutexLocker locker(&m_replyMutex);
+    m_replyBuffers.insert(deviceId, QByteArray());
+  }
+  m_replyCaptureArmed.store(true, std::memory_order_release);
+
+  return writeDataToDevice(deviceId, data);
+}
+
+/**
+ * @brief Returns a copy of the bytes captured for @p deviceId since the last arm.
+ */
+QByteArray IO::ConnectionManager::pollReplyBuffer(int deviceId) const
+{
+  Q_ASSERT(deviceId >= 0);
+
+  QMutexLocker locker(&m_replyMutex);
+  return m_replyBuffers.value(deviceId);
+}
+
+/**
+ * @brief Drops the capture buffer for @p deviceId and disarms the tap once no buffers remain,
+ *        so the steady-state raw-data path pays only a single relaxed atomic read.
+ */
+void IO::ConnectionManager::disarmReplyCapture(int deviceId)
+{
+  Q_ASSERT(deviceId >= 0);
+
+  QMutexLocker locker(&m_replyMutex);
+  m_replyBuffers.remove(deviceId);
+  if (m_replyBuffers.isEmpty())
+    m_replyCaptureArmed.store(false, std::memory_order_release);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1337,6 +1382,13 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDa
 
   if (m_paused)
     return;
+
+  if (m_replyCaptureArmed.load(std::memory_order_acquire)) [[unlikely]] {
+    QMutexLocker locker(&m_replyMutex);
+    auto it = m_replyBuffers.find(deviceId);
+    if (it != m_replyBuffers.end())
+      it->append(data->data);
+  }
 
   static auto& console = Console::Handler::instance();
   static auto& server  = API::Server::instance();

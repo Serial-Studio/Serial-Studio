@@ -113,7 +113,7 @@ QString AI::ContextBuilder::roleBlock()
            "is about to send you down a rabbit hole.\n"
            "  control_script    -> the project setup()/loop() control script, the "
            "SerialStudio.js/.lua SDK (io.ble.writeCharacteristic(uuid, hex, "
-           "SerialStudio.Hex), delay(ms)), controlscript.* management. Load for "
+           "SerialStudio.Hex), delay(ms)), controlScript.* management. Load for "
            "device automation, wake-up handshakes, polling, keep-alives.\n"
            "  tool_discovery    -> meta.* (always relevant when you're hunting for a "
            "command you don't recognise)\n"

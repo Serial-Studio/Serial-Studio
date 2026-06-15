@@ -141,12 +141,13 @@ void API::Handlers::IOManagerHandler::registerBusConfigCommands()
   {
     QJsonObject props;
     props[QStringLiteral("data")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")},
+      {       QStringLiteral("type"),QStringLiteral("string")                                     },
+      {     QStringLiteral("binary"),                             true},
       {QStringLiteral("description"),
-       QStringLiteral("Base64-encoded raw bytes to transmit. The device receives "
-       "the decoded bytes verbatim -- no line ending appended, no "
-       "encoding applied. For text + line ending, use console.send "
-       "instead.")       }
+       QStringLiteral("Raw bytes to transmit, tagged with an encoding argument "
+       "(SerialStudio.Hex / .Text / .Base64) in the SDK wrapper. The device "
+       "receives the decoded bytes verbatim -- no line ending appended. For "
+       "text + line ending, use console.send instead.")               }
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");

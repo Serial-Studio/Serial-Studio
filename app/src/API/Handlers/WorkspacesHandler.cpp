@@ -578,6 +578,10 @@ void API::Handlers::WorkspacesHandler::registerWidgetAddCommand()
        QStringLiteral("Workspace id from project.workspace.list. IDs 1000-4999 are "
        "auto-generated (Overview=1000, AllData=1001, per-group >= 1002); "
        "user-created workspaces start at 5000.")                              },
+      {    QStringLiteral("groupId"),
+       QStringLiteral("integer"),
+       QStringLiteral("Group.uniqueId from project.group.list (stable across reorders). "
+       "NOT the positional array index and NOT Group.groupId.")               },
       { QStringLiteral("widgetType"),
        QStringLiteral("string|integer"),
        QStringLiteral("Widget kind. PREFERRED form: a string slug -- 'plot', 'fft', "
@@ -587,10 +591,6 @@ void API::Handlers::WorkspacesHandler::registerWidgetAddCommand()
        "'painter' (Pro). Integer DashboardWidget enum still accepted for "
        "back-compat (1=DataGrid, 2=MultiPlot, ... 9=Plot, 10=Bar, 11=Gauge, "
        "12=Compass) but the strings are unambiguous and forwards-compatible.")},
-      {    QStringLiteral("groupId"),
-       QStringLiteral("integer"),
-       QStringLiteral("Group.uniqueId from project.group.list (stable across reorders). "
-       "NOT the positional array index and NOT Group.groupId.")               },
   },
     {{QString(Keys::DatasetId),
       QStringLiteral("integer"),

@@ -297,5 +297,16 @@
     "projectFileName": "VibrationTestRig.ssproj",
     "hasScreenshot": true,
     "requiresPro": true
+  },
+  {
+    "id": "OBD-II",
+    "title": "OBD-II Vehicle Telemetry",
+    "description": "Reads live engine RPM, vehicle speed, coolant and intake air temperature, calculated load, throttle position and battery voltage from any OBD-II compliant car through an ELM327 adapter, using a control script that polls the adapter and drives gauges via data tables.",
+    "category": "Automotive",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "OBD-II.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": false
   }
 ]

@@ -290,6 +290,9 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "mdf4: tests involving MDF4 export (Pro feature)"
     )
+    config.addinivalue_line(
+        "markers", "pro: tests covering Pro-only features (Modbus, CAN Bus, etc.)"
+    )
     config.addinivalue_line("markers", "project: tests involving project files")
 
 

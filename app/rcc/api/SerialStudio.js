@@ -47,6 +47,15 @@ var SerialStudio = {
 function apiCall(method, params) { return __ss_bridge.call(method, params || {}); }
 function apiCallList()           { return __ss_bridge.listCommands(); }
 function delay(ms)               { if (__ss_bridge.delay) __ss_bridge.delay(ms); }
+// deviceWriteAndWait(data, timeoutMs, until, source): write then block the worker
+// (never the GUI) until the reply satisfies `until` -- a terminator string, an
+// expected byte length (number), or undefined for the first non-empty reply --
+// or timeoutMs elapses. source defaults to 0. Mirrors deviceWrite's data-first
+// shape. Returns { ok, data, bytesRead, timedOut }.
+function deviceWriteAndWait(data, timeoutMs, until, source) {
+  if (!__ss_bridge.writeAndWait) return { ok: false, error: 'unsupported here' };
+  return __ss_bridge.writeAndWait(data, timeoutMs | 0, until, source | 0);
+}
 
 // Hand-maintained SDK prelude (JavaScript). Prepended to the generated command
 // wrappers by scripts/generate-sdk.py to form SerialStudio.js -- the single,
@@ -211,6 +220,15 @@ if (typeof __ss_bridge !== 'undefined') {
     return __ss_bridge.call('dashboard.reprocess', {});
   };
 
+  // dashboardTick() forces a render from the current table/dataset state, synthesizing
+  // the project frame structure when no device frame has arrived yet. Call it after
+  // tableSet() writes so table-driven (virtual) datasets render from the first loop(),
+  // even while the device is silent. refreshDashboard() no-ops until a real frame exists;
+  // dashboardTick() does not.
+  dashboardTick = function() {
+    return __ss_bridge.call('dashboard.tick', {});
+  };
+
   var __ssGroupWidgets = {
     datagrid: 0, accelerometer: 1, gyroscope: 2, gps: 3,
     multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8
@@ -317,7 +335,7 @@ assistant.script = assistant.script || {};
 assistant.workspace = assistant.workspace || {};
 var console = (typeof console !== 'undefined') ? console : {};
 var consoleExport = (typeof consoleExport !== 'undefined') ? consoleExport : {};
-var controlscript = (typeof controlscript !== 'undefined') ? controlscript : {};
+var controlScript = (typeof controlScript !== 'undefined') ? controlScript : {};
 var csvExport = (typeof csvExport !== 'undefined') ? csvExport : {};
 var csvPlayer = (typeof csvPlayer !== 'undefined') ? csvPlayer : {};
 var dashboard = (typeof dashboard !== 'undefined') ? dashboard : {};
@@ -444,9 +462,9 @@ console.getConfig = function() {
   return apiCall('console.getConfig', p);
 };
 
-console.send = function(data, dataEncoding) {
+console.send = function(data) {
   var p = {};
-  p['data'] = SerialStudio._encode(data, dataEncoding);
+  p['data'] = data;
   return apiCall('console.send', p);
 };
 
@@ -532,37 +550,37 @@ consoleExport.setEnabled = function(enabled) {
   return apiCall('consoleExport.setEnabled', p);
 };
 
-controlscript.dryRun = function(code) {
+controlScript.dryRun = function(code) {
   var p = {};
   p['code'] = code;
-  return apiCall('controlscript.dryRun', p);
+  return apiCall('controlScript.dryRun', p);
 };
 
-controlscript.get = function() {
+controlScript.get = function() {
   var p = {};
-  return apiCall('controlscript.get', p);
+  return apiCall('controlScript.get', p);
 };
 
-controlscript.getCode = function() {
+controlScript.getCode = function() {
   var p = {};
-  return apiCall('controlscript.getCode', p);
+  return apiCall('controlScript.getCode', p);
 };
 
-controlscript.getStatus = function() {
+controlScript.getStatus = function() {
   var p = {};
-  return apiCall('controlscript.getStatus', p);
+  return apiCall('controlScript.getStatus', p);
 };
 
-controlscript.set = function(code) {
-  var p = {};
-  p['code'] = code;
-  return apiCall('controlscript.set', p);
-};
-
-controlscript.setCode = function(code) {
+controlScript.set = function(code) {
   var p = {};
   p['code'] = code;
-  return apiCall('controlscript.setCode', p);
+  return apiCall('controlScript.set', p);
+};
+
+controlScript.setCode = function(code) {
+  var p = {};
+  p['code'] = code;
+  return apiCall('controlScript.setCode', p);
 };
 
 csvExport.close = function() {
@@ -667,6 +685,11 @@ dashboard.tailFrames = function(options) {
   var p = {};
   if (options) for (var k in options) p[k] = options[k];
   return apiCall('dashboard.tailFrames', p);
+};
+
+dashboard.tick = function() {
+  var p = {};
+  return apiCall('dashboard.tick', p);
 };
 
 extensions.addRepository = function(url) {
@@ -2027,11 +2050,11 @@ project.workspace.add = function(options) {
   return apiCall('project.workspace.add', p);
 };
 
-project.workspace.addWidget = function(workspaceId, widgetType, groupId, options) {
+project.workspace.addWidget = function(workspaceId, groupId, widgetType, options) {
   var p = {};
   p['workspaceId'] = workspaceId;
-  p['widgetType'] = widgetType;
   p['groupId'] = groupId;
+  p['widgetType'] = widgetType;
   if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.workspace.addWidget', p);
 };

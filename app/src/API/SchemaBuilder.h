@@ -42,6 +42,7 @@ struct SchemaProp {
   QJsonValue defaultValue = {};
   QString itemsType       = {};
   QJsonObject itemsSchema = {};
+  bool binary             = false;
 };
 
 /**
@@ -102,6 +103,21 @@ struct SchemaProp {
 }
 
 /**
+ * @brief Build a SchemaProp for a binary payload the API expects as base64. The generated SDK
+ *        wrappers add a trailing encoding argument (SerialStudio.Hex / .Text / .Base64) for it,
+ *        so scripts pass hex or text and never hand-roll base64.
+ */
+[[nodiscard]] inline SchemaProp byteProp(QString name, QString description)
+{
+  SchemaProp p;
+  p.name        = std::move(name);
+  p.type        = QStringLiteral("string");
+  p.description = std::move(description);
+  p.binary      = true;
+  return p;
+}
+
+/**
  * @brief Build a SchemaProp constrained to a numeric range.
  */
 [[nodiscard]] inline SchemaProp rangeProp(QString name,
@@ -136,6 +152,9 @@ struct SchemaProp {
   }
 
   prop.insert(QStringLiteral("description"), p.description);
+  if (p.binary)
+    prop.insert(QStringLiteral("binary"), true);
+
   if (!p.enumValues.isEmpty())
     prop.insert(QStringLiteral("enum"), p.enumValues);
 

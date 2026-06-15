@@ -222,6 +222,16 @@ void API::Handlers::DashboardHandler::registerQueryCommands()
                    "dashboard reflects them while the device is silent."),
     emptySchema,
     &reprocess);
+
+  registry.registerCommand(
+    QStringLiteral("dashboard.tick"),
+    QStringLiteral("Force a dashboard render from the current table/dataset state, synthesizing "
+                   "the project frame structure if no device frame has arrived yet. Unlike "
+                   "dashboard.reprocess (which no-ops until a real frame exists), this lets a "
+                   "control script that only writes tables (tableSet()) render table-driven "
+                   "virtual datasets from the very first loop(). SDK: dashboardTick()."),
+    emptySchema,
+    &tick);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -523,6 +533,26 @@ API::CommandResponse API::Handlers::DashboardHandler::reprocess(const QString& i
   if (!published)
     result[QStringLiteral("_summary")] =
       QStringLiteral("Nothing to republish: requires ProjectFile mode and a loaded project.");
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Forces a dashboard render from the current state, seeding the frame structure if no
+ *        device frame has arrived; published:false means ProjectFile mode / a project is missing.
+ */
+API::CommandResponse API::Handlers::DashboardHandler::tick(const QString& id,
+                                                           const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  const bool published = DataModel::FrameBuilder::instance().dashboardTick();
+
+  QJsonObject result;
+  result[QStringLiteral("published")] = published;
+  if (!published)
+    result[QStringLiteral("_summary")] =
+      QStringLiteral("Nothing to render: requires ProjectFile mode and a loaded project.");
 
   return CommandResponse::makeSuccess(id, result);
 }

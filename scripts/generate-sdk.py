@@ -48,17 +48,14 @@ def read_prelude(path):
     return path.read_text(encoding="utf-8").rstrip() + "\n" if path.exists() else ""
 
 
-# Param names that carry a binary payload the API expects as base64. A wrapper
-# argument for one of these gets a trailing encoding argument (SerialStudio.Hex
-# / .Base64 / .Text) so users pass hex or text and never touch base64 directly.
-BYTE_PARAMS = {"data", "payload", "bytes"}
-
-
 def is_byte_param(name, prop):
-    """True when a string param should accept an encoding-tagged payload."""
-    if name not in BYTE_PARAMS:
-        return False
-    return prop.get("type", "string") == "string"
+    """True when a string param should accept an encoding-tagged payload.
+
+    Driven by an explicit "binary": true flag on the schema property (emitted by
+    SchemaBuilder's byteProp), NOT by the parameter name -- name-based guessing
+    wrongly wrapped text params like console.send's `data` in base64.
+    """
+    return bool(prop.get("binary")) and prop.get("type", "string") == "string"
 
 
 def ordered_params(cmd):
@@ -146,6 +143,27 @@ def emit_js(commands):
     lines.append(
         "function delay(ms)               { if (__ss_bridge.delay) __ss_bridge.delay(ms); }"
     )
+    lines.append(
+        "// deviceWriteAndWait(data, timeoutMs, until, source): write then block the worker"
+    )
+    lines.append(
+        "// (never the GUI) until the reply satisfies `until` -- a terminator string, an"
+    )
+    lines.append(
+        "// expected byte length (number), or undefined for the first non-empty reply --"
+    )
+    lines.append(
+        "// or timeoutMs elapses. source defaults to 0. Mirrors deviceWrite's data-first"
+    )
+    lines.append("// shape. Returns { ok, data, bytesRead, timedOut }.")
+    lines.append("function deviceWriteAndWait(data, timeoutMs, until, source) {")
+    lines.append(
+        "  if (!__ss_bridge.writeAndWait) return { ok: false, error: 'unsupported here' };"
+    )
+    lines.append(
+        "  return __ss_bridge.writeAndWait(data, timeoutMs | 0, until, source | 0);"
+    )
+    lines.append("}")
     lines.append("")
 
     # Hand-maintained bridge glue (tableGet, dashboard control, deviceWrite, ...).
@@ -386,6 +404,7 @@ def collect_symbols(commands):
             "apiCall",
             "apiCallList",
             "delay",
+            "deviceWriteAndWait",
         ]
     )
 

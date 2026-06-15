@@ -47,6 +47,11 @@ public:
   explicit ControlApiMarshaller(QObject* parent = nullptr);
 
   Q_INVOKABLE [[nodiscard]] QVariantMap dispatch(const QString& method, const QVariantMap& params);
+  Q_INVOKABLE [[nodiscard]] qint64 writeAndArm(int sourceId, const QByteArray& data);
+  Q_INVOKABLE [[nodiscard]] QByteArray pollReply(int sourceId);
+
+public slots:
+  void disarmReply(int sourceId);
 };
 
 /**
@@ -64,6 +69,10 @@ public:
 
   Q_INVOKABLE [[nodiscard]] QVariantMap call(const QString& method, const QVariantMap& params);
   Q_INVOKABLE [[nodiscard]] QVariantList listCommands();
+  Q_INVOKABLE [[nodiscard]] QVariantMap writeAndWait(const QJSValue& data,
+                                                     int timeoutMs,
+                                                     const QJSValue& until,
+                                                     int sourceId);
 
 public slots:
   void delay(int milliseconds);

@@ -67,7 +67,7 @@ assistant.script = assistant.script or {}
 assistant.workspace = assistant.workspace or {}
 console = console or {}
 consoleExport = consoleExport or {}
-controlscript = controlscript or {}
+controlScript = controlScript or {}
 csvExport = csvExport or {}
 csvPlayer = csvPlayer or {}
 dashboard = dashboard or {}
@@ -194,9 +194,9 @@ function console.getConfig()
   return apiCall('console.getConfig', p)
 end
 
-function console.send(data, data_encoding)
+function console.send(data)
   local p = {}
-  p['data'] = SerialStudio._encode(data, data_encoding)
+  p['data'] = data
   return apiCall('console.send', p)
 end
 
@@ -282,37 +282,37 @@ function consoleExport.setEnabled(enabled)
   return apiCall('consoleExport.setEnabled', p)
 end
 
-function controlscript.dryRun(code)
+function controlScript.dryRun(code)
   local p = {}
   p['code'] = code
-  return apiCall('controlscript.dryRun', p)
+  return apiCall('controlScript.dryRun', p)
 end
 
-function controlscript.get()
+function controlScript.get()
   local p = {}
-  return apiCall('controlscript.get', p)
+  return apiCall('controlScript.get', p)
 end
 
-function controlscript.getCode()
+function controlScript.getCode()
   local p = {}
-  return apiCall('controlscript.getCode', p)
+  return apiCall('controlScript.getCode', p)
 end
 
-function controlscript.getStatus()
+function controlScript.getStatus()
   local p = {}
-  return apiCall('controlscript.getStatus', p)
+  return apiCall('controlScript.getStatus', p)
 end
 
-function controlscript.set(code)
-  local p = {}
-  p['code'] = code
-  return apiCall('controlscript.set', p)
-end
-
-function controlscript.setCode(code)
+function controlScript.set(code)
   local p = {}
   p['code'] = code
-  return apiCall('controlscript.setCode', p)
+  return apiCall('controlScript.set', p)
+end
+
+function controlScript.setCode(code)
+  local p = {}
+  p['code'] = code
+  return apiCall('controlScript.setCode', p)
 end
 
 function csvExport.close()
@@ -417,6 +417,11 @@ function dashboard.tailFrames(options)
   local p = {}
   if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('dashboard.tailFrames', p)
+end
+
+function dashboard.tick()
+  local p = {}
+  return apiCall('dashboard.tick', p)
 end
 
 function extensions.addRepository(url)
@@ -1777,11 +1782,11 @@ function project.workspace.add(options)
   return apiCall('project.workspace.add', p)
 end
 
-function project.workspace.addWidget(workspaceId, widgetType, groupId, options)
+function project.workspace.addWidget(workspaceId, groupId, widgetType, options)
   local p = {}
   p['workspaceId'] = workspaceId
-  p['widgetType'] = widgetType
   p['groupId'] = groupId
+  p['widgetType'] = widgetType
   if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.workspace.addWidget', p)
 end

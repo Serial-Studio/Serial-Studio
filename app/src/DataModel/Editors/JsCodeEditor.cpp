@@ -297,7 +297,7 @@ bool DataModel::JsCodeEditor::isModified() const noexcept
 bool DataModel::JsCodeEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
-    return isModified() && m_widget.document()->isUndoAvailable();
+    return m_widget.document()->isUndoAvailable();
 
   return false;
 }
@@ -308,7 +308,7 @@ bool DataModel::JsCodeEditor::undoAvailable() const noexcept
 bool DataModel::JsCodeEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
-    return isModified() && m_widget.document()->isRedoAvailable();
+    return m_widget.document()->isRedoAvailable();
 
   return false;
 }

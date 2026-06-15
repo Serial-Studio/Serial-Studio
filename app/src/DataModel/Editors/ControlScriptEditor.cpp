@@ -104,7 +104,9 @@ DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
     if (editor.currentView() != DataModel::ProjectEditor::ControlScriptView)
       return;
 
+    m_readingCode = true;
     DataModel::ProjectModel::instance().setControlScriptCode(text());
+    m_readingCode = false;
   });
 
   connect(&DataModel::ProjectModel::instance(),
@@ -153,7 +155,7 @@ bool DataModel::ControlScriptEditor::isModified() const noexcept
 bool DataModel::ControlScriptEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
-    return isModified() && m_widget.document()->isUndoAvailable();
+    return m_widget.document()->isUndoAvailable();
 
   return false;
 }
@@ -164,7 +166,7 @@ bool DataModel::ControlScriptEditor::undoAvailable() const noexcept
 bool DataModel::ControlScriptEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
-    return isModified() && m_widget.document()->isRedoAvailable();
+    return m_widget.document()->isRedoAvailable();
 
   return false;
 }

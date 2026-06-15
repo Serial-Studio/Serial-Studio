@@ -39,7 +39,7 @@ io.ble.writeCharacteristic("fff1", "5600030C", SerialStudio.Hex);
 Rules of the SDK:
 
 - Commands are dotted namespaces: `io.writeData(...)`, `io.ble.writeCharacteristic(...)`,
-  `controlscript.getStatus()`, etc.
+  `controlScript.getStatus()`, etc.
 - Required parameters are positional, in the order the command declares them.
 - Optional parameters go in a trailing `{ }` object.
 - Byte-payload parameters (`data`) take a trailing **encoding** argument:
@@ -189,20 +189,20 @@ function loop() {
 
 ## Managing the control script from the API
 
-The `controlscript.*` commands let tools and other scripts inspect, validate,
+The `controlScript.*` commands let tools and other scripts inspect, validate,
 and replace the script:
 
-- `controlscript.get` / `controlscript.getCode` -> `{ code }`: the current
+- `controlScript.get` / `controlScript.getCode` -> `{ code }`: the current
   script source (aliases; `getCode` matches the `project.frameParser.getCode`
   naming convention).
-- `controlscript.dryRun { code }` -> `{ valid, hasSetup, hasLoop, error?,
+- `controlScript.dryRun { code }` -> `{ valid, hasSetup, hasLoop, error?,
   line? }`: compile-check WITHOUT installing or running anything. Syntax errors
   come back with line numbers; `setup()`/`loop()` never execute and
   `apiCall`/`tableSet` have no effect. **Always dry-run before set.**
-- `controlscript.set { code }` / `controlscript.setCode { code }`: replace the
+- `controlScript.set { code }` / `controlScript.setCode { code }`: replace the
   script (aliases). It is persisted in the project and applied live; if a
   device is connected it recompiles and restarts.
-- `controlscript.getStatus` -> `{ running }`: whether the script is running now.
+- `controlScript.getStatus` -> `{ running }`: whether the script is running now.
 
 For the focused runtime reference (all injectable globals, lifecycle rules,
 the connect-cycle-safe watchdog), fetch

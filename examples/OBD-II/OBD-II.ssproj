@@ -1,0 +1,408 @@
+{
+    "actions": [
+    ],
+    "controlScriptCode": "/**\n * OBD-II Poller Control Script (works with any OBD-II compliant vehicle)\n *\n * Talks to an ELM327-compatible adapter (e.g. OBDLink EX) plugged in as a\n * UART/serial source. setup() initializes the adapter once; loop() polls a\n * round-robin of mandatory Mode-01 PIDs: engine RPM (010C), vehicle speed\n * (010D), coolant temp (0105), calculated engine load (0104), intake air temp\n * (010F) and throttle position (0111), plus the adapter's own battery-voltage\n * reading (AT RV). Every request uses deviceWriteAndWait() to send and block\n * (on the worker thread, never the UI) until the ELM327 \">\" prompt marks the\n * end of the reply.\n *\n * No vehicle-specific tuning is required, but OBD-II does not require a car to\n * support every PID: the core three (RPM, speed, coolant) answer on essentially\n * any car, while load, intake air temp and throttle are common but not\n * universal. AT RV always works (the adapter measures it). For an unsupported\n * PID the adapter returns \"NO DATA\", dataBytes() comes back empty, the byte\n * count falls short of the job's required `bytes` and the tableSet() is\n * skipped, so that gauge reads \"No data\" and the others keep working.\n *\n * The reply is decoded right here and written into the \"OBD\" data table with\n * tableSet(). dashboardTick() then forces the gauges (virtual datasets whose\n * transforms read the table) to render. Nothing needs a frame parser, and\n * the dashboard updates even though the adapter only speaks when spoken to.\n *\n * ELM327 protocol reference (commands are ASCII hex + CR, replies are ASCII\n * hex text terminated by the \">\" prompt): see the ELM327 datasheet at\n * https://cdn.sparkfun.com/assets/learn_tutorials/8/3/ELM327DS.pdf\n */\n\n//------------------------------------------------------------------------------\n// Configuration & constants\n//------------------------------------------------------------------------------\n\n// Round-robin list of {register, pid, bytes, decode} jobs.\n//   reg    - column written in the \"OBD\" table\n//   pid    - Mode-01 request, ASCII hex (the adapter wants this + CR)\n//   bytes  - minimum data bytes the decode needs; a shorter reply is skipped\n//   decode - turns the data bytes into the engineering value\nconst JOBS = [{\n        reg: \"rpm\",\n        pid: \"010C\",\n        bytes: 2,\n        decode: function(b) {\n            return (b[0] * 256 + b[1]) / 4;\n        }\n    },\n    {\n        reg: \"speed\",\n        pid: \"010D\",\n        bytes: 1,\n        decode: function(b) {\n            return b[0];\n        }\n    },\n    {\n        reg: \"coolant\",\n        pid: \"0105\",\n        bytes: 1,\n        decode: function(b) {\n            return b[0] - 40;\n        }\n    },\n    {\n        reg: \"load\",\n        pid: \"0104\",\n        bytes: 1,\n        decode: function(b) {\n            return (b[0] * 100) / 255;\n        }\n    },\n    {\n        reg: \"intake\",\n        pid: \"010F\",\n        bytes: 1,\n        decode: function(b) {\n            return b[0] - 40;\n        }\n    },\n    {\n        reg: \"throttle\",\n        pid: \"0111\",\n        bytes: 1,\n        decode: function(b) {\n            return (b[0] * 100) / 255;\n        }\n    }\n];\n\n// Mode-01 positive responses echo the request mode + 0x40, i.e. \"41\" + pid.\nconst MODE01_REPLY_PREFIX = \"41\";\n\n// ELM327 ends every reply with this prompt character.\nconst PROMPT = \">\";\n\n// Per-request reply budget. A Mode-01 PID answers well under 200 ms.\nconst REPLY_TIMEOUT_MS = 250;\n\n// Source the adapter is connected to. 0 is the primary device.\nconst ADAPTER_SOURCE = 0;\n\n// One AT RV (battery voltage) read every this many PID polls.\nconst VOLTAGE_EVERY = 6;\n\n// Wrap pollCount here so it never grows unbounded.\nconst POLL_COUNT_WRAP = 1000000;\n\n// Idle between polls so the worker thread yields. Milliseconds.\nconst LOOP_DELAY_MS = 20;\n\n//------------------------------------------------------------------------------\n// Mutable state\n//------------------------------------------------------------------------------\n\nlet jobIndex = 0;\nlet pollCount = 0;\n\n//------------------------------------------------------------------------------\n// ELM327 I/O\n//------------------------------------------------------------------------------\n\n/**\n * @brief Sends one command and returns the ELM327 reply text (without the\n *        prompt), or \"\" on timeout. Waits for the \">\" prompt terminator.\n */\nfunction ask(cmd, timeoutMs) {\n    const r = deviceWriteAndWait(cmd + \"\\r\", timeoutMs, PROMPT, ADAPTER_SOURCE);\n    return (r && r.ok) ? r.data : \"\";\n}\n\n//------------------------------------------------------------------------------\n// Reply parsing\n//------------------------------------------------------------------------------\n\n/**\n * @brief Parses an ELM327 reply (\"410C1AF8\") into its data bytes after the\n *        mode+pid header. Returns [] for \"NO DATA\" / \"SEARCHING...\" / noise.\n *        `pid` is the bare two-byte PID, e.g. \"0C\" for request \"010C\".\n */\nfunction dataBytes(reply, pid) {\n    const clean = reply.replace(/[^0-9A-Fa-f]/g, \"\").toUpperCase();\n    const head = MODE01_REPLY_PREFIX + pid;\n    const at = clean.indexOf(head);\n    if (at < 0)\n        return [];\n\n    const body = clean.substr(at + head.length);\n    const bytes = [];\n    for (let i = 0; i + 1 < body.length; i += 2)\n        bytes.push(parseInt(body.substr(i, 2), 16));\n\n    return bytes;\n}\n\n/**\n * @brief Parses an AT RV reply (\"12.6V\") into a number, or NaN when the adapter\n *        returns no usable voltage. AT RV has no 41xx header; it is not a PID.\n */\nfunction voltsFromReply(reply) {\n    const m = reply.match(/-?\\d+(\\.\\d+)?/);\n    return m ? parseFloat(m[0]) : NaN;\n}\n\n//------------------------------------------------------------------------------\n// Lifecycle: setup\n//------------------------------------------------------------------------------\n\n/**\n * @brief One-time adapter initialization: reset, disable echo/linefeeds/spaces\n *        so replies are compact, and select automatic protocol detection so the\n *        same script works on CAN, ISO and PWM vehicles alike.\n */\nfunction setup() {\n    ask(\"ATZ\", 1500);  // reset (slow; adapter reboots)\n    ask(\"ATE0\", 400);  // echo off\n    ask(\"ATL0\", 400);  // linefeeds off\n    ask(\"ATS0\", 400);  // spaces off\n    ask(\"ATSP0\", 400); // protocol = auto\n    notifyInfo(\"OBD-II\", \"Adapter initialized; polling engine telemetry.\");\n}\n\n//------------------------------------------------------------------------------\n// Lifecycle: loop\n//------------------------------------------------------------------------------\n\n/**\n * @brief Polls the next PID, decodes the reply and writes the \"OBD\" table.\n *        Every VOLTAGE_EVERY polls it also reads battery voltage via AT RV.\n *        Ticks the dashboard so the gauges render the fresh values.\n */\nfunction loop() {\n    const job = JOBS[jobIndex];\n    jobIndex = (jobIndex + 1) % JOBS.length;\n\n    const b = dataBytes(ask(job.pid, REPLY_TIMEOUT_MS), job.pid.substr(2));\n    if (b.length >= job.bytes)\n        tableSet(\"OBD\", job.reg, job.decode(b));\n\n    if ((pollCount % VOLTAGE_EVERY) === 0) {\n        const v = voltsFromReply(ask(\"ATRV\", REPLY_TIMEOUT_MS));\n        if (!isNaN(v))\n            tableSet(\"OBD\", \"voltage\", v);\n    }\n\n    pollCount = (pollCount + 1) % POLL_COUNT_WRAP;\n    dashboardTick();\n    delay(LOOP_DELAY_MS);\n}",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarmBands": [
+                        {
+                            "label": "High",
+                            "max": 7000,
+                            "min": 6000,
+                            "severity": 2
+                        },
+                        {
+                            "label": "Critical",
+                            "max": 8000,
+                            "min": 7000,
+                            "severity": 3
+                        }
+                    ],
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 17,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 8000,
+                    "plotMin": 0,
+                    "title": "Engine RPM",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"rpm\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 1,
+                    "units": "rpm",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 8000,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "alarmBands": [
+                        {
+                            "label": "High",
+                            "max": 200,
+                            "min": 120,
+                            "severity": 2
+                        },
+                        {
+                            "label": "Excessive",
+                            "max": 240,
+                            "min": 200,
+                            "severity": 3
+                        }
+                    ],
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 240,
+                    "plotMin": 0,
+                    "title": "Vehicle Speed",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"speed\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 2,
+                    "units": "km/h",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "meter",
+                    "widgetMax": 240,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "alarmBands": [
+                        {
+                            "label": "Cold",
+                            "max": 80,
+                            "min": -40,
+                            "severity": 0
+                        },
+                        {
+                            "label": "Normal",
+                            "max": 100,
+                            "min": 80,
+                            "severity": 1
+                        },
+                        {
+                            "label": "Warm",
+                            "max": 120,
+                            "min": 100,
+                            "severity": 2
+                        },
+                        {
+                            "label": "Overheat",
+                            "max": 150,
+                            "min": 120,
+                            "severity": 3
+                        }
+                    ],
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 20,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 150,
+                    "plotMin": -40,
+                    "title": "Coolant Temp",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"coolant\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 3,
+                    "units": "°C",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 150,
+                    "widgetMin": -40,
+                    "xAxis": -2
+                },
+                {
+                    "alarmBands": [
+                        {
+                            "label": "High",
+                            "max": 100,
+                            "min": 85,
+                            "severity": 2
+                        }
+                    ],
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Engine Load",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"load\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 5,
+                    "units": "%",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Throttle",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"throttle\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 6,
+                    "units": "%",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "alarmBands": [
+                        {
+                            "label": "Hot",
+                            "max": 80,
+                            "min": 60,
+                            "severity": 2
+                        }
+                    ],
+                    "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 13,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 80,
+                    "plotMin": -40,
+                    "title": "Intake Air Temp",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"intake\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 7,
+                    "units": "°C",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "bar",
+                    "widgetMax": 80,
+                    "widgetMin": -40,
+                    "xAxis": -2
+                },
+                {
+                    "alarmBands": [
+                        {
+                            "label": "Low",
+                            "max": 11.8,
+                            "min": 8,
+                            "severity": 2
+                        },
+                        {
+                            "label": "High",
+                            "max": 16,
+                            "min": 15,
+                            "severity": 2
+                        }
+                    ],
+                    "datasetId": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 17,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 7,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 16,
+                    "plotMin": 8,
+                    "title": "Battery Voltage",
+                    "transformCode": "function transform(value)\n  local v = tableGet(\"OBD\", \"voltage\")\n  if v == nil then\n    return \"No data\"\n  end\n  return v\nend\n",
+                    "transformLanguage": 1,
+                    "uniqueId": 8,
+                    "units": "V",
+                    "value": "",
+                    "virtual": true,
+                    "widget": "gauge",
+                    "widgetMax": 16,
+                    "widgetMin": 8,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Engine",
+            "uniqueId": 0,
+            "widget": "datagrid"
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 9,
+    "plotTimeRange": 10,
+    "pointCount": 100,
+    "schemaVersion": 3,
+    "sources": [
+        {
+            "busType": 0,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "autoReconnect": true,
+                "baudRate": 38400,
+                "dataBitsIndex": 3,
+                "deviceId": {
+                    "portName": "cu.Bluetooth-Incoming-Port"
+                },
+                "dtr": true,
+                "flowControlIndex": 0,
+                "parityIndex": 0,
+                "portIndex": 2,
+                "stopBitsIndex": 0
+            },
+            "decoder": 0,
+            "decoderMethod": 0,
+            "frameDetection": 2,
+            "frameEnd": ">",
+            "frameParserCode": "/**\n * Dummy parser: the OBD-II control script decodes replies inline and writes\n * the \"OBD\" data table itself, so this source needs no real parsing. It just\n * returns an empty frame; the dashboard renders from the table via virtual\n * dataset transforms. See the control script for the actual decode logic.\n */\nfunction parse(frame) {\n  return [];\n}",
+            "frameStart": "",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "OBD-II Adapter"
+        }
+    ],
+    "tables": [
+        {
+            "name": "OBD",
+            "registers": [
+                {
+                    "name": "rpm",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "speed",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "coolant",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "load",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "intake",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "throttle",
+                    "type": "computed",
+                    "value": 0
+                },
+                {
+                    "name": "voltage",
+                    "type": "computed",
+                    "value": 0
+                }
+            ]
+        }
+    ],
+    "title": "OBD-II Vehicle Telemetry",
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.3.0"
+}

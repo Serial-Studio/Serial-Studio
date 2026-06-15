@@ -53,46 +53,46 @@ void API::Handlers::ControlScriptHandler::registerCommands()
   });
 
   registry.registerCommand(
-    QStringLiteral("controlscript.get"),
+    QStringLiteral("controlScript.get"),
     QStringLiteral("Get the project's setup()/loop() control script source code."),
     empty,
     &getScript);
 
   registry.registerCommand(
-    QStringLiteral("controlscript.getCode"),
-    QStringLiteral("Get the control script source (alias of controlscript.get; matches the "
+    QStringLiteral("controlScript.getCode"),
+    QStringLiteral("Get the control script source (alias of controlScript.get; matches the "
                    "project.frameParser.getCode naming convention)."),
     empty,
     &getScript);
 
   registry.registerCommand(
-    QStringLiteral("controlscript.set"),
+    QStringLiteral("controlScript.set"),
     QStringLiteral("Replace the project's control script source (params: code). The script is "
                    "persisted in the project and applied to the live runtime; if a device is "
                    "connected it is recompiled and restarted immediately. Validate first with "
-                   "controlscript.dryRun."),
+                   "controlScript.dryRun."),
     codeSchema,
     &setScript);
 
   registry.registerCommand(
-    QStringLiteral("controlscript.setCode"),
-    QStringLiteral("Replace the control script source (alias of controlscript.set; params: "
+    QStringLiteral("controlScript.setCode"),
+    QStringLiteral("Replace the control script source (alias of controlScript.set; params: "
                    "code; matches the project.frameParser.setCode naming convention)."),
     codeSchema,
     &setScript);
 
   registry.registerCommand(
-    QStringLiteral("controlscript.dryRun"),
+    QStringLiteral("controlScript.dryRun"),
     QStringLiteral("Validate control-script source WITHOUT installing or running it (params: "
                    "code). Compiles the script in a sandboxed engine with the SDK prelude, "
                    "reports syntax errors with line numbers, and checks that setup() and/or "
                    "loop() are defined. setup()/loop() are never executed and apiCall/tableSet "
-                   "have no effect. Use before controlscript.set."),
+                   "have no effect. Use before controlScript.set."),
     codeSchema,
     &dryRun);
 
   registry.registerCommand(
-    QStringLiteral("controlscript.getStatus"),
+    QStringLiteral("controlScript.getStatus"),
     QStringLiteral("Returns whether the control script is currently running."),
     empty,
     &getStatus);
@@ -171,7 +171,7 @@ API::CommandResponse API::Handlers::ControlScriptHandler::dryRun(const QString& 
   QJSEngine engine;
   engine.installExtensions(QJSEngine::ConsoleExtension);
   DataModel::JsWatchdog watchdog(
-    &engine, kDryRunWatchdogMs, QStringLiteral("controlscript.dryRun"));
+    &engine, kDryRunWatchdogMs, QStringLiteral("controlScript.dryRun"));
 
   engine.evaluate(
     QStringLiteral("var __ss_bridge = { call: function() { return { ok: false, error: 'dryRun' "
