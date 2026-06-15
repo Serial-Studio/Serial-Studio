@@ -49,6 +49,16 @@ Dependencies:
   pip install opencv-python numpy
 """
 
+import sys
+
+# Force UTF-8 console output: Windows defaults to cp1252, which cannot encode
+# the Unicode characters this script prints (e.g. arrows / check marks).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+
 import argparse
 import io
 import math
@@ -56,7 +66,6 @@ import os
 import random
 import socket
 import struct
-import sys
 import threading
 import time
 import urllib.request

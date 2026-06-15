@@ -6,9 +6,18 @@ Sends a systematic ANSI/VT-100 color test suite via UDP to localhost:9000.
 Use this to verify color rendering in the Serial Studio terminal view.
 """
 
+import sys
+
+# Force UTF-8 console output: Windows defaults to cp1252, which cannot encode
+# the Unicode characters this script prints (e.g. arrows / check marks).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+
 import math
 import socket
-import sys
 import time
 
 HOST = "127.0.0.1"

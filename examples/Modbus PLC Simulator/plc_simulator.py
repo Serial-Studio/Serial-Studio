@@ -28,11 +28,20 @@ Usage: python plc_simulator.py
 Requires: pip install pymodbus
 """
 
+import sys
+
+# Force UTF-8 console output: Windows defaults to cp1252, which cannot encode
+# the Unicode characters this script prints (e.g. arrows / check marks).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+
 import asyncio
 import random
 import math
 import logging
-import sys
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S"

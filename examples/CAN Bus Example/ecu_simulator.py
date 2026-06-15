@@ -17,6 +17,7 @@ automotive data over the virtual CAN bus.
 """
 
 import can
+import sys
 import time
 import struct
 import math
@@ -27,6 +28,14 @@ from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional
 from enum import IntEnum
 import argparse
+
+# Force UTF-8 console output: Windows defaults to cp1252, which cannot encode
+# the Unicode characters (e.g. the arrow used in the setup hints below).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
 
 # =============================================================================
 # CAN ID Definitions (Standard 11-bit IDs)
