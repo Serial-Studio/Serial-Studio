@@ -217,10 +217,10 @@ Widgets.Pane {
   //
   Item {
     anchors.fill: parent
-    anchors.leftMargin: zeroBottom ? -14 : -9
-    anchors.rightMargin: zeroBottom ? -14 : -9
-    anchors.bottomMargin: zeroBottom ? -14 : -9
-    anchors.topMargin: headerVisible || zeroBottom ? -15 : -9
+    anchors.leftMargin: (zeroBottom ? -14 : -9)
+    anchors.rightMargin: (zeroBottom ? -14 : -9)
+    anchors.bottomMargin: (zeroBottom ? -14 : -9)
+    anchors.topMargin: (headerVisible || zeroBottom ? -15 : -9)
 
     //
     // Default background
@@ -277,9 +277,9 @@ Widgets.Pane {
         }
 
         Label {
-          anchors.centerIn: parent
-          anchors.verticalCenterOffset: -2
           text: mainWindow.title
+          anchors.centerIn: parent
+          anchors.verticalCenterOffset: -4
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
         }
