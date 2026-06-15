@@ -107,6 +107,7 @@ inline constexpr KeyView AlarmLow("alarmLow");
 inline constexpr KeyView AlarmHigh("alarmHigh");
 inline constexpr KeyView DisplayTickCount("displayTickCount");
 inline constexpr KeyView DisplayFormat("displayFormat");
+inline constexpr KeyView DecimalPoints("decimalPoints");
 inline constexpr KeyView FFTSamples("fftSamples");
 inline constexpr KeyView Overview("overviewDisplay");
 inline constexpr KeyView AlarmEnabled("alarmEnabled");
@@ -402,12 +403,13 @@ struct alignas(8) Dataset {
   double numericValue   = 0;      ///< Parsed numeric value after transforms
   double rawNumericValue = 0;     ///< Parsed numeric value before transforms
   int displayTickCount   = 5;     ///< Preferred major-tick count on analog widgets (0 = auto)
-  QString value;                  ///< Raw string value after transforms
-  QString rawValue;               ///< Raw string value before transforms
-  QString title;                  ///< Human-readable title
-  QString units;                  ///< Measurement units (e.g., degC)
-  QString widget;                 ///< Widget type (bar, gauge, etc.)
-  QString transformCode;          ///< Optional per-dataset transform script
+  int decimalPoints = -1;  ///< Fixed value-display decimals; overrides displayFormat (-1 = auto)
+  QString value;           ///< Raw string value after transforms
+  QString rawValue;        ///< Raw string value before transforms
+  QString title;           ///< Human-readable title
+  QString units;           ///< Measurement units (e.g., degC)
+  QString widget;          ///< Widget type (bar, gauge, etc.)
+  QString transformCode;   ///< Optional per-dataset transform script
   QString displayFormat =
     QStringLiteral("0d");  ///< Tick/value label format on analog widgets ("0d" = integer)
   std::vector<AlarmBand> alarmBands;  ///< Colour-banded alarm zones (empty = no alarms)
@@ -956,6 +958,9 @@ void read_io_settings(QByteArray& frameStart,
 
   if (!d.displayFormat.isEmpty())
     obj.insert(Keys::DisplayFormat, d.displayFormat);
+
+  if (d.decimalPoints >= 0)
+    obj.insert(Keys::DecimalPoints, d.decimalPoints);
 
   obj.insert(Keys::GroupId, d.groupId);
   obj.insert(Keys::DatasetId, d.datasetId);

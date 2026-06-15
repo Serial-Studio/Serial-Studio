@@ -26,11 +26,14 @@
 //
 
 //
-// Formats a value honoring the dataset displayFormat ("auto", "0d".."3d", "sci",
-// printf-style "%.Nf" / "%.Ne"); anything else falls back to the dashboard's
-// range-driven formatter.
+// Formats a value. A dataset decimalPoints >= 0 wins (fixed places); otherwise the
+// displayFormat is honored ("auto", "0d".."3d", "sci", printf-style "%.Nf" / "%.Ne"),
+// and anything else falls back to the dashboard's range-driven formatter.
 //
 function formatValue(model, val) {
+  if (model.decimalPoints >= 0)
+    return val.toFixed(model.decimalPoints)
+
   const fmt = model.displayFormat
   if (!fmt || fmt === "" || fmt === "auto")
     return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
@@ -60,9 +63,13 @@ function formatTickValue(model, val) {
 }
 
 //
-// Range-driven precision, left-padded for stable digital-box width (matches VisualRange).
+// Left-padded for stable digital-box width (matches VisualRange). A dataset decimalPoints
+// >= 0 forces fixed places; otherwise precision is range-driven.
 //
 function getPaddedText(model, val) {
+  if (model.decimalPoints >= 0)
+    return getPaddedFormattedText(model, val)
+
   const a = Cpp_UI_Dashboard.formatValue(model.minValue, model.minValue, model.maxValue)
   const b = Cpp_UI_Dashboard.formatValue(model.maxValue, model.minValue, model.maxValue)
   const v = Cpp_UI_Dashboard.formatValue(val,            model.minValue, model.maxValue)

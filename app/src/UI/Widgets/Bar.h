@@ -93,6 +93,9 @@ class Bar : public QQuickItem {
   Q_PROPERTY(QString displayFormat
              READ displayFormat
              CONSTANT)
+  Q_PROPERTY(int decimalPoints
+             READ decimalPoints
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -112,6 +115,7 @@ public:
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& displayFormat() const noexcept;
+  [[nodiscard]] int decimalPoints() const noexcept;
 
   [[nodiscard]] double value() const noexcept;
   [[nodiscard]] double minValue() const noexcept;
@@ -142,6 +146,7 @@ protected:
 
   int m_index;
   int m_displayTickCount;
+  int m_decimalPoints;
   QString m_title;
   QString m_units;
   QString m_displayFormat;

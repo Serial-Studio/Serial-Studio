@@ -635,7 +635,7 @@ ColumnLayout {
             opacity: autoIntFieldLoader.modelActive ? 1 : 0.5
 
             textFromValue: function(value, locale) {
-              if (value === 0)
+              if (value === autoIntFieldLoader.modelMin)
                 return autoIntFieldLoader.modelPlaceholder ?? qsTr("Auto")
 
               return Number(value).toLocaleString(locale, 'f', 0)
@@ -644,7 +644,7 @@ ColumnLayout {
             valueFromText: function(text, locale) {
               const auto = autoIntFieldLoader.modelPlaceholder ?? qsTr("Auto")
               if (text === auto || text === "" || text.toLowerCase() === "auto")
-                return 0
+                return autoIntFieldLoader.modelMin
 
               try {
                 const n = Number.fromLocaleString(locale, text)

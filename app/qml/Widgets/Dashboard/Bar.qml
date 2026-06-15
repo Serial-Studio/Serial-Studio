@@ -632,8 +632,8 @@ Item {
         font.pixelSize: 100
         font.family: Cpp_Misc_CommonFonts.monoFont.family
         text: {
-          const a = Cpp_UI_Dashboard.formatValue(root.model.minValue, root.model.minValue, root.model.maxValue)
-          const b = Cpp_UI_Dashboard.formatValue(root.model.maxValue, root.model.minValue, root.model.maxValue)
+          const a = root.formatValue(root.model.minValue)
+          const b = root.formatValue(root.model.maxValue)
           const longer = a.length >= b.length ? a : b
           return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
         }

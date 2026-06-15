@@ -269,6 +269,7 @@ bool DataModel::read(Dataset& d, const QJsonObject& obj)
   d.fftSamplingRate   = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
   d.displayTickCount  = ss_jsr(obj, Keys::DisplayTickCount, 5).toInt();
   d.displayFormat     = ss_jsr(obj, Keys::DisplayFormat, "0d").toString();
+  d.decimalPoints     = ss_jsr(obj, Keys::DecimalPoints, -1).toInt();
   d.sourceId          = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
   d.transformCode     = obj.value(Keys::TransformCode).toString();
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();

@@ -51,6 +51,9 @@ class Compass : public QQuickItem {
   Q_PROPERTY(QString displayFormat
              READ displayFormat
              CONSTANT)
+  Q_PROPERTY(int decimalPoints
+             READ decimalPoints
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -66,6 +69,7 @@ public:
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& displayFormat() const noexcept;
+  [[nodiscard]] int decimalPoints() const noexcept;
 
 private slots:
   void updateData();
@@ -74,6 +78,7 @@ private:
   [[nodiscard]] QString cardinalDirection(double angle) const;
 
   int m_index;
+  int m_decimalPoints;
   double m_value;
   QString m_title;
   QString m_units;

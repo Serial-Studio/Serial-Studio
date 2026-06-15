@@ -298,6 +298,43 @@ underlying plot Y-axis at −50…+50 (`pltMin`/`pltMax`): set both. See
 the `dashboard_layout` skill for which widget needs which pair, the
 verify-after-update rule, and full recipes.
 
+### Value formatting: `displayFormat` vs `decimalPoints`
+
+Two dataset fields shape **how a numeric value is rendered** — neither
+changes the stored value or what transforms compute. They overlap and
+are easy to confuse. Both use their FULL key name on read AND write (no
+abbreviation footgun like min/max).
+
+| Field           | Type / default | Accepts                                                        | Affects                                                                 |
+|-----------------|----------------|---------------------------------------------------------------|------------------------------------------------------------------------|
+| `displayFormat` | string, `"0d"` | `"auto"`, `"0d"`..`"3d"`, `"sci"`, printf `"%.Nf"` / `"%.Ne"` | Tick labels **and** the digital value on analog widgets (Bar/Gauge/Meter). Ignored by the DataGrid. |
+| `decimalPoints` | int, `-1`      | `-1` (auto) or `0`..`15` fixed places                          | The DataGrid value column; and when `>= 0` it **overrides** `displayFormat` on the Bar/Gauge/Meter value and tick labels too. |
+
+`displayFormat` is the richer **tick/label notation** control: precision
+*or* notation, scoped to the analog widgets. `"auto"` defers to the
+dashboard's range-driven formatter; `"0d"`..`"3d"` force 0–3 fixed
+places; `"sci"` is scientific with 2 places; printf `"%.Nf"` / `"%.Ne"`
+take an explicit precision. The DataGrid does **not** read it.
+
+`decimalPoints` is the plain **fixed-decimal-places** override. Its
+primary home is the DataGrid value column (`-1` = auto, range-driven).
+But when set `>= 0` it also wins over `displayFormat` on the analog
+widgets — exact fixed places on the digital readout, the same places
+with trailing zeros trimmed on tick labels. `-1` hands formatting back
+to `displayFormat` (analog) / the range-driven default (DataGrid).
+
+**The difference in one line:** `displayFormat` = how analog *ticks and
+value* are styled (supports scientific/printf, DataGrid ignores it);
+`decimalPoints` = a fixed-places override that drives the *DataGrid*
+column and, when set, supersedes `displayFormat` everywhere. So: a
+gauge whose tick labels should read `1.5k`-style auto but whose big
+number wants exactly 3 places → leave `displayFormat: "auto"` and set
+`decimalPoints: 3`. A DataGrid column that wants 2 places → set
+`decimalPoints: 2` (`displayFormat` would do nothing there).
+
+Both are settable via `project.dataset.update` and read back under the
+same names; verify with `dataset.getByPath` after writing.
+
 ### Frame detection enum (`frameDetection` field)
 
 ```

@@ -79,6 +79,7 @@ typedef enum {
   kDatasetView_Virtual,
   kDatasetView_DisplayTickCount,
   kDatasetView_DisplayFormat,
+  kDatasetView_DecimalPoints,
 } DatasetItem;
 
 typedef enum {
@@ -3513,6 +3514,21 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
   formatItem->setData(tr("Decimal places or notation used on tick labels and the value display"),
                       ParameterDescription);
   model->appendRow(formatItem);
+
+  auto* decimalItem = new QStandardItem();
+  decimalItem->setEditable(true);
+  decimalItem->setData(true, Active);
+  decimalItem->setData(AutoIntField, WidgetType);
+  decimalItem->setData(-1, MinValue);
+  decimalItem->setData(15, MaxValue);
+  decimalItem->setData(tr("Auto"), PlaceholderValue);
+  decimalItem->setData(tr("Decimal Points"), ParameterName);
+  decimalItem->setData(dataset.decimalPoints, EditableValue);
+  decimalItem->setData(kDatasetView_DecimalPoints, ParameterType);
+  decimalItem->setData(
+    tr("Fixed decimal places for the value display; overrides the format (-1 = auto)"),
+    ParameterDescription);
+  model->appendRow(decimalItem);
 }
 
 /**
@@ -4151,6 +4167,9 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
       break;
     case kDatasetView_DisplayTickCount:
       dataset.displayTickCount = qMax(0, value.toInt());
+      break;
+    case kDatasetView_DecimalPoints:
+      dataset.decimalPoints = qMax(-1, value.toInt());
       break;
     default:
       break;

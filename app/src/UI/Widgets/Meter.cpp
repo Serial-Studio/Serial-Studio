@@ -41,6 +41,7 @@ Widgets::Meter::Meter(const int index, QQuickItem* parent) : Bar(index, parent, 
     m_units            = dataset.units;
     m_displayFormat    = dataset.displayFormat;
     m_displayTickCount = dataset.displayTickCount;
+    m_decimalPoints    = dataset.decimalPoints;
     m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
     buildBands(dataset.alarmBands);

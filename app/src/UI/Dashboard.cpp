@@ -49,6 +49,7 @@ constexpr int kDefaultPlotPoints      = 1000;
 constexpr int kDefaultPlotBuckets     = 1024;
 constexpr int kMaxTimeRingSamples     = 262144;
 constexpr double kAssumedMaxRateHz    = 50000.0;
+constexpr double kTimeRingHeadroom    = 1.25;
 constexpr double kSmoothMaxPeriodSec  = 0.002;
 constexpr double kSmoothMaxForwardSec = 0.050;
 
@@ -69,6 +70,17 @@ static int timeRingCapacity(const double plotTimeRangeSec)
     return kMaxTimeRingSamples;
 
   return std::max(kDefaultPlotBuckets, static_cast<int>(want));
+}
+
+/**
+ * @brief Builds a scrolling-history ring for the visible window plus headroom, so a
+ *        saturated min/max source (two slots per decimation cell) still spans the full
+ *        axis instead of erasing at the left edge; the surplus samples sit off-screen.
+ */
+static DSP::TimeRing makeHistoryRing(const double plotTimeRangeSec)
+{
+  const double window = plotTimeRangeSec * kTimeRingHeadroom;
+  return DSP::TimeRing(timeRingCapacity(window), window);
 }
 
 /**
@@ -2509,7 +2521,7 @@ void UI::Dashboard::configureLineSeries()
 
     if (useTimeXAxis(yDataset)) {
       const int cap = timeRingCapacity(m_plotTimeRange);
-      m_plotTimeRings.insert(i, DSP::TimeRing(cap, m_plotTimeRange));
+      m_plotTimeRings.insert(i, makeHistoryRing(m_plotTimeRange));
 
       DSP::SweepEngine sweep;
       sweep.configure(1, cap, m_plotTimeRange);
@@ -2691,7 +2703,7 @@ void UI::Dashboard::configureMultiLineSeries()
       std::vector<DSP::TimeRing> rings;
       rings.reserve(group.datasets.size());
       for (size_t j = 0; j < group.datasets.size(); ++j)
-        rings.emplace_back(cap, m_plotTimeRange);
+        rings.push_back(makeHistoryRing(m_plotTimeRange));
 
       m_multiplotTimeRings.insert(i, std::move(rings));
 

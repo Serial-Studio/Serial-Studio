@@ -300,7 +300,9 @@ QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
   if (!dataset.isNumeric)
     return dataset.value;
 
-  QString value = FMT_VAL(dataset.numericValue, dataset);
+  QString value = (dataset.decimalPoints < 0)
+                  ? FMT_VAL(dataset.numericValue, dataset)
+                  : QString::number(dataset.numericValue, 'f', dataset.decimalPoints);
   if (!dataset.units.isEmpty())
     value += QStringLiteral(" ") + dataset.units;
 

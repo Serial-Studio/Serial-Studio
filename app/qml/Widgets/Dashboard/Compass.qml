@@ -88,9 +88,19 @@ Item {
   readonly property var cardinalLabels: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
   //
-  // Range-driven precision, left-padded for stable digital-box width (matches VisualRange).
+  // Left-padded for stable digital-box width (matches VisualRange). A dataset decimalPoints
+  // >= 0 forces fixed places; otherwise precision is range-driven.
   //
   function getPaddedText(val) {
+    if (root.model.decimalPoints >= 0) {
+      const dp = root.model.decimalPoints
+      const lo = (0).toFixed(dp)
+      const hi = (360).toFixed(dp)
+      const fixed = val.toFixed(dp)
+      const len = Math.max(lo.length, hi.length, fixed.length)
+      return " ".repeat(Math.max(0, len - fixed.length)) + fixed
+    }
+
     const a = Cpp_UI_Dashboard.formatValue(0,   0, 360)
     const b = Cpp_UI_Dashboard.formatValue(360, 0, 360)
     const v = Cpp_UI_Dashboard.formatValue(val, 0, 360)

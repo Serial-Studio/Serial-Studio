@@ -38,6 +38,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   : QQuickItem(parent)
   , m_index(index)
   , m_displayTickCount(5)
+  , m_decimalPoints(-1)
   , m_value(0.0)
   , m_minValue(0.0)
   , m_maxValue(0.0)
@@ -51,6 +52,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
     m_units            = dataset.units;
     m_displayFormat    = dataset.displayFormat;
     m_displayTickCount = dataset.displayTickCount;
+    m_decimalPoints    = dataset.decimalPoints;
     m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
     buildBands(dataset.alarmBands);
@@ -188,6 +190,14 @@ int Widgets::Bar::displayTickCount() const noexcept
 const QString& Widgets::Bar::displayFormat() const noexcept
 {
   return m_displayFormat;
+}
+
+/**
+ * @brief Returns the fixed display decimal-place count, or -1 for range-driven auto.
+ */
+int Widgets::Bar::decimalPoints() const noexcept
+{
+  return m_decimalPoints;
 }
 
 /**

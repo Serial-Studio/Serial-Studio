@@ -4291,7 +4291,7 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
                    "alarmBands (array of {min,max,severity,color,label,blink} objects, "
                    "severity=0..3 for Info/Ok/Warning/Critical), "
                    "or legacy alarmLow/alarmHigh/alarmEnabled for 2-band simple mode, "
-                   "displayTickCount, displayFormat, "
+                   "displayTickCount, displayFormat, decimalPoints, "
                    "transformCode, transformLanguage, virtual). The boolean fields "
                    "graph/fft/led/waterfall toggle the same flags as "
                    "project.dataset.setOption -- use them here when patching multiple "
@@ -4892,6 +4892,9 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
 
   if (takeParam(params, consumed, Keys::DisplayFormat))
     d.displayFormat = params.value(Keys::DisplayFormat).toString();
+
+  if (takeParam(params, consumed, Keys::DecimalPoints))
+    d.decimalPoints = qBound(-1, params.value(Keys::DecimalPoints).toInt(), 15);
 
   if (takeParam(params, consumed, QStringLiteral("ledHigh")))
     d.ledHigh = SerialStudio::toDouble(params.value(QStringLiteral("ledHigh")));

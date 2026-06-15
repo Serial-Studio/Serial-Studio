@@ -92,7 +92,7 @@ Item {
     return Math.max(1, Math.min(7, odd))
   }
   readonly property bool showLabels: width >= 130 && height >= 130
-  readonly property real fontSize: Math.max(10, Math.min(28, Math.min(width, height) / 22))
+  readonly property real fontSize: Math.max(10, Math.min(22, Math.min(width, height) / 28))
                                    * Cpp_Misc_CommonFonts.widgetFontScale
   readonly property int autoTargetTickCount: {
     const size = Math.min(width, height) * 0.75
@@ -114,10 +114,14 @@ Item {
     const approxR = Math.min(width, height) * 0.32
     return (angleRangeDeg * Math.PI / 180) * approxR / (tickCount - 1)
   }
-  readonly property bool labelsFitAll: tickCount < 2
-                                       || labelsArcStep > tickLabelMetrics.width * 0.8
-  readonly property bool labelsFitAlternate: tickCount < 2
-                                             || labelsArcStep * 2 > tickLabelMetrics.width * 0.8
+  //
+  // Smallest 1-in-N label stride that keeps adjacent shown labels from overlapping;
+  // cascades (all -> every other -> every third ...) as the gauge shrinks.
+  //
+  readonly property int labelStride: {
+    if (tickCount < 2 || labelsArcStep <= 0) return 1
+    return Math.max(1, Math.ceil((tickLabelMetrics.width + 6) / labelsArcStep))
+  }
 
   //
   // Measures the widest label as actually displayed (trimmed), so the fit test
@@ -321,10 +325,7 @@ Item {
                 }
 
                 Text {
-                  visible: root.showLabels && (root.labelsFitAll
-                                               || (root.labelsFitAlternate
-                                                   && (parent.index % 2 === 0
-                                                       || parent.index === root.tickCount - 1)))
+                  visible: root.showLabels && (parent.index % root.labelStride === 0)
 
                   font.pixelSize: fontSize
                   text: formatTickValue(parent.tickValue)
@@ -360,7 +361,7 @@ Item {
                                                    ? modelData.customColor
                                                    : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
                 readonly property real rOut: gaugeFace.width / 2 - gaugeFace.border.width - 0.5
-                readonly property real rIn: alarmZoneShape.rOut - Math.max(3, gaugeFace.width * 0.0175)
+                readonly property real rIn: alarmZoneShape.rOut - Math.max(6, gaugeFace.width * 0.0250)
                 readonly property real angA: (startAngleDeg + modelData.fracMin * angleRangeDeg) * Math.PI / 180
                 readonly property real angB: (startAngleDeg + modelData.fracMax * angleRangeDeg) * Math.PI / 180
                 readonly property bool largeArc: (modelData.fracMax - modelData.fracMin) * angleRangeDeg > 180
@@ -524,7 +525,7 @@ Item {
               spacing: 2
               visible: gaugeFace.width >= 120
               anchors.bottom: gaugeFace.bottom
-              anchors.bottomMargin: gaugeFace.border.width + 16
+              anchors.bottomMargin: gaugeFace.border.width + 16 + labelLift
               anchors.horizontalCenter: gaugeFace.horizontalCenter
               width: Math.min(Math.max(gaugeFace.width * 0.55, valueBoxMetrics.width + 22),
                               gaugeFace.width - 16)
@@ -533,16 +534,33 @@ Item {
               // Tick clearance for the face label: chord through the central
               // tick-free disk at the title's bottom edge (the tighter y).
               //
+              readonly property real labelLift: gaugeFace.height * 0.07
+                                                * Math.max(0, Math.min(1, (gaugeFace.height - 180) / 60))
               readonly property real tickInnerR: gaugeFace.width / 2 - gaugeFace.border.width - 0.75
                                                  - Math.max(8, gaugeFace.width * 0.05)
               readonly property real titleBottomFromCenter: gaugeFace.height / 2
                                                             - gaugeFace.border.width - 23
+                                                            - labelLift
                                                             - valueBox.height
               readonly property real titleClearanceWidth: {
                 const y = Math.abs(titleBottomFromCenter)
                 if (y >= tickInnerR) return 0
                 return 2 * Math.sqrt(tickInnerR * tickInnerR - y * y) - 8
               }
+
+              //
+              // Value box sits lower than the title, where the tick-free chord is narrower;
+              // scale its text down so it never runs into the bottom tick labels.
+              //
+              readonly property real valueMidFromCenter: gaugeFace.height / 2 - gaugeFace.border.width
+                                                         - 16 - labelLift - valueBoxMetrics.height / 2
+              readonly property real valueClearanceWidth: {
+                const y = Math.abs(valueMidFromCenter)
+                if (y >= tickInnerR) return gaugeFace.width - 24
+                return 2 * Math.sqrt(tickInnerR * tickInnerR - y * y) - 16
+              }
+              readonly property real valueScale: Math.max(0.5, Math.min(1, valueClearanceWidth
+                                                 / Math.max(1, valueBoxMetrics.width + 14)))
 
               TextMetrics {
                 id: titleLabelMetrics
@@ -577,7 +595,7 @@ Item {
                 antialiasing: true
                 height: valueText.implicitHeight + 8
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(parent.width, valueBoxMetrics.width + 18)
+                width: Math.min(parent.width, valueBoxMetrics.width * faceLabels.valueScale + 18)
                 border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
                 color: model.alarmTriggered
                        ? (valueBox.alarmFlashOn
@@ -617,7 +635,7 @@ Item {
 
                   font.bold: true
                   anchors.centerIn: parent
-                  font.pixelSize: fontSize * 1.05
+                  font.pixelSize: fontSize * 1.05 * faceLabels.valueScale
                   font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                   color: model.alarmTriggered
                          ? (valueBox.alarmFlashOn
@@ -817,8 +835,8 @@ Item {
         font.pixelSize: 100
         font.family: Cpp_Misc_CommonFonts.monoFont.family
         text: {
-          const a = Cpp_UI_Dashboard.formatValue(root.model.minValue, root.model.minValue, root.model.maxValue)
-          const b = Cpp_UI_Dashboard.formatValue(root.model.maxValue, root.model.minValue, root.model.maxValue)
+          const a = root.formatValue(root.model.minValue)
+          const b = root.formatValue(root.model.maxValue)
           const longer = a.length >= b.length ? a : b
           return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
         }

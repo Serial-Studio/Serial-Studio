@@ -34,7 +34,7 @@
  * @brief Constructs a Compass widget.
  */
 Widgets::Compass::Compass(const int index, QQuickItem* parent)
-  : QQuickItem(parent), m_index(index), m_value(0.0)
+  : QQuickItem(parent), m_index(index), m_decimalPoints(-1), m_value(0.0)
 {
   m_cardinal = cardinalDirection(0.0);
 
@@ -43,6 +43,7 @@ Widgets::Compass::Compass(const int index, QQuickItem* parent)
     m_title             = dataset.title;
     m_units             = dataset.units;
     m_displayFormat     = dataset.displayFormat;
+    m_decimalPoints     = dataset.decimalPoints;
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Compass::updateData);
   }
@@ -110,6 +111,14 @@ const QString& Widgets::Compass::units() const noexcept
 const QString& Widgets::Compass::displayFormat() const noexcept
 {
   return m_displayFormat;
+}
+
+/**
+ * @brief Returns the fixed display decimal-place count, or -1 for range-driven auto.
+ */
+int Widgets::Compass::decimalPoints() const noexcept
+{
+  return m_decimalPoints;
 }
 
 //--------------------------------------------------------------------------------------------------
