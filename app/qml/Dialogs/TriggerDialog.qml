@@ -95,17 +95,6 @@ Widgets.SmartDialog {
   }
 
   //
-  // Drop the raw C++ pointer the moment the model is destroyed so deferred
-  // closures and bindings can never dereference a stale QObject.
-  //
-  Connections {
-    target: root.model
-    function onDestroyed() {
-      root.model = null
-    }
-  }
-
-  //
   // Dialog controls
   //
   dialogContent: ColumnLayout {

@@ -73,9 +73,11 @@ QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
 UI::Taskbar::Taskbar(QQuickItem* parent)
   : QQuickItem(parent)
   , m_activeGroupId(-1)
+  , m_desiredGroupId(-1)
   , m_rebuildInProgress(false)
   , m_batchUpdateInProgress(false)
   , m_restoringLayout(false)
+  , m_independentWorkspace(false)
   , m_activeWindow(nullptr)
   , m_windowManager(nullptr)
   , m_fullModel(new TaskbarModel(this))
@@ -97,6 +99,9 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
 
   auto* pm = &DataModel::ProjectModel::instance();
   connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {
+    if (m_independentWorkspace)
+      return;
+
     setActiveGroupId(pm->activeGroupId());
   });
 
@@ -106,6 +111,11 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
           &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::searchResultsChanged);
+
+  connect(this, &UI::Taskbar::workspaceModelChanged, this, [this] {
+    if (m_independentWorkspace && !m_rebuildInProgress)
+      setDesiredGroupId(m_desiredGroupId);
+  });
 
   rebuildModel();
 
@@ -163,6 +173,22 @@ int UI::Taskbar::activeGroupIndex() const
   }
 
   return -1;
+}
+
+/**
+ * @brief Returns whether this taskbar tracks its own workspace independently of the project.
+ */
+bool UI::Taskbar::independentWorkspace() const
+{
+  return m_independentWorkspace;
+}
+
+/**
+ * @brief Returns the layout-scope key used to namespace this taskbar's saved layouts.
+ */
+QString UI::Taskbar::layoutScope() const
+{
+  return m_layoutScope;
 }
 
 /**
@@ -347,8 +373,9 @@ void UI::Taskbar::saveLayout()
   if (m_taskbarButtons && m_windowIDs.count() < m_taskbarButtons->rowCount())
     return;
 
-  model->saveWidgetSetting(
-    Keys::layoutKey(m_activeGroupId), QStringLiteral("data"), m_windowManager->serializeLayout());
+  model->saveWidgetSetting(Keys::layoutKey(m_layoutScope, m_activeGroupId),
+                           QStringLiteral("data"),
+                           m_windowManager->serializeLayout());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -365,7 +392,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 
   saveLayout();
 
-  if (!m_rebuildInProgress)
+  if (!m_rebuildInProgress && !m_independentWorkspace)
     DataModel::ProjectModel::instance().setActiveGroupId(groupId);
 
   for (auto it = m_windowConnections.begin(); it != m_windowConnections.end(); ++it)
@@ -382,7 +409,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
   m_activeGroupId = groupId;
 
   if (m_windowManager && AppState::instance().operationMode() == SerialStudio::ProjectFile) {
-    const auto layout = DataModel::ProjectModel::instance().groupLayout(groupId);
+    const auto layout = DataModel::ProjectModel::instance().groupLayout(m_layoutScope, groupId);
     m_windowManager->preloadPendingGeometries(layout);
   }
 
@@ -525,8 +552,53 @@ void UI::Taskbar::setActiveGroupIndex(int index)
     auto item = model[index];
     auto map  = item.toMap();
     auto id   = map.value("id", -1).toInt();
+    if (m_independentWorkspace && id >= 0)
+      m_desiredGroupId = id;
+
     setActiveGroupId(id);
   }
+}
+
+/**
+ * @brief Records and applies the workspace an independent window should display.
+ */
+void UI::Taskbar::setDesiredGroupId(int groupId)
+{
+  m_desiredGroupId = groupId;
+  if (!m_independentWorkspace || groupId < 0)
+    return;
+
+  const auto model      = workspaceModel();
+  const bool selectable = std::any_of(model.begin(), model.end(), [groupId](const QVariant& v) {
+    return v.toMap().value("id").toInt() == groupId;
+  });
+
+  if (selectable && groupId != m_activeGroupId)
+    setActiveGroupId(groupId);
+}
+
+/**
+ * @brief Marks this taskbar as owning its workspace selection independently of the project.
+ */
+void UI::Taskbar::setIndependentWorkspace(bool independent)
+{
+  if (m_independentWorkspace == independent)
+    return;
+
+  m_independentWorkspace = independent;
+  Q_EMIT independentWorkspaceChanged();
+}
+
+/**
+ * @brief Sets the scope key that namespaces this taskbar's saved per-workspace layouts.
+ */
+void UI::Taskbar::setLayoutScope(const QString& scope)
+{
+  if (m_layoutScope == scope)
+    return;
+
+  m_layoutScope = scope;
+  Q_EMIT layoutScopeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -658,7 +730,8 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
     const auto opMode = AppState::instance().operationMode();
     bool restored     = false;
     if (opMode == SerialStudio::ProjectFile) {
-      const auto layout = DataModel::ProjectModel::instance().groupLayout(m_activeGroupId);
+      const auto layout =
+        DataModel::ProjectModel::instance().groupLayout(m_layoutScope, m_activeGroupId);
       if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
         restored = true;
     }
@@ -1007,8 +1080,26 @@ void UI::Taskbar::selectGroupAfterRebuild()
   int targetGroupId = -1;
   bool restored     = false;
 
+  if (m_independentWorkspace) {
+    const auto inModel = [&model](int gid) {
+      return gid >= 0 && std::any_of(model.begin(), model.end(), [gid](const QVariant& v) {
+               return v.toMap().value("id").toInt() == gid;
+             });
+    };
+
+    if (inModel(m_desiredGroupId)) {
+      setActiveGroupId(m_desiredGroupId);
+      return;
+    }
+
+    if (inModel(m_activeGroupId)) {
+      setActiveGroupId(m_activeGroupId);
+      return;
+    }
+  }
+
   const auto opMode = AppState::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile) {
+  if (opMode == SerialStudio::ProjectFile && !m_independentWorkspace) {
     auto* pm          = &DataModel::ProjectModel::instance();
     const int savedId = pm->activeGroupId();
     const bool found =

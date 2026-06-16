@@ -46,6 +46,7 @@ Widgets.Pane {
   //
   // Custom properties
   //
+  property var hostWindow: null
   property bool isExternalWindow: false
   readonly property bool operatorMode: !isExternalWindow && app.runtimeMode
   readonly property bool zeroBottom: operatorMode && Cpp_UI_TaskbarSettings.taskbarHidden
@@ -54,6 +55,14 @@ Widgets.Pane {
   // Signals
   //
   signal externalWindowClicked()
+  signal widgetWindowRequested(int windowId)
+
+  //
+  // Opens a widget pop-out window hosted by this layout's canvas
+  //
+  function openWidgetWindow(windowId) {
+    _canvas.openExternalWidgetWindow(windowId)
+  }
 
   //
   // Public function to trigger auto-layout
@@ -359,6 +368,8 @@ Widgets.Pane {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumWidth: 480
+        isExternalWindow: root.isExternalWindow
+        onExternalWidgetWindowRequested: (windowId) => root.widgetWindowRequested(windowId)
       }
 
       //
@@ -502,12 +513,17 @@ Widgets.Pane {
       id: _startMenu
 
       taskBar: root.taskBar
+      hostWindow: root.hostWindow
       isExternalWindow: root.isExternalWindow
       y: parent.height - height - _taskbar.height + 1
       x: Cpp_Misc_Translator.rtl ? parent.width - width : 0
       onExternalWindowClicked: root.externalWindowClicked()
       onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
       onRenameWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
+      onFullScreenRequested: {
+        if (root.hostWindow)
+          root.hostWindow.toggleFullScreen()
+      }
     }
   }
 

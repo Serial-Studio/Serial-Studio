@@ -168,6 +168,7 @@ inline constexpr KeyView WidgetSettings("widgetSettings");
 inline constexpr KeyView PointCount("pointCount");
 inline constexpr KeyView PlotTimeRange("plotTimeRange");
 inline constexpr KeyView kActiveGroupSubKey("activeGroup");
+inline constexpr KeyView kDashboardWindowsSubKey("dashboardWindows");
 inline constexpr KeyView HiddenGroups("hiddenGroups");
 
 // Workspace keys
@@ -205,6 +206,14 @@ inline constexpr KeyView ApiCallAllowFullSurface("apiCallAllowFullSurface");
 inline QString layoutKey(int groupId)
 {
   return QStringLiteral("layout:") + QString::number(groupId);
+}
+
+inline QString layoutKey(const QString& scope, int groupId)
+{
+  if (scope.isEmpty())
+    return layoutKey(groupId);
+
+  return QStringLiteral("layout:") + scope + QStringLiteral(":") + QString::number(groupId);
 }
 }  // namespace Keys
 

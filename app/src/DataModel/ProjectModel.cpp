@@ -1046,6 +1046,23 @@ QJsonObject DataModel::ProjectModel::groupLayout(int groupId) const
 }
 
 /**
+ * @brief Returns the persisted layout for the given group within a window scope.
+ */
+QJsonObject DataModel::ProjectModel::groupLayout(const QString& scope, int groupId) const
+{
+  const auto key = Keys::layoutKey(scope, groupId);
+  return m_widgetSettings.value(key).toObject().value("data").toObject();
+}
+
+/**
+ * @brief Returns the persisted external-window records (workspace, geometry, state).
+ */
+QJsonArray DataModel::ProjectModel::externalWindows() const
+{
+  return m_widgetSettings.value(Keys::kDashboardWindowsSubKey).toArray();
+}
+
+/**
  * @brief Returns the persisted settings object for the given widget.
  */
 QJsonObject DataModel::ProjectModel::widgetSettings(const QString& widgetId) const
@@ -1240,6 +1257,41 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
 
   obj.insert(key, newValue);
   m_widgetSettings.insert(widgetId, obj);
+
+  setModified(true);
+  Q_EMIT widgetSettingsChanged();
+}
+
+/**
+ * @brief Persists the external dashboard windows and prunes layouts of closed windows.
+ */
+void DataModel::ProjectModel::setExternalWindows(const QJsonArray& windows)
+{
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  if (m_widgetSettings.value(Keys::kDashboardWindowsSubKey).toArray() == windows)
+    return;
+
+  QSet<QString> liveScopes;
+  for (const auto& value : windows) {
+    const auto id = value.toObject().value(QStringLiteral("id")).toString();
+    if (!id.isEmpty())
+      liveScopes.insert(id);
+  }
+
+  const auto keys = m_widgetSettings.keys();
+  for (const auto& key : keys) {
+    const auto parts = key.split(QLatin1Char(':'));
+    if (parts.size() == 3 && parts.first() == QLatin1String("layout")
+        && !liveScopes.contains(parts.at(1)))
+      m_widgetSettings.remove(key);
+  }
+
+  if (windows.isEmpty())
+    m_widgetSettings.remove(Keys::kDashboardWindowsSubKey);
+  else
+    m_widgetSettings.insert(Keys::kDashboardWindowsSubKey, windows);
 
   setModified(true);
   Q_EMIT widgetSettingsChanged();

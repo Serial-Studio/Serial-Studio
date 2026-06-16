@@ -70,6 +70,7 @@ Popup {
   //
   // Custom properties
   //
+  property var hostWindow: null
   property bool isExternalWindow: false
   readonly property real gradientWidth: _versionLabel.implicitHeight + 16
   readonly property real gradientHeight: _versionLabel.implicitWidth + 32
@@ -86,6 +87,7 @@ Popup {
   // Signals
   //
   signal externalWindowClicked()
+  signal fullScreenRequested()
   signal newWorkspaceRequested()
   signal renameWorkspaceRequested(int workspaceId, string currentName)
 
@@ -106,8 +108,8 @@ Popup {
       {
         name: qsTr("Full Screen"),
         icon: "qrc:/icons/start/full-screen.svg",
-        visible: !root.isExternalWindow && !app.runtimeMode,
-        run: function() { mainWindow.toggleFullScreen() }
+        visible: true,
+        run: function() { root.fullScreenRequested() }
       },
       {
         name: qsTr("Add External Window"),
@@ -554,11 +556,10 @@ Popup {
       Layout.fillWidth: true
       text: qsTr("Full Screen")
       icon.source: "qrc:/icons/start/full-screen.svg"
-      visible: !root.isExternalWindow && !app.runtimeMode
-      checked: mainWindow.visibility === Window.FullScreen
+      checked: root.hostWindow ? root.hostWindow.visibility === Window.FullScreen : false
       onClicked: {
         root.close()
-        mainWindow.toggleFullScreen()
+        root.fullScreenRequested()
       }
     }
 

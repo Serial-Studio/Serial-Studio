@@ -26,6 +26,7 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import SerialStudio.UI as SS_UI
 
 import "Dashboard" as DbItems
@@ -68,20 +69,65 @@ Item {
 
     anchors.fill: parent
     taskBar: root.taskBar
+    hostWindow: mainWindow
     onExternalWindowClicked: root.openExternalWindow()
   }
 
   //
-  // Track open external windows and provide a counter for unique categories
+  // Open external dashboard windows, tracked by their stable project id
   //
-  property int extWindowCounter: 0
   property var extWindows: []
 
-  function openExternalWindow() {
-    var num = ++extWindowCounter
+  //
+  // Suppresses persistence while windows are reconciled against the project file
+  //
+  property bool restoringExternal: false
+
+  //
+  // Clears the restore guard once a reconcile burst settles
+  //
+  Timer {
+    id: _extRestoreSettle
+
+    interval: 600
+    repeat: false
+    onTriggered: root.restoringExternal = false
+  }
+
+  //
+  // Coalesces dashboard resets into a single deferred reconcile (avoids re-entrancy)
+  //
+  Timer {
+    id: _extReconcileTimer
+
+    interval: 200
+    repeat: false
+    onTriggered: root.reconcileExternalWindows()
+  }
+
+  //
+  // Highest in-use window number, plus one
+  //
+  function nextWindowNumber() {
+    var max = 0
+    for (var i = 0; i < extWindows.length; ++i) {
+      if (extWindows[i] && extWindows[i].windowNumber > max)
+        max = extWindows[i].windowNumber
+    }
+
+    return max + 1
+  }
+
+  //
+  // Spawns an external dashboard window, optionally seeded from a saved record
+  //
+  function openExternalWindow(record) {
+    var rec = record || ({})
+    var num = (rec.n > 0) ? rec.n : root.nextWindowNumber()
     var win = _extDashboardComponent.createObject(root, {
       "category": "ExternalDashboard_" + num,
-      "windowNumber": num
+      "windowNumber": num,
+      "record": rec
     })
 
     if (win) {
@@ -92,22 +138,111 @@ Item {
           extWindows.splice(idx, 1)
 
         win.destroy()
+        root.syncExternalWindows()
       })
+    }
+
+    root.syncExternalWindows()
+  }
+
+  //
+  // Serializes the live external windows into the project file
+  //
+  function syncExternalWindows() {
+    if (root.restoringExternal)
+      return
+
+    if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
+      return
+
+    //
+    // Never persist while the dashboard is offline: on disconnect every taskbar's
+    // active group is forced to -1, which would otherwise overwrite saved workspaces
+    //
+    if (!Cpp_UI_Dashboard.available)
+      return
+
+    var arr = []
+    for (var i = 0; i < extWindows.length; ++i) {
+      var w = extWindows[i]
+      if (!w || !w.extTaskBar)
+        continue
+
+      var normal = w.visibility !== Window.Maximized
+                   && w.visibility !== Window.FullScreen
+                   && w.visibility !== Window.Minimized
+      var ws = w.extTaskBar.activeGroupId
+      if (ws < 0 && w.record && w.record.workspace !== undefined)
+        ws = w.record.workspace
+
+      arr.push({
+        "id": w.windowId,
+        "n": w.windowNumber,
+        "workspace": ws,
+        "x": Math.round(normal ? w.x : w.previousX),
+        "y": Math.round(normal ? w.y : w.previousY),
+        "w": Math.round(normal ? w.width : w.previousWidth),
+        "h": Math.round(normal ? w.height : w.previousHeight),
+        "maximized": w.isMaximized,
+        "minimized": w.visibility === Window.Minimized,
+        "fullscreen": w.visibility === Window.FullScreen
+      })
+    }
+
+    Cpp_JSON_ProjectModel.setExternalWindows(arr)
+  }
+
+  //
+  // Reconciles open external windows against the project: closes windows that are
+  // gone, spawns missing ones, and leaves matching windows untouched (idempotent)
+  //
+  function reconcileExternalWindows() {
+    root.restoringExternal = true
+    _extRestoreSettle.restart()
+
+    var ready = Cpp_AppState.operationMode === SerialStudio.ProjectFile
+                && Cpp_UI_Dashboard.available
+    var saved = ready ? (Cpp_JSON_ProjectModel.externalWindows() || []) : []
+
+    var savedById = ({})
+    for (var i = 0; i < saved.length; ++i)
+      savedById[saved[i].id] = saved[i]
+
+    var live = ({})
+    var snapshot = extWindows.slice()
+    for (var j = 0; j < snapshot.length; ++j) {
+      var w = snapshot[j]
+      if (!w)
+        continue
+
+      if (savedById[w.windowId])
+        live[w.windowId] = true
+      else
+        w.close()
+    }
+
+    for (var k = 0; k < saved.length; ++k) {
+      if (!live[saved[k].id])
+        openExternalWindow(saved[k])
     }
   }
 
   //
-  // Close all external windows when dashboard data resets
+  // Reconcile when the dashboard resets or its availability changes (connect/
+  // disconnect), and once after this pane is created
   //
   Connections {
     target: Cpp_UI_Dashboard
-    function onDataReset() {
-      for (var i = extWindows.length - 1; i >= 0; --i)
-        extWindows[i].close()
-
-      extWindows = []
-    }
+    function onDataReset() { _extReconcileTimer.restart() }
+    function onWidgetCountChanged() { _extReconcileTimer.restart() }
   }
+
+  Component.onCompleted: _extReconcileTimer.restart()
+
+  //
+  // Freeze persistence during teardown so destroyed windows can't wipe the saved set
+  //
+  Component.onDestruction: root.restoringExternal = true
 
   //
   // External dashboard window component
@@ -139,9 +274,42 @@ Item {
       property int titlebarHeight: 0
 
       //
+      // Persisted record (workspace, geometry, state) and resolved identity
+      //
+      property var record: ({})
+      property string windowId: ""
+      property int targetWorkspace: -1
+
+      //
+      // Re-asserts the saved workspace until it lands (model may settle late on load)
+      //
+      Timer {
+        id: _wsRetry
+
+        repeat: true
+        interval: 120
+        property int tries: 0
+        onTriggered: {
+          if (_extWindow.targetWorkspace < 0
+              || _extWindow.extTaskBar.activeGroupId === _extWindow.targetWorkspace
+              || tries >= 10) {
+            tries = 0
+            stop()
+            return
+          }
+
+          _extWindow.extTaskBar.setDesiredGroupId(_extWindow.targetWorkspace)
+          ++tries
+        }
+      }
+
+      //
       // Independent taskbar for this external window
       //
-      property SS_UI.TaskBar extTaskBar: SS_UI.TaskBar {}
+      property SS_UI.TaskBar extTaskBar: SS_UI.TaskBar {
+        independentWorkspace: true
+        layoutScope: _extWindow.windowId
+      }
 
       //
       // Register with native window system using dashboard background
@@ -240,19 +408,70 @@ Item {
         DbItems.DashboardLayout {
           anchors.fill: parent
           isExternalWindow: true
+          hostWindow: _extWindow
           taskBar: _extWindow.extTaskBar
           onExternalWindowClicked: root.openExternalWindow()
+          onWidgetWindowRequested: (windowId) => _mainLayout.openWidgetWindow(windowId)
         }
       }
 
+      //
+      // Persist whenever this window's workspace selection changes
+      //
+      Connections {
+        target: _extWindow.extTaskBar
+        function onActiveGroupIdChanged() { root.syncExternalWindows() }
+      }
+
+      //
+      // Persist geometry/state once each settle/maximize/visibility change lands
+      //
+      Connections {
+        target: _extWindow
+        function onPreviousXChanged()      { root.syncExternalWindows() }
+        function onPreviousYChanged()      { root.syncExternalWindows() }
+        function onPreviousWidthChanged()  { root.syncExternalWindows() }
+        function onPreviousHeightChanged() { root.syncExternalWindows() }
+        function onIsMaximizedChanged()    { root.syncExternalWindows() }
+        function onVisibilityChanged()     { root.syncExternalWindows() }
+      }
+
       Component.onCompleted: {
-        var scr = Screen
-        if (scr) {
-          x = Math.round(scr.virtualX + (scr.width - width) / 2)
-          y = Math.round(scr.virtualY + (scr.height - height) / 2)
+        var rec = _extWindow.record || ({})
+        _extWindow.windowId = (rec.id && rec.id.length > 0)
+            ? rec.id
+            : ("w" + Date.now() + "_" + _extWindow.windowNumber)
+
+        if (rec.w !== undefined && rec.h !== undefined) {
+          _extWindow.width = rec.w
+          _extWindow.height = rec.h
+          _extWindow.x = rec.x
+          _extWindow.y = rec.y
+          _extWindow.previousX = rec.x
+          _extWindow.previousY = rec.y
+          _extWindow.previousWidth = rec.w
+          _extWindow.previousHeight = rec.h
+          _extWindow.isMaximized = (rec.maximized === true)
+        } else {
+          var scr = Screen
+          if (scr) {
+            _extWindow.x = Math.round(scr.virtualX + (scr.width - width) / 2)
+            _extWindow.y = Math.round(scr.virtualY + (scr.height - height) / 2)
+          }
         }
 
         _extWindow.displayWindow()
+
+        if (rec.fullscreen === true)
+          _extWindow.showFullScreen()
+        else if (rec.minimized === true)
+          _extWindow.showMinimized()
+
+        if (rec.workspace !== undefined && rec.workspace >= 0) {
+          _extWindow.targetWorkspace = rec.workspace
+          _extWindow.extTaskBar.setDesiredGroupId(rec.workspace)
+          _wsRetry.restart()
+        }
       }
     }
   }

@@ -41,6 +41,16 @@ Item {
   }
 
   //
+  // True for canvases hosted in an external dashboard window
+  //
+  property bool isExternalWindow: false
+
+  //
+  // Raised by external-window canvases to forward a pop-out request to the main canvas
+  //
+  signal externalWidgetWindowRequested(int windowId)
+
+  //
   // Window manager access
   //
   property alias windowManager: _wm
@@ -59,6 +69,11 @@ Item {
   property bool persistExternalWindows: true
 
   function openExternalWidgetWindow(windowId) {
+    if (root.isExternalWindow) {
+      root.externalWidgetWindowRequested(windowId)
+      return
+    }
+
     const existing = externalWidgetWindows[windowId]
     if (existing) {
       existing.displayWindow()
@@ -105,6 +120,9 @@ Item {
   // file so they reopen on project reload
   //
   function saveExternalWindowStates() {
+    if (root.isExternalWindow)
+      return
+
     if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
       return
 
@@ -128,6 +146,9 @@ Item {
   // identity to its current windowId; unresolvable entries are skipped, not pruned
   //
   function restoreExternalWindowStates() {
+    if (root.isExternalWindow)
+      return
+
     if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
       return
 
@@ -196,6 +217,9 @@ Item {
   // Opens or closes each tool window so visibility matches its enabled flag
   //
   function syncToolWindows() {
+    if (root.isExternalWindow)
+      return
+
     const count = Cpp_UI_Dashboard.totalWidgetCount
     for (let i = 0; i < dashboardTools.length; ++i) {
       const type = dashboardTools[i]

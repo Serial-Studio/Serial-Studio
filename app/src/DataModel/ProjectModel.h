@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QObject>
 #include <QSet>
@@ -213,6 +214,7 @@ public:
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] QJsonObject groupLayout(int groupId) const;
+  [[nodiscard]] QJsonObject groupLayout(const QString& scope, int groupId) const;
 
   [[nodiscard]] bool containsCommercialFeatures() const;
 
@@ -254,6 +256,7 @@ public:
   Q_INVOKABLE [[nodiscard]] bool apiSaveJsonFile(const QString& path);
   Q_INVOKABLE [[nodiscard]] QJsonObject widgetSettings(const QString& widgetId) const;
   Q_INVOKABLE [[nodiscard]] QJsonObject pluginState(const QString& pluginId) const;
+  Q_INVOKABLE [[nodiscard]] QJsonArray externalWindows() const;
 
 public slots:
   void lockProject();
@@ -261,6 +264,7 @@ public slots:
 
   void savePluginState(const QString& pluginId, const QJsonObject& state);
   void saveWidgetSetting(const QString& widgetId, const QString& key, const QVariant& value);
+  void setExternalWindows(const QJsonArray& windows);
 
   void setupExternalConnections();
   void setSuppressMessageBoxes(const bool suppress);

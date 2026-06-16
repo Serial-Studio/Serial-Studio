@@ -105,6 +105,14 @@ class Taskbar : public QQuickItem {
   Q_PROPERTY(bool hasMaximizedWindow
              READ hasMaximizedWindow
              NOTIFY statesChanged)
+  Q_PROPERTY(bool independentWorkspace
+             READ independentWorkspace
+             WRITE setIndependentWorkspace
+             NOTIFY independentWorkspaceChanged)
+  Q_PROPERTY(QString layoutScope
+             READ layoutScope
+             WRITE setLayoutScope
+             NOTIFY layoutScopeChanged)
   // clang-format on
 
 signals:
@@ -120,7 +128,9 @@ signals:
   void windowManagerChanged();
   void workspaceModelChanged();
   void taskbarButtonsChanged();
+  void layoutScopeChanged();
   void registeredWindowsChanged();
+  void independentWorkspaceChanged();
 
 public:
   Taskbar(QQuickItem* parent = nullptr);
@@ -128,6 +138,8 @@ public:
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] int activeGroupIndex() const;
+  [[nodiscard]] bool independentWorkspace() const;
+  [[nodiscard]] QString layoutScope() const;
   [[nodiscard]] QString searchFilter() const;
   [[nodiscard]] QVariantList allWidgets() const;
   [[nodiscard]] QVariantList searchResults() const;
@@ -154,6 +166,9 @@ public slots:
   void setSearchFilter(const QString& filter);
   void setActiveGroupId(int groupId);
   void setActiveGroupIndex(int index);
+  void setDesiredGroupId(int groupId);
+  void setIndependentWorkspace(bool independent);
+  void setLayoutScope(const QString& scope);
   void showWindow(QQuickItem* window);
   void closeWindow(QQuickItem* window);
   void minimizeWindow(QQuickItem* window);
@@ -214,9 +229,12 @@ private:
   [[nodiscard]] int relativeIndexForWindow(int windowId) const;
 
   int m_activeGroupId;
+  int m_desiredGroupId;
   bool m_rebuildInProgress;
   bool m_batchUpdateInProgress;
   bool m_restoringLayout;
+  bool m_independentWorkspace;
+  QString m_layoutScope;
   QString m_searchFilter;
 
   QQuickItem* m_activeWindow;
