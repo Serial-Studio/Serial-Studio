@@ -81,7 +81,14 @@ they close the See -> Decide -> Act loop:
   Transforms normally run only when a device frame arrives, so `tableSet()`
   writes made while the device is silent do not render until you call this.
   Call it on state transitions, not every `loop()` pass (each call appends one
-  point to plot-enabled datasets).
+  point to plot-enabled datasets). **It updates the dashboard ONLY: exports
+  (CSV/MDF4/Session DB/MQTT/gRPC) are fed exclusively by frames the frame
+  parser publishes, and the parser publishes a frame only when `parse()`
+  returns a non-empty result.** If the dashboard is driven from data tables and
+  the parser would otherwise have nothing to return, make `parse()` return
+  dummy data (e.g. `return [0];`) so a frame still flows to the export
+  fan-out. A parser that returns `[]` keeps the dashboard alive via
+  `tableSet()` + `refreshDashboard()`, but exports stay completely empty.
 - `ensureDashboard(spec)` -- declarative, idempotent widget builder. Spec is an
   array of groups: `{title, widget, datasets: [{title, index, plot, gauge,
   units, ...}]}`. Groups match by title, datasets by parser `index` within the
@@ -172,6 +179,13 @@ often:
   `SerialStudio.controlScript.zeroSensor()` or from the console. Control-script
   functions only run via `setup()`/`loop()`. For a user-triggerable one-shot,
   use an Action, not a console call.
+- **Expecting exports while `parse()` returns `[]`.** A table-driven dashboard
+  whose frame parser is `function parse() { return []; }` renders fine through
+  `tableSet()` + `refreshDashboard()`, but NOTHING is exported: CSV/MDF4/Session
+  DB/MQTT/gRPC only receive frames the parser publishes, and an empty result
+  publishes no frame. If the user needs exports to keep recording while the
+  script (not the parser) owns the values, make `parse()` return dummy data
+  (`return [0];`) so a frame still reaches the export fan-out.
 
 ## Pacing loop() with delay()
 

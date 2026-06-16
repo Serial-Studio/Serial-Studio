@@ -151,6 +151,18 @@ Control loops can read and write the same data-table registers the frame parser 
 
 One caveat: dataset transforms only re-run when a frame arrives. If your script writes table registers while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame — call `refreshDashboard()` after the writes to make them render immediately. It re-runs every dataset transform from the last received values and republishes the frames to the dashboard only (nothing is appended to CSV/MDF4/session exports).
 
+> **Important: `refreshDashboard()` does not export.** It updates the dashboard only. The export pipeline (CSV, MDF4, Session Database, MQTT, gRPC) is fed exclusively by frames the frame parser produces, and a frame is produced only when `parse()` returns a non-empty result. A parser that returns nothing on every frame keeps the dashboard alive through table writes and `refreshDashboard()`, but exports stay empty because no frame ever reaches the export fan-out. If the project drives its datasets from data tables and the parser would otherwise have nothing to return, make `parse()` return dummy data so a frame still flows through:
+>
+> ```javascript
+> function parse(frame) {
+>     // Datasets are fed from data tables; return a placeholder so a
+>     // frame is still published and CSV/MDF4/DB/MQTT exports record it.
+>     return [0];
+> }
+> ```
+>
+> Returning `[]` (or `{}`) means "no frame this time": the dashboard is unchanged and nothing is exported. Use the dummy-data form whenever you need exports to keep recording while the script, not the parser, owns the values.
+
 ### Staleness watchdog
 
 `ageMs` makes a communication-loss watchdog short: no clock mixing, no timestamp bookkeeping in the parser. Mark the failure state in the data tables, then `refreshDashboard()` renders it without waiting for a frame:
