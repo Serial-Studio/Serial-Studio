@@ -30,6 +30,8 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
+#include <QHBoxLayout>
+#include <QLayout>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -58,7 +60,18 @@ Downloader::Downloader(QWidget* parent)
   , m_mandatoryUpdate(false)
   , m_manager(new QNetworkAccessManager())
 {
+  // Register the static-library resource so :/icons/update.png resolves
+  Q_INIT_RESOURCE(qsimpleupdater);
+
   m_ui->setupUi(this);
+
+  // Render the icon at 48x48 logical px (sharp from the 96px source at 2x)
+  m_ui->updater_icon->setFixedSize(48, 48);
+  m_ui->updater_icon->setScaledContents(true);
+
+  // Add breathing room between the icon and the progress column
+  if (auto* row = qobject_cast<QHBoxLayout*>(m_ui->widget->layout()))
+    row->setSpacing(16);
 
   // Set download directory
   m_downloadDir.setPath(QDir::homePath() + "/Downloads/");
@@ -75,7 +88,9 @@ Downloader::Downloader(QWidget* parent)
   connect(
     m_manager, &QNetworkAccessManager::authenticationRequired, this, &Downloader::authenticate);
 
-  // Resize to fit
+  // Resize to fit (activate the layout first so the hint is valid)
+  if (layout())
+    layout()->activate();
   setFixedSize(minimumSizeHint());
 }
 

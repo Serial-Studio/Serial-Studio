@@ -14,6 +14,20 @@
          "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
          "mandatory":false
       },
+      "linux-x64":{
+         "open-url":"",
+         "latest-version":"4.0.0",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.0/Serial-Studio-Pro-4.0.0-Linux-x64.AppImage",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "mandatory":false
+      },
+      "linux-arm64":{
+         "open-url":"",
+         "latest-version":"4.0.0",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.0/Serial-Studio-Pro-4.0.0-Linux-arm64.AppImage",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "mandatory":false
+      },
       "linux":{
          "download-url":"",
          "latest-version":"4.0.0",
