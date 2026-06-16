@@ -1043,8 +1043,10 @@ QJsonObject DataModel::ProtoImporter::generateProject() const
   QVector<DispatchRecord> dispatchRecords;
   int groupIdCounter = 0;
   int datasetIndex   = 1;
-  for (const auto& m : m_messages)
-    buildGroups(m, QString(), 0, groupIdCounter, datasetIndex, groups, dispatchRecords);
+  for (const auto& m : m_messages) {
+    QSet<const ProtoMessage*> visited;
+    buildGroups(m, QString(), 0, groupIdCounter, datasetIndex, groups, dispatchRecords, visited);
+  }
 
   const int totalDatasets = datasetIndex - 1;
 
@@ -1078,8 +1080,10 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
                                            int& groupIdCounter,
                                            int& datasetIndexCounter,
                                            QJsonArray& groupsOut,
-                                           QVector<DispatchRecord>& dispatchOut) const
+                                           QVector<DispatchRecord>& dispatchOut,
+                                           QSet<const ProtoMessage*>& visited) const
 {
+  visited.insert(&message);
   Group group;
   group.groupId  = groupIdCounter++;
   group.sourceId = sourceId;
@@ -1145,15 +1149,23 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
       continue;
 
     const auto* sub = findMessage(field.typeRef);
-    if (sub) {
+    if (sub && !visited.contains(sub)) {
       const int childIdx = dispatchOut.size();
       dispatchOut[myDispatchIdx].childRecordIndex.append(childIdx);
-      buildGroups(
-        *sub, field.name, sourceId, groupIdCounter, datasetIndexCounter, groupsOut, dispatchOut);
+      buildGroups(*sub,
+                  field.name,
+                  sourceId,
+                  groupIdCounter,
+                  datasetIndexCounter,
+                  groupsOut,
+                  dispatchOut,
+                  visited);
     } else {
       dispatchOut[myDispatchIdx].childRecordIndex.append(-1);
     }
   }
+
+  visited.remove(&message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1766,13 +1778,29 @@ int DataModel::ProtoImporter::countScalarFields(const ProtoMessage& message) con
  */
 int DataModel::ProtoImporter::countFieldsRecursive(const ProtoMessage& message) const
 {
+  QSet<const ProtoMessage*> visited;
+  return countFieldsRecursive(message, visited);
+}
+
+/**
+ * @brief Cycle-guarded recursive field count; an already-on-path message contributes nothing.
+ */
+int DataModel::ProtoImporter::countFieldsRecursive(const ProtoMessage& message,
+                                                   QSet<const ProtoMessage*>& visited) const
+{
+  if (visited.contains(&message))
+    return 0;
+
+  visited.insert(&message);
   int n = countScalarFields(message);
   for (const auto& f : message.fields) {
     if (f.scalar != ProtoScalar::MessageRef)
       continue;
 
     if (const auto* sub = findMessage(f.typeRef))
-      n += countFieldsRecursive(*sub);
+      n += countFieldsRecursive(*sub, visited);
   }
+
+  visited.remove(&message);
   return n;
 }

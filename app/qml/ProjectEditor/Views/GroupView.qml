@@ -73,12 +73,12 @@ Widgets.Pane {
       asynchronous: false
       source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml"
 
+      onLoaded: painterCodeDialog.item.closing.connect(() => painterCodeDialog.active = false)
+
       function showDialog() {
         painterCodeDialog.active = true
-        if (painterCodeDialog.item) {
-          painterCodeDialog.item.closing.connect(() => painterCodeDialog.active = false)
+        if (painterCodeDialog.item)
           painterCodeDialog.item.showDialog()
-        }
       }
     }
 

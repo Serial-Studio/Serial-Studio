@@ -248,7 +248,7 @@ Widgets.Pane {
             horizontalPadding: 12
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/buttons/help.svg"
-            onClicked: app.showHelpCenter("Project-Editor")
+            onClicked: app.showHelpCenter("javascript-api")
           }
         }
       }

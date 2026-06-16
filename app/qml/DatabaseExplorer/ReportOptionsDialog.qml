@@ -162,7 +162,8 @@ Widgets.SmartDialog {
       "outputFormat":        outputFormat
     }
 
-    Cpp_Sessions_Manager.exportSessionToPdf(root.sessionId, options)
+    const id = root.sessionId
+    Qt.callLater(() => Cpp_Sessions_Manager.exportSessionToPdf(id, options))
   }
 
   //

@@ -89,8 +89,19 @@ Widgets.SmartDialog {
     enabled: root.model !== null && root.visible
 
     function onSweepChanged() {
-      if (!levelField.activeFocus)
+      if (root.model && !levelField.activeFocus)
         levelField.text = root.model.triggerLevel.toFixed(4)
+    }
+  }
+
+  //
+  // Drop the raw C++ pointer the moment the model is destroyed so deferred
+  // closures and bindings can never dereference a stale QObject.
+  //
+  Connections {
+    target: root.model
+    function onDestroyed() {
+      root.model = null
     }
   }
 
@@ -230,7 +241,10 @@ Widgets.SmartDialog {
           placeholderText: qsTr("Value to cross")
           onTextChanged: {
             if (activeFocus && acceptableInput && root.model)
-              Qt.callLater(function() { root.model.triggerLevel = parseFloat(levelField.text) })
+              Qt.callLater(function() {
+                if (root.model)
+                  root.model.triggerLevel = parseFloat(levelField.text)
+              })
           }
         }
 
@@ -330,9 +344,10 @@ Widgets.SmartDialog {
             onTextChanged: {
               if (activeFocus && root.model)
                 Qt.callLater(function() {
-                  root.model.sweepTimebase = timebaseField.text.length > 0
-                                             ? parseFloat(timebaseField.text)
-                                             : 0
+                  if (root.model)
+                    root.model.sweepTimebase = timebaseField.text.length > 0
+                                               ? parseFloat(timebaseField.text)
+                                               : 0
                 })
             }
           }
@@ -360,7 +375,10 @@ Widgets.SmartDialog {
             placeholderText: qsTr("0")
             onTextChanged: {
               if (activeFocus && acceptableInput && root.model)
-                Qt.callLater(function() { root.model.holdoff = parseFloat(holdoffField.text) })
+                Qt.callLater(function() {
+                  if (root.model)
+                    root.model.holdoff = parseFloat(holdoffField.text)
+                })
             }
           }
 

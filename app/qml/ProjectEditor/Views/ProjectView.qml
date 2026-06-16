@@ -185,13 +185,6 @@ Widgets.Pane {
               return timeRangeField.nearestIndex(secs)
             }
             onValueModified: Cpp_JSON_ProjectModel.setPlotTimeRange(presets[value])
-
-            Connections {
-              target: Cpp_JSON_ProjectModel
-              function onPlotTimeRangeChanged() {
-                timeRangeField.value = timeRangeField.nearestIndex(Cpp_JSON_ProjectModel.plotTimeRange)
-              }
-            }
           }
 
           Rectangle {
@@ -216,13 +209,6 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             value: Cpp_JSON_ProjectModel.pointCount
             onValueModified: Cpp_JSON_ProjectModel.setPointCount(value)
-
-            Connections {
-              target: Cpp_JSON_ProjectModel
-              function onPointCountChanged() {
-                pointCountField.value = Cpp_JSON_ProjectModel.pointCount
-              }
-            }
           }
         }
       }

@@ -60,11 +60,9 @@ Item {
       model: Cpp_IO_Serial.portList
       currentIndex: Cpp_IO_Serial.portIndex
       editable: Qt.platform.os !== "windows"
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Serial.portIndex)
-            Cpp_IO_Serial.portIndex = currentIndex
-        }
+      onActivated: (index) => {
+        if (enabled && index !== Cpp_IO_Serial.portIndex)
+          Cpp_IO_Serial.portIndex = index
       }
 
       onAccepted: {
@@ -89,7 +87,6 @@ Item {
       opacity: enabled ? 1 : 0.5
 
       property bool initializing: true
-      property bool updatingIndex: false
 
       validator: IntValidator { bottom: 1 }
 
@@ -116,8 +113,6 @@ Item {
         target: Cpp_IO_Serial
         function onBaudRateChanged() {
           if (!_baudCombo.initializing) {
-            _baudCombo.updatingIndex = true
-
             const rates = Cpp_IO_Serial.baudRateList
             const current = String(Cpp_IO_Serial.baudRate)
             _baudCombo.model = rates
@@ -127,8 +122,6 @@ Item {
               _baudCombo.currentIndex = idx
             else
               _baudCombo.editText = current
-
-            _baudCombo.updatingIndex = false
           }
         }
       }
@@ -143,15 +136,11 @@ Item {
         }
       }
 
-      onCurrentIndexChanged: {
-        if (!initializing && !updatingIndex
-            && currentIndex >= 0 && currentIndex < model.length) {
-          const value = parseInt(model[currentIndex])
-          if (!isNaN(value) && Cpp_IO_Serial.baudRate !== value) {
-            updatingIndex = true
+      onActivated: (index) => {
+        if (index >= 0 && index < model.length) {
+          const value = parseInt(model[index])
+          if (!isNaN(value) && Cpp_IO_Serial.baudRate !== value)
             Cpp_IO_Serial.baudRate = value
-            updatingIndex = false
-          }
         }
       }
     }

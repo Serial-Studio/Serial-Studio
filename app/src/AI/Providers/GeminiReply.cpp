@@ -72,6 +72,7 @@ AI::GeminiReply::GeminiReply(QNetworkAccessManager& nam,
 
   QNetworkRequest req(endpoint);
   req.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
+  req.setRawHeader("x-goog-api-key", apiKey.toUtf8());
   req.setRawHeader("accept", "text/event-stream");
   req.setTransferTimeout(kInitialResponseTimeoutMs);
 

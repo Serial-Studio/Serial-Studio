@@ -22,6 +22,7 @@
 
 #include "IO/Drivers/SlcanBackend.h"
 
+#include <chrono>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QVariant>
@@ -283,6 +284,10 @@ void IO::Drivers::SlcanBackend::onReadyRead()
   // frame batching allocate by nature, as in every driver read callback.
   m_rxBuffer.append(m_port->readAll());
 
+  const qint64 arrivalUsec = std::chrono::duration_cast<std::chrono::microseconds>(
+                               std::chrono::steady_clock::now().time_since_epoch())
+                               .count();
+
   QList<QCanBusFrame> received;
   int end = m_rxBuffer.indexOf('\r');
   while (end >= 0) {
@@ -290,8 +295,10 @@ void IO::Drivers::SlcanBackend::onReadyRead()
     m_rxBuffer.remove(0, end + 1);
 
     QCanBusFrame frame;
-    if (parseSlcanToken(token, frame))
+    if (parseSlcanToken(token, frame)) {
+      frame.setTimeStamp(QCanBusFrame::TimeStamp::fromMicroSeconds(arrivalUsec));
       received.append(frame);
+    }
 
     end = m_rxBuffer.indexOf('\r');
   }

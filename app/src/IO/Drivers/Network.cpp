@@ -183,28 +183,38 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
   QIODevice* socket = nullptr;
 
   if (socketType() == QAbstractSocket::TcpSocket) {
-    socket = static_cast<QIODevice*>(&m_tcpSocket);
     if (!connectTcp(hostAddr)) {
+      close();
+      return false;
+    }
+
+    socket = static_cast<QIODevice*>(&m_tcpSocket);
+  }
+
+  if (socketType() == QAbstractSocket::UdpSocket) {
+    if (!m_udpSocket.bind(udpLocalPort(),
+                          QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
+      qWarning() << "UDP bind failed on port" << udpLocalPort() << ":" << m_udpSocket.errorString();
+      close();
+      return false;
+    }
+
+    socket = static_cast<QIODevice*>(&m_udpSocket);
+  }
+
+  if (socketType() == QAbstractSocket::UdpSocket && udpMulticast()) {
+    const QHostAddress group(m_address);
+    if (group.isNull() || !m_udpSocket.joinMulticastGroup(group)) {
+      qWarning() << "UDP multicast join failed for" << m_address << ":"
+                 << m_udpSocket.errorString();
       close();
       return false;
     }
   }
 
-  else if (socketType() == QAbstractSocket::UdpSocket) {
-    m_udpSocket.bind(udpLocalPort(),
-                     QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint);
-
-    if (udpMulticast())
-      m_udpSocket.joinMulticastGroup(QHostAddress(QHostAddress(m_address).toIPv6Address()));
-
-    socket = static_cast<QIODevice*>(&m_udpSocket);
-  }
-
-  if (socket) {
-    if (socket->open(mode)) {
-      connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
-      return true;
-    }
+  if (socket && socket->open(mode)) {
+    connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
+    return true;
   }
 
   close();

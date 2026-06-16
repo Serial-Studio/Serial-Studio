@@ -22,6 +22,7 @@
 
 #include "IO/Drivers/CANBus.h"
 
+#include <chrono>
 #include <QCanBus>
 #include <QLoggingCategory>
 #include <stdexcept>
@@ -209,7 +210,7 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
              | static_cast<quint8>(data[3]);
       dlc_index = 4;
     } else
-      can_id = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+      can_id = ((static_cast<quint8>(data[0]) & 0x07) << 8) | static_cast<quint8>(data[1]);
 
     quint8 dlc     = static_cast<quint8>(data[dlc_index]);
     quint8 max_dlc = m_canFD ? 64 : 8;
@@ -659,7 +660,13 @@ void IO::Drivers::CANBus::onFramesReceived()
       while (data.size() < min_size)
         data.append(static_cast<char>(0));
 
-      publishReceivedData(std::move(data));
+      const auto stamp       = frame.timeStamp();
+      const qint64 stampUsec = stamp.seconds() * 1000000 + stamp.microSeconds();
+      if (stampUsec > 0) {
+        const CapturedData::SteadyTimePoint arrival{std::chrono::microseconds(stampUsec)};
+        publishReceivedData(std::move(data), arrival);
+      } else
+        publishReceivedData(std::move(data));
     }
   } catch (...) {
   }

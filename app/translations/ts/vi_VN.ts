@@ -87,32 +87,32 @@ Mỗi hành động thiết bị vẫn yêu cầu sự chấp thuận rõ ràng 
         <translation type="vanished">Trợ lý AI yêu cầu giấy phép Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="161"/>
+        <location filename="../../src/AI/Conversation.cpp" line="172"/>
         <source>AI Assistant is not available in this build</source>
         <translation>Trợ Lý AI không khả dụng trong bản dựng này</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="167"/>
+        <location filename="../../src/AI/Conversation.cpp" line="178"/>
         <source>AI subsystem not initialized</source>
         <translation>Hệ thống con AI chưa được khởi tạo</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="173"/>
+        <location filename="../../src/AI/Conversation.cpp" line="184"/>
         <source>Already busy with a previous request</source>
         <translation>Đang xử lý yêu cầu trước đó</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="489"/>
+        <location filename="../../src/AI/Conversation.cpp" line="500"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>Đã đạt giới hạn gọi công cụ cho lượt này; không có công cụ nào khác sẽ chạy.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1087"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1098"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>Đang chờ %1 phản hồi. Việc tải mô hình và xử lý lời nhắc có thể mất một lúc trên phần cứng cục bộ...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1945"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1956"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Bạn đã đạt giới hạn gọi công cụ cho lượt này. Không yêu cầu thêm công cụ. Tóm tắt những gì bạn đã tìm thấy cho đến nay và nếu tác vụ chưa hoàn thành, hãy nói các bước còn lại để người dùng có thể yêu cầu bạn tiếp tục.</translation>
     </message>
@@ -121,17 +121,17 @@ Mỗi hành động thiết bị vẫn yêu cầu sự chấp thuận rõ ràng 
         <translation type="vanished">Vượt quá giới hạn gọi công cụ</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="934"/>
+        <location filename="../../src/AI/Conversation.cpp" line="945"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Mô hình trả về phản hồi trống. Hãy thử diễn đạt lại, chuyển sang mô hình khác hoặc kiểm tra xem yêu cầu có được cho phép bởi bộ lọc an toàn của nhà cung cấp không.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1091"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1102"/>
         <source>Sending request to %1...</source>
         <translation>Đang gửi yêu cầu tới %1...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1103"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1114"/>
         <source>Provider returned no reply</source>
         <translation>Nhà cung cấp không trả về phản hồi</translation>
     </message>
@@ -139,37 +139,37 @@ Mỗi hành động thiết bị vẫn yêu cầu sự chấp thuận rõ ràng 
 <context>
     <name>AI::GeminiReply</name>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="145"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="146"/>
         <source>Prompt blocked by Gemini safety filter: %1</source>
         <translation>Lời nhắc bị chặn bởi bộ lọc an toàn Gemini: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="199"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="200"/>
         <source>Gemini stopped without producing a response: %1</source>
         <translation>Gemini dừng mà không tạo ra phản hồi: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="261"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="262"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="264"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="265"/>
         <source>Invalid API key (%1)</source>
         <translation>Khóa API không hợp lệ (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="266"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="267"/>
         <source>Rate limited: %1</source>
         <translation>Bị giới hạn tốc độ: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="268"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="269"/>
         <source>Invalid API key</source>
         <translation>Khóa API không hợp lệ</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="270"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="271"/>
         <source>Gemini %1: %2</source>
         <translation>Gemini %1: %2</translation>
     </message>
@@ -1285,56 +1285,56 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="47"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="65"/>
         <source>Axis Range Configuration</source>
         <translation>Cấu Hình Phạm Vi Trục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="161"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="179"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Cấu hình phạm vi hiển thị cho các trục biểu đồ. Giá trị cập nhật theo thời gian thực khi nhập.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="169"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="187"/>
         <source>X Axis</source>
         <translation>Trục X</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="194"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="265"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="283"/>
         <source>Minimum:</source>
         <translation>Tối Thiểu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="206"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="277"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="224"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="295"/>
         <source>Enter min value</source>
         <translation>Nhập giá trị tối thiểu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="215"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="286"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="304"/>
         <source>Maximum:</source>
         <translation>Tối Đa:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="227"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="298"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="245"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="316"/>
         <source>Enter max value</source>
         <translation>Nhập giá trị tối đa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="242"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="260"/>
         <source>Y Axis</source>
         <translation>Trục Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="317"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="335"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="327"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="345"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -1991,42 +1991,42 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Trình Điều Khiển CAN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
         <source>Interface</source>
         <translation>Giao Diện</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="169"/>
         <source>Bitrate</source>
         <translation>Tốc Độ Bit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="223"/>
         <source>Flexible Data-Rate</source>
         <translation>Tốc Độ Dữ Liệu Linh Hoạt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="243"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="263"/>
         <source>Listen-Only</source>
         <translation>Chỉ Lắng Nghe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="285"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="283"/>
         <source>DBC Database</source>
         <translation>Cơ Sở Dữ Liệu DBC</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="287"/>
         <source>Import DBC File…</source>
         <translation>Nhập Tệp DBC…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="320"/>
         <source>No CAN Interfaces Found</source>
         <translation>Không Tìm Thấy Giao Diện CAN</translation>
     </message>
@@ -3755,44 +3755,44 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1306"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1307"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1310"/>
         <source>Frame Parser</source>
         <translation>Bộ Phân Tích Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1448"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1449"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1491"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1492"/>
         <source>Groups</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1521"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1534"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1522"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1535"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1536"/>
         <source>Shared Memory</source>
         <translation>Bộ Nhớ Dùng Chung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1521"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1540"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1522"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1541"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5058"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1542"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5059"/>
         <source>Dataset Values</source>
         <translation>Giá Trị Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1583"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1584"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1597"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1598"/>
         <source>Workspaces</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1635"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1638"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1636"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1639"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1640"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
@@ -3801,791 +3801,791 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Script Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1712"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1713"/>
         <source>Publishing</source>
         <translation>Xuất Bản</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1723"/>
         <source>Enable Publishing</source>
         <translation>Bật Xuất Bản</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1723"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1724"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>Phát các khung, byte thô và thông báo đến broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1734"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1735"/>
         <source>Payload</source>
         <translation>Payload</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1735"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1736"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>Chọn nội dung xuất bản: dữ liệu bảng điều khiển đã phân tích hoặc byte RX thô</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1745"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
         <source>Publish Rate (Hz)</source>
         <translation>Tốc Độ Xuất Bản (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>Số lần xuất bản mỗi giây (1-30 Hz). Tốc độ cao tăng tải broker; dữ liệu bảng điều khiển bị giới hạn tốc độ nên broker chậm không bao giờ chặn phân tích khung.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1758"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
         <source>Topic Base</source>
         <translation>Topic Gốc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/thiết-bị</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1761"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>Topic cơ sở dùng để xuất bản frame và byte thô</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1770"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1771"/>
         <source>Script Topic</source>
         <translation>Topic Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1771"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1795"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1772"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1796"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>Mặc định là Topic Cơ Sở khi để trống</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1772"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1773"/>
         <source>Topic the user script publishes to</source>
         <translation>Topic mà script người dùng xuất bản đến</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1782"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
         <source>Publish Notifications</source>
         <translation>Xuất Bản Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>Phản chiếu thông báo dashboard đến một topic chuyên dụng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1794"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1795"/>
         <source>Notification Topic</source>
         <translation>Topic Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1796"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1797"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>Topic nơi thông báo dashboard được phản chiếu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1810"/>
         <source>Broker</source>
         <translation>Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1820"/>
         <source>Hostname</source>
         <translation>Tên Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1820"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1821"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1821"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1822"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>Tên máy chủ hoặc địa chỉ IP của broker MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1830"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1831"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1831"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1832"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>Cổng TCP do broker cung cấp (1883 thường, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1841"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1842"/>
         <source>Custom Client ID</source>
         <translation>ID Khách Tùy Chỉnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1844"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>Tắt: tạo ID ngẫu nhiên mới mỗi khi tải dự án. Bật: dùng ID bên dưới.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1854"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1855"/>
         <source>Client ID</source>
         <translation>ID Khách</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1855"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1856"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>Mã định danh gửi đến broker khi CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1869"/>
         <source>Protocol Version</source>
         <translation>Phiên Bản Giao Thức</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1869"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1870"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>Phiên bản giao thức MQTT sử dụng khi CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1878"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1879"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1879"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1880"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>Số giây giữa các gói PINGREQ khi nhàn rỗi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1888"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1889"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1889"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1890"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>Loại bỏ mọi trạng thái phiên lưu trữ khi CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1904"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
         <source>Username</source>
         <translation>Tên Người Dùng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1906"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>Tên người dùng để xác thực broker (để trống cho chế độ ẩn danh)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1915"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1916"/>
         <source>Password</source>
         <translation>Mật Khẩu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1916"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1917"/>
         <source>Password for broker authentication</source>
         <translation>Mật khẩu để xác thực broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1927"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1928"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1937"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1938"/>
         <source>Use SSL/TLS</source>
         <translation>Sử Dụng SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1938"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1939"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Đường hầm kết nối broker qua TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1951"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1952"/>
         <source>Protocol</source>
         <translation>Giao Thức</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1952"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1953"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Họ giao thức TLS được thương lượng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1962"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1963"/>
         <source>Peer Verify</source>
         <translation>Xác Minh Peer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1963"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1964"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Mức độ nghiêm ngặt xác thực chuỗi chứng chỉ của broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1973"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1974"/>
         <source>Verify Depth</source>
         <translation>Độ Sâu Xác Minh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1974"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1975"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Độ dài chuỗi chứng chỉ tối đa được chấp nhận (0 = không giới hạn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2186"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2187"/>
         <source>Project Information</source>
         <translation>Thông Tin Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2196"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2197"/>
         <source>Project Title</source>
         <translation>Tiêu Đề Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2197"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2198"/>
         <source>Untitled Project</source>
         <translation>Dự Án Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2198"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2199"/>
         <source>Name or description of the project</source>
         <translation>Tên hoặc mô tả của dự án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2216"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2217"/>
         <source>Group Information</source>
         <translation>Thông Tin Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2227"/>
         <source>Group Title</source>
         <translation>Tiêu Đề Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2227"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2228"/>
         <source>Untitled Group</source>
         <translation>Nhóm Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2228"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2229"/>
         <source>Title or description of this dataset group</source>
         <translation>Tiêu đề hoặc mô tả của nhóm dataset này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2243"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2877"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2244"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2878"/>
         <source>Device %1</source>
         <translation>Thiết Bị %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2261"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2426"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2262"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2427"/>
         <source>Input Device</source>
         <translation>Thiết Bị Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2262"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2263"/>
         <source>Select which connected device provides data for this group</source>
         <translation>Chọn thiết bị đã kết nối cung cấp dữ liệu cho nhóm này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2278"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2279"/>
         <source>Image Configuration</source>
         <translation>Cấu Hình Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2291"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2292"/>
         <source>Detection Mode</source>
         <translation>Chế Độ Phát Hiện</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2293"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2294"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>Tự động phát hiện đọc byte magic JPEG/PNG; Thủ công sử dụng chuỗi bắt đầu/kết thúc rõ ràng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2303"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2304"/>
         <source>Start Sequence (Hex)</source>
         <translation>Chuỗi Bắt Đầu (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2304"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2305"/>
         <source>e.g. FF D8 FF</source>
         <translation>ví dụ: FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2305"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2306"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Byte hex đánh dấu điểm bắt đầu của khung hình ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2314"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2315"/>
         <source>End Sequence (Hex)</source>
         <translation>Chuỗi Kết Thúc (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2315"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2316"/>
         <source>e.g. FF D9</source>
         <translation>ví dụ: FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2316"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2317"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Byte hex đánh dấu điểm kết thúc của khung hình ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2329"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2330"/>
         <source>Time</source>
         <translation>Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2329"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2330"/>
         <source>Samples</source>
         <translation>Mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2341"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2342"/>
         <source>Plot every curve against time or against the sample number</source>
         <translation>Vẽ đồ thị mỗi đường cong theo thời gian hoặc theo số mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2357"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2358"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2359"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2360"/>
         <source>Web address to load in this widget</source>
         <translation>Địa chỉ web để tải trong widget này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
         <source>Composite Widget</source>
         <translation>Widget Tổng Hợp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Chọn cách nhóm tập dữ liệu này sẽ được hiển thị trực quan (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2436"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2437"/>
         <source>Device Name</source>
         <translation>Tên Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2437"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2438"/>
         <source>Device 1</source>
         <translation>Thiết Bị 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2438"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2439"/>
         <source>Human-readable name for this input device</source>
         <translation>Tên dễ đọc cho thiết bị đầu vào này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2447"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2448"/>
         <source>Bus Type</source>
         <translation>Loại Bus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2448"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2449"/>
         <source>Select the hardware interface for this input device</source>
         <translation>Chọn giao diện phần cứng cho thiết bị đầu vào này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2451"/>
         <source>Serial Port</source>
         <translation>Cổng Nối Tiếp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2451"/>
         <source>Network Socket</source>
         <translation>Socket Mạng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2451"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>Audio Input</source>
         <translation>Đầu Vào Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>CAN Bus</source>
         <translation>Magistrala CAN</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>Raw USB</source>
         <translation>USB Thô</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2454"/>
         <source>HID Device</source>
         <translation>Thiết Bị HID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2454"/>
         <source>Process</source>
         <translation>Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2454"/>
         <source>MQTT Subscriber</source>
         <translation>Người Đăng Ký MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2467"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2468"/>
         <source>Frame Detection</source>
         <translation>Phát Hiện Khung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2481"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2482"/>
         <source>Frame Detection Method</source>
         <translation>Phương Thức Phát Hiện Khung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2482"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2483"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Chọn cách xác định các khung dữ liệu đến</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2492"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2493"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Dấu Phân Cách Thập Lục Phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2493"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2494"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Nhập chuỗi bắt đầu/kết thúc khung dưới dạng giá trị thập lục phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2510"/>
         <source>Frame Start Delimiter</source>
         <translation>Dấu Phân Cách Bắt Đầu Khung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2510"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2511"/>
         <source>e.g. /*</source>
         <translation>ví dụ: /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2512"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Chuỗi đánh dấu điểm bắt đầu của một khung dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2523"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2524"/>
         <source>Frame End Delimiter</source>
         <translation>Dấu Phân Cách Kết Thúc Khung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2524"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2525"/>
         <source>e.g. */</source>
         <translation>ví dụ: */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2525"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2526"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Chuỗi đánh dấu điểm kết thúc của một khung dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2531"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2532"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Xử Lý &amp; Xác Thực Payload</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2542"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2543"/>
         <source>Data Conversion Method</source>
         <translation>Phương Thức Chuyển Đổi Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2543"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2544"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Chọn cách giải mã dữ liệu nhị phân đến trước khi phân tích</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2559"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2560"/>
         <source>Checksum Algorithm</source>
         <translation>Thuật Toán Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2560"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2561"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Chọn thuật toán checksum dùng để xác thực các frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2608"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2609"/>
         <source>Connection Settings</source>
         <translation>Cài Đặt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2845"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3115"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4754"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2846"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4755"/>
         <source>General Information</source>
         <translation>Thông Tin Chung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2854"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2855"/>
         <source>Action Title</source>
         <translation>Tiêu Đề Hành Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2856"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2857"/>
         <source>Untitled Action</source>
         <translation>Hành Động Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2857"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2858"/>
         <source>Name or description of this action</source>
         <translation>Tên hoặc mô tả của hành động này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2866"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2867"/>
         <source>Action Icon</source>
         <translation>Biểu Tượng Hành Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2867"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2868"/>
         <source>Default Icon</source>
         <translation>Biểu Tượng Mặc Định</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2869"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Biểu tượng hiển thị cho hành động này trong bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2895"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2896"/>
         <source>Target Device</source>
         <translation>Thiết Bị Đích</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2896"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2897"/>
         <source>Select which connected device this action sends data to</source>
         <translation>Chọn thiết bị đã kết nối mà hành động này gửi dữ liệu đến</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2908"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2909"/>
         <source>Data Payload</source>
         <translation>Tải Trọng Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2919"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2920"/>
         <source>Send as Binary</source>
         <translation>Gửi dưới Dạng Nhị Phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2920"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2921"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Gửi dữ liệu nhị phân thô khi hành động này được kích hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2931"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2943"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2932"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2944"/>
         <source>Command</source>
         <translation>Lệnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2932"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2933"/>
         <source>Transmit Data (Hex)</source>
         <translation>Truyền Dữ Liệu (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2933"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2934"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Tải trọng thập lục phân để gửi khi hành động được kích hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2944"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2945"/>
         <source>Transmit Data</source>
         <translation>Truyền Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2945"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2946"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Tải trọng văn bản để gửi khi hành động được kích hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2956"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4813"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2957"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4814"/>
         <source>Text Encoding</source>
         <translation>Mã Hóa Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2957"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2958"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Mã hóa ký tự được sử dụng để tuần tự hóa dữ liệu văn bản</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2981"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2982"/>
         <source>End-of-Line Sequence</source>
         <translation>Chuỗi Kết Thúc Dòng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2982"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2983"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Ký tự EOL được thêm vào thông điệp (ví dụ: </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2994"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2995"/>
         <source>Execution Behavior</source>
         <translation>Hành Vi Thực Thi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3005"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3006"/>
         <source>Auto-Execute on Connect</source>
         <translation>Tự Động Thực Thi Khi Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3006"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3007"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Tự động kích hoạt hành động này khi thiết bị kết nối</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3012"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3013"/>
         <source>Timer Behavior</source>
         <translation>Hành Vi Bộ Đếm Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3021"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3022"/>
         <source>Timer Mode</source>
         <translation>Chế Độ Bộ Đếm Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3024"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3025"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Chọn thời điểm và cách thức hành động này tự động lặp lại</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3031"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3032"/>
         <source>Interval (ms)</source>
         <translation>Khoảng Thời Gian (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3035"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3036"/>
         <source>Timer Interval (ms)</source>
         <translation>Khoảng Thời Gian Bộ Đếm (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3036"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3037"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Số mili giây giữa mỗi lần kích hoạt lặp lại của hành động này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3043"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3047"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3044"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3048"/>
         <source>Repeat Count</source>
         <translation>Số Lần Lặp Lại</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3048"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3049"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Số lần gửi lệnh trong mỗi lần kích hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3125"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3126"/>
         <source>Untitled Dataset</source>
         <translation>Dataset Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3126"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3127"/>
         <source>Dataset Title</source>
         <translation>Tiêu Đề Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3127"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3128"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Tên của dataset, dùng để gắn nhãn và nhận dạng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
         <source>Virtual Dataset</source>
         <translation>Dataset Ảo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3141"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>Dataset ảo tính toán giá trị từ các phép biến đổi và bảng dữ liệu, không yêu cầu chỉ số khung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3156"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3157"/>
         <source>Hide on Dashboard</source>
         <translation>Ẩn trên Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3157"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3158"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Ẩn ô dashboard riêng của dataset này; widget vẽ vẫn có thể đọc các giá trị của nó</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3170"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3171"/>
         <source>Frame Index</source>
         <translation>Chỉ Số Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3171"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3172"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Vị trí frame dùng để căn chỉnh các dataset theo thời gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3180"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3181"/>
         <source>Measurement Unit</source>
         <translation>Đơn Vị Đo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3181"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3182"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampe, v.v.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3182"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3183"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Đơn vị đo lường, chẳng hạn như volt hoặc ampe (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3203"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3204"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Giới hạn dưới của phạm vi giá trị dataset; các widget và FFT sẽ dùng giá trị này khi phạm vi riêng của chúng không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3216"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3217"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Giới hạn trên của phạm vi giá trị dataset; các widget và FFT sẽ dùng giá trị này khi phạm vi riêng của chúng không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3229"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3230"/>
         <source>Plot Settings</source>
         <translation>Cài Đặt Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3252"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3253"/>
         <source>Enable Plot Widget</source>
         <translation>Bật Widget Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3254"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3255"/>
         <source>Plot data in real-time</source>
         <translation>Vẽ dữ liệu theo thời gian thực</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3543"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3544"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Số chữ số thập phân cố định cho hiển thị giá trị; ghi đè định dạng (-1 = tự động)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2340"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3273"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2341"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3274"/>
         <source>X-Axis Source</source>
         <translation>Nguồn Trục X</translation>
     </message>
@@ -4610,57 +4610,57 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Giới hạn trên cho phạm vi hiển thị biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3287"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3288"/>
         <source>Frequency Analysis</source>
         <translation>Phân Tích Tần Số</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3298"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3299"/>
         <source>Enable FFT Analysis</source>
         <translation>Bật Phân Tích FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3299"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3300"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Thực hiện phân tích miền tần số của tập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3309"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3310"/>
         <source>Enable Waterfall Plot</source>
         <translation>Bật Biểu Đồ Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3310"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3311"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Hiển thị phổ tần số cuộn theo thời gian (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3333"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3334"/>
         <source>Waterfall Y Axis</source>
         <translation>Trục Y Thác Nước</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3334"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3335"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Chọn Thời Gian (mặc định) hoặc bất kỳ tập dữ liệu nào có giá trị điều khiển trục Y -- tạo biểu đồ Campbell khi liên kết với RPM chẳng hạn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3361"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3362"/>
         <source>FFT Window Size</source>
         <translation>Kích Thước Cửa Sổ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3362"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3363"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Số lượng mẫu sử dụng cho mỗi cửa sổ tính toán FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3373"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3374"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Tần Số Lấy Mẫu FFT (Hz, bắt buộc)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3374"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3375"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Tần số lấy mẫu sử dụng cho FFT (tính bằng Hz)</translation>
     </message>
@@ -4681,17 +4681,17 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Giới hạn trên cho chuẩn hóa dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3423"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3424"/>
         <source>Widget Settings</source>
         <translation>Cài Đặt Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3446"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3447"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3447"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3448"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Chọn widget trực quan dùng để hiển thị tập dữ liệu này</translation>
     </message>
@@ -4712,29 +4712,29 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Giới hạn trên của phạm vi hiển thị đồng hồ đo hoặc thanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3503"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3538"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3699"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3504"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3539"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3700"/>
         <source>Auto</source>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3504"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3505"/>
         <source>Tick Count</source>
         <translation>Số Lượng Vạch Chia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3508"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3509"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Số lượng vạch chia chính trên thang đo (0 = tự động điều chỉnh theo kích thước widget)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3527"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3528"/>
         <source>Label Format</source>
         <translation>Định Dạng Nhãn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3528"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3529"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Số chữ số thập phân hoặc ký hiệu được sử dụng trên nhãn vạch chia và hiển thị giá trị</translation>
     </message>
@@ -4775,22 +4775,22 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Kích hoạt cảnh báo trực quan khi giá trị vượt quá ngưỡng này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3603"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
         <source>LED Display Settings</source>
         <translation>Cài Đặt Hiển Thị LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3614"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
         <source>Show in LED Panel</source>
         <translation>Hiển Thị trong Bảng LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3616"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Bật giám sát trạng thái trực quan bằng màn hình LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
         <source>LED On Threshold (required)</source>
         <translation>Ngưỡng Bật LED (bắt buộc)</translation>
     </message>
@@ -4799,179 +4799,179 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">LED sáng lên khi giá trị đạt hoặc vượt ngưỡng này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
         <source>Off</source>
         <translation>Tắt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
         <source>Auto Start</source>
         <translation>Tự Động Bắt Đầu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
         <source>Start on Trigger</source>
         <translation>Bắt Đầu Khi Có Tín Hiệu Kích Hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
         <source>Toggle on Trigger</source>
         <translation>Chuyển Đổi Khi Có Tín Hiệu Kích Hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3652"/>
         <source>Repeat N Times</source>
         <translation>Lặp Lại N Lần</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3654"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3655"/>
         <source>Plain Text (UTF8)</source>
         <translation>Văn Bản Thuần (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3654"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3655"/>
         <source>Hexadecimal</source>
         <translation>Thập Lục Phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3654"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3655"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3655"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3656"/>
         <source>Binary (Direct)</source>
         <translation>Nhị Phân (Trực Tiếp)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3660"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3661"/>
         <source>No Checksum</source>
         <translation>Không Có Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3664"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3665"/>
         <source>End Delimiter Only</source>
         <translation>Chỉ Ký Tự Kết Thúc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3664"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3665"/>
         <source>Start Delimiter Only</source>
         <translation>Chỉ Dấu Phân Cách Đầu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3665"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3666"/>
         <source>Start + End Delimiter</source>
         <translation>Dấu Phân Cách Đầu + Cuối</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3665"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3666"/>
         <source>No Delimiters</source>
         <translation>Không Có Dấu Phân Cách</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3673"/>
         <source>Auto-detect</source>
         <translation>Tự Động Phát Hiện</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3673"/>
         <source>Manual Delimiters</source>
         <translation>Dấu Phân Cách Thủ Công</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3675"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3676"/>
         <source>Button</source>
         <translation>Nút</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3675"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3676"/>
         <source>Slider</source>
         <translation>Thanh Trượt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3675"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3676"/>
         <source>Toggle</source>
         <translation>Công Tắc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3675"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3676"/>
         <source>Text Field</source>
         <translation>Trường Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3676"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3677"/>
         <source>Knob</source>
         <translation>Núm Xoay</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3681"/>
         <source>Data Grid</source>
         <translation>Lưới Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3681"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3682"/>
         <source>GPS Map</source>
         <translation>Bản Đồ GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3682"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3683"/>
         <source>Gyroscope</source>
         <translation>Con Quay Hồi Chuyển</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3683"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3684"/>
         <source>Multiple Plot</source>
         <translation>Đồ Thị Đa Trục</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3684"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3685"/>
         <source>Accelerometer</source>
         <translation>Gia Tốc Kế</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3685"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3686"/>
         <source>3D Plot</source>
         <translation>Đồ Thị 3D</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3686"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3687"/>
         <source>Image View</source>
         <translation>Khung Xem Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3687"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3688"/>
         <source>Painter Widget</source>
         <translation>Widget Vẽ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3688"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3689"/>
         <source>Web View</source>
         <translation>Khung Xem Web</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3689"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3692"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3707"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3690"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3708"/>
         <source>None</source>
         <translation>Không</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3694"/>
         <source>Bar</source>
         <translation>Thanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3694"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3695"/>
         <source>Gauge</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3695"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3696"/>
         <source>Compass</source>
         <translation>La Bàn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3696"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3697"/>
         <source>Meter</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
@@ -4980,153 +4980,153 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Nhiệt Kế</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3700"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3701"/>
         <source>Integer (0 decimals)</source>
         <translation>Số Nguyên (0 chữ số thập phân)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3701"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3702"/>
         <source>1 decimal</source>
         <translation>1 số thập phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3702"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3703"/>
         <source>2 decimals</source>
         <translation>2 số thập phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3703"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3704"/>
         <source>3 decimals</source>
         <translation>3 số thập phân</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3705"/>
         <source>Scientific</source>
         <translation>Khoa Học</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3708"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3709"/>
         <source>New Line (\n)</source>
         <translation>Dòng Mới (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3709"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3710"/>
         <source>Carriage Return (\r)</source>
         <translation>Về Đầu Dòng (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3710"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3711"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3713"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3714"/>
         <source>No</source>
         <translation>Không</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3714"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3715"/>
         <source>Yes</source>
         <translation>Có</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4764"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4765"/>
         <source>Label</source>
         <translation>Nhãn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4766"/>
         <source>Display label</source>
         <translation>Hiển thị nhãn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4775"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4776"/>
         <source>Button Icon</source>
         <translation>Biểu Tượng Nút</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4784"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4785"/>
         <source>Colorize Icon</source>
         <translation>Tô Màu Biểu Tượng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4785"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4786"/>
         <source>Tint the icon with the button color</source>
         <translation>Nhuộm biểu tượng với màu của nút</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4802"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4803"/>
         <source>Initial Value</source>
         <translation>Giá Trị Khởi Tạo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4814"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4815"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Bảng mã ký tự được sử dụng khi transmit() trả về giá trị chuỗi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4832"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4833"/>
         <source>Value Range</source>
         <translation>Phạm Vi Giá Trị</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3202"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4842"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3203"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4843"/>
         <source>Minimum Value</source>
         <translation>Giá Trị Tối Thiểu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1659"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1662"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1660"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1663"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1664"/>
         <source>Control Loop</source>
         <translation>Vòng Lặp Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3215"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4851"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3216"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4852"/>
         <source>Maximum Value</source>
         <translation>Giá Trị Tối Đa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3274"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3275"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Chọn Thời Gian hoặc một dataset để điều khiển trục X trong các biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3384"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3473"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3385"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3474"/>
         <source>Minimum Value (optional)</source>
         <translation>Giá Trị Tối Thiểu (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3385"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3386"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn dưới cho chuẩn hóa dữ liệu; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3397"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3486"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3398"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3487"/>
         <source>Maximum Value (optional)</source>
         <translation>Giá Trị Tối Đa (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3398"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3399"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn trên cho chuẩn hóa dữ liệu; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3474"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3475"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn dưới của phạm vi đồng hồ đo hoặc thanh; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3487"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3488"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn trên của phạm vi đồng hồ đo hoặc thanh; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3539"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3540"/>
         <source>Decimal Points</source>
         <translation>Số Chữ Số Thập Phân</translation>
     </message>
@@ -5135,47 +5135,47 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Số chữ số thập phân hiển thị trong cột giá trị của lưới dữ liệu (-1 = tự động)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3587"/>
         <source>On</source>
         <translation>Bật</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED sáng lên khi giá trị đạt hoặc vượt ngưỡng này; định nghĩa các dải cảnh báo cho màu sắc đa trạng thái</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4860"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4861"/>
         <source>Step Size</source>
         <translation>Kích Thước Bước</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5059"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5060"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>Giá trị thô và đã biến đổi cho mọi dataset (chỉ đọc)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5068"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5069"/>
         <source>Shared table defined in this project</source>
         <translation>Bảng dùng chung được định nghĩa trong dự án này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5427"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5428"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>Xóa 1 tham chiếu widget có nhóm hoặc tập dữ liệu đích không còn tồn tại?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5428"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5429"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>Xóa %1 tham chiếu widget có nhóm hoặc tập dữ liệu đích không còn tồn tại?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5433"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5434"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Thao tác này chỉ ảnh hưởng đến vị trí ô trong không gian làm việc; không có nhóm, tập dữ liệu hoặc dữ liệu nào bị xóa.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5436"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5437"/>
         <source>Clean Up Workspaces</source>
         <translation>Dọn Dẹp Không Gian Làm Việc</translation>
     </message>
@@ -5183,141 +5183,141 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="397"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="419"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="411"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="420"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="433"/>
         <source>Project error</source>
         <translation>Lỗi dự án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="411"/>
         <source>Project title cannot be empty!</source>
         <translation>Tiêu đề dự án không được để trống!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="406"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="420"/>
         <source>You need to add at least one group!</source>
         <translation>Bạn cần thêm ít nhất một nhóm!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="419"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="433"/>
         <source>You need to add at least one dataset!</source>
         <translation>Bạn cần thêm ít nhất một tập dữ liệu!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="466"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="480"/>
         <source>Your project needs a title</source>
         <translation>Dự án của bạn cần có tiêu đề</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="482"/>
         <source>Add a group to get started</source>
         <translation>Thêm một nhóm để bắt đầu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="484"/>
         <source>Add a dataset to a group</source>
         <translation>Thêm tập dữ liệu vào nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="498"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Mở chế độ xem Dự án ở đầu cây và nhập tên. Bạn có thể đổi tên dự án bất cứ lúc nào.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="487"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="501"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Nhóm tổ chức các tập dữ liệu thành widget bảng điều khiển. Sử dụng nút Nhóm trên thanh công cụ để tạo nhóm, sau đó thêm tập dữ liệu vào đó.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="491"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="505"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Tập dữ liệu là các giá trị xuất hiện trên bảng điều khiển. Chọn một nhóm trong cây và sử dụng nút Tập dữ liệu trên thanh công cụ để thêm.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="539"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="548"/>
         <source>Lock Project</source>
         <translation>Khóa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="526"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="540"/>
         <source>Choose a password to lock the project:</source>
         <translation>Chọn mật khẩu để khóa dự án:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="548"/>
         <source>Confirm the password:</source>
         <translation>Xác nhận mật khẩu:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="539"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="553"/>
         <source>Passwords do not match</source>
         <translation>Mật khẩu không khớp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="540"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="554"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Hai mật khẩu bạn nhập không khớp. Dự án chưa được khóa.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="588"/>
         <source>Unlock Project</source>
         <translation>Mở Khóa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="575"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="589"/>
         <source>Enter the project password:</source>
         <translation>Nhập mật khẩu dự án:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="585"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="599"/>
         <source>Incorrect password</source>
         <translation>Mật khẩu không đúng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="600"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Mật khẩu bạn nhập không khớp với mật khẩu được lưu trong tệp dự án.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="617"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="631"/>
         <source>New Project</source>
         <translation>Dự Án Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="817"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="831"/>
         <source>Samples</source>
         <translation>Mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="816"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="865"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="830"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="879"/>
         <source>Time</source>
         <translation>Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1274"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1288"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Nhiều nguồn dữ liệu yêu cầu giấy phép Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1289"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro cho phép kết nối đồng thời với nhiều thiết bị. Vui lòng nâng cấp để mở khóa tính năng này.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1287"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1301"/>
         <source>Device %1</source>
         <translation>Thiết Bị %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1319"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1333"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Bạn có muốn xóa nguồn dữ liệu "%1" không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1320"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1334"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Các nhóm sử dụng nguồn này sẽ chuyển về nguồn mặc định. Hành động này không thể hoàn tác.</translation>
     </message>
@@ -5326,119 +5326,119 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">(Bản Sao)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1557"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1571"/>
         <source>Do you want to save your changes?</source>
         <translation>Lưu các thay đổi?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1572"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Dự án có các thay đổi chưa được lưu!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1597"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
         <source>Save Serial Studio Project</source>
         <translation>Lưu Dự Án Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1599"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2221"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1613"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2235"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Tệp Dự Án Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1620"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1839"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2212"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1634"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1853"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
         <source>Untitled Project</source>
         <translation>Dự Án Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1851"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2367"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1865"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2381"/>
         <source>Device A</source>
         <translation>Thiết Bị A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2064"/>
         <source>Select Project File</source>
         <translation>Chọn Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2052"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2066"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Tệp Dự Án (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2096"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
         <source>JSON validation error</source>
         <translation>Lỗi xác thực JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2186"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2200"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Dự Án Đã Được Nâng Cấp Từ Định Dạng Tập Tin Cũ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2201"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Dự án này được lưu với phiên bản schema %1; phiên bản hiện tại là %2. Các trường mới đã được áp dụng giá trị mặc định. Lưu dự án để hoàn tất nâng cấp.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2233"/>
         <source>Save Imported Project</source>
         <translation>Lưu Dự Án Đã Nhập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2411"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2425"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Dự án đa nguồn yêu cầu giấy phép Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2412"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2426"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Dự án này chứa nhiều nguồn dữ liệu. Chỉ nguồn đầu tiên được tải. Cần có giấy phép Serial Studio Pro để sử dụng dự án đa nguồn.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2645"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Workspace IDs remapped on load</source>
         <translation>ID Không Gian Làm Việc Được Ánh Xạ Lại Khi Tải</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 ID không gian làm việc tùy chỉnh bị trùng với dải tự động mới đã được chuyển sang dải người dùng. Lưu dự án để áp dụng ánh xạ vĩnh viễn.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2788"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2802"/>
         <source>Legacy frame parser function updated</source>
         <translation>Hàm phân tích frame cũ đã được cập nhật</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2789"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2803"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Dự án của bạn đã sử dụng hàm phân tích frame cũ với tham số 'separator'. Nó đã được tự động chuyển đổi sang định dạng mới.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2987"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3001"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Bạn có muốn xóa nhóm "%1" không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2988"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3065"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3803"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3047"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3079"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3817"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Hành động này không thể hoàn tác. Bạn có muốn tiếp tục không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3032"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3046"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Bạn có muốn xóa hành động "%1" không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3064"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3078"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Bạn có muốn xóa dataset "%1" không?</translation>
     </message>
@@ -5447,78 +5447,78 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">%1 (Bản Sao)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3715"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3751"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3765"/>
         <source>Output Controls</source>
         <translation>Điều Khiển Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3777"/>
         <source>New Button</source>
         <translation>Nút Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3766"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3780"/>
         <source>New Slider</source>
         <translation>Thanh Trượt Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3769"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3783"/>
         <source>New Toggle</source>
         <translation>Công Tắc Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3772"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3786"/>
         <source>New Text Field</source>
         <translation>Trường Văn Bản Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3789"/>
         <source>New Knob</source>
         <translation>Núm Xoay Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3802"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3816"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Bạn có muốn xóa widget đầu ra "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3981"/>
         <source>Group</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3985"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3999"/>
         <source>New Dataset</source>
         <translation>Dataset Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3988"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4002"/>
         <source>New Plot</source>
         <translation>Biểu Đồ Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3992"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4006"/>
         <source>New FFT Plot</source>
         <translation>Biểu Đồ FFT Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4010"/>
         <source>New Level Indicator</source>
         <translation>Chỉ Báo Mức Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4000"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4014"/>
         <source>New Gauge</source>
         <translation>Đồng Hồ Đo Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4004"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4018"/>
         <source>New Compass</source>
         <translation>La Bàn Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4024"/>
         <source>New Meter</source>
         <translation>Đồng Hồ Đo Mới</translation>
     </message>
@@ -5527,261 +5527,261 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Nhiệt Kế Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4014"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4028"/>
         <source>New LED Indicator</source>
         <translation>Chỉ Báo LED Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4018"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4032"/>
         <source>New Waterfall</source>
         <translation>Thác Nước Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4086"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4100"/>
         <source>Channel %1</source>
         <translation>Kênh %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4171"/>
         <source>New Action</source>
         <translation>Hành Động Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4295"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4309"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Xác nhận thay đổi widget cấp nhóm?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4297"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4311"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Các tập dữ liệu hiện có của nhóm này sẽ bị xóa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4365"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4366"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4367"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4379"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4380"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4381"/>
         <source>Accelerometer %1</source>
         <translation>Gia Tốc Kế %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4382"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4382"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4382"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4396"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4396"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4396"/>
         <source>Gyro %1</source>
         <translation>Con Quay Hồi Chuyển %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4411"/>
         <source>Latitude</source>
         <translation>Vĩ Độ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4411"/>
         <source>Longitude</source>
         <translation>Kinh Độ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4411"/>
         <source>Altitude</source>
         <translation>Độ Cao</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4412"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4426"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4440"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4412"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4426"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4440"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4412"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4426"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4440"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4684"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5561"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5580"/>
         <source>Workspace</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4849"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4863"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5070"/>
         <source>Shared Table</source>
         <translation>Bảng Dùng Chung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4927"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4941"/>
         <source>register</source>
         <translation>thanh ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5070"/>
         <source>New Shared Table</source>
         <translation>Bảng Chia Sẻ Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5051"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5068"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5070"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="5087"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5111"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="5157"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5179"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5201"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5561"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5582"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5176"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5198"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5580"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5601"/>
         <source>Name:</source>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5068"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5087"/>
         <source>Rename Table</source>
         <translation>Đổi Tên Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5087"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5106"/>
         <source>Rename Group</source>
         <translation>Đổi Tên Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5111"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
         <source>Rename Dataset</source>
         <translation>Đổi Tên Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5157"/>
         <source>Rename Data Source</source>
         <translation>Đổi Tên Nguồn Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5176"/>
         <source>Rename Action</source>
         <translation>Đổi Tên Hành Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5178"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5197"/>
         <source>New Register</source>
         <translation>Thanh Ghi Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5201"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5220"/>
         <source>Rename Register</source>
         <translation>Đổi Tên Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5238"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5263"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6084"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5257"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5282"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6103"/>
         <source>This action cannot be undone.</source>
         <translation>Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5239"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5258"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Thao tác này sẽ xóa %1 thanh ghi cùng với bảng. Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5242"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5262"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6083"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5261"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5281"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6102"/>
         <source>Delete "%1"?</source>
         <translation>Xóa "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5245"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5264"/>
         <source>Delete Table</source>
         <translation>Xóa Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5284"/>
         <source>Delete Register</source>
         <translation>Xóa Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5288"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5307"/>
         <source>Export Table</source>
         <translation>Xuất Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5290"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5332"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5351"/>
         <source>CSV files (*.csv)</source>
         <translation>Tệp CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5349"/>
         <source>Import Table</source>
         <translation>Nhập Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5561"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5580"/>
         <source>New Workspace</source>
         <translation>Không Gian Làm Việc Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5582"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5601"/>
         <source>Rename Workspace</source>
         <translation>Đổi Tên Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5684"/>
         <source>Overview</source>
         <translation>Tổng Quan</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5674"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5693"/>
         <source>All Data</source>
         <translation>Tất Cả Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5852"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5871"/>
         <source>Discard workspace customisations?</source>
         <translation>Hủy bỏ tùy chỉnh không gian làm việc?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5853"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5872"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Tắt Tùy chỉnh sẽ hủy các chỉnh sửa của bạn và xây dựng lại danh sách không gian làm việc từ các nhóm của dự án.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5856"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5875"/>
         <source>Customize Workspaces</source>
         <translation>Tùy Chỉnh Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6086"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6105"/>
         <source>Delete Workspace</source>
         <translation>Xóa Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6466"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6486"/>
         <source>Project file removed from disk</source>
         <translation>Tệp dự án đã bị xóa khỏi đĩa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6487"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 đã bị xóa hoặc đổi tên bởi chương trình khác. Lưu dự án để tạo lại tệp.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6487"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6508"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6529"/>
         <source>Project file changed on disk</source>
         <translation>Tệp dự án đã thay đổi trên đĩa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6509"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 đã bị sửa đổi bởi chương trình khác. Dự án trong bộ nhớ được giữ nguyên; mở lại tệp để tải các thay đổi bên ngoài.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6504"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6525"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -5790,7 +5790,7 @@ Reload it and discard your unsaved changes?</source>
 Tải lại và hủy các thay đổi chưa lưu?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6506"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6527"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -5799,12 +5799,12 @@ Reload it?</source>
 Tải lại tệp?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6536"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6558"/>
         <source>File save error</source>
         <translation>Lỗi lưu tệp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2255"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2269"/>
         <source>File open error</source>
         <translation>Lỗi mở tệp</translation>
     </message>
@@ -5897,7 +5897,7 @@ Tải lại tệp?</translation>
         <translation>Nhập Protobuf Hoàn Tất</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1053"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1055"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
@@ -7919,67 +7919,67 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="752"/>
         <source>channels</source>
         <translation>kênh</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="805"/>
         <source> channels</source>
         <translation>kênh</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="953"/>
         <source>Unsigned 8-bit</source>
         <translation>Unsigned 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="945"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
         <source>Signed 16-bit</source>
         <translation>Signed 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="955"/>
         <source>Signed 24-bit</source>
         <translation>Signed 24-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="956"/>
         <source>Signed 32-bit</source>
         <translation>Signed 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="957"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="960"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="952"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="961"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1332"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1342"/>
         <source>Input Device</source>
         <translation>Thiết Bị Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1340"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1350"/>
         <source>Sample Rate</source>
         <translation>Tốc Độ Lấy Mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1348"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1358"/>
         <source>Sample Format</source>
         <translation>Định Dạng Mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1356"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1366"/>
         <source>Channels</source>
         <translation>Kênh</translation>
     </message>
@@ -8065,35 +8065,35 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>Tạo Thiết Bị CAN Thất Bại</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Không thể tạo thiết bị CAN bus. Kiểm tra phần cứng và trình điều khiển.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="297"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="298"/>
         <source>CAN Connection Failed</source>
         <translation>Kết Nối CAN Thất Bại</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="300"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Không thể kết nối với thiết bị CAN bus. Kiểm tra kết nối phần cứng và cài đặt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="316"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="322"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="328"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="333"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="317"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="334"/>
         <source>CAN Bus Not Available</source>
         <translation>Magistrala CAN Không Khả Dụng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="317"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8102,7 +8102,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Trên Linux, đảm bảo các module kernel SOCKETCAN đã được tải.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8111,7 +8111,7 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Trên Windows, cài đặt driver phần cứng CAN (PEAK, VECTOR, v.v.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8120,138 +8120,138 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Hỗ trợ magistrala CAN trên macOS bị hạn chế và có thể yêu cầu driver phần cứng của bên thứ ba.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="334"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Không có plugin magistrala CAN nào khả dụng trên nền tảng này.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="346"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
         <source>Invalid CAN Configuration</source>
         <translation>Cấu Hình CAN Không Hợp Lệ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Cấu hình magistrala CAN chưa đầy đủ. Chọn một plugin và giao diện hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="355"/>
         <source>Invalid Selection</source>
         <translation>Lựa Chọn Không Hợp Lệ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Plugin hoặc giao diện đã chọn không còn khả dụng. Làm mới danh sách và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="363"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>No Devices Available</source>
         <translation>Không Có Thiết Bị Khả Dụng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Danh sách plugin hoặc giao diện trống. Làm mới danh sách và đảm bảo phần cứng CAN đã được kết nối.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="687"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="694"/>
         <source>CAN Bus Error</source>
         <translation>Lỗi CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="695"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>Đã xảy ra lỗi nhưng thiết bị CAN không còn khả dụng.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="702"/>
         <source>Error code: %1</source>
         <translation>Mã lỗi: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="705"/>
         <source>CAN Bus Communication Error</source>
         <translation>Lỗi Truyền Thông CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="713"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="720"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Kết nối bộ chuyển đổi %1, sau đó làm mới</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="717"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="724"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Tải các module kernel SOCKETCAN trước</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="720"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="727"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Thiết lập giao diện CAN ảo trước</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="722"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="749"/>
         <source>No interfaces found for %1</source>
         <translation>Không tìm thấy giao diện nào cho %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Cài đặt &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;trình điều khiển PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="730"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Cài đặt &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;trình điều khiển VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Cài đặt &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;trình điều khiển CAN SysTec&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="744"/>
         <source>Install %1 drivers</source>
         <translation>Cài đặt trình điều khiển %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="747"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Cài đặt trình điều khiển %1 cho macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="755"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="762"/>
         <source>No CAN driver selected</source>
         <translation>Chưa chọn trình điều khiển CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="843"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="844"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="851"/>
         <source>Interface</source>
         <translation>Giao Diện</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="859"/>
         <source>Bitrate</source>
         <translation>Tốc Độ Bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="861"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="868"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="868"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="875"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="882"/>
         <source>Listen-Only</source>
         <translation>Chỉ Lắng Nghe</translation>
     </message>
@@ -8259,67 +8259,67 @@ Hỗ trợ magistrala CAN trên macOS bị hạn chế và có thể yêu cầu 
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="381"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="382"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>Không thể khởi tạo libusb cho bộ chuyển đổi CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="410"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>Không thể liệt kê các thiết bị USB.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="429"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="430"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>Bộ chuyển đổi CANable đã chọn không còn được kết nối, hoặc một ứng dụng khác đang mở nó. Trên Windows, thiết bị phải sử dụng trình điều khiển WinUSB (candleLight tự động cài đặt nó).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="443"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>Không thể chiếm giao diện USB CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="510"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>Bộ chuyển đổi CANable không được mở để ghi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="544"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="545"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>Không thể truyền khung CAN đến bộ chuyển đổi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="561"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>Lỗi CAN bus được báo cáo bởi bộ chuyển đổi CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="615"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="616"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>Một khung CAN không được xác nhận trên bus.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="708"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="715"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>Bộ chuyển đổi CANable từ chối bắt tay định dạng máy chủ.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="722"/>
         <source>Could not read CANable timing constants.</source>
         <translation>Không thể đọc hằng số thời gian CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="728"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>Tốc độ bit %1 bps không được hỗ trợ bởi bộ chuyển đổi CANable này.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="727"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="734"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>Bộ chuyển đổi CANable từ chối tốc độ bit được yêu cầu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="748"/>
         <source>Could not start the CANable channel.</source>
         <translation>Không thể khởi động kênh CANable.</translation>
     </message>
@@ -8871,37 +8871,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="513"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="523"/>
         <source>Network socket error</source>
         <translation>Lỗi socket mạng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="529"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="539"/>
         <source>Socket Type</source>
         <translation>Loại Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="537"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="547"/>
         <source>Remote Address</source>
         <translation>Địa Chỉ từ Xa</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="545"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="555"/>
         <source>TCP Port</source>
         <translation>Cổng TCP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="554"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="564"/>
         <source>UDP Local Port</source>
         <translation>Cổng Cục Bộ UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="563"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="573"/>
         <source>UDP Remote Port</source>
         <translation>Cổng từ Xa UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="572"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="582"/>
         <source>UDP Multicast</source>
         <translation>Multicast UDP</translation>
     </message>
@@ -9008,27 +9008,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="205"/>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="206"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>Tốc độ bit %1 bps không được hỗ trợ bởi USB-CAN Analyzer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="215"/>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="216"/>
         <source>Could not open serial port %1: %2</source>
         <translation>Không thể mở cổng nối tiếp %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="226"/>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="227"/>
         <source>Failed to initialize the USB-CAN Analyzer.</source>
         <translation>Không thể khởi tạo USB-CAN Analyzer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="263"/>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="264"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>USB-CAN Analyzer chưa mở để ghi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="309"/>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="310"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>Lỗi CAN bus được báo cáo bởi USB-CAN Analyzer.</translation>
     </message>
@@ -9036,27 +9036,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SlcanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="166"/>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="167"/>
         <source>The bitrate %1 bps is not a standard slcan rate.</source>
         <translation>Tốc độ bit %1 bps không phải là tốc độ slcan chuẩn.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="177"/>
         <source>Could not open serial port %1: %2</source>
         <translation>Không thể mở cổng nối tiếp %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="189"/>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="190"/>
         <source>Failed to open the slcan channel.</source>
         <translation>Không thể mở kênh slcan.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="228"/>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="229"/>
         <source>slcan adapter is not open for writing.</source>
         <translation>Bộ chuyển đổi slcan chưa mở để ghi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="266"/>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="267"/>
         <source>CAN bus error reported by the slcan adapter.</source>
         <translation>Lỗi CAN bus được báo cáo bởi bộ chuyển đổi slcan.</translation>
     </message>
@@ -9066,169 +9066,169 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="69"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="375"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="414"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="391"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="430"/>
         <source>None</source>
         <translation>Không Có</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="245"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="261"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>Không thể kết nối với cổng nối tiếp "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="333"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="717"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="733"/>
         <source>Select Port</source>
         <translation>Chọn Cổng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="392"/>
         <source>Even</source>
         <translation>Chẵn</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
         <source>Odd</source>
         <translation>Lẻ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="378"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
         <source>Space</source>
         <translation>Khoảng Trắng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
         <source>Mark</source>
         <translation>Đánh Dấu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="415"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="431"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="546"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="562"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1" không phải là đường dẫn hợp lệ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="547"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="563"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Vui lòng nhập đường dẫn khác để đăng ký thiết bị nối tiếp tùy chỉnh</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="798"/>
         <source>Unknown</source>
         <translation>Không Rõ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="783"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="799"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Lỗi nghiêm trọng trên cổng nối tiếp "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="800"/>
         <source>Unknown error</source>
         <translation>Lỗi không xác định</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="822"/>
         <source>No error occurred.</source>
         <translation>Không có lỗi xảy ra.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="807"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="823"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Không tìm thấy thiết bị được chỉ định. Kiểm tra kết nối và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="824"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Quyền truy cập bị từ chối. Đảm bảo ứng dụng có quyền truy cập cần thiết vào thiết bị.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="825"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Không thể mở thiết bị. Thiết bị có thể đang được sử dụng hoặc không khả dụng.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="826"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Lỗi xảy ra khi ghi dữ liệu vào thiết bị.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="827"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Lỗi xảy ra khi đọc dữ liệu từ thiết bị.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="828"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Lỗi tài nguyên nghiêm trọng xảy ra. Thiết bị có thể đã bị ngắt kết nối hoặc không còn truy cập được.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="813"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Thao tác được yêu cầu không được hỗ trợ trên thiết bị này.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="814"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Đã xảy ra lỗi không xác định. Kiểm tra thiết bị và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Thao tác đã hết thời gian chờ. Thiết bị có thể không phản hồi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="816"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Thiết bị chưa được mở. Mở thiết bị trước khi thực hiện thao tác này.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="978"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="994"/>
         <source>Serial Port</source>
         <translation>Cổng Nối Tiếp</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1002"/>
         <source>Baud Rate</source>
         <translation>Tốc Độ Baud</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="994"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1010"/>
         <source>Parity</source>
         <translation>Chẵn Lẻ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1002"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1018"/>
         <source>Data Bits</source>
         <translation>Bit Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1010"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1026"/>
         <source>Stop Bits</source>
         <translation>Bit Dừng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1018"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1034"/>
         <source>Flow Control</source>
         <translation>Điều Khiển Luồng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1042"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
         <source>Auto-Reconnect</source>
         <translation>Kết Nối Lại Tự Động</translation>
     </message>
@@ -9236,33 +9236,33 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="169"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="156"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="164"/>
         <source>USB Error</source>
         <translation>Lỗi USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="157"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>Không thể khởi tạo hệ thống con USB. Kiểm tra xem libusb có sẵn trên hệ thống của bạn.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="165"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>Chưa chọn thiết bị USB. Chọn một thiết bị và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
         <source>Unknown Device</source>
         <translation>Thiết Bị Không Xác Định</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="189"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
         <source>Failed to open "%1"</source>
         <translation>Không thể mở "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="190"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -9271,14 +9271,14 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 Trên Linux, đảm bảo bạn có quyền đọc/ghi trên nút thiết bị (thêm quy tắc udev hoặc chạy với quyền root). Trên macOS, có thể cần tách trình điều khiển kernel trước.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="212"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="227"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="612"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="199"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="214"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="572"/>
         <source>USB Device Error</source>
         <translation>Lỗi Thiết Bị USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="228"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="215"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -9287,42 +9287,42 @@ Another driver or application may already have it open. On Linux, try unloading 
 Trình điều khiển hoặc ứng dụng khác có thể đã mở nó. Trên Linux, thử gỡ trình điều khiển kernel (ví dụ: cdc_acm) hoặc thêm quy tắc udev.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="386"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="360"/>
         <source>Select Device</source>
         <translation>Chọn Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="405"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="379"/>
         <source>Select IN Endpoint</source>
         <translation>Chọn Điểm Cuối IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="390"/>
         <source>None (Read-only)</source>
         <translation>Không Có (Chỉ Đọc)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="490"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="464"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>Bật Truyền Điều Khiển USB Nâng Cao?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="491"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="465"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>Tính năng này bật truyền điều khiển bên cạnh truyền khối. Gửi yêu cầu điều khiển không đúng có thể làm hỏng hoặc gây hại cho phần cứng đã kết nối. Chỉ bật nếu bạn biết mình đang làm gì.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="495"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="469"/>
         <source>Advanced USB Mode</source>
         <translation>Chế Độ USB Nâng Cao</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="613"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="573"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>Thiết bị USB đã bị ngắt kết nối hoặc gặp lỗi đọc nghiêm trọng.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="710"/>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
 Switch the Transfer Mode to "Bulk Stream" and try again.</source>
@@ -9331,7 +9331,7 @@ Switch the Transfer Mode to "Bulk Stream" and try again.</source>
 Chuyển Chế Độ Truyền sang "Luồng Khối" và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="755"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="715"/>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -9340,7 +9340,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 Chuyển Chế Độ Truyền sang "Đẳng Thời" và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="719"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may require a specific driver.</source>
@@ -9349,42 +9349,42 @@ The device may not expose data endpoints in its active configuration, or it may 
 Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong cấu hình đang hoạt động hoặc có thể yêu cầu trình điều khiển cụ thể.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1185"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1211"/>
         <source>USB Device</source>
         <translation>Thiết Bị USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1193"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1219"/>
         <source>Transfer Mode</source>
         <translation>Chế Độ Truyền</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1222"/>
         <source>Bulk Stream</source>
         <translation>Luồng Bulk</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1222"/>
         <source>Advanced Control</source>
         <translation>Điều Khiển Nâng Cao</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1222"/>
         <source>Isochronous</source>
         <translation>Isochronous</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1201"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1227"/>
         <source>IN Endpoint</source>
         <translation>Điểm Cuối IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1209"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1235"/>
         <source>OUT Endpoint</source>
         <translation>Điểm Cuối OUT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1217"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1243"/>
         <source>ISO Packet Size</source>
         <translation>Kích Thước Gói ISO</translation>
     </message>
@@ -11093,45 +11093,45 @@ Cảm ơn bạn một lần nữa vì đã ủng hộ Serial Studio!</translatio
         <translation>Chọn Thư Mục Kho Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1014"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1017"/>
         <source>Installed (repository no longer available)</source>
         <translation>Đã cài đặt (kho không còn khả dụng)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1321"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1331"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1352"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1374"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1418"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1437"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1324"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1334"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1355"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1377"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1421"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1431"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1440"/>
         <source>Plugin Error</source>
         <translation>Lỗi Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1321"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1324"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>Plugin "%1" chưa được cài đặt.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1332"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1335"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>Tiện ích mở rộng "%1" không phải là plugin (loại: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1353"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1356"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>Không thể đọc tệp metadata của plugin:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1378"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>Plugin "%1" yêu cầu GRPC nhưng bản build này không bao gồm hỗ trợ GRPC.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1384"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1387"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -11140,39 +11140,39 @@ Would you like to enable it now?</source>
 Bạn có muốn bật ngay bây giờ không?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1387"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1390"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>Các plugin cần máy chủ API để giao tiếp với Serial Studio. Bạn có muốn bật nó ngay bây giờ không?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1390"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
         <source>API Server Required</source>
         <translation>Yêu Cầu Máy Chủ API</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1419"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1422"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>Plugin "%1" không có trường 'entry' trong info.json.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1432"/>
         <source>Entry point not found:
 %1</source>
         <translation>Không tìm thấy điểm vào:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1441"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>Plugin "%1" có đường dẫn điểm vào không hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1481"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1484"/>
         <source>Missing Dependency</source>
         <translation>Thiếu Phụ Thuộc</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1482"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1485"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -11303,8 +11303,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Không thể tạo cấu trúc thư mục bundle .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Trình ghi lối tắt Windows không khả dụng trên nền tảng này.</translation>
     </message>
@@ -11335,8 +11335,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Lưu tệp .lnk thất bại (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Trình tạo lối tắt macOS không khả dụng trên nền tảng này.</translation>
     </message>
@@ -11473,87 +11473,87 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Giao Thức</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="70"/>
         <source>Serial Port</source>
         <translation>Cổng Nối Tiếp</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="97"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="93"/>
         <source>Baud Rate</source>
         <translation>Tốc Độ Baud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="201"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="184"/>
         <source>Parity</source>
         <translation>Chẵn Lẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="205"/>
         <source>Data Bits</source>
         <translation>Bit Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="226"/>
         <source>Stop Bits</source>
         <translation>Bit Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="268"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="247"/>
         <source>Host</source>
         <translation>Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="257"/>
         <source>IP Address</source>
         <translation>Địa Chỉ IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="271"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="280"/>
         <source>TCP Port</source>
         <translation>Cổng TCP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="308"/>
         <source>Slave Address</source>
         <translation>Địa Chỉ Slave</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="313"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="349"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="328"/>
         <source>Poll Interval (ms)</source>
         <translation>Chu Kỳ Truy Vấn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="354"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <source>Polling interval</source>
         <translation>Khoảng thời gian truy vấn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="361"/>
         <source>Configure Register Groups…</source>
         <translation>Cấu Hình Nhóm Thanh Ghi…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="371"/>
         <source>Import Register Map…</source>
         <translation>Nhập Bản Đồ Thanh Ghi…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="386"/>
         <source>%1 group(s) configured</source>
         <translation>Đã cấu hình %1 nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="387"/>
         <source>No groups configured</source>
         <translation>Chưa cấu hình nhóm nào</translation>
     </message>
@@ -13441,52 +13441,52 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Phạm Vi Thời Gian:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="205"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="198"/>
         <source>Point Count:</source>
         <translation>Số Lượng Điểm:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="266"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="252"/>
         <source>Source</source>
         <translation>Nguồn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="253"/>
         <source>Sources</source>
         <translation>Nguồn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="272"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="258"/>
         <source>Group</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="259"/>
         <source>Groups</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="278"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="264"/>
         <source>Dataset</source>
         <translation>Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="279"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="265"/>
         <source>Datasets</source>
         <translation>Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="284"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="270"/>
         <source>Action</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="271"/>
         <source>Actions</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="373"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="359"/>
         <source>Double-click a block to edit it. Right-click anywhere to add a group, dataset, action, data table, or device.</source>
         <translation>Nhấp đúp vào một khối để chỉnh sửa. Nhấp chuột phải bất kỳ đâu để thêm nhóm, tập dữ liệu, hành động, bảng dữ liệu hoặc thiết bị.</translation>
     </message>
@@ -13694,7 +13694,7 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Lỗi I/O chung</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/LocalProvider.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/LocalProvider.cpp" line="351"/>
         <source>No local model server URL configured. Open Manage Keys to set one.</source>
         <translation>Chưa cấu hình URL máy chủ mô hình cục bộ. Mở Quản Lý Khóa để thiết lập.</translation>
     </message>
@@ -13776,8 +13776,8 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Serial Studio đang loại bỏ các frame để giữ ứng dụng phản hồi. Vui lòng đơn giản hóa hoặc tối ưu hóa script bộ phân tích frame để giảm khối lượng công việc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Bộ Phân Tích Frame Đã Tắt</translation>
     </message>
@@ -13819,8 +13819,8 @@ Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực kỳ chậ
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>Thiếu Hàm Parse</translation>
     </message>
@@ -13836,8 +13836,8 @@ Vui lòng đảm bảo mã của bạn bao gồm:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>Lỗi Runtime Hàm Parse</translation>
     </message>
@@ -14284,147 +14284,147 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="279"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="280"/>
         <source>Session Report</source>
         <translation>Báo Cáo Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="188"/>
         <source>Branding</source>
         <translation>Thương Hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="194"/>
         <source>Page</source>
         <translation>Trang</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="199"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="200"/>
         <source>Sections</source>
         <translation>Các Phần</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="247"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="248"/>
         <source>Identity</source>
         <translation>Danh Tính</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="261"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="262"/>
         <source>Company</source>
         <translation>Công Ty</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="268"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="269"/>
         <source>e.g. Acme Test Systems</source>
         <translation>ví dụ: Hệ Thống Kiểm Tra Acme</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="272"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="273"/>
         <source>Document title</source>
         <translation>Tiêu đề tài liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="283"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="284"/>
         <source>Author</source>
         <translation>Tác Giả</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="291"/>
         <source>Prepared by (optional)</source>
         <translation>Người chuẩn bị (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="299"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="300"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="313"/>
         <source>File</source>
         <translation>Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="324"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG hoặc SVG (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="326"/>
         <source>Browse…</source>
         <translation>Duyệt…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="328"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="329"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
         <source>Paper</source>
         <translation>Giấy</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="381"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="382"/>
         <source>Page size</source>
         <translation>Kích thước trang</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="396"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="397"/>
         <source>Plot appearance</source>
         <translation>Giao diện biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="410"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
         <source>Line width</source>
         <translation>Độ rộng đường</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="442"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="443"/>
         <source>Line style</source>
         <translation>Kiểu đường</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
         <source>Include</source>
         <translation>Bao Gồm</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="498"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Trang bìa (logo, tiêu đề tài liệu, phụ đề kiểm tra)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="500"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="501"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Thông tin kiểm tra (dự án, dấu thời gian, phân loại và ghi chú)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="503"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="504"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Tóm tắt đo lường (min, max, trung bình, độ lệch chuẩn cho mỗi tham số)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="507"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Xu hướng tham số (biểu đồ chuỗi thời gian cho mỗi tham số số)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="509"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="510"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Chú thích giá trị min, max và trung bình trên biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="532"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="533"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="558"/>
         <source>Export PDF</source>
         <translation>Xuất PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="558"/>
         <source>Export HTML</source>
         <translation>Xuất HTML</translation>
     </message>
@@ -15372,13 +15372,13 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1032"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1041"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1033"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1042"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
@@ -15497,7 +15497,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Vẽ Đồ Thị Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="660"/>
         <source>Point Count</source>
         <translation>Số Lượng Điểm</translation>
     </message>
@@ -15507,239 +15507,239 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Phạm Vi Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="683"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Tốc Độ Làm Mới Giao Diện (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="705"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="707"/>
         <source>Dashboard Font</source>
         <translation>Phông Chữ Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="720"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1195"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="722"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1204"/>
         <source>Font Family</source>
         <translation>Họ Phông Chữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="735"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1210"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1219"/>
         <source>Font Size</source>
         <translation>Cỡ Phông Chữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="745"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
         <source>Small</source>
         <translation>Nhỏ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="745"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
         <source>Normal</source>
         <translation>Bình Thường</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="745"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
         <source>Large</source>
         <translation>Lớn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="745"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
         <source>Extra Large</source>
         <translation>Rất Lớn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="745"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
         <source>Custom</source>
         <translation>Tùy Chỉnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="792"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="801"/>
         <source>Layout</source>
         <translation>Bố Cục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="807"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="816"/>
         <source>Show Actions Panel</source>
         <translation>Hiển Thị Bảng Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="830"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="839"/>
         <source>Video Export</source>
         <translation>Xuất Video</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="848"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
         <source>Save Videos by Default</source>
         <translation>Lưu Video Theo Mặc Định</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="899"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="908"/>
         <source>Behavior</source>
         <translation>Hành Vi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="920"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Luôn Hiển Thị Các Nút Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="935"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Show Search Field</source>
         <translation>Hiển Thị Trường Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="950"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="959"/>
         <source>Auto-hide Taskbar</source>
         <translation>Tự Động Ẩn Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="968"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="977"/>
         <source>Hide Delay (ms)</source>
         <translation>Độ Trễ Ẩn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="992"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1001"/>
         <source>Pinned Buttons</source>
         <translation>Các Nút Đã Ghim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1010"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1019"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Kéo một nút đã ghim trên thanh tác vụ để sắp xếp lại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1031"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1040"/>
         <source>Settings</source>
         <translation>Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1034"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1043"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1035"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1044"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1036"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1045"/>
         <source>Pause / Resume</source>
         <translation>Tạm Dừng / Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1037"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1046"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1038"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1047"/>
         <source>AI Assistant</source>
         <translation>Trợ Lý AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1176"/>
         <source>Display</source>
         <translation>Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1182"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1191"/>
         <source>Display Mode</source>
         <translation>Chế Độ Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1227"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1236"/>
         <source>Show Timestamps</source>
         <translation>Hiển Thị Dấu Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1246"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1255"/>
         <source>Data Transmission</source>
         <translation>Truyền Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1261"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1270"/>
         <source>Line Ending</source>
         <translation>Kết Thúc Dòng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1274"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1283"/>
         <source>Input Mode</source>
         <translation>Chế Độ Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1287"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1296"/>
         <source>Text Encoding</source>
         <translation>Mã Hóa Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1300"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1309"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1322"/>
         <source>Echo Sent Data</source>
         <translation>Phản Hồi Dữ Liệu Đã Gửi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1332"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>Escape Codes</source>
         <translation>Mã Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1347"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1356"/>
         <source>VT100 Emulation</source>
         <translation>Mô Phỏng VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1366"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1375"/>
         <source>ANSI Colors</source>
         <translation>Màu ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1424"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1433"/>
         <source>Delivery</source>
         <translation>Phân Phối</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1439"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1448"/>
         <source>System Notifications</source>
         <translation>Thông Báo Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1460"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1469"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Hiển thị sự kiện Cảnh báo/Nghiêm trọng dưới dạng thông báo desktop của hệ điều hành khi Serial Studio không phải là cửa sổ đang hoạt động.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1470"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1479"/>
         <source>Application Logs</source>
         <translation>Nhật Ký Ứng Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1485"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1494"/>
         <source>Route Warnings to Notifications</source>
         <translation>Chuyển Cảnh Báo sang Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1506"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1515"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Tắt theo mặc định — QT và QML phát ra cảnh báo thường xuyên và bật tính năng này có thể làm lu mờ các cảnh báo thực sự. Thông báo nghiêm trọng luôn được chuyển bất kể cài đặt này.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1525"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1534"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1563"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1572"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1571"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1580"/>
         <source>Apply</source>
         <translation>Áp Dụng</translation>
     </message>
@@ -15861,204 +15861,204 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Chọn Biểu Tượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="106"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="109"/>
         <source>Save Deployment</source>
         <translation>Lưu Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="146"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="152"/>
         <source>General</source>
         <translation>Chung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="152"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="158"/>
         <source>Taskbar</source>
         <translation>Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="158"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="164"/>
         <source>Logging</source>
         <translation>Ghi Nhật Ký</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="215"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="221"/>
         <source>Identity</source>
         <translation>Định Danh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="271"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="277"/>
         <source>Click to choose an icon</source>
         <translation>Nhấp để chọn biểu tượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="280"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="286"/>
         <source>Name:</source>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="289"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="295"/>
         <source>Deployment Name</source>
         <translation>Tên Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="298"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="304"/>
         <source>Change Icon…</source>
         <translation>Đổi Biểu Tượng…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="315"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="321"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="339"/>
         <source>Project</source>
         <translation>Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="343"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="349"/>
         <source>Choose a project file to begin</source>
         <translation>Chọn tệp dự án để bắt đầu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="365"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="371"/>
         <source>Behavior</source>
         <translation>Hành Vi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="380"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="386"/>
         <source>Theme</source>
         <translation>Giao Diện</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="390"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="396"/>
         <source>Same as Serial Studio</source>
         <translation>Giống Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="402"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="408"/>
         <source>Fullscreen</source>
         <translation>Toàn Màn Hình</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="412"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="418"/>
         <source>Actions Panel</source>
         <translation>Bảng Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="423"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="632"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="429"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="638"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="445"/>
         <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Nhấp đúp vào triển khai này sẽ đưa người dùng thẳng đến dashboard trực tiếp cho dự án này. Không có thanh công cụ hay ngăn thiết lập, chỉ có dữ liệu, và Serial Studio thoát ngay khi thiết bị ngắt kết nối.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="485"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
         <source>Visibility</source>
         <translation>Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="500"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="506"/>
         <source>Mode</source>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="509"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="515"/>
         <source>Always shown</source>
         <translation>Luôn Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="510"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
         <source>Auto-hide</source>
         <translation>Tự Động Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="517"/>
         <source>Hidden</source>
         <translation>Đã Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="526"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="532"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>Ẩn thanh tác vụ sẽ loại bỏ các nút thu nhỏ/phóng to/đóng cửa sổ và buộc bố cục tự động, do đó dashboard luôn lấp đầy vùng khả dụng.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="530"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="536"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>Thanh tác vụ trượt vào khi người dùng di chuyển con trỏ gần cạnh dưới.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="532"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="538"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>Thanh tác vụ hiển thị cố định ở cuối dashboard.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="545"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="551"/>
         <source>Pinned Buttons</source>
         <translation>Nút Ghim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="562"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="568"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="576"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="582"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="590"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="596"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="604"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="610"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="618"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="682"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="688"/>
         <source>Recorders</source>
         <translation>Bộ Ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="697"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="703"/>
         <source>CSV File</source>
         <translation>Tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="707"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="713"/>
         <source>MDF4 File</source>
         <translation>Tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="717"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
         <source>Session Database</source>
         <translation>Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="727"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
         <source>Console Log</source>
         <translation>Nhật Ký Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="743"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="749"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Bản ghi được lưu trong thư mục làm việc của Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="772"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="778"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="781"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="787"/>
         <source>Save</source>
         <translation>Lưu</translation>
     </message>
@@ -16595,12 +16595,12 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="811"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="813"/>
         <source>No</source>
         <translation>Không</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="811"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="813"/>
         <source>Yes</source>
         <translation>Có</translation>
     </message>
@@ -17191,7 +17191,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Khóa tín hiệu lặp lại tại chỗ, giống như nút Auto trên máy hiện sóng. Mỗi lần quét bắt đầu tại cùng một điểm trên dạng sóng, do đó nó giữ nguyên thay vì cuộn qua.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="184"/>
         <source>Trigger</source>
         <translation>Tín Hiệu Kích Hoạt</translation>
     </message>
@@ -17200,57 +17200,57 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Chế Độ:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="121"/>
         <source>Mode</source>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="146"/>
         <source>Auto</source>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="146"/>
         <source>Normal</source>
         <translation>Bình Thường</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="146"/>
         <source>Single</source>
         <translation>Đơn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="158"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="169"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto chạy tự do khi không có gì vượt qua mức.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="170"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal chờ đợi một lần vượt qua.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="171"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Single chụp một lần quét, sau đó dừng lại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="238"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="252"/>
         <source>Slope:</source>
         <translation>Độ Dốc:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="284"/>
         <source>Trigger on a downward crossing</source>
         <translation>Kích hoạt khi vượt qua xuống</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="316"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="330"/>
         <source>Timebase:</source>
         <translation>Cơ Sở Thời Gian:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="381"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="399"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Để trống cơ sở thời gian để sử dụng phạm vi thời gian của biểu đồ; giảm xuống để phóng to tín hiệu nhanh. Holdoff bỏ qua các tín hiệu kích hoạt mới trong một khoảnh khắc sau mỗi lần.</translation>
     </message>
@@ -17259,7 +17259,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Tín Hiệu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="241"/>
         <source>Value to cross</source>
         <translation>Giá trị cần vượt qua</translation>
     </message>
@@ -17268,17 +17268,17 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Cạnh:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="251"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="265"/>
         <source>Rising</source>
         <translation>Lên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="269"/>
         <source>Trigger on an upward crossing</source>
         <translation>Kích hoạt khi vượt qua lên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="266"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="280"/>
         <source>Falling</source>
         <translation>Xuống</translation>
     </message>
@@ -17287,7 +17287,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Một lần quét mới bắt đầu mỗi khi tín hiệu vượt qua mức trong hướng đã chọn. Auto cũng chạy tự do khi không tìm thấy điểm vượt qua.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="289"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="303"/>
         <source>Timing</source>
         <translation>Thời Gian</translation>
     </message>
@@ -17296,23 +17296,23 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Cơ sở thời gian (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="329"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="343"/>
         <source>Match time range</source>
         <translation>Khớp phạm vi thời gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="341"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="368"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="356"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="386"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="347"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="362"/>
         <source>Holdoff:</source>
         <translation>Holdoff:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="360"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="375"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -17321,17 +17321,17 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Cơ sở thời gian đặt khoảng thời gian mà một lần quét hiển thị; để trống để sử dụng phạm vi thời gian của biểu đồ. Giảm xuống để phóng to tín hiệu nhanh. Holdoff bỏ qua các tín hiệu kích hoạt mới trong một khoảnh khắc sau mỗi lần.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="396"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="414"/>
         <source>Capture Next</source>
         <translation>Chụp Tiếp Theo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="398"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="416"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Kích hoạt cho một lần chụp đơn tiếp theo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="217"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="228"/>
         <source>Level:</source>
         <translation>Mức:</translation>
     </message>
@@ -17348,7 +17348,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Thời gian giữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="208"/>
         <source>Source:</source>
         <translation>Nguồn:</translation>
     </message>
@@ -17357,7 +17357,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Tái Kích Hoạt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="411"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="429"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -17370,37 +17370,37 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Cổng COM</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="81"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="79"/>
         <source>Baud Rate</source>
         <translation>Tốc Độ Baud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="163"/>
         <source>Data Bits</source>
         <translation>Bit Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="184"/>
         <source>Parity</source>
         <translation>Chẵn Lẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="216"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="205"/>
         <source>Stop Bits</source>
         <translation>Bit Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <source>Flow Control</source>
         <translation>Điều Khiển Luồng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="258"/>
         <source>Auto Reconnect</source>
         <translation>Kết Nối Lại Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="287"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
         <source>Send DTR Signal</source>
         <translation>Gửi Tín Hiệu DTR</translation>
     </message>
@@ -17597,117 +17597,117 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="166"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="169"/>
         <source>Add Register</source>
         <translation>Thêm Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="169"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="172"/>
         <source>Add register</source>
         <translation>Thêm thanh ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Insert Constant</source>
         <translation>Chèn Hằng Số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="182"/>
         <source>Insert constant</source>
         <translation>Chèn hằng số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="189"/>
         <source>Import</source>
         <translation>Nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="189"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="192"/>
         <source>Import registers from CSV</source>
         <translation>Nhập thanh ghi từ CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="196"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Export</source>
         <translation>Xuất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="202"/>
         <source>Export registers to CSV</source>
         <translation>Xuất thanh ghi ra CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="211"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="214"/>
         <source>Rename</source>
         <translation>Đổi Tên</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="217"/>
         <source>Rename table</source>
         <translation>Đổi tên bảng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="224"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="224"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="227"/>
         <source>Delete table</source>
         <translation>Xóa bảng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="238"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="241"/>
         <source>Help</source>
         <translation>Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="246"/>
         <source>Open help documentation for shared memory</source>
         <translation>Mở tài liệu trợ giúp về bộ nhớ chia sẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="283"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="286"/>
         <source>Permissions</source>
         <translation>Quyền</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="284"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="287"/>
         <source>Register Name</source>
         <translation>Tên Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="288"/>
         <source>Default Value</source>
         <translation>Giá Trị Mặc Định</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="327"/>
         <source>Read-Only</source>
         <translation>Chỉ Đọc</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="327"/>
         <source>Read/Write</source>
         <translation>Đọc/ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="462"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="465"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>Sao chép mã truy cập %1 vào clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="498"/>
         <source>Delete register</source>
         <translation>Xóa thanh ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="515"/>
         <source>No registers.</source>
         <translation>Không có thanh ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="562"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="565"/>
         <source>Register access code copied</source>
         <translation>Đã sao chép mã truy cập thanh ghi</translation>
     </message>
@@ -18248,7 +18248,7 @@ Tôi hiểu rằng khi kết thúc, tôi cần mua bản quyền hoặc tự bi�
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="959"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="961"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Khoảng Lưới: %1 đơn vị</translation>
     </message>

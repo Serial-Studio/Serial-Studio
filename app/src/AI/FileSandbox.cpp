@@ -176,6 +176,27 @@ bool AI::FileSandbox::isWithinRoot(const QString& canonical, const QString& root
 }
 
 /**
+ * @brief Re-canonicalizes an opened path and confirms it still resolves within a root.
+ */
+static bool openedPathWithinRoots(const QString& openedPath, const QStringList& roots)
+{
+  const QFileInfo info(openedPath);
+  const auto canonical = info.canonicalFilePath();
+  if (canonical.isEmpty())
+    return false;
+
+  for (const auto& root : roots) {
+    if (root.isEmpty())
+      continue;
+
+    if (canonical == root || canonical.startsWith(root + QLatin1Char('/')))
+      return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Resolves an input path for reading against the workspace + dropped roots.
  */
 AI::FileSandbox::Resolved AI::FileSandbox::resolveRead(const QString& input) const
@@ -189,8 +210,11 @@ AI::FileSandbox::Resolved AI::FileSandbox::resolveRead(const QString& input) con
   if (canonical.isEmpty())
     return {false, {}, QStringLiteral("not_found"), {}};
 
-  for (const auto& root : readRoots())
-    if (isWithinRoot(canonical, root))
+  if (isWithinRoot(canonical, base))
+    return {true, canonical, {}, {}};
+
+  for (const auto& dropped : droppedPaths())
+    if (canonical == dropped)
       return {true, canonical, {}, {}};
 
   return {false,
@@ -273,7 +297,11 @@ static bool looksBinary(const QByteArray& sample)
  */
 QString AI::FileSandbox::registerDroppedPath(const QString& localPath)
 {
-  const auto canonical = QFileInfo(localPath).canonicalFilePath();
+  const QFileInfo dropped(localPath);
+  if (dropped.isSymLink() || !dropped.isFile())
+    return {};
+
+  const auto canonical = dropped.canonicalFilePath();
   if (canonical.isEmpty())
     return {};
 
@@ -312,7 +340,7 @@ static void collectEntries(const QString& dir,
   if (depth > AI::FileSandbox::kMaxRecurseDepth || truncated)
     return;
 
-  const auto flags = QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden;
+  const auto flags = QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden | QDir::NoSymLinks;
   const auto infos = QDir(dir).entryInfoList(flags, QDir::Name | QDir::DirsFirst);
   for (const auto& info : infos) {
     if (rows.size() >= AI::FileSandbox::kMaxListEntries) {
@@ -388,6 +416,10 @@ QJsonObject AI::FileSandbox::read(const QJsonObject& args) const
   QFile file(resolved.path);
   if (!file.open(QIODevice::ReadOnly))
     return failure(QStringLiteral("open_failed"), file.errorString());
+
+  if (info.isSymLink() || !openedPathWithinRoots(file.fileName(), readRoots()))
+    return failure(QStringLiteral("outside_sandbox"),
+                   QStringLiteral("Refusing to read a symlinked or sandbox-escaping path."));
 
   const qint64 total  = file.size();
   const qint64 offset = qBound<qint64>(0, args.value(QStringLiteral("offset")).toInteger(0), total);
@@ -474,8 +506,9 @@ static QStringList gatherSearchFiles(const QStringList& roots, int cap)
       continue;
     }
 
-    QDirIterator it(
-      root, QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden, QDirIterator::Subdirectories);
+    QDirIterator it(root,
+                    QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::NoSymLinks,
+                    QDirIterator::Subdirectories);
     while (it.hasNext() && files.size() < cap)
       files.append(it.next());
 
@@ -535,6 +568,10 @@ static QJsonObject writeBytes(const QString& path,
                               const QString& root)
 {
   const QFileInfo info(path);
+  if (info.isSymLink())
+    return failure(QStringLiteral("outside_sandbox"),
+                   QStringLiteral("Refusing to write through a symlinked target."));
+
   if (!QDir().mkpath(info.absolutePath()))
     return failure(QStringLiteral("mkdir_failed"), info.absolutePath());
 

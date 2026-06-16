@@ -29,6 +29,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSaveFile>
 #include <QStandardPaths>
 #include <QTimer>
 
@@ -153,16 +154,12 @@ QString Misc::BackupManager::snapshot(const QString& label)
   fileName += QStringLiteral(".ssproj");
 
   const auto fullPath = QDir(dir).filePath(fileName);
-  QFile out(fullPath);
+  QSaveFile out(fullPath);
   if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
     return {};
 
-  if (out.write(bytes) != bytes.size()) {
-    out.close();
-    QFile::remove(fullPath);
+  if (out.write(bytes) != bytes.size() || !out.commit())
     return {};
-  }
-  out.close();
 
   m_lastSnapshotPath = fullPath;
   m_lastContentHash  = newHash;
@@ -208,17 +205,17 @@ bool Misc::BackupManager::restore(const QString& path)
 
   const auto originalPath = pm.jsonFilePath();
 
+  (void)snapshot(QStringLiteral("pre-restore"));
+
   pm.setSuppressMessageBoxes(true);
   const bool ok = pm.loadFromJsonDocument(projectDoc, originalPath);
   pm.setSuppressMessageBoxes(false);
+  if (!ok)
+    return false;
 
-  if (ok && !originalPath.isEmpty())
-    (void)pm.apiSaveJsonFile(originalPath);
-
-  if (ok)
-    Q_EMIT restored(path);
-
-  return ok;
+  pm.setModified(true);
+  Q_EMIT restored(path);
+  return true;
 }
 
 /**
@@ -498,15 +495,17 @@ void Misc::BackupManager::seedDedupFromNewest(const QString& dir)
 }
 
 /**
- * @brief Evict the oldest snapshots once the retention cap is exceeded.
+ * @brief Evict the oldest snapshots once the retention cap is exceeded; ordered by the embedded
+ *        ISO timestamp filename prefix so a sync/copy that rewrites mtime cannot drop the newest.
  */
 void Misc::BackupManager::enforceRetention(const QString& dir)
 {
   QDir d(dir);
   const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
                                        QDir::Files | QDir::NoDotAndDotDot,
-                                       QDir::Time | QDir::Reversed);
+                                       QDir::Name | QDir::Reversed);
 
   for (int i = kRetentionDefault; i < entries.size(); ++i)
-    QFile::remove(entries.at(i).absoluteFilePath());
+    if (!QFile::remove(entries.at(i).absoluteFilePath()))
+      qWarning() << "[BackupManager] Failed to evict snapshot" << entries.at(i).absoluteFilePath();
 }

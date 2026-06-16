@@ -23,9 +23,11 @@
 #include "IO/Drivers/USB.h"
 
 #include <QApplication>
+#include <QElapsedTimer>
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QMetaObject>
+#include <QThread>
 #include <QTimer>
 
 #include "IO/ConnectionManager.h"
@@ -42,6 +44,8 @@ constexpr int kDefaultIsoPacketSize      = 1024;
 constexpr int kIsoNumTransfers           = 8;
 constexpr int kIsoPacketsPerTransfer     = 8;
 constexpr int kHotplugFallbackIntervalMs = 2000;
+constexpr int kIsoDrainTimeoutMs         = 2000;
+constexpr int kIsoDrainPollMs            = 5;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton
@@ -62,6 +66,7 @@ IO::Drivers::USB::USB()
   , m_transferMode(TransferMode::BulkStream)
   , m_running(false)
   , m_eventLoopRunning(false)
+  , m_isoInFlight(0)
   , m_activeInEp(0)
   , m_activeOutEp(0)
 {
@@ -103,39 +108,21 @@ IO::Drivers::USB::USB()
 }
 
 /**
- * @brief Stops worker threads, releases libusb resources, and closes the device. Order is
- * deliberate: stop the read thread and cancel in-flight iso transfers (so the event loop drains
- * them) before joining the event thread; only once that thread is joined does this thread own
- * libusb state exclusively, making the hotplug/context calls below safe without a lock.
+ * @brief Destructor: tears down threads and libusb state in the documented safe order (stop
+ *        reader, drain iso callbacks while the event thread pumps, join it, then free).
  */
 IO::Drivers::USB::~USB()
 {
-  m_running = false;
-  if (m_readThread.isRunning()) {
-    if (!m_readThread.wait(2000))
-      m_readThread.terminate();
-
-    m_readThread.wait();
-  }
-
-  for (auto* t : std::as_const(m_isoTransfers))
-    libusb_cancel_transfer(t);
-
-  m_eventLoopRunning.store(false, std::memory_order_release);
-  if (m_eventThread.isRunning()) {
-    if (!m_eventThread.wait(2000))
-      m_eventThread.terminate();
-
-    m_eventThread.wait();
-  }
+  stopReadThread();
+  cancelAndDrainTransfers();
+  stopEventThread();
 
   if (m_ctx && m_hotplugHandle) {
     libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
     m_hotplugHandle = 0;
   }
 
-  for (auto* t : std::as_const(m_isoTransfers))
-    libusb_free_transfer(t);
+  freeTransfers();
 
   for (auto* dev : std::as_const(m_devicePtrs))
     libusb_unref_device(dev);
@@ -259,22 +246,9 @@ void IO::Drivers::USB::close()
   Q_ASSERT(m_ctx != nullptr);
   Q_ASSERT(m_activeInEp != 0 || m_handle == nullptr);
 
-  m_running = false;
-
-  for (auto* t : std::as_const(m_isoTransfers))
-    libusb_cancel_transfer(t);
-
-  if (m_readThread.isRunning()) {
-    if (!m_readThread.wait(2000))
-      m_readThread.terminate();
-
-    m_readThread.wait();
-  }
-
-  for (auto* t : std::as_const(m_isoTransfers))
-    libusb_free_transfer(t);
-
-  m_isoTransfers.clear();
+  stopReadThread();
+  cancelAndDrainTransfers();
+  freeTransfers();
 
   disconnect(&m_readThread, &QThread::started, this, &USB::readLoop);
   disconnect(&m_readThread, &QThread::started, this, &USB::isoReadLoop);
@@ -562,37 +536,23 @@ void IO::Drivers::USB::setIsoPacketSize(const int size)
 }
 
 /**
- * @brief Connects the driver to application-level lifecycle signals. On quit, hotplug is
- * deregistered first because that wakes the event loop out of its blocking poll so the event
- * thread can then be joined.
+ * @brief Connects the driver to application-level lifecycle signals. On quit, the read thread is
+ * joined, iso transfers are cancelled and drained, and the event thread is joined before the
+ * transfer pool is freed, matching the teardown order in close()/~USB().
  */
 void IO::Drivers::USB::setupExternalConnections()
 {
   connect(qApp, &QApplication::aboutToQuit, this, [this] {
-    m_running = false;
-    m_eventLoopRunning.store(false, std::memory_order_release);
+    stopReadThread();
+    cancelAndDrainTransfers();
+    stopEventThread();
 
     if (m_ctx && m_hotplugHandle) {
       libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
       m_hotplugHandle = 0;
     }
 
-    for (auto* t : std::as_const(m_isoTransfers))
-      libusb_cancel_transfer(t);
-
-    if (m_readThread.isRunning()) {
-      if (!m_readThread.wait(2000))
-        m_readThread.terminate();
-
-      m_readThread.wait();
-    }
-
-    if (m_eventThread.isRunning()) {
-      if (!m_eventThread.wait(2000))
-        m_eventThread.terminate();
-
-      m_eventThread.wait();
-    }
+    freeTransfers();
   });
 }
 
@@ -869,6 +829,66 @@ void IO::Drivers::USB::eventLoop()
 }
 
 /**
+ * @brief Stops and joins the bulk read thread. Mirrors HID::cleanupDevice: the started+
+ * DirectConnection idiom drops the thread into exec() once readLoop returns, so quit() before
+ * wait() is mandatory and terminate() (which corrupts libusb mid-transfer) is never used.
+ */
+void IO::Drivers::USB::stopReadThread()
+{
+  m_running.store(false, std::memory_order_release);
+
+  if (m_readThread.isRunning()) {
+    m_readThread.quit();
+    m_readThread.wait();
+  }
+}
+
+/**
+ * @brief Cancels every iso transfer and pumps the event loop until all callbacks have reported
+ * back. libusb forbids freeing an in-flight transfer, so this must drain to zero before the event
+ * thread is stopped; the bounded deadline is a safety net, not the expected exit.
+ */
+void IO::Drivers::USB::cancelAndDrainTransfers()
+{
+  for (auto* t : std::as_const(m_isoTransfers))
+    libusb_cancel_transfer(t);
+
+  QElapsedTimer timer;
+  timer.start();
+  while (m_isoInFlight.load(std::memory_order_acquire) > 0 && timer.elapsed() < kIsoDrainTimeoutMs)
+    QThread::msleep(kIsoDrainPollMs);
+}
+
+/**
+ * @brief Stops and joins the libusb event thread. quit() before wait() because eventLoop runs on
+ * the started+DirectConnection idiom and would otherwise fall into exec().
+ */
+void IO::Drivers::USB::stopEventThread()
+{
+  m_eventLoopRunning.store(false, std::memory_order_release);
+
+  if (m_eventThread.isRunning()) {
+    m_eventThread.quit();
+    m_eventThread.wait();
+  }
+}
+
+/**
+ * @brief Frees the iso transfer pool and its buffers. Sole owner of transfer->buffer: only valid
+ * once the read and event threads are joined, so no callback can race the free.
+ */
+void IO::Drivers::USB::freeTransfers()
+{
+  for (auto* t : std::as_const(m_isoTransfers)) {
+    delete[] t->buffer;
+    libusb_free_transfer(t);
+  }
+
+  m_isoTransfers.clear();
+  m_isoInFlight.store(0, std::memory_order_release);
+}
+
+/**
  * @brief Static libusb hotplug callback invoked when a device arrives or leaves.
  */
 int LIBUSB_CALL IO::Drivers::USB::hotplugCallback(libusb_context*,
@@ -977,6 +997,7 @@ void IO::Drivers::USB::allocateIsoTransfers()
       libusb_free_transfer(t);
     } else {
       m_isoTransfers.append(t);
+      m_isoInFlight.fetch_add(1, std::memory_order_acq_rel);
     }
   }
 }
@@ -991,9 +1012,8 @@ void IO::Drivers::USB::isoReadLoop()
 }
 
 /**
- * @brief Static libusb callback invoked for each completed isochronous transfer.
- * Source owns time: stamp at acquisition here, before queueing to the main thread, so the
- * timestamp reflects the bus event and not the later queued-slot dispatch.
+ * @brief Static libusb callback for each completed iso transfer; stamps acquisition time before
+ *        queueing. Buffer ownership lives solely with freeTransfers() (frees post-join).
  */
 void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer)
 {
@@ -1027,10 +1047,16 @@ void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer
     }
   }
 
-  if (self->m_running.load(std::memory_order_relaxed))
-    libusb_submit_transfer(transfer);
-  else
-    delete[] transfer->buffer;
+  if (!self->m_running.load(std::memory_order_relaxed)) {
+    self->m_isoInFlight.fetch_sub(1, std::memory_order_acq_rel);
+    return;
+  }
+
+  if (libusb_submit_transfer(transfer) < 0) {
+    self->m_running.store(false, std::memory_order_release);
+    self->m_isoInFlight.fetch_sub(1, std::memory_order_acq_rel);
+    QMetaObject::invokeMethod(self, "onReadError", Qt::QueuedConnection);
+  }
 }
 
 /**

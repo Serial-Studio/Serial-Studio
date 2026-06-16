@@ -336,7 +336,6 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
              "https://generativelanguage.googleapis.com/v1beta/models/%1:streamGenerateContent")
              .arg(currentModel()));
   QUrlQuery q;
-  q.addQueryItem(QStringLiteral("key"), key);
   q.addQueryItem(QStringLiteral("alt"), QStringLiteral("sse"));
   url.setQuery(q);
 

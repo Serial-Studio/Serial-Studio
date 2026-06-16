@@ -78,12 +78,12 @@ Widgets.Pane {
       asynchronous: false
       source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml"
 
+      onLoaded: alarmBandsDialog.item.closing.connect(() => alarmBandsDialog.active = false)
+
       function show(gId, dId, rMin, rMax, bands) {
         alarmBandsDialog.active = true
-        if (alarmBandsDialog.item) {
-          alarmBandsDialog.item.closing.connect(() => alarmBandsDialog.active = false)
+        if (alarmBandsDialog.item)
           alarmBandsDialog.item.showDialog(gId, dId, rMin, rMax, bands)
-        }
       }
     }
 

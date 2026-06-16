@@ -31,6 +31,17 @@
 #include "DataModel/ProjectModel.h"
 #include "Licensing/CommercialToken.h"
 
+/**
+ * @brief Neutralizes any forged <untrusted> delimiter inside untrusted payload text.
+ */
+static QString neutralizeUntrustedDelimiter(const QString& payload)
+{
+  QString out = payload;
+  out.replace(QStringLiteral("</untrusted"), QStringLiteral("< /untrusted"), Qt::CaseInsensitive);
+  out.replace(QStringLiteral("<untrusted"), QStringLiteral("< untrusted"), Qt::CaseInsensitive);
+  return out;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Construction / destruction
 //--------------------------------------------------------------------------------------------------
@@ -1896,7 +1907,7 @@ void AI::Conversation::recordToolResult(const QString& callId,
   wrapped += QStringLiteral("<untrusted source=\"");
   wrapped += sourceTag.toHtmlEscaped();
   wrapped += QStringLiteral("\">\n");
-  wrapped += QString::fromUtf8(contentBytes);
+  wrapped += neutralizeUntrustedDelimiter(QString::fromUtf8(contentBytes));
   wrapped += QStringLiteral("\n</untrusted>");
 
   QJsonObject block;

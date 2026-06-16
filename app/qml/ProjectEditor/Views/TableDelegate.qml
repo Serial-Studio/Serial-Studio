@@ -755,7 +755,7 @@ ColumnLayout {
             flat: true
             model: comboBoxLoader.comboBoxData
             enabled: comboBoxLoader.modelActive
-            onCurrentIndexChanged: {
+            onActivated: {
               if (currentIndex !== comboBoxLoader.editableValue) {
                 root.modelPointer.setData(
                       view.index(comboBoxLoader.modelRow, comboBoxLoader.modelColumn),
@@ -801,11 +801,13 @@ ColumnLayout {
 
             flat: true
             enabled: checkBoxLoader.modelActive
-            onCurrentIndexChanged: {
-              root.modelPointer.setData(
-                    view.index(checkBoxLoader.modelRow, checkBoxLoader.modelColumn),
-                    currentIndex === 1,
-                    ProjectEditor.EditableValue)
+            onActivated: {
+              if ((currentIndex === 1) !== Boolean(checkBoxLoader.editableValue)) {
+                root.modelPointer.setData(
+                      view.index(checkBoxLoader.modelRow, checkBoxLoader.modelColumn),
+                      currentIndex === 1,
+                      ProjectEditor.EditableValue)
+              }
             }
             opacity: checkBoxLoader.modelActive ? 1 : 0.5
             model: [qsTr("No"), qsTr("Yes")]
@@ -879,7 +881,6 @@ ColumnLayout {
           sourceComponent: TextField {
             id: _hexComponent
 
-            text: hexFieldLoader.editableValue
             enabled: hexFieldLoader.modelActive
             opacity: hexFieldLoader.modelActive ? 1 : 0.5
             placeholderText: hexFieldLoader.modelPlaceholder ?? ""
@@ -889,9 +890,31 @@ ColumnLayout {
               horizontalAlignment: TextInput.AlignLeft
 
               //
+              // Sync from model only when unfocused (onTextEdited reassigns
+              // text imperatively, so a declarative text binding cannot refresh)
+              //
+              property var modelValue: hexFieldLoader.editableValue
+              function refreshFromModel() {
+                const formattedText = Cpp_Console_Handler.formatUserHex(
+                                        _hexComponent.modelValue ?? "");
+                const isValid = Cpp_Console_Handler.validateUserHex(formattedText);
+
+                _hexComponent.text = formattedText;
+                _hexComponent.color = isValid
+                    ? Cpp_ThemeManager.colors["table_text"]
+                    : Cpp_ThemeManager.colors["alarm"]
+              }
+
+              Component.onCompleted: refreshFromModel()
+              onModelValueChanged: {
+                if (!_hexComponent.activeFocus)
+                  refreshFromModel();
+              }
+
+              //
               // Add space automatically in hex view
               //
-              onTextChanged: {
+              onTextEdited: {
                 const currentCursorPosition = _hexComponent.cursorPosition;
                 const cursorAtEnd = (currentCursorPosition === _hexComponent.text.length);
 

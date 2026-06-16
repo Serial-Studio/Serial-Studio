@@ -134,6 +134,7 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   , m_previewMode(false)
   , m_slowPaintWarned(false)
   , m_pointerDown(false)
+  , m_rendering(false)
   , m_slowPaintStreak(0)
   , m_lastPointerX(0.0)
   , m_lastPointerY(0.0)
@@ -464,6 +465,16 @@ void Widgets::Painter::dispatchPointer(QJSValue& fn, const QJSValueList& args)
   if (!m_runtimeOk || !fn.isCallable())
     return;
 
+  if (!m_previewMode) {
+    const auto* dashboard = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dashboard->widgetCount(SerialStudio::DashboardPainter)) {
+      m_bridge->setGroup(nullptr);
+      return;
+    }
+
+    m_bridge->setGroup(&dashboard->getGroupWidget(SerialStudio::DashboardPainter, m_index));
+  }
+
   auto r = m_watchdog.call(fn, args);
   if (r.isError()) [[unlikely]] {
     setLastError(QStringLiteral("input: ") + r.property(QStringLiteral("message")).toString());
@@ -761,6 +772,11 @@ void Widgets::Painter::invalidateCompilation()
  */
 void Widgets::Painter::renderFrame()
 {
+  if (m_rendering)
+    return;
+
+  m_rendering = true;
+
   const qreal dpr = qMax<qreal>(1.0, window() ? window()->effectiveDevicePixelRatio() : 1.0);
   const QSize logical(qMax(1, int(width())), qMax(1, int(height())));
   const QSize physical(qMax(1, int(std::ceil(logical.width() * dpr))),
@@ -791,6 +807,7 @@ void Widgets::Painter::renderFrame()
   if (r.isError()) [[unlikely]] {
     setLastError(QStringLiteral("paint: ") + r.property(QStringLiteral("message")).toString());
     setRuntimeOk(false);
+    m_rendering = false;
     return;
   }
 
@@ -806,6 +823,8 @@ void Widgets::Painter::renderFrame()
   } else {
     m_slowPaintStreak = 0;
   }
+
+  m_rendering = false;
 }
 
 //--------------------------------------------------------------------------------------------------

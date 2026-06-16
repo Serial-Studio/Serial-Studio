@@ -387,6 +387,9 @@ void Widgets::FFTPlot::updateData()
   if (newSize <= 0)
     return;
 
+  if (!m_plan)
+    return;
+
   const double* in       = data.raw();
   std::size_t idx        = data.frontIndex();
   const std::size_t mask = data.storageMask();

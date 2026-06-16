@@ -45,12 +45,12 @@
 constexpr int MIN_ZOOM = 2;
 constexpr int WEATHER_MAX_ZOOM = 6;
 constexpr int WEATHER_GIBS_MAX_ZOOM = 9;
-constexpr auto CLOUD_URL = "https://clouds.matteason.co.uk/images/4096x2048/clouds-alpha.png";
 constexpr double kInvTile = 1.0 / 256.0;
 constexpr double kInv360  = 1.0 / 360.0;
 constexpr double kInv180  = 1.0 / 180.0;
 constexpr double kInv120  = 1.0 / 120.0;
 constexpr double kInvPi   = 1.0 / M_PI;
+constexpr auto CLOUD_URL = "https://clouds.matteason.co.uk/images/4096x2048/clouds-alpha.png";
 // clang-format on
 
 QCache<QString, QImage> Widgets::GPS::s_tileCache;

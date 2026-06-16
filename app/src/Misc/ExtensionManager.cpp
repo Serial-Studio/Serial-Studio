@@ -615,22 +615,23 @@ void Misc::ExtensionManager::installExtension()
 }
 
 /**
- * @brief Uninstalls the currently selected addon by removing its files.
+ * @brief Uninstalls the currently selected addon, returning false on an invalid selection
+ *        or a partial-delete failure.
  */
-void Misc::ExtensionManager::uninstallExtension()
+bool Misc::ExtensionManager::uninstallExtension()
 {
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
-    return;
+    return false;
 
   const auto addon = m_filteredExtensions.at(m_selectedIndex).toMap();
   const auto id    = addon.value("id").toString();
   const auto type  = addon.value("type").toString();
 
   if (id.isEmpty() || !isInstalled(id))
-    return;
+    return false;
 
   const auto installDir = extensionsPath() + "/" + type + "/" + id;
-  QDir(installDir).removeRecursively();
+  const bool removed    = QDir(installDir).removeRecursively();
 
   m_installedExtensions.remove(id);
   m_pluginMetadataCache.remove(id);
@@ -639,6 +640,8 @@ void Misc::ExtensionManager::uninstallExtension()
   Q_EMIT extensionUninstalled(id);
   applyFilter();
   rebuildInstalledPlugins();
+
+  return removed;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -31,6 +31,7 @@
 #include "API/EnumLabels.h"
 #include "API/SchemaBuilder.h"
 #include "DataModel/Frame.h"
+#include "DataModel/ProjectModel.h"
 #include "Misc/BackupManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -896,7 +897,8 @@ static QString resolveCheckpoint(const QJsonObject& params)
 }
 
 /**
- * @brief Restore a previously taken snapshot, replacing the current ProjectModel state.
+ * @brief Restore a previously taken snapshot into ProjectModel and persist it to disk; the
+ *        pre-restore snapshot keeps the action reversible.
  */
 API::CommandResponse API::Handlers::AssistantHandler::restore(const QString& id,
                                                               const QJsonObject& params)
@@ -919,9 +921,29 @@ API::CommandResponse API::Handlers::AssistantHandler::restore(const QString& id,
                      "contained invalid project JSON).")
         .arg(path));
 
+  auto& pm               = DataModel::ProjectModel::instance();
+  const auto projectPath = pm.jsonFilePath();
+  const bool persisted   = !projectPath.isEmpty() && pm.apiSaveJsonFile(projectPath);
+  if (!projectPath.isEmpty() && !persisted)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("Restored checkpoint %1 into memory but failed to write it to %2. The "
+                     "project is loaded and modified; revert via %3 or save manually.")
+        .arg(path,
+             projectPath,
+             reverse.isEmpty() ? QStringLiteral("the pre-restore snapshot") : reverse));
+
   QJsonObject result;
-  result[QStringLiteral("restored")] = true;
-  result[QStringLiteral("path")]     = path;
+  result[QStringLiteral("restored")]  = true;
+  result[QStringLiteral("path")]      = path;
+  result[QStringLiteral("persisted")] = persisted;
+  if (!persisted)
+    result[QStringLiteral("modified")] = true;
+
+  if (!projectPath.isEmpty())
+    result[QStringLiteral("projectPath")] = projectPath;
+
   if (!reverse.isEmpty())
     result[QStringLiteral("reverseSnapshotPath")] = reverse;
 

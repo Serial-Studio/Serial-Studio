@@ -86,7 +86,7 @@ SmartDialog {
       Slider {
         Layout.fillWidth: true
         value: Cpp_CSV_Player.progress
-        onValueChanged: {
+        onMoved: {
           if (!isNaN(value) && value !== Cpp_CSV_Player.progress)
             Cpp_CSV_Player.setProgress(value)
         }

@@ -29,11 +29,11 @@ import "../../../Widgets" as Widgets
 Widgets.SmartWindow {
   id: window
 
-  width: 640
-  height: 480
   visible: true
   minimumWidth: 356
   minimumHeight: 320
+  width: minimumWidth
+  height: minimumHeight
   transientParent: null
   objectName: "ExternalWindow"
   category: "ExternalWidget_" + stableType + "_" + stableIndex
@@ -73,8 +73,8 @@ Widgets.SmartWindow {
   // Caption color blends with toolbar or window background.
   //
   readonly property color captionColor: hasToolbar
-    ? Cpp_ThemeManager.colors["window_toolbar_background"]
-    : Cpp_ThemeManager.colors["window"]
+                                        ? Cpp_ThemeManager.colors["window_toolbar_background"]
+                                        : Cpp_ThemeManager.colors["window"]
 
   onVisibleChanged: {
     if (visible)
@@ -159,6 +159,31 @@ Widgets.SmartWindow {
 
         else if (component.status === Component.Error)
           console.error("Component load error:", component.errorString())
+
+        if (window.width === window.minimumWidth && window.height === window.minimumHeight) {
+          const barPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Bar.qml"
+          const pltPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot.qml"
+          const fftPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/FFTPlot.qml"
+          const plot3DPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml"
+          const mplotPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/MultiPlot.qml"
+          const waterfallPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml"
+
+          switch (dashboardWidget.widgetQmlPath) {
+          case barPath:
+            window.height = window.width * 1.4
+            break
+          case fftPath:
+          case pltPath:
+          case mplotPath:
+          case plot3DPath:
+          case waterfallPath:
+            window.width = 640
+            window.height = 480
+            break
+          default:
+            break
+          }
+        }
       }
 
       Connections {

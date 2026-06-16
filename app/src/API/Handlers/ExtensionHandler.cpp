@@ -80,12 +80,18 @@ void API::Handlers::ExtensionHandler::registerCatalogCommands()
 
   registry.registerCommand(
     QStringLiteral("extensions.uninstall"),
-    QStringLiteral("Uninstall an extension by selecting it (params: addonIndex)"),
-    makeSchema({
-      {QStringLiteral("addonIndex"),
-       QStringLiteral("integer"),
-       QStringLiteral("Index of the extension in the addon list")}
-  }),
+    QStringLiteral("Uninstall an extension by selecting it (params: addonIndex). DESTRUCTIVE: "
+                   "removes the extension files irreversibly. Pass dryRun:true to see what "
+                   "would be removed without committing."),
+    makeSchema(
+      {
+        {QStringLiteral("addonIndex"),
+         QStringLiteral("integer"),
+         QStringLiteral("Index of the extension in the addon list")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return what would be removed without committing.")}}),
     &uninstallExtension);
 
   registry.registerCommand(QStringLiteral("extensions.refresh"),
@@ -227,7 +233,9 @@ API::CommandResponse API::Handlers::ExtensionHandler::installExtension(const QSt
 }
 
 /**
- * @brief Uninstalls an extension by setting the selected index and triggering removal.
+ * @brief Uninstalls an extension by selecting it and triggering an irreversible directory
+ *        removal. With dryRun:true, reports what would be removed without mutating; otherwise
+ *        the manager's removal result plus the post-removal install state decide the outcome.
  */
 API::CommandResponse API::Handlers::ExtensionHandler::uninstallExtension(const QString& id,
                                                                          const QJsonObject& params)
@@ -239,10 +247,43 @@ API::CommandResponse API::Handlers::ExtensionHandler::uninstallExtension(const Q
 
   auto& mgr = Misc::ExtensionManager::instance();
   mgr.setSelectedIndex(index);
-  mgr.uninstallExtension();
-  return CommandResponse::makeSuccess(id,
-                                      QJsonObject{
-                                        {"status", "uninstalled"}
+
+  const auto selected     = mgr.selectedExtension();
+  const QString addonId   = selected.value("id").toString();
+  const QString addonName = selected.value("name").toString();
+
+  if (addonId.isEmpty())
+    return CommandResponse::makeError(
+      id, QStringLiteral("NOT_FOUND"), "No extension at addonIndex: " + QString::number(index));
+
+  if (!mgr.isInstalled(addonId))
+    return CommandResponse::makeError(
+      id, QStringLiteral("NOT_FOUND"), "Extension is not installed: " + addonId);
+
+  const bool isDryRun = params.value("dryRun").toBool(false);
+  if (isDryRun)
+    return CommandResponse::makeSuccess(id,
+                                        QJsonObject{
+                                          {    "dryRun",true                                                        },
+                                          {        "id",               addonId},
+                                          {      "name",             addonName},
+                                          {"willRemove",                  true},
+                                          {   "warning",
+                                           "DRY RUN: no files were removed. Re-call "
+                                           "without dryRun:true to uninstall."}
+    });
+
+  const bool removed = mgr.uninstallExtension();
+  if (!removed || mgr.isInstalled(addonId))
+    return CommandResponse::makeError(
+      id, QStringLiteral("OPERATION_FAILED"), "Failed to uninstall extension: " + addonId);
+
+  return CommandResponse::makeSuccess(
+    id,
+    QJsonObject{
+      {         "id",   addonId},
+      {       "name", addonName},
+      {"uninstalled",      true}
   });
 }
 

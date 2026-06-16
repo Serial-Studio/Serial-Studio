@@ -58,9 +58,9 @@ Item {
       model: Cpp_IO_HID.deviceList
       currentIndex: Cpp_IO_HID.deviceIndex
 
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_HID.deviceIndex)
-          Cpp_IO_HID.deviceIndex = currentIndex
+      onActivated: (index) => {
+        if (enabled && index !== Cpp_IO_HID.deviceIndex)
+          Cpp_IO_HID.deviceIndex = index
       }
 
       Connections {

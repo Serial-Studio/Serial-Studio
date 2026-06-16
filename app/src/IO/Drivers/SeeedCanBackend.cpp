@@ -22,6 +22,7 @@
 
 #include "IO/Drivers/SeeedCanBackend.h"
 
+#include <chrono>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QVariant>
@@ -327,6 +328,10 @@ void IO::Drivers::SeeedCanBackend::onReadyRead()
   // loop is bounded -- each pass consumes >= 1 byte or breaks on NeedMore.
   m_rxBuffer.append(m_port->readAll());
 
+  const qint64 arrivalUsec = std::chrono::duration_cast<std::chrono::microseconds>(
+                               std::chrono::steady_clock::now().time_since_epoch())
+                               .count();
+
   QList<QCanBusFrame> received;
   while (true) {
     const int start = m_rxBuffer.indexOf(static_cast<char>(kFrameStart));
@@ -344,8 +349,10 @@ void IO::Drivers::SeeedCanBackend::onReadyRead()
     if (result == SeeedParse::NeedMore)
       break;
 
-    if (result == SeeedParse::Frame)
+    if (result == SeeedParse::Frame) {
+      frame.setTimeStamp(QCanBusFrame::TimeStamp::fromMicroSeconds(arrivalUsec));
       received.append(frame);
+    }
 
     m_rxBuffer.remove(0, consumed);
   }

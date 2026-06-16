@@ -630,7 +630,7 @@ Widgets.SmartDialog {
             to: presets.length - 1
             editable: true
             Layout.fillWidth: true
-            value: nearestIndex(Cpp_UI_Dashboard.plotTimeRange)
+            Component.onCompleted: value = nearestIndex(Cpp_UI_Dashboard.plotTimeRange)
             textFromValue: function(value, locale) { return _timeRange.formatSeconds(presets[value]) }
             valueFromText: function(text, locale) {
               var t = String(text).toLowerCase()
@@ -641,7 +641,7 @@ Widgets.SmartDialog {
               var secs = (t.indexOf("ms") >= 0) ? num / 1000 : num
               return _timeRange.nearestIndex(secs)
             }
-            onValueChanged: {
+            onValueModified: {
               if (presets[value] !== Cpp_UI_Dashboard.plotTimeRange)
                 Cpp_UI_Dashboard.plotTimeRange = presets[value]
             }
@@ -649,7 +649,9 @@ Widgets.SmartDialog {
             Connections {
               target: Cpp_UI_Dashboard
               function onPlotTimeRangeChanged() {
-                _timeRange.value = _timeRange.nearestIndex(Cpp_UI_Dashboard.plotTimeRange)
+                const idx = _timeRange.nearestIndex(Cpp_UI_Dashboard.plotTimeRange)
+                if (_timeRange.value !== idx)
+                  _timeRange.value = idx
               }
             }
           }
@@ -744,7 +746,7 @@ Widgets.SmartDialog {
               Layout.fillWidth: true
               model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large"), qsTr("Custom")]
 
-              Component.onCompleted: {
+              function syncFromScale() {
                 const scale = Cpp_Misc_CommonFonts.widgetFontScale
                 if (Math.abs(scale - 0.85) < 0.01)
                   currentIndex = 0
@@ -758,11 +760,18 @@ Widgets.SmartDialog {
                   currentIndex = 4
               }
 
+              Component.onCompleted: syncFromScale()
+
               onActivated: (index) => {
                              const scales = [0.85, 1.00, 1.25, 1.50]
                              if (index < 4)
                                Cpp_Misc_CommonFonts.widgetFontScale = scales[index]
                            }
+
+              Connections {
+                target: Cpp_Misc_CommonFonts
+                function onFontsChanged() { _widgetSizePreset.syncFromScale() }
+              }
             }
 
             SpinBox {

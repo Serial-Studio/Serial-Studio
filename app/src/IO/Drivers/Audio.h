@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <QBuffer>
 #include <QMap>
 #include <QObject>
@@ -231,6 +232,15 @@ private:
 
   bool m_sampleClockValid;
   CapturedData::SteadyTimePoint m_nextSampleTime;
+
+  // code-verify off
+  // Written once in open() before the RT thread starts, then read-only; there are no concurrent
+  // cross-core writes, so sharing one cache line is intended (a single transfer to the RT core).
+  std::atomic<ma_format> m_rtCaptureFormat;
+  std::atomic<ma_format> m_rtPlaybackFormat;
+  std::atomic<ma_uint32> m_rtCaptureChannels;
+  std::atomic<ma_uint32> m_rtPlaybackChannels;
+  // code-verify on
 
   QVector<AudioDeviceInfo> m_inputCapabilities;
   QVector<AudioDeviceInfo> m_outputCapabilities;

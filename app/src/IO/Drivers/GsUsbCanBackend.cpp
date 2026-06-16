@@ -25,6 +25,7 @@
 #include <libusb.h>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstring>
 #include <QMetaObject>
@@ -646,6 +647,10 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
 
     m_rxCarry.append(reinterpret_cast<const char*>(buffer), transferred);
 
+    const qint64 arrivalUsec = std::chrono::duration_cast<std::chrono::microseconds>(
+                                 std::chrono::steady_clock::now().time_since_epoch())
+                                 .count();
+
     QList<quint32> echoIds;
     QList<QCanBusFrame> received;
     while (m_rxCarry.size() >= kClassicFrameSize) {
@@ -659,8 +664,10 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
       }
 
       QCanBusFrame canFrame;
-      if (decodeRxFrame(host, canFrame))
+      if (decodeRxFrame(host, canFrame)) {
+        canFrame.setTimeStamp(QCanBusFrame::TimeStamp::fromMicroSeconds(arrivalUsec));
         received.append(canFrame);
+      }
     }
 
     if (!echoIds.isEmpty())

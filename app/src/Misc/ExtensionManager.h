@@ -145,7 +145,7 @@ public slots:
   void setFilterCategory(const QString& category);
   void setFilterType(const QString& type);
   void installExtension();
-  void uninstallExtension();
+  bool uninstallExtension();
   void addRepository(const QString& url);
   void resetRepositories();
   void removeRepository(int index);

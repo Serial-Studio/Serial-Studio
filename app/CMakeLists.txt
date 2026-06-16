@@ -1176,6 +1176,9 @@ serial_studio_sign(${PROJECT_EXECUTABLE})
 #
 #---------------------------------------------------------------------------------------------------
 
+set_source_files_properties(qml/Widgets/Dashboard/ValueFormat.js
+  PROPERTIES QT_QML_SKIP_QMLDIR_ENTRY FALSE)
+
 qt_add_qml_module(
   ${PROJECT_EXECUTABLE}
   URI gui

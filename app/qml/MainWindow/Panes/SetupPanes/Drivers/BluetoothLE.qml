@@ -66,9 +66,9 @@ Item {
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         model: Cpp_IO_Bluetooth_LE.deviceNames
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Bluetooth_LE.deviceIndex + 1)
-            Cpp_IO_Bluetooth_LE.selectDevice(currentIndex)
+        onActivated: (index) => {
+          if (index !== Cpp_IO_Bluetooth_LE.deviceIndex + 1)
+            Cpp_IO_Bluetooth_LE.selectDevice(index)
         }
 
         Connections {
@@ -151,9 +151,9 @@ Item {
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.characteristicNames
         currentIndex: Cpp_IO_Bluetooth_LE.characteristicIndex
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Bluetooth_LE.characteristicIndex)
-            Cpp_IO_Bluetooth_LE.characteristicIndex = currentIndex
+        onActivated: (index) => {
+          if (index !== Cpp_IO_Bluetooth_LE.characteristicIndex)
+            Cpp_IO_Bluetooth_LE.characteristicIndex = index
         }
       }
     }

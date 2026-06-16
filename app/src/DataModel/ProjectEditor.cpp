@@ -372,6 +372,9 @@ void DataModel::ProjectEditor::wireDatasetSignals()
     &DataModel::ProjectModel::datasetDeleted,
     this,
     [this](int survivingGroupId) {
+      if (!m_selectionModel)
+        return;
+
       if (survivingGroupId >= 0) {
         for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
           if (it.value().groupId != survivingGroupId)
@@ -381,9 +384,6 @@ void DataModel::ProjectEditor::wireDatasetSignals()
           return;
         }
       }
-
-      if (!m_selectionModel)
-        return;
 
       if (m_groupsRootItem) {
         m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
@@ -469,6 +469,9 @@ void DataModel::ProjectEditor::wireOutputWidgetSignals()
     &DataModel::ProjectModel::outputWidgetDeleted,
     this,
     [this](int groupId) {
+      if (!m_selectionModel)
+        return;
+
       for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
         if (it.value().groupId != groupId)
           continue;
@@ -477,10 +480,8 @@ void DataModel::ProjectEditor::wireOutputWidgetSignals()
         return;
       }
 
-      if (m_selectionModel) {
-        auto index = m_treeModel->index(0, 0);
-        m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
-      }
+      auto index = m_treeModel->index(0, 0);
+      m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     },
     Qt::QueuedConnection);
 }

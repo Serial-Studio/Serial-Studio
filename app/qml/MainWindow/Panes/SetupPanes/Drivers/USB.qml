@@ -58,9 +58,9 @@ Item {
       model: Cpp_IO_USB.deviceList
       currentIndex: Cpp_IO_USB.deviceIndex
 
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_USB.deviceIndex)
-          Cpp_IO_USB.deviceIndex = currentIndex
+      onActivated: (index) => {
+        if (enabled && index !== Cpp_IO_USB.deviceIndex)
+          Cpp_IO_USB.deviceIndex = index
       }
 
       Connections {
@@ -179,9 +179,9 @@ Item {
       enabled: Cpp_IO_Manager.isConnected
       currentIndex: Cpp_IO_USB.inEndpointIndex
 
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_USB.inEndpointIndex)
-          Cpp_IO_USB.inEndpointIndex = currentIndex
+      onActivated: (index) => {
+        if (enabled && index !== Cpp_IO_USB.inEndpointIndex)
+          Cpp_IO_USB.inEndpointIndex = index
       }
 
       Connections {
@@ -215,9 +215,9 @@ Item {
       enabled: Cpp_IO_Manager.isConnected
       currentIndex: Cpp_IO_USB.outEndpointIndex
 
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_USB.outEndpointIndex)
-          Cpp_IO_USB.outEndpointIndex = currentIndex
+      onActivated: (index) => {
+        if (enabled && index !== Cpp_IO_USB.outEndpointIndex)
+          Cpp_IO_USB.outEndpointIndex = index
       }
 
       Connections {

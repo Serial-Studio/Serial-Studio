@@ -100,14 +100,11 @@ Item {
 
         textRole: "display"
         Layout.fillWidth: true
-        currentIndex: Cpp_IO_CANBus.pluginIndex
         Component.onCompleted: _pluginCombo.updatePluginModel()
-        onCurrentIndexChanged: {
-          if (!updating && currentIndex !== Cpp_IO_CANBus.pluginIndex)
-            Cpp_IO_CANBus.pluginIndex = currentIndex
+        onActivated: (index) => {
+          if (Cpp_IO_CANBus.pluginIndex !== index)
+            Cpp_IO_CANBus.pluginIndex = index
         }
-
-        property bool updating: false
 
         model: ListModel {
           id: pluginModel
@@ -118,10 +115,12 @@ Item {
           function onAvailablePluginsChanged() {
             _pluginCombo.updatePluginModel()
           }
+          function onPluginIndexChanged() {
+            _pluginCombo.currentIndex = Cpp_IO_CANBus.pluginIndex
+          }
         }
 
         function updatePluginModel() {
-          updating = true
           pluginModel.clear()
           const plugins = Cpp_IO_CANBus.pluginList
           for (let i = 0; i < plugins.length; ++i) {
@@ -131,7 +130,6 @@ Item {
             })
           }
           currentIndex = Cpp_IO_CANBus.pluginIndex
-          updating = false
         }
       }
 
@@ -146,11 +144,21 @@ Item {
 
         Layout.fillWidth: true
         model: Cpp_IO_CANBus.interfaceList
-        currentIndex: Cpp_IO_CANBus.interfaceIndex
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_CANBus.interfaceIndex)
-            Cpp_IO_CANBus.interfaceIndex = currentIndex
+        Component.onCompleted: _interfaceCombo.currentIndex = Cpp_IO_CANBus.interfaceIndex
+        onActivated: (index) => {
+          if (Cpp_IO_CANBus.interfaceIndex !== index)
+            Cpp_IO_CANBus.interfaceIndex = index
+        }
+
+        Connections {
+          target: Cpp_IO_CANBus
+          function onInterfaceIndexChanged() {
+            _interfaceCombo.currentIndex = Cpp_IO_CANBus.interfaceIndex
+          }
+          function onAvailableInterfacesChanged() {
+            _interfaceCombo.currentIndex = Cpp_IO_CANBus.interfaceIndex
+          }
         }
       }
 
@@ -168,15 +176,9 @@ Item {
         model: Cpp_IO_CANBus.bitrateList
         visible: Cpp_IO_CANBus.interfaceList.length > 0
 
-        //
-        // updating brackets internal writes so QML->C++ handlers can distinguish user input from echoes.
-        //
-        property bool updating: true
-
         validator: IntValidator { bottom: 1 }
 
         function syncFromDriver() {
-          updating = true
           const current = String(Cpp_IO_CANBus.bitrate)
           const rates = Cpp_IO_CANBus.bitrateList
           const idx = rates.indexOf(current)
@@ -187,7 +189,6 @@ Item {
             _bitrateCombo.currentIndex = -1
             _bitrateCombo.editText = current
           }
-          updating = false
         }
 
         Component.onCompleted: Qt.callLater(syncFromDriver)
@@ -199,20 +200,17 @@ Item {
           }
         }
 
-        onEditTextChanged: {
-          if (updating)
-            return
-
+        onAccepted: {
           const value = parseInt(editText)
           if (!isNaN(value) && value > 0 && Cpp_IO_CANBus.bitrate !== value)
             Cpp_IO_CANBus.bitrate = value
         }
 
-        onCurrentIndexChanged: {
-          if (updating || currentIndex < 0 || currentIndex >= model.length)
+        onActivated: (index) => {
+          if (index < 0 || index >= model.length)
             return
 
-          const value = parseInt(model[currentIndex])
+          const value = parseInt(model[index])
           if (!isNaN(value) && Cpp_IO_CANBus.bitrate !== value)
             Cpp_IO_CANBus.bitrate = value
         }

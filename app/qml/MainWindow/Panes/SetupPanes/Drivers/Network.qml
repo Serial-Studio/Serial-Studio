@@ -85,9 +85,9 @@ Item {
         opacity: enabled ? 1 : 0.5
         model: Cpp_IO_Network.socketTypes
         currentIndex: Cpp_IO_Network.socketTypeIndex
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Network.socketTypeIndex)
-            Cpp_IO_Network.socketTypeIndex = currentIndex
+        onActivated: (index) => {
+          if (index !== Cpp_IO_Network.socketTypeIndex)
+            Cpp_IO_Network.socketTypeIndex = index
         }
       }
 
@@ -105,7 +105,7 @@ Item {
         Layout.fillWidth: true
         placeholderText: qsTr("Type 0 for automatic port")
         Component.onCompleted: text = Cpp_IO_Network.udpLocalPort
-        onTextChanged: {
+        onEditingFinished: {
           if (Cpp_IO_Network.udpLocalPort !== text && text.length > 0)
             Cpp_IO_Network.udpLocalPort = text
 
@@ -138,7 +138,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         placeholderText: Cpp_IO_Network.defaultAddress
         Component.onCompleted: text = Cpp_IO_Network.remoteAddress
-        onTextChanged: {
+        onEditingFinished: {
           if (Cpp_IO_Network.remoteAddress !== text && text.length > 0)
             Cpp_IO_Network.remoteAddress = text
 
@@ -163,7 +163,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         placeholderText: Cpp_IO_Network.defaultTcpPort
         Component.onCompleted: text = Cpp_IO_Network.tcpPort
-        onTextChanged: {
+        onEditingFinished: {
           if (Cpp_IO_Network.tcpPort !== text && text.length > 0)
             Cpp_IO_Network.tcpPort = text
 
@@ -198,7 +198,7 @@ Item {
         Component.onCompleted: text = Cpp_IO_Network.udpRemotePort
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
 
-        onTextChanged: {
+        onEditingFinished: {
           if (Cpp_IO_Network.udpRemotePort !== text && text.length > 0)
             Cpp_IO_Network.udpRemotePort = text
 

@@ -107,7 +107,7 @@ SmartDialog {
       Layout.fillWidth: true
       visible: Cpp_Sessions_Player.isOpen
       value: Cpp_Sessions_Player.progress
-      onValueChanged: {
+      onMoved: {
         if (!isNaN(value) && value !== Cpp_Sessions_Player.progress)
           Cpp_Sessions_Player.setProgress(value)
       }

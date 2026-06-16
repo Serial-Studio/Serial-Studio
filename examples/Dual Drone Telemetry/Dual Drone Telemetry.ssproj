@@ -1693,6 +1693,18 @@
             "showWeather": false
         },
         "activeGroup": 1000,
+        "externalWindows": {
+            "data": [
+                {
+                    "relativeIndex": 0,
+                    "widgetType": 19
+                },
+                {
+                    "relativeIndex": 1,
+                    "widgetType": 19
+                }
+            ]
+        },
         "layout:-1": {
             "data": {
                 "autoLayout": true,
@@ -2414,6 +2426,6 @@
             }
         }
     },
-    "writerVersion": "3.2.7",
+    "writerVersion": "4.0.0",
     "writerVersionAtCreation": "3.2.7"
 }

@@ -317,11 +317,25 @@ DataModel::ProjectModel::ProjectModel()
   connect(this, &ProjectModel::sourceStructureChanged, this, bumpEpoch);
   connect(this, &ProjectModel::groupsChanged, this, bumpEpoch);
   connect(this, &ProjectModel::actionsChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::sourceChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::sourcesChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::sourceFrameParserCodeChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::frameDetectionChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::editorWorkspacesChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::tablesChanged, this, bumpEpoch);
+  connect(this, &ProjectModel::titleChanged, this, bumpEpoch);
 
   connect(this, &ProjectModel::titleChanged, this, &ProjectModel::saveStatusChanged);
   connect(this, &ProjectModel::groupsChanged, this, &ProjectModel::saveStatusChanged);
 
   connect(this, &ProjectModel::widgetSettingsChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::sourceChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::sourcesChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::sourceFrameParserCodeChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::frameDetectionChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::editorWorkspacesChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::tablesChanged, this, &ProjectModel::scheduleAutoSave);
+  connect(this, &ProjectModel::titleChanged, this, &ProjectModel::scheduleAutoSave);
 
   // code-verify off
   // Must run before the groupsChanged auto-regen connect below: newJsonFile()
@@ -1977,7 +1991,7 @@ void DataModel::ProjectModel::setFrameStartSequence(const QString& sequence)
 
   m_frameStartSequence = sequence;
 
-  if (m_sources.size() == 1)
+  if (!m_sources.empty())
     m_sources[0].frameStart = sequence;
 
   Q_EMIT frameDetectionChanged();
@@ -1994,7 +2008,7 @@ void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 
   m_frameEndSequence = sequence;
 
-  if (m_sources.size() == 1)
+  if (!m_sources.empty())
     m_sources[0].frameEnd = sequence;
 
   Q_EMIT frameDetectionChanged();
@@ -2011,7 +2025,7 @@ void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
 
   m_checksumAlgorithm = algorithm;
 
-  if (m_sources.size() == 1)
+  if (!m_sources.empty())
     m_sources[0].checksumAlgorithm = algorithm;
 
   Q_EMIT frameDetectionChanged();
@@ -2028,7 +2042,7 @@ void DataModel::ProjectModel::setFrameDetection(const SerialStudio::FrameDetecti
 
   m_frameDetection = detection;
 
-  if (m_sources.size() == 1)
+  if (!m_sources.empty())
     m_sources[0].frameDetection = static_cast<int>(detection);
 
   setModified(true);
@@ -2874,7 +2888,7 @@ void DataModel::ProjectModel::setDecoderMethod(const SerialStudio::DecoderMethod
 
   m_frameDecoder = method;
 
-  if (m_sources.size() == 1)
+  if (!m_sources.empty())
     m_sources[0].decoderMethod = static_cast<int>(method);
 
   Q_EMIT frameDetectionChanged();
@@ -2891,7 +2905,7 @@ void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
 
   m_hexadecimalDelimiters = hexadecimal;
 
-  if (m_sources.size() == 1)
+  if (!m_sources.empty())
     m_sources[0].hexadecimalDelimiters = hexadecimal;
 
   Q_EMIT frameDetectionChanged();
@@ -4974,8 +4988,11 @@ void DataModel::ProjectModel::deleteRegister(const QString& table, const QString
 
 /**
  * @brief Updates an existing register -- rename, retype, and/or default value.
+ *        Returns true only when the update was applied and tablesChanged() was
+ *        emitted; false on every validation-failure path so callers can key
+ *        refresh-suppression off confirmed success rather than emit timing.
  */
-void DataModel::ProjectModel::updateRegister(const QString& table,
+bool DataModel::ProjectModel::updateRegister(const QString& table,
                                              const QString& registerName,
                                              const QString& newName,
                                              bool computed,
@@ -4985,16 +5002,16 @@ void DataModel::ProjectModel::updateRegister(const QString& table,
     m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
 
   if (it == m_tables.end())
-    return;
+    return false;
 
   const QString n = newName.simplified();
   if (n.isEmpty())
-    return;
+    return false;
 
   if (n != registerName) {
     for (const auto& r : it->registers)
       if (r.name == n)
-        return;
+        return false;
   }
 
   for (auto& r : it->registers) {
@@ -5004,9 +5021,11 @@ void DataModel::ProjectModel::updateRegister(const QString& table,
       r.defaultValue = defaultValue.isValid() ? defaultValue : r.defaultValue;
       setModified(true);
       Q_EMIT tablesChanged();
-      return;
+      return true;
     }
   }
+
+  return false;
 }
 
 /**
@@ -5209,7 +5228,7 @@ void DataModel::ProjectModel::promptRenameRegister(const QString& table,
 
     for (const auto& r : t.registers) {
       if (r.name == registerName) {
-        updateRegister(
+        (void)updateRegister(
           table, registerName, name.trimmed(), r.type == RegisterType::Computed, r.defaultValue);
         return;
       }
@@ -6459,7 +6478,8 @@ void DataModel::ProjectModel::resolveDiskFileChange()
 
   if (!QFile::exists(m_filePath)) {
     m_diskFileHash.clear();
-    setModified(true);
+    m_modified = true;
+    Q_EMIT modifiedChanged();
     Q_EMIT projectFileChangedOnDisk();
     DataModel::NotificationCenter::instance().postWarning(
       QStringLiteral("ProjectModel"),
@@ -6481,7 +6501,8 @@ void DataModel::ProjectModel::resolveDiskFileChange()
 
   if (m_suppressMessageBoxes) {
     qWarning() << "[ProjectModel] Project file changed on disk; keeping in-memory state";
-    setModified(true);
+    m_modified = true;
+    Q_EMIT modifiedChanged();
     DataModel::NotificationCenter::instance().postWarning(
       QStringLiteral("ProjectModel"),
       tr("Project file changed on disk"),
@@ -6513,7 +6534,8 @@ void DataModel::ProjectModel::promptDiskFileReload()
   m_diskPromptActive  = false;
 
   if (ret != QMessageBox::Yes) {
-    setModified(true);
+    m_modified = true;
+    Q_EMIT modifiedChanged();
     return;
   }
 

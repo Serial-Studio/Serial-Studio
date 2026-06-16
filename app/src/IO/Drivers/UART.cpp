@@ -190,6 +190,18 @@ qint64 IO::Drivers::UART::write(const QByteArray& data)
 }
 
 /**
+ * @brief Returns the index of the port whose system location matches, or -1 when none does.
+ */
+static int matchPortByLocation(const QVector<QSerialPortInfo>& ports, const QString& location)
+{
+  for (int i = 0; i < ports.count(); ++i)
+    if (ports.at(i).systemLocation() == location)
+      return i;
+
+  return -1;
+}
+
+/**
  * @brief Opens the currently selected serial port with the specified mode.
  */
 bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
@@ -208,14 +220,18 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     const auto name = ports.at(portId);
 
     if (m_deviceNames.contains(name)) {
+      const auto target =
+        portId < m_deviceLocations.count() ? m_deviceLocations.at(portId) : QString();
       const auto live = validPorts();
-      if (portId - 1 >= live.count()) {
+
+      const int matchIndex = matchPortByLocation(live, target);
+      if (matchIndex < 0) {
         close();
         return false;
       }
 
       m_usingCustomSerialPort = false;
-      m_port                  = new QSerialPort(live.at(portId - 1));
+      m_port                  = new QSerialPort(live.at(matchIndex));
     }
 
     else if (m_customDevices.contains(name)) {

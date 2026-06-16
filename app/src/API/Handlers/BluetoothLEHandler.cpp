@@ -215,13 +215,13 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectDevice(const QStri
                                         .arg(ble->deviceCount() - 1));
   }
 
-  ble->selectDevice(deviceIndex);
+  ble->selectDevice(deviceIndex + 1);
 
   QJsonObject result;
   result[QStringLiteral("deviceIndex")] = deviceIndex;
   const auto& deviceNames               = ble->deviceNames();
-  if (deviceIndex < deviceNames.count())
-    result[QStringLiteral("deviceName")] = deviceNames.at(deviceIndex);
+  if (deviceIndex + 1 < deviceNames.count())
+    result[QStringLiteral("deviceName")] = deviceNames.at(deviceIndex + 1);
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -249,11 +249,13 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QStr
                                         .arg(serviceNames.count() - 1));
   }
 
-  ble->selectService(serviceIndex);
+  ble->selectService(serviceIndex + 1);
 
   QJsonObject result;
   result[QStringLiteral("serviceIndex")] = serviceIndex;
-  result[QStringLiteral("serviceName")]  = serviceNames.at(serviceIndex);
+  if (serviceIndex + 1 < serviceNames.count())
+    result[QStringLiteral("serviceName")] = serviceNames.at(serviceIndex + 1);
+
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -310,11 +312,13 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
         .arg(characteristicNames.count() - 1));
   }
 
-  ble->setCharacteristicIndex(characteristicIndex);
+  ble->setCharacteristicIndex(characteristicIndex + 1);
 
   QJsonObject result;
   result[QStringLiteral("characteristicIndex")] = characteristicIndex;
-  result[QStringLiteral("characteristicName")]  = characteristicNames.at(characteristicIndex);
+  if (characteristicIndex + 1 < characteristicNames.count())
+    result[QStringLiteral("characteristicName")] = characteristicNames.at(characteristicIndex + 1);
+
   return CommandResponse::makeSuccess(id, result);
 }
 

@@ -13,6 +13,7 @@
 #include <QEventLoop>
 #include <QFile>
 #include <QHash>
+#include <QScopeGuard>
 #include <QStringList>
 #include <QThread>
 #include <QUuid>
@@ -578,12 +579,26 @@ static QJsonObject fsToolDescription(const QString& name)
 }
 
 /**
- * @brief Runs blocking work on a worker thread, pumping the caller's event loop until it returns.
+ * @brief Runs blocking work on a worker thread; a main-thread reentrancy guard makes a
+ *        re-entrant fs tool fail fast rather than spin a second nested event loop.
  */
 static QJsonObject runOffMainThread(const std::function<QJsonObject()>& work)
 {
   if (QThread::currentThread() != QCoreApplication::instance()->thread())
     return work();
+
+  static bool s_inNestedLoop = false;
+  if (s_inNestedLoop) {
+    QJsonObject out;
+    out[QStringLiteral("ok")]    = false;
+    out[QStringLiteral("error")] = QStringLiteral("fs_tool_busy");
+    out[QStringLiteral("hint")]  = QStringLiteral("Another filesystem tool is still running. Wait "
+                                                  "for it to finish, then retry this call.");
+    return out;
+  }
+
+  s_inNestedLoop = true;
+  const QScopeGuard clearGuard([] { s_inNestedLoop = false; });
 
   QJsonObject result;
   QEventLoop loop;
@@ -1377,6 +1392,44 @@ static QJsonObject compactBatchRowResult(const QJsonObject& opResult)
 }
 
 /**
+ * @brief True when a fanned-out inner command (Safe/Confirm tier) may run without an extra
+ *        AI confirmation; Blocked and AlwaysConfirm (incl. deviceGated) ops are rejected.
+ */
+static bool innerOpAllowed(const QString& commandName)
+{
+  const auto safety = AI::CommandRegistry::instance().safetyOf(commandName);
+  return safety == AI::Safety::Safe || safety == AI::Safety::Confirm;
+}
+
+/**
+ * @brief Builds the rejection reply for a fanned-out op whose safety tier blocks fan-out.
+ */
+static QJsonObject makeInnerOpRejection(const QString& commandName)
+{
+  const auto& aiReg = AI::CommandRegistry::instance();
+  const auto safety = aiReg.safetyOf(commandName);
+
+  QJsonObject out;
+  out[QStringLiteral("ok")]      = false;
+  out[QStringLiteral("error")]   = QStringLiteral("inner_op_blocked");
+  out[QStringLiteral("command")] = commandName;
+  out[QStringLiteral("safety")]  = static_cast<int>(safety);
+  if (aiReg.isDeviceGated(commandName) && !aiReg.deviceControlAllowed())
+    out[QStringLiteral("hint")] =
+      QStringLiteral("This op drives the device; enable 'Allow device control' or run it as a "
+                     "separate confirmed tool call. Batch fan-out cannot satisfy that gate.");
+  else if (safety == AI::Safety::Blocked)
+    out[QStringLiteral("hint")] =
+      QStringLiteral("This op is blocked for AI safety and cannot run inside a batch.");
+  else
+    out[QStringLiteral("hint")] =
+      QStringLiteral("This op needs explicit user approval and must be run as a separate tool "
+                     "call, not inside a batch fan-out.");
+
+  return out;
+}
+
+/**
  * @brief Validates and forwards a project.batch payload, summarizing any per-op failures.
  */
 static QJsonObject executeBulkApply(const QJsonObject& args)
@@ -1398,13 +1451,17 @@ static QJsonObject executeBulkApply(const QJsonObject& args)
   }
 
   for (const auto& value : ops) {
-    const auto op = value.toObject();
-    if (op.value(QStringLiteral("command")).toString() == QStringLiteral("project.batch")) {
+    const auto op        = value.toObject();
+    const auto opCommand = op.value(QStringLiteral("command")).toString();
+    if (opCommand == QStringLiteral("project.batch")) {
       QJsonObject out;
       out[QStringLiteral("ok")]    = false;
       out[QStringLiteral("error")] = QStringLiteral("nested_batch_rejected");
       return out;
     }
+
+    if (!innerOpAllowed(opCommand))
+      return makeInnerOpRejection(opCommand);
   }
 
   QJsonObject batchArgs;
@@ -1638,6 +1695,17 @@ static QJsonObject executeAddTile(const QJsonObject& args)
     out[QStringLiteral("error")] = QStringLiteral("missing_widgetType");
     return out;
   }
+
+  static const QStringList kFanOutCommands = {
+    QStringLiteral("project.workspace.add"),
+    QStringLiteral("project.dataset.setOptions"),
+    QStringLiteral("project.dataset.update"),
+    QStringLiteral("project.workspace.setCustomizeMode"),
+    QStringLiteral("project.workspace.addWidget"),
+  };
+  for (const auto& command : kFanOutCommands)
+    if (!innerOpAllowed(command))
+      return makeInnerOpRejection(command);
 
   auto wsReply = resolveOrCreateTileWorkspace(args, steps);
   if (!wsReply.value(QStringLiteral("ok")).toBool())

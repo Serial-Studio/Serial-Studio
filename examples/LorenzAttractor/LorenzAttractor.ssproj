@@ -245,14 +245,22 @@
             "interpolationEnabled": true
         },
         "activeGroup": 1000,
+        "externalWindows": {
+            "data": [
+                {
+                    "relativeIndex": 0,
+                    "widgetType": 6
+                }
+            ]
+        },
         "layout:1000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 477,
+                "canvasHeight": 478,
                 "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 477,
+                        "height": 478,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
@@ -262,7 +270,7 @@
                         "y": 0
                     },
                     {
-                        "height": 477,
+                        "height": 478,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
@@ -292,58 +300,58 @@
         "layout:1001": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1035,
+                "canvasHeight": 478,
+                "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 518,
+                        "width": 514,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 6,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 518,
-                        "x": 517,
+                        "width": 514,
+                        "x": 513,
                         "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 7,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 345,
+                        "width": 343,
                         "x": 0,
-                        "y": 249
+                        "y": 238
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 8,
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 345,
-                        "x": 344,
-                        "y": 249
+                        "width": 343,
+                        "x": 342,
+                        "y": 238
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 6,
-                        "width": 345,
-                        "x": 688,
-                        "y": 249
+                        "width": 343,
+                        "x": 684,
+                        "y": 238
                     }
                 ],
                 "userReordered": false,
@@ -381,7 +389,7 @@
         "layout:1002": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 477,
+                "canvasHeight": 478,
                 "canvasWidth": 1027,
                 "geometries": [
                     {
@@ -455,11 +463,11 @@
         "layout:1003": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 477,
+                "canvasHeight": 478,
                 "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 477,
+                        "height": 478,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
@@ -482,6 +490,6 @@
             }
         }
     },
-    "writerVersion": "3.2.7",
+    "writerVersion": "4.0.0",
     "writerVersionAtCreation": "3.2.7"
 }

@@ -41,6 +41,24 @@ Widgets.SmartDialog {
   property bool hasCustomRanges: false
 
   //
+  // Drop the raw C++ pointers the moment their QObjects are destroyed so the
+  // auto-range bindings and apply path can never dereference a stale pointer.
+  //
+  Connections {
+    target: root.dataModel
+    function onDestroyed() {
+      root.dataModel = null
+    }
+  }
+
+  Connections {
+    target: root.plotWidget
+    function onDestroyed() {
+      root.plotWidget = null
+    }
+  }
+
+  //
   // Window properties
   //
   staysOnTop: true
@@ -132,12 +150,12 @@ Widgets.SmartDialog {
       return
 
     if (!root.timeAxis) {
-      plotWidget.xMin = Qt.binding(function() { return dataModel.minX })
-      plotWidget.xMax = Qt.binding(function() { return dataModel.maxX })
+      plotWidget.xMin = Qt.binding(function() { return dataModel ? dataModel.minX : 0 })
+      plotWidget.xMax = Qt.binding(function() { return dataModel ? dataModel.maxX : 0 })
     }
 
-    plotWidget.yMin = Qt.binding(function() { return dataModel.minY })
-    plotWidget.yMax = Qt.binding(function() { return dataModel.maxY })
+    plotWidget.yMin = Qt.binding(function() { return dataModel ? dataModel.minY : 0 })
+    plotWidget.yMax = Qt.binding(function() { return dataModel ? dataModel.maxY : 0 })
 
     hasCustomRanges = false
     updateFields()

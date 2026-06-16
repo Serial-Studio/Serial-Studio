@@ -93,6 +93,7 @@ private:
   bool m_previewMode;
   bool m_slowPaintWarned;
   bool m_pointerDown;
+  bool m_rendering;
   int m_slowPaintStreak;
   qreal m_lastPointerX;
   qreal m_lastPointerY;

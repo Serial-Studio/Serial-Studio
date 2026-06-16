@@ -95,8 +95,11 @@ Widgets.SmartDialog {
     currentFolder: StandardPaths.writableLocation(StandardPaths.DesktopLocation)
     nameFilters: [Cpp_ShortcutGenerator.iconFileFilter]
     onAccepted: {
-      root.iconPathValue = selectedFile
-      root.userPickedIcon = true
+      const file = selectedFile
+      Qt.callLater(() => {
+        root.iconPathValue = file
+        root.userPickedIcon = true
+      })
     }
   }
 
@@ -109,21 +112,24 @@ Widgets.SmartDialog {
     defaultSuffix: Cpp_ShortcutGenerator.shortcutDefaultSuffix
     nameFilters: [Cpp_ShortcutGenerator.shortcutFileFilter]
     onAccepted: {
-      Cpp_ShortcutGenerator.generate(
-            selectedFile,
-            root.shortcutTitle,
-            root.iconPathValue,
-            root.projectPath,
-            fullscreen.checked,
-            actionsPanel.checked,
-            fileTransmission.checked,
-            csvExport.checked,
-            mdfExport.checked,
-            sessionExport.checked,
-            consoleExport.checked,
-            root.taskbarMode,
-            root.selectedTaskbarButtons(),
-            root.themeName)
+      const file = selectedFile
+      const title = root.shortcutTitle
+      const iconPath = root.iconPathValue
+      const projectPath = root.projectPath
+      const isFullscreen = fullscreen.checked
+      const hasActions = actionsPanel.checked
+      const hasFileTransmission = fileTransmission.checked
+      const hasCsv = csvExport.checked
+      const hasMdf = mdfExport.checked
+      const hasSession = sessionExport.checked
+      const hasConsole = consoleExport.checked
+      const mode = root.taskbarMode
+      const buttons = root.selectedTaskbarButtons()
+      const theme = root.themeName
+      Qt.callLater(() => Cpp_ShortcutGenerator.generate(
+                     file, title, iconPath, projectPath, isFullscreen,
+                     hasActions, hasFileTransmission, hasCsv, hasMdf,
+                     hasSession, hasConsole, mode, buttons, theme))
     }
   }
 

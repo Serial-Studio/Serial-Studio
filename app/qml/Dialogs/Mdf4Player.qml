@@ -68,7 +68,7 @@ SmartDialog {
       Slider {
         Layout.fillWidth: true
         value: Cpp_MDF4_Player.progress
-        onValueChanged: {
+        onMoved: {
           if (!isNaN(value) && value !== Cpp_MDF4_Player.progress)
             Cpp_MDF4_Player.setProgress(value)
         }

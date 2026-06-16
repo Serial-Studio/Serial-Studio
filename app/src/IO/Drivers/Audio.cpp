@@ -278,6 +278,10 @@ IO::Drivers::Audio::Audio()
   , m_outputQueue(kAudioQueueCapacity)
   , m_inputWorkerTimer(nullptr)
   , m_sampleClockValid(false)
+  , m_rtCaptureFormat(ma_format_unknown)
+  , m_rtPlaybackFormat(ma_format_unknown)
+  , m_rtCaptureChannels(0)
+  , m_rtPlaybackChannels(0)
 {
 #if defined(Q_OS_WIN)
   ma_backend backend[] = {ma_backend_wasapi};
@@ -492,6 +496,11 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   configureCaptureFormat(mode);
   if (!configurePlaybackFormat(mode))
     return false;
+
+  m_rtCaptureFormat.store(m_config.capture.format, std::memory_order_relaxed);
+  m_rtCaptureChannels.store(m_config.capture.channels, std::memory_order_relaxed);
+  m_rtPlaybackFormat.store(m_config.playback.format, std::memory_order_relaxed);
+  m_rtPlaybackChannels.store(m_config.playback.channels, std::memory_order_release);
 
   std::memset(&m_device, 0, sizeof(m_device));
   if (ma_device_init(&m_context, &m_config, &m_device) != MA_SUCCESS) {
@@ -1270,8 +1279,10 @@ void IO::Drivers::Audio::syncOutputParameters()
  */
 void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint32 frameCount)
 {
-  const ma_format format         = m_config.capture.format;
-  const ma_uint32 channels       = m_config.capture.channels;
+  const ma_format format         = m_rtCaptureFormat.load(std::memory_order_acquire);
+  const ma_uint32 channels       = m_rtCaptureChannels.load(std::memory_order_relaxed);
+  const ma_format playbackFormat = m_rtPlaybackFormat.load(std::memory_order_relaxed);
+  const ma_uint32 playbackChans  = m_rtPlaybackChannels.load(std::memory_order_relaxed);
   const ma_uint32 bytesPerSample = ma_get_bytes_per_sample(format);
   const ma_uint32 bytesPerFrame  = bytesPerSample * channels;
 
@@ -1281,10 +1292,9 @@ void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint
     (void)m_inputQueue.try_enqueue(std::move(chunk));
   }
 
-  if (output && m_config.playback.channels > 0 && m_config.playback.format != ma_format_unknown) {
-    char* out = reinterpret_cast<char*>(output);
-    const ma_uint32 outBytesPerFrame =
-      ma_get_bytes_per_sample(m_config.playback.format) * m_config.playback.channels;
+  if (output && playbackChans > 0 && playbackFormat != ma_format_unknown) {
+    char* out                        = reinterpret_cast<char*>(output);
+    const ma_uint32 outBytesPerFrame = ma_get_bytes_per_sample(playbackFormat) * playbackChans;
 
     QVector<quint8> frame;
     for (ma_uint32 i = 0; i < frameCount; ++i, out += outBytesPerFrame) {

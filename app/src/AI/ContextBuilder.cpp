@@ -34,6 +34,17 @@ static QString readResource(const QString& path)
   return QString::fromUtf8(data);
 }
 
+/**
+ * @brief Neutralizes any forged <untrusted> delimiter inside untrusted payload text.
+ */
+static QString neutralizeUntrustedDelimiter(const QString& payload)
+{
+  QString out = payload;
+  out.replace(QStringLiteral("</untrusted"), QStringLiteral("< /untrusted"), Qt::CaseInsensitive);
+  out.replace(QStringLiteral("<untrusted"), QStringLiteral("< untrusted"), Qt::CaseInsensitive);
+  return out;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Static text blocks
 //--------------------------------------------------------------------------------------------------
@@ -788,7 +799,7 @@ QString AI::ContextBuilder::liveProjectStateBlock()
   QString out;
   out += QStringLiteral("# Current project state\n\n");
   out += QStringLiteral("<untrusted source=\"project_state\">\n");
-  out += QString::fromUtf8(pretty);
+  out += neutralizeUntrustedDelimiter(QString::fromUtf8(pretty));
   out += QStringLiteral("\n</untrusted>\n");
   return out;
 }

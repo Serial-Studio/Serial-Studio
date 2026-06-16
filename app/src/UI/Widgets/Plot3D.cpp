@@ -41,9 +41,11 @@ static double fastPow10(double exponent) noexcept
     1e-4,  1e-3,  1e-2,  1e-1,  1e0,   1e1,   1e2,  1e3,  1e4,  1e5,  1e6,
     1e7,   1e8,   1e9,   1e10,  1e11,  1e12,  1e13, 1e14, 1e15,
   };
+
   const int idx = static_cast<int>(exponent) + 15;
   if (idx < 0 || idx >= static_cast<int>(sizeof(kTable) / sizeof(kTable[0]))) [[unlikely]]
     return std::pow(10.0, exponent);
+
   return kTable[idx];
 }
 

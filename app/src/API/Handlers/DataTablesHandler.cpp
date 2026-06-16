@@ -138,10 +138,15 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
     &tableAdd);
   registry.registerCommand(
     QStringLiteral("project.dataTable.delete"),
-    QStringLiteral("Delete a table (params: name)"),
-    API::makeSchema({
-      {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
-  }),
+    QStringLiteral("Delete a table and all its registers (params: name). Pass dryRun:true to "
+                   "return the register list that WOULD be deleted without committing."),
+    API::makeSchema(
+      {
+        {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return what would be deleted without committing.")}}),
     &tableDelete);
   registry.registerCommand(
     QStringLiteral("project.dataTable.rename"),
@@ -216,11 +221,16 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
 
   registry.registerCommand(
     QStringLiteral("project.dataTable.deleteRegister"),
-    QStringLiteral("Delete a register (params: table, name)"),
-    API::makeSchema({
-      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
-      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
-  }),
+    QStringLiteral("Delete a register (params: table, name). Pass dryRun:true to return what "
+                   "WOULD be deleted without committing."),
+    API::makeSchema(
+      {
+        {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
+        { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return what would be deleted without committing.")}}),
     &registerDelete);
 
   QJsonObject updProps;
@@ -332,7 +342,8 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableAdd(const QString& i
 }
 
 /**
- * @brief Deletes a table by name. No-op if not found.
+ * @brief Deletes a table by name. With dryRun:true, reports what would be deleted without
+ *        mutating; the delete itself is a no-op if the table is not found.
  */
 API::CommandResponse API::Handlers::DataTablesHandler::tableDelete(const QString& id,
                                                                    const QJsonObject& params)
@@ -342,10 +353,36 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableDelete(const QString
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
-  DataModel::ProjectModel::instance().deleteTable(name);
+  auto& pm           = DataModel::ProjectModel::instance();
+  const auto& tables = pm.tables();
+  const auto it =
+    std::find_if(tables.begin(), tables.end(), [&name](const auto& t) { return t.name == name; });
+
+  if (it == tables.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(name));
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  QJsonArray registers;
+  for (const auto& r : it->registers)
+    registers.append(r.name);
 
   QJsonObject result;
-  result[QStringLiteral("name")]    = name;
+  result[QStringLiteral("name")]          = name;
+  result[QStringLiteral("registerCount")] = static_cast<int>(it->registers.size());
+  result[QStringLiteral("registers")]     = registers;
+
+  if (isDryRun) {
+    result[QStringLiteral("dryRun")]  = true;
+    result[QStringLiteral("deleted")] = false;
+    result[QStringLiteral("warning")] = QStringLiteral(
+      "DRY RUN: no changes were written. Re-call without dryRun:true to delete the table "
+      "and all its registers.");
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  pm.deleteTable(name);
   result[QStringLiteral("deleted")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
@@ -429,7 +466,8 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerAdd(const QString
 }
 
 /**
- * @brief Removes a register from a table.
+ * @brief Removes a register from a table. With dryRun:true, reports what would be deleted
+ *        without mutating.
  */
 API::CommandResponse API::Handlers::DataTablesHandler::registerDelete(const QString& id,
                                                                       const QJsonObject& params)
@@ -444,11 +482,39 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerDelete(const QStr
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
-  DataModel::ProjectModel::instance().deleteRegister(table, name);
+  auto& pm           = DataModel::ProjectModel::instance();
+  const auto& tables = pm.tables();
+  const auto tit =
+    std::find_if(tables.begin(), tables.end(), [&table](const auto& t) { return t.name == table; });
+
+  if (tit == tables.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(table));
+
+  const auto rit = std::find_if(tit->registers.begin(),
+                                tit->registers.end(),
+                                [&name](const auto& r) { return r.name == name; });
+
+  if (rit == tit->registers.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Register not found: %1/%2").arg(table, name));
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
 
   QJsonObject result;
-  result[QStringLiteral("table")]   = table;
-  result[QStringLiteral("name")]    = name;
+  result[QStringLiteral("table")]    = table;
+  result[QStringLiteral("name")]     = name;
+  result[QStringLiteral("computed")] = (rit->type == DataModel::RegisterType::Computed);
+
+  if (isDryRun) {
+    result[QStringLiteral("dryRun")]  = true;
+    result[QStringLiteral("deleted")] = false;
+    result[QStringLiteral("warning")] = QStringLiteral(
+      "DRY RUN: no changes were written. Re-call without dryRun:true to delete the register.");
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  pm.deleteRegister(table, name);
   result[QStringLiteral("deleted")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
@@ -499,7 +565,8 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QStr
   else if (params.contains(QStringLiteral("value")))
     defaultValue = jsonToVariant(params.value(QStringLiteral("value")));
 
-  DataModel::ProjectModel::instance().updateRegister(table, name, newName, computed, defaultValue);
+  (void)DataModel::ProjectModel::instance().updateRegister(
+    table, name, newName, computed, defaultValue);
 
   QJsonObject result;
   result[QStringLiteral("table")]    = table;

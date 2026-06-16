@@ -71,6 +71,25 @@ QString AI::LocalProvider::defaultBaseUrl()
 }
 
 /**
+ * @brief Validates a base URL: well-formed http/https with no embedded credentials.
+ */
+static bool isSafeBaseUrl(const QString& candidate)
+{
+  const QUrl url(candidate, QUrl::StrictMode);
+  if (!url.isValid() || url.host().isEmpty())
+    return false;
+
+  const auto scheme = url.scheme().toLower();
+  if (scheme != QStringLiteral("http") && scheme != QStringLiteral("https"))
+    return false;
+
+  if (!url.userInfo().isEmpty())
+    return false;
+
+  return true;
+}
+
+/**
  * @brief Static fallback model list shown when the live query has not (yet) succeeded.
  */
 static QStringList fallbackModels()
@@ -97,6 +116,9 @@ AI::LocalProvider::LocalProvider(QNetworkAccessManager& nam) : QObject(nullptr),
   m_settings.beginGroup(QStringLiteral("ai/local"));
   m_baseUrl = m_settings.value(QStringLiteral("baseUrl"), defaultBaseUrl()).toString();
   m_settings.endGroup();
+
+  if (!isSafeBaseUrl(m_baseUrl))
+    m_baseUrl = defaultBaseUrl();
 
   loadCachedModels();
 
@@ -197,6 +219,11 @@ void AI::LocalProvider::setBaseUrl(const QString& url)
 
   if (trimmed.isEmpty())
     trimmed = defaultBaseUrl();
+
+  if (!isSafeBaseUrl(trimmed)) {
+    qCWarning(serialStudioAI) << "Rejected local base URL (must be http/https, no credentials)";
+    return;
+  }
 
   if (trimmed == m_baseUrl)
     return;

@@ -46,7 +46,7 @@ Widgets.Pane {
   }
   property var registers: []
 
-  property int suppressRefresh: 0
+  property bool committing: false
   function refresh() {
     if (tableName.length > 0)
       registers = Cpp_JSON_ProjectModel.registersForTable(tableName)
@@ -55,8 +55,12 @@ Widgets.Pane {
   }
 
   function commitRegister(oldName, newName, computed, value) {
-    suppressRefresh += 1
-    Cpp_JSON_ProjectModel.updateRegister(tableName, oldName, newName, computed, value)
+    root.committing = true
+    const ok = Cpp_JSON_ProjectModel.updateRegister(tableName, oldName, newName, computed, value)
+    root.committing = false
+
+    if (!ok)
+      Qt.callLater(root.refresh)
   }
 
   onTableNameChanged: Qt.callLater(refresh)
@@ -66,10 +70,9 @@ Widgets.Pane {
   Connections {
     target: Cpp_JSON_ProjectModel
     function onTablesChanged() {
-      if (root.suppressRefresh > 0) {
-        root.suppressRefresh -= 1
+      if (root.committing)
         return
-      }
+
       Qt.callLater(root.refresh)
     }
   }

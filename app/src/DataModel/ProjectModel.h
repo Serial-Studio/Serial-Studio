@@ -288,11 +288,11 @@ public slots:
                    bool computed,
                    const QVariant& defaultValue);
   void deleteRegister(const QString& table, const QString& registerName);
-  void updateRegister(const QString& table,
-                      const QString& registerName,
-                      const QString& newName,
-                      bool computed,
-                      const QVariant& defaultValue);
+  [[nodiscard]] bool updateRegister(const QString& table,
+                                    const QString& registerName,
+                                    const QString& newName,
+                                    bool computed,
+                                    const QVariant& defaultValue);
 
   void promptAddTable();
   void promptRenameTable(const QString& oldName);

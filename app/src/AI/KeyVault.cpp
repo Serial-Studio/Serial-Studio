@@ -111,7 +111,7 @@ void AI::KeyVault::setKey(ProviderId provider, const QString& plaintext)
   m_settings.setValue(settingsKey(provider), cipher);
   m_settings.endGroup();
 
-  qCDebug(serialStudioAI) << "Key set for" << settingsKey(provider) << "value" << redact(trimmed);
+  qCDebug(serialStudioAI) << "Key set for" << settingsKey(provider);
 }
 
 /**

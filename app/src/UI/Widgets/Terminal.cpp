@@ -1463,7 +1463,10 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
   (void)text;
 
   if (byte >= '0' && byte <= '9') {
-    m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
+    static constexpr int kMaxCsiParam = 1000000;
+    if (m_currentFormatValue < kMaxCsiParam)
+      m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
+
     return;
   }
 
@@ -1977,7 +1980,8 @@ QString Widgets::Terminal::formatDebugMessage(QtMsgType type,
  */
 void Widgets::Terminal::setCursorPosition(const QPoint& position)
 {
-  const QPoint clamped(position.x(), qBound(0, position.y(), MAX_LINES));
+  const QPoint clamped(qBound(0, position.x(), maxCharsPerLine()),
+                       qBound(0, position.y(), MAX_LINES));
   if (m_cursorPosition != clamped) {
     m_cursorPosition = clamped;
     Q_EMIT cursorMoved();

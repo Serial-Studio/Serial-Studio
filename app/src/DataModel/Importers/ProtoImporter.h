@@ -24,6 +24,7 @@
 #include <memory>
 #include <QJsonObject>
 #include <QObject>
+#include <QSet>
 #include <QString>
 #include <QVector>
 
@@ -155,6 +156,8 @@ private:
   [[nodiscard]] const ProtoMessage* messageAt(int index) const;
   [[nodiscard]] int countScalarFields(const ProtoMessage& message) const;
   [[nodiscard]] int countFieldsRecursive(const ProtoMessage& message) const;
+  [[nodiscard]] int countFieldsRecursive(const ProtoMessage& message,
+                                         QSet<const ProtoMessage*>& visited) const;
 
   void buildGroups(const ProtoMessage& message,
                    const QString& parentFieldName,
@@ -162,7 +165,8 @@ private:
                    int& groupIdCounter,
                    int& datasetIndexCounter,
                    QJsonArray& groupsOut,
-                   QVector<DispatchRecord>& dispatchOut) const;
+                   QVector<DispatchRecord>& dispatchOut,
+                   QSet<const ProtoMessage*>& visited) const;
 
   [[nodiscard]] QString selectGroupWidget(const ProtoMessage& message) const;
 

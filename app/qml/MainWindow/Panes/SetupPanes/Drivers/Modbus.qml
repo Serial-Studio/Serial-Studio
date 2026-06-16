@@ -57,11 +57,9 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.protocolList
       currentIndex: Cpp_IO_Modbus.protocolIndex
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Modbus.protocolIndex)
-            Cpp_IO_Modbus.protocolIndex = currentIndex
-        }
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_Modbus.protocolIndex !== index)
+          Cpp_IO_Modbus.protocolIndex = index
       }
     }
 
@@ -82,11 +80,9 @@ Item {
       model: Cpp_IO_Modbus.serialPortList
       visible: Cpp_IO_Modbus.protocolIndex === 0
       currentIndex: Cpp_IO_Modbus.serialPortIndex
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Modbus.serialPortIndex)
-            Cpp_IO_Modbus.serialPortIndex = currentIndex
-        }
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_Modbus.serialPortIndex !== index)
+          Cpp_IO_Modbus.serialPortIndex = index
       }
     }
 
@@ -109,7 +105,6 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
 
       property bool initializing: true
-      property bool updatingIndex: false
 
       validator: IntValidator { bottom: 1 }
 
@@ -133,8 +128,6 @@ Item {
         target: Cpp_IO_Modbus
         function onBaudRateChanged() {
           if (!_baudRateCombo.initializing && Cpp_IO_Modbus.protocolIndex === 0) {
-            _baudRateCombo.updatingIndex = true
-
             const rates = Cpp_IO_Modbus.baudRateList
             const current = String(Cpp_IO_Modbus.baudRate)
             _baudRateCombo.model = rates
@@ -144,8 +137,6 @@ Item {
               _baudRateCombo.currentIndex = idx
             else
               _baudRateCombo.editText = current
-
-            _baudRateCombo.updatingIndex = false
           }
         }
       }
@@ -154,8 +145,6 @@ Item {
         target: Cpp_IO_Modbus
         function onProtocolIndexChanged() {
           if (Cpp_IO_Modbus.protocolIndex === 0 && !_baudRateCombo.initializing) {
-            _baudRateCombo.updatingIndex = true
-
             const rates = Cpp_IO_Modbus.baudRateList
             const current = String(Cpp_IO_Modbus.baudRate)
             _baudRateCombo.model = rates
@@ -165,8 +154,6 @@ Item {
               _baudRateCombo.currentIndex = idx
             else
               _baudRateCombo.editText = current
-
-            _baudRateCombo.updatingIndex = false
           }
         }
       }
@@ -181,15 +168,11 @@ Item {
         }
       }
 
-      onCurrentIndexChanged: {
-        if (!initializing && !updatingIndex
-            && currentIndex >= 0 && currentIndex < model.length) {
-          const value = parseInt(model[currentIndex])
-          if (!isNaN(value) && Cpp_IO_Modbus.baudRate !== value) {
-            updatingIndex = true
+      onActivated: (index) => {
+        if (!initializing && index >= 0 && index < model.length) {
+          const value = parseInt(model[index])
+          if (!isNaN(value) && Cpp_IO_Modbus.baudRate !== value)
             Cpp_IO_Modbus.baudRate = value
-            updatingIndex = false
-          }
         }
       }
     }
@@ -230,11 +213,9 @@ Item {
       model: Cpp_IO_Modbus.dataBitsList
       currentIndex: Cpp_IO_Modbus.dataBitsIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Modbus.dataBitsIndex)
-            Cpp_IO_Modbus.dataBitsIndex = currentIndex
-        }
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_Modbus.dataBitsIndex !== index)
+          Cpp_IO_Modbus.dataBitsIndex = index
       }
     }
 
@@ -253,11 +234,9 @@ Item {
       model: Cpp_IO_Modbus.stopBitsList
       currentIndex: Cpp_IO_Modbus.stopBitsIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Modbus.stopBitsIndex)
-            Cpp_IO_Modbus.stopBitsIndex = currentIndex
-        }
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_Modbus.stopBitsIndex !== index)
+          Cpp_IO_Modbus.stopBitsIndex = index
       }
     }
 

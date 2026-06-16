@@ -174,6 +174,11 @@ private:
   void collectEndpoint(const libusb_endpoint_descriptor& ep, int ifNum, bool wantIso);
   void eventLoop();
 
+  void stopReadThread();
+  void stopEventThread();
+  void cancelAndDrainTransfers();
+  void freeTransfers();
+
   [[nodiscard]] QString endpointErrorMessage() const;
 
   void readLoop();
@@ -215,6 +220,7 @@ private:
   static constexpr std::size_t kCacheLine = 64;
   alignas(kCacheLine) std::atomic<bool> m_running;
   alignas(kCacheLine) std::atomic<bool> m_eventLoopRunning;
+  alignas(kCacheLine) std::atomic<int> m_isoInFlight;
 
   QThread m_readThread;
   QThread m_eventThread;
