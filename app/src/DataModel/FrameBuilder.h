@@ -256,6 +256,7 @@ private:
   void buildQuickPlotAudioFrame(const QStringList& channels);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
   void publishSourceTemplateFrame(const DataModel::Source& src);
+  [[nodiscard]] bool republishFrames(bool feedExports);
   void refreshAnyAsyncSink();
   void refreshDatasetCaptureFlag();
   void refreshLatestFrameCapture();

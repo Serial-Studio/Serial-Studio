@@ -3314,29 +3314,29 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1594"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1708"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1612"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1726"/>
         <source>Channel %1</source>
         <translation>Canale %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1719"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1737"/>
         <source>Audio Input</source>
         <translation>Ingresso Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1603"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1724"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1621"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1742"/>
         <source>Quick Plot</source>
         <translation>Grafico Rapido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1323"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1341"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Trasformazione JavaScript ha superato il budget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1324"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1342"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Una trasformazione di dataset ha impiegato più di %1 ms; i dataset rimanenti nella frame sono stati riportati ai valori grezzi fino alla frame successiva. Profila o semplifica il codice di trasformazione.</translation>
     </message>
@@ -3351,17 +3351,17 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Un consumatore a valle (dashboard, esportazione CSV/MDF4, session DB o sottoscrittore API) non sta svuotando le frame abbastanza velocemente. Serial Studio sta passando ad allocazioni per frame fino a quando l’arretrato non si libera. Disabilita un consumatore pesante o riduci la velocità dei dati.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1555"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1573"/>
         <source>Device A</source>
         <translation>Dispositivo A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1610"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1628"/>
         <source>Quick Plot Data</source>
         <translation>Dati Grafico Rapido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1622"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1640"/>
         <source>Multiple Plots</source>
         <translation>Grafici Multipli</translation>
     </message>
@@ -13156,52 +13156,52 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
 <context>
     <name>Plot3D</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="202"/>
         <source>Interpolate</source>
         <translation>Interpola</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="220"/>
         <source>Orbit Navigation</source>
         <translation>Navigazione Orbita</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="230"/>
         <source>Pan Navigation</source>
         <translation>Navigazione Pan</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="241"/>
         <source>Orthogonal View</source>
         <translation>Vista Ortogonale</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="247"/>
         <source>Top View</source>
         <translation>Vista Dall'alto</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="253"/>
         <source>Left View</source>
         <translation>Vista da Sinistra</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="259"/>
         <source>Front View</source>
         <translation>Vista Frontale</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="276"/>
         <source>Auto Center</source>
         <translation>Centra Automaticamente</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="292"/>
         <source>Anaglyph 3D</source>
         <translation>Anaglifo 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="306"/>
         <source>Invert Eye Positions</source>
         <translation>Inverti Posizioni Occhi</translation>
     </message>
@@ -14524,12 +14524,12 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Nessuna chiave API Groq impostata. Apri Gestisci Chiavi per aggiungerne una.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1081"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1099"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Il parser di frame sta utilizzando più del %1% del tempo CPU.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1083"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1101"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio sta scartando frame per mantenere l'applicazione reattiva. Semplificare o ottimizzare lo script del parser di frame per ridurne il carico di lavoro.</translation>
     </message>
@@ -18940,7 +18940,7 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="961"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="950"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Intervallo Griglia: %1 unità</translation>
     </message>

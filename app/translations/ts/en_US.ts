@@ -3314,29 +3314,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1594"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1708"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1612"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1726"/>
         <source>Channel %1</source>
         <translation>Channel %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1719"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1737"/>
         <source>Audio Input</source>
         <translation>Audio Input</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1603"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1724"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1621"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1742"/>
         <source>Quick Plot</source>
         <translation>Quick Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1323"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1341"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript transform exceeded budget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1324"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1342"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</translation>
     </message>
@@ -3351,17 +3351,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1555"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1573"/>
         <source>Device A</source>
         <translation>Device A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1610"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1628"/>
         <source>Quick Plot Data</source>
         <translation>Quick Plot Data</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1622"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1640"/>
         <source>Multiple Plots</source>
         <translation>Multiple Plots</translation>
     </message>
@@ -13156,52 +13156,52 @@ Add groups above to poll multiple register types.</translation>
 <context>
     <name>Plot3D</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="202"/>
         <source>Interpolate</source>
         <translation>Interpolate</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="220"/>
         <source>Orbit Navigation</source>
         <translation>Orbit Navigation</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="230"/>
         <source>Pan Navigation</source>
         <translation>Pan Navigation</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="241"/>
         <source>Orthogonal View</source>
         <translation>Orthogonal View</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="247"/>
         <source>Top View</source>
         <translation>Top View</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="253"/>
         <source>Left View</source>
         <translation>Left View</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="259"/>
         <source>Front View</source>
         <translation>Front View</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="276"/>
         <source>Auto Center</source>
         <translation>Auto Center</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="292"/>
         <source>Anaglyph 3D</source>
         <translation>Anaglyph 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="306"/>
         <source>Invert Eye Positions</source>
         <translation>Invert Eye Positions</translation>
     </message>
@@ -14524,12 +14524,12 @@ The separator parameter is no longer needed.</translation>
         <translation>No Groq API key set. Open Manage Keys to add one.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1081"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1099"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>The frame parser is using more than %1% of CPU time.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1083"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1101"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</translation>
     </message>
@@ -18940,7 +18940,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="961"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="950"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Grid Interval: %1 unit(s)</translation>
     </message>

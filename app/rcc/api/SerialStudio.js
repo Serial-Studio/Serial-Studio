@@ -223,8 +223,10 @@ if (typeof __ss_bridge !== 'undefined') {
   // dashboardTick() forces a render from the current table/dataset state, synthesizing
   // the project frame structure when no device frame has arrived yet. Call it after
   // tableSet() writes so table-driven (virtual) datasets render from the first loop(),
-  // even while the device is silent. refreshDashboard() no-ops until a real frame exists;
-  // dashboardTick() does not.
+  // even while the device is silent. Unlike refreshDashboard() (dashboard only, and a
+  // no-op until a real frame exists), dashboardTick() also fans the synthesized frame
+  // out to the enabled export sinks (CSV/MDF4/session/MQTT/API), so a control-script
+  // simulation can be recorded.
   dashboardTick = function() {
     return __ss_bridge.call('dashboard.tick', {});
   };
@@ -744,9 +746,10 @@ extensions.saveState = function(pluginId, state) {
   return apiCall('extensions.saveState', p);
 };
 
-extensions.uninstall = function(addonIndex) {
+extensions.uninstall = function(addonIndex, options) {
   var p = {};
   p['addonIndex'] = addonIndex;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('extensions.uninstall', p);
 };
 
@@ -1523,16 +1526,18 @@ project.dataTable.addRegister = function(table, name, options) {
   return apiCall('project.dataTable.addRegister', p);
 };
 
-project.dataTable.delete = function(name) {
+project.dataTable.delete = function(name, options) {
   var p = {};
   p['name'] = name;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.dataTable.delete', p);
 };
 
-project.dataTable.deleteRegister = function(table, name) {
+project.dataTable.deleteRegister = function(table, name, options) {
   var p = {};
   p['table'] = table;
   p['name'] = name;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.dataTable.deleteRegister', p);
 };
 

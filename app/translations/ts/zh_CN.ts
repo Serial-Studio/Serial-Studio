@@ -3314,29 +3314,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1594"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1708"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1612"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1726"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1719"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1737"/>
         <source>Audio Input</source>
         <translation>音频输入</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1603"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1724"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1621"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1742"/>
         <source>Quick Plot</source>
         <translation>快速绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1323"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1341"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 转换超出预算</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1324"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1342"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>某个数据集转换耗时超过 %1 毫秒；该帧中其余数据集已回退为原始值，直到下一个帧。请对转换代码进行分析或简化。</translation>
     </message>
@@ -3351,17 +3351,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>下游消费者（仪表盘、CSV/MDF4 导出、会话数据库或 API 订阅者）处理帧的速度不够快。Serial Studio 正回退为每帧分配，直到积压清除。请禁用高负载消费者或降低数据速率。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1555"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1573"/>
         <source>Device A</source>
         <translation>设备 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1610"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1628"/>
         <source>Quick Plot Data</source>
         <translation>快速绘图数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1622"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1640"/>
         <source>Multiple Plots</source>
         <translation>多重绘图</translation>
     </message>
@@ -13156,52 +13156,52 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Plot3D</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="202"/>
         <source>Interpolate</source>
         <translation>插值</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="220"/>
         <source>Orbit Navigation</source>
         <translation>轨道导航</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="230"/>
         <source>Pan Navigation</source>
         <translation>平移导航</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="241"/>
         <source>Orthogonal View</source>
         <translation>正交视图</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="247"/>
         <source>Top View</source>
         <translation>顶视图</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="253"/>
         <source>Left View</source>
         <translation>左视图</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="259"/>
         <source>Front View</source>
         <translation>前视图</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="276"/>
         <source>Auto Center</source>
         <translation>自动居中</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="292"/>
         <source>Anaglyph 3D</source>
         <translation>浮雕 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="306"/>
         <source>Invert Eye Positions</source>
         <translation>反转眼睛位置</translation>
     </message>
@@ -14524,12 +14524,12 @@ function parse(%1) { ... }
         <translation>未设置 Groq API 密钥。打开管理密钥以添加。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1081"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1099"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>帧解析器占用超过 %1% 的 CPU 时间。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1083"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1101"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio 正在丢弃帧以保持应用程序响应。请简化或优化帧解析器脚本以减少其工作负载。</translation>
     </message>
@@ -18940,7 +18940,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="961"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="950"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>网格间隔:%1 单位</translation>
     </message>

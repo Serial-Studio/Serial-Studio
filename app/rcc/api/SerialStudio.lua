@@ -476,9 +476,10 @@ function extensions.saveState(pluginId, state)
   return apiCall('extensions.saveState', p)
 end
 
-function extensions.uninstall(addonIndex)
+function extensions.uninstall(addonIndex, options)
   local p = {}
   p['addonIndex'] = addonIndex
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('extensions.uninstall', p)
 end
 
@@ -1255,16 +1256,18 @@ function project.dataTable.addRegister(table, name, options)
   return apiCall('project.dataTable.addRegister', p)
 end
 
-function project.dataTable.delete(name)
+function project.dataTable.delete(name, options)
   local p = {}
   p['name'] = name
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.dataTable.delete', p)
 end
 
-function project.dataTable.deleteRegister(table, name)
+function project.dataTable.deleteRegister(table, name, options)
   local p = {}
   p['table'] = table
   p['name'] = name
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.dataTable.deleteRegister', p)
 end
 

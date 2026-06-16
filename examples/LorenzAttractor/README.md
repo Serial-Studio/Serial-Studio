@@ -39,11 +39,11 @@ The whole example runs from the control script, with no helper process to launch
 - **`setup()`** seeds the clock and posts a notification.
 - **`loop()`** advances the Lorenz state one Euler step, writes `x`, `y` and `z` into the `Lorenz` data table with `tableSet()`, then calls `dashboardTick()` to force a render.
 - The three datasets are **virtual**: their Lua transforms read the matching register from the `Lorenz` table, so the dashboard is fed straight from the control loop.
-- The UDP source is a **dummy**, kept only so a connection can be opened. Its Lua frame parser returns `{0}`; no bytes are ever parsed.
+- The UDP source is a **dummy**, kept only so a connection can be opened. Its Lua frame parser returns `{}` (no frame); no bytes are ever parsed, and the control loop's `dashboardTick()` drives both the dashboard and the exports.
 
 Because the loop free-runs (the worker re-arms it about once per millisecond), this project also doubles as a control-loop benchmark. `loop()` advances `STEPS_PER_TICK` integration steps per dashboard refresh, and every `STATS_EVERY` steps it reports the measured step rate as a notification, so you can see how fast and how steadily the control loop runs. Raise `STEPS_PER_TICK` to push raw integration throughput past the refresh rate.
 
-> Table-driven `dashboardTick()` updates the dashboard only; it does not feed the export fan-out, so CSV/MDF4/Session-database/MQTT exports stay empty here. A project that needs those exports must decode into datasets via a real frame parser rather than into a data table.
+> `dashboardTick()` also fans the synthesized frame out to whatever export sinks are enabled, so a control-script simulation like this one can be recorded to CSV/MDF4/Session-database/MQTT just like real device data. (`refreshDashboard()`, by contrast, only refreshes the view.)
 
 ## Project features
 
@@ -62,7 +62,7 @@ Open `LorenzAttractor.ssproj` in Serial Studio and click **Connect**. That is al
 
 ## Serial Studio configuration
 
-The bundled project is already set up: its data source is a dummy UDP socket on local port **9000**, and it contains both visualizations, a Multi-Plot group (`2D Visualization`) and a 3D plot group (`3D Visualization`). The X/Y/Z values come from the `Lorenz` data table that the control loop writes; the frame parser is a Lua stub that returns `{0}`.
+The bundled project is already set up: its data source is a dummy UDP socket on local port **9000**, and it contains both visualizations, a Multi-Plot group (`2D Visualization`) and a 3D plot group (`3D Visualization`). The X/Y/Z values come from the `Lorenz` data table that the control loop writes; the frame parser is a Lua stub that returns `{}`.
 
 Here is how the project editor should look:
 

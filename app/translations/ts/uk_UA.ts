@@ -3314,29 +3314,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1594"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1708"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1612"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1726"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1719"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1737"/>
         <source>Audio Input</source>
         <translation>Аудіовхід</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1603"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1724"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1621"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1742"/>
         <source>Quick Plot</source>
         <translation>Швидкий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1323"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1341"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Перетворення JavaScript перевищило ліміт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1324"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1342"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Перетворення для одного з наборів даних тривало більше ніж %1 мс; решта наборів даних у фреймі були повернуті у вигляді сирих значень до наступного фрейму. Проаналізуйте або спростіть код перетворення.</translation>
     </message>
@@ -3351,17 +3351,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Один із споживачів (dashboard, експорт у CSV/MDF4, база даних сесій або підписник API) не встигає обробляти фрейми. Serial Studio переходить до виділення пам’яті для кожного фрейму окремо, поки черга не очиститься. Вимкніть важкого споживача або зменшіть швидкість передачі даних.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1555"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1573"/>
         <source>Device A</source>
         <translation>Пристрій A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1610"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1628"/>
         <source>Quick Plot Data</source>
         <translation>Дані Швидкого Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1622"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1640"/>
         <source>Multiple Plots</source>
         <translation>Кілька Графіків</translation>
     </message>
@@ -13156,52 +13156,52 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Plot3D</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="202"/>
         <source>Interpolate</source>
         <translation>Інтерполювати</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="220"/>
         <source>Orbit Navigation</source>
         <translation>Орбітальна Навігація</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="230"/>
         <source>Pan Navigation</source>
         <translation>Панорамна Навігація</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="241"/>
         <source>Orthogonal View</source>
         <translation>Ортогональний Вигляд</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="247"/>
         <source>Top View</source>
         <translation>Вигляд Зверху</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="253"/>
         <source>Left View</source>
         <translation>Вигляд Зліва</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="259"/>
         <source>Front View</source>
         <translation>Вигляд Спереду</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="276"/>
         <source>Auto Center</source>
         <translation>Автоцентрування</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="292"/>
         <source>Anaglyph 3D</source>
         <translation>Анагліф 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="306"/>
         <source>Invert Eye Positions</source>
         <translation>Інвертувати Позиції Очей</translation>
     </message>
@@ -14524,12 +14524,12 @@ function parse(%1) { ... }
         <translation>API-ключ Groq не встановлено. Відкрийте Керування Ключами, щоб додати його.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1081"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1099"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Парсер фреймів використовує понад %1% процесорного часу.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1083"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1101"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio пропускає фрейми, щоб зберегти відгук програми. Спростіть або оптимізуйте скрипт парсера фреймів, щоб зменшити його навантаження.</translation>
     </message>
@@ -18940,7 +18940,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="961"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="950"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Інтервал Сітки: %1 одиниць</translation>
     </message>

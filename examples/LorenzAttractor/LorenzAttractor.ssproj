@@ -1,5 +1,6 @@
 {
-    "actions": [],
+    "actions": [
+    ],
     "controlScriptCode": "/**\n * Lorenz Attractor - Control Loop (self-contained simulation)\n *\n * The entire simulation now lives in this control script: there is no external\n * data generator. loop() advances the Lorenz system, writes x/y/z into the\n * \"Lorenz\" data table with tableSet(), then dashboardTick() forces the virtual\n * datasets (whose Lua transforms read the table) to render. The UDP source is a\n * dummy, kept only so a connection can be opened; its Lua frame parser just\n * returns {0} and no bytes are ever parsed.\n *\n * This doubles as a control-loop benchmark. The loop free-runs (the worker\n * re-arms it about every millisecond), so STEPS_PER_TICK integration steps run\n * per dashboard refresh; raise it to push raw integration throughput past the\n * refresh rate. Every STATS_EVERY steps the measured step rate is reported, so\n * you can see how fast and how steadily the control loop actually runs.\n *\n * Lorenz system (Edward Lorenz, 1963), classic chaotic parameters:\n *   dx/dt = sigma (y - x),  dy/dt = x (rho - z) - y,  dz/dt = x y - beta z\n * integrated with the Euler method at a fixed dt.\n */\n\n//------------------------------------------------------------------------------\n// Configuration & constants\n//------------------------------------------------------------------------------\n\n// Lorenz parameters and Euler integration step.\nconst SIGMA = 10.0;\nconst RHO   = 28.0;\nconst BETA  = 8.0 / 3.0;\nconst DT    = 0.01;\n\n// Integration steps advanced per loop() call. 1 keeps the trace smooth and the\n// step rate close to the loop rate; higher values trade refresh rate for raw\n// integration throughput.\nconst STEPS_PER_TICK = 1;\n\n// Report the measured step rate every this many steps (0 disables reporting).\nconst STATS_EVERY = 50000;\n\n// Data table the virtual datasets read through their transforms.\nconst TABLE = \"Lorenz\";\n\n//------------------------------------------------------------------------------\n// Mutable state\n//------------------------------------------------------------------------------\n\nlet x = 0.1, y = 0.0, z = 0.0;\nlet stepCount = 0;\nlet lastReportStep = 0;\nlet lastReportMs = 0;\n\n//------------------------------------------------------------------------------\n// Integration\n//------------------------------------------------------------------------------\n\n/**\n * @brief Advances the Lorenz state by one Euler step of size DT.\n */\nfunction step() {\n  const dx = SIGMA * (y - x);\n  const dy = x * (RHO - z) - y;\n  const dz = x * y - BETA * z;\n  x += dx * DT;\n  y += dy * DT;\n  z += dz * DT;\n}\n\n//------------------------------------------------------------------------------\n// Benchmark reporting\n//------------------------------------------------------------------------------\n\n/**\n * @brief Reports the measured step rate every STATS_EVERY steps, so the control\n *        loop's speed and steadiness are observable from the dashboard.\n */\nfunction reportRate() {\n  if (STATS_EVERY <= 0 || (stepCount - lastReportStep) < STATS_EVERY)\n    return;\n\n  const now = Date.now();\n  const elapsed = now - lastReportMs;\n  if (elapsed > 0) {\n    const rate = Math.round((stepCount - lastReportStep) * 1000 / elapsed);\n    notifyInfo(\"Lorenz Attractor\", rate + \" steps/s\");\n  }\n\n  lastReportStep = stepCount;\n  lastReportMs = now;\n}\n\n//------------------------------------------------------------------------------\n// Lifecycle\n//------------------------------------------------------------------------------\n\n/**\n * @brief Seeds the clock and announces that the simulation runs entirely from\n *        the control loop.\n */\nfunction setup() {\n  lastReportMs = Date.now();\n  notifyInfo(\"Lorenz Attractor\", \"Simulating from the control loop; no external generator.\");\n}\n\n/**\n * @brief Advances the simulation, publishes x/y/z to the data table, and ticks\n *        the dashboard so the virtual datasets render the fresh trajectory.\n */\nfunction loop() {\n  for (let i = 0; i < STEPS_PER_TICK; ++i)\n    step();\n\n  stepCount += STEPS_PER_TICK;\n  tableSet(TABLE, \"x\", x);\n  tableSet(TABLE, \"y\", y);\n  tableSet(TABLE, \"z\", z);\n  dashboardTick();\n  reportRate();\n}\n",
     "groups": [
         {
@@ -239,12 +240,12 @@
             "decoderMethod": 0,
             "frameDetection": 0,
             "frameEnd": "\\n",
-            "frameParserCode": "--\n-- Dummy frame parser\n--\n-- This project generates all of its data inside the control script, which\n-- writes the \"Lorenz\" data table and calls dashboardTick(). The UDP source is\n-- a dummy, kept only so a connection can be opened; no bytes are ever parsed.\n-- Returning a single zero keeps the frame non-empty.\n--\n\nfunction parse(frame)\n  return {0}\nend\n",
+            "frameParserCode": "--\n-- Dummy frame parser\n--\n-- This project generates all of its data inside the control script, which\n-- writes the \"Lorenz\" data table and calls dashboardTick(). The UDP source is\n-- a dummy, kept only so a connection can be opened; no bytes are ever parsed.\n--\n\nfunction parse(frame)\n  return {}\nend\n",
             "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
-            "title": "Device A"
+            "title": "Dummy Device"
         }
     ],
     "tables": [
@@ -286,7 +287,8 @@
         },
         "activeGroup": 1000,
         "externalWindows": {
-            "data": []
+            "data": [
+            ]
         },
         "layout:1000": {
             "data": {

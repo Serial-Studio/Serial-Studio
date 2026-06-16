@@ -719,12 +719,12 @@ void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source
 }
 
 /**
- * @brief Re-runs every dataset transform from the last raw values (virtual datasets re-read
- *        the data tables) and republishes the live frames to the dashboard only, with no
- *        export fan-out so a synthetic refresh never lands in CSV/MDF4/session records.
- *        Returns false when no frame structure is available to publish.
+ * @brief Re-runs every dataset transform from the last raw values (virtual datasets re-read the
+ *        data tables) and republishes the live frames. With @p feedExports false the frames go to
+ *        the dashboard only; with it true they also fan out through hotpathTxFrame() to the export
+ *        sinks. Returns false when no frame structure is available to publish.
  */
-bool DataModel::FrameBuilder::reprocessFrames()
+bool DataModel::FrameBuilder::republishFrames(bool feedExports)
 {
   if (m_operationMode != SerialStudio::ProjectFile)
     return false;
@@ -737,13 +737,21 @@ bool DataModel::FrameBuilder::reprocessFrames()
       continue;
 
     reprocessDatasetValues(frame);
-    dashboard.hotpathRxFrame(acquireFrame(frame));
+    if (feedExports)
+      hotpathTxFrame(acquireFrame(frame));
+    else
+      dashboard.hotpathRxFrame(acquireFrame(frame));
+
     published = true;
   }
 
   if (!published && !m_frame.groups.empty() && !m_frame.title.isEmpty()) {
     reprocessDatasetValues(m_frame);
-    dashboard.hotpathRxFrame(acquireFrame(m_frame));
+    if (feedExports)
+      hotpathTxFrame(acquireFrame(m_frame));
+    else
+      dashboard.hotpathRxFrame(acquireFrame(m_frame));
+
     published = true;
   }
 
@@ -751,10 +759,20 @@ bool DataModel::FrameBuilder::reprocessFrames()
 }
 
 /**
- * @brief Forces a dashboard render from the current table/dataset state even when the device is
- *        silent and no frame has arrived yet: seeds each project source frame from the template
- *        if missing, runs the transform-only pass, and publishes. Lets a control script update
- *        tables then call dashboardTick() to make table-driven (virtual) datasets render at once.
+ * @brief Re-runs transforms from the last received values and republishes to the dashboard only,
+ *        with no export fan-out, so a synthetic refresh never re-records frames that were already
+ *        exported on arrival. Returns false when no frame structure is available to publish.
+ */
+bool DataModel::FrameBuilder::reprocessFrames()
+{
+  return republishFrames(false);
+}
+
+/**
+ * @brief Forces a render from the current table/dataset state even when the device is silent:
+ *        seeds each source frame from the template if missing, runs the transform-only pass, and
+ *        publishes through hotpathTxFrame so table-driven datasets both render and feed the
+ *        CSV/MDF4/session/MQTT/API exports. Works from the first loop().
  */
 bool DataModel::FrameBuilder::dashboardTick()
 {
@@ -768,7 +786,7 @@ bool DataModel::FrameBuilder::dashboardTick()
     for (const auto& g : m_frame.groups)
       (void)ensureSourceFrame(g.sourceId);
 
-  return reprocessFrames();
+  return republishFrames(true);
 }
 
 /**

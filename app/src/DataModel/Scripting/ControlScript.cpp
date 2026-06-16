@@ -27,10 +27,17 @@
 #include <QJSValue>
 
 #include "AppState.h"
+#include "CSV/Player.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
+#include "MDF4/Player.h"
+#include "SerialStudio.h"
+
+#ifdef BUILD_COMMERCIAL
+#  include "Sessions/Player.h"
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -84,6 +91,19 @@ void DataModel::ControlScript::setupExternalConnections()
           &AppState::operationModeChanged,
           this,
           &ControlScript::onConnectedChanged);
+
+  connect(
+    &CSV::Player::instance(), &CSV::Player::openChanged, this, &ControlScript::onConnectedChanged);
+  connect(&MDF4::Player::instance(),
+          &MDF4::Player::openChanged,
+          this,
+          &ControlScript::onConnectedChanged);
+#ifdef BUILD_COMMERCIAL
+  connect(&Sessions::Player::instance(),
+          &Sessions::Player::openChanged,
+          this,
+          &ControlScript::onConnectedChanged);
+#endif
 
   onConnectedChanged();
 }
@@ -189,7 +209,7 @@ void DataModel::ControlScript::setCode(const QString& code)
  */
 void DataModel::ControlScript::runOnConnect()
 {
-  if (m_shutdown || m_code.trimmed().isEmpty()
+  if (m_shutdown || m_code.trimmed().isEmpty() || SerialStudio::isAnyPlayerOpen()
       || AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
@@ -223,11 +243,13 @@ void DataModel::ControlScript::runOnConnect()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief True only when connected and in ProjectFile mode (a project owns the script).
+ * @brief True only when connected and in ProjectFile mode (a project owns the script). Never runs
+ *        while a CSV/MDF4/session player is open: a replay must not race a live control loop
+ *        writing the same tables and re-driving the dashboard/exports with synthetic frames.
  */
 bool DataModel::ControlScript::shouldRun() const
 {
-  if (!m_ready || m_shutdown)
+  if (!m_ready || m_shutdown || SerialStudio::isAnyPlayerOpen())
     return false;
 
   return IO::ConnectionManager::instance().isConnected()

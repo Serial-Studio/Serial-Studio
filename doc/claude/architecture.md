@@ -628,12 +628,17 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   `timestampMs` against `Date.now()`. A new control-script global must follow the apiCall
   fallback pattern; installing a direct bridge on the worker engine is a threading bug. Dataset
   transforms re-run only on frame arrival, so table writes made while the device is silent
-  don't render until the next frame — `refreshDashboard()` (`dashboard.reprocess` →
-  `FrameBuilder::reprocessFrames`) closes that gap: it re-runs every transform from the
-  retained raw values (`reprocessDatasetValues`) and republishes the live frames
-  (per-source frames when populated, else `m_frame`) to `Dashboard::hotpathRxFrame` directly,
-  deliberately skipping the `hotpathTxFrame` export fan-out so synthetic refreshes never land
-  in CSV/MDF4/session records.
+  don't render until the next frame. Two SDK calls close that gap, both running the same
+  transform-only pass (`reprocessDatasetValues`) over the live frames (per-source frames when
+  populated, else `m_frame`) and sharing the private `republishFrames(bool feedExports)` helper:
+  `refreshDashboard()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, `feedExports`
+  false) publishes to `Dashboard::hotpathRxFrame` directly, skipping the `hotpathTxFrame` export
+  fan-out so a synthetic refresh never re-records frames already exported on arrival;
+  `dashboardTick()` (`dashboard.tick` → `FrameBuilder::dashboardTick`, `feedExports` true)
+  publishes *through* `hotpathTxFrame`, so a control-script simulation that owns its values via
+  data tables both renders and feeds the CSV/MDF4/session/MQTT/API exports (still gated on
+  `m_anyAsyncSink`). `dashboardTick` also seeds each source frame from the project template when
+  none has arrived yet, so it works from the very first `loop()`.
 - **Control-script lifecycle is per-connection and force-restarted**: `ControlScript`
   edge-tracks `shouldRun()` (`m_shouldRun`) and on every rising edge queues stop-then-start, so
   each connection gets a fresh engine (top-level state resets, setup() re-runs). `stopWorker()`

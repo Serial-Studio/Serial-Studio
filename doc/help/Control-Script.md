@@ -149,19 +149,12 @@ In ConsoleOnly mode frames are not parsed, so `values` is empty and only `text` 
 
 Control loops can read and write the same data-table registers the frame parser and dataset transforms use. `tableGet(table, register)` returns the live runtime value (or `undefined` when the table or register does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, register, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
 
-One caveat: dataset transforms only re-run when a frame arrives. If your script writes table registers while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame — call `refreshDashboard()` after the writes to make them render immediately. It re-runs every dataset transform from the last received values and republishes the frames to the dashboard only (nothing is appended to CSV/MDF4/session exports).
+One caveat: dataset transforms only re-run when a frame arrives. If your script writes table registers while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame. Two calls close that gap, and the difference between them is whether the result is exported:
 
-> **Important: `refreshDashboard()` does not export.** It updates the dashboard only. The export pipeline (CSV, MDF4, Session Database, MQTT, gRPC) is fed exclusively by frames the frame parser produces, and a frame is produced only when `parse()` returns a non-empty result. A parser that returns nothing on every frame keeps the dashboard alive through table writes and `refreshDashboard()`, but exports stay empty because no frame ever reaches the export fan-out. If the project drives its datasets from data tables and the parser would otherwise have nothing to return, make `parse()` return dummy data so a frame still flows through:
->
-> ```javascript
-> function parse(frame) {
->     // Datasets are fed from data tables; return a placeholder so a
->     // frame is still published and CSV/MDF4/DB/MQTT exports record it.
->     return [0];
-> }
-> ```
->
-> Returning `[]` (or `{}`) means "no frame this time": the dashboard is unchanged and nothing is exported. Use the dummy-data form whenever you need exports to keep recording while the script, not the parser, owns the values.
+- **`refreshDashboard()` — view only.** Re-runs every dataset transform from the last received values and republishes to the dashboard. Nothing is appended to CSV/MDF4/Session Database/MQTT. Use it for a purely visual refresh, such as a comms-loss watchdog marking sensors invalid.
+- **`dashboardTick()` — render *and* export.** Runs the same transform pass but publishes the synthesized frame through the export fan-out as well, so a script-owned (table-driven) simulation is recorded to CSV/MDF4/Session Database/MQTT just like real device data. It also seeds the frame structure when no device frame has arrived yet, so it works from the very first `loop()`. Exports are still gated on a sink being enabled.
+
+> **Choosing between them — and the parser's role.** If the script owns the values (it writes data tables and the device is silent or only a dummy source), call `dashboardTick()` so the data both renders and records, and make the frame parser return **empty** (`return []` / `return {}`). This last part matters: if the parser also returns a non-empty frame, every value is exported twice — once by the parser-produced frame and once by the frame `dashboardTick()` synthesizes — and the two paths race in the export records. Reserve `refreshDashboard()` for refreshes you explicitly do *not* want exported. The opposite pattern is parser-driven: when real device frames arrive and `parse()` writes the tables itself, have it return dummy data (`return [0];`) so each arriving frame flows through the export pipeline, and do *not* also call `dashboardTick()` — either path alone exports each value exactly once.
 
 ### Staleness watchdog
 

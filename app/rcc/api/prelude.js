@@ -164,8 +164,10 @@ if (typeof __ss_bridge !== 'undefined') {
   // dashboardTick() forces a render from the current table/dataset state, synthesizing
   // the project frame structure when no device frame has arrived yet. Call it after
   // tableSet() writes so table-driven (virtual) datasets render from the first loop(),
-  // even while the device is silent. refreshDashboard() no-ops until a real frame exists;
-  // dashboardTick() does not.
+  // even while the device is silent. Unlike refreshDashboard() (dashboard only, and a
+  // no-op until a real frame exists), dashboardTick() also fans the synthesized frame
+  // out to the enabled export sinks (CSV/MDF4/session/MQTT/API), so a control-script
+  // simulation can be recorded.
   dashboardTick = function() {
     return __ss_bridge.call('dashboard.tick', {});
   };

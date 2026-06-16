@@ -179,13 +179,15 @@ often:
   `SerialStudio.controlScript.zeroSensor()` or from the console. Control-script
   functions only run via `setup()`/`loop()`. For a user-triggerable one-shot,
   use an Action, not a console call.
-- **Expecting exports while `parse()` returns `[]`.** A table-driven dashboard
-  whose frame parser is `function parse() { return []; }` renders fine through
-  `tableSet()` + `refreshDashboard()`, but NOTHING is exported: CSV/MDF4/Session
-  DB/MQTT/gRPC only receive frames the parser publishes, and an empty result
-  publishes no frame. If the user needs exports to keep recording while the
-  script (not the parser) owns the values, make `parse()` return dummy data
-  (`return [0];`) so a frame still reaches the export fan-out.
+- **Double-exporting from a control-loop project.** When the script owns the
+  values (writes tables, calls `dashboardTick()` to render AND export), the frame
+  parser MUST return empty (`[]` / `{}`). A non-empty parser return publishes its
+  own frame, so every value lands in CSV/MDF4/Session DB/MQTT twice and the two
+  paths race in the export records. `refreshDashboard()` is the view-only variant
+  (never exports), and works from the first `loop()`. The opposite, parser-driven
+  pattern — `parse()` writes the tables and returns `[0]` so each real arriving
+  frame flows to exports — is correct only when the device sends frames, and must
+  NOT also call `dashboardTick()`.
 
 ## Pacing loop() with delay()
 

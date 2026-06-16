@@ -12,7 +12,7 @@
                             "label": "On",
                             "max": 1,
                             "min": 0.5,
-                            "severity": 1
+                            "severity": 3
                         }
                     ],
                     "datasetId": 0,
@@ -406,6 +406,14 @@
     "widgetSettings": {
         "externalWindows": {
             "data": [
+                {
+                    "relativeIndex": 0,
+                    "widgetType": 11
+                },
+                {
+                    "relativeIndex": 1,
+                    "widgetType": 11
+                }
             ]
         }
     },
@@ -427,6 +435,6 @@
             "workspaceId": 5001
         }
     ],
-    "writerVersion": "3.2.7",
+    "writerVersion": "4.0.0",
     "writerVersionAtCreation": "3.2.7"
 }
