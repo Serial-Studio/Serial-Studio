@@ -85,12 +85,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_targetWorldScale(1.0)
   , m_centerInitialized(false)
 {
-  m_anaglyph           = m_settings.value("Plot3D_Anaglyph", false).toBool();
-  m_autoCenter         = m_settings.value("Plot3D_AutoCenter", false).toBool();
-  m_interpolate        = m_settings.value("Plot3D_Interpolate", true).toBool();
-  m_eyeSeparation      = m_settings.value("Plot3D_EyeSeparation", 0.069).toFloat();
-  m_invertEyePositions = m_settings.value("Plot3D_InvertEyes", false).toBool();
-
   setOpaquePainting(true);
   setAcceptHoverEvents(true);
   setFiltersChildMouseEvents(true);
@@ -465,7 +459,6 @@ void Widgets::Plot3D::setAutoCenter(const bool enabled)
 {
   if (m_autoCenter != enabled) {
     m_autoCenter = enabled;
-    m_settings.setValue("Plot3D_AutoCenter", enabled);
 
     if (!enabled) {
       m_centerPoint  = QVector3D(0, 0, 0);
@@ -484,7 +477,6 @@ void Widgets::Plot3D::setAnaglyphEnabled(const bool enabled)
 {
   if (m_anaglyph != enabled) {
     m_anaglyph = enabled;
-    m_settings.setValue("Plot3D_Anaglyph", enabled);
 
     markDirty();
 
@@ -509,7 +501,6 @@ void Widgets::Plot3D::setOrbitNavigation(const bool enabled)
 void Widgets::Plot3D::setEyeSeparation(const float separation)
 {
   m_eyeSeparation = separation;
-  m_settings.setValue("Plot3D_EyeSeparation", separation);
   markCameraDirty();
 
   Q_EMIT eyeSeparationChanged();
@@ -522,7 +513,6 @@ void Widgets::Plot3D::setInvertEyePositions(const bool enabled)
 {
   if (m_invertEyePositions != enabled) {
     m_invertEyePositions = enabled;
-    m_settings.setValue("Plot3D_InvertEyes", enabled);
     markCameraDirty();
 
     Q_EMIT invertEyePositionsChanged();
@@ -536,8 +526,7 @@ void Widgets::Plot3D::setInterpolationEnabled(const bool enabled)
 {
   if (m_interpolate != enabled) {
     m_interpolate = enabled;
-    m_settings.setValue("Plot3D_Interpolate", enabled);
-    m_dirtyData = true;
+    m_dirtyData   = true;
     update();
 
     Q_EMIT interpolationEnabledChanged();

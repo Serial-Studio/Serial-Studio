@@ -234,7 +234,7 @@
         "6:1:-1": {
             "anaglyphEnabled": false,
             "autoCenter": true,
-            "interpolationEnabled": true,
+            "interpolationEnabled": false,
             "orbitNavigation": true
         },
         "9:0:1": {
@@ -483,6 +483,6 @@
             }
         }
     },
-    "writerVersion": "3.2.7",
+    "writerVersion": "4.0.0",
     "writerVersionAtCreation": "3.2.7"
 }

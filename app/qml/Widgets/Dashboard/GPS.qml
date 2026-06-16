@@ -42,8 +42,8 @@ Item {
   //
   // Window flags
   //
+  readonly property int toolbarHeight: 48
   property bool hasToolbar: root.height >= 220 && root.width >= toolbar.implicitWidth
-  readonly property int toolbarHeight: windowRoot.objectName === "ExternalWindow" ? 47 : 48
 
   //
   // Configure module widget on load, then restore persisted settings

@@ -24,7 +24,6 @@
 #include <QMatrix4x4>
 #include <QPainter>
 #include <QQuickPaintedItem>
-#include <QSettings>
 #include <QVector3D>
 
 #include "DSP.h"
@@ -240,6 +239,5 @@ private:
   bool m_centerInitialized;
 
   QSize m_size;
-  QSettings m_settings;
 };
 }  // namespace Widgets

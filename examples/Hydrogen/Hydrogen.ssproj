@@ -187,6 +187,10 @@
             "showAreaUnderPlot": false
         },
         "activeGroup": 1001,
+        "externalWindows": {
+            "data": [
+            ]
+        },
         "layout:1001": {
             "data": {
                 "autoLayout": true,
@@ -290,6 +294,6 @@
             }
         }
     },
-    "writerVersion": "3.2.7",
+    "writerVersion": "4.0.0",
     "writerVersionAtCreation": "3.2.7"
 }

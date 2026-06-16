@@ -139,8 +139,8 @@
             "decoder": 0,
             "decoderMethod": 0,
             "frameDetection": 1,
-            "frameEnd": ", \"timestamp\": ",
-            "frameParserCode": "/**\n * Frame parser that extracts latitude and longitude from ISS position JSON.\n */\nfunction parse(frame) {\n  if (frame.length === 0) {\n    return [];\n  }\n  \n  try {\n    var data = JSON.parse(frame);\n    return [\n      data.latitude,\n      data.longitude\n    ];\n  } catch (e) {\n    console.warn(\"Failed to parse JSON: \" + e);\n    return [];\n  }\n}\n",
+            "frameEnd": "},",
+            "frameParserCode": "/**\n * Frame parser that extracts latitude and longitude from ISS position JSON.\n */\nfunction parse(frame) {\n  if (frame.length === 0) {\n    return [];\n  }\n  \n  try {\n    var data = JSON.parse(frame + \"}\");\n    return [\n      data.latitude,\n      data.longitude\n    ];\n  } catch (e) {\n    console.warn(\"Failed to parse JSON: \" + e);\n    return [];\n  }\n}\n",
             "frameStart": "\"iss_position\":",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
@@ -203,6 +203,6 @@
             }
         }
     },
-    "writerVersion": "3.2.7",
+    "writerVersion": "4.0.0",
     "writerVersionAtCreation": "3.2.7"
 }

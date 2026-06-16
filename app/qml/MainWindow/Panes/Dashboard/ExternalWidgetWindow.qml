@@ -161,22 +161,32 @@ Widgets.SmartWindow {
           console.error("Component load error:", component.errorString())
 
         if (window.width === window.minimumWidth && window.height === window.minimumHeight) {
+          const gpsPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/GPS.qml"
           const barPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Bar.qml"
           const pltPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot.qml"
           const fftPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/FFTPlot.qml"
           const plot3DPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml"
           const mplotPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/MultiPlot.qml"
+          const webviewPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/WebView.qml"
+          const painterPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Painter.qml"
+          const datagridPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/DataGrid.qml"
           const waterfallPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml"
+          const imageViewPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml"
 
           switch (dashboardWidget.widgetQmlPath) {
           case barPath:
             window.height = window.width * 1.4
             break
+          case gpsPath:
           case fftPath:
           case pltPath:
           case mplotPath:
           case plot3DPath:
+          case webviewPath:
+          case painterPath:
+          case datagridPath:
           case waterfallPath:
+          case imageViewPath:
             window.width = 640
             window.height = 480
             break
