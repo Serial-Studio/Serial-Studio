@@ -430,6 +430,7 @@
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
+        <file>icons/project-editor/treeview/control-script.svg</file>
         <file>icons/project-editor/treeview/datagrid.svg</file>
         <file>icons/project-editor/treeview/dataset-values.svg</file>
         <file>icons/project-editor/treeview/dataset.svg</file>
@@ -457,6 +458,7 @@
         <file>icons/project-editor/treeview/shared-memory.svg</file>
         <file>icons/project-editor/treeview/shared-table.svg</file>
         <file>icons/project-editor/windows/code.svg</file>
+        <file>icons/project-editor/windows/control-script.svg</file>
         <file>icons/project-editor/windows/dataset.svg</file>
         <file>icons/project-editor/windows/group.svg</file>
         <file>icons/project-editor/windows/project-setup.svg</file>
@@ -490,6 +492,7 @@
         <file>icons/whats-new/ai.svg</file>
         <file>icons/whats-new/alarms.svg</file>
         <file>icons/whats-new/connectivity.svg</file>
+        <file>icons/whats-new/control-script.svg</file>
         <file>icons/whats-new/deployments.svg</file>
         <file>icons/whats-new/image.svg</file>
         <file>icons/whats-new/lock.svg</file>

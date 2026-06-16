@@ -66,7 +66,7 @@ static QString defaultControlScript()
  * @brief Constructs the QML-side control-script editor.
  */
 DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent), m_readingCode(false)
+  : QQuickPaintedItem(parent), m_readingCode(false), m_initialLoad(true)
 {
   setMipmap(false);
   setAntialiasing(false);
@@ -108,6 +108,11 @@ DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
     DataModel::ProjectModel::instance().setControlScriptCode(text());
     m_readingCode = false;
   });
+
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::jsonFileChanged,
+          this,
+          [this] { m_initialLoad = true; });
 
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::controlScriptChanged,
@@ -315,8 +320,10 @@ void DataModel::ControlScriptEditor::readCode()
   m_readingCode = true;
 
   QString code = DataModel::ProjectModel::instance().controlScriptCode();
-  if (code.isEmpty())
+  if (code.isEmpty() && m_initialLoad)
     code = defaultControlScript();
+
+  m_initialLoad = false;
 
   if (m_widget.toPlainText() != code)
     m_widget.setPlainText(code);
@@ -365,7 +372,7 @@ void DataModel::ControlScriptEditor::evaluate()
   }
 
   Misc::Utilities::showMessageBox(tr("Code Validation Successful"),
-                                  tr("No syntax errors detected in the control script."),
+                                  tr("No syntax errors detected in the control loop."),
                                   QMessageBox::Information);
 }
 

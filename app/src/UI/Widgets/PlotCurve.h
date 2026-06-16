@@ -31,8 +31,8 @@
 
 namespace Widgets {
 /**
- * @brief GPU polyline for plot curves: renders a curve series as independent
- *        per-segment quads with per-vertex feathered edges (anti-aliasing without
+ * @brief GPU polyline for plot curves: renders a curve series as one connected mitered
+ *        triangle strip per run with per-vertex feathered edges (anti-aliasing without
  *        MSAA), built directly on the scene graph. Replaces the QtGraphs LineSeries
  *        stroke, which re-triangulates a QQuickShape path on the CPU every update.
  */
@@ -99,21 +99,39 @@ protected:
   QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data) override;
 
 private:
-  [[nodiscard]] bool segmentVisible(const QPointF* pts,
+  void projectToPixels(const QPointF* pts, const qsizetype count, const double w, const double h);
+  [[nodiscard]] qsizetype runLength(const QPointF* pts,
                                     const qsizetype count,
-                                    const qsizetype i) const;
+                                    qsizetype& start) const;
+  [[nodiscard]] bool runVisible(const QPointF* pts,
+                                const qsizetype start,
+                                const qsizetype len) const;
+  void countRun(const QPointF* px,
+                const qsizetype start,
+                const qsizetype len,
+                qsizetype& vertexCount,
+                qsizetype& indexCount) const;
   void countRibbon(const QPointF* pts,
+                   const QPointF* px,
                    const qsizetype count,
-                   int& vertexCount,
-                   int& indexCount) const;
+                   qsizetype& vertexCount,
+                   qsizetype& indexCount) const;
   void emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
                   quint32* indices,
                   const int vertexCount,
                   const int indexCount,
                   const QPointF* pts,
+                  const QPointF* px,
                   const qsizetype count,
-                  const double w,
-                  const double h) const;
+                  const double hw) const;
+  void emitRun(QSGGeometry::ColoredPoint2D* vertices,
+               quint32* indices,
+               int& v,
+               int& idx,
+               const QPointF* px,
+               const qsizetype start,
+               const qsizetype len,
+               const double hw) const;
 
 private:
   QColor m_color;
@@ -123,6 +141,7 @@ private:
   double m_yMin;
   double m_yMax;
 
+  QList<QPointF> m_px;
   QPointer<QXYSeries> m_source;
   QMetaObject::Connection m_sourceConnection;
 };

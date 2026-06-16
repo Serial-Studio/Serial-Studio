@@ -42,7 +42,7 @@ vibration,rpm,mic_left,mic_right\n
 
 ### 1. Start the simulator
 
-The project includes a control script that launches `vibration_test_rig.py` with its defaults automatically when you connect, so for a quick look you can skip this step and jump to **2. Configure Serial Studio**. To explore the optional arguments below, run the simulator yourself before connecting (so the two don't run at once):
+The project includes a control loop that launches `vibration_test_rig.py` with its defaults automatically when you connect, so for a quick look you can skip this step and jump to **2. Configure Serial Studio**. To explore the optional arguments below, run the simulator yourself before connecting (so the two don't run at once):
 
 ```bash
 python3 vibration_test_rig.py

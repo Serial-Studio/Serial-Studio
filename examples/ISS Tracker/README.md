@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project visualizes the real-time position of the International Space Station (ISS) in Serial Studio. A built-in control script polls a public API directly over TCP, so there is no companion program to run and no extra hardware. Serial Studio parses the response and shows the station on an interactive map alongside a live 3D view.
+This project visualizes the real-time position of the International Space Station (ISS) in Serial Studio. A built-in control loop polls a public API directly over TCP, so there is no companion program to run and no extra hardware. Serial Studio parses the response and shows the station on an interactive map alongside a live 3D view.
 
 Real-time satellite tracking with nothing but Serial Studio and an internet connection.
 
@@ -12,7 +12,7 @@ Real-time satellite tracking with nothing but Serial Studio and an internet conn
 
 ## Telemetry source
 
-ISS position is pulled from the [Open Notify](http://open-notify.org/Open-Notify-API/ISS-Location-Now/) `iss-now.json` API. The project's control script opens a TCP connection to `api.open-notify.org:80`, issues an HTTP `GET /iss-now.json` request every few seconds, and lets the frame parser read the response. Two fields are extracted:
+ISS position is pulled from the [Open Notify](http://open-notify.org/Open-Notify-API/ISS-Location-Now/) `iss-now.json` API. The project's control loop opens a TCP connection to `api.open-notify.org:80`, issues an HTTP `GET /iss-now.json` request every few seconds, and lets the frame parser read the response. Two fields are extracted:
 
 - `latitude`: geographic latitude in degrees.
 - `longitude`: geographic longitude in degrees.
@@ -21,7 +21,7 @@ ISS position is pulled from the [Open Notify](http://open-notify.org/Open-Notify
 
 - Real-time map tracking of the ISS.
 - Interactive 3D view of the station rendered in the dashboard.
-- API polling driven entirely by an in-project control script, no external program.
+- API polling driven entirely by an in-project control loop, no external program.
 - TCP source with a JSON frame parser, configured in Serial Studio's project editor.
 
 ## Data format
@@ -54,7 +54,7 @@ The widgets then map to array indices:
 1. Open Serial Studio and load `iss-tracker.ssproj` (project file included).
 2. Click **Connect**.
 
-That is all. The bundled control script opens the TCP connection to the API and polls it for you, so the map and 3D view start updating on their own. The source is preconfigured as a **Network Socket** in **TCP** mode pointing at `api.open-notify.org`, port **80**.
+That is all. The bundled control loop opens the TCP connection to the API and polls it for you, so the map and 3D view start updating on their own. The source is preconfigured as a **Network Socket** in **TCP** mode pointing at `api.open-notify.org`, port **80**.
 
 ## Visualizations
 
@@ -68,7 +68,7 @@ That is all. The bundled control script opens the TCP connection to the API and 
 
 ## Files
 
-- `iss-tracker.ssproj`: Serial Studio project file (pre-configured, includes the control script).
+- `iss-tracker.ssproj`: Serial Studio project file (pre-configured, includes the control loop).
 - `README.md`: project documentation.
 - `doc/screenshot.png`: visualization screenshot.
 

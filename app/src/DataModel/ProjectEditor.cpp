@@ -1656,12 +1656,12 @@ void DataModel::ProjectEditor::appendControlScriptTreeItem(QStandardItem* root)
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  if (filterActive && !tr("Control Script").contains(q, Qt::CaseInsensitive))
+  if (filterActive && !tr("Control Loop").contains(q, Qt::CaseInsensitive))
     return;
 
-  auto* item = new QStandardItem(tr("Control Script"));
-  item->setData(tr("Control Script"), TreeViewText);
-  item->setData("qrc:/icons/project-editor/treeview/code.svg", TreeViewIcon);
+  auto* item = new QStandardItem(tr("Control Loop"));
+  item->setData(tr("Control Loop"), TreeViewText);
+  item->setData("qrc:/icons/project-editor/treeview/control-script.svg", TreeViewIcon);
   item->setData(-1, TreeViewFrameIndex);
   item->setData(KindControlScript, TreeItemKind);
   item->setData(-1, TreeItemId);
@@ -2075,11 +2075,11 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 {
   Q_ASSERT(root != nullptr);
 
+  appendControlScriptTreeItem(root);
   appendSourceTreeItems(root);
 #ifdef BUILD_COMMERCIAL
   appendMqttPublisherTreeItem(root);
 #endif
-  appendControlScriptTreeItem(root);
   appendActionTreeItems(root);
   appendGroupTreeItems(root, expandedStates);
   appendSharedMemoryTreeItems(root, expandedStates);

@@ -1,7 +1,7 @@
 {
     "actions": [
     ],
-    "controlScriptCode": "/**\n * ISS Position Tracker - Control Script\n * \n * Fetches ISS (International Space Station) location data from the\n * open-notify.org API every second and sends it to Serial Studio.\n */\n\nfunction setup() {}\n\nfunction loop() {\n  const status = io.getStatus();\n  if (!status.isConnected) {\n    io.connect();\n    delay(300); \n  }\n\n  const host = \"api.open-notify.org\";\n  const path = \"/iss-now.json\";\n  const httpRequest = \n    \"GET \" + path + \" HTTP/1.1\\r\\n\" +\n    \"Host: \" + host + \"\\r\\n\" +\n    \"Connection: keep-alive\\r\\n\" +\n    \"User-Agent: SerialStudio ISS Tracker\\r\\n\" +\n    \"\\r\\n\";\n\n  io.writeData(httpRequest, SerialStudio.Text);\n \n  delay(5000);\n}\n",
+    "controlScriptCode": "/**\n * ISS Position Tracker - Control Loop\n * \n * Fetches ISS (International Space Station) location data from the\n * open-notify.org API every second and sends it to Serial Studio.\n */\n\nfunction setup() {}\n\nfunction loop() {\n  const status = io.getStatus();\n  if (!status.isConnected) {\n    io.connect();\n    delay(300); \n  }\n\n  const host = \"api.open-notify.org\";\n  const path = \"/iss-now.json\";\n  const httpRequest = \n    \"GET \" + path + \" HTTP/1.1\\r\\n\" +\n    \"Host: \" + host + \"\\r\\n\" +\n    \"Connection: keep-alive\\r\\n\" +\n    \"User-Agent: SerialStudio ISS Tracker\\r\\n\" +\n    \"\\r\\n\";\n\n  io.writeData(httpRequest, SerialStudio.Text);\n \n  delay(5000);\n}\n",
     "groups": [
         {
             "datasets": [

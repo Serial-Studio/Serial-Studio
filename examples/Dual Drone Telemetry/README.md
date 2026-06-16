@@ -64,13 +64,13 @@ Each drone has an output control panel on the dashboard with six interactive wid
 1. Open `Dual Drone Telemetry.ssproj` in Serial Studio.
 2. Connect both TCP sources. Each one connects to the simulator's TCP server on ports 9001 and 9002.
 
-The project includes a control script that launches `dual_drone_telemetry.py` (which starts the two TCP servers) automatically just before connecting, so there is nothing to start by hand. For camera imagery, install its optional dependencies first:
+The project includes a control loop that launches `dual_drone_telemetry.py` (which starts the two TCP servers) automatically just before connecting, so there is nothing to start by hand. For camera imagery, install its optional dependencies first:
 
 ```bash
 pip install opencv-python numpy   # for camera imagery
 ```
 
-The simulator also works without opencv. You just won't get camera images. To run it yourself instead of letting the control script start it, launch `python3 dual_drone_telemetry.py` before connecting.
+The simulator also works without opencv. You just won't get camera images. To run it yourself instead of letting the control loop start it, launch `python3 dual_drone_telemetry.py` before connecting.
 
 ## Command-line options
 

@@ -256,7 +256,7 @@
   {
     "id": "Testo T549i",
     "title": "Testo T549i Refrigeration Pressure Probe",
-    "description": "Automates a Testo T549i BLE pressure probe: a Control Script sends the vendor enable handshake, a binary frame parser decodes the raw stream, and Lua transforms derive bar and psi engineering units shown on a gauge.",
+    "description": "Automates a Testo T549i BLE pressure probe: a Control Loop sends the vendor enable handshake, a binary frame parser decodes the raw stream, and Lua transforms derive bar and psi engineering units shown on a gauge.",
     "category": "Sensors & Hardware",
     "difficulty": "Intermediate",
     "hasProjectFile": true,
@@ -301,7 +301,7 @@
   {
     "id": "OBD-II",
     "title": "OBD-II Vehicle Telemetry",
-    "description": "Reads live engine RPM, vehicle speed, coolant and intake air temperature, calculated load, throttle position and battery voltage from any OBD-II compliant car through an ELM327 adapter, using a control script that polls the adapter and drives gauges via data tables.",
+    "description": "Reads live engine RPM, vehicle speed, coolant and intake air temperature, calculated load, throttle position and battery voltage from any OBD-II compliant car through an ELM327 adapter, using a control loop that polls the adapter and drives gauges via data tables.",
     "category": "Automotive",
     "difficulty": "Intermediate",
     "hasProjectFile": true,

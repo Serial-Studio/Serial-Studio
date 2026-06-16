@@ -44,7 +44,7 @@ The sentinels are chosen so they are unlikely to occur in JPEG, PNG, BMP, or Web
 
 ## How to run
 
-The project includes a control script that launches `camera_telemetry.py --no-camera` automatically when you connect, so for a no-hardware demo you can skip straight to Step 3 and click **Connect**. Run the script by hand (Steps 1 and 2) when you want a real camera or custom options.
+The project includes a control loop that launches `camera_telemetry.py --no-camera` automatically when you connect, so for a no-hardware demo you can skip straight to Step 3 and click **Connect**. Run the script by hand (Steps 1 and 2) when you want a real camera or custom options.
 
 ### Step 1: install dependencies
 

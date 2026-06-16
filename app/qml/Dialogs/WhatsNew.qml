@@ -70,6 +70,15 @@ Widgets.SmartDialog {
       helpId: "ai-assistant"
     },
     {
+      icon: "qrc:/icons/whats-new/control-script.svg",
+      topColor: "#26c6da",
+      bottomColor: "#00838f",
+      title: qsTr("Device Control Loops"),
+      description: qsTr("Automate your device with an Arduino-style setup() and loop() " +
+                        "routine that can read, write, and drive the dashboard."),
+      helpId: "control-script"
+    },
+    {
       icon: "qrc:/icons/whats-new/oscilloscope.svg",
       topColor: "#48c9b0",
       bottomColor: "#148f77",

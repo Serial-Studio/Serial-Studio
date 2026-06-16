@@ -70,7 +70,7 @@ The scalars (battery, temperature) are repeated automatically, and the vectors a
 
 ### 1. Start the simulator
 
-The project includes a control script that launches `imu_simulator.py` automatically when you connect, so you normally just open the project and click **Connect**. Run it by hand only if you want custom options:
+The project includes a control loop that launches `imu_simulator.py` automatically when you connect, so you normally just open the project and click **Connect**. Run it by hand only if you want custom options:
 
 ```bash
 python3 imu_simulator.py

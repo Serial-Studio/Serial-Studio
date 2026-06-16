@@ -1,12 +1,12 @@
-# Control Script (setup / loop)
+# Control Loop (setup / loop)
 
-The Control Script automates a connected device the way an Arduino sketch does. You write two functions, `setup()` and `loop()`, and Serial Studio calls them over the life of the connection: `setup()` once when the device connects, `loop()` repeatedly while it stays connected (paced by `delay()`, as the loop() pacing section explains). Both functions can drive the connection through Serial Studio's I/O API, so the script can send wake-up handshakes, poll registers, issue keep-alives, or step a state machine without any firmware changes on the device.
+The Control Loop automates a connected device the way an Arduino sketch does. You write two functions, `setup()` and `loop()`, and Serial Studio calls them over the life of the connection: `setup()` once when the device connects, `loop()` repeatedly while it stays connected (paced by `delay()`, as the loop() pacing section explains). Both functions can drive the connection through Serial Studio's I/O API, so the loop can send wake-up handshakes, poll registers, issue keep-alives, or step a state machine without any firmware changes on the device.
 
-The script automates a device you have **already set up and connected**. It is not where you create or connect a data source: choose the bus, device, and connection in the I/O panel first, then write the script to drive that open connection. This matters most for Bluetooth LE, where scanning, selecting the device, and connecting are interactive steps best done by hand; once the BLE device is connected, the script can select its service and notify characteristic by UUID and write commands (see the BLE example below).
+The Control Loop automates a device you have **already set up and connected**. It is not where you create or connect a data source: choose the bus, device, and connection in the I/O panel first, then write the loop to drive that open connection. This matters most for Bluetooth LE, where scanning, selecting the device, and connecting are interactive steps best done by hand; once the BLE device is connected, the loop can select its service and notify characteristic by UUID and write commands (see the BLE example below).
 
-This is a per-project script, not a per-source one. A project has exactly one Control Script; if you run several devices in one project, the script branches on the device itself.
+This is a per-project loop, not a per-source one. A project has exactly one Control Loop; if you run several devices in one project, the loop branches on the device itself.
 
-The script runs on its own worker thread, separate from the data hotpath, so a slow or blocking script never stalls frame parsing, the dashboard, or the UI. Each call is bounded by a runtime watchdog; a function that runs too long is stopped and reported as an error rather than freezing the application.
+The loop runs on its own worker thread, separate from the data hotpath, so a slow or blocking loop never stalls frame parsing, the dashboard, or the UI. Each call is bounded by a runtime watchdog; a function that runs too long is stopped and reported as an error rather than freezing the application.
 
 Use this when:
 
@@ -17,12 +17,12 @@ Use this when:
 
 ## Where to configure it
 
-The Control Script has its own node in the project editor's left tree, directly under the project root. Selecting it opens the code editor.
+The Control Loop has its own node in the project editor's left tree, directly under the project root. Selecting it opens the code editor.
 
 ```
 Project
 ├─ Device 1 (Bluetooth LE)
-├─ Control Script          <-- here
+├─ Control Loop            <-- here
 ├─ Actions
 ├─ Groups
 └─ ...
@@ -93,7 +93,7 @@ Rules:
 - A byte-payload argument takes a trailing **encoding**: `SerialStudio.Hex`, `SerialStudio.Text`, or `SerialStudio.Base64`. The SDK does the base64 conversion, so you pass hex or text directly and never encode by hand.
 - Every call returns `{ ok, result, error, errorCode }`. Check `ok`.
 
-The most useful I/O calls for a control script:
+The most useful I/O calls for a control loop:
 
 - `io.writeData(data, encoding)` -- write bytes to the active connection (any bus).
 - `io.ble.selectServiceByUuid(uuid)` -- select a BLE service (e.g. `"fff0"`).
@@ -103,7 +103,7 @@ The most useful I/O calls for a control script:
 
 ## Launching helper processes: the system.* API
 
-A control script can launch a helper program and let Serial Studio manage its lifetime. This is how the bundled examples start their Python data generators automatically: you click **Connect** and the generator is running, with nothing to type in a terminal. The calls live under the `system.` namespace and, for safety, are available **only to the control script**; they are rejected over the network API and the SDK.
+A control loop can launch a helper program and let Serial Studio manage its lifetime. This is how the bundled examples start their Python data generators automatically: you click **Connect** and the generator is running, with nothing to type in a terminal. The calls live under the `system.` namespace and, for safety, are available **only to the control loop**; they are rejected over the network API and the SDK.
 
 - `system.projectDir()` -- returns `{ directory, filePath, fileName }` for the loaded project. Use `directory` to build a path to a script that sits next to the `.ssproj` file.
 - `system.exec(program, { args, workingDir })` -- launch `program` with optional `args` (an array) and `workingDir` (defaults to the project directory). Returns `{ processId }`.
@@ -135,7 +135,7 @@ Put the launch in `setup()` when Serial Studio listens for the data it generates
 
 ## Reading data: See, Decide, Act
 
-A control script is not limited to sending commands: it can also read what the device sends and act on it. The mental model is the same loop a robot runs: **see** the latest data, **decide** in plain JavaScript, **act** through the SDK.
+A control loop is not limited to sending commands: it can also read what the device sends and act on it. The mental model is the same loop a robot runs: **see** the latest data, **decide** in plain JavaScript, **act** through the SDK.
 
 - **See**: `newFrame()` returns the latest frame received from the device, or `null` when nothing new has arrived since the last call. The returned object carries `text` (the raw payload), `values` (the parser's channel tokens, in parser order), `sourceId`, `timestampMs` (a monotonic clock in milliseconds, useful for deltas between frames, not wall-clock time), `ageMs` (milliseconds elapsed since the frame was captured), and a monotonic `sequence` number.
 - **Decide**: plain JavaScript. Compare, count, branch; top-level variables persist across `loop()` calls.
@@ -147,7 +147,7 @@ In ConsoleOnly mode frames are not parsed, so `values` is empty and only `text` 
 
 ### Data tables: tableGet() / tableSet()
 
-Control scripts can read and write the same data-table registers the frame parser and dataset transforms use. `tableGet(table, register)` returns the live runtime value (or `undefined` when the table or register does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, register, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
+Control loops can read and write the same data-table registers the frame parser and dataset transforms use. `tableGet(table, register)` returns the live runtime value (or `undefined` when the table or register does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, register, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
 
 One caveat: dataset transforms only re-run when a frame arrives. If your script writes table registers while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame — call `refreshDashboard()` after the writes to make them render immediately. It re-runs every dataset transform from the last received values and republishes the frames to the dashboard only (nothing is appended to CSV/MDF4/session exports).
 
@@ -202,7 +202,7 @@ ensureDashboard([
 
 ### 1. BLE wake-up handshake
 
-Many BLE devices expose a service (here `FFF0`) with separate write (`FFF1`) and notify (`FFF2`) characteristics, and only start streaming after a command sequence is written. The service and notify characteristic are chosen on the BLE source and saved with the project; the driver wires them on connect, so the control script only writes the enable sequence. Readings then arrive through the frame parser like any other data.
+Many BLE devices expose a service (here `FFF0`) with separate write (`FFF1`) and notify (`FFF2`) characteristics, and only start streaming after a command sequence is written. The service and notify characteristic are chosen on the BLE source and saved with the project; the driver wires them on connect, so the control loop only writes the enable sequence. Readings then arrive through the frame parser like any other data.
 
 ```javascript
 function setup() {
@@ -291,10 +291,10 @@ The script is saved inside the project file, so it travels with the project. Edi
 
 Every connection starts a fresh script engine: all top-level variables reset and `setup()` runs again on each reconnect, exactly like an Arduino reset. Do not design around state surviving a connect/disconnect cycle. The latest-frame store also clears on each connection edge, so `io.getLatestFrame()` reports no data until the first frame of the current connection arrives; a watchdog built on `ageMs` can never trip from a previous connection's frame.
 
-Tools and scripts can manage the control script through the API: `controlscript.get`/`controlscript.getCode` read the source, `controlscript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlscript.set`/`controlscript.setCode` install it, and `controlscript.getStatus` reports whether it is running.
+Tools and scripts can manage the control loop through the API: `controlscript.get`/`controlscript.getCode` read the source, `controlscript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlscript.set`/`controlscript.setCode` install it, and `controlscript.getStatus` reports whether it is running.
 
 ## Related
 
 - [Bluetooth Low Energy](Drivers-Bluetooth-LE.md) for selecting the device, service, and notify characteristic the script writes alongside.
 - [Frame Parser Reference](JavaScript-API.md) for turning the bytes a device streams into dataset values.
-- [Actions](Actions.md) for user-triggered one-shot commands, the manual counterpart to an automated Control Script.
+- [Actions](Actions.md) for user-triggered one-shot commands, the manual counterpart to an automated Control Loop.

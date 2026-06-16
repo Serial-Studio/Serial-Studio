@@ -500,8 +500,8 @@ Item {
       y:         blockCursor + vGap * 2,
       w:         nodeW,
       h:         nodeH,
-      label:     qsTr("Control Script"),
-      icon:      "qrc:/icons/project-editor/treeview/code.svg",
+      label:     qsTr("Control Loop"),
+      icon:      "qrc:/icons/project-editor/treeview/control-script.svg",
       badge:     Cpp_JSON_ProjectModel.controlScriptCode.length > 0 ? "" : qsTr("empty")
     })
 
@@ -2123,7 +2123,7 @@ Item {
     MenuItem {
       icon.width: 16
       icon.height: 16
-      text: qsTr("Edit Control Script…")
+      text: qsTr("Edit Control Loop…")
       icon.source: "qrc:/icons/project-editor/actions/edit-code.svg"
       onTriggered: Cpp_JSON_ProjectEditor.selectControlScript()
     }

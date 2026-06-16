@@ -29,7 +29,7 @@ The electric field oscillates along the Y axis, the magnetic field along the Z a
 
 ### 1. Start the simulator
 
-The project includes a control script that launches `em_wave_udp.py` automatically when you connect, so you normally just open the project and click **Connect**. Run it by hand only if you want custom options:
+The project includes a control loop that launches `em_wave_udp.py` automatically when you connect, so you normally just open the project and click **Connect**. Run it by hand only if you want custom options:
 
 ```bash
 python3 em_wave_udp.py

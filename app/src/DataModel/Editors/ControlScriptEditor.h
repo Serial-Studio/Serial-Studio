@@ -102,6 +102,7 @@ private:
 
 private:
   bool m_readingCode;
+  bool m_initialLoad;
   QPixmap m_pixmap;
   QSyntaxStyle m_style;
   QCodeEditor m_widget;

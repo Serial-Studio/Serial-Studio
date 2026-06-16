@@ -25,6 +25,21 @@ These rules are about predictability, not productivity — the difference
 between a tool the user re-audits every time and a collaborator they rely
 on. Capability without predictability gets disabled.
 
+- **Never touch, revert, or restore files outside your own edits — this is
+  the one rule whose violation loses real work.** A file modified in the
+  working tree that *you* did not edit this session is the user's
+  in-progress work. NEVER `git checkout`/`restore`/`reset`/`stash`/`clean`
+  it, overwrite it, or "clean it up" — not even when it looks like
+  unrelated noise, a generated artifact, or stray subagent output, and not
+  even to make your own diff readable. The `git status` at session start is
+  a snapshot, not a baseline you may restore to. If such a file is in your
+  way or seems wrong, *stop and say so in chat* — quote the path, say you
+  did not touch it, and ask. Restoring even derived artifacts (`.ts`/`.qm`,
+  build output) requires explicit per-file permission, because you cannot
+  prove the user wasn't mid-edit. When unsure whether a file is yours: it
+  is not. This has bitten before — a subagent regenerating translation
+  files, and a reflexive restore nearly discarding hours of uncommitted
+  work — so the rule is absolute, not advisory.
 - **Stay in your lane.** Every file touched outside the explicit ask costs
   the reviewer an audit pass. Spot an adjacent fix? *Name it in chat*
   ("noticed X — want it in this pass?") rather than slipping it into the
@@ -59,21 +74,6 @@ code-review trigger — fix root cause when possible.
 `.code-report` and `.doc-report` are the cleanup checklists. If a rule appears as advisory,
 that means the existing codebase has baseline debt — new code should still clear it.
 
-## Repo Skills (Claude Code)
-
-Project-scoped Agent Skills live in `.claude/skills/` and load automatically for anyone running
-Claude Code in this repo (committed to git, no install step). Invoke with `/<name>` or let them
-auto-trigger. Keep them current when the workflows they encode change.
-
-| Skill | Use it when |
-|-------|-------------|
-| `ss-hotpath` | Editing/reviewing the data hotpath (`FrameReader`, `CircularBuffer`, `FrameBuilder`, `Dashboard` draw). Auto-activates on those paths. Encodes the SPSC/DirectConnection/slot-pool rules and the `--benchmark-hotpath` 256 kHz check. |
-| `ss-new-driver` | Adding a new I/O driver / data source under `app/src/IO/Drivers/`. Encodes the `BluetoothLE` reference pattern and every registration touch-point. |
-| `ss-verify` | Before committing, or any "lint / check conventions / sanitize" request. Wraps `code-verify.py` + `sanitize-commit.py`. |
-| `qt-cpp-review` | Reviewing/auditing C++ (or "before I commit"). Runs `code-verify.py` as phase 1, then six parallel read-only agents (model contracts, ownership, thread-safety + hotpath, API correctness, error handling, perf). Adapted from The Qt Company's `qt-cpp-review`; read-only. |
-| `ss-cpp-modern` | Authoring/refactoring non-trivial C++ and you want the idiomatic modern-C++20 shape (smart-pointer choice, RAII wrapper, concept-constrained template, atomics). Adapted from jeffallan's `cpp-pro`; defers style/build/sanitize to the scripts and the other skills. |
-| `cpp-compiler-flags` | Reading/changing the cmake flag modules (`Optimization`/`Hardening`/`Sanitizers`/`MiMalloc`), tuning `-O`/`-march`/LTO/PGO, adding a per-toolchain branch, or explaining a flag. Encodes the repo's real flag layout + invariants (IEEE-stable math, Lua unwind tables, x86-64-v2, two-stage PGO) and a cross-compiler flag catalog. Read-only on the build; never invokes cmake. |
-
 ## Project Overview
 
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
@@ -98,6 +98,8 @@ not a substitute.
 | [doc/claude/common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup table — gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, scope creep, macOS file-dialog reentrancy, etc.). |
 | [doc/claude/code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten: formatting, naming, control flow, C++ headers, signals/connections, comments & Doxygen, QML, performance, licensing. The Code Style block below is the inline essentials — read this for the complete rules. |
 | [doc/claude/directory-map.md](doc/claude/directory-map.md) | The `app/src` / `app/qml` / `lib` tree with one-line role notes per subsystem. |
+| [doc/claude/working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning, surface tradeoffs as decisions, engage the "why." Read once per session if you haven't internalized it. |
+| [doc/claude/repo-skills.md](doc/claude/repo-skills.md) | The project-scoped `/`-skills catalog (`ss-hotpath`, `ss-new-driver`, `ss-verify`, `qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`) and when each fires. Most auto-activate; this is the lookup when picking one deliberately. |
 
 ## Threading & Hotpath — Non-Negotiable
 

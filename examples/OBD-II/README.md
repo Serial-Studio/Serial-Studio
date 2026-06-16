@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project reads live engine data from any OBD-II compliant vehicle and shows it on a Serial Studio dashboard. A built-in control script polls an ELM327-compatible adapter (such as the OBDLink EX) over a serial connection, so there is no companion program to run. Engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage appear on live gauges.
+This project reads live engine data from any OBD-II compliant vehicle and shows it on a Serial Studio dashboard. A built-in control loop polls an ELM327-compatible adapter (such as the OBDLink EX) over a serial connection, so there is no companion program to run. Engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage appear on live gauges.
 
 Real-time car telemetry with nothing but Serial Studio and a cheap OBD-II adapter.
 
@@ -12,7 +12,7 @@ Real-time car telemetry with nothing but Serial Studio and a cheap OBD-II adapte
 
 ## Telemetry source
 
-OBD-II data is read from an ELM327-compatible adapter plugged into the vehicle's diagnostic port and connected to the computer as a serial (UART) device. The project's control script drives the whole exchange:
+OBD-II data is read from an ELM327-compatible adapter plugged into the vehicle's diagnostic port and connected to the computer as a serial (UART) device. The project's control loop drives the whole exchange:
 
 - `setup()` initializes the adapter once: reset, echo/linefeed/space off, and automatic protocol detection (`ATSP0`) so the same script works on CAN, ISO and PWM vehicles.
 - `loop()` polls six Mode-01 PIDs in round-robin and decodes each reply inline, and periodically reads the adapter's own battery-voltage measurement with the `AT RV` command (which has no PID header and is parsed separately).
@@ -37,8 +37,8 @@ All requests are plain ASCII (the hex PID digits, or the letters `AT` for adapte
 
 This example shows the request/response pattern that OBD-II needs, which differs from a normal telemetry stream where the device pushes data on its own. Three Serial Studio features carry it:
 
-- **`deviceWriteAndWait(data, timeout, until, source?)`** sends a command and blocks the control-script worker (never the UI) until the adapter's `>` prompt arrives or the timeout elapses, then returns the reply. This turns the fire-and-forget serial link into a clean request/response call. It mirrors `deviceWrite`'s data-first shape; `source` is optional and defaults to 0.
-- **The `OBD` data table** holds the decoded values. The control script writes it with `tableSet("OBD", "rpm", value)` after each reply; the registers are declared as `computed` so they are writable.
+- **`deviceWriteAndWait(data, timeout, until, source?)`** sends a command and blocks the control-loop worker (never the UI) until the adapter's `>` prompt arrives or the timeout elapses, then returns the reply. This turns the fire-and-forget serial link into a clean request/response call. It mirrors `deviceWrite`'s data-first shape; `source` is optional and defaults to 0.
+- **The `OBD` data table** holds the decoded values. The control loop writes it with `tableSet("OBD", "rpm", value)` after each reply; the registers are declared as `computed` so they are writable.
 - **Virtual datasets** drive the gauges. Each gauge is a virtual dataset whose transform reads its table register (`tableGet("OBD", "rpm")`) and returns the value, so nothing needs a frame parser.
 
 After writing the table, the script calls **`dashboardTick()`**, which forces the dashboard to re-run the dataset transforms and render the fresh values, even though the adapter only speaks when polled. The project's frame parser is a stub that returns an empty frame.
@@ -46,7 +46,7 @@ After writing the table, the script calls **`dashboardTick()`**, which forces th
 ## Project features
 
 - Live gauges for engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage (any PID the vehicle does not support reads "No data").
-- Request/response polling driven entirely by an in-project control script, no external program.
+- Request/response polling driven entirely by an in-project control loop, no external program.
 - Works with any OBD-II compliant vehicle through the standard ELM327 command set; the core RPM/speed/coolant gauges populate on almost every car.
 - Serial (UART) source configured in Serial Studio's project editor (115200 baud, the OBDLink EX power-up rate; classic ELM327 clones default to 38400).
 
@@ -59,7 +59,7 @@ After writing the table, the script calls **`dashboardTick()`**, which forces th
 
 ## Files
 
-- `OBD-II.ssproj`: the Serial Studio project; it embeds the source, data table, gauges, the OBD-II poller control script, and a stub frame parser.
+- `OBD-II.ssproj`: the Serial Studio project; it embeds the source, data table, gauges, the OBD-II poller control loop, and a stub frame parser.
 - `doc/screenshot.png`: dashboard screenshot.
 
 ## Reference

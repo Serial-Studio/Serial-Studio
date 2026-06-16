@@ -30,7 +30,7 @@ Widgets.Pane {
   id: root
 
   focus: true
-  title: qsTr("Control Script")
+  title: qsTr("Control Loop")
   icon: Cpp_JSON_ProjectEditor.selectedIcon
 
   //
@@ -150,7 +150,7 @@ Widgets.Pane {
             onClicked: editor.reload()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/reload.svg"
-            ToolTip.text: qsTr("Reset to the default control script")
+            ToolTip.text: qsTr("Reset to the default control loop")
           }
 
           Widgets.ToolbarButton {
@@ -160,7 +160,7 @@ Widgets.Pane {
             onClicked: editor.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/open.svg"
-            ToolTip.text: qsTr("Import a control script file")
+            ToolTip.text: qsTr("Import a control loop file")
           }
 
           Widgets.ToolbarButton {
@@ -238,7 +238,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/help.svg"
             onClicked: app.showHelpCenter("Control-Script")
-            ToolTip.text: qsTr("Open the control script documentation")
+            ToolTip.text: qsTr("Open the control loop documentation")
           }
 
           Item {

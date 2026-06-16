@@ -47,7 +47,7 @@ The generator uses the Euler method for numerical integration to evolve the syst
 
 Open `LorenzAttractor.ssproj` in Serial Studio and click **Connect**. That is all.
 
-The project includes a control script that launches `lorenz_udp.py` automatically when the connection opens, so there is nothing to start by hand. The script resolves the interpreter cross-platform (it tries `python3` first, then falls back to `python`), runs the generator from the project folder, and Serial Studio stops it again when you disconnect, switch projects, or quit.
+The project includes a control loop that launches `lorenz_udp.py` automatically when the connection opens, so there is nothing to start by hand. The script resolves the interpreter cross-platform (it tries `python3` first, then falls back to `python`), runs the generator from the project folder, and Serial Studio stops it again when you disconnect, switch projects, or quit.
 
 If you prefer to run the generator yourself, start it from a terminal before connecting:
 
@@ -78,6 +78,6 @@ In the bundled project the three datasets cross-reference each other ($x$ agains
 
 - **No data appears.**
   - Make sure Serial Studio is listening on UDP port 9000 (the project's preconfigured source).
-  - Confirm that Python 3 is installed and on your `PATH` so the control script can launch it.
+  - Confirm that Python 3 is installed and on your `PATH` so the control loop can launch it.
 - **Chaotic output.**
   - Adjust the `transmission_interval` variable in `lorenz_udp.py` if needed.
