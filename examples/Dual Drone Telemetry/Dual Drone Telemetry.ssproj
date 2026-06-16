@@ -2,6 +2,7 @@
     "actions": [
     ],
     "controlScriptCode": "/**\n * Dual Drone Telemetry - Control Loop\n *\n * Launches the bundled Python data generator (dual_drone_telemetry.py) automatically just before\n * the connection opens (via onConnect), so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/dual_drone_telemetry.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction onConnect() {\n  startHelper();\n}\n\nfunction setup() {}\n\nfunction loop() {\n  delay(1000);\n}\n",
+    "customizeWorkspaces": true,
     "groups": [
         {
             "datasets": [
@@ -1766,162 +1767,102 @@
         "layout:1000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1058,
+                "canvasHeight": 478,
+                "canvasWidth": 1027,
                 "geometries": [
                     {
-                        "height": 250,
-                        "id": 4,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 4,
-                        "width": 212,
-                        "x": 0,
-                        "y": 0
-                    },
-                    {
-                        "height": 250,
-                        "id": 6,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 5,
-                        "width": 212,
-                        "x": 211,
-                        "y": 0
-                    },
-                    {
-                        "height": 250,
-                        "id": 10,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 18,
-                        "width": 212,
-                        "x": 422,
-                        "y": 0
-                    },
-                    {
-                        "height": 250,
-                        "id": 12,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 19,
-                        "width": 211,
-                        "x": 633,
-                        "y": 0
-                    },
-                    {
-                        "height": 250,
-                        "id": 15,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 22,
-                        "width": 211,
-                        "x": 843,
-                        "y": 0
-                    },
-                    {
-                        "height": 250,
-                        "id": 3,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 4,
-                        "width": 212,
-                        "x": 0,
-                        "y": 249
-                    },
-                    {
-                        "height": 250,
+                        "height": 239,
                         "id": 5,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 5,
-                        "width": 212,
-                        "x": 211,
-                        "y": 249
+                        "width": 343,
+                        "x": 0,
+                        "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 239,
                         "id": 9,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 18,
-                        "width": 212,
-                        "x": 422,
-                        "y": 249
+                        "width": 343,
+                        "x": 342,
+                        "y": 0
                     },
                     {
-                        "height": 250,
-                        "id": 11,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 19,
-                        "width": 211,
-                        "x": 633,
-                        "y": 249
-                    },
-                    {
-                        "height": 250,
+                        "height": 239,
                         "id": 14,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 211,
-                        "x": 843,
-                        "y": 249
+                        "width": 343,
+                        "x": 684,
+                        "y": 0
+                    },
+                    {
+                        "height": 239,
+                        "id": 6,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 5,
+                        "width": 343,
+                        "x": 0,
+                        "y": 238
+                    },
+                    {
+                        "height": 239,
+                        "id": 10,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 18,
+                        "width": 343,
+                        "x": 342,
+                        "y": 238
+                    },
+                    {
+                        "height": 239,
+                        "id": 15,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 22,
+                        "width": 343,
+                        "x": 684,
+                        "y": 238
                     }
                 ],
                 "userReordered": true,
                 "windowOrder": [
-                    4,
-                    6,
-                    10,
-                    12,
-                    15,
-                    3,
                     5,
                     9,
-                    11,
-                    14
+                    14,
+                    6,
+                    10,
+                    15
                 ],
                 "windowOrderTyped": [
                     {
-                        "relativeIndex": 1,
-                        "widgetType": 4
-                    },
-                    {
-                        "relativeIndex": 1,
+                        "relativeIndex": 0,
                         "widgetType": 5
                     },
                     {
-                        "relativeIndex": 1,
+                        "relativeIndex": 0,
                         "widgetType": 18
                     },
                     {
-                        "relativeIndex": 1,
-                        "widgetType": 19
-                    },
-                    {
-                        "relativeIndex": 1,
+                        "relativeIndex": 0,
                         "widgetType": 22
                     },
                     {
-                        "relativeIndex": 0,
-                        "widgetType": 4
-                    },
-                    {
-                        "relativeIndex": 0,
+                        "relativeIndex": 1,
                         "widgetType": 5
                     },
                     {
-                        "relativeIndex": 0,
+                        "relativeIndex": 1,
                         "widgetType": 18
                     },
                     {
-                        "relativeIndex": 0,
-                        "widgetType": 19
-                    },
-                    {
-                        "relativeIndex": 0,
+                        "relativeIndex": 1,
                         "widgetType": 22
                     }
                 ]
@@ -2426,6 +2367,488 @@
             }
         }
     },
+    "workspaces": [
+        {
+            "icon": "qrc:/icons/panes/overview.svg",
+            "title": "Overview",
+            "widgetRefs": [
+                {
+                    "groupId": 1150012,
+                    "relativeIndex": 0,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 1150018,
+                    "relativeIndex": 1,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 1150011,
+                    "relativeIndex": 0,
+                    "widgetType": 18
+                },
+                {
+                    "groupId": 1150017,
+                    "relativeIndex": 1,
+                    "widgetType": 18
+                },
+                {
+                    "groupId": 1150025,
+                    "relativeIndex": 0,
+                    "widgetType": 22
+                },
+                {
+                    "groupId": 1150026,
+                    "relativeIndex": 1,
+                    "widgetType": 22
+                }
+            ],
+            "workspaceId": 1000
+        },
+        {
+            "icon": "qrc:/icons/panes/dashboard.svg",
+            "title": "All Data",
+            "widgetRefs": [
+                {
+                    "groupId": 1150011,
+                    "relativeIndex": 0,
+                    "widgetType": 18
+                },
+                {
+                    "groupId": 1150012,
+                    "relativeIndex": 0,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 1150013,
+                    "relativeIndex": 0,
+                    "widgetType": 12
+                },
+                {
+                    "groupId": 1150014,
+                    "relativeIndex": 0,
+                    "widgetType": 4
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 0,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 1,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 1,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 0,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 2,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 2,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 3,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 1,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 2,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 4,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150017,
+                    "relativeIndex": 1,
+                    "widgetType": 18
+                },
+                {
+                    "groupId": 1150018,
+                    "relativeIndex": 1,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 1150019,
+                    "relativeIndex": 1,
+                    "widgetType": 12
+                },
+                {
+                    "groupId": 1150020,
+                    "relativeIndex": 1,
+                    "widgetType": 4
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 3,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 5,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 4,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 6,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 3,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 7,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 5,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 8,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 4,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 5,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 9,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150023,
+                    "relativeIndex": 0,
+                    "widgetType": 19
+                },
+                {
+                    "groupId": 1150024,
+                    "relativeIndex": 1,
+                    "widgetType": 19
+                },
+                {
+                    "groupId": 1150025,
+                    "relativeIndex": 0,
+                    "widgetType": 22
+                },
+                {
+                    "groupId": 1150026,
+                    "relativeIndex": 1,
+                    "widgetType": 22
+                }
+            ],
+            "workspaceId": 1001
+        },
+        {
+            "title": "Alpha Camera",
+            "widgetRefs": [
+                {
+                    "groupId": 1150011,
+                    "relativeIndex": 0,
+                    "widgetType": 18
+                }
+            ],
+            "workspaceId": 1002
+        },
+        {
+            "title": "Alpha Navigation",
+            "widgetRefs": [
+                {
+                    "groupId": 1150012,
+                    "relativeIndex": 0,
+                    "widgetType": 5
+                }
+            ],
+            "workspaceId": 1003
+        },
+        {
+            "title": "Alpha Heading",
+            "widgetRefs": [
+                {
+                    "groupId": 1150013,
+                    "relativeIndex": 0,
+                    "widgetType": 12
+                }
+            ],
+            "workspaceId": 1004
+        },
+        {
+            "title": "Alpha Attitude",
+            "widgetRefs": [
+                {
+                    "groupId": 1150014,
+                    "relativeIndex": 0,
+                    "widgetType": 4
+                }
+            ],
+            "workspaceId": 1005
+        },
+        {
+            "title": "Alpha Flight",
+            "widgetRefs": [
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 0,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 1,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 1,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 0,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150015,
+                    "relativeIndex": 2,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1006
+        },
+        {
+            "title": "Alpha Power",
+            "widgetRefs": [
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 2,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 3,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 1,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 2,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150016,
+                    "relativeIndex": 4,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1007
+        },
+        {
+            "title": "Bravo Camera",
+            "widgetRefs": [
+                {
+                    "groupId": 1150017,
+                    "relativeIndex": 1,
+                    "widgetType": 18
+                }
+            ],
+            "workspaceId": 1008
+        },
+        {
+            "title": "Bravo Navigation",
+            "widgetRefs": [
+                {
+                    "groupId": 1150018,
+                    "relativeIndex": 1,
+                    "widgetType": 5
+                }
+            ],
+            "workspaceId": 1009
+        },
+        {
+            "title": "Bravo Heading",
+            "widgetRefs": [
+                {
+                    "groupId": 1150019,
+                    "relativeIndex": 1,
+                    "widgetType": 12
+                }
+            ],
+            "workspaceId": 1010
+        },
+        {
+            "title": "Bravo Attitude",
+            "widgetRefs": [
+                {
+                    "groupId": 1150020,
+                    "relativeIndex": 1,
+                    "widgetType": 4
+                }
+            ],
+            "workspaceId": 1011
+        },
+        {
+            "title": "Bravo Flight",
+            "widgetRefs": [
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 3,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 5,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 4,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 6,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 3,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150021,
+                    "relativeIndex": 7,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1012
+        },
+        {
+            "title": "Bravo Power",
+            "widgetRefs": [
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 5,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 8,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 4,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 5,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 1150022,
+                    "relativeIndex": 9,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1013
+        },
+        {
+            "title": "Alpha Controls",
+            "widgetRefs": [
+                {
+                    "groupId": 1150023,
+                    "relativeIndex": 0,
+                    "widgetType": 19
+                }
+            ],
+            "workspaceId": 1014
+        },
+        {
+            "title": "Bravo Controls",
+            "widgetRefs": [
+                {
+                    "groupId": 1150024,
+                    "relativeIndex": 1,
+                    "widgetType": 19
+                }
+            ],
+            "workspaceId": 1015
+        },
+        {
+            "title": "Alpha State",
+            "widgetRefs": [
+                {
+                    "groupId": 1150025,
+                    "relativeIndex": 0,
+                    "widgetType": 22
+                }
+            ],
+            "workspaceId": 1016
+        },
+        {
+            "title": "Bravo State",
+            "widgetRefs": [
+                {
+                    "groupId": 1150026,
+                    "relativeIndex": 1,
+                    "widgetType": 22
+                }
+            ],
+            "workspaceId": 1017
+        }
+    ],
     "writerVersion": "4.0.0",
-    "writerVersionAtCreation": "3.2.7"
+    "writerVersionAtCreation": "4.0.0"
 }

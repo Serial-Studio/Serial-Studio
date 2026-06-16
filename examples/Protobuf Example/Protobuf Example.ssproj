@@ -434,6 +434,6 @@
         }
     ],
     "title": "sensor",
-    "writerVersion": "3.2.7",
-    "writerVersionAtCreation": "3.2.7"
+    "writerVersion": "4.0.0",
+    "writerVersionAtCreation": "4.0.0"
 }

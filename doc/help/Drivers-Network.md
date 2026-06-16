@@ -72,7 +72,7 @@ Choose UDP when either the data is inherently datagram-shaped (one self-containe
 
 UDP supports a special form of distribution called **multicast**: one sender publishes to a multicast group address, and any number of receivers can subscribe to that group. Routers and switches that support multicast replicate packets only where receivers exist.
 
-Multicast group addresses are in the IP range `223.2.7.0` to `239.255.255.255`. The most useful sub-range for application traffic is `239.0.0.0/8` (administratively scoped, organisation-local).
+Multicast group addresses are in the IP range `224.0.0.0` to `239.255.255.255`. The most useful sub-range for application traffic is `239.0.0.0/8` (administratively scoped, organisation-local).
 
 ```mermaid
 flowchart LR

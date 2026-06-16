@@ -43,7 +43,7 @@ env:
   #
   # Application information
   #
-  VERSION: "3.2.7"
+  VERSION: "4.0.0"
   PUBLISHER: "Alex Spataru"
   UNIXNAME: "serial-studio-pro"
   EXECUTABLE: "Serial-Studio-Pro"
