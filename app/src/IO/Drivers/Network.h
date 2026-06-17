@@ -165,6 +165,7 @@ private:
   QSettings m_settings;
 
   QString m_address;
+  QHostAddress m_resolvedAddress;
   quint16 m_tcpPort;
   bool m_hostExists;
   bool m_connecting;

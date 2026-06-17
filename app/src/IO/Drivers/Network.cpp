@@ -160,8 +160,15 @@ bool IO::Drivers::Network::configurationOk() const noexcept
 qint64 IO::Drivers::Network::write(const QByteArray& data)
 {
   if (isWritable()) {
-    if (socketType() == QAbstractSocket::UdpSocket)
-      return m_udpSocket.write(data);
+    if (socketType() == QAbstractSocket::UdpSocket) {
+      const QHostAddress dest = m_resolvedAddress.isNull() ? QHostAddress(m_address)
+                                                           : m_resolvedAddress;
+      if (dest.isNull())
+        return -1;
+
+      return m_udpSocket.writeDatagram(data, dest, udpRemotePort());
+    }
+
     else if (socketType() == QAbstractSocket::TcpSocket)
       return m_tcpSocket.write(data);
   }
@@ -399,11 +406,14 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
 {
   if (!address.isEmpty() && QHostAddress(address).isNull()) {
     m_hostExists = false;
+    m_resolvedAddress.clear();
     lookup(address);
   }
 
-  else
+  else {
     m_hostExists = true;
+    m_resolvedAddress = QHostAddress(address);
+  }
 
   m_address = address;
   m_settings.setValue("NetworkDriver/address", address);

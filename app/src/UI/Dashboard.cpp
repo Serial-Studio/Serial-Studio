@@ -1219,7 +1219,8 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
     }
 
     if (!IO::ConnectionManager::instance().paused())
-      (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+      (void)IO::ConnectionManager::instance().writeDataToDevice(action.sourceId,
+                                                                DataModel::get_tx_bytes(action));
 
     if (m_repeatCounters.contains(index))
       m_repeatCounters[index]--;
@@ -1229,7 +1230,8 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
   if (action.timerMode == DataModel::TimerMode::RepeatNTimes && !guiTrigger) {
     if (!IO::ConnectionManager::instance().paused())
-      (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+      (void)IO::ConnectionManager::instance().writeDataToDevice(action.sourceId,
+                                                                DataModel::get_tx_bytes(action));
 
     tickRepeatTimer(index, m_timers, m_repeatCounters);
     return;
@@ -1245,7 +1247,8 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   }
 
   if (!IO::ConnectionManager::instance().paused())
-    (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+    (void)IO::ConnectionManager::instance().writeDataToDevice(action.sourceId,
+                                                              DataModel::get_tx_bytes(action));
 
   if (timerFlipped)
     Q_EMIT actionStatusChanged();

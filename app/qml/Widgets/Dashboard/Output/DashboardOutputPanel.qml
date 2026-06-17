@@ -71,8 +71,9 @@ Item {
 
         radius: 4
         color: Cpp_ThemeManager.colors["groupbox_background"]
-        border.width: 1
-        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        border.width: cell.txError ? 2 : 1
+        border.color: cell.txError ? Cpp_ThemeManager.colors["alarm"]
+                                   : Cpp_ThemeManager.colors["groupbox_border"]
 
         property var owData: root.model ? root.model.widgets[index] : null
         property var owModel: root.model ? root.model.models[index] : null
@@ -81,6 +82,37 @@ Item {
         property string owIcon: owData ? (owData.icon || "") : ""
         property string owTitle: owData ? owData.title : ""
         property color accentColor: SerialStudio.getDatasetColor(index + 1)
+
+        //
+        // Transmit error indicator: flash a red border + tooltip when the
+        // control's transmit script times out, fails, or overflows the payload
+        //
+        property bool txError: false
+        property string txErrorText: ""
+
+        Connections {
+          target: cell.owModel
+          ignoreUnknownSignals: true
+          function onTransmitError(error) {
+            cell.txError = true
+            cell.txErrorText = error
+            txErrorTimer.restart()
+          }
+        }
+
+        Timer {
+          id: txErrorTimer
+
+          interval: 4000
+          onTriggered: cell.txError = false
+        }
+
+        ToolTip.text: cell.txErrorText
+        ToolTip.visible: cell.txError && cellHover.hovered
+
+        HoverHandler {
+          id: cellHover
+        }
 
         //
         // Section label component: uppercase title + separator

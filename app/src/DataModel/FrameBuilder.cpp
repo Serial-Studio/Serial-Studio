@@ -835,9 +835,10 @@ void DataModel::FrameBuilder::onConnectedChanged()
   const auto& actions = m_frame.actions;
   for (const auto& action : actions)
     if (action.autoExecuteOnConnect) {
-      const qint64 written = IO::ConnectionManager::instance().writeData(get_tx_bytes(action));
+      const qint64 written = IO::ConnectionManager::instance().writeDataToDevice(
+          action.sourceId, get_tx_bytes(action));
       if (written < 0) [[unlikely]]
-        qWarning() << "[FrameBuilder] Auto-execute writeData() failed for action:" << action.title;
+        qWarning() << "[FrameBuilder] Auto-execute write failed for action:" << action.title;
     }
 
   const auto& sources = DataModel::ProjectModel::instance().sources();
