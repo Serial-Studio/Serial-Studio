@@ -68,7 +68,7 @@ Actions can repeat on a timer, which is useful for periodic polling or keep-aliv
 
 ## Multi-source actions
 
-In projects with multiple sources (devices), each action can target a specific one. Use the **Target Device** dropdown in the action properties to pick which device receives the command. The flow diagram in the Project Editor shows a dashed arrow from each action to its target device.
+In projects with multiple sources (devices), the **Target Device** dropdown in the action properties selects which device an action transmits to, and the flow diagram in the Project Editor draws an arrow from each action to its target device. When the action fires, its payload is sent to the selected source.
 
 ```mermaid
 flowchart RL

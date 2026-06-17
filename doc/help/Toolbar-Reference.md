@@ -28,8 +28,8 @@ The toolbar runs along the top of the window, left to right, grouped into sectio
 |--------|------|--------------|-------|
 | **Project Editor** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/project-setup.svg" width="16" height="16"> | Opens the [Project Editor](Project-Editor.md) to create or modify your JSON layout. | Authoring mode only. |
 | **Open Project** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/open-project.svg" width="16" height="16"> | Opens an existing `.ssproj` / `.json` project and switches to Project File mode. | Authoring mode only. |
-| **Open CSV** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/csv.svg" width="16" height="16"> | Plays a recorded CSV file back as if it were live sensor data. | Disabled while a device is connected or another player is open. See [CSV Export & Playback](CSV-Export-Playback.md). |
-| **Open MDF4** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/mf4.svg" width="16" height="16"> | Plays an MDF4 file back as if it were live data. | Disabled while connected or another player is open. See [MDF4](MDF4.md). |
+| **Open CSV** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/csv.svg" width="16" height="16"> | Plays a recorded CSV file back as if it were live sensor data. | Disabled while a device is connected or while the CSV player is already open. See [CSV Export & Playback](CSV-Export-Playback.md). |
+| **Open MDF4** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/mf4.svg" width="16" height="16"> | Plays an MDF4 file back as if it were live data. | Disabled while a device is connected or while the MDF4 player is already open. See [MDF4](MDF4.md). |
 
 ### Assistant / Extensions section
 
@@ -75,7 +75,7 @@ The driver buttons are a single-choice group: the active driver's label is shown
 
 ## Setup panel
 
-The Setup panel docks on the right edge of the window and is where you choose how data is parsed and which I/O driver to use. Click its header to collapse or expand it.
+The Setup panel docks on the right edge of the window and is where you choose how data is parsed and which I/O driver to use. Drag its left edge to resize it and give the Dashboard more space.
 
 ### Frame parsing
 
@@ -94,7 +94,7 @@ Three radio buttons pick the [operation mode](Operation-Modes.md):
 
 ### Data export
 
-Switches that arm recording for the session. Each writes to a separate file or store and can be toggled independently (all are disabled in Console Only mode):
+Switches that arm recording for the session. Each writes to a separate file or store and can be toggled independently. CSV Spreadsheet, Session Recording, and MDF4 Recording are disabled in Console Only mode; the Console Log switch stays available:
 
 | Switch | What it records | Reference |
 |--------|-----------------|-----------|
@@ -115,7 +115,7 @@ The Start menu opens from the leftmost taskbar button. It is the dashboard's mai
 | **Actions** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/actions.svg" width="16" height="16"> | Lists the project's [actions](Actions.md); picking one runs it. | Hidden when the project defines no actions. |
 | **Plugins** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/extensions.svg" width="16" height="16"> | Lists installed [plugins](Plugin-Development.md), plus **Manage Plugins...**. | Hidden when no plugins are installed. |
 | **Auto Layout** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/auto-layout.svg" width="16" height="16"> | Toggles automatic tiling of dashboard windows. | Toggle. |
-| **Full Screen** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/full-screen.svg" width="16" height="16"> | Toggles the main window between full-screen and windowed. | Hidden in external windows and operator runtime mode. |
+| **Full Screen** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/full-screen.svg" width="16" height="16"> | Toggles the main window between full-screen and windowed. | Toggle. |
 | **Add External Window** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/external-window.svg" width="16" height="16"> | Opens a second dashboard window (for a multi-monitor layout). | |
 | **Export** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/export.svg" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File, Console Transcript, and Session Database **(Pro)**. | Mirrors the Setup panel's export switches. |
 | **Tools** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/tools.svg" width="16" height="16"> | Submenu: Console, Notifications **(Pro)**, Clock, Stopwatch, Preferences, Sessions **(Pro)**, File Transmission **(Pro)**, AI Assistant **(Pro)**. | Toggles the utility widgets and opens the tool windows. |
@@ -196,6 +196,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 |--------|------|-----------------------|
 | **Group** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-group.svg" width="16" height="16"> | A generic dataset group. |
 | **Image** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/image.svg" width="16" height="16"> | An [Image View](Widget-Reference.md#image-view-pro) (Pro). |
+| **Web View** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-webview.svg" width="16" height="16"> | A web viewer. |
 | **Painter** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-painter.svg" width="16" height="16"> | A [Painter](Painter-Widget.md) widget (Pro). |
 | **Table** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-datagrid.svg" width="16" height="16"> | A Data Grid. |
 | **Multi-Plot** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-multiplot.svg" width="16" height="16"> | A [MultiPlot](Plots.md). |

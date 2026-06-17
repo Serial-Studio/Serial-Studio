@@ -100,12 +100,12 @@ Serial Studio wraps every JavaScript transform in an IIFE at compile time, so to
 
 ### What NOT to do
 
-Avoid bare globals. They bypass the isolation and will collide with other datasets on the same source:
+In JavaScript, avoid bare globals: an implicit global is written to the shared engine's global object and will collide with other datasets on the same source. In Lua each dataset chunk gets its own private environment, so a bare global stays isolated per dataset and won't collide. Declaring `local` is still recommended in Lua for clarity and to match the JavaScript rule:
 
 ```lua
--- WRONG in Lua: ema is a shared global
+-- Lua: this works (ema is isolated to this dataset), but local is clearer
 function transform(value)
-  ema = ema or value  -- leaks across all datasets on this source
+  ema = ema or value
   ema = 0.1 * value + 0.9 * ema
   return ema
 end
@@ -156,7 +156,7 @@ function transform(value)
 end
 ```
 
-A plain `function foo() end` at chunk top level in Lua creates a global and would collide with other datasets. Always prefix helpers with `local function`.
+A plain `function foo() end` at chunk top level in Lua defines a global, but that global stays in this dataset's private environment, so it won't collide with other datasets. Prefixing helpers with `local function` is still recommended for clarity.
 
 ### When state resets
 
@@ -221,7 +221,7 @@ end
 
 Transforms are applied in order: groups in frame order, datasets in group order. Inside a single frame:
 
-- `datasetGetRaw(uid)` can read any dataset, since all raw values are populated before transforms run.
+- `datasetGetRaw(uid)` returns the current frame's raw value only for the current dataset and the ones already processed before it. Later datasets still hold the previous frame's raw value, because raw and final values are written incrementally per dataset, not in a pre-pass.
 - `datasetGetFinal(uid)` only works for datasets that have already been transformed (earlier datasets in the same group, or any dataset in an earlier group).
 - Computed registers hold their last written value, so a value written in one frame is still visible in the next, handy for integrators, derivatives, and latched flags. If you specifically want a register to start each frame fresh, write the reset value yourself at the top of an early transform.
 
@@ -354,7 +354,7 @@ end
 ### When NOT to use it
 
 - For a button or slider the user clicks, use an **Output Widget**. Transforms run on every frame; an Output Widget runs when the user acts.
-- Don't `deviceWrite` from a virtual dataset unless you understand its execution order. Virtual datasets are processed after the regular ones, so they see *final* values, but they still fire every frame.
+- Don't `deviceWrite` from a virtual dataset unless you understand its execution order. Virtual datasets are processed in tree order like any other dataset (they are not automatically processed last), so a virtual dataset only sees the *final* values of datasets that come before it. Place it after its inputs. It still fires every frame.
 - Don't write large payloads on every frame. The transform hotpath is shared with all datasets in the source; a noisy `deviceWrite` saturates the link.
 
 ## Firing actions: `actionFire()`
@@ -585,7 +585,7 @@ end
 3. It has to return a number, or a string for text datasets (a returned string is kept as the dataset value).
 4. Returning `nil`, `NaN`, or `Infinity` falls back to the raw value, as does a script error (silent in JavaScript; logged in Lua).
 5. Each dataset picks its own transform language (Lua or JavaScript); datasets on the same source can mix the two. The source's frame parser language is only the default when none is picked.
-6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. Declare stateful variables with `local` in Lua or `var` in JavaScript and they won't collide with other datasets. Bare globals in Lua (and `function foo() end` at chunk top level) DO leak across datasets. Always use `local`.
+6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. In JavaScript, declare stateful variables with `var`: an implicit (undeclared) global is written to the shared engine and leaks across datasets. In Lua each dataset chunk has its own environment, so bare globals (and `function foo() end` at chunk top level) stay isolated per dataset; `local` is still recommended for clarity and consistency with the JavaScript rule.
 7. The engine is sandboxed: no file I/O, no network, no OS commands.
 8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation.
 

@@ -23,9 +23,11 @@ This is the ID you pass to **mutating** API calls:
 ```jsonc
 {
   "method": "project.dataset.update",
-  "params": { "groupId": 5, "datasetId": 0, "options": { "title": "Pressure" } }
+  "params": { "groupId": 5, "datasetId": 0, "title": "Pressure" }
 }
 ```
+
+Patched fields go at the top level of `params`, not inside an `options` object.
 
 ### `index`
 
@@ -49,7 +51,7 @@ Treat the integer as opaque: it's allocated, not derived. Two assumptions you'd 
 | `sourceId` | Source-scoped API calls (`project.source.update`, `project.source.setFrameParserCode`, etc.)     |
 | `groupId`  | Group-scoped API calls (`project.group.update`, dataset CRUD addressing)                         |
 | `datasetId`| Dataset CRUD addressing (`project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete`) |
-| `index`    | Frame-parser scripts when assigning values from the parsed array (`group.datasets[0].index = 1`) |
+| `index`    | Maps each slot of the parser's returned array to a dataset; set per dataset in the Project Editor |
 | `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uid)`, `datasetGetFinal(uid)`), Data Tables (`raw:<uid>`, `final:<uid>`) |
 
 ## Rule of thumb
@@ -69,7 +71,9 @@ In other words:
 - **`datasetId` shifts when you rearrange.** Inserting a dataset at slot 0 renumbers everything that came after. If you cache `datasetId` in your script and then edit the project, refresh it from the API after every mutation.
 - **`uniqueId` does NOT follow `datasetId`.** It's persisted with the dataset and stays the same across reorders, renames, retypes, and moves between sources. The one exception is duplicate / copy-paste: a duplicated dataset receives a fresh `uniqueId` from the counter so the original and the copy stay distinguishable.
 - **`groupId` shifts when you rearrange.** Adding a new group at the top renumbers everything that came after. For a stable group identifier, use `Group.uniqueId` (returned by `project.group.list` under `uniqueId`); that's what workspace widget refs persist.
-- **`index` is yours to set.** Frame parsers control `index` directly. The Project Editor assigns sequential defaults but you can override them.
+- **`index` is yours to set.** The parser returns a positional array; you set each dataset's
+  `index` in the Project Editor to choose which array slot it reads. The editor seeds sequential
+  defaults, which you can override.
 
 ## Quick reference
 

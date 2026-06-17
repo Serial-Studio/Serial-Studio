@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Project Editor lets you create and edit JSON project files that define how Serial Studio interprets incoming data and displays it on the dashboard. Open it from the toolbar (wrench icon).
+The Project Editor lets you create and edit JSON project files that define how Serial Studio interprets incoming data and displays it on the dashboard. Open it from the toolbar's Project Editor button (or the wrench button in the device setup panel).
 
 A project file describes three things: the structure of your data (groups and datasets), how to detect and parse frames from the wire, and what actions (commands) the user can send back to the device. Serial Studio reads the file at connect time and builds the dashboard from it.
 
@@ -40,13 +40,13 @@ The editor window has three areas: a toolbar across the top, a tree view on the 
 File actions sit on the left; the rest of the toolbar is "add" buttons grouped by what they create.
 
 - **New / Open / Save / Save As.** File actions. **Save** (Ctrl+S / Cmd+S) writes the project to disk; **Open** loads an existing `.json` or `.ssproj` file.
-- **Protobuf** (Pro). Generate a project from a Protocol Buffers (`.proto`) schema. See [Auto-Generating Projects](Auto-Generating-Projects.md).
+- **Protobuf.** Generate a project from a Protocol Buffers (`.proto`) schema. Available in all builds; only the Pro widgets it can generate require a license. See [Auto-Generating Projects](Auto-Generating-Projects.md).
 - **Restore.** Restore a recent automatic snapshot. See [Backups & Recovery](Backup-Recovery.md).
 - **Lock.** Set a password and lock the editor. See [Project Lock](Project-Lock.md).
 - **Add Device** (Pro). Add another data source for multi-device projects.
 - **Output / Action / Slider / Toggle / Knob / Text Field / Button.** Add an [output control](Output-Controls.md) panel or an [action](Actions.md).
 - **Dataset / Plot / FFT Plot / Gauge / Level Indicator / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
-- **Group / Image / Painter / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image and Painter are Pro).
+- **Group / Image / Web View / Painter / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image and Painter are Pro).
 
 Every button, with its icon, is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#project-editor-toolbar).
 
@@ -89,8 +89,8 @@ Data tables, output widgets, and workspaces are drawn alongside as their own car
 The diagram is interactive:
 
 - **Double-click any block** to jump into the matching configuration form. Double-clicking a source card opens that source's settings; a group card opens the group form; a dataset pill opens the dataset form; a frame-parser card opens the script editor; an action card opens the action form; a data-table card opens the table editor; an output-widget card opens the output editor.
-- **Right-click any block** for a context menu tailored to that node: add a sibling group, add a dataset to that group, duplicate, delete, change widget type, attach to a workspace, and so on. Right-clicking empty background opens the "add source / add table / add action" shortcuts. This lets you grow a project once the high-level shape is in place without walking back through the tree on the left.
-- **Scroll wheel** zooms the diagram in and out. The toolbar has a reset-zoom button.
+- **Right-click any block** for a context menu tailored to that node: add a sibling group, add a dataset to that group, rename, move up or down, duplicate, delete, and edit the frame parser or painter code. Right-clicking empty background opens the "add source / add table / add action" shortcuts. This lets you grow a project once the high-level shape is in place without walking back through the tree on the left.
+- **Ctrl+scroll wheel** zooms the diagram in and out; plain scrolling pans it (Shift+scroll pans horizontally). The toolbar has a reset-zoom button.
 
 The overview is useful as a sanity check ("does my group widget have the three datasets it needs?") and as a navigation surface once a project gets too large to keep entirely in the tree.
 
@@ -116,8 +116,8 @@ These settings run *before* the parser and apply to every parser type (Built-In,
 | Frame detection method | How Serial Studio finds frame boundaries in the byte stream. | *End Delimiter Only* (frames end with a known sequence such as `\n`; the most common choice); *Start and End Delimiter* (bounded by a start and an end marker, e.g. `/*` and `*/`); *Start Delimiter Only* (a header begins each frame, and the next header ends the previous one); *No Delimiters* (the whole captured chunk is one frame; use it for fixed-size or length-prefixed protocols). |
 | Start delimiter / end delimiter | The actual delimiter strings. Which ones apply depends on the detection method. | Any string, e.g. `\n`, `/*`, `*/`. |
 | Hex delimiters | Tick when the delimiter strings are written in hex. | e.g. `0A` for newline. |
-| Data conversion (decoder) | How the bytes inside the delimiters are decoded before the parser sees them. | *Plain Text (UTF-8)* (default text mode); *Hexadecimal* (each byte pair read as a hex value); *Base64* (Base64-decoded first); *Binary Direct (Pro)* (raw bytes passed straight to the parser as a byte array/table). |
-| Checksum algorithm | Optional integrity check appended to each frame; frames that fail are dropped. | XOR-8, MOD-256, CRC-8, CRC-16, CRC-16-MODBUS, CRC-16-CCITT, CRC-32. |
+| Data conversion (decoder) | How the bytes inside the delimiters are decoded before the parser sees them. | *Plain Text (UTF-8)* (default text mode); *Hexadecimal* (each byte pair read as a hex value); *Base64* (Base64-decoded first); *Binary Direct* (raw bytes passed straight to the parser as a byte array/table). |
+| Checksum algorithm | Optional integrity check appended to each frame; frames that fail are dropped. | XOR-8, MOD-256, CRC-8, CRC-16, CRC-16-MODBUS, CRC-16-CCITT, Fletcher-16, CRC-32, Adler-32. |
 
 Picking the wrong decoder/detection pair silently mojibakes binary data or never produces a frame. The trap to remember: **Plain Text routes through `QString::fromUtf8`**, so any byte that is not valid UTF-8 (most binary payloads contain `0x00` or values above `0x7F`) is replaced with `U+FFFD` and the original bytes are lost. For anything non-text, pick **Binary Direct**.
 
@@ -127,8 +127,8 @@ The **parser** turns a decoded frame into an array of values, one per dataset fr
 
 | Language | What you configure | Best for |
 |----------|--------------------|----------|
-| Built-In | No code. Pick a template and fill in its parameter form. | Common wire formats with no setup: delimited/CSV, fixed-width, key-value, NMEA 0183/2000, JSON, XML, YAML, MessagePack, Modbus, UBX, MAVLink, COBS/SLIP, and batched/time-series multi-frame data. |
-| Lua | A `parse(frame)` function (default, recommended). | Custom logic the templates do not cover, with the lowest scripting overhead. |
+| Built-In | No code. Pick a template and fill in its parameter form. The default parser for a new project. | Common wire formats with no setup: delimited/CSV, fixed-width, key-value, NMEA 0183/2000, JSON, XML, YAML, MessagePack, Modbus, UBX, MAVLink, COBS/SLIP, and batched/time-series multi-frame data. |
+| Lua | A `parse(frame)` function (recommended scripting language). | Custom logic the templates do not cover, with the lowest scripting overhead. |
 | JavaScript | A `parse(frame)` function. | Custom logic when you prefer JavaScript or need `JSON.parse`-style ergonomics. |
 
 For Built-In, the parameter form is per template. For example, *Delimited text* exposes a separator, an optional quote character, and trim/skip-empty toggles, while *Modbus frames* exposes a channel count, register offset, and a signed-registers toggle. The full template catalog and its parameters live in [Frame Parser Scripting](JavaScript-API.md).
@@ -153,6 +153,8 @@ Groups organize related datasets and determine which group-level widget is used 
 | GPS Map         | Geographic tracking on a map       | 2 or 3 (lat, lon, optional alt) |
 | 3D Plot (Pro)   | 3D scatter/trajectory              | Exactly 3 (X, Y, Z)  |
 | Image View (Pro)| Binary image stream                | None (image data in frame) |
+| Painter Widget (Pro)| Custom JavaScript-rendered canvas | Any number          |
+| Web View        | Embedded web page                  | Any number           |
 | None            | No group widget. Datasets shown individually | Any number |
 
 ### Step 4: add datasets

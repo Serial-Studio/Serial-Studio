@@ -4,7 +4,7 @@ A password gate for the Project Editor. Lock a project once, and from that point
 
 This is a lightweight feature by design. The goal is **operator/engineer separation**: keep curious operators from rewiring frame parsers or moving widgets around mid-shift, without pretending to defend against an attacker with a text editor and ten minutes.
 
-> **Pro feature.** Lock is part of the commercial build. Locked projects still open under GPL builds; the editor is just hidden the same way it is in Pro.
+> **Available in all builds.** Project Lock is not license-gated. The Lock button lives in the Project Editor toolbar's Restore section and works the same in Free/GPL and Pro builds. Locked projects open the same way everywhere.
 
 ## What the lock does
 

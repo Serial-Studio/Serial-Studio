@@ -114,7 +114,7 @@ The Setup panel exposes these fields:
 
 **Remote Address** accepts hostnames as well as IP literals. A hostname triggers a background DNS lookup, and the Connect button stays disabled until the name resolves. Clearing the address or a port field restores its default.
 
-UDP uses a single bidirectional socket; there is no separate Receiver / Sender / Multicast mode. Serial Studio binds **Local Port** for receiving and uses **Remote Address** plus **Remote Port** as the destination when writing data back. Incoming datagrams are read one at a time, so on the receive side UDP preserves the message boundaries that TCP discards.
+UDP uses a single socket; there is no separate Receiver / Sender / Multicast mode. Serial Studio binds **Local Port** to receive datagrams. Incoming datagrams are read one at a time, so on the receive side UDP preserves the message boundaries that TCP discards. Outbound data (actions, output controls, the console send line) is sent as datagrams to **Remote Address** / **Remote Port**.
 
 The same settings are scriptable through the `io.network.*` commands of the [JSON-RPC API](API-Reference.md): `setSocketType` (`socketTypeIndex` 0 = TCP, 1 = UDP), `setRemoteAddress`, `setTcpPort`, `setUdpLocalPort`, `setUdpRemotePort`, `setUdpMulticast`, and `lookup`, plus the read-only `getConfig` and `listSocketTypes`. The port commands take a `port` parameter (1-65535; `setUdpLocalPort` also accepts 0). When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
 

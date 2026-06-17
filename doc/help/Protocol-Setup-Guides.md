@@ -41,7 +41,7 @@ Full driver reference: [UART](Drivers-UART.md).
 4. Enter the **Remote Port** the device is listening on. Default: 23.
 5. Click **Connect**.
 
-Serial Studio will resolve the hostname (if provided) and attempt a TCP connection. A spinner indicates DNS lookup is in progress, and the Connect button stays disabled until the name resolves.
+Serial Studio will resolve the hostname (if provided) and attempt a TCP connection. The Connect button stays disabled until the name resolves.
 
 Serial Studio is a TCP client only: it dials out to a listening server and never accepts inbound connections. If the device expects to push data to a listener, run a small TCP relay in front of Serial Studio, or switch to UDP.
 
@@ -139,7 +139,7 @@ See [MQTT Subscriber](Drivers-MQTT.md) for the full protocol primer.
    - **Dashboard Data (JSON)** publishes each parsed frame as compact JSON.
    - **Dashboard Data (CSV)** publishes each parsed frame as a CSV row.
    - **Raw RX Data** republishes the bytes that arrived on any active driver, unmodified.
-   - **Custom Script** publishes the value returned by the `mqttPublish()` script hook.
+   - **Custom Script** publishes the value returned by the `mqtt(frame)` script hook.
 4. Set **Topic Base**. The Publisher silently produces no traffic when this is empty.
 5. Turn on **Publish Notifications** to mirror dashboard events to MQTT; set **Notification Topic** if you want them on a separate topic from the frame stream (it defaults to the Topic Base when empty).
 6. Under **Broker**, fill in hostname, port, credentials, protocol version, and keep-alive.
@@ -147,7 +147,7 @@ See [MQTT Subscriber](Drivers-MQTT.md) for the full protocol primer.
 8. Click **Test Connection** in the header bar to probe the broker without disturbing the live session. The result appears in a message box.
 9. Click **Connect** in the header bar to open the publishing session.
 
-See [MQTT Publisher](MQTT-Publisher.md) for the full reference, including the `mqttPublish()` script hook for frame parsers.
+See [MQTT Publisher](MQTT-Publisher.md) for the full reference, including the `mqtt(frame)` script hook for frame parsers.
 
 ### Troubleshooting
 

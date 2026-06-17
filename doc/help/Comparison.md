@@ -339,7 +339,7 @@ Plotly Dash is a Python framework for building web-based analytical dashboards.
 
 1. Keep your existing Arduino code (comma-separated output).
 2. In Serial Studio, pick the serial port and baud rate.
-3. Click "Enable Quick Plot".
+3. Under Frame Parsing, select "Quick Plot (Comma Separated Values)".
 4. Done. Your data is plotted with better scaling and controls.
 
 Optional next step: create a project file for a custom dashboard in the Project Editor.

@@ -92,7 +92,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Project Templates | ✅ | ✅ |
 | **Platform Support** | | | |
 | | Windows 10/11 (x64) | ✅ | ✅ |
-| | macOS 11+ (Universal) | ✅ | ✅ |
+| | macOS 13+ (Universal) | ✅ | ✅ |
 | | Linux (x64, AppImage/Flatpak) | ✅ | ✅ |
 | **Licensing** | | | |
 | | Personal/Educational Use | ✅ | ✅ |
@@ -228,7 +228,7 @@ function parse(frame) {
 - Magnetic field visualization
 - Motion tracking in 3D space
 
-**Requirements:** Requires OpenGL-capable graphics
+**Requirements:** None beyond the base app. The 3D Plot renders on the CPU (no GPU or OpenGL needed) and runs on low-end hardware, including Raspberry Pi.
 
 **Learn more:** [Widget Reference - 3D Plot](Widget-Reference.md#3d-plot-pro)
 

@@ -145,7 +145,7 @@ The decoder determines how raw bytes are converted before being passed to the fr
 | **Plain Text (UTF-8)**  | 0         | Bytes are decoded as UTF-8 text. The most common choice for ASCII/CSV protocols. |
 | **Hexadecimal**         | 1         | Each byte is converted to a two-character hex string. For example, bytes `0x03 0xFF 0x02` become `"03FF02"`. |
 | **Base64**              | 2         | Bytes are encoded as a Base64 string. |
-| **Binary (Direct)**     | 3         | Raw bytes are passed to the frame parser as a table or array of integers (0 to 255). This is a Pro feature. |
+| **Binary (Direct)**     | 3         | Raw bytes are passed to the frame parser as a table or array of integers (0 to 255). |
 
 ### Frame parser script
 

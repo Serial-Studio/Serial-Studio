@@ -117,7 +117,8 @@ Real-world applications of Serial Studio across industries, education, and hobby
 **Solution:** Serial Studio's Process driver launches the simulation executable and streams its stdout into the dashboard:
 - Simulation outputs comma-separated values (position, velocity, energy)
 - Real-time plots show simulation trajectories
-- Named pipe mode supports bidirectional communication for parameter sweeps
+- Named pipe mode reads data from a FIFO; use Launch mode if you need to write back to
+  the process (e.g. parameter sweeps)
 - Data exported to CSV for comparison with experimental results
 
 **Hardware:** Any computer (no external devices needed)

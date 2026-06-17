@@ -145,8 +145,8 @@ flowchart TD
 - Auto-created for datasets with `graph: true` (field name `plt`).
 - Single-curve 2D time-series line chart.
 - Auto-scaling Y-axis.
-- Configurable plot range via `pltMin` and `pltMax`.
-- Optional custom X-axis from another dataset via `xAxisId` (enables XY/scatter plots).
+- Configurable plot range via the `plotMin` and `plotMax` project-file keys (C++ fields `pltMin`/`pltMax`).
+- Optional custom X-axis from another dataset via the `xAxis` project-file key (C++ field `xAxisId`), which enables XY/scatter plots.
 - Pause/resume.
 - Best for: individual signal monitoring, trend analysis.
 
@@ -181,7 +181,7 @@ flowchart TD
 - Color-banded alarm zones with per-band severity (Info / OK / Warning / Critical).
 - Shows current value and units.
 - Best for: level indicators, resource usage, bounded values.
-- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 0), `alarmBands` (array; see [Alarm bands](#alarm-bands)).
+- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands` (array; see [Alarm bands](#alarm-bands)). The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
 - **Two-page swipe view.** Page 0 is the analog bar; page 1 is a large monospace digital readout. Swipe horizontally (or use the page indicator dots at the bottom) to flip. The active page is saved per-widget in the project file, so each Bar tile remembers its own preference.
 
 ### Gauge
@@ -190,7 +190,7 @@ flowchart TD
 - Circular or arc gauge display with colored outer-rim arc segments for each alarm band.
 - Same configuration as Bar (min/max, bands).
 - Best for: speedometers, RPM, pressure, temperature.
-- Configuration fields: `wgtMin`, `wgtMax`, `alarmBands`.
+- Configuration fields (project-file keys): `widgetMin`, `widgetMax`, `alarmBands`. The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
 - **Two-page swipe view.** Page 0 is the analog dial; page 1 is a large digital readout. The active page is persisted per widget.
 
 ### Compass
@@ -207,7 +207,7 @@ flowchart TD
 - Analog half-arc meter with a sweeping needle, tick marks, colored arc bands, and value readout.
 - Same min/max + bands model as Bar and Gauge.
 - Best for: VU-style readouts, signal strength, pressure, voltage.
-- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 0), `alarmBands`.
+- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands`. The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
 - **Two-page swipe view.** Page 0 is the analog half-arc meter; page 1 is a large digital readout. The active page is persisted per widget.
 
 ## Alarm bands
@@ -264,13 +264,13 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
 | Painter       | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
 | Web View      | Group   | `webview`      | 0            | `webViewUrl` (Qt WebEngine build)            |
-| Plot          | Dataset | auto           | n/a          | `graph: true`, `pltMin`/`pltMax`             |
+| Plot          | Dataset | auto           | n/a          | `graph: true`, `plotMin`/`plotMax`           |
 | FFT Plot      | Dataset | auto           | n/a          | `fft: true`, `fftSamples`, `fftSamplingRate` |
 | Waterfall     | Dataset | auto           | n/a          | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
-| Bar           | Dataset | `bar`          | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
-| Gauge         | Dataset | `gauge`        | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
+| Bar           | Dataset | `bar`          | n/a          | `widgetMin`/`widgetMax`, `alarmBands[]`, swipe to digital page |
+| Gauge         | Dataset | `gauge`        | n/a          | `widgetMin`/`widgetMax`, `alarmBands[]`, swipe to digital page |
 | Compass       | Dataset | `compass`      | n/a          | value 0-360, swipe to digital page           |
-| Meter         | Dataset | `meter`        | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
+| Meter         | Dataset | `meter`        | n/a          | `widgetMin`/`widgetMax`, `alarmBands[]`, swipe to digital page |
 | Clock         | Utility | (toggle)       | 0            | system-clock driven; swipe between analog face / digital readout |
 | Stopwatch     | Utility | (toggle)       | 0            | local Start/Stop/Lap/Reset with lap table    |
 
@@ -291,17 +291,17 @@ Every dataset in a project file supports these visualization-related fields:
 | `led`              | bool   | false   | Enable LED indicator. |
 | `log`              | bool   | false   | Enable logging to file. |
 | `overviewDisplay`  | bool   | false   | Show in the overview/status bar. |
-| `pltMin`           | double | 0       | Plot Y-axis minimum (0 = auto-scale). |
-| `pltMax`           | double | 0       | Plot Y-axis maximum (0 = auto-scale). |
-| `wgtMin`           | double | 0       | Widget (bar/gauge/meter) minimum. |
-| `wgtMax`           | double | 0       | Widget (bar/gauge/meter) maximum. |
+| `plotMin`          | double | 0       | Plot Y-axis minimum (0 = auto-scale). C++ field `pltMin`. |
+| `plotMax`          | double | 0       | Plot Y-axis maximum (0 = auto-scale). C++ field `pltMax`. |
+| `widgetMin`        | double | 0       | Widget (bar/gauge/meter) minimum. C++ field `wgtMin`. |
+| `widgetMax`        | double | 0       | Widget (bar/gauge/meter) maximum. C++ field `wgtMax`. |
 | `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |
 | `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets and LED panels. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |
 | `fftMax`           | double | 0       | FFT frequency axis maximum. |
-| `xAxisId`          | int    | -2      | X-axis source: `-2` = time (default), or the `uniqueId` of another dataset for an XY plot (Pro). |
+| `xAxis`            | int    | -2      | X-axis source: `-2` = time (default), or the `uniqueId` of another dataset for an XY plot (Pro). C++ field `xAxisId`. |
 
 ## Dashboard layout
 

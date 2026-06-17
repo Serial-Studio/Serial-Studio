@@ -44,7 +44,7 @@ Documents/Serial Studio/CSV/Weather Station/2026-03-17_15-30-05.csv
 
 ### Automation
 
-Export and playback can be driven without the GUI. The [API](API-Reference.md) exposes `csvExport.getStatus`, `csvExport.setEnabled`, and `csvExport.close` for export, plus the `csvPlayer.*` family (`open`, `play`, `pause`, `setProgress`, `getStatus`, and frame stepping) for playback. The `--csv-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns export on at startup.
+Export and playback can be driven without the GUI. The [API](API-Reference.md) exposes `csvExport.getStatus`, `csvExport.setEnabled`, and `csvExport.close` for export, plus the `csvPlayer.*` family (`open`, `setPaused`, `setProgress`, `getStatus`, and frame stepping via `csvPlayer.step`) for playback. The `--csv-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns export on at startup.
 
 ### File format
 

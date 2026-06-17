@@ -38,7 +38,7 @@ The frame reader scans the input buffer for frame boundaries and extracts comple
 - **Start Delimiter Only.** Frame boundaries fall between consecutive start markers.
 - **No Delimiters.** Pass all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
 
-After extraction, the frame reader can optionally validate a checksum. Seven algorithms are registered: `XOR-8`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, and `CRC-32`. Valid frames move to the next stage.
+After extraction, the frame reader can optionally validate a checksum. Nine algorithms are registered: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, and `Adler-32`. Valid frames move to the next stage.
 
 ## Stage 4: frame builder
 

@@ -303,10 +303,13 @@ wget http://example.com/script.py && python script.py
 
 ### Future Enhancements
 
+Rate limiting and basic connection logging are already present. The
+server enforces a per-window message cap (clients that exceed it are
+disconnected), and connect, disconnect, and authentication events are
+logged.
+
 Planned security features (not yet implemented):
 - Per-command permissions
-- Connection logging
-- Rate limiting
 - TLS/SSL encryption
 - Configurable bind address
 
@@ -677,24 +680,27 @@ A client that issues commands on a long-lived socket while a device is streaming
 
 The API provides **300+ commands** across multiple modules; enumerate the live surface with `api.getCommands`:
 
+The per-module counts below are approximate and drift behind the C++
+registry; treat `api.getCommands` as the source of truth.
+
 **GPL Build:**
 - API introspection: 1 command
-- I/O Manager: 12 commands
+- I/O Manager: 8 commands
 - UART Driver: 12 commands
-- Network Driver: 10 commands
-- Bluetooth LE Driver: 9 commands
+- Network Driver: 9 commands
+- Bluetooth LE Driver: 12 commands
 - CSV Export: 3 commands
-- CSV Player: 9 commands
-- Console Control: 11 commands
-- Dashboard Configuration: 7 commands
-- Project Management: 19 commands
+- CSV Player: 6 commands
+- Console Control: 17 commands
+- Dashboard Configuration: 13 commands
+- Project Management: 64 commands
 
 **Pro Build Additional:**
-- Modbus Driver: 21 commands
+- Modbus Driver: 22 commands
 - CAN Bus Driver: 9 commands
-- MQTT Client: 27 commands
+- MQTT Client: 6 commands
 - MDF4 Export: 3 commands
-- MDF4 Player: 9 commands
+- MDF4 Player: 6 commands
 - Audio Driver: 13 commands
 
 ### API Commands (1)
@@ -873,19 +879,21 @@ Get current UART configuration.
 **Returns:**
 ```json
 {
-  "port": "/dev/ttyUSB0",
+  "portIndex": 1,
+  "portName": "/dev/ttyUSB0",
   "baudRate": 115200,
-  "dataBits": 8,
-  "parity": "None",
-  "stopBits": 1,
-  "flowControl": "None",
+  "parityIndex": 0,
+  "parityName": "None",
+  "dataBitsIndex": 3,
+  "dataBitsValue": 8,
+  "stopBitsIndex": 0,
+  "stopBitsValue": 1,
+  "flowControlIndex": 0,
+  "flowControlName": "None",
   "dtrEnabled": true,
   "autoReconnect": false,
-  "parityIndex": 0,
-  "dataBitsIndex": 3,
-  "stopBitsIndex": 0,
-  "flowControlIndex": 0,
-  "isOpen": false
+  "isOpen": false,
+  "configurationOk": true
 }
 ```
 
@@ -917,7 +925,7 @@ Get list of common baud rates.
 **Returns:**
 ```json
 {
-  "baudRateList": ["110", "300", "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200"],
+  "baudRateList": ["110", "150", "300", "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200", "230400", "256000", "460800", "576000", "921600"],
   "currentBaudRate": 9600,
   "baudRates": [
     {"index": 0, "value": 1200},
@@ -1008,7 +1016,6 @@ Enable or disable DTR signal.
 
 **Parameters:**
 - `dtrEnabled` (bool): true to enable, false to disable
-- `enabled` (bool): Alternative parameter name
 
 **Example:**
 ```bash
@@ -1020,7 +1027,6 @@ Set auto-reconnect behavior.
 
 **Parameters:**
 - `autoReconnect` (bool): true to enable, false to disable
-- `enabled` (bool): Alternative parameter name
 
 **Example:**
 ```bash
@@ -1039,13 +1045,12 @@ Get current network configuration.
 **Returns:**
 ```json
 {
-  "socketType": 0,
+  "socketTypeIndex": 0,
   "socketTypeName": "TCP",
   "remoteAddress": "192.168.1.1",
   "tcpPort": 8080,
   "udpLocalPort": 0,
   "udpRemotePort": 8081,
-  "socketTypeIndex": 0,
   "udpMulticast": false,
   "isOpen": false
 }
@@ -1166,9 +1171,7 @@ Get Bluetooth adapter status.
   "operatingSystemSupported": true,
   "adapterAvailable": true,
   "isOpen": false,
-  "deviceCount": 0,
-  "scanning": false,
-  "connected": false
+  "deviceCount": 0
 }
 ```
 
@@ -1181,11 +1184,10 @@ Get current BLE configuration.
 ```json
 {
   "deviceIndex": -1,
-  "characteristicIndex": -1,
+  "characteristicIndex": 0,
   "isOpen": false,
   "configurationOk": false,
   "deviceName": "Arduino BLE",
-  "serviceName": "Environmental Sensing",
   "characteristicName": "Temperature"
 }
 ```
@@ -1301,8 +1303,7 @@ Get CSV export status.
 ```json
 {
   "enabled": false,
-  "isOpen": false,
-  "filePath": ""
+  "isOpen": false
 }
 ```
 
@@ -1637,11 +1638,13 @@ python test_api.py send dashboard.getTimeRange
 
 Project file and configuration management:
 
-> Project file I/O (new / open / save) is no longer exposed as a runtime
-> API command. Project files are loaded and saved through the GUI.
-> Programmatic project authoring uses `project.exportJson` (read) plus
-> the `project.{group,dataset,action,workspace}.*` mutators (write) on
-> the in-memory model.
+> Project file I/O is exposed as runtime API commands: `project.new`,
+> `project.open`, and `project.save` (with an optional `filePath` for a
+> headless save-as), plus `project.loadJson` to replace the in-memory model.
+> The GUI is one of several entry points. Programmatic project authoring can
+> also use `project.exportJson` (read) plus the
+> `project.{group,dataset,action,workspace}.*` mutators (write) on the
+> in-memory model.
 
 #### 🟢 `project.getStatus`
 Get project info.
@@ -1662,7 +1665,9 @@ Add new group.
 
 **Parameters:**
 - `title` (string): Group title
-- `widgetType` (int): Widget type (0-6)
+- `widgetType` (int): Widget type (0-8): 0=DataGrid, 1=Accelerometer,
+  2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView,
+  8=Painter
 
 #### 🟢 `project.group.delete`
 Delete current group.
@@ -1678,7 +1683,8 @@ Duplicate current group.
 Add new dataset.
 
 **Parameters:**
-- `options` (int): Dataset options (bit flags 0-63)
+- `options` (int): Dataset options (bit flags 0-127): 1=Plot, 2=FFT, 4=Bar,
+  8=Gauge, 16=Compass, 32=LED, 64=Waterfall
 
 #### 🟢 `project.dataset.delete`
 Delete current dataset.
@@ -1869,7 +1875,7 @@ Set RTU stop bits.
 Add a register group to poll.
 
 **Parameters:**
-- `type` (int): Register type (0=Coils, 1=Discrete, 2=Holding, 3=Input)
+- `type` (int): Register type (0=Holding, 1=Input, 2=Coils, 3=Discrete)
 - `startAddress` (int): Starting register address (0-65535)
 - `count` (int): Number of registers to read (1-125)
 
@@ -1939,7 +1945,7 @@ Get list of supported bitrates.
 **Returns:**
 ```json
 {
-  "bitrateList": ["10000", "20000", "50000", "125000", "250000", "500000", "1000000"]
+  "bitrateList": ["10000", "20000", "50000", "100000", "125000", "250000", "500000", "800000", "1000000"]
 }
 ```
 
@@ -2222,7 +2228,7 @@ Get list of sample rates.
 **Returns:**
 ```json
 {
-  "sampleRates": ["8000 Hz", "44100 Hz", "48000 Hz"],
+  "sampleRates": ["8000", "44100", "48000"],
   "selectedIndex": 2
 }
 ```
@@ -2233,7 +2239,7 @@ Get list of input sample formats.
 **Returns:**
 ```json
 {
-  "formats": ["16-bit", "24-bit", "32-bit float"],
+  "formats": ["Unsigned 8-bit", "Signed 16-bit", "Signed 24-bit", "Signed 32-bit", "Float 32-bit"],
   "selectedIndex": 0
 }
 ```
@@ -2244,7 +2250,7 @@ Get list of output sample formats.
 **Returns:**
 ```json
 {
-  "formats": ["16-bit", "24-bit", "32-bit float"],
+  "formats": ["Unsigned 8-bit", "Signed 16-bit", "Signed 24-bit", "Signed 32-bit", "Float 32-bit"],
   "selectedIndex": 0
 }
 ```

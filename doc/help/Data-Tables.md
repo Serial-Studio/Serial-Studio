@@ -34,7 +34,7 @@ Computed registers behave like ordinary memory: once you write a value, it stays
 
 ## The system table
 
-Serial Studio maintains one built-in table called `__datasets__`, generated automatically from your project. You don't define it, and it doesn't appear in the editor. It mirrors every dataset as two registers:
+Serial Studio maintains one built-in table called `__datasets__`, generated automatically from your project. You don't define it. It surfaces in the Project Editor only as a read-only **Dataset Values** node under Shared Memory, which lists each dataset's unique ID and its `datasetGetFinal()` access code; you can't edit it. It mirrors every dataset as two registers:
 
 | Register          | Contents                                                          |
 |-------------------|-------------------------------------------------------------------|

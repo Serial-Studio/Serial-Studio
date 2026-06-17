@@ -46,7 +46,6 @@ Sends a numeric value from a draggable slider.
 | Max Value | 100 | Upper bound of the slider range |
 | Step Size | 1 | Increment between discrete positions |
 | Initial Value | 0 | Starting position |
-| Units | none | Label suffix (for example "%", "rpm") |
 
 The value passed to `transmit()` is a number clamped to [Min, Max]. Transmissions occur continuously while dragging, rate-limited to 50 ms intervals.
 
@@ -56,8 +55,6 @@ Binary on/off switch.
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| ON Label | none | Text shown in the ON state |
-| OFF Label | none | Text shown in the OFF state |
 | Initial Value | 0 | Starting state (0 = off, 1 = on) |
 
 Passes `1` to `transmit()` when switched on, `0` when switched off.
@@ -74,16 +71,16 @@ Accepts arbitrary typed input and sends it as a string.
 
 ### Knob
 
-Rotary dial for continuous setpoint adjustment. Same numeric properties as Slider (Min, Max, Step, Initial Value, Units) but displayed as a circular dial.
+Rotary dial for continuous setpoint adjustment. Same numeric properties as Slider (Min, Max, Step, Initial Value) but displayed as a circular dial.
 
 ## Creating Output Controls
 
-1. Open the Project Editor (toolbar wrench icon, or Ctrl+Shift+P / Cmd+Shift+P).
+1. Open the Project Editor (toolbar wrench icon).
 2. Click one of the **Add Output** buttons in the toolbar (Button, Slider, Toggle, Text Field, or Knob).
 3. An **Output Panel** group is created automatically if one does not exist.
 4. Select the new control in the tree view to configure its properties and transmit function.
 
-Output controls live inside **Output Panel** groups. You can also add an Output Panel group first (via the toolbar), then add controls to it. Each Output Panel can hold multiple controls of mixed types, arranged in a configurable column grid.
+Output controls live inside **Output Panel** groups. You can also add an Output Panel group first (via the toolbar), then add controls to it. Each Output Panel can hold multiple controls of mixed types, packed automatically into as many columns as fit the available width.
 
 ## The Transmit Function
 
@@ -105,7 +102,7 @@ function transmit(value) {
 }
 ```
 
-The return value must be a string. For binary protocols, build a byte-string with `String.fromCharCode(...)` (see the Binary Packet template); returning a plain array of numbers transmits nothing. Payloads are capped at 65536 bytes, and a `transmit()` call that runs longer than 500 ms is stopped by a watchdog. Both conditions surface as a transmit error on the widget.
+The return value must be a string. For binary protocols, build a byte-string with `String.fromCharCode(...)` (see the Binary Packet template); returning a plain array of numbers transmits nothing. Payloads are capped at 65536 bytes, and a `transmit()` call that runs longer than 500 ms is stopped by a watchdog. Both conditions abort the transmission and flash a red border on the control; hover the control to see the error message.
 
 ### Built-in Templates
 
@@ -354,14 +351,14 @@ function transmit(value) {
 
 Output controls are displayed in an Output Panel widget on the dashboard. The panel uses an adaptive layout engine:
 
-- Controls are arranged in a configurable number of columns (set in the Output Panel group properties).
+- Controls are packed automatically into as many columns as fit the available width, derived from each control's minimum width.
 - Small controls (Button, Slider, Toggle, TextField) stack vertically within columns.
 - Tall controls (Knob) span the full column height.
 - If controls overflow the visible area, the panel scrolls vertically.
 
 ## Multi-Source Projects
 
-In projects with multiple data sources (devices), each output control has a **Target Device** property. This determines which connected device receives the transmitted data. The tree view shows the target device tag next to each control.
+In projects with multiple data sources (devices), the target device is determined by the source of the Output Panel group a control belongs to, not by a per-control property. Every control in a group transmits to that group's source. To send to a different device, place the control in an Output Panel group assigned to that source.
 
 ## Output Controls vs. Actions
 
@@ -521,7 +518,7 @@ function transmit(value) {
 **Fix:**
 1. Check the **Console** view to confirm data is being sent.
 2. Verify the transmit function returns a properly terminated string (most devices expect `\r\n`).
-3. Confirm the correct **Target Device** is selected in multi-source projects.
+3. In multi-source projects, confirm the control is in an Output Panel group assigned to the correct device.
 4. Check that your Pro license is active. Transmission is disabled without it.
 
 ### Slider Sends Too Many Commands
@@ -532,9 +529,9 @@ function transmit(value) {
 
 ### Transmit Function Error
 
-**Symptom:** A red error indicator appears on the control.
+**Symptom:** The control shows the red text "No transmit function defined" instead of its widget.
 
-**Fix:** Open the Project Editor and check the transmit function for syntax errors. The function must be a valid JavaScript function named `transmit` that accepts one parameter and returns a string.
+**Fix:** Open the Project Editor and check the transmit function for syntax errors. The function must be a valid JavaScript function named `transmit` that accepts one parameter and returns a string. This label also appears when the field is left empty. Runtime errors raised during a transmit (watchdog timeout or an oversize payload) abort the send but are not shown on the widget; use the Console view to confirm what was sent.
 
 ## Tips
 

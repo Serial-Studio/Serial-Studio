@@ -33,7 +33,7 @@ Pro features are proprietary. They're not open source. See the [License Agreemen
 ### What platforms does Serial Studio support?
 
 - **Windows:** Windows 10/11 (x64).
-- **macOS:** macOS 11+ (universal binary: Intel and Apple Silicon).
+- **macOS:** macOS 13+ (universal binary: Intel and Apple Silicon).
 - **Linux:** x64 via AppImage or Flatpak.
 - **Raspberry Pi:** ARM64 (Ubuntu 24.04+ or equivalent).
 
@@ -291,7 +291,7 @@ Pro only.
 
 ### How do I connect via TCP/UDP?
 
-1. Select **Network (TCP)** or **Network (UDP)** as the data source.
+1. Select **Network Socket** as the data source, then set the socket type to TCP or UDP.
 2. Enter the IP address and port (for example `192.168.1.100:8080`).
 3. Click **Connect**.
 
@@ -357,7 +357,7 @@ See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md
 - Accelerometer (3-axis).
 - Gyroscope (3-axis).
 - FFT spectrum analyzer.
-- GPS maps (OpenStreetMap).
+- GPS maps (ArcGIS / Esri map tiles).
 - LED panel.
 - Terminal.
 
@@ -380,10 +380,12 @@ See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md
 **CSV format:**
 
 ```
-Time,Group/Dataset 1,Group/Dataset 2,...
-0.010000,...
-0.020000,...
+Elapsed (s),Group/Dataset 1,Group/Dataset 2,...
+0.010000000,...
+0.020000000,...
 ```
+
+The first column is elapsed seconds with 9-decimal resolution. With multiple sources, the value columns are named `Source/Group/Dataset`.
 
 ### Can I change the application theme?
 
@@ -455,12 +457,12 @@ Use a **frame parser**. Parsers can be written in JavaScript or Lua, or configur
 
 ```javascript
 function parse(frame) {
-  // frame is QByteArray of raw data
-  // Return a comma-separated string
-  let byte1 = frame.at(0);
-  let byte2 = frame.at(1);
+  // frame is a string (text frames) or an array of byte values (binary frames)
+  // Return an array of values (the default parser returns frame.split(','))
+  let byte1 = frame[0];
+  let byte2 = frame[1];
   let value = (byte1 << 8) | byte2;
-  return value.toString();
+  return [value.toString()];
 }
 ```
 
@@ -682,11 +684,10 @@ uint16_t crc16(const char* data, int length) {
 
 void loop() {
   char buffer[32];
-  snprintf(buffer, sizeof(buffer), "%d,%d", sensor1, sensor2);
+  snprintf(buffer, sizeof(buffer), "%d,%d\n", sensor1, sensor2);
   uint16_t checksum = crc16(buffer, strlen(buffer));
 
   Serial.print(buffer);
-  Serial.print(",");
   Serial.println(checksum);
 
   delay(100);
@@ -702,6 +703,7 @@ Yes. The Console panel has a send line: type text (or hex), pick a line ending, 
 **Other options:**
 
 - Add [Output Controls](Output-Controls.md) (Pro): buttons, toggles, sliders, knobs, and text fields on the dashboard. Each one runs a JavaScript template (GCode, SCPI, Modbus, NMEA, custom binary) that converts the control's state into outgoing bytes.
+- Use a control script. Each project can hold an Arduino-style script with `setup()` and `loop()` functions that runs in the background, so you can send commands on a timer or in response to incoming data, and drive the whole session from code. It uses the same scripting API as the frame parser.
 - Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/tree/master/app/src/API) in your preferred language or framework that shares the device with Serial Studio.
 - Use MQTT (Pro). Serial Studio can publish commands to MQTT topics that your device subscribes to.
 
@@ -768,7 +770,6 @@ Yes, if you have:
 
 - A 64-bit OS (Ubuntu 24.04+ or equivalent).
 - The ARM64 AppImage (from GitHub releases).
-- An adequate GPU. Serial Studio's UI needs OpenGL.
 
 Performance depends on the Pi model and the connected display. Raspberry Pi 4 or 5 with 4 GB+ of RAM is a good starting point.
 

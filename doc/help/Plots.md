@@ -7,7 +7,7 @@ Serial Studio's line plots turn a stream of numbers into a moving chart. This pa
 | Widget       | Source  | Curves | Enable with                           |
 |--------------|---------|--------|---------------------------------------|
 | **Plot**     | Dataset | One    | `graph: true` on a dataset            |
-| **MultiPlot**| Group   | Many   | `graph: true` on a group's datasets   |
+| **MultiPlot**| Group   | Many   | Set the group's widget to MultiPlot (plots every dataset in the group) |
 
 A **Plot** draws a single signal. A **MultiPlot** overlays several signals from the same group on one chart with a shared axis and a color legend, which is the right choice when you want to compare channels (the three axes of an accelerometer, several thermocouples, a setpoint against a measured value).
 
@@ -15,11 +15,12 @@ Both are configured in the Project Editor and behave the same way at runtime. Ev
 
 ## How the X axis works
 
-A plot's X axis is one of two kinds, chosen automatically from the dataset configuration:
+A plot's X axis is one of three kinds, chosen automatically from the dataset configuration:
 
 | X axis      | When                                        | Reads as                          |
 |-------------|---------------------------------------------|-----------------------------------|
 | **Time**    | Default for a plotted dataset               | Seconds, newest sample at the right |
+| **Samples** | X axis set to Samples                        | Sample index, 0 to N (newest at the right) |
 | **Custom**  | `xAxisId` points at another dataset (Pro)   | That dataset's value (XY / scatter) |
 
 A **time** plot scrolls: it shows the most recent window of data, spanning `[-T, 0]` where `T` is the dashboard time range. The newest reading is always pinned at the right edge.
@@ -80,7 +81,7 @@ A short timebase also refreshes the trace many times per second and holds it sta
 
 ### Reading the markers
 
-While Sweep mode is on, a horizontal line marks the trigger level on the plot. The trace begins at the left edge (time zero) and runs for one timebase to the right.
+While the Trigger Settings dialog is open, a horizontal line marks the trigger level on the plot. The trace begins at the left edge (time zero) and runs for one timebase to the right.
 
 ## Performance
 

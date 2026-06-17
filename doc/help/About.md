@@ -98,7 +98,7 @@ Output widgets cover button-press commands; the Control Loop covers automation. 
 
 ### Session Database
 
-Sessions can be recorded into a SQLite `.db` file. Parsed frames, raw bytes, data-table snapshots, and project metadata all live in one file. The Database Explorer browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with charts and a table-of-contents. See [Session Database](Session-Database.md) and [Session Reports](Session-Reports.md).
+Sessions can be recorded into a SQLite `.db` file. Parsed frames, raw bytes, data-table snapshots, and project metadata all live in one file. The Database Explorer browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Session Database](Session-Database.md) and [Session Reports](Session-Reports.md).
 
 ### File transmission
 

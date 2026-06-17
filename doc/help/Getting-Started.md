@@ -129,7 +129,7 @@ The Setup panel is where you configure the connection:
 - **Frame parsing options.** Delimiters, data conversion, and other protocol settings.
 - **Export options.** Turn on CSV or MDF4 logging.
 
-You can collapse the Setup panel by clicking its header to give the Dashboard more space.
+You can resize the Setup panel by dragging its left edge to give the Dashboard more space.
 
 ## Your first connection: Quick Plot mode
 
@@ -196,12 +196,14 @@ Click the **Project Editor** button in the toolbar. That opens a separate editor
 
 1. Click **New Project**.
 2. Give the project a title (for example "My Sensor Dashboard").
-3. Configure frame detection: set the start delimiter, end delimiter, or choose line-based detection depending on how your device frames its data.
+3. Configure frame detection: choose a frame-detection method (End Delimiter Only, Start
+   Delimiter Only, Start + End Delimiter, or No Delimiters) depending on how your device
+   frames its data. For line-based data, use a newline as the end delimiter.
 
 ### Step 3: add groups and datasets
 
 1. Click **Add Group** in the tree view on the left.
-2. Name the group (for example "Temperature Sensors") and pick a widget type (Data Grid, MultiPlot, Gauge).
+2. Name the group (for example "Temperature Sensors") and pick a widget type (Data Grid, Multiple Plot, GPS Map).
 3. Inside the group, click **Add Dataset** for each data field.
 4. For each dataset, set its title, frame index (which CSV field it maps to, starting at 1), units, and any min/max bounds.
 

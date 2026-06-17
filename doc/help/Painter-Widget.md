@@ -49,7 +49,7 @@ The function should return in under 10 ms to keep up with the refresh rate. If `
 
 ### `onFrame()`
 
-Called once per dashboard tick, immediately before `paint()`. Optional. Both functions run on every tick regardless of widget visibility, so a Painter on a hidden workspace tab continues to update its state.
+Called once per data-bearing dashboard tick, immediately before `paint()`. Optional. `paint()` can additionally run on UI-refresh ticks that carry no new data, where `onFrame()` is not invoked, so keep state that must advance on every tick out of `onFrame()` if it depends on the UI cadence. Both functions run regardless of widget visibility, so a Painter on a hidden workspace tab continues to update its state.
 
 `onFrame()` is the place for time-domain bookkeeping: pushing samples into history buffers, decaying peak holds, integrating a phase angle. Keeping that logic out of `paint()` makes both functions easier to read and review.
 
@@ -594,7 +594,7 @@ Common causes of slow paints:
 - **Allocation in the paint path.** Iterating with `for (const ds of datasets)` is fine. `datasets.map(d => d.value)` allocates a new array each frame. So does `ds.title.toUpperCase()` inside a tight loop. Move the work into `onFrame()` and cache the result if the cost is non-trivial.
 - **`measureTextWidth()` per label.** Each call is a real metrics call into Qt. Measure fixed labels once at compile time and cache the width.
 - **One `stroke()` per point.** A single `beginPath()` followed by many `lineTo()` calls and one `stroke()` is one QPainter call. A `beginPath()`, `lineTo()`, `stroke()` per point is N calls.
-- **`drawImage` from disk every frame.** The path is hashed and the image is cached, but the lookup is not free. Pre-resolve to `qrc:/` paths or read the image once at the top of the script and reuse it.
+- **`drawImage` from disk every frame.** `drawImage` reloads the image from disk on every call with no internal caching, so per-frame disk reads are not free. Pre-resolve to `qrc:/` paths or read the image once at the top of the script and reuse it.
 
 The 250 ms watchdog terminates the script if a single `paint()` or `onFrame()` call exceeds it. The 30 ms slow-paint warning fires after two consecutive ticks over budget.
 

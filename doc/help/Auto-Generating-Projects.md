@@ -2,7 +2,7 @@
 
 For three of the most painful protocol configurations, Serial Studio can build the project for you from a vendor file. Drop in a `.dbc` for CAN Bus, a register-map CSV/XML/JSON for Modbus, or a `.proto` schema for Protocol Buffers, and you get back a complete `.ssproj` with groups, datasets, dashboard widgets, and a working frame parser. No hand-typed register addresses, no copy-paste from PDFs.
 
-The DBC and Modbus importers live in the **Setup Panel** of the relevant driver. The Protobuf importer lives in the Project Editor toolbar (**Import > Protobuf**) and applies to any transport that delivers a serialized message blob. All three are Pro features.
+The DBC and Modbus importers live in the **Setup Panel** of the relevant driver and are Pro features. The Protobuf importer lives in the Project Editor toolbar (**Import > Protobuf**), applies to any transport that delivers a serialized message blob, and is available in all builds. (Any Pro widgets the generated projects use still require a license, but `.proto` import itself does not.)
 
 ## Why this exists
 
@@ -16,7 +16,7 @@ Both importers produce the same shape of output:
 
 - A new project (`.ssproj`) with one or more **groups** representing logical chunks of the device (a CAN message, a contiguous Modbus register block).
 - A **dataset per signal/register**, complete with `title`, `units`, `min`/`max`, scale, and a sensible default widget (gauge, bar, plot, LED, accelerometer, GPS, depending on what the importer can infer).
-- A configured **frame parser** that decodes each frame into the right datasets without any user code. DBC and Modbus imports configure a Built-In (native C++) parser template with the signal or register map; the Protobuf import generates a Lua parser.
+- A configured **frame parser** that decodes each frame into the right datasets without any user code. All three importers generate a Lua frame parser. DBC and Modbus emit a declarative spec (a per-message `MESSAGES` table or a per-block `BLOCKS` table) plus a generic decoder whose map comes from the imported file; the source starts on the Lua platform. The Protobuf import emits a Lua varint/length-delimited decoder.
 - For Modbus, the **register groups** are also pushed into the live Modbus driver so it polls the right addresses immediately.
 
 The result is a project that is already wired up. From there you arrange widgets in workspaces, adjust titles, and connect.
@@ -25,8 +25,8 @@ The result is a project that is already wired up. From there you arrange widgets
 
 | Importer        | Source format            | Driver pre-load    | Output                                          |
 |-----------------|--------------------------|--------------------|-------------------------------------------------|
-| **DBC**         | `.dbc`                   | No                 | Project + Built-In parser, signals grouped by CAN ID |
-| **Modbus map**  | `.csv` / `.xml` / `.json`| Yes (register groups) | Project + Built-In parser, registers grouped by type/contiguity |
+| **DBC**         | `.dbc`                   | No                 | Project + Lua parser, signals grouped by CAN ID |
+| **Modbus map**  | `.csv` / `.xml` / `.json`| Yes (register groups) | Project + Lua parser, registers grouped by type/contiguity |
 | **Protobuf**    | `.proto`                 | No                 | Project + Lua parser, groups per message, recursive descent into nested messages |
 
 All three importers preview before committing. You see the parsed messages, registers, or fields, click **Create Project**, and a `.ssproj` is generated and opened in the Project Editor.
@@ -51,7 +51,7 @@ For each CAN message:
 
 - One **group** named after the message (e.g. *EngineData*).
 - One **dataset per signal** with the signal's name, units, and a derived widget choice.
-- An entry in the Built-In **CAN signal map** parser that selects the message by CAN ID, extracts each signal at the correct bit offset and byte order, applies factor and offset, and writes the result into the dataset.
+- An entry in the generated **Lua frame parser** (a per-message `MESSAGES` spec) that selects the message by CAN ID, extracts each signal at the correct bit offset and byte order, applies factor and offset, and publishes the value, which each dataset reads back through its transform.
 
 ### Widget inference
 
@@ -94,7 +94,7 @@ For each contiguous block of same-type registers (holding, input, coil, discrete
 
 - One **group** named after the register type and start address (e.g. *Holding Registers @ 0*).
 - One **dataset per register**, with the register's name, units, scale, and offset baked in.
-- An entry in the Built-In **Modbus register map** parser that decodes each register from the Modbus response (handling word order for 32-bit and 64-bit values automatically).
+- An entry in the generated **Lua frame parser** (a per-block `BLOCKS` spec) that decodes each register from the Modbus response (handling word order for 32-bit and 64-bit values automatically).
 - A **register group** added to the Modbus driver itself, sized to cover the contiguous block.
 
 ### Format details
@@ -155,7 +155,7 @@ Build the project by hand when:
 
 ## Editing after import
 
-The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, add transforms, attach datasets to workspaces. The importer produces a starting layout, not a fixed one. DBC and Modbus imports configure a Built-In parser whose map comes from the imported file: re-import to change the map, or switch the source's parser platform to Lua or JavaScript for custom decoding logic. The Protobuf parser is generated Lua and can be edited directly.
+The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, add transforms, attach datasets to workspaces. The importer produces a starting layout, not a fixed one. DBC and Modbus imports configure a generated Lua parser whose signal/register map comes from the imported file: re-import to regenerate the map, edit the Lua directly, or switch the source's parser platform to JavaScript for custom decoding logic. The Protobuf parser is generated Lua and can be edited directly.
 
 If you need to re-import (the vendor published a new DBC, you added a register, the protobuf schema gained a field), the safest path is to import again as a new project and copy over your dashboard customizations, rather than trying to merge by hand.
 

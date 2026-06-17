@@ -58,7 +58,7 @@ Serial/UART is the most common way to connect microcontrollers to a computer. It
 
 - **Linux:** The user has to belong to the `dialout` (or `uucp`) group to access `/dev/ttyUSBx` and `/dev/ttyACMx` without root.
 - **Windows:** CH340 and PL2303 adapters may need a manually installed driver. FTDI and CP210x drivers are bundled with Windows 10+.
-- **macOS:** Most USB-serial adapters work without setup on macOS 11+. Older CP210x chips may need a signed kext or VCP driver.
+- **macOS:** Most USB-serial adapters work without setup. Older CP210x chips may need a signed kext or VCP driver.
 
 ### TCP/UDP network
 
@@ -118,7 +118,7 @@ The BLE driver talks to Bluetooth Low Energy peripherals via GATT. It auto-disco
 **Platform considerations:**
 
 - **Windows:** Needs Windows 10 version 1803 or later with a Bluetooth 4.0+ adapter.
-- **macOS:** Needs macOS 11+ and Bluetooth entitlement. The system may prompt for Bluetooth permission.
+- **macOS:** Needs macOS 13+ and Bluetooth entitlement. The system may prompt for Bluetooth permission.
 - **Linux:** Needs BlueZ 5.44+ and a Bluetooth 4.0+ adapter. The user may need to be in the `bluetooth` group. Some distros require `bluetoothd` to be running.
 - **All platforms:** The BLE device must be advertising and not already connected to another host. Move it closer if it doesn't show up in the scan.
 
@@ -296,7 +296,7 @@ The HID driver accesses Human Interface Devices via the hidapi library. It reads
 
 **Key configuration parameters:**
 
-- **Device.** Pick from the auto-enumerated list, shown as `VID:PID, Product Name`.
+- **Device.** Pick from the auto-enumerated list, shown as `Product Name (VID:PID)` (or just `VID:PID` when no product string is available).
 - **Usage Page / Usage.** Shown after device selection for reference (identifies the HID function).
 
 **How enumeration works.** The driver re-enumerates all HID devices every 2 seconds via a QTimer. The device list updates automatically when devices are plugged in or removed.
@@ -325,7 +325,7 @@ The Process I/O driver captures data from child processes or named pipes, so Ser
 | Mode       | Description |
 |------------|-------------|
 | Launch     | Serial Studio spawns the process, reads its merged stdout+stderr, and can write to its stdin. |
-| Named pipe | Serial Studio opens an existing named pipe or FIFO and reads from it. The external process manages the pipe. |
+| Named pipe | Serial Studio reads from a named pipe or FIFO. On POSIX it creates the FIFO with `mkfifo` if it does not already exist; on Windows it acts as the named-pipe server. The external process writes to the pipe. |
 
 **Launch mode parameters:**
 

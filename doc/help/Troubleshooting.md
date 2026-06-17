@@ -32,9 +32,10 @@ Quick solutions to common Serial Studio issues. If you can't find your problem h
 **Solution:**
 1. **For "damaged" error:**
    ```bash
-   xattr -cr /Applications/Serial\ Studio.app
+   xattr -cr "/Applications/Serial Studio Pro.app"
    ```
-   Run this in Terminal, then try opening again
+   Run this in Terminal, then try opening again. Substitute the exact bundle name shown in
+   /Applications (for example "Serial Studio GPLv3.app" for the GPL build).
 
 2. **For "unidentified developer":**
    - Go to **System Preferences > Security & Privacy**
@@ -351,7 +352,6 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
 **Possible causes:**
 - Wrong widget type for data
 - Missing required datasets
-- OpenGL issues (3D widgets)
 - Project file corruption
 
 **Solutions:**
@@ -365,12 +365,7 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
    - Don't use gauge for text data
    - Don't use bar for unbounded values
 
-3. **For 3D widgets (Accelerometer, Gyroscope, 3D Plot):**
-   - Ensure OpenGL is supported by your graphics card
-   - Update graphics drivers
-   - Some virtual machines don't support OpenGL
-
-4. **Try recreating widget:**
+3. **Try recreating widget:**
    - Delete widget from project
    - Add it again with fresh configuration
 
@@ -466,7 +461,7 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
    - Plain Text: `frame` is string
    - Hexadecimal: `frame` is hex string
    - Base64: `frame` is base64 string
-   - Binary (Direct) (Pro): `frame` is byte array
+   - Binary (Direct): `frame` is byte array
 
 ### Parse error: "string expected, got table" / "frame.split is not a function"
 
@@ -528,7 +523,9 @@ was written for a string input.
 
 3. **Test with the built-in Test area.** Enter a raw value in the Input field and click Test. If you see an error, fix the function before applying.
 
-4. **Check for non-numeric datasets.** Transforms only run on numeric values. If the dataset value is a string (for example "N/A"), the transform is skipped.
+4. **Handle non-numeric datasets.** The transform receives the raw value as a number when it
+   parses as numeric, otherwise as a string. A non-numeric value like "N/A" is passed to
+   `transform()` as a string, not skipped, so make sure your function handles the string case.
 
 5. **Check the console for errors.** Compilation errors are logged at connect time. Look for `[FrameBuilder] Transform compile error` messages.
 
@@ -604,15 +601,14 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the complete reference
 
 **Solutions:**
 
-1. **Reduce playback speed:**
-   - Use 0.5x or 0.25x speed
+The CSV Player replays at the original capture speed; there is no playback-speed control.
 
-2. **Close other applications:**
+1. **Close other applications:**
    - Free up system resources
 
-3. **For very large files:**
-   - Consider splitting into smaller segments
-   - Export only needed columns
+2. **For very large or high-rate files:**
+   - Split the file into smaller segments
+   - Export only the columns you need
 
 ## Pro Feature Issues
 
@@ -742,7 +738,7 @@ Common issues:
 - System performance
 - Too many widgets
 - High data rate
-- 3D widgets on weak GPU
+- Many 3D widgets on a slow CPU
 
 **Solutions:**
 
@@ -751,7 +747,7 @@ Common issues:
    - More widgets = more rendering
 
 2. **Use fewer 3D widgets:**
-   - 3D Accelerometer, Gyroscope, and 3D Plot are GPU-intensive
+   - 3D Accelerometer, Gyroscope, and 3D Plot are the most CPU-intensive widgets
    - Consider 2D alternatives
 
 3. **Reduce data rate:**

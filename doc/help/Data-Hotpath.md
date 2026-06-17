@@ -30,7 +30,7 @@ the consumer can drain it, and the FrameReader's bounded queue starts dropping f
 
 ### Stage 1: driver
 
-Drivers wrap one transport each (UART, TCP/UDP, BLE, Audio, Modbus, CAN Bus, USB, HID,
+Drivers wrap one transport each (UART, TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB, HID,
 Process I/O). They publish data through `HAL_Driver::publishReceivedData(...)`, which carries
 a shared `IO::CapturedData` payload:
 
@@ -59,8 +59,8 @@ both, or none) and pulls out one logical frame at a time.
 - Single-delimiter modes use the KMP fast path.
 - Multi-delimiter modes use `CircularBuffer::findFirstOfPatterns()`, a single-pass scan with
   a stack-allocated `PatInfo` array of up to eight patterns; it never touches the heap.
-- Optional checksum validation (`XOR-8`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`,
-  `Fletcher-16`, `CRC-32`) runs immediately after extraction.
+- Optional checksum validation (`XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`,
+  `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`) runs immediately after extraction.
 
 Each completed frame is enqueued into a lock-free
 `moodycamel::ReaderWriterQueue<CapturedDataPtr>` with 65536 slots. When that queue is full,
@@ -173,8 +173,10 @@ export or report. Patching a downstream stage to "fix" timing usually masks an e
 The hotpath is designed around three rules:
 
 1. **No allocations after init.** `FrameBuilder` reuses one `Frame` per source and draws
-   each `TimestampedFramePtr` from a fixed-size slot pool (`acquireFrame`); slots are
-   recycled via a custom shared_ptr deleter when the last consumer releases the frame.
+   each `TimestampedFramePtr` from a fixed-size slot pool (`acquireFrame`) as an aliasing
+   shared_ptr that shares the slot's control block (no deleter, no per-frame control block);
+   a slot is recycled when its use_count drops back to 1, detected by a probe at the next
+   `acquireFrame`.
    Parser engines are compiled once, `CircularBuffer` and lock-free queues are pre-sized,
    and per-source transform engines are looked up once per source switch (not per dataset).
 2. **No copy on the dashboard path.** The dashboard draws the pooled `TimestampedFramePtr`

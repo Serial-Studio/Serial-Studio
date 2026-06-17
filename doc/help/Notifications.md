@@ -292,7 +292,7 @@ The Notification Log is a Pro-only dashboard widget that renders events from the
 | Border blink                | The widget border pulses in the alarm color for 10 seconds after any Warning or Critical event. |
 | Filter by channel           | Case-sensitive substring match on the channel name. Live; rows hide and re-show as you type. |
 | Clear all                   | Wipes the in-memory history. The ring buffer and the dedup window reset to empty. |
-| Empty state                 | When the log is empty, the widget shows a large icon and a hint line reminding users which functions post events. |
+| Empty state                 | When the log is empty, the widget shows a large icon and a "No notifications yet" heading. |
 
 The widget is global: only one exists per dashboard, and it isn't tied to any dataset group. Its position and size are saved with the project layout like any other dashboard widget.
 

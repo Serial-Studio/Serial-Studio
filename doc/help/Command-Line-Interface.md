@@ -68,7 +68,7 @@ pipeline.
 | `--file-transmission` | | Allow the File Transmission dialog in operator runtime mode. |
 | `--taskbar-mode` | `mode` | Operator taskbar visibility: `shown`, `autohide`, or `hidden`. |
 | `--taskbar-buttons` | `ids` | Comma-separated taskbar pin IDs for operator mode. |
-| `--theme` | `name` | Override the application theme by name (e.g. `Iconic`, `Light`, `System`). |
+| `--theme` | `name` | Override the application theme by name (e.g. `Default`, `Fluent Dark`, `Fluent Light`, `System`). |
 
 ## Licensing (Pro)
 

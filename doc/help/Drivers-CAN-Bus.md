@@ -134,7 +134,7 @@ sudo ip link set up can0
 
 Serial Studio publishes every received CAN frame to the frame parser as a binary byte array. Standard (11-bit) frames use the layout `[ID_hi, ID_lo, DLC, payload...]`, zero-padded to 11 bytes. Extended (29-bit) frames set bit 7 of the first byte: `[0x80|ID28..24, ID23..16, ID15..8, ID7..0, DLC, payload...]`, zero-padded to 13 bytes. Configure the source with no frame delimiters and the **Binary** decoder (`decoder: 3` in the project file) so the parser entry point, `parse(frame)`, receives those raw bytes. Transmitting uses the same layout: write the header and payload bytes and the driver assembles the CAN frame.
 
-In a DBC-imported project the auto-generated parser is a Built-In (no-code) parser configured from the DBC: it dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and writes the value into the matching dataset.
+In a DBC-imported project the auto-generated parser is a Lua frame parser built from the DBC: a declarative per-message spec plus a generic decoder that dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and publishes the value into the matching dataset. The imported source starts on the Lua platform.
 
 When the project is built by hand, the dispatch logic can instead be written in Lua or JavaScript. See [Frame Parser Scripting](JavaScript-API.md).
 

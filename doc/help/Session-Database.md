@@ -48,7 +48,7 @@ Each session captures three per-sample streams, keyed by session ID and nanoseco
 
 The embedded project JSON in `sessions.project_json` is a snapshot of the project at the moment recording started. That's how a session recorded with one version of the project can replay faithfully later, even if the live project has changed in the meantime.
 
-Both raw bytes and parsed frames are captured, so you can replay from either layer: re-render widgets from the parsed values, or re-run the parser over the raw stream. Tables and computed registers are snapshotted so data-table-aware transforms can be inspected after the fact.
+Both raw bytes and parsed frames are captured. Replay re-renders widgets from the stored parsed (final) values; the raw byte stream is archived for inspection, CSV, or external analysis, but it is not re-parsed during replay. Tables and computed registers are snapshotted so data-table-aware transforms can be inspected after the fact.
 
 ## Session Explorer
 

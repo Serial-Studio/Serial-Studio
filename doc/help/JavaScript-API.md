@@ -99,11 +99,11 @@ The `frame` parameter type depends on the Decoder Method selected in the Project
 | Plain Text (UTF-8)     | String                       | String                       | `"23.5,1013,45.2"`                 |
 | Hexadecimal            | String (hex pairs)           | String (hex pairs)           | `"03FF020035A0"`                   |
 | Base64                 | String (base64-encoded)      | String (base64-encoded)      | `"Av8CADWg"`                       |
-| Binary (Direct) [Pro]  | Table of numbers (0--255)    | Array of numbers (0--255)    | `{3, 255, 2, 0, 53, 160}`         |
+| Binary (Direct)        | Table of numbers (0--255)    | Array of numbers (0--255)    | `{3, 255, 2, 0, 53, 160}`         |
 
 **Plain Text** is the default. The frame string contains whatever the device sent, decoded as UTF-8, with start/end delimiters already stripped.
 
-**Binary (Direct)** passes byte values directly. In Lua, this is a 1-indexed table; in JavaScript, a 0-indexed array. Requires a Pro license.
+**Binary (Direct)** passes byte values directly. In Lua, this is a 1-indexed table; in JavaScript, a 0-indexed array.
 
 > **Binary trap:** with Binary (Direct), `frame` is **not a string**, so string functions fail on it. In Lua, `string.byte(frame, 1)` raises `bad argument #1 to 'byte' (string expected, got table)` and `frame:match(...)` raises `attempt to index a table value`; in JavaScript, `frame.split(",")` throws `frame.split is not a function`. Read bytes by indexing (`frame[1]` in Lua, `frame[0]` in JavaScript), as in Example 3 below. When you need `string.unpack` for multi-byte or float fields, convert the table to a string once at the top of `parse()`:
 >
@@ -731,7 +731,13 @@ end
 
 ## Calling any API command: `apiCall()`
 
-Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, and Painter widgets. The gateway is default-deny: only a small read-only allow-list is callable with no setup (`project.*` getters, `dashboard.getStatus` / `dashboard.getData` / `dashboard.tailFrames`, `notifications.list` / `notifications.post`, `sessions.list` / `sessions.get`, `controlscript.get` / `controlscript.getStatus`, `api.getCommands`); every other command returns `METHOD_NOT_ALLOWED` unless the project opts in via `apiCall.allowFullSurface`. Calls are also rate-limited per source: a 100 calls/s token bucket, at most 8 concurrent calls, and a 1 MiB cap on request bodies and responses.
+Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, and Painter widgets. The gateway is default-deny: only a small allow-list is callable with no setup (`project.*`
+getters, `dashboard.getStatus` / `dashboard.getData` / `dashboard.tailFrames`,
+`notifications.list` / `notifications.post`, `sessions.list` / `sessions.get`,
+`controlScript.get` / `controlScript.getStatus`, `api.getCommands`, plus the `system.*` process
+commands `system.projectDir` / `system.exec` / `system.kill` / `system.runningProcesses`, which
+are not read-only); every other command returns `METHOD_NOT_ALLOWED` unless the project opts in
+via `apiCall.allowFullSurface`. Calls are also rate-limited per source: a 100 calls/s token bucket, at most 8 concurrent calls, and a 1 MiB cap on request bodies and responses.
 
 ```text
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
@@ -812,7 +818,7 @@ end
 - **One-shot, fire-and-forget.** `apiCall` runs synchronously on the dashboard thread. Heavy work (mass mutations, project save, MDF4 export) blocks frame processing. Gate every call on an event transition; never `apiCall` on every frame.
 - **Prefer the focused helpers.** Runtime UI orchestration (clearing plots, toggling panes, switching the active workspace) has `apiCall` equivalents under `ui.*` / `dashboard.*`, but those sit behind the `apiCall.allowFullSurface` opt-in. The dedicated `clearPlots()` / `setPlotPoints()` / `setActiveWorkspace()` shortcuts bypass the allow-list, so use the shortcuts for those tasks; reach for `apiCall` for the rest of the command surface.
 - **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming hotpath.
-- **Pro features stay gated.** Commands behind the commercial tier (Modbus, CAN, sessions, MDF4, MQTT...) return `{ ok = false, errorCode = "EXECUTION_ERROR" }` in GPL builds. Check `ok` before assuming success.
+- **Pro features stay gated.** In GPL builds the commercial-tier handlers (Modbus, CAN, sessions, MDF4, MQTT...) are not registered, so `apiCall` returns `{ ok = false, errorCode = "UNKNOWN_COMMAND" }`. Check `ok` before assuming success.
 
 ## Built-in Template Scripts
 

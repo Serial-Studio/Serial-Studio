@@ -27,9 +27,9 @@
 // qDebug message handler, so routing through qDebug here would recurse.
 #include <iostream>
 // code-verify on
-#include <QSysInfo>
-#include <QQmlContext>
 #include <QCoreApplication>
+#include <QQmlContext>
+#include <QSysInfo>
 
 #include "API/ProcessLauncher.h"
 #include "API/Server.h"
@@ -367,7 +367,7 @@ void Misc::ModuleManager::onQuit()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sets default options for QSimpleUpdater (notify on update, silent on no-update).
+ * @brief Configures QSimpleUpdater defaults and the Linux arch-specific appcast key.
  */
 void Misc::ModuleManager::configureUpdater()
 {
@@ -379,7 +379,6 @@ void Misc::ModuleManager::configureUpdater()
   QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
 
 #if defined(Q_OS_LINUX)
-  // Arch-specific appcast key for direct download; "linux" stays as fallback
   const auto arch = QSysInfo::buildCpuArchitecture();
   if (arch == QStringLiteral("x86_64") || arch == QStringLiteral("i386"))
     QSimpleUpdater::getInstance()->setPlatformKey(APP_UPDATER_URL, "linux-x64");

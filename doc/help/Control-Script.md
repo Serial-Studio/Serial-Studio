@@ -28,7 +28,7 @@ Project
 └─ ...
 ```
 
-The editor toolbar mirrors the Frame Parser editor: **Reset** loads the starter template, **Open** imports a `.js` file, then the usual undo / redo / clipboard actions, and **Validate** compiles the script and reports the first syntax error (or confirms it is clean) without running it. A status dot shows whether the script is currently running, and **Help** opens this page.
+The editor toolbar mirrors the Frame Parser editor: **Reset** loads the starter template, **Open** imports a `.js` file, then the usual undo / redo / clipboard actions, **Help** opens this page, and **Validate** compiles the script and reports the first syntax error (or confirms it is clean) without running it. Errors appear in a banner below the editor.
 
 ## The lifecycle functions
 
@@ -88,7 +88,7 @@ var status = io.getStatus();                           // read connection state
 
 Rules:
 
-- Functions are dotted namespaces: `io.writeData`, `io.ble.writeCharacteristic`, `io.connect`, `controlscript.getStatus`, and so on. Type a name in the editor and autocomplete shows the rest.
+- Functions are dotted namespaces: `io.writeData`, `io.ble.writeCharacteristic`, `io.connect`, `controlScript.getStatus`, and so on. Type a name in the editor and autocomplete shows the rest.
 - Required arguments are positional; any optional ones go in a trailing object.
 - A byte-payload argument takes a trailing **encoding**: `SerialStudio.Hex`, `SerialStudio.Text`, or `SerialStudio.Base64`. The SDK does the base64 conversion, so you pass hex or text directly and never encode by hand.
 - Every call returns `{ ok, result, error, errorCode }`. Check `ok`.
@@ -103,7 +103,7 @@ The most useful I/O calls for a control loop:
 
 ## Launching helper processes: the system.* API
 
-A control loop can launch a helper program and let Serial Studio manage its lifetime. This is how the bundled examples start their Python data generators automatically: you click **Connect** and the generator is running, with nothing to type in a terminal. The calls live under the `system.` namespace and, for safety, are available **only to the control loop**; they are rejected over the network API and the SDK.
+A control loop can launch a helper program and let Serial Studio manage its lifetime. This is how the bundled examples start their Python data generators automatically: you click **Connect** and the generator is running, with nothing to type in a terminal. The calls live under the `system.` namespace and are available to in-process scripts, including the control loop. For safety, `system.exec`, `system.kill`, and `system.runningProcesses` are rejected over the network API; `system.projectDir` is allowed everywhere.
 
 - `system.projectDir()` -- returns `{ directory, filePath, fileName }` for the loaded project. Use `directory` to build a path to a script that sits next to the `.ssproj` file.
 - `system.exec(program, { args, workingDir })` -- launch `program` with optional `args` (an array) and `workingDir` (defaults to the project directory). Returns `{ processId }`.
@@ -296,7 +296,7 @@ The script is saved inside the project file, so it travels with the project. Edi
 
 Every connection starts a fresh script engine: all top-level variables reset and `setup()` runs again on each reconnect, exactly like an Arduino reset. Do not design around state surviving a connect/disconnect cycle. The latest-frame store also clears on each connection edge, so `io.getLatestFrame()` reports no data until the first frame of the current connection arrives; a watchdog built on `ageMs` can never trip from a previous connection's frame.
 
-Tools and scripts can manage the control loop through the API: `controlscript.get`/`controlscript.getCode` read the source, `controlscript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlscript.set`/`controlscript.setCode` install it, and `controlscript.getStatus` reports whether it is running.
+Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running.
 
 ## Related
 

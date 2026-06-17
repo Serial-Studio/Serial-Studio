@@ -78,7 +78,7 @@ Serial Studio is on [Flathub](https://flathub.org/apps/com.serial_studio.Serial-
 
 #### Raspberry Pi / ARM64
 
-An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance depends on your GPU drivers since the UI is GPU-accelerated. Requirements:
+An ARM64 AppImage is available for Raspberry Pi and similar boards. It runs well on Raspberry Pi 4/5 and on integrated graphics. Requirements:
 
 - A 64-bit Linux distro equivalent to or newer than Ubuntu 24.04 (needs `glibc 2.38`)
 - `libfuse2` installed
@@ -115,7 +115,7 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 - **AI Assistant (Pro):** in-app chat panel that edits the project (sources, datasets, parsers, transforms, output widgets, workspaces) by calling the project-editing API. Bring-your-own-key for Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM); the local option runs fully offline. Mutating commands require explicit approval; connection control and device writes are permanently blocked. Hidden in operator deployments.
 - **MCP integration:** external AI clients (Claude Desktop, custom MCP hosts) can call the full TCP API, including connection control and device writes, over the Model Context Protocol (see [MCP Client](./examples/MCP%20Client)).
 - **Throughput:** the parse pipeline sustains 256,000 frames per second, enforced as a CI benchmark gate on every pull request (see [Benchmark](./doc/help/Benchmark.md)).
-- **Cross-platform:** 60 FPS, under 50 ms latency, on Windows 10/11, macOS 11+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.
+- **Cross-platform:** 60 FPS, under 50 ms latency, on Windows 10/11, macOS 13+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.
 - **Dual licensed:** open source GPL-3.0 core with proprietary Pro features (see [LICENSE.md](LICENSE.md)).
 
 ## Quick start

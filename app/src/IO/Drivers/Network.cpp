@@ -161,8 +161,8 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
 {
   if (isWritable()) {
     if (socketType() == QAbstractSocket::UdpSocket) {
-      const QHostAddress dest = m_resolvedAddress.isNull() ? QHostAddress(m_address)
-                                                           : m_resolvedAddress;
+      const QHostAddress dest =
+        m_resolvedAddress.isNull() ? QHostAddress(m_address) : m_resolvedAddress;
       if (dest.isNull())
         return -1;
 
@@ -411,7 +411,7 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
   }
 
   else {
-    m_hostExists = true;
+    m_hostExists      = true;
     m_resolvedAddress = QHostAddress(address);
   }
 
