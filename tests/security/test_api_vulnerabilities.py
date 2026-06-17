@@ -590,10 +590,15 @@ def test_state_manipulation(tester):
         import threading
 
         def rapid_state_change():
+            # Each thread MUST own its connection: SerialStudioClient is not
+            # thread-safe (single socket + shared receive buffer), so sharing
+            # the fixture client across threads interleaves bytes on the wire
+            # and desyncs the response buffer.
             try:
-                for i in range(100):
-                    client.command("io.connect")
-                    client.command("io.disconnect")
+                with SerialStudioClient(timeout=5.0) as worker:
+                    for i in range(100):
+                        worker.command("io.connect")
+                        worker.command("io.disconnect")
             except:
                 pass
 
