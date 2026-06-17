@@ -653,7 +653,12 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
 
   const QByteArray seq = translateKeyToVt100(event);
   if (!seq.isEmpty()) {
-    (void)IO::ConnectionManager::instance().writeData(seq);
+    const int deviceId = Console::Handler::instance().currentDeviceId();
+    if (deviceId >= 0)
+      (void)IO::ConnectionManager::instance().writeDataToDevice(deviceId, seq);
+    else
+      (void)IO::ConnectionManager::instance().writeData(seq);
+
     event->accept();
     return;
   }
