@@ -160,12 +160,16 @@ def test_window_manager_taskbar_access_is_guarded():
     assert "if (m_taskbar)\n      m_taskbar->setActiveWindow(nullptr);" in text
 
 
-def test_usb_close_forces_thread_stop_before_handle_close():
+def test_usb_close_joins_threads_with_quit_then_wait():
     text = _read("app/src/IO/Drivers/USB.cpp")
 
+    # The read and event threads run on the started + DirectConnection idiom,
+    # so quit() before wait() is mandatory to drop out of exec().
     assert "if (m_readThread.isRunning())" in text
-    assert "if (!m_readThread.wait(2000))" in text
-    assert "m_readThread.terminate();" in text
+    assert "m_readThread.quit();" in text
+    assert "m_readThread.wait();" in text
+    # terminate() corrupts libusb mid-transfer and must never be called.
+    assert ".terminate();" not in text
 
 
 def test_frame_parser_uses_qcoreapplication_event_forwarding():

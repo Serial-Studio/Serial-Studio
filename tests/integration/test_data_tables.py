@@ -129,9 +129,11 @@ def test_delete_table_removes_it(api_client, clean_state):
 
 
 @pytest.mark.project
-def test_delete_missing_table_is_noop(api_client, clean_state):
-    """Deleting a non-existent table returns deleted=true but changes nothing."""
-    _delete_table(api_client, "DoesNotExist")
+def test_delete_missing_table_errors(api_client, clean_state):
+    """Deleting a non-existent table returns an INVALID_PARAM error."""
+    with pytest.raises(APIError) as ei:
+        _delete_table(api_client, "DoesNotExist")
+    assert ei.value.code == "INVALID_PARAM"
     assert _list_tables(api_client)["count"] == 0
 
 
