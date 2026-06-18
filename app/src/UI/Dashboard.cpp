@@ -158,6 +158,8 @@ UI::Dashboard::Dashboard()
   , m_stopwatchEnabled(false)
   , m_autoHideToolbar(false)
   , m_persistSettings(true)
+  , m_autoLayoutMargin(0)
+  , m_autoLayoutSpacing(-1)
   , m_updateRetryInProgress(false)
   , m_layoutValid(false)
   , m_streamAvailable(false)
@@ -243,6 +245,9 @@ UI::Dashboard::Dashboard()
   m_stopwatchEnabled       = m_settings.value("Dashboard/StopwatchEnabled", false).toBool();
   m_plotTimeRange =
     qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
+
+  m_autoLayoutMargin  = qMax(0, m_settings.value("Dashboard/AutoLayoutMargin", 0).toInt());
+  m_autoLayoutSpacing = qMax(-1, m_settings.value("Dashboard/AutoLayoutSpacing", -1).toInt());
 }
 
 /**
@@ -289,6 +294,22 @@ bool UI::Dashboard::autoHideToolbar() const noexcept
 double UI::Dashboard::plotTimeRange() const noexcept
 {
   return m_plotTimeRange;
+}
+
+/**
+ * @brief Returns the auto-layout margin (px) reserved between tiled windows and the canvas edges.
+ */
+int UI::Dashboard::autoLayoutMargin() const noexcept
+{
+  return m_autoLayoutMargin;
+}
+
+/**
+ * @brief Returns the auto-layout spacing (px) between adjacent tiled windows (-1 = flush borders).
+ */
+int UI::Dashboard::autoLayoutSpacing() const noexcept
+{
+  return m_autoLayoutSpacing;
 }
 
 /**
@@ -1085,6 +1106,38 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
     m_settings.setValue("Dashboard/AutoHideToolbar", m_autoHideToolbar);
     Q_EMIT autoHideToolbarChanged();
   }
+}
+
+/**
+ * @brief Sets the auto-layout edge margin (px); clamped to >= 0 and persisted.
+ */
+void UI::Dashboard::setAutoLayoutMargin(const int margin)
+{
+  const int clamped = qMax(0, margin);
+  if (m_autoLayoutMargin == clamped)
+    return;
+
+  m_autoLayoutMargin = clamped;
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/AutoLayoutMargin", m_autoLayoutMargin);
+
+  Q_EMIT autoLayoutMarginChanged();
+}
+
+/**
+ * @brief Sets the auto-layout inter-window spacing (px); clamped to >= -1 and persisted.
+ */
+void UI::Dashboard::setAutoLayoutSpacing(const int spacing)
+{
+  const int clamped = qMax(-1, spacing);
+  if (m_autoLayoutSpacing == clamped)
+    return;
+
+  m_autoLayoutSpacing = clamped;
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/AutoLayoutSpacing", m_autoLayoutSpacing);
+
+  Q_EMIT autoLayoutSpacingChanged();
 }
 
 /**

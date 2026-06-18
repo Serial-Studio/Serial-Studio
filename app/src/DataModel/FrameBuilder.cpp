@@ -1229,6 +1229,9 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     }
   }
 
+  if (!dataset.isNumeric)
+    dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
+
   if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
@@ -1286,6 +1289,9 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
       dataset.isNumeric = false;
     }
   }
+
+  if (!dataset.isNumeric)
+    dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 
   if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
@@ -1405,6 +1411,9 @@ void DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
         dataset.value     = result.toString();
         dataset.isNumeric = false;
       }
+
+      if (!dataset.isNumeric)
+        dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 
       if (m_captureDatasetValues)
         m_tableStore.setDatasetFinal(

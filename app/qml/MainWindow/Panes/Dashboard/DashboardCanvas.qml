@@ -398,6 +398,15 @@ Item {
         onHoveredChanged: if (!resizeHover.hovered) _wm.updateHoverCursor(Qt.point(-1, -1))
         onHoverPositionChanged: if (resizeHover.hovered) _wm.updateHoverCursor(hoverPosition)
       }
+
+      //
+      // Re-tile when the auto-layout margin/spacing preferences change
+      //
+      Connections {
+        target: Cpp_UI_Dashboard
+        function onAutoLayoutMarginChanged()  { if (_wm.autoLayoutEnabled) _wm.loadLayout() }
+        function onAutoLayoutSpacingChanged() { if (_wm.autoLayoutEnabled) _wm.loadLayout() }
+      }
     }
 
     //

@@ -79,6 +79,14 @@ class Dashboard : public QObject {
              READ  autoHideToolbar
              WRITE setAutoHideToolbar
              NOTIFY autoHideToolbarChanged)
+  Q_PROPERTY(int autoLayoutMargin
+             READ  autoLayoutMargin
+             WRITE setAutoLayoutMargin
+             NOTIFY autoLayoutMarginChanged)
+  Q_PROPERTY(int autoLayoutSpacing
+             READ  autoLayoutSpacing
+             WRITE setAutoLayoutSpacing
+             NOTIFY autoLayoutSpacingChanged)
   Q_PROPERTY(double plotTimeRange
              READ  plotTimeRange
              WRITE setPlotTimeRange
@@ -106,6 +114,8 @@ signals:
   void clockEnabledChanged();
   void stopwatchEnabledChanged();
   void autoHideToolbarChanged();
+  void autoLayoutMarginChanged();
+  void autoLayoutSpacingChanged();
   void plotTimeRangeChanged();
   void containsCommercialFeaturesChanged();
 
@@ -134,6 +144,8 @@ public:
   [[nodiscard]] int points() const noexcept;
   [[nodiscard]] int actionCount() const;
   [[nodiscard]] int totalWidgetCount() const noexcept;
+  [[nodiscard]] int autoLayoutMargin() const noexcept;
+  [[nodiscard]] int autoLayoutSpacing() const noexcept;
 
   [[nodiscard]] Q_INVOKABLE bool frameValid() const;
   [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
@@ -191,6 +203,8 @@ public slots:
   void setClockEnabled(const bool enabled);
   void setStopwatchEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
+  void setAutoLayoutMargin(const int margin);
+  void setAutoLayoutSpacing(const int spacing);
   void setPlotTimeRange(const double seconds);
   void setSettingsPersistent(const bool persistent);
   void activateAction(const int index, const bool guiTrigger = false);
@@ -393,6 +407,9 @@ private:
   bool m_stopwatchEnabled;
   bool m_autoHideToolbar;
   bool m_persistSettings;
+
+  int m_autoLayoutMargin;
+  int m_autoLayoutSpacing;
 
   bool m_updateRetryInProgress;
 

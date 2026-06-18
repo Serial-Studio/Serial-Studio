@@ -828,6 +828,56 @@ Widgets.SmartDialog {
             }
           }
 
+          Label {
+            text: qsTr("Auto-Layout Margin")
+            color: Cpp_ThemeManager.colors["text"]
+          } SpinBox {
+            id: _autoLayoutMargin
+
+            from: 0
+            stepSize: 1
+            editable: true
+            to: 2147483647
+            Layout.fillWidth: true
+            value: Cpp_UI_Dashboard.autoLayoutMargin
+            onValueChanged: {
+              if (value !== Cpp_UI_Dashboard.autoLayoutMargin)
+                Cpp_UI_Dashboard.autoLayoutMargin = value
+            }
+
+            Connections {
+              target: Cpp_UI_Dashboard
+              function onAutoLayoutMarginChanged() {
+                _autoLayoutMargin.value = Cpp_UI_Dashboard.autoLayoutMargin
+              }
+            }
+          }
+
+          Label {
+            text: qsTr("Auto-Layout Spacing")
+            color: Cpp_ThemeManager.colors["text"]
+          } SpinBox {
+            id: _autoLayoutSpacing
+
+            from: -1
+            stepSize: 1
+            editable: true
+            to: 2147483647
+            Layout.fillWidth: true
+            value: Cpp_UI_Dashboard.autoLayoutSpacing
+            onValueChanged: {
+              if (value !== Cpp_UI_Dashboard.autoLayoutSpacing)
+                Cpp_UI_Dashboard.autoLayoutSpacing = value
+            }
+
+            Connections {
+              target: Cpp_UI_Dashboard
+              function onAutoLayoutSpacingChanged() {
+                _autoLayoutSpacing.value = Cpp_UI_Dashboard.autoLayoutSpacing
+              }
+            }
+          }
+
           Item {
             implicitHeight: 2
             Layout.columnSpan: 2
@@ -1547,6 +1597,8 @@ Widgets.SmartDialog {
           Cpp_Misc_ModuleManager.performanceMode = true
           Cpp_Misc_ModuleManager.inhibitIdleSleep = true
           Cpp_UI_Dashboard.autoHideToolbar = false
+          Cpp_UI_Dashboard.autoLayoutMargin = 0
+          Cpp_UI_Dashboard.autoLayoutSpacing = -1
           Cpp_UI_TaskbarSettings.resetToDefaults()
           Cpp_Console_Handler.fontFamily = Cpp_Misc_CommonFonts.monoFont.family
           Cpp_Console_Handler.fontSize = Cpp_Misc_CommonFonts.monoFont.pointSize

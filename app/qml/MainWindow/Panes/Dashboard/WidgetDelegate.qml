@@ -40,7 +40,9 @@ Widgets.MiniWindow {
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
   windowControlsVisible: !Cpp_UI_TaskbarSettings.taskbarHidden
-  shadowEnabled: root.state === "normal" && !windowManager.autoLayoutEnabled
+  shadowEnabled: root.state === "normal"
+                 && (!windowManager.autoLayoutEnabled
+                     || Cpp_UI_Dashboard.autoLayoutSpacing > -1)
   visible: root.state === "normal" || root.state === "maximized"
            || root.hideAnimationRunning
 

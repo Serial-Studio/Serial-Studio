@@ -80,7 +80,7 @@ Rectangle {
     }
 
     height: root.titlebarHeight
-    color: app.runtimeMode
+    color: (app.runtimeMode || root.dashboardMode)
            ? Cpp_ThemeManager.colors["dashboard_background"]
            : Cpp_ThemeManager.colors["toolbar_top"]
   }
@@ -103,7 +103,7 @@ Rectangle {
     visible: root.titlebarHeight > 0
     font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
-    color: app.runtimeMode
+    color: (app.runtimeMode || root.dashboardMode)
            ? Cpp_ThemeManager.colors["text"]
            : Cpp_ThemeManager.colors["titlebar_text"]
   }

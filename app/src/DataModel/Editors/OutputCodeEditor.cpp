@@ -452,7 +452,7 @@ void DataModel::OutputCodeEditor::onThemeChanged()
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
   const auto path =
-    name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
+    QDir::isAbsolutePath(name) ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {

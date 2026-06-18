@@ -68,6 +68,20 @@ Widgets.SmartWindow {
                                                && root.dashboardVisible)
 
   //
+  // Native caption tint so the OS-drawn caption (Windows/DWM) tracks the QML strip; empty =
+  // default system caption (tinted while the toolbar bar is collapsed over the dashboard).
+  //
+  readonly property string nativeCaptionColor:
+    (app.runtimeMode || (root.dashboardVisible && !root.toolbarBarShown))
+      ? Cpp_ThemeManager.colors["dashboard_background"]
+      : ""
+
+  onNativeCaptionColorChanged: {
+    if (root.visible)
+      Cpp_NativeWindow.addWindow(root, root.nativeCaptionColor)
+  }
+
+  //
   // Wraps any QML disconnect entry point so device-initiated drops can be told apart.
   //
   function userDisconnect() {
@@ -321,12 +335,8 @@ Widgets.SmartWindow {
   // Handle platform-specific window initialization code
   //
   onVisibilityChanged: {
-    if (root.visible) {
-      const tint = app.runtimeMode
-                 ? Cpp_ThemeManager.colors["dashboard_background"]
-                 : ""
-      Cpp_NativeWindow.addWindow(root, tint)
-    }
+    if (root.visible)
+      Cpp_NativeWindow.addWindow(root, root.nativeCaptionColor)
 
     else
       Cpp_NativeWindow.removeWindow(root)

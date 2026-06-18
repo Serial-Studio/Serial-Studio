@@ -553,25 +553,42 @@ Item {
       singleHighlightColor: Cpp_ThemeManager.colors["widget_highlighted_text"]
 
       //
-      // Force refresh all theme colors on theme change
+      // Reapplies every themed color from the active palette.
       //
+      function refreshColors() {
+        _theme.borderColors = [Cpp_ThemeManager.colors["widget_border"]]
+        _theme.backgroundColor = Cpp_ThemeManager.colors["widget_window"]
+        _theme.plotAreaBackgroundColor = Cpp_ThemeManager.colors["widget_base"]
+        _theme.axisX.subColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.axisY.subColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.axisX.mainColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.axisY.mainColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.axisX.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
+        _theme.axisY.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
+        _theme.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
+        _theme.grid.subColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.grid.mainColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.multiHighlightColor = Cpp_ThemeManager.colors["widget_highlight"]
+        _theme.singleHighlightColor = Cpp_ThemeManager.colors["widget_highlighted_text"]
+      }
+
+      //
+      // QtGraphs can paint a stale light/dark pass on a theme switch, so reapply the colors
+      // immediately and once more after the transition settles to clear residual artifacts.
+      //
+      Timer {
+        id: _themeRefreshTimer
+
+        interval: 500
+        repeat: false
+        onTriggered: _theme.refreshColors()
+      }
+
       Connections {
         target: Cpp_ThemeManager
         function onThemeChanged() {
-          _theme.borderColors = [Cpp_ThemeManager.colors["widget_border"]]
-          _theme.backgroundColor = Cpp_ThemeManager.colors["widget_window"]
-          _theme.plotAreaBackgroundColor = Cpp_ThemeManager.colors["widget_base"]
-          _theme.axisX.subColor = Cpp_ThemeManager.colors["widget_border"]
-          _theme.axisY.subColor = Cpp_ThemeManager.colors["widget_border"]
-          _theme.axisX.mainColor = Cpp_ThemeManager.colors["widget_border"]
-          _theme.axisY.mainColor = Cpp_ThemeManager.colors["widget_border"]
-          _theme.axisX.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
-          _theme.axisY.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
-          _theme.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
-          _theme.grid.subColor = Cpp_ThemeManager.colors["widget_border"]
-          _theme.grid.mainColor = Cpp_ThemeManager.colors["widget_border"]
-          _theme.multiHighlightColor = Cpp_ThemeManager.colors["widget_highlight"]
-          _theme.singleHighlightColor = Cpp_ThemeManager.colors["widget_highlighted_text"]
+          _theme.refreshColors()
+          _themeRefreshTimer.restart()
         }
       }
     }

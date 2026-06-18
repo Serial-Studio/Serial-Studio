@@ -247,6 +247,7 @@ Widgets.Pane {
       mipmap: true
       smooth: true
       anchors.fill: parent
+      anchors.topMargin: -16
       visible: source !== ""
       source: _canvas.backgroundImage
       fillMode: Image.PreserveAspectCrop

@@ -662,7 +662,7 @@ struct SweepEngine {
     if (sweeping) {
       const double st = now - t0;
       if (st > activeWindow())
-        completeSweep(now);
+        completeSweep();
       else {
         sweepTime = st < 0 ? 0.0 : st;
         prevValue = trigValue;
@@ -738,17 +738,18 @@ private:
   }
 
   /**
-   * @brief Publishes the filled sweep to `front` and ends the acquisition.
+   * @brief Publishes the filled sweep to `front` and ends the acquisition. `lastSweepSec` is
+   *        left at the sweep's start time so the Auto free-run timer re-triggers immediately on
+   *        the next sample (continuous refresh) instead of stalling for another full window.
    */
-  void completeSweep(double now)
+  void completeSweep()
   {
     const std::size_t n = std::min(front.size(), back.size());
     for (std::size_t i = 0; i < n; ++i)
       std::swap(front[i], back[i]);
 
-    hasFront     = true;
-    sweeping     = false;
-    lastSweepSec = now;
+    hasFront = true;
+    sweeping = false;
     if (mode == kSingle)
       armed = false;
   }

@@ -943,8 +943,8 @@ void UI::WindowManager::autoLayout()
     return;
 
   TileEnv env;
-  env.margin      = 0;
-  env.spacing     = -1;
+  env.margin      = qMax(0, UI::Dashboard::instance().autoLayoutMargin());
+  env.spacing     = qMax(-1, UI::Dashboard::instance().autoLayoutSpacing());
   env.availW      = canvasW - 2 * env.margin;
   env.availH      = canvasH - 2 * env.margin;
   env.isLandscape = env.availW >= env.availH;
@@ -1965,13 +1965,15 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
       return;
     }
 
-    if (event->button() == Qt::RightButton && !m_focusedWindow) {
+    if (!m_focusedWindow) {
       if (m_taskbar)
         m_taskbar->setActiveWindow(nullptr);
 
-      Q_EMIT rightClicked(event->pos().x(), event->pos().y());
-      event->accept();
-      return;
+      if (event->button() == Qt::RightButton) {
+        Q_EMIT rightClicked(event->pos().x(), event->pos().y());
+        event->accept();
+        return;
+      }
     }
 
     QQuickItem::mousePressEvent(event);

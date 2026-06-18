@@ -17,6 +17,7 @@
 #  include <lua.h>
 #  include <lualib.h>
 
+#  include <QDir>
 #  include <QFile>
 #  include <QHBoxLayout>
 #  include <QJavascriptHighlighter>
@@ -449,7 +450,7 @@ void MQTT::PublisherScriptEditor::onThemeChanged()
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
   const auto path =
-    name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
+    QDir::isAbsolutePath(name) ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
