@@ -1,0 +1,661 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Alex Spataru <serial-studio.com>
+ * SPDX-License-Identifier: GPL-3.0-only
+ *
+ * Serial Studio Doxygen theme.
+ *
+ * A drop-in HTML_EXTRA_STYLESHEET that restyles Doxygen's generated output to
+ * match serial-studio.com: IBM Plex Sans / JetBrains Mono, the cyan accent
+ * (#0EA5E9), the deep-navy code surfaces (#04263F) and the site's radii,
+ * shadows and spacing scale. It overrides the stock doxygen.css, so list it
+ * AFTER the default sheet (Doxygen does this automatically for EXTRA sheets).
+ */
+
+/* ----------------------------------------------------------------------------
+ * Design tokens (mirrored from serial-studio.com :root)
+ * ------------------------------------------------------------------------- */
+:root {
+  --ss-bg-0: #FFFFFF;
+  --ss-bg-1: #F4F7FB;
+  --ss-bg-2: #EAF1F8;
+  --ss-surface-1: #FFFFFF;
+  --ss-surface-2: #F1F5F9;
+  --ss-surface-3: #E2E8F0;
+  --ss-border: rgba(15, 23, 42, 0.10);
+  --ss-border-strong: rgba(15, 23, 42, 0.18);
+
+  --ss-text-primary: #0F172A;
+  --ss-text-secondary: #334155;
+  --ss-text-muted: #64748B;
+  --ss-text-light: #94A3B8;
+
+  --ss-dark-bg: #04263F;
+  --ss-dark-bg-2: #073A5F;
+  --ss-dark-surface: #0B4F7E;
+  --ss-dark-text: #F8FAFC;
+  --ss-dark-text-secondary: #CBD5E1;
+
+  --ss-accent: #0EA5E9;
+  --ss-accent-2: #0284C7;
+  --ss-accent-3: #0369A1;
+  --ss-accent-4: #075985;
+  --ss-accent-soft: #E0F2FE;
+  --ss-accent-glow: rgba(14, 165, 233, 0.28);
+  --ss-accent-tint: #67E8F9;
+
+  --ss-warn: #D97706;
+  --ss-success: #059669;
+  --ss-danger: #DC2626;
+
+  --ss-gradient-dark: linear-gradient(135deg, #04263F 0%, #073A5F 55%, #0B4F7E 100%);
+  --ss-gradient-accent: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  --ss-gradient-hero:
+    radial-gradient(ellipse at 80% 20%, rgba(14, 165, 233, 0.20) 0%, transparent 50%),
+    linear-gradient(135deg, #0A1628 0%, #112842 60%, #1B3658 100%);
+
+  --ss-radius-sm: 8px;
+  --ss-radius-md: 14px;
+  --ss-radius-lg: 20px;
+  --ss-radius-pill: 999px;
+
+  --ss-elev-1: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 3px rgba(15, 23, 42, .06);
+  --ss-elev-2: 0 4px 6px rgba(15, 23, 42, .04), 0 2px 4px rgba(15, 23, 42, .06);
+  --ss-elev-3: 0 10px 25px rgba(15, 23, 42, .08), 0 4px 10px rgba(15, 23, 42, .04);
+  --ss-glow: 0 14px 40px -12px rgba(14, 165, 233, .35);
+
+  --ss-font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto,
+                  'Helvetica Neue', Arial, sans-serif;
+  --ss-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ss-nav-h: 64px;
+  --ss-container: 1240px;
+
+  /* Map Doxygen's own custom properties to the Serial Studio palette so the
+     parts we don't override by hand still pick up the brand colors. */
+  --primary-color: var(--ss-accent);
+  --primary-dark-color: var(--ss-accent-3);
+  --primary-light-color: var(--ss-accent-soft);
+  --page-background-color: var(--ss-bg-0);
+  --header-background: rgba(255, 255, 255, 0.88);
+  --side-nav-background: var(--ss-bg-1);
+}
+
+/* ----------------------------------------------------------------------------
+ * Base typography
+ * ------------------------------------------------------------------------- */
+body, table, div, p, dl, #nav-tree .label, .contents {
+  font-family: var(--ss-font-sans);
+}
+
+body {
+  color: var(--ss-text-secondary);
+  background: var(--ss-bg-0);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+h1.glow, h2.groupheader, div.contents h2 {
+  color: var(--ss-text-primary);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h2.groupheader {
+  border-bottom: 1px solid var(--ss-border);
+  padding-bottom: 6px;
+  margin-top: 2rem;
+}
+
+a, a:visited {
+  color: var(--ss-accent-3);
+  text-decoration: none;
+  transition: color 160ms cubic-bezier(.16, 1, .3, 1);
+}
+
+a:hover {
+  color: var(--ss-accent);
+}
+
+a.el {
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------------------
+ * Branded top navigation bar (rendered by header.html)
+ * ------------------------------------------------------------------------- */
+.ss-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  height: var(--ss-nav-h);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+}
+
+.ss-navbar .ss-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ss-navbar .ss-logo {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+.ss-navbar .ss-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.ss-navbar .ss-brand-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ss-text-primary);
+}
+
+.ss-navbar .ss-brand-tagline {
+  font-size: 0.74rem;
+  color: var(--ss-text-muted);
+}
+
+.ss-navbar .ss-nav-spacer {
+  flex: 1 1 auto;
+}
+
+.ss-navbar .ss-nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.ss-navbar .ss-nav-links a {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--ss-text-secondary);
+}
+
+.ss-navbar .ss-nav-links a:hover {
+  color: var(--ss-accent);
+}
+
+.ss-navbar .ss-nav-version {
+  font-family: var(--ss-font-mono);
+  font-size: 0.78rem;
+  color: var(--ss-text-muted);
+  padding: 3px 10px;
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-pill);
+}
+
+.ss-navbar .ss-nav-cta {
+  background: var(--ss-gradient-accent);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 18px;
+  border-radius: var(--ss-radius-pill);
+  box-shadow: 0 6px 18px -4px var(--ss-accent-glow),
+              inset 0 1px 0 rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(14, 165, 233, 0.40);
+}
+
+.ss-navbar .ss-nav-cta:hover {
+  background: var(--ss-accent-2);
+}
+
+@media (max-width: 768px) {
+  .ss-navbar .ss-nav-links a:not(.ss-nav-cta),
+  .ss-navbar .ss-brand-tagline { display: none; }
+}
+
+/* ----------------------------------------------------------------------------
+ * Doxygen's own tab menu + title area
+ * ------------------------------------------------------------------------- */
+#top {
+  border: none;
+  box-shadow: none;
+}
+
+#titlearea {
+  display: none; /* replaced by the branded .ss-navbar */
+}
+
+.sm-dox, #main-menu, .tabs, .tabs2, .tabs3 {
+  background: var(--ss-bg-1) !important;
+  border: none;
+  border-bottom: 1px solid var(--ss-border);
+  box-shadow: none;
+}
+
+.sm-dox a, .sm-dox a:focus, .sm-dox a:hover, .sm-dox a:active,
+.tablist li a {
+  background: transparent !important;
+  color: var(--ss-text-secondary) !important;
+  font-weight: 500;
+  text-shadow: none !important;
+}
+
+.sm-dox a:hover, .tablist li.current a, .tablist li:hover a {
+  color: var(--ss-accent) !important;
+  background: transparent !important;
+}
+
+.tablist li.current a {
+  border-bottom: 2px solid var(--ss-accent);
+}
+
+/* Page header band */
+div.header {
+  background: var(--ss-bg-1);
+  border-bottom: 1px solid var(--ss-border);
+  background-image: none;
+}
+
+div.headertitle {
+  padding: 18px 0;
+}
+
+.title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--ss-text-primary);
+}
+
+.ingroups, .levelinfo {
+  color: var(--ss-text-muted);
+}
+
+/* ----------------------------------------------------------------------------
+ * Content container
+ * ------------------------------------------------------------------------- */
+div.contents {
+  max-width: var(--ss-container);
+  margin: 0 auto;
+  padding: 24px 28px 64px;
+}
+
+.contents p, .contents dl, .contents li {
+  color: var(--ss-text-secondary);
+}
+
+hr, .memSeparator {
+  border: none;
+  border-top: 1px solid var(--ss-border);
+}
+
+/* ----------------------------------------------------------------------------
+ * Member declaration tables (class/file summaries)
+ * ------------------------------------------------------------------------- */
+table.memberdecl {
+  border-spacing: 0;
+}
+
+table.memberdecl .heading,
+h2.groupheader a {
+  color: var(--ss-text-primary);
+}
+
+.memItemLeft, .memItemRight, .memTemplItemLeft, .memTemplItemRight,
+.memTemplParams {
+  background: var(--ss-surface-1);
+  border: none;
+  padding: 8px 10px;
+}
+
+.memItemLeft, .memTemplItemLeft {
+  color: var(--ss-text-muted);
+  font-family: var(--ss-font-mono);
+  font-size: 0.86rem;
+}
+
+tr.even .memItemLeft, tr.even .memItemRight,
+.memdesc, .mdescLeft, .mdescRight {
+  background: var(--ss-bg-1);
+}
+
+.mdescLeft, .mdescRight {
+  color: var(--ss-text-muted);
+  padding: 2px 10px 8px;
+}
+
+/* ----------------------------------------------------------------------------
+ * Member documentation cards (the detailed entries)
+ * ------------------------------------------------------------------------- */
+.memitem {
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-md);
+  box-shadow: var(--ss-elev-1);
+  margin: 18px 0;
+  overflow: hidden;
+  transition: box-shadow 280ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.memitem:hover {
+  box-shadow: var(--ss-elev-3);
+}
+
+.memproto, .memname {
+  background: var(--ss-bg-2);
+  color: var(--ss-text-primary);
+  font-family: var(--ss-font-mono);
+  font-size: 0.92rem;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  border-radius: 0;
+}
+
+.memproto {
+  border-bottom: 1px solid var(--ss-border);
+  border-top: 3px solid var(--ss-accent);
+}
+
+.memdoc {
+  background: var(--ss-surface-1);
+  border: none;
+  box-shadow: none;
+  padding: 14px 18px;
+}
+
+.paramname {
+  color: var(--ss-accent-3);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.paramtype {
+  color: var(--ss-text-muted);
+}
+
+/* ----------------------------------------------------------------------------
+ * Section callouts (note / warning / return / see / pre / post)
+ * ------------------------------------------------------------------------- */
+dl.section {
+  border-radius: var(--ss-radius-sm);
+  padding: 10px 14px;
+  margin: 14px 0;
+  border-left: 4px solid var(--ss-accent);
+  background: var(--ss-accent-soft);
+}
+
+dl.note, dl.remark {
+  border-left-color: var(--ss-accent);
+  background: var(--ss-accent-soft);
+}
+
+dl.warning, dl.attention {
+  border-left-color: var(--ss-warn);
+  background: #FEF3C7;
+}
+
+dl.deprecated, dl.bug {
+  border-left-color: var(--ss-danger);
+  background: #FEE2E2;
+}
+
+dl.return, dl.pre, dl.post, dl.invariant {
+  border-left-color: var(--ss-success);
+  background: #D1FAE5;
+}
+
+dl.see, dl.todo, dl.par {
+  border-left-color: var(--ss-accent-2);
+  background: var(--ss-bg-1);
+}
+
+dl.section dt {
+  color: var(--ss-text-primary);
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------------------------
+ * Code: fragments, inline code, and the <pre> blocks (dark, brand navy)
+ * ------------------------------------------------------------------------- */
+div.fragment, pre.fragment {
+  background: var(--ss-dark-bg);
+  border: 1px solid var(--ss-dark-surface);
+  border-radius: var(--ss-radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--ss-elev-2);
+  overflow-x: auto;
+}
+
+div.line {
+  font-family: var(--ss-font-mono);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ss-dark-text-secondary);
+}
+
+div.line span.lineno {
+  color: var(--ss-text-light);
+  background: transparent;
+  border-right: 1px solid var(--ss-dark-surface);
+}
+
+.fragment span.keyword, .fragment span.keywordtype,
+.fragment span.keywordflow { color: #67E8F9; }
+.fragment span.comment { color: #94A3B8; font-style: italic; }
+.fragment span.preprocessor { color: #C4B5FD; }
+.fragment span.stringliteral, .fragment span.charliteral { color: #5EEAD4; }
+.fragment a, .fragment a .code { color: #7DD3FC; }
+
+code, tt, .tt, span.mlabel {
+  font-family: var(--ss-font-mono);
+}
+
+code, *:not(pre) > code {
+  background: var(--ss-surface-2);
+  color: var(--ss-accent-4);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 0.86em;
+}
+
+/* ----------------------------------------------------------------------------
+ * Generic doc tables
+ * ------------------------------------------------------------------------- */
+table.doxtable {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-md);
+  overflow: hidden;
+  box-shadow: var(--ss-elev-1);
+}
+
+table.doxtable th {
+  background: var(--ss-gradient-accent);
+  color: #FFFFFF;
+  font-weight: 600;
+  text-shadow: none;
+  border: none;
+  padding: 9px 14px;
+}
+
+table.doxtable td {
+  border: none;
+  border-top: 1px solid var(--ss-border);
+  padding: 8px 14px;
+}
+
+table.doxtable tr:nth-child(even) td {
+  background: var(--ss-bg-1);
+}
+
+/* ----------------------------------------------------------------------------
+ * Member-tag pills (static / virtual / inline / Q_PROPERTY etc.)
+ * ------------------------------------------------------------------------- */
+span.mlabel {
+  background: var(--ss-accent-soft);
+  color: var(--ss-accent-4);
+  border: 1px solid rgba(14, 165, 233, 0.30);
+  border-radius: var(--ss-radius-pill);
+  padding: 1px 9px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------------------
+ * Left navigation tree + sidebar
+ * ------------------------------------------------------------------------- */
+#side-nav, #nav-tree {
+  background: var(--ss-bg-1);
+}
+
+#nav-tree {
+  border-right: 1px solid var(--ss-border);
+}
+
+#nav-tree .label {
+  font-size: 13.5px;
+}
+
+#nav-tree a {
+  color: var(--ss-text-secondary);
+}
+
+#nav-tree .selected {
+  background-image: none;
+  background: var(--ss-accent-soft);
+  border-radius: var(--ss-radius-sm);
+  text-shadow: none;
+}
+
+#nav-tree .selected a {
+  color: var(--ss-accent-4);
+  font-weight: 600;
+}
+
+.ui-resizable-e {
+  background: var(--ss-border);
+}
+
+/* ----------------------------------------------------------------------------
+ * Directory listings
+ * ------------------------------------------------------------------------- */
+.directory td.entry, .directory tr.even {
+  background: transparent;
+}
+
+.directory tr.even {
+  background: var(--ss-bg-1);
+}
+
+.directory .levels span:hover {
+  color: var(--ss-accent);
+}
+
+.icon, .icona .icon {
+  background: var(--ss-accent);
+}
+
+/* ----------------------------------------------------------------------------
+ * Search box
+ * ------------------------------------------------------------------------- */
+#MSearchBox {
+  background: var(--ss-surface-1);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-pill);
+  box-shadow: var(--ss-elev-1);
+}
+
+#MSearchField {
+  font-family: var(--ss-font-sans);
+  color: var(--ss-text-primary);
+}
+
+#MSearchResultsWindow {
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-md);
+  box-shadow: var(--ss-elev-3);
+}
+
+/* ----------------------------------------------------------------------------
+ * Breadcrumb / generated-by footer
+ * ------------------------------------------------------------------------- */
+.navpath ul {
+  background: var(--ss-bg-1);
+  border-top: 1px solid var(--ss-border);
+  box-shadow: none;
+}
+
+.navpath li.navelem a {
+  color: var(--ss-text-muted);
+  text-shadow: none;
+}
+
+.navpath li.navelem a:hover {
+  color: var(--ss-accent);
+}
+
+/* Site-style footer rendered by footer.html */
+.ss-footer {
+  background: var(--ss-gradient-dark);
+  color: var(--ss-dark-text-secondary);
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.86rem;
+}
+
+.ss-footer a {
+  color: var(--ss-accent-tint);
+}
+
+.ss-footer a:hover {
+  color: #FFFFFF;
+}
+
+.ss-footer .ss-logo {
+  width: 28px;
+  height: 28px;
+}
+
+.ss-footer .ss-footer-spacer {
+  flex: 1 1 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * Dark mode (honours Doxygen's AUTO/DARK toggle and OS preference)
+ * ------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) body {
+    background: var(--ss-dark-bg);
+    color: var(--ss-dark-text-secondary);
+  }
+
+  html:not(.light-mode) {
+    --ss-bg-0: #04263F;
+    --ss-bg-1: #073A5F;
+    --ss-bg-2: #0B4F7E;
+    --ss-surface-1: #073A5F;
+    --ss-surface-2: #0B4F7E;
+    --ss-border: rgba(255, 255, 255, 0.10);
+    --ss-text-primary: #F8FAFC;
+    --ss-text-secondary: #CBD5E1;
+    --ss-text-muted: #94A3B8;
+  }
+
+  html:not(.light-mode) .ss-navbar {
+    background: rgba(4, 38, 63, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.10);
+  }
+
+  html:not(.light-mode) .memproto, html:not(.light-mode) .memname {
+    color: var(--ss-dark-text);
+  }
+}

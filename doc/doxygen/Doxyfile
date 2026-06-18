@@ -1,0 +1,96 @@
+# SPDX-FileCopyrightText: 2025 Alex Spataru <serial-studio.com>
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Serial Studio Doxygen preset.
+#
+# Wires the serial-studio.com-styled theme (header.html, footer.html,
+# serial-studio.css, logo-simple.svg) into Doxygen. Run from the repository
+# root so the relative paths below resolve:
+#
+#     doxygen doc/doxygen/Doxyfile
+#
+# Output lands in build/doxygen/html/index.html. Only the tags that matter for
+# this project or the theme are listed; every other tag keeps its Doxygen
+# default. Generate a full, version-matched config with `doxygen -g` if needed.
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+PROJECT_NAME           = "Serial Studio"
+PROJECT_NUMBER         = "v4.0.1"
+PROJECT_BRIEF          = "Build a live dashboard for any device"
+PROJECT_LOGO           = doc/doxygen/logo-simple.svg
+OUTPUT_DIRECTORY       = build/doxygen
+CREATE_SUBDIRS         = NO
+ALLOW_UNICODE_NAMES    = YES
+OUTPUT_LANGUAGE        = English
+MARKDOWN_SUPPORT       = YES
+TAB_SIZE               = 2
+
+#---------------------------------------------------------------------------
+# Build
+#---------------------------------------------------------------------------
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+HIDE_UNDOC_MEMBERS     = NO
+CASE_SENSE_NAMES       = YES
+SORT_MEMBERS_CTORS_1ST = YES
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO
+
+#---------------------------------------------------------------------------
+# Input
+#---------------------------------------------------------------------------
+INPUT                  = app/src \
+                         README.md
+USE_MDFILE_AS_MAINPAGE = README.md
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h \
+                         *.hpp \
+                         *.cpp \
+                         *.cc \
+                         *.md
+EXCLUDE_PATTERNS       = */build/* \
+                         */lib/* \
+                         */moc_* \
+                         */qrc_*
+EXTENSION_MAPPING      = h=C++
+
+#---------------------------------------------------------------------------
+# Source browsing
+#---------------------------------------------------------------------------
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+STRIP_CODE_COMMENTS    = NO
+
+#---------------------------------------------------------------------------
+# HTML output — Serial Studio theme
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HTML_OUTPUT            = html
+HTML_HEADER            = doc/doxygen/header.html
+HTML_FOOTER            = doc/doxygen/footer.html
+HTML_EXTRA_STYLESHEET  = doc/doxygen/serial-studio.css
+HTML_EXTRA_FILES       = doc/doxygen/logo-simple.svg
+HTML_COLORSTYLE        = TOGGLE
+HTML_COLORSTYLE_HUE    = 199
+HTML_COLORSTYLE_SAT    = 180
+HTML_COLORSTYLE_GAMMA  = 80
+HTML_DYNAMIC_SECTIONS  = YES
+GENERATE_TREEVIEW      = YES
+FULL_SIDEBAR           = NO
+DISABLE_INDEX          = NO
+TREEVIEW_WIDTH         = 280
+SEARCHENGINE           = YES
+
+#---------------------------------------------------------------------------
+# Diagrams
+#---------------------------------------------------------------------------
+HAVE_DOT               = NO
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = NO

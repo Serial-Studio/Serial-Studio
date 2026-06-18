@@ -2,37 +2,37 @@
    "updates":{
       "windows":{
          "open-url":"",
-         "latest-version":"4.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.0/Serial-Studio-Pro-4.0.0-Windows.msi",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "latest-version":"4.0.1",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.1/Serial-Studio-Pro-4.0.1-Windows.msi",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.1",
          "mandatory":false
       },
       "osx":{
          "open-url":"",
-         "latest-version":"4.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.0/Serial-Studio-Pro-4.0.0-macOS.dmg",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "latest-version":"4.0.1",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.1/Serial-Studio-Pro-4.0.1-macOS.dmg",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.1",
          "mandatory":false
       },
       "linux-x64":{
          "open-url":"",
-         "latest-version":"4.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.0/Serial-Studio-Pro-4.0.0-Linux-x64.AppImage",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "latest-version":"4.0.1",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.1/Serial-Studio-Pro-4.0.1-Linux-x64.AppImage",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.1",
          "mandatory":false
       },
       "linux-arm64":{
          "open-url":"",
-         "latest-version":"4.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.0/Serial-Studio-Pro-4.0.0-Linux-arm64.AppImage",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "latest-version":"4.0.1",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v4.0.1/Serial-Studio-Pro-4.0.1-Linux-arm64.AppImage",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.1",
          "mandatory":false
       },
       "linux":{
          "download-url":"",
-         "latest-version":"4.0.0",
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.0",
+         "latest-version":"4.0.1",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.1",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.1",
          "mandatory":false
       }
    }
