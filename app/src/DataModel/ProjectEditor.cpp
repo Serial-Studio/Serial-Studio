@@ -5467,7 +5467,7 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel) {
       QVariantMap row;
       row["widgetType"]    = static_cast<int>(groupKey);
-      row["groupId"]       = group.groupId;
+      row["groupId"]       = group.uniqueId;
       row["relativeIndex"] = groupIdx.value(groupKey, 0);
       row["groupTitle"]    = group.title;
       row["datasetTitle"]  = QString();
@@ -5481,7 +5481,7 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
                                          SerialStudio::DashboardWidget k) {
       QVariantMap row;
       row["widgetType"]    = static_cast<int>(k);
-      row["groupId"]       = group.groupId;
+      row["groupId"]       = group.uniqueId;
       row["relativeIndex"] = datasetIdx.value(k, 0);
       row["groupTitle"]    = group.title;
       row["datasetTitle"]  = ds.title;
@@ -5509,7 +5509,7 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
       const auto ledKey = SerialStudio::DashboardLED;
       QVariantMap row;
       row["widgetType"]    = static_cast<int>(ledKey);
-      row["groupId"]       = group.groupId;
+      row["groupId"]       = group.uniqueId;
       row["relativeIndex"] = groupIdx.value(ledKey, 0);
       row["groupTitle"]    = group.title;
       row["datasetTitle"]  = QString();
