@@ -83,6 +83,7 @@ option(ENABLE_HARDENING        "Enable security hardening flags"       OFF)
 option(ENABLE_PGO              "Enable Profile-Guided Optimization"    OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 option(ENABLE_GRPC             "Enable gRPC server support"            OFF)
+option(SS_USE_MIMALLOC         "Use the mimalloc allocator override (FetchContent from GitHub)" ON)
 
 option(WITH_WEBENGINE          "Build against Qt WebEngine (markdown viewers, PDF reports)" ON)
 

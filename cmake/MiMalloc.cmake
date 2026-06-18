@@ -34,10 +34,13 @@ include_guard(GLOBAL)
 # mimalloc's own warnings are silenced (third-party). Include BEFORE Optimization.cmake so it is not
 # swept into LTO/PGO. Call target_link_mimalloc(<target>) on the executable.
 #
+# Set -DSS_USE_MIMALLOC=OFF to skip the GitHub FetchContent entirely (e.g. Flathub/offline builds
+# with no network access); target_link_mimalloc() then becomes a no-op and the system heap is used.
+#
 #---------------------------------------------------------------------------------------------------
 
 set(SS_MIMALLOC_PLATFORM FALSE)
-if((WIN32 AND MSVC) OR (UNIX AND NOT APPLE))
+if(SS_USE_MIMALLOC AND ((WIN32 AND MSVC) OR (UNIX AND NOT APPLE)))
   set(SS_MIMALLOC_PLATFORM TRUE)
 endif()
 
@@ -75,7 +78,7 @@ if(SS_MIMALLOC_PLATFORM)
 endif()
 
 function(target_link_mimalloc target)
-  if(NOT ((WIN32 AND MSVC) OR (UNIX AND NOT APPLE)))
+  if(NOT SS_MIMALLOC_PLATFORM)
     return()
   endif()
 
