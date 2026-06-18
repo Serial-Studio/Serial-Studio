@@ -294,12 +294,13 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     error = m_device->errorString();
     m_device->deleteLater();
     m_device = nullptr;
-    Misc::Utilities::showMessageBox(
-      tr("CAN Connection Failed"),
+    const QString base =
       error.isEmpty()
         ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
-        : error,
-      QMessageBox::Critical);
+        : error;
+    Misc::Utilities::showMessageBox(tr("CAN Connection Failed"),
+                                    base + connectionErrorHint(plugin, interface),
+                                    QMessageBox::Critical);
     return false;
   }
 
@@ -748,6 +749,26 @@ QString IO::Drivers::CANBus::noInterfacesHint(const QString& plugin) const
 #else
   return tr("No interfaces found for %1").arg(driverName);
 #endif
+}
+
+/**
+ * @brief Returns a platform-specific hint to append when connecting to a CAN interface fails.
+ */
+QString IO::Drivers::CANBus::connectionErrorHint(const QString& plugin,
+                                                 const QString& interface) const
+{
+#if defined(Q_OS_LINUX)
+  if (plugin == "socketcan")
+    return tr("\n\nIf the interface is down, bring it up first:\n"
+              "sudo ip link set %1 up type can bitrate %2")
+      .arg(interface)
+      .arg(m_bitrate);
+#else
+  Q_UNUSED(plugin)
+  Q_UNUSED(interface)
+#endif
+
+  return QString();
 }
 
 /**

@@ -80,6 +80,7 @@ void CLI::registerOptions()
 {
   m_parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
   m_parser.addHelpOption();
+  m_parser.addPositionalArgument("project", "Project file to open", "[project]");
   m_parser.addOption(m_opts.versionOpt);
   m_parser.addOption(m_opts.resetOpt);
   m_parser.addOption(m_opts.fullscreenOpt);
@@ -366,7 +367,11 @@ bool CLI::quickPlot() const
  */
 QString CLI::projectPath() const
 {
-  return m_parser.isSet(m_opts.projectOpt) ? m_parser.value(m_opts.projectOpt) : QString();
+  if (m_parser.isSet(m_opts.projectOpt))
+    return m_parser.value(m_opts.projectOpt);
+
+  const auto positional = m_parser.positionalArguments();
+  return positional.isEmpty() ? QString() : positional.first();
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -381,10 +386,10 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
   if (apiServerEnabled())
     API::Server::instance().setEnabled(true);
 
-  if (m_parser.isSet(m_opts.projectOpt)) {
-    QString projectPath = m_parser.value(m_opts.projectOpt);
+  const QString project = projectPath();
+  if (!project.isEmpty()) {
     AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-    DataModel::ProjectModel::instance().openJsonFile(projectPath);
+    DataModel::ProjectModel::instance().openJsonFile(project);
   }
 
   else if (quickPlot())

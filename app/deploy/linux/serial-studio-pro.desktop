@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Serial Studio Pro
 Comment=Flexible data visualization software for embedded devices and projects
-Exec=serial-studio-pro --project %f
+Exec=serial-studio-pro %f
 Terminal=false
 Type=Application
 StartupNotify=true
