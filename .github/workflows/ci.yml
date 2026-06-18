@@ -118,6 +118,7 @@ jobs:
           build-essential \
           fakeroot \
           libcups2-dev \
+          libnss3 \
           libegl1 \
           libfuse2 \
           libgl1-mesa-dev \
@@ -353,6 +354,25 @@ jobs:
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
 
+        # Qt WebEngine's NSS dlopen()s its crypto backends (softokn/freebl/
+        # nssckbi) at runtime, so linuxdeploy (ldd-based) never bundles them and
+        # leaves a half-bundled NSS that crashes against the host's newer copies.
+        # Copy the version-matched modules next to the bundled libnssutil3.so.
+        have_softokn=0
+        for d in /usr/lib/*/nss /usr/lib/*-linux-gnu /usr/lib64; do
+          [ -d "$d" ] || continue
+          for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
+            if [ -f "$d/$m.so" ]; then
+              cp -a "$d/$m.so" AppDir/usr/lib/
+              [ "$m" = libsoftokn3 ] && have_softokn=1
+            fi
+          done
+        done
+        if [ "$have_softokn" = 0 ]; then
+          echo "::error::libsoftokn3.so not found; NSS bundle incomplete (WebEngine will crash)"
+          exit 1
+        fi
+
         ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
 
         rm linuxdeploy-x86_64.AppImage
@@ -422,6 +442,7 @@ jobs:
           build-essential \
           fakeroot \
           libcups2-dev \
+          libnss3 \
           libegl1 \
           libfuse2 \
           libgl1-mesa-dev \
@@ -653,6 +674,25 @@ jobs:
           cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
         else
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
+        fi
+
+        # Qt WebEngine's NSS dlopen()s its crypto backends (softokn/freebl/
+        # nssckbi) at runtime, so linuxdeploy (ldd-based) never bundles them and
+        # leaves a half-bundled NSS that crashes against the host's newer copies.
+        # Copy the version-matched modules next to the bundled libnssutil3.so.
+        have_softokn=0
+        for d in /usr/lib/*/nss /usr/lib/*-linux-gnu /usr/lib64; do
+          [ -d "$d" ] || continue
+          for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
+            if [ -f "$d/$m.so" ]; then
+              cp -a "$d/$m.so" AppDir/usr/lib/
+              [ "$m" = libsoftokn3 ] && have_softokn=1
+            fi
+          done
+        done
+        if [ "$have_softokn" = 0 ]; then
+          echo "::error::libsoftokn3.so not found; NSS bundle incomplete (WebEngine will crash)"
+          exit 1
         fi
 
         ./linuxdeploy-aarch64.AppImage --appdir AppDir --output appimage
