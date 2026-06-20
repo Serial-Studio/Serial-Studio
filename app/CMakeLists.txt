@@ -669,6 +669,7 @@ if(BUILD_COMMERCIAL)
     src/AI/Providers/GeminiReply.h
     src/AI/Providers/DeepSeekProvider.h
     src/AI/Providers/OpenRouterProvider.h
+    src/AI/Providers/RequestyProvider.h
     src/AI/Providers/GroqProvider.h
     src/AI/Providers/MistralProvider.h
     src/AI/Providers/LocalProvider.h
@@ -753,6 +754,7 @@ if(BUILD_COMMERCIAL)
     src/AI/Providers/GeminiReply.cpp
     src/AI/Providers/DeepSeekProvider.cpp
     src/AI/Providers/OpenRouterProvider.cpp
+    src/AI/Providers/RequestyProvider.cpp
     src/AI/Providers/GroqProvider.cpp
     src/AI/Providers/MistralProvider.cpp
     src/AI/Providers/LocalProvider.cpp

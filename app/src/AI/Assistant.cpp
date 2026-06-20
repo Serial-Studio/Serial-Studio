@@ -23,6 +23,7 @@
 #include "AI/Providers/MistralProvider.h"
 #include "AI/Providers/OpenAIProvider.h"
 #include "AI/Providers/OpenRouterProvider.h"
+#include "AI/Providers/RequestyProvider.h"
 #include "AI/ToolDispatcher.h"
 #include "Licensing/CommercialToken.h"
 #include "Misc/Utilities.h"
@@ -242,6 +243,9 @@ QStringList AI::Assistant::providerNames() const
 
   if (m_local)
     names.append(m_local->displayName());
+
+  if (m_requesty)
+    names.append(m_requesty->displayName());
 
   return names;
 }
@@ -565,6 +569,9 @@ void AI::Assistant::rebuildProviders()
     qCDebug(serialStudioAI) << "Local model list updated";
   });
   m_local.reset(local);
+
+  m_requesty = std::make_unique<RequestyProvider>(
+    *m_nam, [this]() { return m_vault.key(ProviderId::Requesty); });
 }
 
 /**
@@ -632,6 +639,8 @@ QString AI::Assistant::modelSettingsKey(int providerIdx)
       return QStringLiteral("mistral");
     case ProviderId::Local:
       return QStringLiteral("local");
+    case ProviderId::Requesty:
+      return QStringLiteral("requesty");
   }
   return QStringLiteral("unknown");
 }
@@ -658,6 +667,8 @@ AI::Provider* AI::Assistant::providerAt(int idx) const
       return m_mistral.get();
     case ProviderId::Local:
       return m_local.get();
+    case ProviderId::Requesty:
+      return m_requesty.get();
   }
   return nullptr;
 }

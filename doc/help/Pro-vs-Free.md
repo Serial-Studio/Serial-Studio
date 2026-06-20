@@ -418,7 +418,7 @@ function parse(frame) {
 
 **What it is:** A bring-your-own-key chat panel that reads the live dashboard and edits the project on request.
 
-**How it works:** Providers include Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, OpenRouter, and Mistral, plus any OpenAI-compatible local server (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Read-only commands run automatically; mutations show an Approve/Deny card; device control stays blocked unless the **Allow device control** toggle is on.
+**How it works:** Providers include Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, OpenRouter, Requesty, and Mistral, plus any OpenAI-compatible local server (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Read-only commands run automatically; mutations show an Approve/Deny card; device control stays blocked unless the **Allow device control** toggle is on.
 
 **Learn more:** [AI Assistant](AI-Assistant.md)
 

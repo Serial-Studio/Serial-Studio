@@ -172,6 +172,8 @@ QString AI::KeyVault::settingsKey(ProviderId provider)
       return QStringLiteral("mistral");
     case ProviderId::Local:
       return QStringLiteral("local");
+    case ProviderId::Requesty:
+      return QStringLiteral("requesty");
   }
 
   return QStringLiteral("unknown");

@@ -30,7 +30,7 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Automate it.** A TCP API on port 7777 with 300+ commands. A gRPC server on port 8888 mirrors the same command set with protobuf and live frame streaming. An MCP server wraps the same surface for Claude Desktop or any other MCP host.
 
-**AI Assistant for project editing (Pro).** A bring-your-own-key chat panel that edits the project. Eight providers: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and local OpenAI-compatible endpoints (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
+**AI Assistant for project editing (Pro).** A bring-your-own-key chat panel that edits the project. Nine providers: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, [Requesty](https://requesty.ai), and local OpenAI-compatible endpoints (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
 
 **Vendor-document importers (Pro).** Feed the Modbus register-map importer a vendor CSV/XML/JSON and get a project. DBC import decodes CAN signals from the standard automotive files.
 
@@ -112,7 +112,7 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. It runs well
 - **Multi-device:** several devices in one project, each with its own protocol (Pro).
 - **TCP API on port 7777:** 300+ commands for programmatic control (see the [API client example](./examples/API%20Test)).
 - **gRPC server on port 8888:** the same command set over protobuf, with frame and raw-data streaming (see the [gRPC reference](./doc/help/gRPC-Server.md)).
-- **AI Assistant (Pro):** in-app chat panel that edits the project (sources, datasets, parsers, transforms, output widgets, workspaces) by calling the project-editing API. Bring-your-own-key for Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM); the local option runs fully offline. Mutating commands require explicit approval; connection control and device writes are permanently blocked. Hidden in operator deployments.
+- **AI Assistant (Pro):** in-app chat panel that edits the project (sources, datasets, parsers, transforms, output widgets, workspaces) by calling the project-editing API. Bring-your-own-key for Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter, Requesty, or a local OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM); the local option runs fully offline. Mutating commands require explicit approval; connection control and device writes are permanently blocked. Hidden in operator deployments.
 - **MCP integration:** external AI clients (Claude Desktop, custom MCP hosts) can call the full TCP API, including connection control and device writes, over the Model Context Protocol (see [MCP Client](./examples/MCP%20Client)).
 - **Throughput:** the parse pipeline sustains 256,000 frames per second, enforced as a CI benchmark gate on every pull request (see [Benchmark](./doc/help/Benchmark.md)).
 - **Cross-platform:** 60 FPS, under 50 ms latency, on Windows 10/11, macOS 13+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.

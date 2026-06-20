@@ -164,6 +164,7 @@ private:
   std::unique_ptr<Provider> m_groq;
   std::unique_ptr<Provider> m_mistral;
   std::unique_ptr<Provider> m_local;
+  std::unique_ptr<Provider> m_requesty;
   std::unique_ptr<ToolDispatcher> m_dispatcher;
   std::unique_ptr<Conversation> m_conversation;
   int m_currentProvider;

@@ -79,6 +79,11 @@ Widgets.SmartDialog {
               + "endpoint -- Ollama, llama.cpp's llama-server, LM Studio, "
               + "or vLLM. Nothing leaves your machine. The model list is "
               + "queried live from the server.")
+    } else if (idx === 8) {
+      return qsTr("Requesty. One key, OpenAI-compatible router that fans out "
+              + "to OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek, and "
+              + "others using provider/model ids (e.g. openai/gpt-4o-mini). "
+              + "Pay-as-you-go.")
     }
     return ""
   }

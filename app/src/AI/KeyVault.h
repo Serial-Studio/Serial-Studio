@@ -34,12 +34,13 @@ enum class ProviderId : int {
   Groq       = 5,
   Mistral    = 6,
   Local      = 7,
+  Requesty   = 8,
 };
 
 /**
  * @brief Total number of AI providers wired into the Assistant.
  */
-inline constexpr int kProviderCount = 8;
+inline constexpr int kProviderCount = 9;
 
 /**
  * @brief RAII helper that best-effort scrubs a QString on destruction.

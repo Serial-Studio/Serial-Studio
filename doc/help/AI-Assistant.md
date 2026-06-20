@@ -2,7 +2,7 @@
 
 A chat-based assistant that lives inside Serial Studio and edits the project for you. Open it from the main toolbar (the **Assistant** button next to *Extensions*) or from the **Project Editor** toolbar, describe what you want to build, and the assistant configures sources, groups, datasets, frame parsers, transforms, output widgets, painters, and workspaces by calling the same in-process API your scripts and the MCP server already use.
 
-It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local model server) and paste an API key once. The key is encrypted on this machine and never leaves your computer except to talk to the provider you selected. The local-server option lets you run everything offline against Ollama, llama.cpp, LM Studio, or vLLM.
+It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, Requesty, or a local model server) and paste an API key once. The key is encrypted on this machine and never leaves your computer except to talk to the provider you selected. The local-server option lets you run everything offline against Ollama, llama.cpp, LM Studio, or vLLM.
 
 > **Pro feature.** The Assistant button is only present in Pro builds; GPL builds hide it entirely. Operator deployments (`--runtime`) also hide it. The Assistant is a build-time author tool, not something you ship to operators.
 
@@ -38,11 +38,12 @@ Eight providers are wired in. They all do roughly the same job; the trade-offs a
 | **Groq** | llama-3.3-70b-versatile | Free tier with daily limits; very low paid pricing | OpenAI-compatible API on Groq's LPU hardware (extremely fast token output). `llama-3.1-8b-instant` for cheapest/fastest, plus the OpenAI gpt-oss-120b / 20b open-weights builds. |
 | **Mistral** | mistral-large-latest | Pay-per-token; small / Ministral / Nemo tiers are cheap | OpenAI-compatible API. Selectable: `mistral-medium-latest`, `mistral-small-latest`, `ministral-8b-latest`, `ministral-3b-latest`, `codestral-latest` (code-tuned), `pixtral-large-latest` (vision), `open-mistral-nemo`. |
 | **OpenRouter** | anthropic/claude-haiku-4.5 | Aggregator pricing per upstream model; some `:free` routes | OpenAI-compatible aggregator. Single key fans out to Anthropic, OpenAI, Google, Meta Llama, DeepSeek, Mistral, Qwen routes. Useful when you want to try several backends without juggling keys. |
+| **[Requesty](https://requesty.ai)** | openai/gpt-4o-mini | Router pricing per upstream model; pay-as-you-go | OpenAI-compatible router (base URL `https://router.requesty.ai/v1`). A single key fans out to OpenAI, Anthropic, Google, Meta Llama, Mistral, DeepSeek, and other routes using `provider/model` ids. Get a key from [app.requesty.ai/api-keys](https://app.requesty.ai/api-keys); browse routes at [app.requesty.ai/router/list](https://app.requesty.ai/router/list). |
 | **Local model** | (whatever your server has loaded) | Free | OpenAI-compatible local endpoint. Works with Ollama (default `http://localhost:11434/v1`), llama.cpp's `llama-server`, LM Studio, or vLLM. The model list is queried live from `/v1/models`. Nothing leaves your machine. |
 
 You switch providers from the footer combo box. Each provider keeps its own model selection. Serial Studio remembers which model you picked per provider, so flipping back and forth doesn't reset anything.
 
-> **Anthropic and OpenAI have the most complete integrations today.** Anthropic surfaces cache read/write counts and adaptive extended thinking back to the UI; the OpenAI path uses server-side prompt caching (silent), parallel tool calls, and the GPT-5 / o-series developer-role conventions, with `reasoning_effort: none` so tool-calling stays responsive. Gemini also streams its thinking (extended thinking on 2.5 models) but has no cache reporting. DeepSeek, Groq, Mistral, OpenRouter, and Local all work for streaming chat and tool calls (Groq, Mistral, OpenRouter and DeepSeek run on the same OpenAI-compatible code path) but have neither cache reporting nor thinking integration.
+> **Anthropic and OpenAI have the most complete integrations today.** Anthropic surfaces cache read/write counts and adaptive extended thinking back to the UI; the OpenAI path uses server-side prompt caching (silent), parallel tool calls, and the GPT-5 / o-series developer-role conventions, with `reasoning_effort: none` so tool-calling stays responsive. Gemini also streams its thinking (extended thinking on 2.5 models) but has no cache reporting. DeepSeek, Groq, Mistral, OpenRouter, Requesty, and Local all work for streaming chat and tool calls (Groq, Mistral, OpenRouter, Requesty and DeepSeek run on the same OpenAI-compatible code path) but have neither cache reporting nor thinking integration.
 
 ### Local models
 
@@ -129,10 +130,10 @@ When you're starting from a blank project, you can ask the assistant to "use a t
 ## Frequently asked
 
 **Does the assistant work offline?**
-Yes, with the **Local model** provider. Point it at Ollama, llama.cpp, LM Studio, or vLLM running on your machine and the Assistant works fully offline. The cloud providers (Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter) need a network connection. The rest of Serial Studio works offline regardless.
+Yes, with the **Local model** provider. Point it at Ollama, llama.cpp, LM Studio, or vLLM running on your machine and the Assistant works fully offline. The cloud providers (Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter, Requesty) need a network connection. The rest of Serial Studio works offline regardless.
 
 **Can I use a self-hosted model (Ollama, LM Studio, llama.cpp, vLLM)?**
-Eight providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and a Local provider that talks to any OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM). The Local provider's base URL is user-configurable, so any other compatible endpoint works without a code change.
+Nine providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, Requesty, and a Local provider that talks to any OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM). The Local provider's base URL is user-configurable, so any other compatible endpoint works without a code change.
 
 **Can I see what the assistant is about to do before it does it?**
 Yes. That's exactly what the **Confirm** tier is for. The card shows the command name and the full arguments object before you approve.
