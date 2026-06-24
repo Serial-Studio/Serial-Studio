@@ -131,6 +131,7 @@ jobs:
           libminizip-dev \
           libopus-dev \
           rpm \
+          python3-venv \
           libxcb1 \
           libxcb-cursor0 \
           libxcb-cursor-dev \
@@ -380,6 +381,27 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
 
+    - name: '📦 Create .deb and .rpm packages'
+      run: |
+        set -euo pipefail
+        python3 -m venv /tmp/ldnp-venv
+        /tmp/ldnp-venv/bin/pip install --upgrade pip
+        /tmp/ldnp-venv/bin/pip install \
+          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git"
+
+        export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
+        export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
+        export LDNP_PACKAGE_NAME="${{env.UNIXNAME}}"
+        export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
+
+        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
+          --appdir build/app/AppDir \
+          --build deb --build rpm
+
+        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
+        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
+
     - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
       env:
         GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
@@ -393,9 +415,11 @@ jobs:
         fi
         printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
         APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
+        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
+        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
         BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64"
         cp "build/app/${{env.UNIXNAME}}" "$BIN"
-        for f in "$APPIMAGE" "$BIN"; do
+        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN"; do
           gpg --batch --yes --pinentry-mode loopback \
             ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
             --local-user "$GPG_KEY_ID" \
@@ -409,6 +433,18 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
 
+    - name: '📤 Upload artifact: .deb (x64)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb
+
+    - name: '📤 Upload artifact: .rpm (x64)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
+
     - name: '📤 Upload artifact: signatures + signed binary (x64)'
       uses: actions/upload-artifact@v5
       with:
@@ -416,6 +452,8 @@ jobs:
         if-no-files-found: ignore
         path: |
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage.asc
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb.asc
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.asc
 
@@ -455,6 +493,7 @@ jobs:
           libminizip-dev \
           libopus-dev \
           rpm \
+          python3-venv \
           libxcb1 \
           libxcb-cursor0 \
           libxcb-cursor-dev \
@@ -702,6 +741,27 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
+    - name: '📦 Create .deb and .rpm packages'
+      run: |
+        set -euo pipefail
+        python3 -m venv /tmp/ldnp-venv
+        /tmp/ldnp-venv/bin/pip install --upgrade pip
+        /tmp/ldnp-venv/bin/pip install \
+          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git"
+
+        export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
+        export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
+        export LDNP_PACKAGE_NAME="${{env.UNIXNAME}}"
+        export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
+
+        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
+          --appdir build/app/AppDir \
+          --build deb --build rpm
+
+        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
+        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
+
     - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
       env:
         GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
@@ -715,9 +775,11 @@ jobs:
         fi
         printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
         APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
+        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
+        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
         BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64"
         cp "build/app/${{env.UNIXNAME}}" "$BIN"
-        for f in "$APPIMAGE" "$BIN"; do
+        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN"; do
           gpg --batch --yes --pinentry-mode loopback \
             ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
             --local-user "$GPG_KEY_ID" \
@@ -731,6 +793,18 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
+    - name: '📤 Upload artifact: .deb (arm64)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb
+
+    - name: '📤 Upload artifact: .rpm (arm64)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
+
     - name: '📤 Upload artifact: signatures + signed binary (arm64)'
       uses: actions/upload-artifact@v5
       with:
@@ -738,6 +812,8 @@ jobs:
         if-no-files-found: ignore
         path: |
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage.asc
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb.asc
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.asc
 
