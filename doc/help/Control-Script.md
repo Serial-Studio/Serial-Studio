@@ -300,6 +300,7 @@ Tools and scripts can manage the control loop through the API: `controlScript.ge
 
 ## Related
 
+- [SDK Reference](SerialStudio-SDK.md) for the full call surface a control loop drives: `io.*`, `tableGet`/`tableSet`, `deviceWriteAndWait`, dashboard control, notifications, and the See/Decide/Act helpers.
 - [Bluetooth Low Energy](Drivers-Bluetooth-LE.md) for selecting the device, service, and notify characteristic the script writes alongside.
 - [Frame Parser Reference](JavaScript-API.md) for turning the bytes a device streams into dataset values.
 - [Actions](Actions.md) for user-triggered one-shot commands, the manual counterpart to an automated Control Loop.

@@ -591,6 +591,7 @@ end
 
 ## See also
 
+- [SDK Reference](SerialStudio-SDK.md): the full helper surface a transform can call (`tableGet`/`tableSet`, `deviceWrite`, `actionFire`, notifications, protocol encoders).
 - [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function that feeds values to transforms.
 - [Data Tables](Data-Tables.md): shared constants and computed registers available to every transform.
 - [Data Flow](Data-Flow.md): how data moves from device through parsing, transforms, and into the dashboard.

@@ -16,6 +16,7 @@
   { "id": "control-script", "title": "Control Loop (setup / loop)", "section": "Scripting & Data Logic", "file": "Control-Script.md" },
   { "id": "dataset-transforms", "title": "Dataset Value Transforms", "section": "Scripting & Data Logic", "file": "Dataset-Transforms.md" },
   { "id": "data-tables", "title": "Data Tables", "section": "Scripting & Data Logic", "file": "Data-Tables.md" },
+  { "id": "serial-studio-sdk", "title": "SDK Reference", "section": "Scripting & Data Logic", "file": "SerialStudio-SDK.md" },
   { "id": "communication-protocols", "title": "Communication Protocols", "section": "Connectivity", "file": "Communication-Protocols.md" },
   { "id": "protocol-setup-guides", "title": "Protocol Setup Guides", "section": "Connectivity", "file": "Protocol-Setup-Guides.md" },
   { "id": "auto-generating-projects", "title": "Auto-Generating Projects", "section": "Connectivity", "file": "Auto-Generating-Projects.md" },

@@ -543,6 +543,7 @@ function transmit(value) {
 
 ## See Also
 
+- [SDK Reference](SerialStudio-SDK.md): the protocol encoders (`modbusWriteRegister`, `canSendFrame`, ...) a `transmit()` function returns, and the wider scripting surface.
 - [Actions](Actions.md): simple command buttons with timer support.
 - [Project Editor](Project-Editor.md): full guide to creating and configuring projects.
 - [Toolbar & Button Reference](Toolbar-Reference.md): the Project Editor's add-control buttons and the rest of the app's chrome.
