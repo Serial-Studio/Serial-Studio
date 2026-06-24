@@ -72,11 +72,11 @@ env:
   #
   # Qt cache management
   #
-  INSTALL_QT_WINDOWS: true
-  INSTALL_QT_MACOS_ARM64: true
-  INSTALL_QT_MACOS_INTEL: true
-  INSTALL_QT_LINUX_INTEL: true
-  INSTALL_QT_LINUX_ARM64: true
+  INSTALL_QT_WINDOWS: false
+  INSTALL_QT_MACOS_ARM64: false
+  INSTALL_QT_MACOS_INTEL: false
+  INSTALL_QT_LINUX_INTEL: false
+  INSTALL_QT_LINUX_ARM64: false
 
   #
   # Test gating
@@ -391,9 +391,11 @@ jobs:
 
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
-        export LDNP_PACKAGE_NAME="${{env.UNIXNAME}}"
-        export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
+        export LDNP_META_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_META_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_META_ARCHITECTURE="amd64"
+        export LDNP_META_BUILD_ARCH="x86_64"
 
         /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
           --appdir build/app/AppDir \
@@ -751,9 +753,11 @@ jobs:
 
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
-        export LDNP_PACKAGE_NAME="${{env.UNIXNAME}}"
-        export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
+        export LDNP_META_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_META_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
+        export LDNP_META_ARCHITECTURE="arm64"
+        export LDNP_META_BUILD_ARCH="aarch64"
 
         /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
           --appdir build/app/AppDir \
