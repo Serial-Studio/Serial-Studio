@@ -1541,6 +1541,8 @@ jobs:
           name: 'Continuous Build'
           artifacts: |
             artifacts/*.AppImage
+            artifacts/*.deb
+            artifacts/*.rpm
             artifacts/*.dmg
             artifacts/*.msi
             artifacts/*.zip
