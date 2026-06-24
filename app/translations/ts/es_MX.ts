@@ -5661,8 +5661,6 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
         <source>Gyro %1</source>
         <translation>Giroscopio %1</translation>
     </message>
@@ -11812,8 +11810,8 @@ Would you like to open the download page?</source>
         <translation>No se pudo escribir Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>El escritor de accesos directos de Windows no está disponible en esta plataforma.</translation>
     </message>
@@ -11844,8 +11842,8 @@ Would you like to open the download page?</source>
         <translation>Falló el guardado del archivo .lnk (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>El escritor de accesos directos de macOS no está disponible en esta plataforma.</translation>
     </message>
@@ -12432,9 +12430,9 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Entradas etiqueta:índice separadas por comas, p. ej. 1:0,2:1,3:2. Las etiquetas pueden ser decimales o hexadecimales con prefijo 0x.</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1096"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1300"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <source>Validate checksum</source>
         <translation>Validar suma de verificación</translation>
     </message>
@@ -15949,12 +15947,12 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="217"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="289"/>
         <source>Workspace Folder</source>
         <translation>Carpeta del Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="585"/>
         <source>Automatically Check for Updates</source>
         <translation>Buscar Actualizaciones Automáticamente</translation>
     </message>
@@ -15964,43 +15962,43 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="402"/>
         <source>Export…</source>
         <translation>Exportar…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="593"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
         <source>Data Plotting</source>
         <translation>Graficación de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="660"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
         <source>Point Count</source>
         <translation>Cantidad de Puntos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Frecuencia de Actualización de la Interfaz (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Mostrar Siempre los Botones de la Barra de Tareas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="816"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Show Actions Panel</source>
         <translation>Mostrar Panel de Acciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>Habilitar Servidor API (Puerto 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
@@ -16014,17 +16012,16 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Archivos y Actualizaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="248"/>
         <source>Advanced</source>
-        <translation>Avanzado</translation>
+        <translation type="vanished">Avanzado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <source>Allow External API Connections</source>
         <translation>Permitir Conexiones Externas a la API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Ocultar Automáticamente la Barra de Herramientas</translation>
     </message>
@@ -16034,12 +16031,12 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Barra de Tareas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="470"/>
         <source>Rendering Backend</source>
         <translation>Backend de Renderizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="370"/>
         <source>API Access Token</source>
         <translation>Token de Acceso de la API</translation>
     </message>
@@ -16049,195 +16046,220 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Inicio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="202"/>
+        <source>Window</source>
+        <translation>Ventana</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="221"/>
+        <source>Custom Window Decorations</source>
+        <translation>Decoraciones de Ventana Personalizadas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="237"/>
+        <source>Window Shadow</source>
+        <translation>Sombra de Ventana</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>Los cambios en la decoración de ventana se aplican después de reiniciar %1.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="273"/>
         <source>Files</source>
         <translation>Archivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="320"/>
+        <source>API &amp; Plugins</source>
+        <translation>API y Plugins</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
         <source>Graphics</source>
         <translation>Gráficos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="508"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="468"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="524"/>
         <source>Apply Performance Hints</source>
         <translation>Aplicar Sugerencias de Rendimiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="482"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="538"/>
         <source>Keep Display Awake</source>
         <translation>Mantener Pantalla Activa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="558"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Las sugerencias de rendimiento elevan la prioridad del proceso y excluyen la limitación de energía del sistema operativo. Los cambios surten efecto la próxima vez que Serial Studio inicie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="569"/>
         <source>Updates &amp; News</source>
         <translation>Actualizaciones y Noticias</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="543"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
         <translation>Mostrar Novedades al Iniciar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="608"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
         <source>Time Range</source>
         <translation>Rango de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Small</source>
         <translation>Pequeño</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Large</source>
         <translation>Grande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Extra Large</source>
         <translation>Extra Grande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="801"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
         <source>Layout</source>
         <translation>Diseño</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="832"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
         <source>Auto-Layout Margin</source>
         <translation>Margen de Diseño Automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
         <source>Auto-Layout Spacing</source>
         <translation>Espaciado de Diseño Automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="889"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
         <source>Video Export</source>
         <translation>Exportación de Video</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="907"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
         <source>Save Videos by Default</source>
         <translation>Guardar Videos de Forma Predeterminada</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
         <source>Behavior</source>
         <translation>Comportamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
         <source>Show Search Field</source>
         <translation>Mostrar Campo de Búsqueda</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Auto-hide Taskbar</source>
         <translation>Ocultar Automáticamente la Barra de Tareas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
         <source>Hide Delay (ms)</source>
         <translation>Retraso de Ocultación (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
         <source>Pinned Buttons</source>
         <translation>Botones Anclados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1069"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Arrastra un botón anclado en la barra de tareas para reordenarlo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1090"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
         <source>Settings</source>
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
         <source>Clock</source>
         <translation>Reloj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1094"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Stopwatch</source>
         <translation>Cronómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
         <source>Pause / Resume</source>
         <translation>Pausar / Reanudar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1096"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
         <source>File Transmission</source>
         <translation>Transmisión de Archivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1097"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
         <source>AI Assistant</source>
         <translation>Asistente de IA</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
         <source>Display</source>
         <translation>Visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1241"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Display Mode</source>
         <translation>Modo de Visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="722"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
         <source>Font Family</source>
         <translation>Familia de Fuente</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="344"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="400"/>
         <source>Export Protobuf File</source>
         <translation>Exportar Archivo Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="707"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
         <source>Dashboard Font</source>
         <translation>Fuente del Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1269"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>Font Size</source>
         <translation>Tamaño de Fuente</translation>
     </message>
@@ -16250,97 +16272,97 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Guardar Imágenes por Defecto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1286"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
         <source>Show Timestamps</source>
         <translation>Mostrar Marcas de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1305"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
         <source>Data Transmission</source>
         <translation>Transmisión de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1320"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
         <source>Line Ending</source>
         <translation>Final de Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
         <source>Input Mode</source>
         <translation>Modo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
         <source>Text Encoding</source>
         <translation>Codificación de Texto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1359"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
         <source>Checksum</source>
         <translation>Suma de Verificación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1372"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
         <source>Echo Sent Data</source>
         <translation>Repetir Datos Enviados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
         <source>Escape Codes</source>
         <translation>Códigos de Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1406"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
         <source>VT100 Emulation</source>
         <translation>Emulación VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1425"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
         <source>ANSI Colors</source>
         <translation>Colores ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
         <source>Delivery</source>
         <translation>Entrega</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1498"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
         <source>System Notifications</source>
         <translation>Notificaciones del Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1519"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Mostrar eventos de Advertencia/Críticos como notificaciones de escritorio del SO cuando Serial Studio no sea la ventana en primer plano.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
         <source>Application Logs</source>
         <translation>Registros de la Aplicación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1544"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
         <source>Route Warnings to Notifications</source>
         <translation>Redirigir Advertencias a Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1565"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Desactivado por defecto — QT y QML emiten advertencias frecuentemente y habilitar esto puede ocultar alarmas reales. Los mensajes críticos siempre se enrutan independientemente de esta configuración.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1584"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
         <source>Reset</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1624"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1632"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>

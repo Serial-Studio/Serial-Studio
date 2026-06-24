@@ -5661,8 +5661,6 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
         <source>Gyro %1</source>
         <translation>जायरो %1</translation>
     </message>
@@ -11812,8 +11810,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist नहीं लिखा जा सका: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -11844,8 +11842,8 @@ Would you like to open the download page?</source>
         <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -12432,9 +12430,9 @@ Add groups above to poll multiple register types.</source>
         <translation>अल्पविराम से अलग किए गए tag:index प्रविष्टियाँ, जैसे 1:0,2:1,3:2। टैग दशमलव या 0x-उपसर्गित हेक्स हो सकते हैं।</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1096"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1300"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <source>Validate checksum</source>
         <translation>चेकसम सत्यापित करें</translation>
     </message>
@@ -15949,17 +15947,17 @@ function parse(%1) { ... }
         <translation>थीम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="217"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="289"/>
         <source>Workspace Folder</source>
         <translation>वर्कस्पेस फ़ोल्डर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>API सर्वर सक्षम करें (पोर्ट 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="585"/>
         <source>Automatically Check for Updates</source>
         <translation>अपडेट स्वचालित रूप से जाँचें</translation>
     </message>
@@ -15969,38 +15967,38 @@ function parse(%1) { ... }
         <translation>डैशबोर्ड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="402"/>
         <source>Export…</source>
         <translation>एक्सपोर्ट करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="593"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
         <source>Data Plotting</source>
         <translation>डेटा प्लॉटिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="660"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
         <source>Point Count</source>
         <translation>पॉइंट काउंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI रिफ्रेश रेट (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="816"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Show Actions Panel</source>
         <translation>एक्शन पैनल दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>टास्कबार बटन हमेशा दिखाएं</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
@@ -16014,17 +16012,16 @@ function parse(%1) { ... }
         <translation type="vanished">फाइलें और अपडेट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="248"/>
         <source>Advanced</source>
-        <translation>उन्नत</translation>
+        <translation type="vanished">उन्नत</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <source>Allow External API Connections</source>
         <translation>बाहरी API कनेक्शन की अनुमति दें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
         <source>Auto-Hide Toolbar</source>
         <translation>टूलबार स्वतः छुपाएं</translation>
     </message>
@@ -16034,12 +16031,12 @@ function parse(%1) { ... }
         <translation>टास्कबार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="470"/>
         <source>Rendering Backend</source>
         <translation>रेंडरिंग बैकएंड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="370"/>
         <source>API Access Token</source>
         <translation>API एक्सेस टोकन</translation>
     </message>
@@ -16049,195 +16046,220 @@ function parse(%1) { ... }
         <translation>स्टार्टअप</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="202"/>
+        <source>Window</source>
+        <translation>विंडो</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="221"/>
+        <source>Custom Window Decorations</source>
+        <translation>कस्टम विंडो सजावट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="237"/>
+        <source>Window Shadow</source>
+        <translation>विंडो छाया</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>विंडो सजावट परिवर्तन %1 को पुनः आरंभ करने के बाद लागू होते हैं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="273"/>
         <source>Files</source>
         <translation>फ़ाइलें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="320"/>
+        <source>API &amp; Plugins</source>
+        <translation>API और प्लगइन्स</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
         <source>Graphics</source>
         <translation>ग्राफ़िक्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="508"/>
         <source>System</source>
         <translation>सिस्टम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="468"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="524"/>
         <source>Apply Performance Hints</source>
         <translation>परफ़ॉर्मेंस हिंट्स लागू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="482"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="538"/>
         <source>Keep Display Awake</source>
         <translation>डिस्प्ले को सक्रिय रखें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="558"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>परफ़ॉर्मेंस हिंट्स प्रोसेस प्राथमिकता बढ़ाते हैं और OS पावर थ्रॉटलिंग से बाहर निकलते हैं। बदलाव अगली बार Serial Studio शुरू होने पर लागू होंगे।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="569"/>
         <source>Updates &amp; News</source>
         <translation>अपडेट और समाचार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="543"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
         <translation>स्टार्टअप पर नया क्या है दिखाएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="608"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
         <source>Time Range</source>
         <translation>समय सीमा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Small</source>
         <translation>छोटा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Normal</source>
         <translation>सामान्य</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Large</source>
         <translation>बड़ा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Extra Large</source>
         <translation>अतिरिक्त बड़ा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Custom</source>
         <translation>कस्टम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="801"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
         <source>Layout</source>
         <translation>लेआउट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="832"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
         <source>Auto-Layout Margin</source>
         <translation>ऑटो-लेआउट मार्जिन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
         <source>Auto-Layout Spacing</source>
         <translation>ऑटो-लेआउट स्पेसिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="889"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
         <source>Video Export</source>
         <translation>वीडियो एक्सपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="907"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
         <source>Save Videos by Default</source>
         <translation>डिफ़ॉल्ट रूप से वीडियो सहेजें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
         <source>Behavior</source>
         <translation>व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
         <source>Show Search Field</source>
         <translation>खोज फ़ील्ड दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Auto-hide Taskbar</source>
         <translation>टास्कबार स्वतः छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
         <source>Hide Delay (ms)</source>
         <translation>छुपाने की देरी (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
         <source>Pinned Buttons</source>
         <translation>पिन किए गए बटन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1069"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>क्रम बदलने के लिए टास्कबार पर पिन किए गए बटन को ड्रैग करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1090"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
         <source>Settings</source>
         <translation>सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1094"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
         <source>Pause / Resume</source>
         <translation>रोकें / फिर से शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1096"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
         <source>File Transmission</source>
         <translation>फ़ाइल ट्रांसमिशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1097"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
         <source>AI Assistant</source>
         <translation>AI असिस्टेंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
         <source>Display</source>
         <translation>डिस्प्ले</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1241"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Display Mode</source>
         <translation>डिस्प्ले मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="722"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
         <source>Font Family</source>
         <translation>फ़ॉन्ट फ़ैमिली</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
         <source>Notifications</source>
         <translation>नोटिफ़िकेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="344"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="400"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf फ़ाइल एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="707"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
         <source>Dashboard Font</source>
         <translation>डैशबोर्ड फ़ॉन्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1269"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>Font Size</source>
         <translation>फ़ॉन्ट साइज़</translation>
     </message>
@@ -16250,97 +16272,97 @@ function parse(%1) { ... }
         <translation type="vanished">डिफ़ॉल्ट रूप से इमेज सेव करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1286"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
         <source>Show Timestamps</source>
         <translation>टाइमस्टैम्प दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1305"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
         <source>Data Transmission</source>
         <translation>डेटा ट्रांसमिशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1320"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
         <source>Line Ending</source>
         <translation>लाइन एंडिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
         <source>Input Mode</source>
         <translation>इनपुट मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
         <source>Text Encoding</source>
         <translation>टेक्स्ट एन्कोडिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1359"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
         <source>Checksum</source>
         <translation>चेकसम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1372"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
         <source>Echo Sent Data</source>
         <translation>भेजा गया डेटा इको करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
         <source>Escape Codes</source>
         <translation>एस्केप कोड्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1406"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
         <source>VT100 Emulation</source>
         <translation>VT100 एमुलेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1425"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
         <source>ANSI Colors</source>
         <translation>ANSI रंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
         <source>Delivery</source>
         <translation>डिलीवरी</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1498"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
         <source>System Notifications</source>
         <translation>सिस्टम नोटिफिकेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1519"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Serial Studio जब फोरग्राउंड विंडो नहीं है तब Warning/Critical इवेंट्स को OS डेस्कटॉप नोटिफिकेशन के रूप में दिखाएं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
         <source>Application Logs</source>
         <translation>एप्लिकेशन लॉग्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1544"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
         <source>Route Warnings to Notifications</source>
         <translation>Warnings को नोटिफिकेशन में रूट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1565"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>डिफ़ॉल्ट रूप से बंद — QT और QML अक्सर warnings उत्सर्जित करते हैं और इसे सक्षम करने से वास्तविक अलार्म दब सकते हैं। Critical संदेश हमेशा इस सेटिंग की परवाह किए बिना रूट किए जाते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1584"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
         <source>Reset</source>
         <translation>रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1624"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1632"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>

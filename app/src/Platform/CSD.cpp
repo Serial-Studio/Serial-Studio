@@ -768,9 +768,10 @@ void Titlebar::hoverLeaveEvent(QHoverEvent* event)
 /**
  * @brief Constructs a Window decorator.
  */
-Window::Window(QWindow* window, const QString& color, QObject* parent)
+Window::Window(QWindow* window, const QString& color, bool shadow, QObject* parent)
   : QObject(parent)
   , m_resizing(false)
+  , m_shadowEnabled(shadow)
   , m_frame(nullptr)
   , m_border(nullptr)
   , m_color(color)
@@ -892,6 +893,9 @@ int Window::shadowMargin() const
   if (!m_window)
     return 0;
 
+  if (!m_shadowEnabled)
+    return 0;
+
   const auto state = m_window->windowStates();
   if (state & (Qt::WindowMaximized | Qt::WindowFullScreen))
     return 0;
@@ -931,10 +935,14 @@ void Window::setColor(const QString& color)
 
 /**
  * @brief Creates the drop-shadow as a BorderImage over a shared 9-slice atlas (no per-window
- *        full-window backing); enables the window alpha channel the shadow needs.
+ *        full-window backing); enables the window alpha channel the shadow needs. Skipped
+ *        entirely when the shadow is disabled, leaving an opaque frameless window.
  */
 void Window::setupFrame()
 {
+  if (!m_shadowEnabled)
+    return;
+
   auto* quickWindow = qobject_cast<QQuickWindow*>(m_window.data());
   if (!quickWindow)
     return;

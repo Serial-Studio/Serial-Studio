@@ -5661,8 +5661,6 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
         <source>Gyro %1</source>
         <translation>Jiroskop %1</translation>
     </message>
@@ -11812,8 +11810,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist yazılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
@@ -11844,8 +11842,8 @@ Would you like to open the download page?</source>
         <translation>.lnk dosyası kaydedilemedi (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
@@ -12432,9 +12430,9 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation>Virgülle ayrılmış etiket:indeks girdileri, örn. 1:0,2:1,3:2. Etiketler ondalık veya 0x önekli onaltılık olabilir.</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1096"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1300"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <source>Validate checksum</source>
         <translation>Sağlama toplamını doğrula</translation>
     </message>
@@ -15949,12 +15947,12 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="217"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="289"/>
         <source>Workspace Folder</source>
         <translation>Çalışma Alanı Klasörü</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="585"/>
         <source>Automatically Check for Updates</source>
         <translation>Güncellemeleri Otomatik Denetle</translation>
     </message>
@@ -15964,43 +15962,43 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Gösterge Paneli</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="402"/>
         <source>Export…</source>
         <translation>Dışa Aktar…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="593"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
         <source>Data Plotting</source>
         <translation>Veri Çizimi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="660"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
         <source>Point Count</source>
         <translation>Nokta Sayısı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Arayüz Yenileme Hızı (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Görev Çubuğu Düğmelerini Her Zaman Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="816"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Show Actions Panel</source>
         <translation>Eylemler Panelini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>API Sunucusunu Etkinleştir (Port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
@@ -16014,17 +16012,16 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation type="vanished">Dosyalar ve Güncellemeler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="248"/>
         <source>Advanced</source>
-        <translation>Gelişmiş</translation>
+        <translation type="vanished">Gelişmiş</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <source>Allow External API Connections</source>
         <translation>Harici API Bağlantılarına İzin Ver</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Araç Çubuğunu Otomatik Gizle</translation>
     </message>
@@ -16034,12 +16031,12 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Görev Çubuğu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="470"/>
         <source>Rendering Backend</source>
         <translation>İşleme Altyapısı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="370"/>
         <source>API Access Token</source>
         <translation>API Erişim Jetonu</translation>
     </message>
@@ -16049,195 +16046,220 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Başlangıç</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="202"/>
+        <source>Window</source>
+        <translation>Pencere</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="221"/>
+        <source>Custom Window Decorations</source>
+        <translation>Özel Pencere Süslemeleri</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="237"/>
+        <source>Window Shadow</source>
+        <translation>Pencere Gölgesi</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>Pencere süslemesi değişiklikleri %1 yeniden başlatıldıktan sonra uygulanır.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="273"/>
         <source>Files</source>
         <translation>Dosyalar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="320"/>
+        <source>API &amp; Plugins</source>
+        <translation>API ve Eklentiler</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
         <source>Graphics</source>
         <translation>Grafikler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="508"/>
         <source>System</source>
         <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="468"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="524"/>
         <source>Apply Performance Hints</source>
         <translation>Performans İpuçlarını Uygula</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="482"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="538"/>
         <source>Keep Display Awake</source>
         <translation>Ekranı Uyanık Tut</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="558"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Performans ipuçları işlem önceliğini yükseltir ve işletim sistemi güç kısıtlamasından çıkar. Değişiklikler Serial Studio bir sonraki başlatıldığında geçerli olur.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="569"/>
         <source>Updates &amp; News</source>
         <translation>Güncellemeler ve Haberler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="543"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
         <translation>Başlangıçta Yenilikleri Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="608"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
         <source>Time Range</source>
         <translation>Zaman Aralığı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Small</source>
         <translation>Küçük</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Large</source>
         <translation>Büyük</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Extra Large</source>
         <translation>Çok Büyük</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Custom</source>
         <translation>Özel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="801"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
         <source>Layout</source>
         <translation>Düzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="832"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
         <source>Auto-Layout Margin</source>
         <translation>Otomatik Düzen Kenar Boşluğu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
         <source>Auto-Layout Spacing</source>
         <translation>Otomatik Düzen Aralığı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="889"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
         <source>Video Export</source>
         <translation>Video Dışa Aktarma</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="907"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
         <source>Save Videos by Default</source>
         <translation>Videoları Varsayılan Olarak Kaydet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
         <source>Behavior</source>
         <translation>Davranış</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
         <source>Show Search Field</source>
         <translation>Arama Alanını Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Auto-hide Taskbar</source>
         <translation>Görev Çubuğunu Otomatik Gizle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
         <source>Hide Delay (ms)</source>
         <translation>Gizleme Gecikmesi (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
         <source>Pinned Buttons</source>
         <translation>Sabitlenmiş Düğmeler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1069"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Görev çubuğundaki sabitlenmiş bir düğmeyi sırasını değiştirmek için sürükleyin.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1090"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
         <source>Clock</source>
         <translation>Saat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1094"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Stopwatch</source>
         <translation>Kronometre</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
         <source>Pause / Resume</source>
         <translation>Duraklat / Devam Et</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1096"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
         <source>File Transmission</source>
         <translation>Dosya İletimi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1097"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
         <source>AI Assistant</source>
         <translation>Yapay Zeka Asistanı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
         <source>Display</source>
         <translation>Görüntüleme</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1241"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Display Mode</source>
         <translation>Görüntüleme Modu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="722"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
         <source>Font Family</source>
         <translation>Yazı Tipi Ailesi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
         <source>Notifications</source>
         <translation>Bildirimler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="344"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="400"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf Dosyasını Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="707"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
         <source>Dashboard Font</source>
         <translation>Gösterge Paneli Yazı Tipi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1269"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>Font Size</source>
         <translation>Yazı Tipi Boyutu</translation>
     </message>
@@ -16250,97 +16272,97 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation type="vanished">Görüntüleri Varsayılan Olarak Kaydet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1286"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
         <source>Show Timestamps</source>
         <translation>Zaman Damgalarını Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1305"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
         <source>Data Transmission</source>
         <translation>Veri İletimi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1320"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
         <source>Line Ending</source>
         <translation>Satır Sonu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
         <source>Input Mode</source>
         <translation>Giriş Modu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
         <source>Text Encoding</source>
         <translation>Metin Kodlaması</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1359"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
         <source>Checksum</source>
         <translation>Sağlama Toplamı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1372"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
         <source>Echo Sent Data</source>
         <translation>Gönderilen Veriyi Yankıla</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
         <source>Escape Codes</source>
         <translation>Kaçış Kodları</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1406"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
         <source>VT100 Emulation</source>
         <translation>VT100 Emülasyonu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1425"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
         <source>ANSI Colors</source>
         <translation>ANSI Renkleri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
         <source>Delivery</source>
         <translation>Teslimat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1498"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
         <source>System Notifications</source>
         <translation>Sistem Bildirimleri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1519"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Serial Studio ön planda olmadığında Uyarı/Kritik olayları işletim sistemi masaüstü bildirimleri olarak göster.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
         <source>Application Logs</source>
         <translation>Uygulama Günlükleri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1544"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
         <source>Route Warnings to Notifications</source>
         <translation>Uyarıları Bildirimlere Yönlendir</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1565"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Varsayılan olarak kapalı — QT ve QML sık sık uyarı yayar ve bunu etkinleştirmek gerçek alarmları bastırabilir. Kritik mesajlar bu ayardan bağımsız olarak her zaman yönlendirilir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1584"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
         <source>Reset</source>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1624"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1632"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
         <source>Apply</source>
         <translation>Uygula</translation>
     </message>

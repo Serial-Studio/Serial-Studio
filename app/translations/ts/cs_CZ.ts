@@ -5661,8 +5661,6 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4448"/>
         <source>Gyro %1</source>
         <translation>Gyroskop %1</translation>
     </message>
@@ -11812,8 +11810,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Nelze zapsat Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců Windows není na této platformě dostupný.</translation>
     </message>
@@ -11844,8 +11842,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Uložení souboru .lnk selhalo (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců macOS není na této platformě dostupný.</translation>
     </message>
@@ -12432,9 +12430,9 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Položky značka:index oddělené čárkami, např. 1:0,2:1,3:2. Značky mohou být desítkové nebo hexadecimální s prefixem 0x.</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1096"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1300"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <source>Validate checksum</source>
         <translation>Ověřit kontrolní součet</translation>
     </message>
@@ -15949,12 +15947,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Motiv</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="217"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="289"/>
         <source>Workspace Folder</source>
         <translation>Složka Pracovního Prostoru</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="585"/>
         <source>Automatically Check for Updates</source>
         <translation>Automaticky Kontrolovat Aktualizace</translation>
     </message>
@@ -15964,43 +15962,43 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="402"/>
         <source>Export…</source>
         <translation>Exportovat…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="593"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
         <source>Data Plotting</source>
         <translation>Vykreslování Dat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="660"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
         <source>Point Count</source>
         <translation>Počet Bodů</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Obnovovací Frekvence UI (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Vždy Zobrazit Tlačítka na Hlavním Panelu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="816"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Show Actions Panel</source>
         <translation>Zobrazit Panel Akcí</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>Povolit API Server (Port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
@@ -16014,17 +16012,16 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Soubory a Aktualizace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="248"/>
         <source>Advanced</source>
-        <translation>Pokročilé</translation>
+        <translation type="vanished">Pokročilé</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <source>Allow External API Connections</source>
         <translation>Povolit Externí API Připojení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Automaticky Skrýt Panel Nástrojů</translation>
     </message>
@@ -16034,12 +16031,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Hlavní Panel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="470"/>
         <source>Rendering Backend</source>
         <translation>Vykreslovací Rozhraní</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="370"/>
         <source>API Access Token</source>
         <translation>Přístupový Token API</translation>
     </message>
@@ -16049,195 +16046,220 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Spuštění</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="202"/>
+        <source>Window</source>
+        <translation>Okno</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="221"/>
+        <source>Custom Window Decorations</source>
+        <translation>Vlastní Dekorace Oken</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="237"/>
+        <source>Window Shadow</source>
+        <translation>Stín Okna</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>Změny dekorace oken se použijí po restartování %1.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="273"/>
         <source>Files</source>
         <translation>Soubory</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="320"/>
+        <source>API &amp; Plugins</source>
+        <translation>API a Pluginy</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
         <source>Graphics</source>
         <translation>Grafika</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="508"/>
         <source>System</source>
         <translation>Systém</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="468"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="524"/>
         <source>Apply Performance Hints</source>
         <translation>Použít Tipy pro Výkon</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="482"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="538"/>
         <source>Keep Display Awake</source>
         <translation>Udržovat Displej Aktivní</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="558"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Tipy pro výkon zvyšují prioritu procesu a vypínají omezování výkonu operačním systémem. Změny se projeví při příštím spuštění Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="569"/>
         <source>Updates &amp; News</source>
         <translation>Aktualizace a Novinky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="543"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
         <translation>Zobrazit Co Je Nového při Spuštění</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="608"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
         <source>Time Range</source>
         <translation>Časový Rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Small</source>
         <translation>Malé</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Normal</source>
         <translation>Normální</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Large</source>
         <translation>Velké</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Extra Large</source>
         <translation>Extra Velké</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="747"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
         <source>Custom</source>
         <translation>Vlastní</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="801"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
         <source>Layout</source>
         <translation>Rozvržení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="832"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
         <source>Auto-Layout Margin</source>
         <translation>Okraj Automatického Rozvržení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
         <source>Auto-Layout Spacing</source>
         <translation>Rozestup Automatického Rozvržení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="889"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
         <source>Video Export</source>
         <translation>Export Videa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="907"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
         <source>Save Videos by Default</source>
         <translation>Ukládat Videa ve Výchozím Nastavení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
         <source>Behavior</source>
         <translation>Chování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
         <source>Show Search Field</source>
         <translation>Zobrazit Vyhledávací Pole</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Auto-hide Taskbar</source>
         <translation>Automaticky Skrýt Hlavní Panel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
         <source>Hide Delay (ms)</source>
         <translation>Prodleva Skrytí (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
         <source>Pinned Buttons</source>
         <translation>Připnutá Tlačítka</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1069"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Přetažením připnutého tlačítka na hlavním panelu změníte jeho pořadí.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1090"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
         <source>Clock</source>
         <translation>Hodiny</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1094"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Stopwatch</source>
         <translation>Stopky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
         <source>Pause / Resume</source>
         <translation>Pozastavit / Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1096"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
         <source>File Transmission</source>
         <translation>Přenos Souboru</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1097"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
         <source>AI Assistant</source>
         <translation>AI Asistent</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
         <source>Display</source>
         <translation>Zobrazení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1241"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Display Mode</source>
         <translation>Režim Zobrazení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="722"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
         <source>Font Family</source>
         <translation>Rodina Písma</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="344"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="400"/>
         <source>Export Protobuf File</source>
         <translation>Exportovat Soubor Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="707"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
         <source>Dashboard Font</source>
         <translation>Písmo Panelu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1269"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>Font Size</source>
         <translation>Velikost Písma</translation>
     </message>
@@ -16250,97 +16272,97 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Ukládat Obrázky ve Výchozím Nastavení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1286"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
         <source>Show Timestamps</source>
         <translation>Zobrazit Časové Značky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1305"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
         <source>Data Transmission</source>
         <translation>Přenos Dat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1320"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
         <source>Line Ending</source>
         <translation>Ukončení Řádku</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
         <source>Input Mode</source>
         <translation>Režim Vstupu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1346"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
         <source>Text Encoding</source>
         <translation>Kódování Textu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1359"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
         <source>Checksum</source>
         <translation>Kontrolní Součet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1372"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
         <source>Echo Sent Data</source>
         <translation>Ozvěna Odeslaných Dat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
         <source>Escape Codes</source>
         <translation>Escape Sekvence</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1406"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
         <source>VT100 Emulation</source>
         <translation>Emulace VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1425"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
         <source>ANSI Colors</source>
         <translation>Barvy ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
         <source>Delivery</source>
         <translation>Doručení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1498"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
         <source>System Notifications</source>
         <translation>Systémová Oznámení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1519"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Zobrazit události Varování/Kritické jako systémová oznámení, když Serial Studio není v popředí.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1529"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
         <source>Application Logs</source>
         <translation>Protokoly Aplikace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1544"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
         <source>Route Warnings to Notifications</source>
         <translation>Směrovat Varování do Oznámení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1565"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Vypnuto ve výchozím nastavení — QT a QML často generují varování a jejich povolení může přehlušit skutečné alarmy. Kritické zprávy jsou vždy směrovány bez ohledu na toto nastavení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1584"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
         <source>Reset</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1624"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1632"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>

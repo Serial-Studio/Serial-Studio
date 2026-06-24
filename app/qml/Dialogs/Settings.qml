@@ -195,6 +195,78 @@ Widgets.SmartDialog {
           Item {
             implicitHeight: 2
             Layout.columnSpan: 2
+            visible: Cpp_NativeWindow.csdAvailable
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Window")
+            visible: Cpp_NativeWindow.csdAvailable
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            visible: Cpp_NativeWindow.csdAvailable
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_NativeWindow.csdAvailable
+          }
+
+          Label {
+            visible: Cpp_NativeWindow.csdAvailable
+            text: qsTr("Custom Window Decorations")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            visible: Cpp_NativeWindow.csdAvailable
+            checked: Cpp_NativeWindow.csdEnabled
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_NativeWindow.csdEnabled)
+                Cpp_NativeWindow.csdEnabled = checked
+            }
+          }
+
+          Label {
+            opacity: enabled ? 1 : 0.5
+            text: qsTr("Window Shadow")
+            enabled: Cpp_NativeWindow.csdEnabled
+            visible: Cpp_NativeWindow.csdAvailable
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            opacity: enabled ? 1 : 0.5
+            Layout.alignment: Qt.AlignRight
+            enabled: Cpp_NativeWindow.csdEnabled
+            visible: Cpp_NativeWindow.csdAvailable
+            checked: Cpp_NativeWindow.csdShadowEnabled
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_NativeWindow.csdShadowEnabled)
+                Cpp_NativeWindow.csdShadowEnabled = checked
+            }
+          }
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.topMargin: -2
+            opacity: 0.7
+            wrapMode: Text.WordWrap
+            visible: Cpp_NativeWindow.csdAvailable
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Window decoration changes apply after restarting %1.").arg(Cpp_AppName)
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
           } Label {
             Layout.columnSpan: 2
             Layout.topMargin: 6
@@ -245,7 +317,7 @@ Widgets.SmartDialog {
           } Label {
             Layout.columnSpan: 2
             Layout.topMargin: 6
-            text: qsTr("Advanced")
+            text: qsTr("API & Plugins")
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -257,22 +329,6 @@ Widgets.SmartDialog {
           } Item {
             implicitHeight: 2
             Layout.columnSpan: 2
-          }
-
-          Label {
-            text: qsTr("Auto-Hide Toolbar")
-            color: Cpp_ThemeManager.colors["text"]
-          } Switch {
-            id: _autoHideToolbar
-
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            checked: Cpp_UI_Dashboard.autoHideToolbar
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
-                Cpp_UI_Dashboard.autoHideToolbar = checked
-            }
           }
 
           Label {
@@ -825,6 +881,22 @@ Widgets.SmartDialog {
             onCheckedChanged: {
               if (checked !== Cpp_UI_Dashboard.showActionPanel)
                 Cpp_UI_Dashboard.showActionPanel = checked
+            }
+          }
+
+          Label {
+            text: qsTr("Auto-Hide Toolbar")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _autoHideToolbar
+
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_UI_Dashboard.autoHideToolbar
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
+                Cpp_UI_Dashboard.autoHideToolbar = checked
             }
           }
 

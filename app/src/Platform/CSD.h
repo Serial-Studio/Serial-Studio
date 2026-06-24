@@ -128,7 +128,8 @@ class Window : public QObject {
   Q_OBJECT
 
 public:
-  explicit Window(QWindow* window, const QString& color = QString(), QObject* parent = nullptr);
+  explicit Window(QWindow* window, const QString& color = QString(), bool shadow = true,
+                  QObject* parent = nullptr);
   ~Window() override;
 
   [[nodiscard]] QWindow* window() const;
@@ -182,6 +183,7 @@ protected:
 
 private:
   bool m_resizing;
+  bool m_shadowEnabled;
   QQuickItem* m_frame;
   QQuickItem* m_border;
   QString m_color;

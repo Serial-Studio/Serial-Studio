@@ -60,12 +60,65 @@ static bool isWindows11()
 /**
  * @brief Constructs NativeWindow.
  */
-NativeWindow::NativeWindow(QObject* parent) : QObject(parent)
+NativeWindow::NativeWindow(QObject* parent)
+  : QObject(parent)
+  , m_csdShadowEnabled(m_settings.value("Window/CSDShadowEnabled", true).toBool())
+  , m_csdEnabled(m_settings.value("Window/CSDEnabled", true).toBool())
 {
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
           &NativeWindow::onThemeChanged);
+}
+
+/**
+ * @brief Returns true when the custom CSD chrome is the active decoration scheme.
+ */
+bool NativeWindow::csdAvailable() const
+{
+  return !isWindows11();
+}
+
+/**
+ * @brief Returns whether the custom CSD decorations are enabled.
+ */
+bool NativeWindow::csdEnabled() const
+{
+  return m_csdEnabled;
+}
+
+/**
+ * @brief Returns whether the CSD drop-shadow is enabled.
+ */
+bool NativeWindow::csdShadowEnabled() const
+{
+  return m_csdShadowEnabled;
+}
+
+/**
+ * @brief Persists the CSD decoration preference; applied to windows created afterwards.
+ */
+void NativeWindow::setCsdEnabled(bool enabled)
+{
+  if (m_csdEnabled == enabled)
+    return;
+
+  m_csdEnabled = enabled;
+  m_settings.setValue("Window/CSDEnabled", m_csdEnabled);
+  Q_EMIT csdEnabledChanged();
+}
+
+/**
+ * @brief Persists the CSD shadow preference; applied to windows created afterwards.
+ */
+void NativeWindow::setCsdShadowEnabled(bool enabled)
+{
+  if (m_csdShadowEnabled == enabled)
+    return;
+
+  m_csdShadowEnabled = enabled;
+  m_settings.setValue("Window/CSDShadowEnabled", m_csdShadowEnabled);
+  Q_EMIT csdShadowEnabledChanged();
 }
 
 /**
@@ -95,13 +148,13 @@ int NativeWindow::frameMargin(QObject* window)
   if (!w)
     return 0;
 
-  if (isWindows11())
+  if (isWindows11() || !m_csdEnabled)
     return 0;
 
   if (auto* decorator = s_decorators.value(w, nullptr))
     return decorator->shadowMargin();
 
-  return CSD::ShadowRadius;
+  return m_csdShadowEnabled ? CSD::ShadowRadius : 0;
 }
 
 /**
@@ -113,13 +166,13 @@ int NativeWindow::frameTopInset(QObject* window)
   if (!w)
     return 0;
 
-  if (isWindows11())
+  if (isWindows11() || !m_csdEnabled)
     return 0;
 
   if (auto* decorator = s_decorators.value(w, nullptr))
     return decorator->shadowMargin() + decorator->titleBarHeight();
 
-  return CSD::ShadowRadius + CSD::TitleBarHeight;
+  return (m_csdShadowEnabled ? CSD::ShadowRadius : 0) + CSD::TitleBarHeight;
 }
 
 /**
@@ -186,8 +239,8 @@ void NativeWindow::addWindow(QObject* window, const QString& color)
     Q_EMIT w->activeChanged();
   }
 
-  else {
-    auto* decorator = new CSD::Window(w, color, this);
+  else if (m_csdEnabled) {
+    auto* decorator = new CSD::Window(w, color, m_csdShadowEnabled, this);
     s_decorators.insert(w, decorator);
     connect(w, &QObject::destroyed, this, [this, w]() {
       auto* dec = s_decorators.value(w, nullptr);
@@ -202,6 +255,16 @@ void NativeWindow::addWindow(QObject* window, const QString& color)
     });
 
     connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
+  }
+
+  else {
+    connect(w, &QObject::destroyed, this, [this, w]() {
+      auto index = m_windows.indexOf(w);
+      if (index != -1 && index >= 0) {
+        m_windows.removeAt(index);
+        m_colors.remove(w);
+      }
+    });
   }
 }
 

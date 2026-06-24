@@ -58,9 +58,61 @@ static NSApplicationTerminateReply swizzled_applicationShouldTerminate(id self, 
  */
 NativeWindow::NativeWindow(QObject *parent)
   : QObject(parent)
+  , m_csdShadowEnabled(m_settings.value("Window/CSDShadowEnabled", true).toBool())
+  , m_csdEnabled(m_settings.value("Window/CSDEnabled", true).toBool())
 {
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &NativeWindow::onThemeChanged);
+}
+
+/**
+ * @brief macOS uses native decorations, so the custom CSD chrome is never used.
+ */
+bool NativeWindow::csdAvailable() const
+{
+  return false;
+}
+
+/**
+ * @brief Returns whether the custom CSD decorations are enabled.
+ */
+bool NativeWindow::csdEnabled() const
+{
+  return m_csdEnabled;
+}
+
+/**
+ * @brief Returns whether the CSD drop-shadow is enabled.
+ */
+bool NativeWindow::csdShadowEnabled() const
+{
+  return m_csdShadowEnabled;
+}
+
+/**
+ * @brief Persists the CSD decoration preference (inert on macOS).
+ */
+void NativeWindow::setCsdEnabled(bool enabled)
+{
+  if (m_csdEnabled == enabled)
+    return;
+
+  m_csdEnabled = enabled;
+  m_settings.setValue("Window/CSDEnabled", m_csdEnabled);
+  Q_EMIT csdEnabledChanged();
+}
+
+/**
+ * @brief Persists the CSD shadow preference (inert on macOS).
+ */
+void NativeWindow::setCsdShadowEnabled(bool enabled)
+{
+  if (m_csdShadowEnabled == enabled)
+    return;
+
+  m_csdShadowEnabled = enabled;
+  m_settings.setValue("Window/CSDShadowEnabled", m_csdShadowEnabled);
+  Q_EMIT csdShadowEnabledChanged();
 }
 
 /**
