@@ -1389,7 +1389,8 @@ endif()
 #     -force-openssl        - Force inclusion of OpenSSL DLLs
 #     --release             - Deploy release Qt DLLs (not debug)
 #     --no-translations     - Exclude Qt translations (we embed our own)
-#     --no-compiler-runtime - Don't include MSVC runtime (already bundled)
+#     --no-compiler-runtime - Skip windeployqt's CRT handling; the MSVC runtime
+#                             DLLs are bundled app-local via InstallRequiredSystemLibraries
 #
 #   Linux:
 #     NO_UNSUPPORTED_PLATFORM_ERROR - Don't fail on Linux (manual deployment)
@@ -1409,6 +1410,19 @@ install(
   BUNDLE  DESTINATION .
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+# Bundle the MSVC runtime (vcruntime140, msvcp140, ...) app-local next to the
+# executable so the installer needs no separate VC++ redistributable. SKIP keeps
+# CMake from auto-installing into a default location; we place the resolved DLLs
+# into the runtime dir ourselves.
+if(MSVC)
+  set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP ON)
+  include(InstallRequiredSystemLibraries)
+  install(
+    FILES       ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+endif()
 
 set(deploy_tool_options_arg "")
 if(APPLE)
