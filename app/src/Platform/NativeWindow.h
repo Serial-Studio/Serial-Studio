@@ -23,13 +23,14 @@
 
 #include <QMap>
 #include <QObject>
-#include <QWindow>
 #include <QSettings>
+#include <QWindow>
 
 /**
  * @brief Provides native window customization features across operating systems.
  */
 class NativeWindow : public QObject {
+  // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool csdAvailable
              READ csdAvailable
@@ -42,6 +43,7 @@ class NativeWindow : public QObject {
              READ csdShadowEnabled
              WRITE setCsdShadowEnabled
              NOTIFY csdShadowEnabledChanged)
+  // clang-format on
 
 signals:
   void quitRequested();
