@@ -1298,6 +1298,27 @@ void DataModel::ProjectModel::setExternalWindows(const QJsonArray& windows)
 }
 
 /**
+ * @brief Path-keyed Project Editor tree node expansion map (persisted in the file).
+ */
+const QJsonObject& DataModel::ProjectModel::treeExpansion() const noexcept
+{
+  return m_treeExpansion;
+}
+
+/**
+ * @brief Stores the editor tree expansion map, marking the project dirty when it changed.
+ */
+void DataModel::ProjectModel::setTreeExpansion(const QJsonObject& expansion)
+{
+  if (m_treeExpansion == expansion)
+    return;
+
+  m_treeExpansion = expansion;
+  setModified(true);
+  scheduleAutoSave();
+}
+
+/**
  * @brief Stages a plugin's state in the project and marks it dirty.
  */
 void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
@@ -1815,6 +1836,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);
 
+  if (!m_treeExpansion.isEmpty())
+    json.insert(Keys::TreeExpansion, m_treeExpansion);
+
   if (!m_mqttPublisher.isEmpty())
     json.insert(Keys::MqttPublisher, m_mqttPublisher);
 
@@ -1911,6 +1935,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_frameDecoder   = SerialStudio::PlainText;
   m_frameDetection = SerialStudio::EndDelimiterOnly;
   m_widgetSettings = QJsonObject();
+  m_treeExpansion  = QJsonObject();
 
   DataModel::Source defaultSource;
   defaultSource.sourceId              = 0;
@@ -2192,6 +2217,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   m_sources.clear();
   m_workspaces.clear();
   m_widgetSettings = QJsonObject();
+  m_treeExpansion  = QJsonObject();
 
   m_filePath = sourcePath;
 
@@ -2678,6 +2704,7 @@ void DataModel::ProjectModel::resolveDatasetVirtualFlags()
 void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject& json)
 {
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
+  m_treeExpansion  = json.value(Keys::TreeExpansion).toObject();
 
   m_workspaces.clear();
   m_customizeWorkspaces = json.value(Keys::CustomizeWorkspaces).toBool(false);

@@ -312,6 +312,7 @@ public slots:
   void openMqttScriptEditor();
   void setTreeSearchQuery(const QString& query);
   void confirmCleanupUnresolvedWorkspaceWidgets();
+  void persistTreeExpansion();
 
   void buildTreeModel();
   void buildProjectModel();
@@ -395,7 +396,9 @@ private:
   void saveExpandedStateMap(QStandardItem* item, QHash<QString, bool>& map, const QString& title);
   void restoreExpandedStateMap(QStandardItem* item,
                                QHash<QString, bool>& map,
-                               const QString& title);
+                               const QString& title,
+                               bool defaultExpanded = true);
+  [[nodiscard]] QJsonObject snapshotTreeExpansion();
 
   void wireProjectModelRebuilds();
   void wireGroupSignals();
@@ -484,6 +487,7 @@ private:
 
   QString m_treeSearchQuery;
   QString m_lastJsonFilePath;
+  bool m_seedExpansionFromModel;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

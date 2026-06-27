@@ -26,6 +26,7 @@
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QHash>
+#include <QJsonObject>
 #include <QSet>
 #include <QTimer>
 
@@ -159,6 +160,9 @@ typedef enum {
 
 // clang-format on
 
+// Past this many groups, unremembered groups default to collapsed in the tree.
+static constexpr int kAutoCollapseGroupThreshold = 6;
+
 /**
  * @brief Returns the QML icon path for a SerialStudio::BusType integer.
  */
@@ -263,7 +267,8 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
     if (path == m_lastJsonFilePath)
       return;
 
-    m_lastJsonFilePath = path;
+    m_lastJsonFilePath       = path;
+    m_seedExpansionFromModel = true;
     if (m_selectionModel) {
       auto index = m_treeModel->index(0, 0);
       m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
@@ -632,6 +637,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_selectedWorkspaceId(-1)
   , m_mqttPublisherItem(nullptr)
   , m_controlScriptItem(nullptr)
+  , m_seedExpansionFromModel(true)
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
   , m_groupModel(nullptr)
@@ -1190,9 +1196,17 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_mqttPublisherItem  = nullptr;
   m_controlScriptItem  = nullptr;
 
+  const bool seeding = m_seedExpansionFromModel;
   QHash<QString, bool> expandedStates;
-  if (m_treeModel)
+  if (seeding) {
+    const auto& persisted = DataModel::ProjectModel::instance().treeExpansion();
+    for (auto it = persisted.constBegin(); it != persisted.constEnd(); ++it)
+      expandedStates.insert(it.key(), it.value().toBool());
+
+    m_seedExpansionFromModel = false;
+  } else if (m_treeModel) {
     saveExpandedStateMap(m_treeModel->invisibleRootItem(), expandedStates, "");
+  }
 
   if (m_currentSelectionConnection) {
     QObject::disconnect(m_currentSelectionConnection);
@@ -1234,6 +1248,9 @@ void DataModel::ProjectEditor::buildTreeModel()
   const auto revealIndex = consumePendingSelection();
   if (!revealIndex.isValid())
     restoreTreeSelection();
+
+  if (!seeding)
+    DataModel::ProjectModel::instance().setTreeExpansion(snapshotTreeExpansion());
 
   Q_EMIT treeRebuildFinished(revealIndex);
 }
@@ -1465,6 +1482,9 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
   };
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
+  const bool collapseByDefault =
+    !filterActive && static_cast<int>(groups.size()) > kAutoCollapseGroupThreshold;
+
   for (const auto& group : groups) {
     const bool groupMatches = !filterActive || matches(group.title);
     if (groupFilteredOut(group, groupMatches))
@@ -1490,7 +1510,7 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
 
     ensureGroupsRoot();
     const QString gPath = root->text() + "/" + tr("Groups") + "/" + group.title;
-    restoreExpandedStateMap(groupItem, expandedStates, gPath);
+    restoreExpandedStateMap(groupItem, expandedStates, gPath, !collapseByDefault);
     groupsRoot->appendRow(groupItem);
     m_groupItems.insert(groupItem, group);
   }
@@ -2077,11 +2097,12 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   Q_ASSERT(root != nullptr);
 
   appendControlScriptTreeItem(root);
-  appendSourceTreeItems(root);
 #ifdef BUILD_COMMERCIAL
   appendMqttPublisherTreeItem(root);
 #endif
+
   appendActionTreeItems(root);
+  appendSourceTreeItems(root);
   appendGroupTreeItems(root, expandedStates);
   appendSharedMemoryTreeItems(root, expandedStates);
   appendWorkspaceTreeItems(root, expandedStates);
@@ -4988,7 +5009,8 @@ void DataModel::ProjectEditor::saveExpandedStateMap(QStandardItem* item,
  */
 void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
                                                        QHash<QString, bool>& map,
-                                                       const QString& title)
+                                                       const QString& title,
+                                                       bool defaultExpanded)
 {
   if (!item)
     return;
@@ -4996,7 +5018,34 @@ void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
   if (map.contains(title))
     item->setData(map[title], TreeViewExpanded);
   else
-    item->setData(true, TreeViewExpanded);
+    item->setData(defaultExpanded, TreeViewExpanded);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Serializes the live tree's expansion state into a path-keyed JSON object.
+ */
+QJsonObject DataModel::ProjectEditor::snapshotTreeExpansion()
+{
+  QJsonObject obj;
+  if (!m_treeModel)
+    return obj;
+
+  QHash<QString, bool> states;
+  saveExpandedStateMap(m_treeModel->invisibleRootItem(), states, "");
+  for (auto it = states.constBegin(); it != states.constEnd(); ++it)
+    obj.insert(it.key(), it.value());
+
+  return obj;
+}
+
+/**
+ * @brief Pushes the current tree expansion into the project model (e.g. after a manual toggle).
+ */
+void DataModel::ProjectEditor::persistTreeExpansion()
+{
+  DataModel::ProjectModel::instance().setTreeExpansion(snapshotTreeExpansion());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -258,6 +258,8 @@ public:
   Q_INVOKABLE [[nodiscard]] QJsonObject pluginState(const QString& pluginId) const;
   Q_INVOKABLE [[nodiscard]] QJsonArray externalWindows() const;
 
+  [[nodiscard]] const QJsonObject& treeExpansion() const noexcept;
+
 public slots:
   void lockProject();
   void unlockProject();
@@ -265,6 +267,7 @@ public slots:
   void savePluginState(const QString& pluginId, const QJsonObject& state);
   void saveWidgetSetting(const QString& widgetId, const QString& key, const QVariant& value);
   void setExternalWindows(const QJsonArray& windows);
+  void setTreeExpansion(const QJsonObject& expansion);
 
   void setupExternalConnections();
   void setSuppressMessageBoxes(const bool suppress);
@@ -555,5 +558,6 @@ private:
 
   QJsonObject m_widgetSettings;
   QJsonObject m_mqttPublisher;
+  QJsonObject m_treeExpansion;
 };
 }  // namespace DataModel

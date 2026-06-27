@@ -364,6 +364,7 @@ Widgets.Pane {
           if (hasChildren) {
             treeView.toggleExpanded(row)
             model.treeViewExpanded = expanded
+            Cpp_JSON_ProjectEditor.persistTreeExpansion()
             return true
           }
 

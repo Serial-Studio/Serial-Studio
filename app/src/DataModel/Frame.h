@@ -164,6 +164,9 @@ inline constexpr KeyView DashboardLayout("dashboardLayout");
 inline constexpr KeyView ActiveGroupId("activeGroupId");
 inline constexpr KeyView WidgetSettings("widgetSettings");
 
+// Project-editor tree state (path-keyed node expansion map)
+inline constexpr KeyView TreeExpansion("treeExpansion");
+
 // Plot history keys
 inline constexpr KeyView PointCount("pointCount");
 inline constexpr KeyView PlotTimeRange("plotTimeRange");
