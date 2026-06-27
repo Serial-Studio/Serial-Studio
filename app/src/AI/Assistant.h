@@ -21,7 +21,9 @@
 #include <QSettings>
 #include <QString>
 #include <QStringList>
+#include <QVariantList>
 
+#include "AI/ChatStore.h"
 #include "AI/KeyVault.h"
 
 namespace AI {
@@ -52,6 +54,12 @@ class Assistant : public QObject {
   Q_PROPERTY(QObject* conversation
              READ conversationObject
              CONSTANT)
+  Q_PROPERTY(QVariantList chatList
+             READ chatList
+             NOTIFY chatListChanged)
+  Q_PROPERTY(QString activeChatId
+             READ activeChatId
+             NOTIFY activeChatChanged)
   Q_PROPERTY(bool busy
              READ busy
              NOTIFY busyChanged)
@@ -83,6 +91,8 @@ signals:
   void autoApproveEditsChanged();
   void allowDeviceControlChanged();
   void droppedPathAdded(const QString& displayName, bool isDir);
+  void chatListChanged();
+  void activeChatChanged();
 
 private:
   explicit Assistant();
@@ -102,6 +112,8 @@ public:
   [[nodiscard]] QStringList providerNames() const;
   [[nodiscard]] bool busy() const noexcept;
   [[nodiscard]] QObject* conversationObject() const noexcept;
+  [[nodiscard]] QVariantList chatList() const;
+  [[nodiscard]] QString activeChatId() const noexcept;
   [[nodiscard]] int cacheReadTokens() const noexcept;
   [[nodiscard]] int cacheCreatedTokens() const noexcept;
   [[nodiscard]] bool autoApproveEdits() const noexcept;
@@ -138,6 +150,10 @@ public slots:
   void approveToolCallGroup(const QString& family);
   void denyToolCallGroup(const QString& family);
   void clearConversation();
+  void newChat();
+  void switchChat(const QString& id);
+  void deleteChat(const QString& id);
+  void renameChat(const QString& id, const QString& title);
   void addDroppedPath(const QString& localPath);
   void clearDroppedPaths();
 
@@ -149,6 +165,9 @@ private:
   void rebuildProviders();
   void rewireConversationProvider();
   void restoreModelSelections();
+  void initChats();
+  void loadActiveSnapshot();
+  void persistActiveChat();
   [[nodiscard]] Provider* providerAt(int idx) const;
   [[nodiscard]] static QString modelSettingsKey(int providerIdx);
 
@@ -166,6 +185,8 @@ private:
   std::unique_ptr<Provider> m_local;
   std::unique_ptr<ToolDispatcher> m_dispatcher;
   std::unique_ptr<Conversation> m_conversation;
+  ChatStore m_chats;
+  QString m_activeChatId;
   int m_currentProvider;
   int m_cacheReadTokens;
   int m_cacheCreatedTokens;

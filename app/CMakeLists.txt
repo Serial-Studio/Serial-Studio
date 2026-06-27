@@ -660,6 +660,7 @@ if(BUILD_COMMERCIAL)
     src/AI/SseEventReader.h
     src/AI/ContextBuilder.h
     src/AI/Conversation.h
+    src/AI/ChatStore.h
     src/AI/Providers/Provider.h
     src/AI/Providers/AnthropicProvider.h
     src/AI/Providers/AnthropicReply.h
@@ -745,6 +746,7 @@ if(BUILD_COMMERCIAL)
     src/AI/SseEventReader.cpp
     src/AI/ContextBuilder.cpp
     src/AI/Conversation.cpp
+    src/AI/ChatStore.cpp
     src/AI/Providers/AnthropicProvider.cpp
     src/AI/Providers/AnthropicReply.cpp
     src/AI/Providers/OpenAIProvider.cpp
@@ -795,6 +797,7 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Output/DashboardTextField.qml
     qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml
     qml/AI/AssistantPanel.qml
+    qml/AI/ChatSidebar.qml
     qml/AI/KeyManagerDialog.qml
     qml/AI/MessageBubble.qml
     qml/AI/MessageList.qml

@@ -791,15 +791,25 @@ QString AI::ContextBuilder::scriptingDocsBlock()
  */
 QString AI::ContextBuilder::liveProjectStateBlock()
 {
+  static constexpr int kMaxStateBytes = 24 * 1024;
+
   ToolDispatcher dispatcher;
   const auto state    = dispatcher.getProjectState();
   const auto scrubbed = AI::Redactor::scrubObject(state);
-  const auto pretty   = QJsonDocument(scrubbed).toJson(QJsonDocument::Indented);
+  auto pretty         = QJsonDocument(scrubbed).toJson(QJsonDocument::Indented);
+
+  QString tail;
+  if (pretty.size() > kMaxStateBytes) {
+    pretty.truncate(kMaxStateBytes);
+    tail = QStringLiteral("\n... [project state truncated to fit the model context; ask for "
+                          "specific items via list commands]\n");
+  }
 
   QString out;
   out += QStringLiteral("# Current project state\n\n");
   out += QStringLiteral("<untrusted source=\"project_state\">\n");
   out += neutralizeUntrustedDelimiter(QString::fromUtf8(pretty));
+  out += tail;
   out += QStringLiteral("\n</untrusted>\n");
   return out;
 }

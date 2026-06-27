@@ -9,14 +9,11 @@
 #include "AI/Conversation.h"
 
 #include <QByteArray>
-#include <QDir>
-#include <QFile>
 #include <QJsonDocument>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QRegularExpression>
 #include <QSet>
-#include <QStandardPaths>
 #include <QTextDocument>
 #include <QUrl>
 
@@ -326,8 +323,6 @@ void AI::Conversation::clear()
   m_outstandingToolResults  = 0;
   m_awaitingConfirm.clear();
   setLastError(QString());
-
-  QFile::remove(persistencePath());
 
   Q_EMIT messagesChanged();
 }
@@ -1109,7 +1104,8 @@ void AI::Conversation::issueRequest()
     Q_EMIT messagesChanged();
   }
 
-  m_reply = m_provider->sendMessage(m_history, dispatcherTools(), m_summaryForced);
+  const auto tools = dispatcherTools();
+  m_reply          = m_provider->sendMessage(budgetedHistory(tools), tools, m_summaryForced);
   if (!m_reply) {
     setLastError(tr("Provider returned no reply"));
     Q_EMIT errorOccurred(m_lastError);
@@ -2459,71 +2455,31 @@ QJsonArray AI::Conversation::dispatcherTools() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Persistence (round-trips m_history + m_uiMessages across app restarts)
+// Snapshot (round-trips m_history + m_uiMessages through the ChatStore)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the absolute path of the saved-conversation JSON file.
+ * @brief Returns a serializable snapshot of the current history and UI rows.
  */
-QString AI::Conversation::persistencePath()
+QJsonObject AI::Conversation::snapshot() const
 {
-  const auto base = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-  return base + QStringLiteral("/ai/last_conversation.json");
-}
-
-/**
- * @brief Writes the current conversation snapshot to disk; best effort.
- */
-void AI::Conversation::saveToDisk() const
-{
-  if (m_uiMessages.isEmpty() && m_history.isEmpty())
-    return;
-
   QJsonObject doc;
   doc[QStringLiteral("schema")]   = 1;
   doc[QStringLiteral("history")]  = m_history;
   doc[QStringLiteral("messages")] = QJsonArray::fromVariantList(m_uiMessages);
-
-  const auto path = persistencePath();
-  QDir().mkpath(QFileInfo(path).absolutePath());
-
-  QFile f(path);
-  if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    qCWarning(serialStudioAI) << "Failed to persist conversation:" << f.errorString();
-    return;
-  }
-
-  f.write(QJsonDocument(doc).toJson(QJsonDocument::Compact));
-  f.close();
+  return doc;
 }
 
 /**
- * @brief Reads the previous conversation snapshot, if any, into memory.
+ * @brief Loads a captured snapshot into memory, resetting all in-flight turn state and
+ *        downgrading any stale Running/AwaitingConfirm tool cards to Done.
  */
-void AI::Conversation::restoreFromDisk()
+void AI::Conversation::loadSnapshot(const QJsonObject& doc)
 {
-  QFile f(persistencePath());
-  if (!f.exists())
-    return;
+  cancel();
 
-  if (!f.open(QIODevice::ReadOnly)) {
-    qCWarning(serialStudioAI) << "Failed to read persisted conversation:" << f.errorString();
-    return;
-  }
-
-  const auto bytes = f.readAll();
-  f.close();
-
-  QJsonParseError err;
-  const auto doc = QJsonDocument::fromJson(bytes, &err);
-  if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-    qCWarning(serialStudioAI) << "Persisted conversation invalid JSON:" << err.errorString();
-    return;
-  }
-
-  const auto root = doc.object();
-  m_history       = root.value(QStringLiteral("history")).toArray();
-  m_uiMessages    = root.value(QStringLiteral("messages")).toArray().toVariantList();
+  m_history    = doc.value(QStringLiteral("history")).toArray();
+  m_uiMessages = doc.value(QStringLiteral("messages")).toArray().toVariantList();
 
   m_assistantIndex = -1;
   m_assistantText.clear();
@@ -2533,6 +2489,7 @@ void AI::Conversation::restoreFromDisk()
   m_pendingToolResultBlocks = QJsonArray();
   m_outstandingToolResults  = 0;
   m_awaitingConfirm.clear();
+  setLastError(QString());
 
   for (int i = 0; i < m_uiMessages.size(); ++i) {
     auto map     = m_uiMessages.at(i).toMap();
@@ -2557,4 +2514,77 @@ void AI::Conversation::restoreFromDisk()
   pruneHistory();
 
   Q_EMIT messagesChanged();
+}
+
+/**
+ * @brief Returns the text of the first user row, used to title a chat.
+ */
+QString AI::Conversation::firstUserText() const
+{
+  for (const auto& row : m_uiMessages) {
+    const auto map = row.toMap();
+    if (map.value(QStringLiteral("role")).toString() == QStringLiteral("user"))
+      return map.value(QStringLiteral("text")).toString();
+  }
+  return {};
+}
+
+/**
+ * @brief Returns the number of UI message rows in the conversation.
+ */
+int AI::Conversation::messageCount() const noexcept
+{
+  return static_cast<int>(m_uiMessages.size());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Context-window budgeting
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Rough token estimate (~4 bytes/token) of a serialized block array.
+ */
+int AI::Conversation::estimateTokens(const QJsonArray& blocks)
+{
+  const auto bytes = QJsonDocument(blocks).toJson(QJsonDocument::Compact).size();
+  return static_cast<int>(bytes / 4);
+}
+
+/**
+ * @brief Returns the longest recent suffix of history that fits the provider context window,
+ *        cut only at fresh user-turn boundaries so tool_use/tool_result pairs stay intact.
+ */
+QJsonArray AI::Conversation::budgetedHistory(const QJsonArray& tools) const
+{
+  Q_ASSERT(m_provider);
+  if (!m_provider)
+    return m_history;
+
+  const auto caps = m_provider->capabilities();
+  const int budget =
+    caps.contextWindowTokens - caps.maxOutputTokens - kSystemReserveTokens - estimateTokens(tools);
+  if (budget <= 0 || estimateTokens(m_history) <= budget)
+    return m_history;
+
+  auto suffixFrom = [this](int from) {
+    QJsonArray out;
+    for (int i = from; i < m_history.size(); ++i)
+      out.append(m_history.at(i));
+
+    return out;
+  };
+
+  QList<int> boundaries;
+  for (int at = firstFreshUserTurnAt(0); at >= 0; at = firstFreshUserTurnAt(at + 1))
+    boundaries.append(at);
+
+  int chosen = boundaries.isEmpty() ? 0 : boundaries.constLast();
+  for (const int b : boundaries)
+    if (estimateTokens(suffixFrom(b)) <= budget) {
+      chosen = b;
+      break;
+    }
+
+  Q_ASSERT(chosen >= 0 && chosen <= m_history.size());
+  return suffixFrom(chosen);
 }

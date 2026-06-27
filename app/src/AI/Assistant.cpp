@@ -27,6 +27,8 @@
 #include "Licensing/CommercialToken.h"
 #include "Misc/Utilities.h"
 
+static constexpr int kTitleLimit = 60;
+
 //--------------------------------------------------------------------------------------------------
 // Singleton accessor
 //--------------------------------------------------------------------------------------------------
@@ -78,12 +80,21 @@ AI::Assistant::Assistant()
     m_conversation.get(), &Conversation::busyChanged, this, &Assistant::onConversationBusyChanged);
   connect(
     m_conversation.get(), &Conversation::errorOccurred, this, &Assistant::onConversationError);
+
+  initChats();
 }
 
 /**
- * @brief Releases owned resources in reverse construction order.
+ * @brief Persists the active chat, then releases owned resources.
  */
-AI::Assistant::~Assistant() = default;
+AI::Assistant::~Assistant()
+{
+  if (m_conversation && !m_activeChatId.isEmpty())
+    m_chats.saveChat(m_activeChatId,
+                     m_conversation->snapshot(),
+                     m_conversation->firstUserText().left(kTitleLimit),
+                     m_conversation->messageCount());
+}
 
 //--------------------------------------------------------------------------------------------------
 // Property getters
@@ -131,6 +142,22 @@ bool AI::Assistant::busy() const noexcept
 QObject* AI::Assistant::conversationObject() const noexcept
 {
   return m_conversation.get();
+}
+
+/**
+ * @brief Returns the saved chats as metadata rows for QML, newest first.
+ */
+QVariantList AI::Assistant::chatList() const
+{
+  return m_chats.list();
+}
+
+/**
+ * @brief Returns the id of the currently displayed chat.
+ */
+QString AI::Assistant::activeChatId() const noexcept
+{
+  return m_activeChatId;
 }
 
 /**
@@ -487,14 +514,88 @@ void AI::Assistant::denyToolCallGroup(const QString& family)
 }
 
 /**
- * @brief Clears the chat history and any in-flight state.
+ * @brief Starts a fresh chat (kept as the legacy "clear" entry point).
  */
 void AI::Assistant::clearConversation()
 {
+  newChat();
+}
+
+/**
+ * @brief Persists the current chat, then opens a new empty one and switches to it.
+ */
+void AI::Assistant::newChat()
+{
+  if (m_conversation && m_conversation->messageCount() == 0 && !m_activeChatId.isEmpty())
+    return;
+
+  if (m_conversation && m_conversation->busy())
+    m_conversation->cancel();
+
+  persistActiveChat();
+
+  m_activeChatId = m_chats.createChat();
+  m_chats.setLastActiveId(m_activeChatId);
   if (m_conversation)
     m_conversation->clear();
 
   AI::FileSandbox::instance().clearDroppedPaths();
+
+  Q_EMIT chatListChanged();
+  Q_EMIT activeChatChanged();
+}
+
+/**
+ * @brief Persists the current chat and loads another saved chat into the conversation.
+ */
+void AI::Assistant::switchChat(const QString& id)
+{
+  if (id == m_activeChatId || !m_chats.contains(id))
+    return;
+
+  if (m_conversation && m_conversation->busy())
+    m_conversation->cancel();
+
+  persistActiveChat();
+
+  m_activeChatId = id;
+  m_chats.setLastActiveId(id);
+  loadActiveSnapshot();
+
+  AI::FileSandbox::instance().clearDroppedPaths();
+  Q_EMIT activeChatChanged();
+}
+
+/**
+ * @brief Deletes a chat; if it was active, falls back to the newest remaining (or a new) chat.
+ */
+void AI::Assistant::deleteChat(const QString& id)
+{
+  if (!m_chats.contains(id))
+    return;
+
+  const bool wasActive = (id == m_activeChatId);
+  m_chats.removeChat(id);
+
+  if (wasActive) {
+    const auto rows = m_chats.list();
+    m_activeChatId  = rows.isEmpty() ? m_chats.createChat()
+                                     : rows.first().toMap().value(QStringLiteral("id")).toString();
+    m_chats.setLastActiveId(m_activeChatId);
+    loadActiveSnapshot();
+    Q_EMIT activeChatChanged();
+  }
+
+  Q_EMIT chatListChanged();
+}
+
+/**
+ * @brief Sets a user-chosen title on a chat.
+ */
+void AI::Assistant::renameChat(const QString& id, const QString& title)
+{
+  m_chats.renameChat(id, title.trimmed());
+  Q_EMIT chatListChanged();
 }
 
 /**
@@ -521,10 +622,13 @@ void AI::Assistant::clearDroppedPaths()
 }
 
 /**
- * @brief Re-emits the conversation busy signal as the Assistant's.
+ * @brief Re-emits the conversation busy signal; persists the active chat when it goes idle.
  */
 void AI::Assistant::onConversationBusyChanged()
 {
+  if (m_conversation && !m_conversation->busy())
+    persistActiveChat();
+
   Q_EMIT busyChanged();
 }
 
@@ -576,6 +680,53 @@ void AI::Assistant::rewireConversationProvider()
     return;
 
   m_conversation->setProvider(providerAt(m_currentProvider));
+}
+
+/**
+ * @brief Picks the active chat on startup (last active, newest, or a fresh one) and loads it.
+ */
+void AI::Assistant::initChats()
+{
+  if (m_chats.isEmpty()) {
+    m_activeChatId = m_chats.createChat();
+  } else {
+    m_activeChatId = m_chats.lastActiveId();
+    if (m_activeChatId.isEmpty() || !m_chats.contains(m_activeChatId))
+      m_activeChatId = m_chats.list().first().toMap().value(QStringLiteral("id")).toString();
+  }
+
+  m_chats.setLastActiveId(m_activeChatId);
+  loadActiveSnapshot();
+}
+
+/**
+ * @brief Loads the active chat's snapshot into the conversation, or clears it when empty.
+ */
+void AI::Assistant::loadActiveSnapshot()
+{
+  if (!m_conversation)
+    return;
+
+  const auto snap = m_chats.loadChat(m_activeChatId);
+  if (snap.isEmpty())
+    m_conversation->clear();
+  else
+    m_conversation->loadSnapshot(snap);
+}
+
+/**
+ * @brief Writes the conversation's current state back to the active chat file.
+ */
+void AI::Assistant::persistActiveChat()
+{
+  if (!m_conversation || m_activeChatId.isEmpty())
+    return;
+
+  m_chats.saveChat(m_activeChatId,
+                   m_conversation->snapshot(),
+                   m_conversation->firstUserText().left(kTitleLimit),
+                   m_conversation->messageCount());
+  Q_EMIT chatListChanged();
 }
 
 /**

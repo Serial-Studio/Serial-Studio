@@ -55,6 +55,7 @@ public:
   static constexpr int kMaxHistoryItems     = 400;
   static constexpr int kMaxUiMessageRows    = 600;
   static constexpr int kMaxTransientRetries = 2;
+  static constexpr int kSystemReserveTokens = 28000;
 
   /**
    * @brief Status pill rendered by QML for each tool-call card.
@@ -74,6 +75,11 @@ public:
 
   void setProvider(Provider* provider);
   void setDispatcher(ToolDispatcher* dispatcher);
+
+  [[nodiscard]] QJsonObject snapshot() const;
+  void loadSnapshot(const QJsonObject& doc);
+  [[nodiscard]] QString firstUserText() const;
+  [[nodiscard]] int messageCount() const noexcept;
 
   [[nodiscard]] QVariantList messages() const;
   [[nodiscard]] bool busy() const noexcept;
@@ -162,10 +168,8 @@ private:
   void setLastError(const QString& message);
   void flushPendingStreamUpdate();
   [[nodiscard]] QJsonArray dispatcherTools() const;
-
-  [[nodiscard]] static QString persistencePath();
-  void saveToDisk() const;
-  void restoreFromDisk();
+  [[nodiscard]] QJsonArray budgetedHistory(const QJsonArray& tools) const;
+  [[nodiscard]] static int estimateTokens(const QJsonArray& blocks);
 
   /**
    * @brief Captured Confirm-state info pending user approval.

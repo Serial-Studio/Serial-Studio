@@ -36,6 +36,8 @@ struct ProviderCapabilities {
   bool needsSmallToolSurface  = true;
   bool slowFirstToken         = false;
   int toolResultByteBudget    = 4096;
+  int contextWindowTokens     = 128000;
+  int maxOutputTokens         = 8192;
 };
 
 /**

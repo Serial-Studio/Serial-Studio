@@ -217,6 +217,8 @@ AI::ProviderCapabilities AI::AnthropicProvider::capabilities() const
   caps.structuredToolResults  = true;
   caps.needsSmallToolSurface  = currentModel().contains(QStringLiteral("haiku"));
   caps.toolResultByteBudget   = caps.needsSmallToolSurface ? 4096 : 8192;
+  caps.contextWindowTokens    = 200000;
+  caps.maxOutputTokens        = caps.thinking ? 64000 : 16000;
   return caps;
 }
 
@@ -238,7 +240,7 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
 
   QJsonObject body;
   body[QStringLiteral("model")]      = model;
-  body[QStringLiteral("max_tokens")] = caps.thinking ? 64000 : 16000;
+  body[QStringLiteral("max_tokens")] = caps.maxOutputTokens;
   body[QStringLiteral("stream")]     = true;
   body[QStringLiteral("system")]     = ContextBuilder::buildSystemArray();
 
