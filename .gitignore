@@ -14,11 +14,15 @@
 .AppleDesktop
 .apdisk
 
-# AI stuff — ignore every .claude except the committed repo skills at the repo root
+# AI stuff — ignore every .claude except shared, committed config: repo skills,
+# the project settings (deny rules + hooks), and the hook scripts they invoke.
+# settings.local.json stays personal (machine-local) and ignored.
 .claude/
 !/.claude/
 /.claude/*
 !/.claude/skills/
+!/.claude/settings.json
+!/.claude/hooks/
 .code-report
 .doc-report
 

@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 scripts/code-format.py *)",
+      "Bash(python3 scripts/code-verify.py *)",
+      "Bash(python3 scripts/documentation-verify.py *)",
+      "Bash(python3 scripts/sanitize-commit.py *)",
+      "Bash(otool *)",
+      "Bash(nm *)"
+    ],
+    "deny": [
+      "Bash(cmake *)",
+      "Bash(jom *)",
+      "Bash(ninja *)",
+      "Bash(make *)",
+      "Bash(msbuild *)",
+      "Bash(xcodebuild *)",
+      "Bash(clang *)",
+      "Bash(clang++ *)",
+      "Bash(gcc *)",
+      "Bash(g++ *)",
+      "Bash(cl *)",
+      "Bash(git checkout *)",
+      "Bash(git restore *)",
+      "Bash(git reset *)",
+      "Bash(git stash *)",
+      "Bash(git clean *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/verify-on-save.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

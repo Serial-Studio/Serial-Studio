@@ -7,7 +7,9 @@
   before touching it. **Read `BluetoothLE.h/.cpp`** before writing any new driver — it's the
   canonical reference.
 - **Read existing signal/slot wiring** in a file before adding or changing any.
-- **Plan before multi-file changes** (>3 files): state the plan, get confirmation.
+- **Plan before multi-file changes** (>3 files): state the plan, get confirmation. Non-trivial
+  or multi-file work runs through spec-driven development (`/ss-spec` → `/ss-plan` → `/ss-tasks`
+  → `/ss-implement`); see [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
 - **Edit, don't rewrite.** Targeted `Edit` calls; full rewrite only when asked or >70% changed.
 - **No preamble, no trailing summary** — except a one-line statement of
   intent before non-trivial work, and one or two sentences naming what
@@ -50,7 +52,11 @@ on. Capability without predictability gets disabled.
   sentence. When the choice was obvious, say nothing.
 - **State the plan before non-trivial work.** Not just multi-file: any
   change where a reasonable reviewer could prefer a different approach. Plan
-  visible *before* execution is the contract — a summary after is not.
+  visible *before* execution is the contract — a summary after is not. This
+  is operationalized as spec-driven development: non-trivial or multi-file
+  work MUST start with `/ss-spec`, and no implementation lands before an
+  approved `plan.md`. Trivial one-liners stay exempt. See
+  [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
 - **Self-review before handoff.** Before declaring a non-trivial change
   done, re-read the diff: is this *what was asked, and only that*? If you
   can't answer yes, say so before claiming completion.
@@ -73,6 +79,33 @@ code-review trigger — fix root cause when possible.
 
 `.code-report` and `.doc-report` are the cleanup checklists. If a rule appears as advisory,
 that means the existing codebase has baseline debt — new code should still clear it.
+
+## Tests
+
+Python/pytest suite under `tests/`. Full catalog (per-file coverage, fixtures, markers, the
+delay/operation-mode tables, and a worked example) lives in [tests/README.md](tests/README.md)
+— read it before writing a test. The shape that matters before you reach for it:
+
+- **You don't build or run the app, so you can't run the live-API tests.** Integration,
+  security, and performance tests drive a running Serial Studio over TCP and assert on parsed
+  frames / exports / dashboards — they need the app up with **Settings → Miscellaneous →
+  Enable API Server** (`localhost:7777`). The user runs those.
+- **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests that
+  spawn a fresh Node.js subprocess per case (no Qt, no app). Verify parser-script logic here.
+- **`pip install -r tests/requirements.txt`** once; `pytest.ini` registers all markers and a
+  30 s per-test timeout.
+
+```bash
+pytest tests/integration/ -v                                          # all integration (needs app)
+pytest tests/integration/test_frame_parsing.py -v                     # one file
+pytest tests/integration/test_frame_parsing.py::test_checksum_validation -v -s   # one test
+pytest tests/scripts/ -v                                              # JS-parser units (Node.js only)
+pytest tests/ -m "not destructive" -v                                # skip server-crashing tests
+pytest tests/integration/ -n 4                                        # parallel (pytest-xdist)
+```
+
+The C++ hotpath has no pytest path — it's gated by the in-binary `--benchmark-hotpath` flag
+(see Threading & Hotpath) that the user runs, plus `test.yml`/`deploy.yml` in CI.
 
 ## Project Overview
 
@@ -99,7 +132,8 @@ not a substitute.
 | [doc/claude/code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten: formatting, naming, control flow, C++ headers, signals/connections, comments & Doxygen, QML, performance, licensing. The Code Style block below is the inline essentials — read this for the complete rules. |
 | [doc/claude/directory-map.md](doc/claude/directory-map.md) | The `app/src` / `app/qml` / `lib` tree with one-line role notes per subsystem. |
 | [doc/claude/working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning, surface tradeoffs as decisions, engage the "why." Read once per session if you haven't internalized it. |
-| [doc/claude/repo-skills.md](doc/claude/repo-skills.md) | The project-scoped `/`-skills catalog (`ss-hotpath`, `ss-new-driver`, `ss-verify`, `qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`) and when each fires. Most auto-activate; this is the lookup when picking one deliberately. |
+| [doc/claude/repo-skills.md](doc/claude/repo-skills.md) | The project-scoped `/`-skills catalog (`ss-hotpath`, `ss-new-driver`, `ss-verify`, `qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`, and the `ss-spec`/`ss-plan`/`ss-tasks`/`ss-implement` workflow) and when each fires. Most auto-activate; this is the lookup when picking one deliberately. |
+| [doc/claude/spec-driven.md](doc/claude/spec-driven.md) | Before any non-trivial or multi-file feature: the default workflow. The four gated phases (`/ss-spec` → `/ss-plan` → `/ss-tasks` → `/ss-implement`), where artifacts live (`doc/claude/specs/NNNN-slug/`), the gate discipline, when to skip, and how it composes with the hotpath/verify/trust rules. |
 
 ## Threading & Hotpath — Non-Negotiable
 
