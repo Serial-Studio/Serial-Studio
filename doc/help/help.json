@@ -57,6 +57,7 @@
   { "id": "comparison", "title": "Comparison with Alternatives", "section": "Support", "file": "Comparison.md" },
   { "id": "pro-vs-free", "title": "Pro vs Free Features", "section": "Licensing", "file": "Pro-vs-Free.md" },
   { "id": "license-agreement", "title": "License Agreement", "section": "Licensing", "file": "License-Agreement.md" },
+  { "id": "privacy-policy", "title": "Privacy Policy", "section": "Licensing", "file": "Privacy-Policy.md" },
   { "id": "earn-pro-license", "title": "Earn a Pro License", "section": "Licensing", "file": "Earn-Pro-License.md" },
   { "id": "support-serial-studio", "title": "Support Serial Studio", "section": "Licensing", "file": "Support-Serial-Studio.md" }
 ]
