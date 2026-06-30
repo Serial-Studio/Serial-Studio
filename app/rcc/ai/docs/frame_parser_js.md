@@ -45,6 +45,13 @@ Each source runs its parser in its own engine; top-level `var` declarations
 are real globals within that per-source engine, so they don't bleed into
 other sources' parsers.
 
+The data-table API is injected here too. A table inside folders is addressed
+by its full `/`-joined folder path (top-level tables are bare names);
+`project.dataTable.list` reports that path. For a parser that writes many
+registers per frame, resolve handles once at load with `tableHandle` and use
+`tableGetH`/`tableSetH` on the hot path. Full reference in the transform and
+SDK docs.
+
 ## Performance
 
 This function runs on every frame, sometimes at 10+ kHz. Cheap operations:

@@ -167,11 +167,22 @@ private:
     }
   };
 
+  /**
+   * @brief Change-driven dependency state for one virtual dataset: the union-over-history set of
+   *        store slots its transform has read, and the write clock at its last run. Re-run only
+   *        when changedSince(readSlots, lastRunClock) is true.
+   */
+  struct DatasetDeps {
+    std::vector<int> readSlots;
+    quint64 lastRunClock = 0;
+  };
+
   int m_quickPlotChannels;
   bool m_quickPlotHasHeader;
   bool m_parseBudgetSkipping;
   bool m_parseBudgetWarned;
   bool m_parseBudgetEnabled;
+  bool m_parseBudgetEpisodeActive;
   bool m_lastConnectedState;
   bool m_playerOpen;
   bool m_anyAsyncSink;
@@ -179,6 +190,7 @@ private:
   bool m_captureFlagsDirty;
   bool m_externalTableApiUsers;
   bool m_captureLatestFrame;
+  bool m_changeDriven;
   int m_seenEngineEpoch;
   SerialStudio::OperationMode m_operationMode;
   qint64 m_parseBudgetUsedNs;
@@ -199,6 +211,7 @@ private:
   std::map<int, quint64> m_sourceFrameCounters;
   std::map<EngineKey, TransformEngine> m_transformEngines;
   std::unordered_map<int, std::unordered_map<int, int>> m_replayColumnMap;
+  std::unordered_map<int, DatasetDeps> m_datasetDeps;
 
   int m_latestFrameSourceId;
   quint64 m_latestFrameSeq;
@@ -243,7 +256,7 @@ private:
 private:
   // code-verify off
   // Parse pipeline
-  static constexpr qsizetype kMaxSpanFields = 64;
+  static constexpr qsizetype kMaxSpanFields = 128;
   std::array<QByteArrayView, kMaxSpanFields> m_spanScratch;
 
   DataModel::Source makeQuickPlotSource() const;

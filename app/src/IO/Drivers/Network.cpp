@@ -206,6 +206,7 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
       return false;
     }
 
+    enlargeUdpReceiveBuffer();
     socket = static_cast<QIODevice*>(&m_udpSocket);
   }
 
@@ -253,6 +254,19 @@ bool IO::Drivers::Network::connectTcp(const QString& hostAddr)
 
   m_connecting = false;
   return connected;
+}
+
+/**
+ * @brief Requests a large kernel receive buffer on the bound UDP socket so a bursty high-rate
+ *        sender is not dropped before the event loop drains it. Windows' default UDP SO_RCVBUF
+ *        is only tens of KB and overflows under loopback floods (Linux/macOS default much
+ *        higher); the OS caps the request to its allowed maximum.
+ */
+void IO::Drivers::Network::enlargeUdpReceiveBuffer()
+{
+  constexpr int kUdpReceiveBufferBytes = 8 * 1024 * 1024;
+  m_udpSocket.setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption,
+                              kUdpReceiveBufferBytes);
 }
 
 //--------------------------------------------------------------------------------------------------

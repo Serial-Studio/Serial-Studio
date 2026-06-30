@@ -366,6 +366,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
   , m_pointCount(100)
   , m_plotTimeRange(10.0)
+  , m_changeDrivenTransforms(false)
   , m_nextUniqueId(1)
   , m_modified(false)
   , m_silentReload(false)
@@ -1192,6 +1193,14 @@ double DataModel::ProjectModel::plotTimeRange() const noexcept
 }
 
 /**
+ * @brief Returns whether change-driven transform execution is enabled for this project.
+ */
+bool DataModel::ProjectModel::changeDrivenTransforms() const noexcept
+{
+  return m_changeDrivenTransforms;
+}
+
+/**
  * @brief Returns the number of groups in the project.
  */
 int DataModel::ProjectModel::groupCount() const noexcept
@@ -1887,6 +1896,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   json.insert(Keys::Title, m_title);
   json.insert(Keys::PointCount, m_pointCount);
   json.insert(Keys::PlotTimeRange, m_plotTimeRange);
+  json.insert(Keys::ChangeDrivenTransforms, m_changeDrivenTransforms);
   json.insert(Keys::HexadecimalDelimiters, m_hexadecimalDelimiters);
 
   const QString writer  = DataModel::current_writer_version();
@@ -2179,6 +2189,19 @@ void DataModel::ProjectModel::setPlotTimeRange(const double seconds)
 }
 
 /**
+ * @brief Toggles change-driven transform execution; the FrameBuilder refreshes its cached flag.
+ */
+void DataModel::ProjectModel::setChangeDrivenTransforms(const bool enabled)
+{
+  if (m_changeDrivenTransforms == enabled)
+    return;
+
+  m_changeDrivenTransforms = enabled;
+  setModified(true);
+  Q_EMIT changeDrivenTransformsChanged();
+}
+
+/**
  * @brief Clears the project file path without changing project data.
  */
 void DataModel::ProjectModel::clearJsonFilePath()
@@ -2388,6 +2411,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   loadPointCount(json);
   loadPlotTimeRange(json);
+  loadChangeDrivenTransforms(json);
   migrateLegacyLayoutKeys();
   migrateLegacyDashboardLayout(json);
 
@@ -2970,6 +2994,14 @@ void DataModel::ProjectModel::loadPlotTimeRange(const QJsonObject& json)
 }
 
 /**
+ * @brief Resolves the change-driven-transforms flag from JSON; absent means false (opt-in).
+ */
+void DataModel::ProjectModel::loadChangeDrivenTransforms(const QJsonObject& json)
+{
+  m_changeDrivenTransforms = json.value(Keys::ChangeDrivenTransforms).toBool(false);
+}
+
+/**
  * @brief Rewrites legacy "__layout__:N__" widgetSettings keys into canonical "layout:N" form.
  */
 void DataModel::ProjectModel::migrateLegacyLayoutKeys()
@@ -3213,6 +3245,50 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
     Q_EMIT groupsChanged();
 
   setModified(true);
+}
+
+/**
+ * @brief Enables or disables a group; a disabled group is excluded from frame building while the
+ *        editor still shows it greyed. Refreshes the runtime frame so the dashboard updates at
+ * once.
+ */
+void DataModel::ProjectModel::setGroupEnabled(const int groupId, const bool enabled)
+{
+  if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
+    return;
+
+  if (m_groups[groupId].enabled == enabled)
+    return;
+
+  m_groups[groupId].enabled = enabled;
+
+  Q_EMIT groupsChanged();
+  setModified(true);
+  DataModel::FrameBuilder::instance().syncFromProjectModel();
+}
+
+/**
+ * @brief Enables or disables a single dataset; a disabled dataset is excluded from frame building
+ *        while its siblings keep their explicit frame indices. Refreshes the runtime frame.
+ */
+void DataModel::ProjectModel::setDatasetEnabled(const int groupId,
+                                                const int datasetId,
+                                                const bool enabled)
+{
+  if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
+    return;
+
+  if (datasetId < 0 || static_cast<size_t>(datasetId) >= m_groups[groupId].datasets.size())
+    return;
+
+  if (m_groups[groupId].datasets[datasetId].enabled == enabled)
+    return;
+
+  m_groups[groupId].datasets[datasetId].enabled = enabled;
+
+  Q_EMIT groupsChanged();
+  setModified(true);
+  DataModel::FrameBuilder::instance().syncFromProjectModel();
 }
 
 /**

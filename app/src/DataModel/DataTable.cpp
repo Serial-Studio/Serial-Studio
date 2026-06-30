@@ -55,7 +55,9 @@ const QString& DataModel::systemDataTableName()
 /**
  * @brief Constructs an empty DataTableStore in the uninitialized state.
  */
-DataModel::DataTableStore::DataTableStore() : m_initialized(false), m_generation(0) {}
+DataModel::DataTableStore::DataTableStore()
+  : m_initialized(false), m_generation(0), m_writeClock(0), m_captureTarget(nullptr)
+{}
 
 /**
  * @brief Pre-allocates registers for user tables and the system dataset table.
@@ -77,6 +79,7 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
 
   totalRegs += datasetCount * 2;
   m_storage.reserve(totalRegs);
+  m_version.reserve(totalRegs);
 
   for (const auto& table : userTables) {
     const QString tablePath = tableFullPath(tableFolders, table.parentFolderId, table.name);
@@ -132,6 +135,7 @@ void DataModel::DataTableStore::clear()
   m_index.clear();
   m_datasetIndex.clear();
   m_isComputed.clear();
+  m_version.clear();
   m_tableRegNames.clear();
   m_warnedMissing.clear();
   m_warnedMissingDatasets.clear();
@@ -168,6 +172,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByInternedKey(cons
       if (entry.storeIndex < 0)
         return nullptr;
 
+      captureRead(entry.storeIndex);
       return &m_storage[static_cast<size_t>(entry.storeIndex)];
     }
   }
@@ -184,6 +189,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByInternedKey(cons
     return nullptr;
   }
 
+  captureRead(idx);
   return &m_storage[static_cast<size_t>(idx)];
 }
 
@@ -223,6 +229,7 @@ bool DataModel::DataTableStore::setByInternedKey(const char* table,
   }
 
   m_storage[static_cast<size_t>(idx)] = val;
+  m_version[static_cast<size_t>(idx)] = ++m_writeClock;
   return true;
 }
 
@@ -232,6 +239,56 @@ bool DataModel::DataTableStore::setByInternedKey(const char* table,
 bool DataModel::DataTableStore::isInitialized() const noexcept
 {
   return m_initialized;
+}
+
+/**
+ * @brief Returns the monotonic write clock; a slot's version equals the clock value at its last
+ *        write, so changedSince() can tell whether any slot moved after a reader's snapshot.
+ */
+quint64 DataModel::DataTableStore::writeClock() const noexcept
+{
+  return m_writeClock;
+}
+
+/**
+ * @brief Points the read-capture accumulator at a caller-owned slot list (nullptr to stop). While
+ *        set, every successful read records the slot it resolved, building a dataset's read-set.
+ */
+void DataModel::DataTableStore::setReadCaptureTarget(std::vector<int>* target) const noexcept
+{
+  m_captureTarget = target;
+}
+
+/**
+ * @brief Returns true if any of the given storage slots was written after sinceClock.
+ */
+bool DataModel::DataTableStore::changedSince(const std::vector<int>& slotList,
+                                             quint64 sinceClock) const
+{
+  for (const int slot : slotList) {
+    if (slot < 0 || slot >= static_cast<int>(m_version.size())) [[unlikely]]
+      continue;
+
+    if (m_version[static_cast<size_t>(slot)] > sinceClock)
+      return true;
+  }
+
+  return false;
+}
+
+/**
+ * @brief Records a read of @p slot into the active capture target, deduped; inert when off.
+ */
+void DataModel::DataTableStore::captureRead(int slot) const
+{
+  if (m_captureTarget == nullptr)
+    return;
+
+  for (const int s : *m_captureTarget)
+    if (s == slot)
+      return;
+
+  m_captureTarget->push_back(slot);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,6 +309,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::get(const QString& ta
     return nullptr;
   }
 
+  captureRead(idx);
   return &m_storage[static_cast<size_t>(idx)];
 }
 
@@ -275,6 +333,7 @@ bool DataModel::DataTableStore::set(const QString& table,
   }
 
   m_storage[static_cast<size_t>(idx)] = val;
+  m_version[static_cast<size_t>(idx)] = ++m_writeClock;
   return true;
 }
 
@@ -283,18 +342,18 @@ bool DataModel::DataTableStore::set(const QString& table,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Resolves (table, register) to a generation-tagged handle (gen<<24|index), or -1 + a
- *        one-shot warning if unknown; run once off the hot path.
+ * @brief Resolves (table, register) to a generation-tagged handle (gen<<24|index), or -1 if
+ *        unknown; run once off the hot path. Silent on miss: -1 is the documented sentinel and
+ *        probing for optional registers is a legitimate pattern, so (unlike get()) it does not
+ *        warn -- a typo surfaces through the name-based get() path instead.
  */
 qint64 DataModel::DataTableStore::handleOf(const QString& table, const QString& reg) const
 {
   Q_ASSERT(m_initialized);
 
   const int idx = indexOf(table, reg);
-  if (idx < 0) [[unlikely]] {
-    noteMissingLookup(table, reg);
+  if (idx < 0) [[unlikely]]
     return -1;
-  }
 
   return (static_cast<qint64>(m_generation) << kHandleIndexBits) | static_cast<qint64>(idx);
 }
@@ -314,6 +373,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByHandle(qint64 ha
   if (gen != m_generation || index >= static_cast<int>(m_storage.size())) [[unlikely]]
     return nullptr;
 
+  captureRead(index);
   return &m_storage[static_cast<size_t>(index)];
 }
 
@@ -338,6 +398,7 @@ bool DataModel::DataTableStore::setByHandle(qint64 handle, const RegisterValue& 
     return false;
 
   m_storage[static_cast<size_t>(index)] = val;
+  m_version[static_cast<size_t>(index)] = ++m_writeClock;
   return true;
 }
 
@@ -359,10 +420,11 @@ void DataModel::DataTableStore::setDatasetRaw(int uniqueId,
   if (it == m_datasetIndex.constEnd()) [[unlikely]]
     return;
 
-  auto& rv        = m_storage[static_cast<size_t>(it->first)];
-  rv.numericValue = numeric;
-  rv.stringValue  = str;
-  rv.isNumeric    = isNum;
+  auto& rv                                  = m_storage[static_cast<size_t>(it->first)];
+  rv.numericValue                           = numeric;
+  rv.stringValue                            = str;
+  rv.isNumeric                              = isNum;
+  m_version[static_cast<size_t>(it->first)] = ++m_writeClock;
 }
 
 /**
@@ -379,10 +441,11 @@ void DataModel::DataTableStore::setDatasetFinal(int uniqueId,
   if (it == m_datasetIndex.constEnd()) [[unlikely]]
     return;
 
-  auto& rv        = m_storage[static_cast<size_t>(it->second)];
-  rv.numericValue = numeric;
-  rv.stringValue  = str;
-  rv.isNumeric    = isNum;
+  auto& rv                                   = m_storage[static_cast<size_t>(it->second)];
+  rv.numericValue                            = numeric;
+  rv.stringValue                             = str;
+  rv.isNumeric                               = isNum;
+  m_version[static_cast<size_t>(it->second)] = ++m_writeClock;
 }
 
 /**
@@ -398,6 +461,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetRaw(int uni
     return nullptr;
   }
 
+  captureRead(it->first);
   return &m_storage[static_cast<size_t>(it->first)];
 }
 
@@ -414,6 +478,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinal(int u
     return nullptr;
   }
 
+  captureRead(it->second);
   return &m_storage[static_cast<size_t>(it->second)];
 }
 
@@ -459,6 +524,7 @@ void DataModel::DataTableStore::addRegister(const QString& table,
 
   m_storage.push_back(defaultVal);
   m_isComputed.push_back(isComputed);
+  m_version.push_back(0);
   m_index.insert(qMakePair(table, reg), offset);
 }
 

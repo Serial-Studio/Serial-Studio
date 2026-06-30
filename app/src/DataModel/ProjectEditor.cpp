@@ -161,9 +161,6 @@ typedef enum {
 
 // clang-format on
 
-// Past this many groups, unremembered groups default to collapsed in the tree.
-static constexpr int kAutoCollapseGroupThreshold = 6;
-
 /**
  * @brief Builds a folder's "/"-joined path from any folder vector (root -> leaf).
  */
@@ -262,6 +259,11 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
           &DataModel::ProjectModel::groupsChanged,
           this,
           &DataModel::ProjectEditor::scheduleTreeRebuild,
+          Qt::QueuedConnection);
+  connect(&pm,
+          &DataModel::ProjectModel::groupsChanged,
+          this,
+          &DataModel::ProjectEditor::editableOptionsChanged,
           Qt::QueuedConnection);
   connect(&pm,
           &DataModel::ProjectModel::actionsChanged,
@@ -836,6 +838,43 @@ bool DataModel::ProjectEditor::currentDatasetIsEditable() const
         return false;
     }
   }
+
+  return true;
+}
+
+/**
+ * @brief Returns whether the selected group is enabled (false dims and locks its editor form).
+ * Reads the live ProjectModel so a context-menu toggle of the open group reflects immediately.
+ */
+bool DataModel::ProjectEditor::selectedGroupEnabled() const
+{
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+  const auto groupId = m_selectedGroup.groupId;
+  if (groupId >= 0 && static_cast<size_t>(groupId) < groups.size())
+    return groups[groupId].enabled;
+
+  return true;
+}
+
+/**
+ * @brief Returns the selected dataset's effective enablement: false when the dataset or its parent
+ *        group is disabled, so a dataset under a disabled group reads as inactive. Reads live
+ * state.
+ */
+bool DataModel::ProjectEditor::selectedDatasetEnabled() const
+{
+  const auto& groups   = DataModel::ProjectModel::instance().groups();
+  const auto groupId   = m_selectedDataset.groupId;
+  const auto datasetId = m_selectedDataset.datasetId;
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return true;
+
+  const auto& group = groups[groupId];
+  if (!group.enabled)
+    return false;
+
+  if (datasetId >= 0 && static_cast<size_t>(datasetId) < group.datasets.size())
+    return group.datasets[datasetId].enabled;
 
   return true;
 }
@@ -1447,6 +1486,8 @@ void DataModel::ProjectEditor::appendDatasetChildren(QStandardItem* groupItem,
     datasetItem->setData(dataset.sourceId, TreeViewSourceId);
     datasetItem->setData(QString(), TreeViewSourceName);
     datasetItem->setData(dataset.virtual_, TreeViewVirtual);
+    datasetItem->setData(group.enabled && dataset.enabled, TreeViewEnabled);
+    datasetItem->setData(dataset.enabled, TreeViewSelfEnabled);
     datasetItem->setData(KindDataset, TreeItemKind);
     datasetItem->setData(dataset.datasetId, TreeItemId);
     datasetItem->setData(group.groupId, TreeItemParentId);
@@ -1495,6 +1536,7 @@ void DataModel::ProjectEditor::appendOutputWidgetChildren(QStandardItem* groupIt
     owItem->setData(-2, TreeViewFrameIndex);
     owItem->setData(ow.sourceId, TreeViewSourceId);
     owItem->setData(QString(), TreeViewSourceName);
+    owItem->setData(group.enabled, TreeViewEnabled);
     owItem->setData(KindOutputWidget, TreeItemKind);
     owItem->setData(ow.widgetId, TreeItemId);
     owItem->setData(group.groupId, TreeItemParentId);
@@ -1528,10 +1570,8 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     return true;
   };
 
-  const auto& groups  = DataModel::ProjectModel::instance().groups();
-  const auto& folders = DataModel::ProjectModel::instance().editorGroupFolders();
-  const bool collapseByDefault =
-    !filterActive && static_cast<int>(groups.size()) > kAutoCollapseGroupThreshold;
+  const auto& groups     = DataModel::ProjectModel::instance().groups();
+  const auto& folders    = DataModel::ProjectModel::instance().editorGroupFolders();
   const bool showFolders = !filterActive && !folders.empty();
 
   bool anyGroup = false;
@@ -1570,6 +1610,8 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     groupItem->setData(group.title, TreeViewText);
     groupItem->setData(QString(), TreeViewSourceName);
     groupItem->setData(group.sourceId, TreeViewSourceId);
+    groupItem->setData(group.enabled, TreeViewEnabled);
+    groupItem->setData(group.enabled, TreeViewSelfEnabled);
     groupItem->setData(KindGroup, TreeItemKind);
     groupItem->setData(group.groupId, TreeItemId);
     groupItem->setData(group.parentFolderId, TreeItemParentId);
@@ -1580,12 +1622,12 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     appendDatasetChildren(groupItem, group);
     appendOutputWidgetChildren(groupItem, group);
 
-    QString gPath = root->text() + "/" + tr("Groups");
+    QString gPath = root->text() + "/" + groupsRoot->text();
     if (showFolders && group.parentFolderId != -1 && folderItems.contains(group.parentFolderId))
       gPath += "/" + folderDisplayPath(folders, group.parentFolderId);
 
     gPath += "/" + group.title;
-    restoreExpandedStateMap(groupItem, expandedStates, gPath, !collapseByDefault);
+    restoreExpandedStateMap(groupItem, expandedStates, gPath);
 
     QStandardItem* parent =
       (showFolders && group.parentFolderId != -1 && folderItems.contains(group.parentFolderId))

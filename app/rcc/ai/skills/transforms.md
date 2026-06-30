@@ -191,9 +191,20 @@ those instead of `tableGet('__datasets__', 'raw:<uid>')`.
 ```js
 tableGet(tableName, registerName)              // -> number | string
 tableSet(tableName, registerName, value)       // user tables only
+tableHandle(tableName, registerName)           // -> handle (number), or -1; resolve ONCE at load
+tableHandleMany(tableName, registerNames)      // -> array of handles
+tableGetH(handle)                              // read by handle (fast path; no name lookup)
+tableSetH(handle, value)                       // write by handle (computed registers only)
 datasetGetRaw(uniqueId)                        // any dataset, this frame
 datasetGetFinal(uniqueId)                      // EARLIER datasets only
 ```
+
+For a transform that hits the same registers every frame, resolve handles
+once in a top-level variable and use `tableGetH`/`tableSetH`; a stale handle
+after a table edit is a safe no-op. A table inside folders is addressed by
+its full path — parent folder titles joined with `/`, then the table name
+(`"Telemetry/BMS/State"`); a top-level table is its bare name.
+`project.dataTable.list` reports that `path`.
 
 `uniqueId` is a stable INTEGER, not a name. Read it from
 `assistant.dataset.resolve`, `project.dataset.list`, or

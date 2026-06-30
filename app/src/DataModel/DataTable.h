@@ -64,6 +64,7 @@ public:
   void clear();
 
   [[nodiscard]] bool isInitialized() const noexcept;
+  [[nodiscard]] quint64 writeClock() const noexcept;
 
   [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
 
@@ -75,6 +76,9 @@ public:
   bool setByInternedKey(const char* table, const char* reg, const RegisterValue& val);
 
   void clearLookupCache() const;
+
+  void setReadCaptureTarget(std::vector<int>* target) const noexcept;
+  [[nodiscard]] bool changedSince(const std::vector<int>& slotList, quint64 sinceClock) const;
 
   bool set(const QString& table, const QString& reg, const RegisterValue& val);
 
@@ -95,23 +99,28 @@ private:
 
   [[nodiscard]] int indexOf(const QString& table, const QString& reg) const;
 
+  void captureRead(int slot) const;
+
   void noteMissingLookup(const QString& table, const QString& reg) const;
   void noteMissingDataset(int uniqueId, const char* kind) const;
 
 private:
   bool m_initialized;
   int m_generation;
+  quint64 m_writeClock;
 
   std::vector<RegisterValue> m_storage;
   QHash<QPair<QString, QString>, int> m_index;
   QHash<int, std::pair<int, int>> m_datasetIndex;
 
   std::vector<bool> m_isComputed;
+  std::vector<quint64> m_version;
 
   std::vector<std::pair<QString, std::vector<QString>>> m_tableRegNames;
 
   mutable QSet<QPair<QString, QString>> m_warnedMissing;
   mutable QSet<int> m_warnedMissingDatasets;
+  mutable std::vector<int>* m_captureTarget;
 
   static constexpr int kInternedKeyCacheSize = 32;
 

@@ -100,7 +100,9 @@ they close the See -> Decide -> Act loop:
   project edits and persist with the project.
 
 Control scripts also get the data-table globals `tableGet(table, register)` and
-`tableSet(table, register, value)`, marshalled through
+`tableSet(table, register, value)` (`table` is the full `/`-joined folder
+path for a table inside folders; a top-level table is its bare name),
+marshalled through
 `project.dataTable.getValue` / `setValue` (each call is a thread round-trip:
 read once per `loop()` pass, not in tight inner loops). `tableGet` returns
 `undefined` for unknown registers, so `tableGet(t, r) || fallback` works.

@@ -57,7 +57,9 @@ The shared data-table API is injected into the parser too: `tableGet(table, reg)
 `tableHandleMany(table, regs)` / `tableGetH(handle)` / `tableSetH(handle, v)`. For a parser that
 writes many registers per frame, resolve handles once in a top-level `local` and use
 `tableGetH`/`tableSetH` on the hot path; a stale handle (after a table-definition edit) is a safe
-no-op. Full reference in the transform and SDK docs.
+no-op. A table inside folders is addressed by its full `/`-joined folder path (top-level tables
+are bare names); `project.dataTable.list` reports that path. Full reference in the transform and
+SDK docs.
 
 ## Console logging
 

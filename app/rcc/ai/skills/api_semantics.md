@@ -181,6 +181,15 @@ populate it directly; UART / network usually leave it 0.
   filter state, integrators, latched flags, and derivatives. It is also the
   reason `tableGet` on the very first frame returns the Constant
   default declared in the project, not "zero from a reset".
+- **A table inside folders is addressed by its full path** — parent
+  folder titles joined with `/`, then the table name
+  (`"Telemetry/BMS/State"`); a top-level table is its bare name. This is
+  the `table` argument everywhere: the `tableGet` / `tableSet` /
+  `tableHandle` globals and the `project.dataTable.getValue` / `setValue`
+  / `handle` commands. `project.dataTable.list` returns each table's
+  `path` (full) next to its `name` (bare), and `project.dataTable.get`
+  accepts either; use the `path` for a foldered table, since a bare name
+  that collides across folders resolves to only one of them.
 
 `__datasets__` is the auto-generated system table. Each dataset has
 two registers: `raw:<uniqueId>` and `final:<uniqueId>`. You almost

@@ -2,6 +2,9 @@
 
 Lua 5.4 mirror of the JS transform API. Use Lua when your team is
 Lua-fluent or when you want closure-captured local state semantics.
+(When the project's opt-in `changeDrivenTransforms` property is on, a virtual
+dataset's transform is skipped on a frame where none of the table
+registers/datasets it reads changed; input discovery is automatic.)
 
 ## Contract
 
@@ -60,6 +63,13 @@ datasetGetFinal(uniqueId)               -- final value of an earlier dataset
 For a transform that hits the same registers every call, resolve handles once in a top-level
 local and use `tableGetH`/`tableSetH` instead of the name-keyed calls. A stale handle (after a
 table-definition edit) is a safe no-op; the script re-resolves on its next load.
+
+A table inside folders is addressed by its full path: parent folder titles
+joined with `/`, then the table name (`"Telemetry/BMS/State"`). A top-level
+table is just its bare name. The same string is the `table` argument to the
+`project.dataTable.*` API commands, and `project.dataTable.list` reports each
+table's `path`. The path uses folder *titles*, so moving or renaming a folder
+changes it (and stales any handle resolved against the old path).
 
 User-table registers are either `Constant` (immutable, set at project
 load) or `Computed` (writable from transforms). Computed registers hold

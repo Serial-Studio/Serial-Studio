@@ -138,77 +138,111 @@ Widgets.Pane {
             }
           }
 
-          Rectangle {
-            width: 1
-            height: 18
+          Widgets.IconButton {
+            id: settingsButton
+
+            iconSize: 18
+            text: qsTr("Settings")
             Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
+            icon.source: "qrc:/icons/toolbar/settings.svg"
+            onClicked: settingsPopup.visible ? settingsPopup.close() : settingsPopup.open()
 
-          Label {
-            text: qsTr("Time Range:")
-            Layout.alignment: Qt.AlignVCenter
-          }
+            Popup {
+              id: settingsPopup
 
-          SpinBox {
-            id: timeRangeField
+              margins: 8
+              padding: 12
+              y: settingsButton.height + 4
+              closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-            readonly property var presets: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
-                                            0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 30, 60, 120, 300]
+              background: Rectangle {
+                radius: 4
+                color: Cpp_ThemeManager.colors["window"]
+                border.color: Cpp_ThemeManager.colors["groupbox_border"]
+              }
 
-            function nearestIndex(seconds) {
-              var best = 0
-              for (var i = 0; i < presets.length; ++i)
-                if (Math.abs(presets[i] - seconds) < Math.abs(presets[best] - seconds))
-                  best = i
+              contentItem: GridLayout {
+                columns: 2
+                rowSpacing: 10
+                columnSpacing: 12
 
-              return best
+                Label {
+                  text: qsTr("Time Range:")
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                SpinBox {
+                  id: timeRangeField
+
+                  readonly property var presets: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
+                                                  0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 30, 60, 120, 300]
+
+                  function nearestIndex(seconds) {
+                    var best = 0
+                    for (var i = 0; i < presets.length; ++i)
+                      if (Math.abs(presets[i] - seconds) < Math.abs(presets[best] - seconds))
+                        best = i
+
+                    return best
+                  }
+
+                  function formatSeconds(s) {
+                    return s < 1 ? (Math.round(s * 1000) + " ms") : (parseFloat(s.toFixed(3)) + " s")
+                  }
+
+                  from: 0
+                  to: presets.length - 1
+                  editable: true
+                  Layout.fillWidth: true
+                  value: nearestIndex(Cpp_JSON_ProjectModel.plotTimeRange)
+                  textFromValue: function(value, locale) { return timeRangeField.formatSeconds(presets[value]) }
+                  valueFromText: function(text, locale) {
+                    var t = String(text).toLowerCase()
+                    var num = parseFloat(t.replace(/[^0-9.]/g, ""))
+                    if (isNaN(num))
+                      return timeRangeField.value
+
+                    var secs = (t.indexOf("ms") >= 0) ? num / 1000 : num
+                    return timeRangeField.nearestIndex(secs)
+                  }
+                  onValueModified: Cpp_JSON_ProjectModel.setPlotTimeRange(presets[value])
+                }
+
+                Label {
+                  text: qsTr("Point Count:")
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                SpinBox {
+                  id: pointCountField
+
+                  from: 10
+                  to: 100000
+                  stepSize: 10
+                  editable: true
+                  Layout.fillWidth: true
+                  value: Cpp_JSON_ProjectModel.pointCount
+                  onValueModified: Cpp_JSON_ProjectModel.setPointCount(value)
+                }
+
+                Label {
+                  Layout.alignment: Qt.AlignVCenter
+                  text: qsTr("Change-Driven Transforms:")
+                }
+
+                Switch {
+                  Layout.alignment: Qt.AlignVCenter
+                  checked: Cpp_JSON_ProjectModel.changeDrivenTransforms
+
+                  ToolTip.delay: 700
+                  ToolTip.visible: hovered
+                  ToolTip.text: qsTr("Run a dataset's transform only when one of its inputs changes. "
+                                     + "Speeds up large table-driven projects; off by default.")
+
+                  onToggled: Cpp_JSON_ProjectModel.changeDrivenTransforms = checked
+                }
+              }
             }
-
-            function formatSeconds(s) {
-              return s < 1 ? (Math.round(s * 1000) + " ms") : (parseFloat(s.toFixed(3)) + " s")
-            }
-
-            from: 0
-            to: presets.length - 1
-            editable: true
-            Layout.alignment: Qt.AlignVCenter
-            value: nearestIndex(Cpp_JSON_ProjectModel.plotTimeRange)
-            textFromValue: function(value, locale) { return timeRangeField.formatSeconds(presets[value]) }
-            valueFromText: function(text, locale) {
-              var t = String(text).toLowerCase()
-              var num = parseFloat(t.replace(/[^0-9.]/g, ""))
-              if (isNaN(num))
-                return timeRangeField.value
-
-              var secs = (t.indexOf("ms") >= 0) ? num / 1000 : num
-              return timeRangeField.nearestIndex(secs)
-            }
-            onValueModified: Cpp_JSON_ProjectModel.setPlotTimeRange(presets[value])
-          }
-
-          Rectangle {
-            width: 1
-            height: 18
-            Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
-
-          Label {
-            text: qsTr("Point Count:")
-            Layout.alignment: Qt.AlignVCenter
-          }
-
-          SpinBox {
-            id: pointCountField
-
-            from: 10
-            to: 100000
-            stepSize: 10
-            editable: true
-            Layout.alignment: Qt.AlignVCenter
-            value: Cpp_JSON_ProjectModel.pointCount
-            onValueModified: Cpp_JSON_ProjectModel.setPointCount(value)
           }
         }
       }

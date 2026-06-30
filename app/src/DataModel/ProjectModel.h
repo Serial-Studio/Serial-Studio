@@ -78,6 +78,10 @@ class ProjectModel : public QObject {
   Q_PROPERTY(double plotTimeRange
              READ plotTimeRange
              NOTIFY plotTimeRangeChanged)
+  Q_PROPERTY(bool changeDrivenTransforms
+             READ changeDrivenTransforms
+             WRITE setChangeDrivenTransforms
+             NOTIFY changeDrivenTransformsChanged)
   Q_PROPERTY(int frameParserLanguage
              READ  frameParserLanguage
              WRITE setFrameParserLanguage
@@ -121,6 +125,7 @@ signals:
   void saveStatusChanged();
   void pointCountChanged();
   void plotTimeRangeChanged();
+  void changeDrivenTransformsChanged();
   void jsonFileChanged();
   void projectFileChangedOnDisk();
   void modifiedChanged();
@@ -220,6 +225,7 @@ public:
 
   [[nodiscard]] int pointCount() const noexcept;
   [[nodiscard]] double plotTimeRange() const noexcept;
+  [[nodiscard]] bool changeDrivenTransforms() const noexcept;
   [[nodiscard]] int groupCount() const noexcept;
   [[nodiscard]] int datasetCount() const;
   [[nodiscard]] int sourceCount() const noexcept;
@@ -286,6 +292,7 @@ public slots:
   void setControlScriptCode(const QString& code);
   void setPointCount(const int points);
   void setPlotTimeRange(const double seconds);
+  void setChangeDrivenTransforms(const bool enabled);
   void clearJsonFilePath();
 
   Q_INVOKABLE QString addTable(const QString& name, int parentFolderId = -1);
@@ -335,6 +342,8 @@ public slots:
   void duplicateGroup(int groupId);
   void deleteDataset(int groupId, int datasetId, bool confirm = false);
   void duplicateDataset(int groupId, int datasetId);
+  void setGroupEnabled(int groupId, bool enabled);
+  void setDatasetEnabled(int groupId, int datasetId, bool enabled);
   void deleteAction(int actionId, bool confirm = false);
   void duplicateAction(int actionId);
 
@@ -521,6 +530,7 @@ private:
   void loadWidgetSettingsAndWorkspaces(const QJsonObject& json);
   void loadPointCount(const QJsonObject& json);
   void loadPlotTimeRange(const QJsonObject& json);
+  void loadChangeDrivenTransforms(const QJsonObject& json);
   void migrateLegacyLayoutKeys();
   void migrateLegacyDashboardLayout(const QJsonObject& json);
   bool migrateLegacySeparator(const QJsonObject& json);
@@ -578,6 +588,7 @@ private:
 
   int m_pointCount;
   double m_plotTimeRange;
+  bool m_changeDrivenTransforms;
   int m_nextUniqueId;
   bool m_modified;
   bool m_silentReload;

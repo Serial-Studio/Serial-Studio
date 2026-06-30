@@ -77,6 +77,35 @@
   return std::max(std::chrono::nanoseconds(1), data->frameStep);
 }
 
+/**
+ * @brief Builds the runtime group list from the project, dropping disabled groups and the
+ *        disabled datasets of the survivors so frame building never sees them. The editor keeps
+ *        the full set; surviving datasets retain their explicit frame index, so no sibling shifts.
+ */
+[[nodiscard]] std::vector<DataModel::Group> buildEnabledGroups(
+  const std::vector<DataModel::Group>& projectGroups)
+{
+  std::vector<DataModel::Group> groups;
+  groups.reserve(projectGroups.size());
+
+  for (const auto& group : projectGroups) {
+    if (!group.enabled)
+      continue;
+
+    DataModel::Group runtimeGroup = group;
+    std::vector<DataModel::Dataset> datasets;
+    datasets.reserve(runtimeGroup.datasets.size());
+    for (auto& dataset : runtimeGroup.datasets)
+      if (dataset.enabled)
+        datasets.push_back(std::move(dataset));
+
+    runtimeGroup.datasets = std::move(datasets);
+    groups.push_back(std::move(runtimeGroup));
+  }
+
+  return groups;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
@@ -90,6 +119,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_parseBudgetSkipping(false)
   , m_parseBudgetWarned(false)
   , m_parseBudgetEnabled(true)
+  , m_parseBudgetEpisodeActive(false)
   , m_lastConnectedState(false)
   , m_playerOpen(false)
   , m_anyAsyncSink(false)
@@ -97,6 +127,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_captureFlagsDirty(true)
   , m_externalTableApiUsers(false)
   , m_captureLatestFrame(false)
+  , m_changeDriven(false)
   , m_seenEngineEpoch(-1)
   , m_operationMode(SerialStudio::ProjectFile)
   , m_parseBudgetUsedNs(0)
@@ -399,6 +430,11 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::onSourceRemoved);
 
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::changeDrivenTransformsChanged,
+          this,
+          [this] { m_captureFlagsDirty = true; });
+
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::timeout1Hz,
           this,
@@ -523,7 +559,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   m_captureFlagsDirty     = true;
 
   m_frame.title   = pm.title();
-  m_frame.groups  = pm.groups();
+  m_frame.groups  = buildEnabledGroups(pm.groups());
   m_frame.actions = pm.actions();
   m_frame.sources = pm.sources();
 
@@ -870,7 +906,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
 {
   Q_ASSERT(data);
   Q_ASSERT(!data->data.isEmpty());
-  Q_ASSERT(!m_frame.groups.empty());
+
+  if (m_frame.groups.empty()) [[unlikely]]
+    return;
 
   if (parseBudgetSkipFrame()) [[unlikely]]
     return;
@@ -922,6 +960,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(data);
   Q_ASSERT(!data->data.isEmpty());
+
+  if (m_frame.groups.empty()) [[unlikely]]
+    return;
 
   if (parseBudgetSkipFrame()) [[unlikely]]
     return;
@@ -1059,6 +1100,9 @@ bool DataModel::FrameBuilder::parseBudgetSkipFrame()
   const auto windowNs =
     std::chrono::duration_cast<std::chrono::nanoseconds>(now - m_parseBudgetWindowStart).count();
   if (windowNs >= static_cast<qint64>(kParseBudgetWindowMs) * 1'000'000LL) {
+    if (!m_parseBudgetSkipping)
+      m_parseBudgetEpisodeActive = false;
+
     m_parseBudgetWindowStart = now;
     m_parseBudgetUsedNs      = 0;
     m_parseBudgetSkipping    = false;
@@ -1090,9 +1134,14 @@ void DataModel::FrameBuilder::parseBudgetAccount(BudgetClock::time_point started
     return;
 
   m_parseBudgetSkipping = true;
+
+  if (m_parseBudgetEpisodeActive)
+    return;
+
+  m_parseBudgetEpisodeActive = true;
   qWarning() << "[FrameBuilder] Parser load exceeded budget (" << m_parseBudgetUsedNs / 1'000'000LL
              << "ms /" << kParseBudgetWindowMs << "ms)"
-             << "...dropping frames until the next window rolls.";
+             << "...dropping frames until parse load recovers.";
 
   if (!m_parseBudgetWarned) {
     m_parseBudgetWarned = true;
@@ -1110,10 +1159,11 @@ void DataModel::FrameBuilder::parseBudgetAccount(BudgetClock::time_point started
  */
 void DataModel::FrameBuilder::parseBudgetReset() noexcept
 {
-  m_parseBudgetWindowStart = BudgetClock::time_point{};
-  m_parseBudgetUsedNs      = 0;
-  m_parseBudgetSkipping    = false;
-  m_parseBudgetWarned      = false;
+  m_parseBudgetWindowStart   = BudgetClock::time_point{};
+  m_parseBudgetUsedNs        = 0;
+  m_parseBudgetSkipping      = false;
+  m_parseBudgetWarned        = false;
+  m_parseBudgetEpisodeActive = false;
 }
 
 /**
@@ -1184,6 +1234,14 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
                                                 const TransformFrameInfo& info,
                                                 const std::unordered_map<int, int>* replayColumns)
 {
+  DatasetDeps* dep = nullptr;
+  if (m_changeDriven && dataset.virtual_ && !dataset.transformCode.isEmpty()
+      && !SerialStudio::isFinalValuePlayerOpen()) {
+    dep = &m_datasetDeps[dataset.uniqueId];
+    if (!dep->readSlots.empty() && !m_tableStore.changedSince(dep->readSlots, dep->lastRunClock))
+      return;
+  }
+
   if (replayColumns) [[unlikely]] {
     const auto it = replayColumns->find(dataset.uniqueId);
     const int col = (it != replayColumns->end()) ? it->second : -1;
@@ -1217,7 +1275,15 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
 
   if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen()) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
+    if (dep)
+      m_tableStore.setReadCaptureTarget(&dep->readSlots);
+
     const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
+
+    if (dep) {
+      m_tableStore.setReadCaptureTarget(nullptr);
+      dep->lastRunClock = m_tableStore.writeClock();
+    }
 
     if (result.typeId() == QMetaType::Double) {
       dataset.numericValue = SerialStudio::toDouble(result);
@@ -1250,6 +1316,13 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
   Q_ASSERT(spans != nullptr);
   SS_ASSUME(count > 0);
 
+  DatasetDeps* dep = nullptr;
+  if (m_changeDriven && dataset.virtual_ && !dataset.transformCode.isEmpty()) {
+    dep = &m_datasetDeps[dataset.uniqueId];
+    if (!dep->readSlots.empty() && !m_tableStore.changedSince(dep->readSlots, dep->lastRunClock))
+      return;
+  }
+
   if (dataset.virtual_) {
     dataset.numericValue = 0.0;
     dataset.value.clear();
@@ -1278,7 +1351,15 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
 
   if (!dataset.transformCode.isEmpty()) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
+    if (dep)
+      m_tableStore.setReadCaptureTarget(&dep->readSlots);
+
     const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
+
+    if (dep) {
+      m_tableStore.setReadCaptureTarget(nullptr);
+      dep->lastRunClock = m_tableStore.writeClock();
+    }
 
     if (result.typeId() == QMetaType::Double) {
       dataset.numericValue = SerialStudio::toDouble(result);
@@ -1367,6 +1448,8 @@ void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
   m_captureDatasetValues =
     m_tableStore.isInitialized()
     && (!m_transformEngines.empty() || m_externalTableApiUsers || parser.hasTableApiEngines());
+  m_changeDriven = DataModel::ProjectModel::instance().changeDrivenTransforms();
+  m_datasetDeps.clear();
   m_captureFlagsDirty = false;
 }
 

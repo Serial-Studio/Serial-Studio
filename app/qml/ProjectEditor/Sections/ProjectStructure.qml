@@ -127,6 +127,7 @@ Widgets.Pane {
       property int ctxItemParentId: -1
       property string ctxItemPath: ""
       property int ctxItemKind: ProjectEditor.KindNone
+      property bool ctxItemEnabled: true
       property int moveExcludeId: -1
       property bool moveHasTargets: false
       property var moveTargetsTree: []
@@ -375,6 +376,28 @@ Widgets.Pane {
           height: visible ? implicitHeight : 0
           icon.source: "qrc:/icons/project-editor/actions/rename.svg"
           onTriggered: treeView.renameCtxItem()
+        }
+
+        //
+        // Enable/disable a group or dataset (excludes it from frame building, greyed in the tree)
+        //
+        MenuItem {
+          icon.width: 16
+          icon.height: 16
+          text: treeView.ctxItemEnabled ? qsTr("Disable") : qsTr("Enable")
+          visible: treeView.ctxItemKind === ProjectEditor.KindGroup
+                   || treeView.ctxItemKind === ProjectEditor.KindDataset
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/led.svg"
+          onTriggered: {
+            if (treeView.ctxItemKind === ProjectEditor.KindGroup)
+              Cpp_JSON_ProjectModel.setGroupEnabled(treeView.ctxItemId,
+                                                     !treeView.ctxItemEnabled)
+            else if (treeView.ctxItemKind === ProjectEditor.KindDataset)
+              Cpp_JSON_ProjectModel.setDatasetEnabled(treeView.ctxItemParentId,
+                                                       treeView.ctxItemId,
+                                                       !treeView.ctxItemEnabled)
+          }
         }
 
         //
@@ -666,6 +689,10 @@ Widgets.Pane {
                                             ? -1 : model.treeItemParentId
         readonly property string itemPath: model.treeItemPath === undefined
                                            ? "" : model.treeItemPath
+        readonly property bool itemEnabled: model.treeViewEnabled === undefined
+                                            ? true : model.treeViewEnabled
+        readonly property bool itemSelfEnabled: model.treeViewSelfEnabled === undefined
+                                                ? true : model.treeViewSelfEnabled
 
         //
         // Restore expanded state from C++ model
@@ -747,6 +774,7 @@ Widgets.Pane {
                   treeView.ctxItemId       = item.itemId
                   treeView.ctxItemParentId = item.itemParentId
                   treeView.ctxItemPath     = item.itemPath
+                  treeView.ctxItemEnabled  = item.itemSelfEnabled
                   treeView.rebuildMoveMenu()
                   sharedContextMenu.popup()
                 }
@@ -801,6 +829,7 @@ Widgets.Pane {
           spacing: 0
           anchors.fill: parent
           anchors.rightMargin: 16
+          opacity: item.itemEnabled ? 1.0 : 0.5
           anchors.leftMargin: padding + (isTreeNode ? depth * indentation : 0)
 
           //

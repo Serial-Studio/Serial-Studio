@@ -96,15 +96,21 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  registry.registerCommand(QStringLiteral("project.dataTable.list"),
-                           QStringLiteral("List all user-defined data tables"),
-                           API::emptySchema(),
-                           &tablesList);
+  registry.registerCommand(
+    QStringLiteral("project.dataTable.list"),
+    QStringLiteral("List all user-defined data tables. Each entry has name (bare), path (full "
+                   "\"/\"-joined folder path), and registerCount. Pass path to get/getValue/handle "
+                   "for a table that lives inside folders."),
+    API::emptySchema(),
+    &tablesList);
   registry.registerCommand(
     QStringLiteral("project.dataTable.get"),
-    QStringLiteral("Return the register list for a table (params: name)"),
+    QStringLiteral("Return the register list for a table (params: name). name may be the bare "
+                   "table name or its full \"/\"-joined folder path."),
     API::makeSchema({
-      {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
+      {QStringLiteral("name"),
+       QStringLiteral("string"),
+       QStringLiteral("Table name or full folder path")}
   }),
     &tableGet);
   registry.registerCommand(
@@ -113,8 +119,10 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
                    "table, name). This is the same store the parser/transform tableGet() reads; "
                    "control scripts use it through the tableGet() global."),
     API::makeSchema({
-      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
-      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+      {QStringLiteral("table"),
+       QStringLiteral("string"),
+       QStringLiteral("Owning table: full \"/\"-joined folder path (bare name if top-level)")                         },
+      { QStringLiteral("name"), QStringLiteral("string"),                              QStringLiteral("Register name")}
   }),
     &valueGet);
   registry.registerCommand(
@@ -123,8 +131,10 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
                    "(params: table, name). Returns handle=-1 for an unknown register. Mirrors the "
                    "parser/transform tableHandle() global."),
     API::makeSchema({
-      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
-      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+      {QStringLiteral("table"),
+       QStringLiteral("string"),
+       QStringLiteral("Owning table: full \"/\"-joined folder path (bare name if top-level)")                         },
+      { QStringLiteral("name"), QStringLiteral("string"),                              QStringLiteral("Register name")}
   }),
     &valueHandle);
   registry.registerCommand(
@@ -317,12 +327,14 @@ API::CommandResponse API::Handlers::DataTablesHandler::tablesList(const QString&
 {
   Q_UNUSED(params)
 
-  const auto& tables = DataModel::ProjectModel::instance().tables();
+  const auto& tables  = DataModel::ProjectModel::instance().tables();
+  const auto& folders = DataModel::ProjectModel::instance().editorTableFolders();
 
   QJsonArray arr;
   for (const auto& t : tables) {
     QJsonObject row;
-    row[QStringLiteral("name")]          = t.name;
+    row[QStringLiteral("name")] = t.name;
+    row[QStringLiteral("path")] = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
     row[QStringLiteral("registerCount")] = static_cast<int>(t.registers.size());
     arr.append(row);
   }
@@ -344,20 +356,29 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableGet(const QString& i
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
-  const auto& tables = DataModel::ProjectModel::instance().tables();
-  const auto it =
-    std::find_if(tables.begin(), tables.end(), [&name](const auto& t) { return t.name == name; });
+  const auto& tables  = DataModel::ProjectModel::instance().tables();
+  const auto& folders = DataModel::ProjectModel::instance().editorTableFolders();
 
-  if (it == tables.end())
+  QString path;
+  for (const auto& t : tables) {
+    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
+    if (full == name || t.name == name) {
+      path = full;
+      break;
+    }
+  }
+
+  if (path.isEmpty())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(name));
 
-  const auto registers = DataModel::ProjectModel::instance().registersForTable(name);
+  const auto registers = DataModel::ProjectModel::instance().registersForTable(path);
 
   QJsonArray arr = QJsonArray::fromVariantList(registers);
 
   QJsonObject result;
   result[QStringLiteral("name")]      = name;
+  result[QStringLiteral("path")]      = path;
   result[QStringLiteral("registers")] = arr;
   return CommandResponse::makeSuccess(id, result);
 }

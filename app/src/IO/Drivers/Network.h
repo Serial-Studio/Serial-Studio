@@ -160,6 +160,7 @@ private slots:
 
 private:
   [[nodiscard]] bool connectTcp(const QString& hostAddr);
+  void enlargeUdpReceiveBuffer();
 
 private:
   QSettings m_settings;

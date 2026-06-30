@@ -2,7 +2,10 @@
 
 A transform turns a raw numeric (or string) dataset value into the value the
 dashboard plots, displays, and exports. Transforms run on every frame, in
-declared dataset order. They are independent per dataset.
+declared dataset order. They are independent per dataset. (When the project's
+opt-in `changeDrivenTransforms` property is on, a virtual dataset's transform is
+skipped on a frame where none of the table registers/datasets it reads changed;
+input discovery is automatic, so scripts are unaffected.)
 
 ## Contract
 
@@ -83,6 +86,17 @@ datasetGetFinal(uniqueId)                      // final value of an EARLIER data
 For a transform that hits the same registers every call, resolve handles once in a top-level
 variable and use `tableGetH`/`tableSetH` instead of the name-keyed calls. A stale handle (after a
 table-definition edit) is a safe no-op; the script re-resolves on its next load.
+
+**Tables in folders are addressed by full path.** The `tableName` you pass
+is the table's parent folder titles joined with `/`, then the table name: a
+table `State` filed under folder `BMS` inside `Telemetry` is
+`"Telemetry/BMS/State"`. A top-level table (no folder) is just its bare
+name. The same string is the `table` argument to the `project.dataTable.*`
+API commands. The path is built from folder *titles*, so renaming or moving
+a folder changes it, and any handle resolved against the old path goes stale
+(a safe no-op; `tableHandle` then returns -1 until the script re-resolves).
+`project.dataTable.list` returns each table's `path` next to its bare
+`name`; pass that `path` for a foldered table.
 
 `uniqueId` is an OPAQUE integer that uniquely identifies a dataset
 within the project. It comes back from `project.dataset.list` (under

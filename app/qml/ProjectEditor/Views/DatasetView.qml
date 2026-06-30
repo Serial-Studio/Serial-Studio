@@ -38,6 +38,9 @@ Widgets.Pane {
   // User interface elements
   //
   Page {
+    enabled: Cpp_JSON_ProjectEditor.selectedDatasetEnabled
+    opacity: Cpp_JSON_ProjectEditor.selectedDatasetEnabled ? 1 : 0.5
+
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]

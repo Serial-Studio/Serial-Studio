@@ -154,8 +154,11 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
   `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes
   (`assign_utf8_in_place`), zero steady-state allocation. The hotpath reads **cached**
   flags (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`, `m_captureLatestFrame`,
-  Dashboard `m_streamAvailable`) — a new input to any of them must wire its change signal
-  to the cache refresh or frames/exports silently stop (see common-mistakes.md).
+  `m_changeDriven`, Dashboard `m_streamAvailable`) — a new input to any of them must wire its
+  change signal to the cache refresh or frames/exports silently stop (see common-mistakes.md).
+  `m_changeDriven` (project property `changeDrivenTransforms`, opt-in/off by default) skips a
+  virtual dataset's transform when none of its captured read-set slots changed since its last
+  run (per-slot version vs `DataTableStore::writeClock`); refreshed in `refreshDatasetCaptureFlag`.
   `m_captureLatestFrame` (control script running or API server on) gates the latest-frame
   capture behind `io.getLatestFrame`: it retains one `CapturedDataPtr` per source (the
   FrameReader pool probe skips pinned slots) plus the channel tokens — keep it gated and

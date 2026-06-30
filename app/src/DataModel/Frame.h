@@ -171,6 +171,9 @@ inline constexpr KeyView TreeExpansion("treeExpansion");
 // Plot history keys
 inline constexpr KeyView PointCount("pointCount");
 inline constexpr KeyView PlotTimeRange("plotTimeRange");
+
+// Transform execution
+inline constexpr KeyView ChangeDrivenTransforms("changeDrivenTransforms");
 inline constexpr KeyView kActiveGroupSubKey("activeGroup");
 inline constexpr KeyView kDashboardWindowsSubKey("dashboardWindows");
 inline constexpr KeyView HiddenGroups("hiddenGroups");
@@ -188,6 +191,9 @@ inline constexpr KeyView FolderId("folderId");
 inline constexpr KeyView ParentFolderId("parentFolderId");
 
 inline constexpr KeyView Virtual("virtual");
+
+// Group/dataset enablement: written only when off, so absence means enabled.
+inline constexpr KeyView Disabled("disabled");
 
 // Data table keys
 inline constexpr KeyView Tables("tables");
@@ -412,6 +418,7 @@ struct alignas(8) Dataset {
   bool isNumeric        = false;  ///< True if value was parsed as numeric
   bool virtual_         = false;  ///< True if dataset is generated rather than parsed directly
   bool hideOnDashboard  = false;  ///< Suppress dataset-level dashboard tile (painter still sees it)
+  bool enabled          = true;   ///< False excludes the dataset from frame building (editor-only)
   double fftMin         = 0;      ///< Minimum value (for FFT)
   double fftMax         = 0;      ///< Maximum value (for FFT)
   double pltMin         = 0;      ///< Minimum value (for plots)
@@ -455,6 +462,7 @@ struct alignas(8) Group {
   int sourceId        = 0;   ///< Source this group reads from (0 = default)
   int columns         = 2;   ///< Number of columns for output panel grid layout
   GroupType groupType = GroupType::Input;   ///< Input (visualization) or Output (controls)
+  bool enabled        = true;               ///< False excludes the group from frame building
   QString title;                            ///< Group display name
   QString widget;                           ///< Group widget type
   std::vector<Dataset> datasets;            ///< Datasets contained in this group
@@ -1135,6 +1143,9 @@ void read_io_settings(QByteArray& frameStart,
   if (d.hideOnDashboard)
     obj.insert(Keys::HideOnDashboard, true);
 
+  if (!d.enabled)
+    obj.insert(Keys::Disabled, true);
+
   return obj;
 }
 
@@ -1166,6 +1177,9 @@ void read_io_settings(QByteArray& frameStart,
 
   if (g.sourceId != 0)
     obj.insert(Keys::SourceId, g.sourceId);
+
+  if (!g.enabled)
+    obj.insert(Keys::Disabled, true);
 
   if (g.widget.simplified() == QLatin1String("image")) {
     obj.insert(Keys::ImgMode, g.imgDetectionMode);
@@ -1354,6 +1368,7 @@ inline void normalizeDatasetRanges(Dataset& d)
   g.sourceId       = ss_jsr(obj, Keys::SourceId, 0).toInt();
   g.uniqueId       = ss_jsr(obj, Keys::UniqueId, -1).toInt();
   g.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
+  g.enabled        = !ss_jsr(obj, Keys::Disabled, false).toBool();
 
   if (isImageGroup) {
     g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();

@@ -322,6 +322,7 @@ bool DataModel::read(Dataset& d, const QJsonObject& obj)
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
   d.virtual_          = ss_jsr(obj, Keys::Virtual, false).toBool();
   d.hideOnDashboard   = ss_jsr(obj, Keys::HideOnDashboard, false).toBool();
+  d.enabled           = !ss_jsr(obj, Keys::Disabled, false).toBool();
   d.uniqueId          = ss_jsr(obj, Keys::UniqueId, -1).toInt();
 
   if (!d.value.isEmpty())

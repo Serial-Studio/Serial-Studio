@@ -97,6 +97,12 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(bool currentDatasetIsEditable
              READ currentDatasetIsEditable
              NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool selectedGroupEnabled
+             READ selectedGroupEnabled
+             NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool selectedDatasetEnabled
+             READ selectedDatasetEnabled
+             NOTIFY editableOptionsChanged)
   Q_PROPERTY(bool currentGroupIsOutputPanel
              READ currentGroupIsOutputPanel
              NOTIFY editableOptionsChanged)
@@ -249,6 +255,9 @@ public:
     MaxValue = Qt::UserRole + 22,
 
     TreeItemPath = Qt::UserRole + 23,
+
+    TreeViewEnabled     = Qt::UserRole + 24,
+    TreeViewSelfEnabled = Qt::UserRole + 25,
   };
   Q_ENUM(CustomRoles)
 
@@ -277,6 +286,8 @@ public:
   [[nodiscard]] const QStringList& availableActionIcons() const;
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
+  [[nodiscard]] bool selectedGroupEnabled() const;
+  [[nodiscard]] bool selectedDatasetEnabled() const;
   [[nodiscard]] bool currentGroupIsOutputPanel() const;
   [[nodiscard]] int outputWidgetType() const noexcept;
   [[nodiscard]] quint16 datasetOptions() const;
@@ -636,6 +647,8 @@ public:
       {ProjectEditor::TreeItemParentId,       BAL("treeItemParentId")},
       {ProjectEditor::TreeItemPath,           BAL("treeItemPath")},
       {ProjectEditor::TreeViewWorkspaceStale, BAL("treeViewWorkspaceStale")},
+      {ProjectEditor::TreeViewEnabled,        BAL("treeViewEnabled")},
+      {ProjectEditor::TreeViewSelfEnabled,    BAL("treeViewSelfEnabled")},
       {ProjectEditor::MinValue,               BAL("minValue")},
       {ProjectEditor::MaxValue,               BAL("maxValue")},
     };

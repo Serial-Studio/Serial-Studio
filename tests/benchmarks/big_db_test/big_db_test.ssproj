@@ -1,6 +1,7 @@
 {
     "actions": [
     ],
+    "changeDrivenTransforms": true,
     "controlScriptCode": "/**\n * BigDB Watchdog Control Script\n *\n * Monitors frame arrival. If no frame is seen for WATCHDOG_TIMEOUT_MS the\n * whole group is marked as a signal loss and every channel on every\n * board (all three types, ids 1..6) is invalidated. Normal arrival clears it.\n */\n\nconst WATCHDOG_TIMEOUT_MS = 1000;\nconst BOARD_COUNT = 6;\nconst TYPES = [\n  { name: \"TA\", valkey: \"resistance\", extra: [] },\n  { name: \"TB\", valkey: \"val\",        extra: [\"mode\"] },\n  { name: \"TC\", valkey: \"temp\",       extra: [\"type\"] },\n];\n\nlet lastFrameTime = 0;\nlet watchdogTriggered = false;\n\nfunction setup() {\n}\n\nfunction markCommLoss() {\n  watchdogTriggered = true;\n\n  for (let t = 0; t < TYPES.length; t++) {\n    const ty = TYPES[t];\n    for (let brd = 1; brd <= BOARD_COUNT; brd++) {\n      const board = \"DAQ/\" + ty.name + \"/BRD-\" + brd;\n      tableSet(board, \"boot_reset_cause\", 0x01);\n      tableSet(board, \"boot_selftest\", 0xFF);\n\n      for (let ch = 1; ch <= 8; ch++) {\n        tableSet(board, \"ch\" + ch + \"_\" + ty.valkey, 0xFFFF);\n        tableSet(board, \"ch\" + ch + \"_diag\", 0xFF);\n        for (let e = 0; e < ty.extra.length; e++)\n          tableSet(board, \"ch\" + ch + \"_\" + ty.extra[e], 0x00);\n      }\n    }\n  }\n\n  refreshDashboard();\n}\n\nfunction clearCommLoss() {\n  watchdogTriggered = false;\n  notifyInfo(\"Information\", \"CAN communications restored\");\n}\n\nfunction loop() {\n  const frame = newFrame();\n\n  if (frame) {\n    lastFrameTime = Date.now();\n\n    if (watchdogTriggered)\n      clearCommLoss();\n\n    delay(100);\n    return;\n  }\n\n  if (lastFrameTime === 0) {\n    delay(100);\n    return;\n  }\n\n  const elapsed = Date.now() - lastFrameTime;\n  if (elapsed > WATCHDOG_TIMEOUT_MS && !watchdogTriggered) {\n    notifyCritical(\"CAN Bus Error\", \"No CAN frames received for \" + elapsed + \" milliseconds\");\n    markCommLoss();\n  }\n\n  delay(100);\n}\n",
     "customizeWorkspaces": true,
     "groupFolders": [
@@ -21051,7 +21052,7 @@
         "BigDB/Control Loop": false,
         "BigDB/Dashboard Widgets": true,
         "BigDB/Dashboard Widgets/DAQ": true,
-        "BigDB/Dashboard Widgets/DAQ/TA": true,
+        "BigDB/Dashboard Widgets/DAQ/TA": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Boot Status": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Boot Status/TA-1 Boot Status": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Boot Status/TA-1 Boot Status/Reset Cause": false,
@@ -21126,7 +21127,7 @@
         "BigDB/Dashboard Widgets/DAQ/TA/Diagnostics/TA-6 Diagnostics/Channel 6": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Diagnostics/TA-6 Diagnostics/Channel 7": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Diagnostics/TA-6 Diagnostics/Channel 8": false,
-        "BigDB/Dashboard Widgets/DAQ/TA/Summary": true,
+        "BigDB/Dashboard Widgets/DAQ/TA/Summary": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Summary/TA-1 Temperatures": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Summary/TA-1 Temperatures/Channel 1": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Summary/TA-1 Temperatures/Channel 2": false,
@@ -21339,8 +21340,8 @@
         "BigDB/Dashboard Widgets/DAQ/TB/Diagnostics/TB-6 Diagnostics/Channel 6": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Diagnostics/TB-6 Diagnostics/Channel 7": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Diagnostics/TB-6 Diagnostics/Channel 8": false,
-        "BigDB/Dashboard Widgets/DAQ/TB/Summary": true,
-        "BigDB/Dashboard Widgets/DAQ/TB/Summary/TB-1 Readings": true,
+        "BigDB/Dashboard Widgets/DAQ/TB/Summary": false,
+        "BigDB/Dashboard Widgets/DAQ/TB/Summary/TB-1 Readings": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Summary/TB-1 Readings/Channel 1": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Summary/TB-1 Readings/Channel 2": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Summary/TB-1 Readings/Channel 3": false,
@@ -21579,9 +21580,9 @@
         "BigDB/Dashboard Widgets/DAQ/TC/Summary/TC-6 Temperatures/Channel 6": false,
         "BigDB/Dashboard Widgets/DAQ/TC/Summary/TC-6 Temperatures/Channel 7": false,
         "BigDB/Dashboard Widgets/DAQ/TC/Summary/TC-6 Temperatures/Channel 8": false,
+        "BigDB/Device 1": true,
+        "BigDB/Device 1/Frame Parser": false,
         "BigDB/MQTT Publisher": false,
-        "BigDB/RH02 USB CAN FD": true,
-        "BigDB/RH02 USB CAN FD/Frame Parser": false,
         "BigDB/Shared Memory": true,
         "BigDB/Shared Memory/DAQ": true,
         "BigDB/Shared Memory/DAQ/TA": false,
@@ -21630,7 +21631,7 @@
         "9:0:1": {
             "showAreaUnderPlot": false
         },
-        "activeGroup": 5009,
+        "activeGroup": 5000,
         "externalWindows": {
             "data": [
             ]
@@ -24057,68 +24058,68 @@
         "layout:5009": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 588,
-                "canvasWidth": 1215,
+                "canvasHeight": 478,
+                "canvasWidth": 1032,
                 "geometries": [
                     {
-                        "height": 294,
+                        "height": 239,
                         "id": 43,
                         "relativeIndex": 42,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 405,
+                        "width": 344,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 294,
+                        "height": 239,
                         "id": 47,
                         "relativeIndex": 46,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 405,
-                        "x": 404,
+                        "width": 344,
+                        "x": 343,
                         "y": 0
                     },
                     {
-                        "height": 294,
+                        "height": 239,
                         "id": 51,
                         "relativeIndex": 50,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 405,
-                        "x": 808,
+                        "width": 344,
+                        "x": 686,
                         "y": 0
                     },
                     {
-                        "height": 294,
+                        "height": 239,
                         "id": 55,
                         "relativeIndex": 54,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 405,
+                        "width": 344,
                         "x": 0,
-                        "y": 293
+                        "y": 238
                     },
                     {
-                        "height": 294,
+                        "height": 239,
                         "id": 59,
                         "relativeIndex": 58,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 405,
-                        "x": 404,
-                        "y": 293
+                        "width": 344,
+                        "x": 343,
+                        "y": 238
                     },
                     {
-                        "height": 294,
+                        "height": 239,
                         "id": 63,
                         "relativeIndex": 62,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 405,
-                        "x": 808,
-                        "y": 293
+                        "width": 344,
+                        "x": 686,
+                        "y": 238
                     }
                 ],
                 "userReordered": false,

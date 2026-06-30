@@ -229,6 +229,17 @@ Transforms are applied in order: groups in frame order, datasets in group order.
 
 If you need dataset B to consume dataset A's final value, make sure A comes before B in the Project Editor tree.
 
+## Change-driven transforms (opt-in)
+
+By default every dataset's transform runs on every frame. For a large table-driven project, where the frame parser writes table registers and many virtual datasets each read one register, that means a frame for one device re-runs the transforms of *every* dataset, even the ones whose data did not change.
+
+The **Change-driven transforms** toggle in the Project Editor's Project Summary turns on a faster mode: a virtual dataset's transform runs only when one of the registers (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio discovers what each transform reads automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option just skips recomputing values that did not change.
+
+It is **off by default** and saved per project. Turn it on for heavy table-driven dashboards that are dropping frames. Two things to know:
+
+- A per-sample filter (an EMA, a deadband) then steps once per *real* new sample of its input rather than once per global frame, which is what you usually want.
+- If a virtual dataset's output depends on something Serial Studio cannot see as an input — wall-clock time read directly inside the transform (`Date.now()`, `os.time()`) rather than a value passed through a table or `frameInfo` — leave this off for that project, or keep such datasets non-virtual, since the transform may not re-run on time alone.
+
 ## Frame metadata: the second `frameInfo` argument
 
 Every transform may declare a second argument with metadata about the frame the value belongs to. One-arg transforms (`function transform(value)`) keep working and pay no extra cost: the engine inspects each transform's parameter count at compile time and skips building the info table or object entirely when it isn't used.
