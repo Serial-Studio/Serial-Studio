@@ -271,6 +271,14 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
+    - name: '🏋️ PGO training run (big project)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 25
+
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -300,6 +308,14 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+
+    - name: '🩺 Big project verification (optimized)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 15
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
@@ -633,6 +649,14 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
+    - name: '🏋️ PGO training run (big project)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
+      run: |
+        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 25
+
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -662,6 +686,14 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+
+    - name: '🩺 Big project verification (optimized)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
+      run: |
+        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 15
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
@@ -932,6 +964,13 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
 
+    - name: '🏋️ PGO training run (big project)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
+      run: |
+        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" 25
+
     - name: '🚧 Reconfigure with CMake (PGO use, arm64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -961,6 +1000,13 @@ jobs:
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
+
+    - name: '🩺 Big project verification (optimized)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
+      run: |
+        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" 15
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
@@ -1361,6 +1407,10 @@ jobs:
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out (no PGO profile)' }
 
+    - name: '🏋️ PGO training run (big project)'
+      run: |
+        ./tests/benchmarks/big_db_test/run_load.ps1 -App "build/app/${{env.EXECUTABLE}}.exe" -Seconds 25
+
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1390,6 +1440,10 @@ jobs:
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
+
+    - name: '🩺 Big project verification (optimized)'
+      run: |
+        ./tests/benchmarks/big_db_test/run_load.ps1 -App "build/app/${{env.EXECUTABLE}}.exe" -Seconds 15
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()

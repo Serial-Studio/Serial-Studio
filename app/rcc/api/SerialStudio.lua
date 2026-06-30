@@ -1284,6 +1284,19 @@ function project.dataTable.getValue(table, name)
   return apiCall('project.dataTable.getValue', p)
 end
 
+function project.dataTable.getValueH(handle)
+  local p = {}
+  p['handle'] = handle
+  return apiCall('project.dataTable.getValueH', p)
+end
+
+function project.dataTable.handle(table, name)
+  local p = {}
+  p['table'] = table
+  p['name'] = name
+  return apiCall('project.dataTable.handle', p)
+end
+
 function project.dataTable.list()
   local p = {}
   return apiCall('project.dataTable.list', p)
@@ -1302,6 +1315,13 @@ function project.dataTable.setValue(table, name, value)
   p['name'] = name
   p['value'] = value
   return apiCall('project.dataTable.setValue', p)
+end
+
+function project.dataTable.setValueH(handle, value)
+  local p = {}
+  p['handle'] = handle
+  p['value'] = value
+  return apiCall('project.dataTable.setValueH', p)
 end
 
 function project.dataTable.updateRegister(table, name, options)

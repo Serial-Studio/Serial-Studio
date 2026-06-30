@@ -72,9 +72,17 @@ Functions injected into your scope:
 ```js
 tableGet(tableName, registerName)              // -> number | string
 tableSet(tableName, registerName, value)       // user-table writes only
+tableHandle(tableName, registerName)           // -> handle (number), or -1; resolve ONCE at load
+tableHandleMany(tableName, registerNames)      // -> array of handles
+tableGetH(handle)                              // read by handle (fast path; no name lookup)
+tableSetH(handle, value)                       // write by handle (computed registers only)
 datasetGetRaw(uniqueId)                        // raw value of any dataset
 datasetGetFinal(uniqueId)                      // final value of an EARLIER dataset (this frame)
 ```
+
+For a transform that hits the same registers every call, resolve handles once in a top-level
+variable and use `tableGetH`/`tableSetH` instead of the name-keyed calls. A stale handle (after a
+table-definition edit) is a safe no-op; the script re-resolves on its next load.
 
 `uniqueId` is an OPAQUE integer that uniquely identifies a dataset
 within the project. It comes back from `project.dataset.list` (under

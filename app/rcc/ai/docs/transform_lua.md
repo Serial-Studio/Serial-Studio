@@ -49,9 +49,17 @@ Functions injected into the Lua state:
 ```lua
 tableGet(tableName, registerName)      -- -> number | string
 tableSet(tableName, registerName, v)    -- user tables only
+tableHandle(tableName, registerName)    -- -> handle (number), or -1; resolve ONCE at load
+tableHandleMany(tableName, registers)   -- -> table of handles
+tableGetH(handle)                       -- read by handle (fast path; no name lookup)
+tableSetH(handle, v)                    -- write by handle (computed registers only)
 datasetGetRaw(uniqueId)                 -- raw value, this frame
 datasetGetFinal(uniqueId)               -- final value of an earlier dataset
 ```
+
+For a transform that hits the same registers every call, resolve handles once in a top-level
+local and use `tableGetH`/`tableSetH` instead of the name-keyed calls. A stale handle (after a
+table-definition edit) is a safe no-op; the script re-resolves on its next load.
 
 User-table registers are either `Constant` (immutable, set at project
 load) or `Computed` (writable from transforms). Computed registers hold

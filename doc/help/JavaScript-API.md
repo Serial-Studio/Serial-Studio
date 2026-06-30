@@ -276,6 +276,23 @@ function parse(frame) {
 
 Globals are reset when: the project is reloaded, parser code is edited and reapplied, or Serial Studio is restarted.
 
+### Fast table access with handles
+
+If your parser writes many [data-table](Data-Tables.md) registers every frame, looking each one up by name with `tableSet(table, register, value)` becomes the bottleneck. Resolve the names to **handles** once in global state, then write by handle on the hot path:
+
+```javascript
+// Runs once at load: resolve register names to handles.
+var H = tableHandleMany("DAQ/BRD-1", ["ch1", "ch2", "ch3", "ch4"]);
+
+function parse(frame) {
+  for (var i = 0; i < H.length; i++)
+    tableSetH(H[i], frame[i]);   // no name lookup per write
+  return [0];
+}
+```
+
+`tableHandle(table, register)` resolves one register (returns `-1` if it does not exist); `tableHandleMany` resolves several of one table at once; `tableGetH(handle)` / `tableSetH(handle, value)` read and write by handle. A stale handle (after a table-definition edit) is a safe no-op, and the script re-resolves on the next load. Full reference: [SDK Reference](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
+
 ## Practical Examples
 
 ### Example 1: Simple CSV

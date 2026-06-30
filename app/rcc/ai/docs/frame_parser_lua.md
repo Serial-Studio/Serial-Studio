@@ -50,6 +50,15 @@ against Lua 5.1/5.2 conventions still work:
 - Top-level `local` declarations stay scoped to your script (each source
   has its own Lua state).
 
+## Data tables
+
+The shared data-table API is injected into the parser too: `tableGet(table, reg)` /
+`tableSet(table, reg, v)` by name, plus the handle fast path `tableHandle(table, reg)` /
+`tableHandleMany(table, regs)` / `tableGetH(handle)` / `tableSetH(handle, v)`. For a parser that
+writes many registers per frame, resolve handles once in a top-level `local` and use
+`tableGetH`/`tableSetH` on the hot path; a stale handle (after a table-definition edit) is a safe
+no-op. Full reference in the transform and SDK docs.
+
 ## Console logging
 
 `print(...)` and a JS-style `console` table route to the application

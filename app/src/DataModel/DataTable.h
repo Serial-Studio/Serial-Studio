@@ -28,6 +28,7 @@
 #include <QSet>
 #include <QString>
 #include <QVariant>
+#include <QVariantList>
 #include <vector>
 
 #include "DataModel/Frame.h"
@@ -66,6 +67,10 @@ public:
 
   [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
 
+  [[nodiscard]] qint64 handleOf(const QString& table, const QString& reg) const;
+  [[nodiscard]] const RegisterValue* getByHandle(qint64 handle) const;
+  bool setByHandle(qint64 handle, const RegisterValue& val);
+
   [[nodiscard]] const RegisterValue* getByInternedKey(const char* table, const char* reg) const;
   bool setByInternedKey(const char* table, const char* reg, const RegisterValue& val);
 
@@ -95,6 +100,7 @@ private:
 
 private:
   bool m_initialized;
+  int m_generation;
 
   std::vector<RegisterValue> m_storage;
   QHash<QPair<QString, QString>, int> m_index;
@@ -134,6 +140,10 @@ public:
 
 public:
   Q_INVOKABLE [[nodiscard]] QVariant tableGet(const QString& t, const QString& r);
+  Q_INVOKABLE [[nodiscard]] QVariant tableGetH(qint64 h);
+  Q_INVOKABLE [[nodiscard]] qint64 tableHandle(const QString& t, const QString& r);
+  Q_INVOKABLE [[nodiscard]] QVariantList tableHandleMany(const QString& t,
+                                                         const QVariantList& regs);
   Q_INVOKABLE [[nodiscard]] QVariant datasetGetRaw(int uid);
   Q_INVOKABLE [[nodiscard]] QVariant datasetGetFinal(int uid);
 #ifdef BUILD_COMMERCIAL
@@ -144,6 +154,7 @@ public:
 #endif
 public slots:
   void tableSet(const QString& t, const QString& r, const QVariant& v);
+  void tableSetH(qint64 h, const QVariant& v);
 };
 
 }  // namespace DataModel

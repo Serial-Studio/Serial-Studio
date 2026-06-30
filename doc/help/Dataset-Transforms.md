@@ -181,6 +181,8 @@ Every transform has access to four built-in functions for reading and writing th
 
 The API is identical in Lua and JavaScript. `table` and `reg` are strings. `uniqueId` is the integer unique ID shown next to each dataset in the Project Editor.
 
+For a transform that touches the same registers on every value, resolving a name once to a **handle** and using `tableGetH` / `tableSetH` avoids the per-call name lookup. See [Fast table access with handles](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
+
 **Lua example: scale a voltage reading by a project-wide calibration factor:**
 
 ```lua

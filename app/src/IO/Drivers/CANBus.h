@@ -26,6 +26,7 @@
 #include <QCanBusDevice>
 #include <QCanBusFrame>
 #include <QObject>
+#include <QSet>
 #include <QSettings>
 #include <QString>
 
@@ -165,6 +166,7 @@ private:
   QString m_interfaceError;
   QStringList m_pluginList;
   QStringList m_interfaceList;
+  QSet<QString> m_loggedPluginErrors;
 };
 }  // namespace Drivers
 }  // namespace IO

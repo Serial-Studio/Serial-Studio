@@ -33,7 +33,8 @@ function parse(frame) {
 The QJSEngine running parsers is isolated from the host system. Available:
 `console`, `gc()`, plain JS built-ins, and the injected host API —
 `deviceWrite`, `actionFire`, the seven dashboard helpers,
-`tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`, `notify*`,
+`tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`, the handle fast path
+`tableHandle`/`tableHandleMany`/`tableGetH`/`tableSetH`, `notify*`,
 `apiCall`, and the generated `SerialStudio` SDK (`io.*`, `project.*`, ...):
 
 - **No** `XMLHttpRequest`, `fetch`, `setTimeout`, `setInterval`.

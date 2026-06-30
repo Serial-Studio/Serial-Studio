@@ -2390,6 +2390,95 @@ static int luaTableSet(lua_State* L)
 }
 
 /**
+ * @brief Lua C closure for tableHandle(table, reg) -> handle; resolve once, off the hot path.
+ */
+static int luaTableHandle(lua_State* L)
+{
+  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
+  Q_ASSERT(store);
+
+  const char* table   = luaL_checkstring(L, 1);
+  const char* reg     = luaL_checkstring(L, 2);
+  const qint64 handle = store->handleOf(QString::fromUtf8(table), QString::fromUtf8(reg));
+
+  lua_pushnumber(L, static_cast<lua_Number>(handle));
+  return 1;
+}
+
+/**
+ * @brief Lua C closure for tableHandleMany(table, regs) -> handles; one handle per name, -1 if
+ *        unknown.
+ */
+static int luaTableHandleMany(lua_State* L)
+{
+  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
+  Q_ASSERT(store);
+
+  const QString table = QString::fromUtf8(luaL_checkstring(L, 1));
+  luaL_checktype(L, 2, LUA_TTABLE);
+
+  const lua_Integer n = luaL_len(L, 2);
+  lua_newtable(L);
+  for (lua_Integer i = 1; i <= n; ++i) {
+    lua_geti(L, 2, i);
+    const qint64 handle = store->handleOf(table, QString::fromUtf8(luaL_checkstring(L, -1)));
+    lua_pop(L, 1);
+    lua_pushnumber(L, static_cast<lua_Number>(handle));
+    lua_seti(L, -2, i);
+  }
+
+  return 1;
+}
+
+/**
+ * @brief Lua C closure for tableGetH(handle); nil for a stale or invalid handle.
+ */
+static int luaTableGetH(lua_State* L)
+{
+  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
+  Q_ASSERT(store);
+
+  const qint64 handle = static_cast<qint64>(luaL_checknumber(L, 1));
+  const auto* val     = store->getByHandle(handle);
+  if (!val) {
+    lua_pushnil(L);
+    return 1;
+  }
+
+  if (val->isNumeric) {
+    lua_pushnumber(L, val->numericValue);
+  } else {
+    const auto utf8 = val->stringValue.toUtf8();
+    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
+  }
+
+  return 1;
+}
+
+/**
+ * @brief Lua C closure for tableSetH(handle, value); ignores non-computed/stale/invalid handles.
+ */
+static int luaTableSetH(lua_State* L)
+{
+  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
+  Q_ASSERT(store);
+
+  const qint64 handle = static_cast<qint64>(luaL_checknumber(L, 1));
+
+  DataModel::RegisterValue rv;
+  if (lua_isnumber(L, 2)) {
+    rv.numericValue = lua_tonumber(L, 2);
+    rv.isNumeric    = true;
+  } else {
+    rv.stringValue = QString::fromUtf8(luaL_checkstring(L, 2));
+    rv.isNumeric   = false;
+  }
+
+  store->setByHandle(handle, rv);
+  return 0;
+}
+
+/**
  * @brief Lua C closure for datasetGetRaw(uniqueId).
  */
 static int luaDatasetGetRaw(lua_State* L)
@@ -2486,6 +2575,22 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
   lua_pushlightuserdata(L, &m_tableStore);
   lua_pushcclosure(L, luaTableSet, 1);
   lua_setglobal(L, "tableSet");
+
+  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushcclosure(L, luaTableHandle, 1);
+  lua_setglobal(L, "tableHandle");
+
+  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushcclosure(L, luaTableHandleMany, 1);
+  lua_setglobal(L, "tableHandleMany");
+
+  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushcclosure(L, luaTableGetH, 1);
+  lua_setglobal(L, "tableGetH");
+
+  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushcclosure(L, luaTableSetH, 1);
+  lua_setglobal(L, "tableSetH");
 
   lua_pushlightuserdata(L, &m_tableStore);
   lua_pushcclosure(L, luaDatasetGetRaw, 1);

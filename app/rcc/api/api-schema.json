@@ -2564,6 +2564,37 @@
         ]
     },
     {
+        "description": "Return a register's LIVE runtime value by handle (params: handle). A stale or invalid handle yields found=false. Mirrors tableGetH().",
+        "name": "project.dataTable.getValueH",
+        "properties": {
+            "handle": {
+                "description": "Handle from project.dataTable.handle",
+                "type": "number"
+            }
+        },
+        "required": [
+            "handle"
+        ]
+    },
+    {
+        "description": "Resolve a register to a reusable numeric handle for the fast get/set path (params: table, name). Returns handle=-1 for an unknown register. Mirrors the parser/transform tableHandle() global.",
+        "name": "project.dataTable.handle",
+        "properties": {
+            "name": {
+                "description": "Register name",
+                "type": "string"
+            },
+            "table": {
+                "description": "Owning table name",
+                "type": "string"
+            }
+        },
+        "required": [
+            "table",
+            "name"
+        ]
+    },
+    {
         "description": "List all user-defined data tables",
         "name": "project.dataTable.list",
         "properties": {
@@ -2612,6 +2643,27 @@
         "required": [
             "table",
             "name",
+            "value"
+        ]
+    },
+    {
+        "description": "Write a register's LIVE runtime value by handle (params: handle, value). A stale, invalid, or constant-register handle yields written=false. Mirrors tableSetH().",
+        "name": "project.dataTable.setValueH",
+        "properties": {
+            "handle": {
+                "description": "Handle from project.dataTable.handle",
+                "type": "number"
+            },
+            "value": {
+                "description": "New runtime value (number or string)",
+                "type": [
+                    "number",
+                    "string"
+                ]
+            }
+        },
+        "required": [
+            "handle",
             "value"
         ]
     },

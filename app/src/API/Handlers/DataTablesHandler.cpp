@@ -117,6 +117,26 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
       { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
   }),
     &valueGet);
+  registry.registerCommand(
+    QStringLiteral("project.dataTable.handle"),
+    QStringLiteral("Resolve a register to a reusable numeric handle for the fast get/set path "
+                   "(params: table, name). Returns handle=-1 for an unknown register. Mirrors the "
+                   "parser/transform tableHandle() global."),
+    API::makeSchema({
+      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
+      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+  }),
+    &valueHandle);
+  registry.registerCommand(
+    QStringLiteral("project.dataTable.getValueH"),
+    QStringLiteral("Return a register's LIVE runtime value by handle (params: handle). A stale or "
+                   "invalid handle yields found=false. Mirrors tableGetH()."),
+    API::makeSchema({
+      {QStringLiteral("handle"),
+       QStringLiteral("number"),
+       QStringLiteral("Handle from project.dataTable.handle")}
+  }),
+    &valueGetH);
 }
 
 /**
@@ -183,6 +203,28 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
                    "writes."),
     valueSchema,
     &valueSet);
+
+  QJsonObject valueHProps;
+  valueHProps[QStringLiteral("handle")] = QJsonObject{
+    {       QStringLiteral("type"),                               QStringLiteral("number")},
+    {QStringLiteral("description"), QStringLiteral("Handle from project.dataTable.handle")}
+  };
+  valueHProps[QStringLiteral("value")] = QJsonObject{
+    {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
+    {QStringLiteral("description"),         QStringLiteral("New runtime value (number or string)")}
+  };
+  QJsonObject valueHSchema;
+  valueHSchema[QStringLiteral("type")]       = QStringLiteral("object");
+  valueHSchema[QStringLiteral("properties")] = valueHProps;
+  valueHSchema[QStringLiteral("required")] =
+    QJsonArray{QStringLiteral("handle"), QStringLiteral("value")};
+  registry.registerCommand(
+    QStringLiteral("project.dataTable.setValueH"),
+    QStringLiteral("Write a register's LIVE runtime value by handle (params: handle, value). A "
+                   "stale, invalid, or constant-register handle yields written=false. Mirrors "
+                   "tableSetH()."),
+    valueHSchema,
+    &valueSetH);
 }
 
 /**
@@ -662,5 +704,104 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueSet(const QString& i
   result[QStringLiteral("table")]   = table;
   result[QStringLiteral("name")]    = name;
   result[QStringLiteral("written")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Resolves a (table, register) pair to a reusable handle for the marshalled fast path.
+ */
+API::CommandResponse API::Handlers::DataTablesHandler::valueHandle(const QString& id,
+                                                                   const QJsonObject& params)
+{
+  QString table;
+  QString name;
+  if (!requireString(params, QStringLiteral("table"), table))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
+
+  if (!requireString(params, QStringLiteral("name"), name))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+
+  const auto& store = DataModel::FrameBuilder::instance().tableStore();
+  if (!store.isInitialized())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
+
+  const qint64 handle = store.handleOf(table, name);
+
+  QJsonObject result;
+  result[QStringLiteral("table")]  = table;
+  result[QStringLiteral("name")]   = name;
+  result[QStringLiteral("handle")] = static_cast<double>(handle);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Returns a register's live value by handle; found=false for a stale or invalid handle.
+ */
+API::CommandResponse API::Handlers::DataTablesHandler::valueGetH(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("handle")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: handle"));
+
+  const qint64 handle =
+    static_cast<qint64>(SerialStudio::toDouble(params.value(QStringLiteral("handle"))));
+
+  const auto& store = DataModel::FrameBuilder::instance().tableStore();
+  if (!store.isInitialized())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
+
+  const auto* value = store.getByHandle(handle);
+
+  QJsonObject result;
+  result[QStringLiteral("handle")] = static_cast<double>(handle);
+  result[QStringLiteral("found")]  = (value != nullptr);
+  result[QStringLiteral("value")]  = QJsonValue();
+  if (value) {
+    result[QStringLiteral("isNumeric")] = value->isNumeric;
+    result[QStringLiteral("value")] =
+      value->isNumeric ? QJsonValue(value->numericValue) : QJsonValue(value->stringValue);
+  }
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Writes a register's live value by handle; written=false for stale/invalid/constant.
+ */
+API::CommandResponse API::Handlers::DataTablesHandler::valueSetH(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("handle")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: handle"));
+
+  if (!params.contains(QStringLiteral("value")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: value"));
+
+  const qint64 handle =
+    static_cast<qint64>(SerialStudio::toDouble(params.value(QStringLiteral("handle"))));
+  const QVariant v = jsonToVariant(params.value(QStringLiteral("value")));
+
+  DataModel::RegisterValue rv;
+  rv.numericValue = SerialStudio::toDouble(v, &rv.isNumeric);
+  if (!rv.isNumeric)
+    rv.stringValue = v.toString();
+
+  auto& store = DataModel::FrameBuilder::instance().tableStore();
+  if (!store.isInitialized())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
+
+  const bool written = store.setByHandle(handle, rv);
+
+  QJsonObject result;
+  result[QStringLiteral("handle")]  = static_cast<double>(handle);
+  result[QStringLiteral("written")] = written;
   return CommandResponse::makeSuccess(id, result);
 }

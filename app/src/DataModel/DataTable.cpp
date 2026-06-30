@@ -37,6 +37,9 @@ static const QString kSystemTable = QStringLiteral("__datasets__");
 static const QString kRawPrefix   = QStringLiteral("raw:");
 static const QString kFinalPrefix = QStringLiteral("final:");
 
+static constexpr int kHandleIndexBits    = 24;
+static constexpr qint64 kHandleIndexMask = (static_cast<qint64>(1) << kHandleIndexBits) - 1;
+
 /**
  * @brief Returns the reserved name of the internal per-dataset mirror table.
  */
@@ -52,7 +55,7 @@ const QString& DataModel::systemDataTableName()
 /**
  * @brief Constructs an empty DataTableStore in the uninitialized state.
  */
-DataModel::DataTableStore::DataTableStore() : m_initialized(false) {}
+DataModel::DataTableStore::DataTableStore() : m_initialized(false), m_generation(0) {}
 
 /**
  * @brief Pre-allocates registers for user tables and the system dataset table.
@@ -62,6 +65,7 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
                                            const Frame& templateFrame)
 {
   clear();
+  ++m_generation;
 
   size_t totalRegs = 0;
   for (const auto& table : userTables)
@@ -275,6 +279,69 @@ bool DataModel::DataTableStore::set(const QString& table,
 }
 
 //--------------------------------------------------------------------------------------------------
+// Handle (pointer) fast path
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Resolves (table, register) to a generation-tagged handle (gen<<24|index), or -1 + a
+ *        one-shot warning if unknown; run once off the hot path.
+ */
+qint64 DataModel::DataTableStore::handleOf(const QString& table, const QString& reg) const
+{
+  Q_ASSERT(m_initialized);
+
+  const int idx = indexOf(table, reg);
+  if (idx < 0) [[unlikely]] {
+    noteMissingLookup(table, reg);
+    return -1;
+  }
+
+  return (static_cast<qint64>(m_generation) << kHandleIndexBits) | static_cast<qint64>(idx);
+}
+
+/**
+ * @brief Hot-path read by handle; a stale, out-of-range, or -1 handle is a safe nullptr.
+ */
+const DataModel::RegisterValue* DataModel::DataTableStore::getByHandle(qint64 handle) const
+{
+  Q_ASSERT(m_initialized);
+
+  if (handle < 0) [[unlikely]]
+    return nullptr;
+
+  const int gen   = static_cast<int>(handle >> kHandleIndexBits);
+  const int index = static_cast<int>(handle & kHandleIndexMask);
+  if (gen != m_generation || index >= static_cast<int>(m_storage.size())) [[unlikely]]
+    return nullptr;
+
+  return &m_storage[static_cast<size_t>(index)];
+}
+
+/**
+ * @brief Hot-path write by handle; non-computed (guard matches set()), stale, or invalid handles
+ *        are ignored silently, with no warning so a misused handle cannot spam the log per frame.
+ */
+bool DataModel::DataTableStore::setByHandle(qint64 handle, const RegisterValue& val)
+{
+  Q_ASSERT(m_initialized);
+  Q_ASSERT(m_isComputed.size() == m_storage.size());
+
+  if (handle < 0) [[unlikely]]
+    return false;
+
+  const int gen   = static_cast<int>(handle >> kHandleIndexBits);
+  const int index = static_cast<int>(handle & kHandleIndexMask);
+  if (gen != m_generation || index >= static_cast<int>(m_storage.size())) [[unlikely]]
+    return false;
+
+  if (!m_isComputed[static_cast<size_t>(index)]) [[unlikely]]
+    return false;
+
+  m_storage[static_cast<size_t>(index)] = val;
+  return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 // System dataset table
 //--------------------------------------------------------------------------------------------------
 
@@ -468,6 +535,59 @@ void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, con
     rv.stringValue = v.toString();
 
   store->set(t, r, rv);
+}
+
+/**
+ * @brief Resolves a (table, register) pair to a reusable handle for the fast read/write path.
+ */
+qint64 DataModel::TableApiBridge::tableHandle(const QString& t, const QString& r)
+{
+  Q_ASSERT(store);
+  return store->handleOf(t, r);
+}
+
+/**
+ * @brief Resolves many register names against one table in a single call; -1 for unknown ones.
+ */
+QVariantList DataModel::TableApiBridge::tableHandleMany(const QString& t, const QVariantList& regs)
+{
+  Q_ASSERT(store);
+
+  QVariantList handles;
+  handles.reserve(regs.size());
+  for (const QVariant& reg : regs)
+    handles.append(QVariant(store->handleOf(t, reg.toString())));
+
+  return handles;
+}
+
+/**
+ * @brief Returns a register value by handle; empty QVariant for a stale or invalid handle.
+ */
+QVariant DataModel::TableApiBridge::tableGetH(qint64 h)
+{
+  Q_ASSERT(store);
+
+  const auto* val = store->getByHandle(h);
+  if (!val)
+    return QVariant();
+
+  return val->isNumeric ? QVariant(val->numericValue) : QVariant(val->stringValue);
+}
+
+/**
+ * @brief Writes a value to a computed register by handle.
+ */
+void DataModel::TableApiBridge::tableSetH(qint64 h, const QVariant& v)
+{
+  Q_ASSERT(store);
+
+  DataModel::RegisterValue rv;
+  rv.numericValue = SerialStudio::toDouble(v, &rv.isNumeric);
+  if (!rv.isNumeric)
+    rv.stringValue = v.toString();
+
+  store->setByHandle(h, rv);
 }
 
 /**

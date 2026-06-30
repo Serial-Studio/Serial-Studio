@@ -44,6 +44,7 @@ File actions sit on the left; the rest of the toolbar is "add" buttons grouped b
 - **Restore.** Restore a recent automatic snapshot. See [Backups & Recovery](Backup-Recovery.md).
 - **Lock.** Set a password and lock the editor. See [Project Lock](Project-Lock.md).
 - **Add Device** (Pro). Add another data source for multi-device projects.
+- **Add Folder / Add Sub-folder.** File the current branch's items under a named folder. Available on the Groups, Data Tables, and Workspaces branches. See [Organizing with folders](#organizing-with-folders).
 - **Output / Action / Slider / Toggle / Knob / Text Field / Button.** Add an [output control](Output-Controls.md) panel or an [action](Actions.md).
 - **Dataset / Plot / FFT Plot / Gauge / Level Indicator / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
 - **Group / Image / Web View / Painter / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image and Painter are Pro).
@@ -93,6 +94,52 @@ The diagram is interactive:
 - **Ctrl+scroll wheel** zooms the diagram in and out; plain scrolling pans it (Shift+scroll pans horizontally). The toolbar has a reset-zoom button.
 
 The overview is useful as a sanity check ("does my group widget have the three datasets it needs?") and as a navigation surface once a project gets too large to keep entirely in the tree.
+
+## Organizing with folders
+
+Once a project grows past a handful of groups, the flat tree gets long. Folders let you file items under named, collapsible containers so the tree stays readable. Folders are available in every edition (free and Pro); they are purely organizational and never change how data is parsed.
+
+Three independent folder trees exist, one per branch:
+
+- **Group folders** organize groups.
+- **Table folders** organize [data tables](Data-Tables.md).
+- **Workspace folders** organize [workspaces](Toolbar-Reference.md#a-note-on-workspaces).
+
+A folder in one branch cannot hold an item from another (a group folder holds groups, not tables). Items left outside any folder stay at the top level of their branch.
+
+```
+Groups
+  Folder: "Powertrain"
+    Folder: "Battery"
+      Group: "Cell Voltages"
+      Group: "Pack Temps"
+    Group: "Motor"
+  Group: "Cabin"          (top level, no folder)
+```
+
+### Creating and filling folders
+
+- **Add a folder.** Select the branch root (Groups, Data Tables, or Workspaces) and click **Add Folder** in the toolbar, or right-click the branch and choose **New Folder**.
+- **Nest a folder.** Select an existing folder and click **Add Sub-folder**, or right-click it and choose **New Sub-folder**. Folders nest to any depth.
+- **Move an item in.** Right-click a group, table, workspace, or folder and use the **Move to Folder** submenu. It mirrors the folder tree, so you can drop the item into any folder at any depth, or back to the top level.
+- **Add items directly into a folder.** With a folder selected, the matching add button (**Add Group**, **Add Shared Table**, **Add Workspace**) creates the new item already filed inside it.
+
+### Renaming and deleting
+
+Select a folder and use **Rename** to change its title. **Delete** removes the folder but never its contents: the folder's items and sub-folders are promoted to the deleted folder's parent (or to the top level if the folder was already there). The confirmation dialog states this explicitly, for example "The folder is removed; its groups and sub-folders move up to the parent." For table folders it also notes that the accessor path of the moved tables changes accordingly.
+
+### How group folders shape the dashboard
+
+In the automatic dashboard layout, the workspace tree on the taskbar's Start menu mirrors your group-folder tree as a cascading menu (folders become submenus, workspaces become clickable items). Two rules decide how groups become workspaces:
+
+- A **leaf** group folder (one with no sub-folders) collapses into a **single workspace** that aggregates every widget of every group inside it. The workspace takes the folder's name.
+- A group in a **container** folder (one that has sub-folders) or at the **top level** gets **its own workspace**, named after the group.
+
+This lets you group several small groups into one dashboard screen by dropping them in a leaf folder, while keeping larger groups on their own screens. Table and workspace folders are organizational only and have no dashboard side effect.
+
+### Persistence and compatibility
+
+Folders are saved additively in the `.ssproj` file as `groupFolders`, `tableFolders`, and `workspaceFolders` arrays, and each group, table, and workspace carries a `parentFolderId` (omitted when it sits at the top level). Older projects that predate folders load unchanged: with no folder arrays present, every item is treated as top-level. A project that uses folders still opens in older builds, which ignore the unknown keys and show a flat tree.
 
 ## Creating a project step by step
 

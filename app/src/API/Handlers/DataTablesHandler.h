@@ -50,6 +50,10 @@ private:
 
   static CommandResponse valueGet(const QString& id, const QJsonObject& params);
   static CommandResponse valueSet(const QString& id, const QJsonObject& params);
+
+  static CommandResponse valueHandle(const QString& id, const QJsonObject& params);
+  static CommandResponse valueGetH(const QString& id, const QJsonObject& params);
+  static CommandResponse valueSetH(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

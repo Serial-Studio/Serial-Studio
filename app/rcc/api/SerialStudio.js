@@ -73,6 +73,10 @@ var Info = 0, Warning = 1, Critical = 2;
 if (typeof __ss !== 'undefined') {
   tableGet        = function(t, r)    { return __ss.tableGet(t, r); };
   tableSet        = function(t, r, v) { __ss.tableSet(t, r, v); };
+  tableHandle     = function(t, r)    { return __ss.tableHandle(t, r); };
+  tableHandleMany = function(t, regs) { return __ss.tableHandleMany(t, regs); };
+  tableGetH       = function(h)       { return __ss.tableGetH(h); };
+  tableSetH       = function(h, v)    { __ss.tableSetH(h, v); };
   datasetGetRaw   = function(uid)     { return __ss.datasetGetRaw(uid); };
   datasetGetFinal = function(uid)     { return __ss.datasetGetFinal(uid); };
   if (__ss.mqttPublish)
@@ -81,13 +85,31 @@ if (typeof __ss !== 'undefined') {
   // Control scripts run on a worker thread with no direct __ss bridge; route the
   // table API through the marshalled apiCall so reads/writes happen on the GUI
   // thread. tableGet returns undefined when the table or register does not exist
-  // (so `tableGet(t, r) || fallback` keeps working).
+  // (so `tableGet(t, r) || fallback` keeps working). The handle variants mirror the
+  // direct bridge: resolve once, then read/write by the returned numeric handle.
   tableGet = function(t, r) {
     var res = __ss_bridge.call('project.dataTable.getValue', { table: t, name: r });
     return (res.ok && res.result) ? res.result.value : undefined;
   };
   tableSet = function(t, r, v) {
     __ss_bridge.call('project.dataTable.setValue', { table: t, name: r, value: v });
+  };
+  tableHandle = function(t, r) {
+    var res = __ss_bridge.call('project.dataTable.handle', { table: t, name: r });
+    return (res.ok && res.result) ? res.result.handle : -1;
+  };
+  tableHandleMany = function(t, regs) {
+    var out = [];
+    for (var i = 0; i < regs.length; ++i)
+      out.push(tableHandle(t, regs[i]));
+    return out;
+  };
+  tableGetH = function(h) {
+    var res = __ss_bridge.call('project.dataTable.getValueH', { handle: h });
+    return (res.ok && res.result && res.result.found) ? res.result.value : undefined;
+  };
+  tableSetH = function(h, v) {
+    __ss_bridge.call('project.dataTable.setValueH', { handle: h, value: v });
   };
 }
 
@@ -1554,6 +1576,19 @@ project.dataTable.getValue = function(table, name) {
   return apiCall('project.dataTable.getValue', p);
 };
 
+project.dataTable.getValueH = function(handle) {
+  var p = {};
+  p['handle'] = handle;
+  return apiCall('project.dataTable.getValueH', p);
+};
+
+project.dataTable.handle = function(table, name) {
+  var p = {};
+  p['table'] = table;
+  p['name'] = name;
+  return apiCall('project.dataTable.handle', p);
+};
+
 project.dataTable.list = function() {
   var p = {};
   return apiCall('project.dataTable.list', p);
@@ -1572,6 +1607,13 @@ project.dataTable.setValue = function(table, name, value) {
   p['name'] = name;
   p['value'] = value;
   return apiCall('project.dataTable.setValue', p);
+};
+
+project.dataTable.setValueH = function(handle, value) {
+  var p = {};
+  p['handle'] = handle;
+  p['value'] = value;
+  return apiCall('project.dataTable.setValueH', p);
 };
 
 project.dataTable.updateRegister = function(table, name, options) {

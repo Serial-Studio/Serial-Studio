@@ -111,6 +111,35 @@ The shared data tables are the cross-script blackboard (see [Data Tables](Data-T
 
 In a Control Loop these calls marshal to the GUI thread, so each costs a round-trip: read once per `loop()` pass, not in a tight inner loop.
 
+#### Handles: the fast path for table-heavy parsers
+
+`tableGet`/`tableSet` look a register up by name on every call. For a parser that touches many registers every frame, resolving a name once and reusing a **handle** is much cheaper: a handle is a number that points straight at the register, with no name lookup on read or write.
+
+| Function | Returns | Notes |
+|---|---|---|
+| `tableHandle(table, register)` | handle (number), or `-1` | Resolve once, at script load. `-1` means the register does not exist. |
+| `tableHandleMany(table, registers)` | array of handles | Resolve several registers of one table in a single call. |
+| `tableGetH(handle)` | value or `undefined` | Read by handle. A stale or invalid handle returns `undefined`. |
+| `tableSetH(handle, value)` | none | Write by handle. A stale, invalid, or constant-register handle is ignored. |
+
+Resolve handles **once**, in the top-level body of the script (which runs when the project loads), and keep them in a variable or array. Then use only `tableGetH`/`tableSetH` inside `parse()` / `transform()` / `loop()`:
+
+```javascript
+// Top level (runs once at load): resolve names to handles.
+var H = tableHandleMany("DAQ/BRD-1", ["ch1", "ch2", "ch3", "ch4"]);
+
+function parse(frame) {
+  // Hot path: write by handle, no name lookup.
+  for (var i = 0; i < H.length; i++)
+    tableSetH(H[i], frame[i]);
+  return [0];
+}
+```
+
+If a handle comes back as `-1` at the top level, the data-table store was not built yet when the script first ran; resolve on the first `parse()` / `transform()` call instead (cache it in a variable, then reuse), which always runs after the store exists.
+
+Handles are valid only while the project is loaded. If you edit the project's table definitions, the registers are rebuilt and old handles stop matching; the script re-resolves them automatically the next time it loads, and in the meantime a stale handle is a safe no-op (read returns `undefined`, write does nothing) rather than touching the wrong register. The handle calls are available to every script kind, including the Control Loop, where they still marshal to the GUI thread (so the round-trip rule above still applies; the win there is the elided name lookup, not the round-trip).
+
 ### Dashboard control
 
 Available from any in-process script (the bridge is present in parsers, transforms, and the Control Loop):

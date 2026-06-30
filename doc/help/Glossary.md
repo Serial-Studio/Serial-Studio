@@ -34,6 +34,10 @@ Two distinct identifiers for a dataset. The frame **index** says which field of 
 
 The component that talks to one data source (UART, TCP/UDP, Bluetooth LE, MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O). Drivers stamp each frame with its arrival time at the source boundary. See [Data Sources](Data-Sources.md).
 
+## Folder
+
+A named, collapsible container in the Project Editor that organizes groups, data tables, or workspaces. Folders nest to any depth, are purely organizational, and exist in every edition. A leaf group folder also collapses into one aggregated dashboard workspace. See [Organizing with folders](Project-Editor.md#organizing-with-folders).
+
 ## Frame
 
 One complete unit of data from the device, delimited by the frame-detection settings. Each frame is parsed into dataset values that update the dashboard. See [Data Flow](Data-Flow.md).

@@ -772,7 +772,9 @@ QString IO::Drivers::CANBus::connectionErrorHint(const QString& plugin,
 }
 
 /**
- * @brief Refreshes the list of available CAN bus interfaces.
+ * @brief Refreshes the list of available CAN bus interfaces. Each distinct plugin enumeration
+ *        error is logged once to avoid per-refresh spam from plugins whose vendor library
+ *        (e.g. vectorcan's vxlapi64) is absent on this machine.
  */
 void IO::Drivers::CANBus::refreshInterfaces()
 {
@@ -795,8 +797,11 @@ void IO::Drivers::CANBus::refreshInterfaces()
     const QList<QCanBusDeviceInfo> interfaces =
       QCanBus::instance()->availableDevices(plugin, &error);
 
-    if (!error.isEmpty())
+    const QString errorKey = plugin + QLatin1Char('|') + error;
+    if (!error.isEmpty() && !m_loggedPluginErrors.contains(errorKey)) {
+      m_loggedPluginErrors.insert(errorKey);
       qWarning() << "CAN plugin error:" << plugin << error;
+    }
 
     for (const QCanBusDeviceInfo& info : interfaces)
       m_interfaceList.append(info.name());
