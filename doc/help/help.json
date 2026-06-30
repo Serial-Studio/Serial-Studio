@@ -51,6 +51,7 @@
   { "id": "benchmark", "title": "Benchmark Dialog", "section": "Architecture", "file": "Benchmark.md" },
   { "id": "about", "title": "About Serial Studio", "section": "Support", "file": "About.md" },
   { "id": "faq", "title": "FAQ", "section": "Support", "file": "FAQ.md" },
+  { "id": "glossary", "title": "Glossary", "section": "Support", "file": "Glossary.md" },
   { "id": "troubleshooting", "title": "Troubleshooting Guide", "section": "Support", "file": "Troubleshooting.md" },
   { "id": "use-cases", "title": "Use Cases", "section": "Support", "file": "Use-Cases.md" },
   { "id": "become-an-affiliate", "title": "Become an Affiliate", "section": "Support", "file": "Become-an-Affiliate.md" },
