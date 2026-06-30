@@ -69,7 +69,7 @@ The SDK converts to base64 internally (in pure JS/Lua, with no host dependency),
 |---|---|---|
 | `apiCall(method, params)` | envelope | The primitive every wrapper routes through. Use it for commands that have no dedicated wrapper yet. |
 | `apiCallList()` | array | Every command name available in the current engine. |
-| `delay(ms)` | — | Blocks **only the calling worker thread**. Control Loop only (the frame-parser/transform hotpath has no `delay`). |
+| `delay(ms)` | none | Blocks **only the calling worker thread**. Control Loop only (the frame-parser/transform hotpath has no `delay`). |
 
 ### Device I/O (`io.*`)
 
@@ -85,7 +85,7 @@ The wrappers mirror the bus tree. The ones you reach for most:
 | `io.ble.writeCharacteristic(uuid, data, encoding)` | Write to a specific BLE characteristic. |
 | `io.ble.selectServiceByUuid(uuid)` / `io.ble.setNotifyCharacteristic(uuid)` | Wire up a BLE service/notify by UUID from a script. |
 
-Every other `io.*` command (audio, CAN, Modbus, network, process, USB, HID configuration) is also a wrapper — type `io.` in the editor and autocomplete lists the namespace.
+Every other `io.*` command (audio, CAN, Modbus, network, process, USB, HID configuration) is also a wrapper: type `io.` in the editor and autocomplete lists the namespace.
 
 ### `deviceWrite()` and `deviceWriteAndWait()`
 
@@ -106,7 +106,7 @@ The shared data tables are the cross-script blackboard (see [Data Tables](Data-T
 | Function | Returns | Notes |
 |---|---|---|
 | `tableGet(table, register)` | value or `undefined` | `tableGet(t, r) || fallback` works for missing registers. |
-| `tableSet(table, register, value)` | — | Stages the new value into the live runtime. |
+| `tableSet(table, register, value)` | none | Stages the new value into the live runtime. |
 | `datasetGetRaw(uniqueId)` / `datasetGetFinal(uniqueId)` | value | Read another dataset's pre/post-transform value by unique id. |
 
 In a Control Loop these calls marshal to the GUI thread, so each costs a round-trip: read once per `loop()` pass, not in a tight inner loop.
@@ -177,13 +177,13 @@ The Control Loop adds four helpers for closed-loop automation: read the latest d
 | Function | Returns | Purpose |
 |---|---|---|
 | `newFrame(sourceId?)` | frame or `null` | The latest frame, **once per arrival** (`null` if nothing new). Carries `text`, `values`, `sourceId`, `timestampMs`, `ageMs`, `sequence`. |
-| `refreshDashboard()` | envelope | Re-run dataset transforms from the last values and repaint — **view only**, no export. |
+| `refreshDashboard()` | envelope | Re-run dataset transforms from the last values and repaint (**view only**, no export). |
 | `dashboardTick()` | envelope | Same render, but also fans the synthesized frame to the export sinks (CSV/MDF4/Session/MQTT). Seeds structure before the first device frame. |
 | `ensureDashboard(spec)` | summary | Declaratively create any group/dataset in `spec` that does not exist yet; existing items are untouched, and a repeated identical spec is free. |
 
 ## Worked examples
 
-### 1. Control Loop — poll a SCPI instrument, no parser state machine
+### 1. Control Loop: poll a SCPI instrument, no parser state machine
 
 `deviceWriteAndWait` turns a request/response exchange into a single blocking call on the worker thread.
 
@@ -197,7 +197,7 @@ function loop() {
 }
 ```
 
-### 2. Control Loop — adaptive sampling driven by the data
+### 2. Control Loop: adaptive sampling driven by the data
 
 See the frame, decide in JavaScript, act through the SDK: speed up polling when the signal moves fast, slow down when it is quiet.
 
@@ -220,7 +220,7 @@ function loop() {
 }
 ```
 
-### 3. Frame parser — close the loop from inside parse()
+### 3. Frame parser: close the loop from inside parse()
 
 A parser is not write-only: after decoding the frame it can command the device. Here it parses two channels and, if temperature crosses a limit, fires a pre-configured cooling Action and trips a critical notification, exactly once per crossing.
 
@@ -246,7 +246,7 @@ function parse(frame) {
 
 > Do the SDK call only on the **state transition** (the `if`), never on every frame: the parser is the hotpath. `apiCall` is rate-limited and a per-frame call will throttle or stall the stream.
 
-### 4. Dataset transform — calibrate against a live table register
+### 4. Dataset transform: calibrate against a live table register
 
 A transform reads a calibration slope another script wrote into a data table, so one place owns the constant and every channel stays in sync.
 
@@ -257,7 +257,7 @@ function transform(value) {
 }
 ```
 
-### 5. Output widget — a knob that drives a Modbus register
+### 5. Output widget: a knob that drives a Modbus register
 
 `transmit(value)` returns the wire bytes; the protocol encoder builds them. No `io.*` needed, since Serial Studio sends whatever you return.
 
@@ -270,7 +270,7 @@ function transmit(value) {
 }
 ```
 
-### 6. Output widget — a toggle that emits a CAN frame
+### 6. Output widget: a toggle that emits a CAN frame
 
 ```javascript
 var RELAY_CAN_ID = 0x200;
@@ -313,10 +313,10 @@ end
 
 ## Related
 
-- [Frame Parser Reference](JavaScript-API.md) — turning device bytes into dataset values; where `parse()` runs.
-- [Dataset Value Transforms](Dataset-Transforms.md) — per-dataset conditioning; where `transform()` runs.
-- [Control Loop](Control-Script.md) — `setup()`/`loop()` automation and the See/Decide/Act model in depth.
-- [Output Controls](Output-Controls.md) — Button/Slider/Toggle/Knob widgets and their `transmit()` function.
-- [Data Tables](Data-Tables.md) — the shared blackboard behind `tableGet`/`tableSet`.
-- [API Reference](API-Reference.md) — the full command catalog the SDK wraps, and the same surface over the network.
-- [Actions](Actions.md) and [Notifications](Notifications.md) — what `actionFire()` and `notify*()` drive.
+- [Frame Parser Reference](JavaScript-API.md): turning device bytes into dataset values; where `parse()` runs.
+- [Dataset Value Transforms](Dataset-Transforms.md): per-dataset conditioning; where `transform()` runs.
+- [Control Loop](Control-Script.md): `setup()`/`loop()` automation and the See/Decide/Act model in depth.
+- [Output Controls](Output-Controls.md): Button/Slider/Toggle/Knob widgets and their `transmit()` function.
+- [Data Tables](Data-Tables.md): the shared blackboard behind `tableGet`/`tableSet`.
+- [API Reference](API-Reference.md): the full command catalog the SDK wraps, and the same surface over the network.
+- [Actions](Actions.md) and [Notifications](Notifications.md): what `actionFire()` and `notify*()` drive.
