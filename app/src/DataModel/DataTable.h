@@ -56,7 +56,9 @@ class DataTableStore {
 public:
   DataTableStore();
 
-  void initialize(const std::vector<TableDef>& userTables, const Frame& templateFrame);
+  void initialize(const std::vector<TableDef>& userTables,
+                  const std::vector<TableFolder>& tableFolders,
+                  const Frame& templateFrame);
 
   void clear();
 

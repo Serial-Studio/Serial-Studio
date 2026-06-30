@@ -28,6 +28,7 @@
 #include "AppState.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "Misc/IconEngine.h"
 #include "UI/Dashboard.h"
 #include "UI/UISessionRegistry.h"
 #include "UI/WidgetRegistry.h"
@@ -557,6 +558,20 @@ void UI::Taskbar::setActiveGroupIndex(int index)
 
     setActiveGroupId(id);
   }
+}
+
+/**
+ * @brief Activates a workspace by id (used by the folder switcher sub-menus).
+ */
+void UI::Taskbar::selectWorkspaceById(int workspaceId)
+{
+  if (workspaceId < 0)
+    return;
+
+  if (m_independentWorkspace)
+    m_desiredGroupId = workspaceId;
+
+  setActiveGroupId(workspaceId);
 }
 
 /**
@@ -1392,16 +1407,70 @@ QVariantList UI::Taskbar::workspaceModel() const
   const auto& workspaces = pm.activeWorkspaces();
   for (const auto& ws : workspaces) {
     QVariantMap entry;
+    const auto icon = ws.icon.isEmpty() ? QStringLiteral("qrc:/icons/dashboard-small/workspace.svg")
+                                        : Misc::IconEngine::resolveActionIconSource(ws.icon);
     entry[QStringLiteral("id")]        = ws.workspaceId;
     entry[QStringLiteral("text")]      = ws.title;
     entry[QStringLiteral("separator")] = false;
-    entry[QStringLiteral("icon")]      = ws.icon.isEmpty()
-                                         ? QStringLiteral("qrc:/icons/panes/dashboard.svg")
-                                         : SerialStudio::normalizeIconPath(ws.icon);
+    entry[QStringLiteral("icon")]      = icon;
     model.append(entry);
   }
 
   return model;
+}
+
+/**
+ * @brief Recursively builds one level of the workspace folder tree.
+ */
+static QVariantList buildWorkspaceTreeLevel(int parentFolderId,
+                                            const std::vector<DataModel::Workspace>& workspaces,
+                                            const std::vector<DataModel::WorkspaceFolder>& folders)
+{
+  QVariantList level;
+
+  for (const auto& f : folders) {
+    if (f.parentFolderId != parentFolderId)
+      continue;
+
+    QVariantMap node;
+    node[QStringLiteral("isFolder")] = true;
+    node[QStringLiteral("id")]       = f.folderId;
+    node[QStringLiteral("text")]     = f.title;
+    node[QStringLiteral("icon")]     = QStringLiteral("qrc:/icons/dashboard-small/folder.svg");
+    node[QStringLiteral("children")] = buildWorkspaceTreeLevel(f.folderId, workspaces, folders);
+    level.append(node);
+  }
+
+  for (const auto& ws : workspaces) {
+    if (ws.parentFolderId != parentFolderId)
+      continue;
+
+    QVariantMap node;
+    const auto icon = ws.icon.isEmpty() ? QStringLiteral("qrc:/icons/dashboard-small/workspace.svg")
+                                        : Misc::IconEngine::resolveActionIconSource(ws.icon);
+    node[QStringLiteral("isFolder")] = false;
+    node[QStringLiteral("id")]       = ws.workspaceId;
+    node[QStringLiteral("text")]     = ws.title;
+    node[QStringLiteral("icon")]     = icon;
+    node[QStringLiteral("children")] = QVariantList();
+    level.append(node);
+  }
+
+  return level;
+}
+
+/**
+ * @brief Returns the workspace switcher model as a folder -> children tree.
+ */
+QVariantList UI::Taskbar::workspaceTree() const
+{
+  const auto& pm         = DataModel::ProjectModel::instance();
+  const auto& workspaces = pm.activeWorkspaces();
+
+  const std::vector<DataModel::WorkspaceFolder> noFolders;
+  const bool projectMode = AppState::instance().operationMode() == SerialStudio::ProjectFile;
+  const auto& folders    = projectMode ? pm.editorWorkspaceFolders() : noFolders;
+  return buildWorkspaceTreeLevel(-1, workspaces, folders);
 }
 
 /**

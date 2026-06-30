@@ -66,6 +66,80 @@ Popup {
   property var currentValue: null
 
   //
+  // Cascading folders: a `folder` row opens a child popup as the next submenu level.
+  //
+  property var childPopup: null
+  property var parentCombo: null
+  property var folderComponent: null
+
+  onClosed: if (childPopup) childPopup.close()
+
+  function setRootModel(rootModel) {
+    if (childPopup)
+      childPopup.close()
+
+    root.model = rootModel
+  }
+
+  function folderRow(node) {
+    if (node.isFolder)
+      return { "folder": true, "separator": false, "children": node.children,
+               "id": node.id, "text": node.text, "icon": node.icon }
+
+    var entry = { "id": node.id, "separator": false,
+                  "text": node.text, "icon": node.icon }
+    if (root.currentValue !== null && node.id === root.currentValue)
+      entry["checked"] = true
+
+    return entry
+  }
+
+  function folderModel(node) {
+    var rows = []
+    var kids = node.children
+    for (var i = 0; i < kids.length; ++i)
+      rows.push(root.folderRow(kids[i]))
+
+    return rows
+  }
+
+  function openFolder(node) {
+    if (folderComponent === null)
+      folderComponent = Qt.createComponent(Qt.resolvedUrl("SubMenuCombo.qml"))
+
+    if (childPopup === null && folderComponent.status === Component.Ready) {
+      childPopup = folderComponent.createObject(root.parent, { "parentCombo": root })
+      childPopup.valueSelected.connect((v) => root.valueSelected(v))
+      childPopup.valueRightClicked.connect((v, t, gx, gy) => root.valueRightClicked(v, t, gx, gy))
+    }
+
+    if (childPopup === null)
+      return
+
+    if (childPopup.childPopup)
+      childPopup.childPopup.close()
+
+    childPopup.showCheckable = root.showCheckable
+    childPopup.currentValue = root.currentValue
+    childPopup.maximumHeight = root.maximumHeight
+    childPopup.model = root.folderModel(node)
+
+    var overlayWidth = root.parent ? root.parent.width : root.x + root.width + childPopup.width
+    var rightX = root.x + root.width - 1
+    childPopup.x = (rightX + childPopup.width > overlayWidth)
+                   ? root.x - childPopup.width + 1
+                   : rightX
+    childPopup.y = root.y
+    childPopup.open()
+  }
+
+  function closeChain() {
+    root.close()
+    if (parentCombo)
+      parentCombo.closeChain()
+  }
+
+  //
   // Control background
   //
   background: Rectangle {
@@ -100,11 +174,17 @@ Popup {
     anchors.fill: parent
     flickableDirection: Flickable.AutoFlickIfNeeded
 
+    ScrollBar.vertical: ScrollBar {
+      policy: ScrollBar.AsNeeded
+    }
+
     delegate: Item {
       required property var modelData
 
       readonly property bool isSeparator: modelData[root.valueRole] === "__separator__"
                                         || modelData["separator"] === true
+      readonly property bool isHeader: modelData["header"] === true
+      readonly property bool isFolder: modelData["folder"] === true
 
       width: root.width - 16
       height: isSeparator ? 9 : 24
@@ -126,7 +206,7 @@ Popup {
       //
       Rectangle {
         anchors.fill: parent
-        visible: !isSeparator && _mouseArea.containsMouse
+        visible: !isSeparator && !isHeader && _mouseArea.containsMouse
         color: Cpp_ThemeManager.colors["start_menu_highlight"]
       }
 
@@ -158,15 +238,26 @@ Popup {
 
         Label {
           elide: Label.ElideRight
+          font: isHeader ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           Layout.fillWidth: true
           text: modelData[root.textRole]
           color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
                                             Cpp_ThemeManager.colors["start_menu_text"]
         }
 
+        ToolButton {
+          icon.width: 12
+          icon.height: 12
+          visible: isFolder
+          background: Item {}
+          icon.source: "qrc:/icons/buttons/forward.svg"
+          icon.color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
+                                                 Cpp_ThemeManager.colors["start_menu_text"]
+        }
+
         Item {
           implicitWidth: 4
-          visible: root.showCheckable
+          visible: root.showCheckable && !isFolder
         }
 
         ToolButton {
@@ -188,10 +279,13 @@ Popup {
 
         hoverEnabled: true
         anchors.fill: parent
-        enabled: !isSeparator
+        enabled: !isSeparator && !isHeader
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onContainsMouseChanged: if (containsMouse && isFolder) root.openFolder(modelData)
         onClicked: (mouse) => {
-          if (mouse.button === Qt.RightButton) {
+          if (isFolder) {
+            root.openFolder(modelData)
+          } else if (mouse.button === Qt.RightButton) {
             const global = mapToGlobal(mouse.x, mouse.y)
             root.valueRightClicked(modelData[root.valueRole],
                                    modelData[root.textRole],
@@ -199,7 +293,7 @@ Popup {
           } else {
             root.currentValue = modelData[root.valueRole]
             root.valueSelected(root.currentValue)
-            root.close()
+            root.closeChain()
           }
         }
       }

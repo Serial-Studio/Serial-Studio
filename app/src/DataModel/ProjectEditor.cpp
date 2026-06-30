@@ -34,6 +34,7 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
+#include "Misc/IconEngine.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -162,6 +163,56 @@ typedef enum {
 
 // Past this many groups, unremembered groups default to collapsed in the tree.
 static constexpr int kAutoCollapseGroupThreshold = 6;
+
+/**
+ * @brief Builds a folder's "/"-joined path from any folder vector (root -> leaf).
+ */
+template<typename Folder>
+static QString folderDisplayPath(const std::vector<Folder>& folders, int folderId)
+{
+  QString path;
+  int cur        = folderId;
+  const int kMax = static_cast<int>(folders.size());
+  for (int i = 0; i <= kMax && cur != -1; ++i) {
+    const Folder* match = nullptr;
+    for (const auto& f : folders)
+      if (f.folderId == cur) {
+        match = &f;
+        break;
+      }
+
+    if (!match)
+      break;
+
+    path = path.isEmpty() ? match->title : (match->title + QLatin1Char('/') + path);
+    cur  = match->parentFolderId;
+  }
+
+  return path;
+}
+
+/**
+ * @brief Builds the nested folder hierarchy (folders only) under @p parentId for a cascading
+ *        "Move to Folder" menu: each node is {id, title, children:[...]} (directory-explorer
+ * style).
+ */
+template<typename Folder>
+static QVariantList buildFolderTree(const std::vector<Folder>& folders, int parentId)
+{
+  QVariantList out;
+  for (const auto& f : folders) {
+    if (f.parentFolderId != parentId)
+      continue;
+
+    QVariantMap node;
+    node[QStringLiteral("id")]       = f.folderId;
+    node[QStringLiteral("title")]    = f.title;
+    node[QStringLiteral("children")] = buildFolderTree(folders, f.folderId);
+    out.append(node);
+  }
+
+  return out;
+}
 
 /**
  * @brief Returns the QML icon path for a SerialStudio::BusType integer.
@@ -631,10 +682,13 @@ DataModel::ProjectEditor::ProjectEditor()
   : m_currentView(ProjectView)
   , m_suppressViewChange(false)
   , m_groupsRootItem(nullptr)
+  , m_selectedGroupFolderId(-1)
   , m_tablesRootItem(nullptr)
   , m_systemDatasetsItem(nullptr)
+  , m_selectedTableFolderId(-1)
   , m_workspacesRootItem(nullptr)
   , m_selectedWorkspaceId(-1)
+  , m_selectedFolderId(-1)
   , m_mqttPublisherItem(nullptr)
   , m_controlScriptItem(nullptr)
   , m_seedExpansionFromModel(true)
@@ -1188,7 +1242,10 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_outputWidgetItems.clear();
   m_sourceParserItems.clear();
   m_userTableItems.clear();
+  m_groupFolderItems.clear();
+  m_tableFolderItems.clear();
   m_workspaceItems.clear();
+  m_workspaceFolderItems.clear();
   m_groupsRootItem     = nullptr;
   m_tablesRootItem     = nullptr;
   m_systemDatasetsItem = nullptr;
@@ -1320,6 +1377,8 @@ void DataModel::ProjectEditor::appendSourceTreeItems(QStandardItem* root)
     sourceItem->setData(source.sourceId, TreeViewSourceId);
     sourceItem->setData(multiSource ? source.title : QString(), TreeViewSourceName);
     sourceItem->setData(true, TreeViewExpanded);
+    sourceItem->setData(KindSource, TreeItemKind);
+    sourceItem->setData(source.sourceId, TreeItemId);
 
     auto* parserItem = new QStandardItem(tr("Frame Parser"));
     parserItem->setData(-1, TreeViewFrameIndex);
@@ -1458,18 +1517,6 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     return s.contains(q, Qt::CaseInsensitive);
   };
 
-  QStandardItem* groupsRoot   = nullptr;
-  const auto ensureGroupsRoot = [&]() {
-    if (groupsRoot)
-      return;
-
-    groupsRoot = new QStandardItem(tr("Groups"));
-    groupsRoot->setData(tr("Groups"), TreeViewText);
-    groupsRoot->setData("qrc:/icons/project-editor/treeview/group.svg", TreeViewIcon);
-    groupsRoot->setData(-1, TreeViewFrameIndex);
-    groupsRoot->setData(true, TreeViewExpanded);
-  };
-
   const auto groupFilteredOut = [&](const DataModel::Group& g, bool groupTitleMatches) {
     if (!filterActive || groupTitleMatches)
       return false;
@@ -1481,9 +1528,34 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     return true;
   };
 
-  const auto& groups = DataModel::ProjectModel::instance().groups();
+  const auto& groups  = DataModel::ProjectModel::instance().groups();
+  const auto& folders = DataModel::ProjectModel::instance().editorGroupFolders();
   const bool collapseByDefault =
     !filterActive && static_cast<int>(groups.size()) > kAutoCollapseGroupThreshold;
+  const bool showFolders = !filterActive && !folders.empty();
+
+  bool anyGroup = false;
+  for (const auto& group : groups) {
+    const bool groupMatches = !filterActive || matches(group.title);
+    if (!groupFilteredOut(group, groupMatches)) {
+      anyGroup = true;
+      break;
+    }
+  }
+
+  if (!anyGroup && !showFolders)
+    return;
+
+  auto* groupsRoot = new QStandardItem(tr("Dashboard Widgets"));
+  groupsRoot->setData(tr("Dashboard Widgets"), TreeViewText);
+  groupsRoot->setData("qrc:/icons/project-editor/treeview/dashboard-widgets.svg", TreeViewIcon);
+  groupsRoot->setData(-1, TreeViewFrameIndex);
+  groupsRoot->setData(true, TreeViewExpanded);
+
+  QHash<int, QStandardItem*> folderItems;
+  if (showFolders)
+    folderItems =
+      appendGroupFolderItems(groupsRoot, root->text() + "/" + groupsRoot->text(), expandedStates);
 
   for (const auto& group : groups) {
     const bool groupMatches = !filterActive || matches(group.title);
@@ -1500,7 +1572,7 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     groupItem->setData(group.sourceId, TreeViewSourceId);
     groupItem->setData(KindGroup, TreeItemKind);
     groupItem->setData(group.groupId, TreeItemId);
-    groupItem->setData(-1, TreeItemParentId);
+    groupItem->setData(group.parentFolderId, TreeItemParentId);
 
     if (filterActive)
       groupItem->setData(true, TreeViewExpanded);
@@ -1508,18 +1580,59 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     appendDatasetChildren(groupItem, group);
     appendOutputWidgetChildren(groupItem, group);
 
-    ensureGroupsRoot();
-    const QString gPath = root->text() + "/" + tr("Groups") + "/" + group.title;
+    QString gPath = root->text() + "/" + tr("Groups");
+    if (showFolders && group.parentFolderId != -1 && folderItems.contains(group.parentFolderId))
+      gPath += "/" + folderDisplayPath(folders, group.parentFolderId);
+
+    gPath += "/" + group.title;
     restoreExpandedStateMap(groupItem, expandedStates, gPath, !collapseByDefault);
-    groupsRoot->appendRow(groupItem);
+
+    QStandardItem* parent =
+      (showFolders && group.parentFolderId != -1 && folderItems.contains(group.parentFolderId))
+        ? folderItems.value(group.parentFolderId)
+        : groupsRoot;
+    parent->appendRow(groupItem);
     m_groupItems.insert(groupItem, group);
   }
 
-  if (groupsRoot) {
-    restoreExpandedStateMap(groupsRoot, expandedStates, root->text() + "/" + groupsRoot->text());
-    root->appendRow(groupsRoot);
-    m_groupsRootItem = groupsRoot;
+  restoreExpandedStateMap(groupsRoot, expandedStates, root->text() + "/" + groupsRoot->text());
+  root->appendRow(groupsRoot);
+  m_groupsRootItem = groupsRoot;
+}
+
+/**
+ * @brief Materializes the group folder items and re-parents them; returns the id->item map.
+ */
+QHash<int, QStandardItem*> DataModel::ProjectEditor::appendGroupFolderItems(
+  QStandardItem* groupsRoot, const QString& pathPrefix, QHash<QString, bool>& expandedStates)
+{
+  const auto& folders = DataModel::ProjectModel::instance().editorGroupFolders();
+
+  QHash<int, QStandardItem*> folderItems;
+  for (const auto& f : folders) {
+    auto* item = new QStandardItem(f.title);
+    item->setData(f.title, TreeViewText);
+    item->setData(QStringLiteral("qrc:/icons/project-editor/treeview/folder.svg"), TreeViewIcon);
+    item->setData(-1, TreeViewFrameIndex);
+    item->setData(KindGroupFolder, TreeItemKind);
+    item->setData(f.folderId, TreeItemId);
+    item->setData(f.parentFolderId, TreeItemParentId);
+
+    const QString fPath = pathPrefix + QStringLiteral("/") + folderDisplayPath(folders, f.folderId);
+    restoreExpandedStateMap(item, expandedStates, fPath);
+    folderItems.insert(f.folderId, item);
   }
+
+  for (const auto& f : folders) {
+    auto* item            = folderItems.value(f.folderId);
+    QStandardItem* parent = (f.parentFolderId != -1 && folderItems.contains(f.parentFolderId))
+                            ? folderItems.value(f.parentFolderId)
+                            : groupsRoot;
+    parent->appendRow(item);
+    m_groupFolderItems.insert(item, f.folderId);
+  }
+
+  return folderItems;
 }
 
 /**
@@ -1564,16 +1677,35 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
   sysDsItem->setData(-1, TreeViewFrameIndex);
   tablesRoot->appendRow(sysDsItem);
 
+  const auto& tableFolders    = DataModel::ProjectModel::instance().editorTableFolders();
+  const bool showTableFolders = !filterActive && !tableFolders.empty();
+
+  QHash<int, QStandardItem*> folderItems;
+  if (showTableFolders)
+    folderItems =
+      appendTableFolderItems(tablesRoot, root->text() + "/" + tr("Shared Memory"), expandedStates);
+
   for (const auto& table : userTables) {
     if (filterActive && !matches(table.name))
       continue;
+
+    const QString path = DataModel::tableFullPath(tableFolders, table.parentFolderId, table.name);
 
     auto* tableItem = new QStandardItem(table.name);
     tableItem->setData(table.name, TreeViewText);
     tableItem->setData("qrc:/icons/project-editor/treeview/shared-table.svg", TreeViewIcon);
     tableItem->setData(-1, TreeViewFrameIndex);
-    tablesRoot->appendRow(tableItem);
-    m_userTableItems.insert(tableItem, table.name);
+    tableItem->setData(KindUserTable, TreeItemKind);
+    tableItem->setData(-1, TreeItemId);
+    tableItem->setData(table.parentFolderId, TreeItemParentId);
+    tableItem->setData(path, TreeItemPath);
+
+    QStandardItem* parent =
+      (showTableFolders && table.parentFolderId != -1 && folderItems.contains(table.parentFolderId))
+        ? folderItems.value(table.parentFolderId)
+        : tablesRoot;
+    parent->appendRow(tableItem);
+    m_userTableItems.insert(tableItem, path);
   }
 
   restoreExpandedStateMap(tablesRoot, expandedStates, root->text() + "/" + tablesRoot->text());
@@ -1584,6 +1716,105 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
   Q_UNUSED(root);
   Q_UNUSED(expandedStates);
 #endif
+}
+
+/**
+ * @brief Materializes the table folder items and re-parents them; returns the id->item map.
+ */
+QHash<int, QStandardItem*> DataModel::ProjectEditor::appendTableFolderItems(
+  QStandardItem* tablesRoot, const QString& pathPrefix, QHash<QString, bool>& expandedStates)
+{
+  const auto& folders = DataModel::ProjectModel::instance().editorTableFolders();
+
+  QHash<int, QStandardItem*> folderItems;
+  for (const auto& f : folders) {
+    auto* item = new QStandardItem(f.title);
+    item->setData(f.title, TreeViewText);
+    item->setData(QStringLiteral("qrc:/icons/project-editor/treeview/folder.svg"), TreeViewIcon);
+    item->setData(-1, TreeViewFrameIndex);
+    item->setData(KindTableFolder, TreeItemKind);
+    item->setData(f.folderId, TreeItemId);
+    item->setData(f.parentFolderId, TreeItemParentId);
+
+    const QString fPath = pathPrefix + QStringLiteral("/") + folderDisplayPath(folders, f.folderId);
+    restoreExpandedStateMap(item, expandedStates, fPath);
+    folderItems.insert(f.folderId, item);
+  }
+
+  for (const auto& f : folders) {
+    auto* item            = folderItems.value(f.folderId);
+    QStandardItem* parent = (f.parentFolderId != -1 && folderItems.contains(f.parentFolderId))
+                            ? folderItems.value(f.parentFolderId)
+                            : tablesRoot;
+    parent->appendRow(item);
+    m_tableFolderItems.insert(item, f.folderId);
+  }
+
+  return folderItems;
+}
+
+/**
+ * @brief Builds a workspace tree item from a workspace record.
+ */
+QStandardItem* DataModel::ProjectEditor::createWorkspaceItem(const DataModel::Workspace& ws)
+{
+  auto* wsItem = new QStandardItem(ws.title);
+  wsItem->setData(ws.title, TreeViewText);
+  wsItem->setData(ws.icon.isEmpty() ? QStringLiteral("qrc:/icons/dashboard-small/workspace.svg")
+                                    : Misc::IconEngine::resolveActionIconSource(ws.icon),
+                  TreeViewIcon);
+  wsItem->setData(-1, TreeViewFrameIndex);
+  wsItem->setData(KindWorkspace, TreeItemKind);
+  wsItem->setData(ws.workspaceId, TreeItemId);
+  wsItem->setData(ws.parentFolderId, TreeItemParentId);
+  wsItem->setData(workspaceHasUnresolvedRefs(ws.workspaceId), TreeViewWorkspaceStale);
+  return wsItem;
+}
+
+/**
+ * @brief Builds the folder hierarchy under the Workspaces root (folders first, then workspaces).
+ */
+void DataModel::ProjectEditor::buildWorkspaceFolderTree(QStandardItem* wsRoot,
+                                                        const QString& pathPrefix,
+                                                        QHash<QString, bool>& expandedStates)
+{
+  Q_ASSERT(wsRoot != nullptr);
+
+  const auto& folders    = DataModel::ProjectModel::instance().editorWorkspaceFolders();
+  const auto& workspaces = DataModel::ProjectModel::instance().editorWorkspaces();
+
+  QHash<int, QStandardItem*> folderItems;
+  for (const auto& f : folders) {
+    auto* item = new QStandardItem(f.title);
+    item->setData(f.title, TreeViewText);
+    item->setData(QStringLiteral("qrc:/icons/project-editor/treeview/folder.svg"), TreeViewIcon);
+    item->setData(-1, TreeViewFrameIndex);
+    item->setData(KindWorkspaceFolder, TreeItemKind);
+    item->setData(f.folderId, TreeItemId);
+    item->setData(f.parentFolderId, TreeItemParentId);
+
+    const QString fPath = pathPrefix + QStringLiteral("/") + folderDisplayPath(folders, f.folderId);
+    restoreExpandedStateMap(item, expandedStates, fPath);
+    folderItems.insert(f.folderId, item);
+  }
+
+  for (const auto& f : folders) {
+    auto* item            = folderItems.value(f.folderId);
+    QStandardItem* parent = (f.parentFolderId != -1 && folderItems.contains(f.parentFolderId))
+                            ? folderItems.value(f.parentFolderId)
+                            : wsRoot;
+    parent->appendRow(item);
+    m_workspaceFolderItems.insert(item, f.folderId);
+  }
+
+  for (const auto& ws : workspaces) {
+    auto* wsItem          = createWorkspaceItem(ws);
+    QStandardItem* parent = (ws.parentFolderId != -1 && folderItems.contains(ws.parentFolderId))
+                            ? folderItems.value(ws.parentFolderId)
+                            : wsRoot;
+    parent->appendRow(wsItem);
+    m_workspaceItems.insert(wsItem, ws.workspaceId);
+  }
 }
 
 /**
@@ -1616,27 +1847,21 @@ void DataModel::ProjectEditor::appendWorkspaceTreeItems(QStandardItem* root,
 
   auto* wsRoot = new QStandardItem(tr("Workspaces"));
   wsRoot->setData(tr("Workspaces"), TreeViewText);
-  wsRoot->setData("qrc:/icons/project-editor/treeview/datagrid.svg", TreeViewIcon);
+  wsRoot->setData("qrc:/icons/project-editor/treeview/workspaces.svg", TreeViewIcon);
   wsRoot->setData(-1, TreeViewFrameIndex);
   wsRoot->setData(true, TreeViewExpanded);
 
-  for (const auto& ws : workspaces) {
-    if (filterActive && !matches(ws.title))
-      continue;
+  if (filterActive) {
+    for (const auto& ws : workspaces) {
+      if (!matches(ws.title))
+        continue;
 
-    auto* wsItem = new QStandardItem(ws.title);
-    wsItem->setData(ws.title, TreeViewText);
-    wsItem->setData(ws.icon.isEmpty()
-                      ? QStringLiteral("qrc:/icons/project-editor/treeview/group.svg")
-                      : SerialStudio::normalizeIconPath(ws.icon),
-                    TreeViewIcon);
-    wsItem->setData(-1, TreeViewFrameIndex);
-    wsItem->setData(KindWorkspace, TreeItemKind);
-    wsItem->setData(ws.workspaceId, TreeItemId);
-    wsItem->setData(-1, TreeItemParentId);
-    wsItem->setData(workspaceHasUnresolvedRefs(ws.workspaceId), TreeViewWorkspaceStale);
-    wsRoot->appendRow(wsItem);
-    m_workspaceItems.insert(wsItem, ws.workspaceId);
+      auto* wsItem = createWorkspaceItem(ws);
+      wsRoot->appendRow(wsItem);
+      m_workspaceItems.insert(wsItem, ws.workspaceId);
+    }
+  } else {
+    buildWorkspaceFolderTree(wsRoot, root->text() + "/" + tr("Workspaces"), expandedStates);
   }
 
   restoreExpandedStateMap(wsRoot, expandedStates, root->text() + "/" + wsRoot->text());
@@ -2181,6 +2406,23 @@ void DataModel::ProjectEditor::restoreTreeSelection()
     toSelect      = findKey(m_workspaceItems, [wid](const auto& v) { return v == wid; });
     if (!toSelect)
       toSelect = m_workspacesRootItem;
+  }
+
+  if (m_currentView == GroupsView)
+    toSelect = m_groupsRootItem;
+
+  if (m_currentView == GroupFolderView) {
+    const int fid = m_selectedGroupFolderId;
+    toSelect      = findKey(m_groupFolderItems, [fid](const auto& v) { return v == fid; });
+    if (!toSelect)
+      toSelect = m_groupsRootItem;
+  }
+
+  if (m_currentView == TableFolderView) {
+    const int fid = m_selectedTableFolderId;
+    toSelect      = findKey(m_tableFolderItems, [fid](const auto& v) { return v == fid; });
+    if (!toSelect)
+      toSelect = m_tablesRootItem;
   }
 
   if (!toSelect)
@@ -4468,6 +4710,29 @@ bool DataModel::ProjectEditor::selectGroupItem(QStandardItem* item)
 }
 
 /**
+ * @brief Routes the Groups root and group folder items to their navigable views.
+ */
+bool DataModel::ProjectEditor::selectGroupFolderItem(QStandardItem* item)
+{
+  if (item == m_groupsRootItem) {
+    setCurrentView(GroupsView);
+    return true;
+  }
+
+  if (m_groupFolderItems.contains(item)) {
+    const int fid = m_groupFolderItems.value(item);
+    if (m_selectedGroupFolderId != fid) {
+      m_selectedGroupFolderId = fid;
+      Q_EMIT selectedGroupFolderIdChanged();
+    }
+    setCurrentView(GroupFolderView);
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Switches the form to the DatasetView for the clicked dataset item.
  */
 bool DataModel::ProjectEditor::selectDatasetItem(QStandardItem* item)
@@ -4571,6 +4836,16 @@ bool DataModel::ProjectEditor::selectDataTableItem(QStandardItem* item)
     return true;
   }
 
+  if (m_tableFolderItems.contains(item)) {
+    const int fid = m_tableFolderItems.value(item);
+    if (m_selectedTableFolderId != fid) {
+      m_selectedTableFolderId = fid;
+      Q_EMIT selectedTableFolderIdChanged();
+    }
+    setCurrentView(TableFolderView);
+    return true;
+  }
+
   return false;
 }
 
@@ -4591,6 +4866,16 @@ bool DataModel::ProjectEditor::selectWorkspaceTreeItem(QStandardItem* item)
       Q_EMIT selectedWorkspaceIdChanged();
     }
     setCurrentView(WorkspaceView);
+    return true;
+  }
+
+  if (m_workspaceFolderItems.contains(item)) {
+    const int fid = m_workspaceFolderItems.value(item);
+    if (m_selectedFolderId != fid) {
+      m_selectedFolderId = fid;
+      Q_EMIT selectedFolderIdChanged();
+    }
+    setCurrentView(WorkspaceFolderView);
     return true;
   }
 
@@ -4644,6 +4929,9 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     return;
 
   if (selectGroupItem(item))
+    return;
+
+  if (selectGroupFolderItem(item))
     return;
 
   if (selectDatasetItem(item))
@@ -5082,6 +5370,7 @@ QVariantList DataModel::ProjectEditor::selectedTreeItems() const
     entry.insert(QStringLiteral("kind"), kind);
     entry.insert(QStringLiteral("id"), m_treeModel->data(idx, TreeItemId).toInt());
     entry.insert(QStringLiteral("parentId"), m_treeModel->data(idx, TreeItemParentId).toInt());
+    entry.insert(QStringLiteral("path"), m_treeModel->data(idx, TreeItemPath).toString());
     result.append(entry);
   }
 
@@ -5173,6 +5462,270 @@ void DataModel::ProjectEditor::selectWorkspace(int workspaceId)
 }
 
 /**
+ * @brief Selects a workspace folder tree item by id.
+ */
+void DataModel::ProjectEditor::selectWorkspaceFolder(int folderId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_workspaceFolderItems.begin(); it != m_workspaceFolderItems.end(); ++it) {
+    if (it.value() == folderId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Returns the id of the currently selected workspace folder.
+ */
+int DataModel::ProjectEditor::selectedFolderId() const noexcept
+{
+  return m_selectedFolderId;
+}
+
+/**
+ * @brief Returns the workspace folders as {id, title} for move-target menus.
+ */
+QVariantList DataModel::ProjectEditor::workspaceFolderTree() const
+{
+  return buildFolderTree(DataModel::ProjectModel::instance().editorWorkspaceFolders(), -1);
+}
+
+/**
+ * @brief Returns the folders and workspaces directly under @p parentFolderId (folders first).
+ */
+QVariantList DataModel::ProjectEditor::workspaceFolderContents(int parentFolderId) const
+{
+  const auto& pm         = DataModel::ProjectModel::instance();
+  const auto& folders    = pm.editorWorkspaceFolders();
+  const auto& workspaces = pm.editorWorkspaces();
+
+  QVariantList out;
+  for (const auto& f : folders) {
+    if (f.parentFolderId != parentFolderId)
+      continue;
+
+    int children = 0;
+    for (const auto& sub : folders)
+      if (sub.parentFolderId == f.folderId)
+        ++children;
+
+    for (const auto& ws : workspaces)
+      if (ws.parentFolderId == f.folderId)
+        ++children;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = true;
+    row[QStringLiteral("id")]       = f.folderId;
+    row[QStringLiteral("title")]    = f.title;
+    row[QStringLiteral("icon")]  = QStringLiteral("qrc:/icons/project-editor/treeview/folder.svg");
+    row[QStringLiteral("count")] = children;
+    out.append(row);
+  }
+
+  for (const auto& ws : workspaces) {
+    if (ws.parentFolderId != parentFolderId)
+      continue;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = false;
+    row[QStringLiteral("id")]       = ws.workspaceId;
+    row[QStringLiteral("title")]    = ws.title;
+    row[QStringLiteral("icon")]     = ws.icon.isEmpty()
+                                      ? QStringLiteral("qrc:/icons/dashboard-small/workspace.svg")
+                                      : Misc::IconEngine::resolveActionIconSource(ws.icon);
+    row[QStringLiteral("count")]    = static_cast<int>(ws.widgetRefs.size());
+    out.append(row);
+  }
+
+  return out;
+}
+
+/**
+ * @brief Returns the nested group folder hierarchy for the cascading "Move to Folder" menu.
+ */
+QVariantList DataModel::ProjectEditor::groupFolderTree() const
+{
+  return buildFolderTree(DataModel::ProjectModel::instance().editorGroupFolders(), -1);
+}
+
+/**
+ * @brief Returns the folders and groups directly under @p parentFolderId (folders first).
+ */
+QVariantList DataModel::ProjectEditor::groupFolderContents(int parentFolderId) const
+{
+  const auto& pm      = DataModel::ProjectModel::instance();
+  const auto& folders = pm.editorGroupFolders();
+  const auto& groups  = pm.groups();
+
+  QVariantList out;
+  for (const auto& f : folders) {
+    if (f.parentFolderId != parentFolderId)
+      continue;
+
+    int children = 0;
+    for (const auto& sub : folders)
+      if (sub.parentFolderId == f.folderId)
+        ++children;
+
+    for (const auto& g : groups)
+      if (g.parentFolderId == f.folderId)
+        ++children;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = true;
+    row[QStringLiteral("id")]       = f.folderId;
+    row[QStringLiteral("title")]    = f.title;
+    row[QStringLiteral("icon")]  = QStringLiteral("qrc:/icons/project-editor/treeview/folder.svg");
+    row[QStringLiteral("count")] = children;
+    out.append(row);
+  }
+
+  for (const auto& g : groups) {
+    if (g.parentFolderId != parentFolderId)
+      continue;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = false;
+    row[QStringLiteral("id")]       = g.groupId;
+    row[QStringLiteral("title")]    = g.title;
+    row[QStringLiteral("icon")] =
+      SerialStudio::dashboardWidgetIcon(SerialStudio::getDashboardWidget(g), false);
+    row[QStringLiteral("count")] = static_cast<int>(g.datasets.size());
+    out.append(row);
+  }
+
+  return out;
+}
+
+/**
+ * @brief Maps each group title to its folder path (empty at top level) for report selection.
+ */
+QVariantMap DataModel::ProjectEditor::groupFolderPaths() const
+{
+  const auto& pm      = DataModel::ProjectModel::instance();
+  const auto& folders = pm.editorGroupFolders();
+  const auto& groups  = pm.groups();
+
+  QVariantMap out;
+  for (const auto& g : groups) {
+    const QString path =
+      (g.parentFolderId != -1) ? folderDisplayPath(folders, g.parentFolderId) : QString();
+    out.insert(g.title, path);
+  }
+
+  return out;
+}
+
+/**
+ * @brief Returns the nested table folder hierarchy for the cascading "Move to Folder" menu.
+ */
+QVariantList DataModel::ProjectEditor::tableFolderTree() const
+{
+  return buildFolderTree(DataModel::ProjectModel::instance().editorTableFolders(), -1);
+}
+
+/**
+ * @brief Returns the folders and tables directly under @p parentFolderId (folders first); each
+ *        table row carries its full folder-qualified path as the editor handle.
+ */
+QVariantList DataModel::ProjectEditor::tableFolderContents(int parentFolderId) const
+{
+  const auto& pm      = DataModel::ProjectModel::instance();
+  const auto& folders = pm.editorTableFolders();
+  const auto& tables  = pm.tables();
+
+  QVariantList out;
+  for (const auto& f : folders) {
+    if (f.parentFolderId != parentFolderId)
+      continue;
+
+    int children = 0;
+    for (const auto& sub : folders)
+      if (sub.parentFolderId == f.folderId)
+        ++children;
+
+    for (const auto& t : tables)
+      if (t.parentFolderId == f.folderId)
+        ++children;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = true;
+    row[QStringLiteral("id")]       = f.folderId;
+    row[QStringLiteral("title")]    = f.title;
+    row[QStringLiteral("icon")]  = QStringLiteral("qrc:/icons/project-editor/treeview/folder.svg");
+    row[QStringLiteral("count")] = children;
+    out.append(row);
+  }
+
+  for (const auto& t : tables) {
+    if (t.parentFolderId != parentFolderId)
+      continue;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = false;
+    row[QStringLiteral("path")]     = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
+    row[QStringLiteral("title")]    = t.name;
+    row[QStringLiteral("icon")] =
+      QStringLiteral("qrc:/icons/project-editor/treeview/shared-table.svg");
+    row[QStringLiteral("count")] = static_cast<int>(t.registers.size());
+    out.append(row);
+  }
+
+  return out;
+}
+
+/**
+ * @brief Returns the currently selected group folder id (-1 when none).
+ */
+int DataModel::ProjectEditor::selectedGroupFolderId() const noexcept
+{
+  return m_selectedGroupFolderId;
+}
+
+/**
+ * @brief Returns the currently selected table folder id (-1 when none).
+ */
+int DataModel::ProjectEditor::selectedTableFolderId() const noexcept
+{
+  return m_selectedTableFolderId;
+}
+
+/**
+ * @brief Moves tree selection to the given group folder.
+ */
+void DataModel::ProjectEditor::selectGroupFolder(int folderId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_groupFolderItems.begin(); it != m_groupFolderItems.end(); ++it) {
+    if (it.value() == folderId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Moves tree selection to the given table folder.
+ */
+void DataModel::ProjectEditor::selectTableFolder(int folderId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_tableFolderItems.begin(); it != m_tableFolderItems.end(); ++it) {
+    if (it.value() == folderId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
  * @brief Selects the MQTT Publisher tree item when available.
  */
 void DataModel::ProjectEditor::selectMqttPublisher()
@@ -5235,13 +5788,13 @@ QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
       const int uid = ds.uniqueId;
 
       QVariantMap row;
-      row["uniqueId"]   = uid;
-      row["groupTitle"] = group.title;
-      row["title"]      = ds.title;
-      row["units"]      = ds.units;
-      row["rawReg"]     = QStringLiteral("raw:") + QString::number(uid);
-      row["finalReg"]   = QStringLiteral("final:") + QString::number(uid);
-      row["isVirtual"]  = ds.virtual_;
+      row[Keys::UniqueId] = uid;
+      row["groupTitle"]   = group.title;
+      row["title"]        = ds.title;
+      row["units"]        = ds.units;
+      row["rawReg"]       = QStringLiteral("raw:") + QString::number(uid);
+      row["finalReg"]     = QStringLiteral("final:") + QString::number(uid);
+      row["isVirtual"]    = ds.virtual_;
       result.append(row);
     }
   }
@@ -5681,22 +6234,6 @@ bool DataModel::ProjectEditor::moveCurrentOutputWidget(int direction)
  */
 bool DataModel::ProjectEditor::moveWorkspace(int workspaceId, int direction)
 {
-  if (workspaceId < WorkspaceIds::UserStart)
-    return false;
-
-  const auto& list = DataModel::ProjectModel::instance().editorWorkspaces();
-  int currentIdx   = -1;
-  for (size_t i = 0; i < list.size(); ++i) {
-    if (list[i].workspaceId == workspaceId) {
-      currentIdx = static_cast<int>(i);
-      break;
-    }
-  }
-
-  if (currentIdx < 0)
-    return false;
-
-  const int target = currentIdx + (direction < 0 ? -1 : 1);
-  DataModel::ProjectModel::instance().moveWorkspace(workspaceId, target);
+  DataModel::ProjectModel::instance().moveWorkspaceInFolder(workspaceId, direction);
   return true;
 }

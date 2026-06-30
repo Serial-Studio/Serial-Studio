@@ -23,6 +23,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import "../../Widgets" as Widgets
 
 Widgets.Pane {
@@ -36,12 +37,14 @@ Widgets.Pane {
 
   property int workspaceId: Cpp_JSON_ProjectEditor.selectedWorkspaceId
   property string workspaceName: Cpp_JSON_ProjectModel.workspaceTitle(workspaceId)
+  property string workspaceIcon: Cpp_JSON_ProjectModel.workspaceIcon(workspaceId)
   property var widgets: []
 
   title: workspaceName.length > 0 ? workspaceName : qsTr("Workspace")
 
   function refresh() {
     workspaceName = Cpp_JSON_ProjectModel.workspaceTitle(workspaceId)
+    workspaceIcon = Cpp_JSON_ProjectModel.workspaceIcon(workspaceId)
     widgets = workspaceId >= 0
               ? Cpp_JSON_ProjectEditor.widgetsForWorkspace(workspaceId)
               : []
@@ -55,6 +58,18 @@ Widgets.Pane {
     target: Cpp_JSON_ProjectModel
     function onEditorWorkspacesChanged() { Qt.callLater(root.refresh) }
     function onGroupsChanged()           { Qt.callLater(root.refresh) }
+  }
+
+  //
+  // Apply the icon chosen in the shared picker to this workspace.
+  //
+  Connections {
+    target: actionIconPicker
+
+    function onIconSelected(icon) {
+      if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.WorkspaceView)
+        Cpp_JSON_ProjectModel.setWorkspaceIcon(root.workspaceId, icon)
+    }
   }
 
   Page {
@@ -93,7 +108,7 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
-      // Secondary toolbar: Rename, Delete
+      // Secondary toolbar: Move Up, Move Down, Change Icon, Rename, Delete
       //
       Rectangle {
         id: toolbar
@@ -135,6 +150,47 @@ Widgets.Pane {
           }
 
           Item { Layout.fillWidth: true }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Move Up")
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Move workspace up")
+            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
+                     && root.workspaceId >= 5000
+            onClicked: Cpp_JSON_ProjectEditor.moveWorkspace(root.workspaceId, -1)
+            icon.source: "qrc:/icons/project-editor/actions/move-up.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Move Down")
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Move workspace down")
+            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
+                     && root.workspaceId >= 5000
+            onClicked: Cpp_JSON_ProjectEditor.moveWorkspace(root.workspaceId, 1)
+            icon.source: "qrc:/icons/project-editor/actions/move-down.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Change Icon")
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Change workspace icon")
+            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
+            onClicked: {
+              actionIconPicker.selectedIcon = Cpp_Misc_IconEngine.isInlineSvg(
+                root.workspaceIcon) ? "" : root.workspaceIcon
+              actionIconPicker.showNormal()
+            }
+            icon.source: root.workspaceIcon.length > 0
+                         ? Cpp_Misc_IconEngine.resolveActionIconSource(root.workspaceIcon)
+                         : "qrc:/icons/dashboard-large/workspace.svg"
+          }
 
           Widgets.ToolbarButton {
             iconSize: 24

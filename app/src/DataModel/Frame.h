@@ -146,6 +146,7 @@ inline constexpr KeyView OutputTxEncoding("outputTxEncoding");
 // Group keys
 inline constexpr KeyView GroupId("groupId");
 inline constexpr KeyView GroupType("groupType");
+inline constexpr KeyView GroupFolders("groupFolders");
 
 // Image-group keys
 inline constexpr KeyView ImgMode("imgDetectionMode");
@@ -182,11 +183,15 @@ inline constexpr KeyView WidgetType("widgetType");
 inline constexpr KeyView RelativeIndex("relativeIndex");
 inline constexpr KeyView CustomizeWorkspaces("customizeWorkspaces");
 inline constexpr KeyView WorkspaceDescription("description");
+inline constexpr KeyView WorkspaceFolders("workspaceFolders");
+inline constexpr KeyView FolderId("folderId");
+inline constexpr KeyView ParentFolderId("parentFolderId");
 
 inline constexpr KeyView Virtual("virtual");
 
 // Data table keys
 inline constexpr KeyView Tables("tables");
+inline constexpr KeyView TableFolders("tableFolders");
 inline constexpr KeyView Registers("registers");
 inline constexpr KeyView RegisterTypeName("type");
 inline constexpr KeyView Name("name");
@@ -228,7 +233,9 @@ inline constexpr int AutoStart     = 1000;
 inline constexpr int Overview      = 1000;
 inline constexpr int AllData       = 1001;
 inline constexpr int PerGroupStart = 1002;
-inline constexpr int UserStart     = 5000;
+inline constexpr int PerFolderStart =
+  3000;  ///< Auto workspace synthesised from a leaf group folder
+inline constexpr int UserStart = 5000;
 }  // namespace WorkspaceIds
 
 namespace DataModel {
@@ -444,6 +451,7 @@ enum class GroupType : quint8 {
 struct alignas(8) Group {
   int groupId         = -1;  ///< Positional id within the project (changes on reorder)
   int uniqueId        = -1;  ///< Persisted stable identity (-1 = unassigned)
+  int parentFolderId  = -1;  ///< Editor folder this group is filed under (-1 = top level)
   int sourceId        = 0;   ///< Source this group reads from (0 = default)
   int columns         = 2;   ///< Number of columns for output panel grid layout
   GroupType groupType = GroupType::Input;   ///< Input (visualization) or Output (controls)
@@ -506,6 +514,7 @@ struct RegisterDef {
  */
 struct TableDef {
   QString name;
+  int parentFolderId = -1;  ///< Editor folder this table is filed under (-1 = top level)
   std::vector<RegisterDef> registers;
 };
 
@@ -567,6 +576,9 @@ struct TableDef {
 
   QJsonObject obj;
   obj.insert(Keys::Name, t.name);
+  if (t.parentFolderId != -1)
+    obj.insert(Keys::ParentFolderId, t.parentFolderId);
+
   obj.insert(Keys::Registers, regs);
   return obj;
 }
@@ -582,6 +594,8 @@ struct TableDef {
   t.name = ss_jsr(obj, Keys::Name, "").toString().simplified();
   if (t.name.isEmpty())
     return false;
+
+  t.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
 
   t.registers.clear();
   const auto regs = obj.value(Keys::Registers).toArray();
@@ -608,7 +622,8 @@ struct WidgetRef {
  * @brief Represents a user-defined dashboard workspace.
  */
 struct Workspace {
-  int workspaceId = -1;
+  int workspaceId    = -1;
+  int parentFolderId = -1;
   QString title;
   QString icon;
   QString description;
@@ -628,6 +643,9 @@ struct Workspace {
 
   if (!w.description.isEmpty())
     obj.insert(Keys::WorkspaceDescription, w.description);
+
+  if (w.parentFolderId != -1)
+    obj.insert(Keys::ParentFolderId, w.parentFolderId);
 
   QJsonArray refs;
   for (const auto& ref : w.widgetRefs) {
@@ -650,10 +668,11 @@ struct Workspace {
   if (obj.isEmpty())
     return false;
 
-  w.workspaceId = ss_jsr(obj, Keys::WorkspaceId, -1).toInt();
-  w.title       = ss_jsr(obj, Keys::Title, "").toString().simplified();
-  w.icon        = ss_jsr(obj, Keys::Icon, "").toString().simplified();
-  w.description = ss_jsr(obj, Keys::WorkspaceDescription, "").toString();
+  w.workspaceId    = ss_jsr(obj, Keys::WorkspaceId, -1).toInt();
+  w.title          = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  w.icon           = ss_jsr(obj, Keys::Icon, "").toString().simplified();
+  w.description    = ss_jsr(obj, Keys::WorkspaceDescription, "").toString();
+  w.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
 
   w.widgetRefs.clear();
   const auto refs = obj.value(Keys::WidgetRefs).toArray();
@@ -668,6 +687,130 @@ struct Workspace {
 
   return w.workspaceId >= 0 && !w.title.isEmpty();
 }
+
+/**
+ * @brief Represents a folder that groups workspaces in the project editor.
+ */
+struct WorkspaceFolder {
+  int folderId       = -1;
+  int parentFolderId = -1;
+  QString title;
+};
+
+/**
+ * @brief Serializes a WorkspaceFolder to a QJsonObject.
+ */
+[[nodiscard]] inline QJsonObject serialize(const WorkspaceFolder& f)
+{
+  QJsonObject obj;
+  obj.insert(Keys::FolderId, f.folderId);
+  obj.insert(Keys::Title, f.title.simplified());
+  if (f.parentFolderId != -1)
+    obj.insert(Keys::ParentFolderId, f.parentFolderId);
+
+  return obj;
+}
+
+/**
+ * @brief Deserializes a WorkspaceFolder from a QJsonObject.
+ */
+[[nodiscard]] inline bool read(WorkspaceFolder& f, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  f.folderId       = ss_jsr(obj, Keys::FolderId, -1).toInt();
+  f.title          = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  f.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
+  return f.folderId >= 0 && !f.title.isEmpty();
+}
+
+/**
+ * @brief Represents a folder that organizes groups in the project editor.
+ */
+struct GroupFolder {
+  int folderId       = -1;
+  int parentFolderId = -1;
+  QString title;
+};
+
+/**
+ * @brief Serializes a GroupFolder to a QJsonObject.
+ */
+[[nodiscard]] inline QJsonObject serialize(const GroupFolder& f)
+{
+  QJsonObject obj;
+  obj.insert(Keys::FolderId, f.folderId);
+  obj.insert(Keys::Title, f.title.simplified());
+  if (f.parentFolderId != -1)
+    obj.insert(Keys::ParentFolderId, f.parentFolderId);
+
+  return obj;
+}
+
+/**
+ * @brief Deserializes a GroupFolder from a QJsonObject.
+ */
+[[nodiscard]] inline bool read(GroupFolder& f, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  f.folderId       = ss_jsr(obj, Keys::FolderId, -1).toInt();
+  f.title          = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  f.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
+  return f.folderId >= 0 && !f.title.isEmpty();
+}
+
+/**
+ * @brief Represents a folder that organizes user-defined tables in the project editor.
+ */
+struct TableFolder {
+  int folderId       = -1;
+  int parentFolderId = -1;
+  QString title;
+};
+
+/**
+ * @brief Serializes a TableFolder to a QJsonObject.
+ */
+[[nodiscard]] inline QJsonObject serialize(const TableFolder& f)
+{
+  QJsonObject obj;
+  obj.insert(Keys::FolderId, f.folderId);
+  obj.insert(Keys::Title, f.title.simplified());
+  if (f.parentFolderId != -1)
+    obj.insert(Keys::ParentFolderId, f.parentFolderId);
+
+  return obj;
+}
+
+/**
+ * @brief Deserializes a TableFolder from a QJsonObject.
+ */
+[[nodiscard]] inline bool read(TableFolder& f, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  f.folderId       = ss_jsr(obj, Keys::FolderId, -1).toInt();
+  f.title          = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  f.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
+  return f.folderId >= 0 && !f.title.isEmpty();
+}
+
+/**
+ * @brief Builds the "/"-joined editor folder path for a table-folder chain (root -> leaf);
+ *        empty for a top-level table (parentFolderId == -1).
+ */
+[[nodiscard]] QString tableFolderPath(const std::vector<TableFolder>& folders, int parentFolderId);
+
+/**
+ * @brief Builds a table's full accessor/store path: the folder path joined with the leaf name.
+ */
+[[nodiscard]] QString tableFullPath(const std::vector<TableFolder>& folders,
+                                    int parentFolderId,
+                                    const QString& name);
 
 /**
  * @brief Current Serial Studio project schema version.
@@ -1012,6 +1155,9 @@ void read_io_settings(QByteArray& frameStart,
   if (g.uniqueId >= 0)
     obj.insert(Keys::UniqueId, g.uniqueId);
 
+  if (g.parentFolderId != -1)
+    obj.insert(Keys::ParentFolderId, g.parentFolderId);
+
   if (g.groupType != GroupType::Input)
     obj.insert(Keys::GroupType, static_cast<int>(g.groupType));
 
@@ -1201,12 +1347,13 @@ inline void normalizeDatasetRanges(Dataset& d)
   if (array.isEmpty() && !isImageGroup && !isOutputGroup && !isPainterGroup && !isWebViewGroup)
     return false;
 
-  g.title     = title;
-  g.widget    = widget;
-  g.groupType = groupType;
-  g.columns   = qBound(1, ss_jsr(obj, Keys::OutputColumns, 2).toInt(), 10);
-  g.sourceId  = ss_jsr(obj, Keys::SourceId, 0).toInt();
-  g.uniqueId  = ss_jsr(obj, Keys::UniqueId, -1).toInt();
+  g.title          = title;
+  g.widget         = widget;
+  g.groupType      = groupType;
+  g.columns        = qBound(1, ss_jsr(obj, Keys::OutputColumns, 2).toInt(), 10);
+  g.sourceId       = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  g.uniqueId       = ss_jsr(obj, Keys::UniqueId, -1).toInt();
+  g.parentFolderId = ss_jsr(obj, Keys::ParentFolderId, -1).toInt();
 
   if (isImageGroup) {
     g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();

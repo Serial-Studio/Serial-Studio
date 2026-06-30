@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QHash>
 #include <QItemSelectionModel>
 #include <QObject>
 #include <QStandardItemModel>
@@ -132,6 +133,15 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(int selectedWorkspaceId
              READ selectedWorkspaceId
              NOTIFY selectedWorkspaceIdChanged)
+  Q_PROPERTY(int selectedFolderId
+             READ selectedFolderId
+             NOTIFY selectedFolderIdChanged)
+  Q_PROPERTY(int selectedGroupFolderId
+             READ selectedGroupFolderId
+             NOTIFY selectedGroupFolderIdChanged)
+  Q_PROPERTY(int selectedTableFolderId
+             READ selectedTableFolderId
+             NOTIFY selectedTableFolderIdChanged)
   // clang-format on
 
 signals:
@@ -139,6 +149,9 @@ signals:
   void treeSearchQueryChanged();
   void selectedUserTableChanged();
   void selectedWorkspaceIdChanged();
+  void selectedFolderIdChanged();
+  void selectedGroupFolderIdChanged();
+  void selectedTableFolderIdChanged();
   void selectedSourceFrameParserCodeChanged();
   void currentGroupPainterCodeChanged();
   void groupModelChanged();
@@ -179,6 +192,10 @@ public:
     UserTableView,
     WorkspacesView,
     WorkspaceView,
+    WorkspaceFolderView,
+    GroupsView,
+    GroupFolderView,
+    TableFolderView,
     MqttPublisherView,
     ControlScriptView,
   };
@@ -230,6 +247,8 @@ public:
 
     MinValue = Qt::UserRole + 21,
     MaxValue = Qt::UserRole + 22,
+
+    TreeItemPath = Qt::UserRole + 23,
   };
   Q_ENUM(CustomRoles)
 
@@ -238,10 +257,15 @@ public:
     KindGroup,
     KindDataset,
     KindWorkspace,
+    KindWorkspaceFolder,
     KindAction,
     KindOutputWidget,
     KindMqttPublisher,
     KindControlScript,
+    KindGroupFolder,
+    KindUserTable,
+    KindTableFolder,
+    KindSource,
   };
   Q_ENUM(ItemKind)
 
@@ -288,7 +312,18 @@ public:
   Q_INVOKABLE [[nodiscard]] bool workspaceHasUnresolvedRefs(int workspaceId) const;
   Q_INVOKABLE [[nodiscard]] int unresolvedWorkspaceWidgetCount() const;
   Q_INVOKABLE int cleanupUnresolvedWorkspaceWidgets();
+  Q_INVOKABLE [[nodiscard]] QVariantList workspaceFolderTree() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList workspaceFolderContents(int parentFolderId) const;
   [[nodiscard]] int selectedWorkspaceId() const noexcept;
+  [[nodiscard]] int selectedFolderId() const noexcept;
+
+  Q_INVOKABLE [[nodiscard]] QVariantList groupFolderTree() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList groupFolderContents(int parentFolderId) const;
+  Q_INVOKABLE [[nodiscard]] QVariantMap groupFolderPaths() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList tableFolderTree() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList tableFolderContents(int parentFolderId) const;
+  [[nodiscard]] int selectedGroupFolderId() const noexcept;
+  [[nodiscard]] int selectedTableFolderId() const noexcept;
 
   [[nodiscard]] const QString& treeSearchQuery() const noexcept;
 
@@ -307,6 +342,9 @@ public:
 public slots:
   void selectUserTable(const QString& tableName);
   void selectWorkspace(int workspaceId);
+  void selectWorkspaceFolder(int folderId);
+  void selectGroupFolder(int folderId);
+  void selectTableFolder(int folderId);
   void selectMqttPublisher();
   void selectControlScript();
   void openMqttScriptEditor();
@@ -376,6 +414,7 @@ private:
   bool selectSourceParserItem(QStandardItem* item);
   bool selectSourceItem(QStandardItem* item);
   bool selectGroupItem(QStandardItem* item);
+  bool selectGroupFolderItem(QStandardItem* item);
   bool selectDatasetItem(QStandardItem* item);
   bool selectActionItem(QStandardItem* item);
   bool selectOutputWidgetItem(QStandardItem* item);
@@ -414,6 +453,14 @@ private:
   void appendGroupTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void appendSharedMemoryTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void appendWorkspaceTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  void buildWorkspaceFolderTree(QStandardItem* wsRoot,
+                                const QString& pathPrefix,
+                                QHash<QString, bool>& expandedStates);
+  [[nodiscard]] QStandardItem* createWorkspaceItem(const DataModel::Workspace& ws);
+  [[nodiscard]] QHash<int, QStandardItem*> appendGroupFolderItems(
+    QStandardItem* groupsRoot, const QString& pathPrefix, QHash<QString, bool>& expandedStates);
+  [[nodiscard]] QHash<int, QStandardItem*> appendTableFolderItems(
+    QStandardItem* tablesRoot, const QString& pathPrefix, QHash<QString, bool>& expandedStates);
   void appendMqttPublisherTreeItem(QStandardItem* root);
   void appendControlScriptTreeItem(QStandardItem* root);
   void appendDatasetChildren(QStandardItem* groupItem, const DataModel::Group& group);
@@ -472,15 +519,21 @@ private:
   QMap<QStandardItem*, DataModel::Source> m_sourceParserItems;
 
   QStandardItem* m_groupsRootItem;
+  QMap<QStandardItem*, int> m_groupFolderItems;
+  int m_selectedGroupFolderId;
 
   QStandardItem* m_tablesRootItem;
   QStandardItem* m_systemDatasetsItem;
   QMap<QStandardItem*, QString> m_userTableItems;
+  QMap<QStandardItem*, int> m_tableFolderItems;
   QString m_selectedUserTable;
+  int m_selectedTableFolderId;
 
   QStandardItem* m_workspacesRootItem;
   QMap<QStandardItem*, int> m_workspaceItems;
+  QMap<QStandardItem*, int> m_workspaceFolderItems;
   int m_selectedWorkspaceId;
+  int m_selectedFolderId;
 
   QStandardItem* m_mqttPublisherItem;
   QStandardItem* m_controlScriptItem;
@@ -581,6 +634,7 @@ public:
       {ProjectEditor::TreeItemKind,           BAL("treeItemKind")},
       {ProjectEditor::TreeItemId,             BAL("treeItemId")},
       {ProjectEditor::TreeItemParentId,       BAL("treeItemParentId")},
+      {ProjectEditor::TreeItemPath,           BAL("treeItemPath")},
       {ProjectEditor::TreeViewWorkspaceStale, BAL("treeViewWorkspaceStale")},
       {ProjectEditor::MinValue,               BAL("minValue")},
       {ProjectEditor::MaxValue,               BAL("maxValue")},

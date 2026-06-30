@@ -33,6 +33,7 @@ Widgets.SmartDialog {
   // Dialog state
   //
   property int sessionId: -1
+  property int selectedDatasetCount: 0
 
   //
   // Persisted branding + layout preferences
@@ -55,6 +56,13 @@ Widgets.SmartDialog {
   }
 
   //
+  // Per-session dataset selection model (flattened group headers + dataset rows)
+  //
+  ListModel {
+    id: _datasetModel
+  }
+
+  //
   // Line style options: index maps to C++ string keys
   //
   readonly property var lineStyles: [
@@ -70,6 +78,11 @@ Widgets.SmartDialog {
     target: Cpp_Sessions_Manager
     function onReportLogoPicked(path) {
       _logoField.text = path
+    }
+
+    function onSessionDatasetsReady(sessionId, datasets) {
+      if (sessionId === root.sessionId)
+        root.buildDatasetModel(datasets)
     }
   }
 
@@ -98,6 +111,10 @@ Widgets.SmartDialog {
   //
   function openFor(id) {
     root.sessionId = id
+    _datasetModel.clear()
+    root.selectedDatasetCount = 0
+    Cpp_Sessions_Manager.requestSessionDatasets(id)
+
     const meta = Cpp_Sessions_Manager.sessionMetadata(id)
     if (meta && meta.project_title)
       _titleField.text = qsTr("%1 — Session Report").arg(meta.project_title)
@@ -159,11 +176,268 @@ Widgets.SmartDialog {
       "lineWidth":           _lineWidthSpin.value / 10,
       "lineStyle":           root.lineStyles[_lineStyleCombo.currentIndex].value,
       "includeStatsOverlay": _annotateStatsCheck.checked,
+      "selectedUniqueIds":   root.collectSelectedUniqueIds(),
       "outputFormat":        outputFormat
     }
 
     const id = root.sessionId
     Qt.callLater(() => Cpp_Sessions_Manager.exportSessionToPdf(id, options))
+  }
+
+  //
+  // Build the flattened group/dataset selection model from the worker payload.
+  // Datasets arrive in column order; groups keep first-seen order.
+  //
+  function buildDatasetModel(datasets) {
+    _datasetModel.clear()
+
+    const sourcesPerGroup = {}
+    for (let i = 0; i < datasets.length; ++i) {
+      const g = datasets[i].group
+      if (!sourcesPerGroup[g])
+        sourcesPerGroup[g] = {}
+
+      sourcesPerGroup[g][datasets[i].sourceTitle] = true
+    }
+
+    //
+    // Folder path per group title from the current project (empty = top level)
+    //
+    const folderByGroup = Cpp_JSON_ProjectEditor.groupFolderPaths()
+
+    const order = []
+    const byKey = {}
+    for (let i = 0; i < datasets.length; ++i) {
+      const d = datasets[i]
+      const key = d.sourceTitle + " " + d.group
+      if (!byKey[key]) {
+        const distinct = Object.keys(sourcesPerGroup[d.group] || {}).length
+        byKey[key] = {
+          group: d.group,
+          sourceTitle: d.sourceTitle,
+          showSource: distinct > 1 && d.sourceTitle.length > 0,
+          folderKey: (folderByGroup[d.group] !== undefined) ? folderByGroup[d.group] : "",
+          items: []
+        }
+        order.push(key)
+      }
+      byKey[key].items.push(d)
+    }
+
+    //
+    // Bucket groups under their folder, preserving first-seen folder order
+    //
+    const folderOrder = []
+    const groupsByFolder = {}
+    for (let k = 0; k < order.length; ++k) {
+      const fk = byKey[order[k]].folderKey
+      if (groupsByFolder[fk] === undefined) {
+        groupsByFolder[fk] = []
+        folderOrder.push(fk)
+      }
+      groupsByFolder[fk].push(order[k])
+    }
+
+    for (let f = 0; f < folderOrder.length; ++f) {
+      const fk = folderOrder[f]
+      if (fk.length > 0) {
+        _datasetModel.append({
+          "isFolder": true,
+          "isGroup": false,
+          "folderKey": fk,
+          "groupKey": "",
+          "folderLabel": fk,
+          "groupLabel": "",
+          "sourceLabel": "",
+          "checkState": Qt.Checked,
+          "uniqueId": -1,
+          "datasetLabel": "",
+          "checked": true
+        })
+      }
+
+      const gkeys = groupsByFolder[fk]
+      for (let k = 0; k < gkeys.length; ++k) {
+        const grp = byKey[gkeys[k]]
+        _datasetModel.append({
+          "isFolder": false,
+          "isGroup": true,
+          "folderKey": fk,
+          "groupKey": gkeys[k],
+          "folderLabel": "",
+          "groupLabel": grp.group,
+          "sourceLabel": grp.showSource ? grp.sourceTitle : "",
+          "checkState": Qt.Checked,
+          "uniqueId": -1,
+          "datasetLabel": "",
+          "checked": true
+        })
+        for (let j = 0; j < grp.items.length; ++j) {
+          const it = grp.items[j]
+          const lbl = (it.units && it.units.length > 0)
+                      ? it.title + " (" + it.units + ")"
+                      : it.title
+          _datasetModel.append({
+            "isFolder": false,
+            "isGroup": false,
+            "folderKey": fk,
+            "groupKey": gkeys[k],
+            "folderLabel": "",
+            "groupLabel": "",
+            "sourceLabel": "",
+            "checkState": Qt.Unchecked,
+            "uniqueId": it.uniqueId,
+            "datasetLabel": lbl,
+            "checked": true
+          })
+        }
+      }
+    }
+
+    root.refreshSelectedCount()
+  }
+
+  //
+  // Check or uncheck an entire folder and everything it contains.
+  //
+  function setFolderChecked(folderKey, checked) {
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (row.folderKey !== folderKey)
+        continue
+
+      if (row.isFolder || row.isGroup)
+        _datasetModel.setProperty(i, "checkState", checked ? Qt.Checked : Qt.Unchecked)
+      else
+        _datasetModel.setProperty(i, "checked", checked)
+    }
+
+    root.refreshSelectedCount()
+  }
+
+  //
+  // Check or uncheck an entire group and all of its datasets, then refresh its folder.
+  //
+  function setGroupChecked(groupKey, checked) {
+    let folderKey = ""
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (row.groupKey !== groupKey)
+        continue
+
+      folderKey = row.folderKey
+      if (row.isGroup)
+        _datasetModel.setProperty(i, "checkState", checked ? Qt.Checked : Qt.Unchecked)
+      else
+        _datasetModel.setProperty(i, "checked", checked)
+    }
+
+    root.recomputeFolder(folderKey)
+    root.refreshSelectedCount()
+  }
+
+  //
+  // Toggle one dataset, then refresh its group header tri-state.
+  //
+  function toggleDataset(index, checked) {
+    _datasetModel.setProperty(index, "checked", checked)
+    root.recomputeGroup(_datasetModel.get(index).groupKey)
+    root.recomputeFolder(_datasetModel.get(index).folderKey)
+    root.refreshSelectedCount()
+  }
+
+  //
+  // Recompute a group header check state from its datasets.
+  //
+  function recomputeGroup(groupKey) {
+    let total = 0
+    let checked = 0
+    let headerIndex = -1
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (row.groupKey !== groupKey)
+        continue
+
+      if (row.isGroup) {
+        headerIndex = i
+        continue
+      }
+
+      ++total
+      if (row.checked)
+        ++checked
+    }
+
+    if (headerIndex < 0)
+      return
+
+    const state = (checked === 0) ? Qt.Unchecked
+                : ((checked === total) ? Qt.Checked : Qt.PartiallyChecked)
+    _datasetModel.setProperty(headerIndex, "checkState", state)
+  }
+
+  //
+  // Recompute a folder header check state from the datasets it contains.
+  //
+  function recomputeFolder(folderKey) {
+    if (folderKey.length === 0)
+      return
+
+    let total = 0
+    let checked = 0
+    let headerIndex = -1
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (row.folderKey !== folderKey)
+        continue
+
+      if (row.isFolder) {
+        headerIndex = i
+        continue
+      }
+
+      if (row.isGroup)
+        continue
+
+      ++total
+      if (row.checked)
+        ++checked
+    }
+
+    if (headerIndex < 0)
+      return
+
+    const state = (checked === 0) ? Qt.Unchecked
+                : ((checked === total) ? Qt.Checked : Qt.PartiallyChecked)
+    _datasetModel.setProperty(headerIndex, "checkState", state)
+  }
+
+  //
+  // Refresh the count of selected datasets (drives the export guard).
+  //
+  function refreshSelectedCount() {
+    let n = 0
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (!row.isGroup && !row.isFolder && row.checked)
+        ++n
+    }
+
+    root.selectedDatasetCount = n
+  }
+
+  //
+  // Collect the unique ids of every checked dataset for the export options.
+  //
+  function collectSelectedUniqueIds() {
+    const ids = []
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (!row.isGroup && !row.isFolder && row.checked)
+        ids.push(row.uniqueId)
+    }
+
+    return ids
   }
 
   //
@@ -198,6 +472,12 @@ Widgets.SmartDialog {
 
       TabButton {
         text: qsTr("Sections")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+
+      TabButton {
+        text: qsTr("Datasets")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
@@ -515,6 +795,121 @@ Widgets.SmartDialog {
           }
         }
       }
+
+      //
+      // Datasets tab
+      //
+      Item {
+        id: _datasetsTab
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        Rectangle {
+          radius: 2
+          border.width: 1
+          anchors.fill: parent
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        ColumnLayout {
+          spacing: 6
+          anchors.margins: 12
+          anchors.fill: parent
+
+          Label {
+            text: qsTr("Include datasets")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          }
+
+          Rectangle {
+            implicitHeight: 1
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          ListView {
+            id: _datasetList
+
+            clip: true
+            spacing: 2
+            model: _datasetModel
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            ScrollBar.vertical: ScrollBar {
+              policy: ScrollBar.AsNeeded
+            }
+
+            delegate: Item {
+              width: ListView.view.width
+              implicitHeight: _rowLayout.implicitHeight + 4
+
+              RowLayout {
+                id: _rowLayout
+
+                spacing: 6
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: model.isFolder ? 0 : (model.isGroup ? 18 : 36)
+
+                CheckBox {
+                  Layout.alignment: Qt.AlignVCenter
+                  tristate: model.isFolder || model.isGroup
+                  checkState: (model.isFolder || model.isGroup)
+                              ? model.checkState
+                              : (model.checked ? Qt.Checked : Qt.Unchecked)
+                  nextCheckState: function() { return checkState }
+                  onClicked: {
+                    if (model.isFolder)
+                      root.setFolderChecked(model.folderKey, model.checkState !== Qt.Checked)
+                    else if (model.isGroup)
+                      root.setGroupChecked(model.groupKey, model.checkState !== Qt.Checked)
+                    else
+                      root.toggleDataset(index, !model.checked)
+                  }
+                }
+
+                Label {
+                  Layout.fillWidth: true
+                  elide: Text.ElideRight
+                  Layout.alignment: Qt.AlignVCenter
+                  color: Cpp_ThemeManager.colors["text"]
+                  text: model.isFolder
+                        ? model.folderLabel
+                        : (model.isGroup ? model.groupLabel : model.datasetLabel)
+                  font: (model.isFolder || model.isGroup)
+                        ? Cpp_Misc_CommonFonts.customUiFont(1.0, true)
+                        : Cpp_Misc_CommonFonts.uiFont
+                }
+
+                Label {
+                  opacity: 0.6
+                  text: model.sourceLabel
+                  Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.uiFont
+                  color: Cpp_ThemeManager.colors["text"]
+                  visible: model.isGroup && model.sourceLabel.length > 0
+                }
+              }
+            }
+
+            Label {
+              opacity: 0.5
+              anchors.centerIn: parent
+              visible: _datasetModel.count === 0
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.uiFont
+              text: qsTr("Loading datasets...")
+            }
+          }
+        }
+      }
     }
 
     //
@@ -523,6 +918,15 @@ Widgets.SmartDialog {
     RowLayout {
       spacing: 8
       Layout.fillWidth: true
+
+      Label {
+        opacity: 0.7
+        Layout.alignment: Qt.AlignVCenter
+        font: Cpp_Misc_CommonFonts.uiFont
+        color: Cpp_ThemeManager.colors["text"]
+        visible: _datasetModel.count > 0 && root.selectedDatasetCount === 0
+        text: qsTr("Select at least one dataset to include.")
+      }
 
       Item {
         Layout.fillWidth: true
@@ -535,33 +939,17 @@ Widgets.SmartDialog {
         icon.source: "qrc:/icons/buttons/close.svg"
       }
 
-      /*Button {
-        text: qsTr("Export HTML")
-        icon.width: 16
-        icon.height: 16
-        icon.source: "qrc:/icons/buttons/html.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
-        enabled: _coverCheck.checked
-                 || _metadataCheck.checked
-                 || _statsCheck.checked
-                 || _chartsCheck.checked
-        onClicked: {
-          root.persistPreferences()
-          root.close()
-          root.dispatchExport("html")
-        }
-      }*/
-
       Widgets.IconButton {
         iconSize: 16
         highlighted: true
         text: Cpp_HasWebEngine ? qsTr("Export PDF") : qsTr("Export HTML")
         icon.source: Cpp_HasWebEngine ? "qrc:/icons/buttons/pdf.svg"
                                       : "qrc:/icons/buttons/html.svg"
-        enabled: _coverCheck.checked
-                 || _metadataCheck.checked
-                 || _statsCheck.checked
-                 || _chartsCheck.checked
+        enabled: (_coverCheck.checked
+                  || _metadataCheck.checked
+                  || _statsCheck.checked
+                  || _chartsCheck.checked)
+                 && root.selectedDatasetCount > 0
         onClicked: {
           root.persistPreferences()
           root.close()

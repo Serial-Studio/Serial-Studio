@@ -101,6 +101,7 @@ signals:
   void reportLogoPicked(const QString& path);
   void projectMetadataRestored();
   void lockedChanged();
+  void sessionDatasetsReady(int sessionId, const QVariantList& datasets);
 
 private:
   explicit DatabaseManager();
@@ -161,6 +162,7 @@ public slots:
 
   void exportSessionToCsv(int sessionId);
   void exportSessionToPdf(int sessionId, const QVariantMap& options);
+  void requestSessionDatasets(int sessionId);
   void pickReportLogo();
 
   void storeProjectMetadata();

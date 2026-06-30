@@ -54,6 +54,7 @@ struct HtmlReportOptions {
   double lineWidth;
   QString lineStyle;
   Format format;
+  std::vector<int> selectedUniqueIds;
 };
 
 /**

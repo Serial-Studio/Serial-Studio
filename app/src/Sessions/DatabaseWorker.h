@@ -72,6 +72,7 @@ signals:
   void csvExportProgress(double percent);
   void csvExportFinished(const QString& outputPath, bool ok, const QString& error);
   void reportDataReady(const Sessions::ReportPayloadPtr& payload);
+  void datasetListReady(int sessionId, const QVariantList& datasets);
 
 public:
   explicit DatabaseWorker(QObject* parent = nullptr);
@@ -104,7 +105,11 @@ public slots:
   void fetchGlobalProjectJson();
 
   void runCsvExport(int sessionId, const QString& outputPath);
-  void runReportDataLoad(int sessionId, bool includeCharts, int chartMaxSamples);
+  void runReportDataLoad(int sessionId,
+                         bool includeCharts,
+                         int chartMaxSamples,
+                         const QVariantList& selectedUniqueIds);
+  void runDatasetListLoad(int sessionId);
 
 private:
   void refreshSessionListInternal();

@@ -108,20 +108,51 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
+        <file>ai/docs/control_script_js.md</file>
+        <file>ai/docs/frame_parser_js.md</file>
+        <file>ai/docs/frame_parser_lua.md</file>
+        <file>ai/docs/output_widget_js.md</file>
+        <file>ai/docs/painter_js.md</file>
+        <file>ai/docs/transform_js.md</file>
+        <file>ai/docs/transform_lua.md</file>
+        <file>ai/skills/api_semantics.md</file>
+        <file>ai/skills/behavioral.md</file>
+        <file>ai/skills/can_modbus.md</file>
+        <file>ai/skills/control_script.md</file>
+        <file>ai/skills/dashboard_layout.md</file>
+        <file>ai/skills/debugging.md</file>
+        <file>ai/skills/filesystem.md</file>
+        <file>ai/skills/frame_parsers.md</file>
+        <file>ai/skills/mqtt.md</file>
+        <file>ai/skills/output_widgets.md</file>
+        <file>ai/skills/painter.md</file>
+        <file>ai/skills/project_basics.md</file>
+        <file>ai/skills/tool_discovery.md</file>
+        <file>ai/skills/transforms.md</file>
+        <file>ai/skills/workspace_design.md</file>
+        <file>ai/templates/blank.json</file>
+        <file>ai/templates/gps_uart_nmea.json</file>
+        <file>ai/templates/imu_uart.json</file>
+        <file>ai/templates/manifest.json</file>
+        <file>ai/templates/mqtt_subscriber.json</file>
+        <file>ai/templates/scope_multichannel_uart.json</file>
+        <file>ai/templates/telemetry_udp.json</file>
+        <file>ai/build_search_index.py</file>
+        <file>ai/command_safety.json</file>
+        <file>ai/search_index.json</file>
+        <file>api/api-schema.json</file>
+        <file>api/prelude.js</file>
+        <file>api/prelude.lua</file>
+        <file>api/sdk-symbols.json</file>
+        <file>api/SerialStudio.js</file>
+        <file>api/SerialStudio.lua</file>
         <file>chartjs/chart.umd.min.js</file>
         <file>chartjs/LICENSE.md</file>
-        <file>vendor/highlight-github-dark.min.css</file>
-        <file>vendor/highlight-github.min.css</file>
-        <file>vendor/highlight.LICENSE</file>
-        <file>vendor/highlight.min.js</file>
-        <file>vendor/showdown.LICENSE</file>
-        <file>vendor/showdown.min.js</file>
-        <file>vendor/sanitize.LICENSE</file>
-        <file>vendor/sanitize.js</file>
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
         <file>icons/buttons/activate.svg</file>
+        <file>icons/buttons/add-workspace.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
         <file>icons/buttons/auto-layout.svg</file>
@@ -142,6 +173,7 @@
         <file>icons/buttons/export-csv.svg</file>
         <file>icons/buttons/falling-edge.svg</file>
         <file>icons/buttons/forward.svg</file>
+        <file>icons/buttons/help.svg</file>
         <file>icons/buttons/html.svg</file>
         <file>icons/buttons/info.svg</file>
         <file>icons/buttons/invisible.svg</file>
@@ -151,6 +183,8 @@
         <file>icons/buttons/media-play.svg</file>
         <file>icons/buttons/media-prev.svg</file>
         <file>icons/buttons/media-stop.svg</file>
+        <file>icons/buttons/mqtt-off.svg</file>
+        <file>icons/buttons/mqtt-on.svg</file>
         <file>icons/buttons/new.svg</file>
         <file>icons/buttons/open.svg</file>
         <file>icons/buttons/paypal.svg</file>
@@ -159,8 +193,8 @@
         <file>icons/buttons/plus.svg</file>
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
-        <file>icons/buttons/rising-edge.svg</file>
         <file>icons/buttons/report.svg</file>
+        <file>icons/buttons/rising-edge.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/search.svg</file>
         <file>icons/buttons/send.svg</file>
@@ -175,6 +209,7 @@
         <file>icons/buttons/unlock.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
+        <file>icons/buttons/workspace-settings.svg</file>
         <file>icons/buttons/wrench.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
@@ -195,6 +230,7 @@
         <file>icons/dashboard-buttons/anaglyph.svg</file>
         <file>icons/dashboard-buttons/archive.svg</file>
         <file>icons/dashboard-buttons/area.svg</file>
+        <file>icons/dashboard-buttons/camcoder.svg</file>
         <file>icons/dashboard-buttons/center.svg</file>
         <file>icons/dashboard-buttons/clear.svg</file>
         <file>icons/dashboard-buttons/color.svg</file>
@@ -231,6 +267,7 @@
         <file>icons/dashboard-large/compass.svg</file>
         <file>icons/dashboard-large/datagrid.svg</file>
         <file>icons/dashboard-large/fft.svg</file>
+        <file>icons/dashboard-large/folder.svg</file>
         <file>icons/dashboard-large/gauge.svg</file>
         <file>icons/dashboard-large/gps.svg</file>
         <file>icons/dashboard-large/group.svg</file>
@@ -248,12 +285,14 @@
         <file>icons/dashboard-large/terminal.svg</file>
         <file>icons/dashboard-large/waterfall.svg</file>
         <file>icons/dashboard-large/webview.svg</file>
+        <file>icons/dashboard-large/workspace.svg</file>
         <file>icons/dashboard-small/accelerometer.svg</file>
         <file>icons/dashboard-small/bar.svg</file>
         <file>icons/dashboard-small/clock.svg</file>
         <file>icons/dashboard-small/compass.svg</file>
         <file>icons/dashboard-small/datagrid.svg</file>
         <file>icons/dashboard-small/fft.svg</file>
+        <file>icons/dashboard-small/folder.svg</file>
         <file>icons/dashboard-small/gauge.svg</file>
         <file>icons/dashboard-small/gps.svg</file>
         <file>icons/dashboard-small/group.svg</file>
@@ -271,6 +310,7 @@
         <file>icons/dashboard-small/terminal.svg</file>
         <file>icons/dashboard-small/waterfall.svg</file>
         <file>icons/dashboard-small/webview.svg</file>
+        <file>icons/dashboard-small/workspace.svg</file>
         <file>icons/database/close.svg</file>
         <file>icons/database/delete.svg</file>
         <file>icons/database/export-csv.svg</file>
@@ -317,6 +357,7 @@
         <file>icons/project-editor/actions/add-compass.svg</file>
         <file>icons/project-editor/actions/add-dataset.svg</file>
         <file>icons/project-editor/actions/add-fft.svg</file>
+        <file>icons/project-editor/actions/add-folder.svg</file>
         <file>icons/project-editor/actions/add-gauge.svg</file>
         <file>icons/project-editor/actions/add-led.svg</file>
         <file>icons/project-editor/actions/add-meter.svg</file>
@@ -329,6 +370,7 @@
         <file>icons/project-editor/actions/add-register.svg</file>
         <file>icons/project-editor/actions/add-table.svg</file>
         <file>icons/project-editor/actions/add-waterfall.svg</file>
+        <file>icons/project-editor/actions/alarm-bands.svg</file>
         <file>icons/project-editor/actions/bar.svg</file>
         <file>icons/project-editor/actions/change-group.svg</file>
         <file>icons/project-editor/actions/clear.svg</file>
@@ -340,14 +382,15 @@
         <file>icons/project-editor/actions/delete.svg</file>
         <file>icons/project-editor/actions/disconnect.svg</file>
         <file>icons/project-editor/actions/duplicate.svg</file>
+        <file>icons/project-editor/actions/edit-code.svg</file>
         <file>icons/project-editor/actions/export-table.svg</file>
         <file>icons/project-editor/actions/fft.svg</file>
         <file>icons/project-editor/actions/gauge.svg</file>
         <file>icons/project-editor/actions/import-table.svg</file>
         <file>icons/project-editor/actions/insert-constant.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
-        <file>icons/project-editor/actions/meter.svg</file>
         <file>icons/project-editor/actions/load-ca-certs.svg</file>
+        <file>icons/project-editor/actions/meter.svg</file>
         <file>icons/project-editor/actions/move-down.svg</file>
         <file>icons/project-editor/actions/move-up.svg</file>
         <file>icons/project-editor/actions/output-button.svg</file>
@@ -360,7 +403,6 @@
         <file>icons/project-editor/actions/rename-table.svg</file>
         <file>icons/project-editor/actions/rename.svg</file>
         <file>icons/project-editor/actions/test-connection.svg</file>
-        <file>icons/project-editor/actions/alarm-bands.svg</file>
         <file>icons/project-editor/actions/transform.svg</file>
         <file>icons/project-editor/actions/waterfall.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>
@@ -385,6 +427,7 @@
         <file>icons/project-editor/model/timer.svg</file>
         <file>icons/project-editor/model/tx-data.svg</file>
         <file>icons/project-editor/model/widget.svg</file>
+        <file>icons/project-editor/model/workspace.svg</file>
         <file>icons/project-editor/permissions/read-only.svg</file>
         <file>icons/project-editor/permissions/read-write.svg</file>
         <file>icons/project-editor/summary/action.svg</file>
@@ -405,9 +448,9 @@
         <file>icons/project-editor/toolbar/add-gauge.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
-        <file>icons/project-editor/toolbar/add-meter.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-led.svg</file>
+        <file>icons/project-editor/toolbar/add-meter.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
         <file>icons/project-editor/toolbar/add-output-button.svg</file>
         <file>icons/project-editor/toolbar/add-output-knob.svg</file>
@@ -419,12 +462,14 @@
         <file>icons/project-editor/toolbar/add-plot.svg</file>
         <file>icons/project-editor/toolbar/add-plot3d.svg</file>
         <file>icons/project-editor/toolbar/add-webview.svg</file>
+        <file>icons/project-editor/toolbar/ai.svg</file>
         <file>icons/project-editor/toolbar/device.svg</file>
         <file>icons/project-editor/toolbar/help.svg</file>
         <file>icons/project-editor/toolbar/image.svg</file>
         <file>icons/project-editor/toolbar/lock.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
+        <file>icons/project-editor/toolbar/protobuf.svg</file>
         <file>icons/project-editor/toolbar/recover-backup.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
@@ -432,11 +477,12 @@
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
         <file>icons/project-editor/treeview/control-script.svg</file>
+        <file>icons/project-editor/treeview/dashboard-widgets.svg</file>
         <file>icons/project-editor/treeview/datagrid.svg</file>
         <file>icons/project-editor/treeview/dataset-values.svg</file>
         <file>icons/project-editor/treeview/dataset.svg</file>
-        <file>icons/project-editor/treeview/transform.svg</file>
         <file>icons/project-editor/treeview/encoding.svg</file>
+        <file>icons/project-editor/treeview/folder.svg</file>
         <file>icons/project-editor/treeview/frame-end.svg</file>
         <file>icons/project-editor/treeview/frame-start.svg</file>
         <file>icons/project-editor/treeview/gps.svg</file>
@@ -452,12 +498,18 @@
         <file>icons/project-editor/treeview/output-slider.svg</file>
         <file>icons/project-editor/treeview/output-textfield.svg</file>
         <file>icons/project-editor/treeview/output-toggle.svg</file>
+        <file>icons/project-editor/treeview/painter.svg</file>
         <file>icons/project-editor/treeview/plot3d.svg</file>
         <file>icons/project-editor/treeview/project-setup.svg</file>
         <file>icons/project-editor/treeview/project-title.svg</file>
+        <file>icons/project-editor/treeview/save-warning.svg</file>
         <file>icons/project-editor/treeview/separator.svg</file>
         <file>icons/project-editor/treeview/shared-memory.svg</file>
         <file>icons/project-editor/treeview/shared-table.svg</file>
+        <file>icons/project-editor/treeview/transform.svg</file>
+        <file>icons/project-editor/treeview/webview.svg</file>
+        <file>icons/project-editor/treeview/workspace.svg</file>
+        <file>icons/project-editor/treeview/workspaces.svg</file>
         <file>icons/project-editor/windows/code.svg</file>
         <file>icons/project-editor/windows/control-script.svg</file>
         <file>icons/project-editor/windows/dataset.svg</file>
@@ -490,6 +542,35 @@
         <file>icons/start/settings.svg</file>
         <file>icons/start/stopwatch.svg</file>
         <file>icons/start/tools.svg</file>
+        <file>icons/taskbar/ai.svg</file>
+        <file>icons/taskbar/clock.svg</file>
+        <file>icons/taskbar/console.svg</file>
+        <file>icons/taskbar/file-transmission.svg</file>
+        <file>icons/taskbar/notifications.svg</file>
+        <file>icons/taskbar/pause.svg</file>
+        <file>icons/taskbar/resume.svg</file>
+        <file>icons/taskbar/settings.svg</file>
+        <file>icons/taskbar/stopwatch.svg</file>
+        <file>icons/toolbar/about.svg</file>
+        <file>icons/toolbar/activate.svg</file>
+        <file>icons/toolbar/add-gauge.svg</file>
+        <file>icons/toolbar/ai.svg</file>
+        <file>icons/toolbar/connect.svg</file>
+        <file>icons/toolbar/console.svg</file>
+        <file>icons/toolbar/csv.svg</file>
+        <file>icons/toolbar/deepwiki.svg</file>
+        <file>icons/toolbar/deploy.svg</file>
+        <file>icons/toolbar/device-setup.svg</file>
+        <file>icons/toolbar/disconnect.svg</file>
+        <file>icons/toolbar/examples.svg</file>
+        <file>icons/toolbar/extensions-small.svg</file>
+        <file>icons/toolbar/extensions.svg</file>
+        <file>icons/toolbar/help.svg</file>
+        <file>icons/toolbar/mf4.svg</file>
+        <file>icons/toolbar/open-project.svg</file>
+        <file>icons/toolbar/project-setup.svg</file>
+        <file>icons/toolbar/sessions.svg</file>
+        <file>icons/toolbar/settings.svg</file>
         <file>icons/whats-new/ai.svg</file>
         <file>icons/whats-new/alarms.svg</file>
         <file>icons/whats-new/connectivity.svg</file>
@@ -506,31 +587,6 @@
         <file>icons/whats-new/transforms.svg</file>
         <file>icons/whats-new/widgets.svg</file>
         <file>icons/whats-new/workspaces.svg</file>
-        <file>icons/taskbar/clock.svg</file>
-        <file>icons/taskbar/console.svg</file>
-        <file>icons/taskbar/file-transmission.svg</file>
-        <file>icons/taskbar/notifications.svg</file>
-        <file>icons/taskbar/pause.svg</file>
-        <file>icons/taskbar/resume.svg</file>
-        <file>icons/taskbar/settings.svg</file>
-        <file>icons/taskbar/stopwatch.svg</file>
-        <file>icons/toolbar/about.svg</file>
-        <file>icons/toolbar/activate.svg</file>
-        <file>icons/toolbar/connect.svg</file>
-        <file>icons/toolbar/console.svg</file>
-        <file>icons/toolbar/csv.svg</file>
-        <file>icons/toolbar/deepwiki.svg</file>
-        <file>icons/toolbar/deploy.svg</file>
-        <file>icons/toolbar/device-setup.svg</file>
-        <file>icons/toolbar/disconnect.svg</file>
-        <file>icons/toolbar/examples.svg</file>
-        <file>icons/toolbar/extensions.svg</file>
-        <file>icons/toolbar/help.svg</file>
-        <file>icons/toolbar/mf4.svg</file>
-        <file>icons/toolbar/open-project.svg</file>
-        <file>icons/toolbar/project-setup.svg</file>
-        <file>icons/toolbar/sessions.svg</file>
-        <file>icons/toolbar/settings.svg</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/dialog-banner.svg</file>
@@ -560,12 +616,12 @@
         <file>logo/start-dark.svg</file>
         <file>logo/start.svg</file>
         <file>messages/gpl3/Welcome_AR.txt</file>
-        <file>messages/gpl3/Welcome_HE.txt</file>
         <file>messages/gpl3/Welcome_CZ.txt</file>
         <file>messages/gpl3/Welcome_DE.txt</file>
         <file>messages/gpl3/Welcome_EN.txt</file>
         <file>messages/gpl3/Welcome_ES.txt</file>
         <file>messages/gpl3/Welcome_FR.txt</file>
+        <file>messages/gpl3/Welcome_HE.txt</file>
         <file>messages/gpl3/Welcome_HI.txt</file>
         <file>messages/gpl3/Welcome_IT.txt</file>
         <file>messages/gpl3/Welcome_JA.txt</file>
@@ -581,12 +637,12 @@
         <file>messages/gpl3/Welcome_VI.txt</file>
         <file>messages/gpl3/Welcome_ZH.txt</file>
         <file>messages/pro/Welcome_AR.txt</file>
-        <file>messages/pro/Welcome_HE.txt</file>
         <file>messages/pro/Welcome_CZ.txt</file>
         <file>messages/pro/Welcome_DE.txt</file>
         <file>messages/pro/Welcome_EN.txt</file>
         <file>messages/pro/Welcome_ES.txt</file>
         <file>messages/pro/Welcome_FR.txt</file>
+        <file>messages/pro/Welcome_HE.txt</file>
         <file>messages/pro/Welcome_HI.txt</file>
         <file>messages/pro/Welcome_IT.txt</file>
         <file>messages/pro/Welcome_JA.txt</file>
@@ -602,12 +658,12 @@
         <file>messages/pro/Welcome_VI.txt</file>
         <file>messages/pro/Welcome_ZH.txt</file>
         <file>messages/trial/Welcome_AR.txt</file>
-        <file>messages/trial/Welcome_HE.txt</file>
         <file>messages/trial/Welcome_CZ.txt</file>
         <file>messages/trial/Welcome_DE.txt</file>
         <file>messages/trial/Welcome_EN.txt</file>
         <file>messages/trial/Welcome_ES.txt</file>
         <file>messages/trial/Welcome_FR.txt</file>
+        <file>messages/trial/Welcome_HE.txt</file>
         <file>messages/trial/Welcome_HI.txt</file>
         <file>messages/trial/Welcome_IT.txt</file>
         <file>messages/trial/Welcome_JA.txt</file>
@@ -623,6 +679,43 @@
         <file>messages/trial/Welcome_VI.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
+        <file>scripts/control/default_template.js</file>
+        <file>scripts/mqtt/js/aws_iot.js</file>
+        <file>scripts/mqtt/js/home_assistant.js</file>
+        <file>scripts/mqtt/js/influxdb.js</file>
+        <file>scripts/mqtt/js/sparkplug_b.js</file>
+        <file>scripts/mqtt/lua/aws_iot.lua</file>
+        <file>scripts/mqtt/lua/home_assistant.lua</file>
+        <file>scripts/mqtt/lua/influxdb.lua</file>
+        <file>scripts/mqtt/lua/sparkplug_b.lua</file>
+        <file>scripts/mqtt/templates.json</file>
+        <file>scripts/native/at_commands.md</file>
+        <file>scripts/native/base64_encoded.md</file>
+        <file>scripts/native/batched_sensor_data.md</file>
+        <file>scripts/native/binary_tlv.md</file>
+        <file>scripts/native/can_signal_map.md</file>
+        <file>scripts/native/cobs_encoded.md</file>
+        <file>scripts/native/delimited.md</file>
+        <file>scripts/native/fixed_width.md</file>
+        <file>scripts/native/hexadecimal_bytes.md</file>
+        <file>scripts/native/ini_config.md</file>
+        <file>scripts/native/json_data.md</file>
+        <file>scripts/native/key_value.md</file>
+        <file>scripts/native/mavlink.md</file>
+        <file>scripts/native/messagepack.md</file>
+        <file>scripts/native/modbus.md</file>
+        <file>scripts/native/modbus_register_map.md</file>
+        <file>scripts/native/nmea_0183.md</file>
+        <file>scripts/native/nmea_2000.md</file>
+        <file>scripts/native/raw_bytes.md</file>
+        <file>scripts/native/rtcm_corrections.md</file>
+        <file>scripts/native/sirf_binary.md</file>
+        <file>scripts/native/slip_encoded.md</file>
+        <file>scripts/native/time_series_2d.md</file>
+        <file>scripts/native/ubx_ublox.md</file>
+        <file>scripts/native/url_encoded.md</file>
+        <file>scripts/native/xml_data.md</file>
+        <file>scripts/native/yaml_data.md</file>
         <file>scripts/output/at_command.js</file>
         <file>scripts/output/binary_packet.js</file>
         <file>scripts/output/canbus_frame.js</file>
@@ -639,19 +732,6 @@
         <file>scripts/output/simple_command.js</file>
         <file>scripts/output/slcan_command.js</file>
         <file>scripts/output/templates.json</file>
-        <file>scripts/control/default_template.js</file>
-        <file>api/SerialStudio.js</file>
-        <file>api/SerialStudio.lua</file>
-        <file>api/sdk-symbols.json</file>
-        <file>scripts/mqtt/js/aws_iot.js</file>
-        <file>scripts/mqtt/js/home_assistant.js</file>
-        <file>scripts/mqtt/js/influxdb.js</file>
-        <file>scripts/mqtt/js/sparkplug_b.js</file>
-        <file>scripts/mqtt/lua/aws_iot.lua</file>
-        <file>scripts/mqtt/lua/home_assistant.lua</file>
-        <file>scripts/mqtt/lua/influxdb.lua</file>
-        <file>scripts/mqtt/lua/sparkplug_b.lua</file>
-        <file>scripts/mqtt/templates.json</file>
         <file>scripts/painter/audio_meter.js</file>
         <file>scripts/painter/bar_peak_hold.js</file>
         <file>scripts/painter/clock_face.js</file>
@@ -668,9 +748,9 @@
         <file>scripts/painter/sparklines.js</file>
         <file>scripts/painter/status_grid.js</file>
         <file>scripts/painter/strip_chart.js</file>
+        <file>scripts/painter/templates.json</file>
         <file>scripts/painter/vector_field.js</file>
         <file>scripts/painter/xy_scope.js</file>
-        <file>scripts/painter/templates.json</file>
         <file>scripts/parser/js/at_commands.js</file>
         <file>scripts/parser/js/base64_encoded.js</file>
         <file>scripts/parser/js/batched_sensor_data.js</file>
@@ -727,33 +807,6 @@
         <file>scripts/parser/lua/url_encoded.lua</file>
         <file>scripts/parser/lua/xml_data.lua</file>
         <file>scripts/parser/lua/yaml_data.lua</file>
-        <file>scripts/native/at_commands.md</file>
-        <file>scripts/native/base64_encoded.md</file>
-        <file>scripts/native/batched_sensor_data.md</file>
-        <file>scripts/native/binary_tlv.md</file>
-        <file>scripts/native/can_signal_map.md</file>
-        <file>scripts/native/cobs_encoded.md</file>
-        <file>scripts/native/delimited.md</file>
-        <file>scripts/native/fixed_width.md</file>
-        <file>scripts/native/hexadecimal_bytes.md</file>
-        <file>scripts/native/ini_config.md</file>
-        <file>scripts/native/json_data.md</file>
-        <file>scripts/native/key_value.md</file>
-        <file>scripts/native/mavlink.md</file>
-        <file>scripts/native/messagepack.md</file>
-        <file>scripts/native/modbus.md</file>
-        <file>scripts/native/modbus_register_map.md</file>
-        <file>scripts/native/nmea_0183.md</file>
-        <file>scripts/native/nmea_2000.md</file>
-        <file>scripts/native/raw_bytes.md</file>
-        <file>scripts/native/rtcm_corrections.md</file>
-        <file>scripts/native/sirf_binary.md</file>
-        <file>scripts/native/slip_encoded.md</file>
-        <file>scripts/native/time_series_2d.md</file>
-        <file>scripts/native/ubx_ublox.md</file>
-        <file>scripts/native/url_encoded.md</file>
-        <file>scripts/native/xml_data.md</file>
-        <file>scripts/native/yaml_data.md</file>
         <file>scripts/parser/templates.json</file>
         <file>scripts/transforms/js/absolute_value.js</file>
         <file>scripts/transforms/js/accumulator.js</file>
@@ -833,58 +886,15 @@
         <file>themes/default.json</file>
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
-        <file>markdown-viewer.html</file>
+        <file>vendor/highlight-github-dark.min.css</file>
+        <file>vendor/highlight-github.min.css</file>
+        <file>vendor/highlight.LICENSE</file>
+        <file>vendor/highlight.min.js</file>
+        <file>vendor/sanitize.js</file>
+        <file>vendor/sanitize.LICENSE</file>
+        <file>vendor/showdown.LICENSE</file>
+        <file>vendor/showdown.min.js</file>
         <file>chat-viewer.html</file>
-        <file>icons/dashboard-buttons/camcoder.svg</file>
-        <file>icons/project-editor/actions/edit-code.svg</file>
-        <file>icons/project-editor/treeview/painter.svg</file>
-        <file>icons/toolbar/ai.svg</file>
-        <file>icons/project-editor/toolbar/ai.svg</file>
-        <file>ai/command_safety.json</file>
-        <file>ai/docs/frame_parser_js.md</file>
-        <file>ai/docs/frame_parser_lua.md</file>
-        <file>ai/docs/transform_js.md</file>
-        <file>ai/docs/transform_lua.md</file>
-        <file>ai/docs/output_widget_js.md</file>
-        <file>ai/docs/painter_js.md</file>
-        <file>ai/docs/control_script_js.md</file>
-        <file>ai/templates/manifest.json</file>
-        <file>ai/templates/blank.json</file>
-        <file>ai/templates/imu_uart.json</file>
-        <file>ai/templates/gps_uart_nmea.json</file>
-        <file>ai/templates/scope_multichannel_uart.json</file>
-        <file>ai/templates/telemetry_udp.json</file>
-        <file>ai/templates/mqtt_subscriber.json</file>
-        <file>ai/skills/tool_discovery.md</file>
-        <file>ai/skills/behavioral.md</file>
-        <file>ai/skills/project_basics.md</file>
-        <file>ai/skills/frame_parsers.md</file>
-        <file>ai/skills/transforms.md</file>
-        <file>ai/skills/painter.md</file>
-        <file>ai/skills/output_widgets.md</file>
-        <file>ai/skills/mqtt.md</file>
-        <file>ai/skills/can_modbus.md</file>
-        <file>ai/skills/filesystem.md</file>
-        <file>ai/skills/dashboard_layout.md</file>
-        <file>ai/skills/debugging.md</file>
-        <file>ai/skills/api_semantics.md</file>
-        <file>ai/skills/workspace_design.md</file>
-        <file>ai/skills/control_script.md</file>
-        <file>ai/search_index.json</file>
-        <file>icons/taskbar/ai.svg</file>
-        <file>icons/project-editor/toolbar/protobuf.svg</file>
-        <file>icons/project-editor/treeview/save-warning.svg</file>
-        <file>icons/toolbar/extensions-small.svg</file>
-        <file>icons/buttons/workspace-settings.svg</file>
-        <file>icons/buttons/add-workspace.svg</file>
-        <file>icons/buttons/mqtt-off.svg</file>
-        <file>icons/buttons/mqtt-on.svg</file>
-        <file>icons/buttons/help.svg</file>
-        <file>ai/build_search_index.py</file>
-        <file>api/api-schema.json</file>
-        <file>api/prelude.js</file>
-        <file>api/prelude.lua</file>
-        <file>icons/project-editor/treeview/webview.svg</file>
-        <file>icons/toolbar/add-gauge.svg</file>
+        <file>markdown-viewer.html</file>
     </qresource>
 </RCC>

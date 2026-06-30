@@ -58,6 +58,7 @@ DataModel::DataTableStore::DataTableStore() : m_initialized(false) {}
  * @brief Pre-allocates registers for user tables and the system dataset table.
  */
 void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTables,
+                                           const std::vector<TableFolder>& tableFolders,
                                            const Frame& templateFrame)
 {
   clear();
@@ -74,6 +75,8 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
   m_storage.reserve(totalRegs);
 
   for (const auto& table : userTables) {
+    const QString tablePath = tableFullPath(tableFolders, table.parentFolderId, table.name);
+
     std::vector<QString> regNames;
     regNames.reserve(table.registers.size());
 
@@ -83,11 +86,11 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
       if (!defVal.isNumeric)
         defVal.stringValue = reg.defaultValue.toString();
 
-      addRegister(table.name, reg.name, defVal, reg.type);
+      addRegister(tablePath, reg.name, defVal, reg.type);
       regNames.push_back(reg.name);
     }
 
-    m_tableRegNames.emplace_back(table.name, std::move(regNames));
+    m_tableRegNames.emplace_back(tablePath, std::move(regNames));
   }
 
   std::vector<QString> sysRegNames;

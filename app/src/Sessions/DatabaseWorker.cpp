@@ -20,6 +20,7 @@
 #  include <QFile>
 #  include <QFileInfo>
 #  include <QMap>
+#  include <QSet>
 #  include <QSqlError>
 #  include <QSqlQuery>
 #  include <QStringList>
@@ -693,7 +694,8 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
  */
 void Sessions::DatabaseWorker::runReportDataLoad(int sessionId,
                                                  bool includeCharts,
-                                                 int chartMaxSamples)
+                                                 int chartMaxSamples,
+                                                 const QVariantList& selectedUniqueIds)
 {
   auto payload       = std::make_shared<ReportPayload>();
   payload->sessionId = sessionId;
@@ -705,7 +707,12 @@ void Sessions::DatabaseWorker::runReportDataLoad(int sessionId,
     return;
   }
 
-  payload->data = ReportData::buildFromSession(m_db, sessionId);
+  QSet<int> selected;
+  selected.reserve(selectedUniqueIds.size());
+  for (const auto& v : selectedUniqueIds)
+    selected.insert(v.toInt());
+
+  payload->data = ReportData::buildFromSession(m_db, sessionId, selected);
   if (!payload->data.valid) {
     payload->error = tr("Could not load session data");
     Q_EMIT reportDataReady(payload);
@@ -713,10 +720,47 @@ void Sessions::DatabaseWorker::runReportDataLoad(int sessionId,
   }
 
   if (includeCharts)
-    payload->series = loadChartSeries(m_db, sessionId, chartMaxSamples);
+    payload->series = loadChartSeries(m_db, sessionId, chartMaxSamples, selected);
 
   payload->ok = true;
   Q_EMIT reportDataReady(payload);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Dataset enumeration for the report selection UI
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Enumerates a session's recorded datasets and ships them to the GUI thread.
+ */
+void Sessions::DatabaseWorker::runDatasetListLoad(int sessionId)
+{
+  QVariantList datasets;
+  if (!m_db.isOpen()) {
+    Q_EMIT datasetListReady(sessionId, datasets);
+    return;
+  }
+
+  QSqlQuery colQ(m_db);
+  colQ.prepare("SELECT unique_id, group_title, title, units, source_title FROM columns "
+               "WHERE session_id = ? ORDER BY column_id ASC");
+  colQ.bindValue(0, sessionId);
+  if (!colQ.exec()) {
+    Q_EMIT datasetListReady(sessionId, datasets);
+    return;
+  }
+
+  while (colQ.next()) {
+    QVariantMap entry;
+    entry["uniqueId"]    = colQ.value(0).toInt();
+    entry["group"]       = colQ.value(1).toString();
+    entry["title"]       = colQ.value(2).toString();
+    entry["units"]       = colQ.value(3).toString();
+    entry["sourceTitle"] = colQ.value(4).toString();
+    datasets.append(entry);
+  }
+
+  Q_EMIT datasetListReady(sessionId, datasets);
 }
 
 //--------------------------------------------------------------------------------------------------

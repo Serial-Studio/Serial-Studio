@@ -65,6 +65,95 @@
 #endif
 
 /**
+ * @brief Returns true when a folder with @p id exists in any folder vector.
+ */
+template<typename Folder>
+static bool folderExists(const std::vector<Folder>& folders, int id)
+{
+  return std::any_of(
+    folders.begin(), folders.end(), [id](const auto& f) { return f.folderId == id; });
+}
+
+/**
+ * @brief Returns true when @p candidate is @p folderId or sits inside its subtree.
+ */
+template<typename Folder>
+static bool folderIsSelfOrDescendant(const std::vector<Folder>& folders,
+                                     int folderId,
+                                     int candidate)
+{
+  const int kMax = static_cast<int>(folders.size());
+  int p          = candidate;
+  for (int i = 0; i <= kMax && p != -1; ++i) {
+    if (p == folderId)
+      return true;
+
+    int parent = -1;
+    for (const auto& f : folders)
+      if (f.folderId == p) {
+        parent = f.parentFolderId;
+        break;
+      }
+
+    p = parent;
+  }
+
+  return false;
+}
+
+/**
+ * @brief Detaches cyclic or dangling folder parents and resets entities pointing at a missing
+ *        folder. Generic over the folder + owning-entity types (workspace/group/table).
+ */
+template<typename Folder, typename Entity>
+static void sanitizeFolderTree(std::vector<Folder>& folders, std::vector<Entity>& entities)
+{
+  QHash<int, int> parentOf;
+  QSet<int> validFolders;
+  for (const auto& f : std::as_const(folders)) {
+    validFolders.insert(f.folderId);
+    parentOf.insert(f.folderId, f.parentFolderId);
+  }
+
+  for (auto& f : folders) {
+    if (f.parentFolderId != -1 && !validFolders.contains(f.parentFolderId)) {
+      f.parentFolderId = -1;
+      continue;
+    }
+
+    QSet<int> seen;
+    int p          = f.parentFolderId;
+    const int kMax = static_cast<int>(folders.size());
+    for (int i = 0; i < kMax && p != -1; ++i) {
+      if (p == f.folderId || seen.contains(p)) {
+        f.parentFolderId = -1;
+        break;
+      }
+
+      seen.insert(p);
+      p = parentOf.value(p, -1);
+    }
+  }
+
+  for (auto& e : entities)
+    if (e.parentFolderId != -1 && !validFolders.contains(e.parentFolderId))
+      e.parentFolderId = -1;
+}
+
+/**
+ * @brief Serializes any folder vector to a JSON array.
+ */
+template<typename Folder>
+static QJsonArray serializeFolders(const std::vector<Folder>& folders)
+{
+  QJsonArray arr;
+  for (const auto& f : std::as_const(folders))
+    arr.append(DataModel::serialize(f));
+
+  return arr;
+}
+
+/**
  * @brief Returns a unique title for a duplicated item using a numbered " (N)" suffix.
  */
 static QString nextDuplicateTitle(const QString& title, const QStringList& taken)
@@ -1163,6 +1252,33 @@ const std::vector<DataModel::Workspace>& DataModel::ProjectModel::editorWorkspac
 }
 
 /**
+ * @brief Returns the editor-owned workspace folder list.
+ */
+const std::vector<DataModel::WorkspaceFolder>& DataModel::ProjectModel::editorWorkspaceFolders()
+  const noexcept
+{
+  return m_workspaceFolders;
+}
+
+/**
+ * @brief Returns the editor-owned group folder list.
+ */
+const std::vector<DataModel::GroupFolder>& DataModel::ProjectModel::editorGroupFolders()
+  const noexcept
+{
+  return m_groupFolders;
+}
+
+/**
+ * @brief Returns the editor-owned table folder list.
+ */
+const std::vector<DataModel::TableFolder>& DataModel::ProjectModel::editorTableFolders()
+  const noexcept
+{
+  return m_tableFolders;
+}
+
+/**
  * @brief Returns the workspace list currently rendered by the dashboard.
  */
 const std::vector<DataModel::Workspace>& DataModel::ProjectModel::activeWorkspaces() const
@@ -1795,6 +1911,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   json.insert(Keys::Groups, groupArray);
 
+  if (!m_groupFolders.empty())
+    json.insert(Keys::GroupFolders, serializeFolders(m_groupFolders));
+
   QJsonArray actionsArray;
   for (const auto& action : std::as_const(m_actions))
     actionsArray.append(DataModel::serialize(action));
@@ -1815,6 +1934,13 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
       workspacesArray.append(DataModel::serialize(ws));
 
     json.insert(Keys::Workspaces, workspacesArray);
+
+    QJsonArray foldersArray;
+    for (const auto& folder : std::as_const(m_workspaceFolders))
+      foldersArray.append(DataModel::serialize(folder));
+
+    if (!foldersArray.isEmpty())
+      json.insert(Keys::WorkspaceFolders, foldersArray);
   }
 
   if (!m_hiddenGroupIds.isEmpty()) {
@@ -1832,6 +1958,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
     json.insert(Keys::Tables, tablesArray);
   }
+
+  if (!m_tableFolders.empty())
+    json.insert(Keys::TableFolders, serializeFolders(m_tableFolders));
 
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);
@@ -1911,6 +2040,8 @@ void DataModel::ProjectModel::newJsonFile()
   m_workspaces.clear();
   m_autoSnapshot.clear();
   m_tables.clear();
+  m_groupFolders.clear();
+  m_tableFolders.clear();
   m_hiddenGroupIds.clear();
   m_customizeWorkspaces = false;
 
@@ -2707,6 +2838,9 @@ void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject&
   m_treeExpansion  = json.value(Keys::TreeExpansion).toObject();
 
   m_workspaces.clear();
+  m_workspaceFolders.clear();
+  m_groupFolders.clear();
+  m_tableFolders.clear();
   m_customizeWorkspaces = json.value(Keys::CustomizeWorkspaces).toBool(false);
 
   if (m_customizeWorkspaces && json.contains(Keys::Workspaces)) {
@@ -2743,6 +2877,28 @@ void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject&
     }
   }
 
+  if (m_customizeWorkspaces && json.contains(Keys::WorkspaceFolders)) {
+    const auto folderArray = json.value(Keys::WorkspaceFolders).toArray();
+    for (const auto& val : folderArray) {
+      DataModel::WorkspaceFolder folder;
+      if (DataModel::read(folder, val.toObject()))
+        m_workspaceFolders.push_back(folder);
+    }
+  }
+
+  sanitizeWorkspaceFolders();
+
+  if (json.contains(Keys::GroupFolders)) {
+    const auto folderArray = json.value(Keys::GroupFolders).toArray();
+    for (const auto& val : folderArray) {
+      DataModel::GroupFolder folder;
+      if (DataModel::read(folder, val.toObject()))
+        m_groupFolders.push_back(folder);
+    }
+  }
+
+  sanitizeGroupFolders();
+
   m_hiddenGroupIds.clear();
   if (json.contains(Keys::HiddenGroups)) {
     const auto hiddenArray = json.value(Keys::HiddenGroups).toArray();
@@ -2759,6 +2915,17 @@ void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject&
         m_tables.push_back(table);
     }
   }
+
+  if (json.contains(Keys::TableFolders)) {
+    const auto folderArray = json.value(Keys::TableFolders).toArray();
+    for (const auto& val : folderArray) {
+      DataModel::TableFolder folder;
+      if (DataModel::read(folder, val.toObject()))
+        m_tableFolders.push_back(folder);
+    }
+  }
+
+  sanitizeTableFolders();
 
   m_mqttPublisher = json.value(Keys::MqttPublisher).toObject();
   Q_EMIT mqttPublisherChanged();
@@ -4290,7 +4457,8 @@ void DataModel::ProjectModel::addAction(int sourceId)
  */
 void DataModel::ProjectModel::addGroup(const QString& title,
                                        const SerialStudio::GroupWidget widget,
-                                       int sourceId)
+                                       int sourceId,
+                                       int parentFolderId)
 {
   int count        = 1;
   QString newTitle = title;
@@ -4321,6 +4489,8 @@ void DataModel::ProjectModel::addGroup(const QString& title,
   group.title    = newTitle;
   group.groupId  = m_groups.size();
   group.uniqueId = allocateUniqueId();
+  group.parentFolderId =
+    (parentFolderId != -1 && folderExists(m_groupFolders, parentFolderId)) ? parentFolderId : -1;
 
   if (sourceId >= 0)
     group.sourceId = sourceId;
@@ -4933,72 +5103,95 @@ void DataModel::ProjectModel::reorderWorkspaces(const QList<int>& userWorkspaceI
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Adds a new empty data table with a unique name derived from @p name.
+ * @brief Returns a table's full folder-qualified path (the editor handle + script accessor key).
  */
-QString DataModel::ProjectModel::addTable(const QString& name)
+QString DataModel::ProjectModel::tablePathFor(const DataModel::TableDef& table) const
 {
-  QString base = name.simplified();
+  return DataModel::tableFullPath(m_tableFolders, table.parentFolderId, table.name);
+}
+
+/**
+ * @brief Resolves a table by its full folder-qualified path; returns -1 when not found.
+ */
+int DataModel::ProjectModel::findTableIndexByPath(const QString& tablePath) const
+{
+  for (size_t i = 0; i < m_tables.size(); ++i)
+    if (tablePathFor(m_tables[i]) == tablePath)
+      return static_cast<int>(i);
+
+  return -1;
+}
+
+/**
+ * @brief Adds a new empty data table with a leaf name unique within @p parentFolderId; returns its
+ *        full folder-qualified path.
+ */
+QString DataModel::ProjectModel::addTable(const QString& name, int parentFolderId)
+{
+  if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
+    parentFolderId = -1;
+
+  QString base = name.simplified().remove(QLatin1Char('/'));
   if (base.isEmpty())
     base = tr("Shared Table");
 
   QString unique     = base;
   int suffix         = 2;
-  const auto hasName = [this](const QString& n) {
+  const auto hasLeaf = [this, parentFolderId](const QString& n) {
     for (const auto& t : m_tables)
-      if (t.name == n)
+      if (t.parentFolderId == parentFolderId && t.name == n)
         return true;
 
     return false;
   };
 
-  while (hasName(unique))
+  while (hasLeaf(unique))
     unique = QStringLiteral("%1 %2").arg(base, QString::number(suffix++));
 
   DataModel::TableDef table;
-  table.name = unique;
+  table.name           = unique;
+  table.parentFolderId = parentFolderId;
   m_tables.push_back(table);
   setModified(true);
   Q_EMIT tablesChanged();
-  return unique;
+  return tablePathFor(table);
 }
 
 /**
- * @brief Deletes the table with the given @p name.
+ * @brief Deletes the table with the given full path.
  */
 void DataModel::ProjectModel::deleteTable(const QString& name)
 {
-  auto it = std::find_if(
-    m_tables.begin(), m_tables.end(), [&name](const auto& t) { return t.name == name; });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(name);
+  if (idx < 0)
     return;
 
-  m_tables.erase(it);
+  m_tables.erase(m_tables.begin() + idx);
   setModified(true);
   Q_EMIT tablesChanged();
 }
 
 /**
- * @brief Renames a table (no-op if target name already exists).
+ * @brief Renames a table's leaf name (no-op if the new leaf collides within the same folder).
  */
 void DataModel::ProjectModel::renameTable(const QString& oldName, const QString& newName)
 {
-  const QString n = newName.simplified();
+  const QString n = newName.simplified().remove(QLatin1Char('/'));
   if (n.isEmpty())
     return;
 
-  for (const auto& t : m_tables)
-    if (t.name == n && t.name != oldName)
+  const int idx = findTableIndexByPath(oldName);
+  if (idx < 0)
+    return;
+
+  const int parent = m_tables[static_cast<size_t>(idx)].parentFolderId;
+  for (size_t i = 0; i < m_tables.size(); ++i)
+    if (static_cast<int>(i) != idx && m_tables[i].parentFolderId == parent && m_tables[i].name == n)
       return;
 
-  for (auto& t : m_tables) {
-    if (t.name == oldName) {
-      t.name = n;
-      setModified(true);
-      Q_EMIT tablesChanged();
-      return;
-    }
-  }
+  m_tables[static_cast<size_t>(idx)].name = n;
+  setModified(true);
+  Q_EMIT tablesChanged();
 }
 
 /**
@@ -5009,11 +5202,11 @@ void DataModel::ProjectModel::addRegister(const QString& table,
                                           bool computed,
                                           const QVariant& defaultValue)
 {
-  auto it = std::find_if(
-    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(table);
+  if (idx < 0)
     return;
+
+  auto it = m_tables.begin() + idx;
 
   QString base = registerName.simplified();
   if (base.isEmpty())
@@ -5047,11 +5240,11 @@ void DataModel::ProjectModel::addRegister(const QString& table,
  */
 void DataModel::ProjectModel::deleteRegister(const QString& table, const QString& registerName)
 {
-  auto it = std::find_if(
-    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(table);
+  if (idx < 0)
     return;
+
+  auto it = m_tables.begin() + idx;
 
   auto rit = std::find_if(it->registers.begin(),
                           it->registers.end(),
@@ -5077,11 +5270,11 @@ bool DataModel::ProjectModel::updateRegister(const QString& table,
                                              bool computed,
                                              const QVariant& defaultValue)
 {
-  auto it = std::find_if(
-    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(table);
+  if (idx < 0)
     return false;
+
+  auto it = m_tables.begin() + idx;
 
   const QString n = newName.simplified();
   if (n.isEmpty())
@@ -5113,11 +5306,11 @@ bool DataModel::ProjectModel::updateRegister(const QString& table,
 QVariantList DataModel::ProjectModel::registersForTable(const QString& table) const
 {
   QVariantList result;
-  auto it = std::find_if(
-    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(table);
+  if (idx < 0)
     return result;
+
+  auto it = m_tables.begin() + idx;
 
   for (const auto& r : it->registers) {
     QVariantMap row;
@@ -5161,11 +5354,17 @@ void DataModel::ProjectModel::promptAddTable()
  */
 void DataModel::ProjectModel::promptRenameTable(const QString& oldName)
 {
+  const int idx = findTableIndexByPath(oldName);
+  if (idx < 0)
+    return;
+
+  const QString currentLeaf = m_tables[static_cast<size_t>(idx)].name;
+
   bool ok            = false;
   const QString name = QInputDialog::getText(
-    nullptr, tr("Rename Table"), tr("Name:"), QLineEdit::Normal, oldName, &ok);
+    nullptr, tr("Rename Table"), tr("Name:"), QLineEdit::Normal, currentLeaf, &ok);
 
-  if (!ok || name.trimmed().isEmpty() || name.trimmed() == oldName)
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == currentLeaf)
     return;
 
   renameTable(oldName, name.trimmed());
@@ -5301,16 +5500,15 @@ void DataModel::ProjectModel::promptRenameRegister(const QString& table,
   if (!ok || name.trimmed().isEmpty() || name.trimmed() == registerName)
     return;
 
-  for (const auto& t : m_tables) {
-    if (t.name != table)
-      continue;
+  const int idx = findTableIndexByPath(table);
+  if (idx < 0)
+    return;
 
-    for (const auto& r : t.registers) {
-      if (r.name == registerName) {
-        (void)updateRegister(
-          table, registerName, name.trimmed(), r.type == RegisterType::Computed, r.defaultValue);
-        return;
-      }
+  for (const auto& r : m_tables[static_cast<size_t>(idx)].registers) {
+    if (r.name == registerName) {
+      (void)updateRegister(
+        table, registerName, name.trimmed(), r.type == RegisterType::Computed, r.defaultValue);
+      return;
     }
   }
 }
@@ -5323,13 +5521,11 @@ void DataModel::ProjectModel::confirmDeleteTable(const QString& name)
   if (name.isEmpty())
     return;
 
-  int registerCount = 0;
-  for (const auto& t : m_tables) {
-    if (t.name == name) {
-      registerCount = static_cast<int>(t.registers.size());
-      break;
-    }
-  }
+  const int idx      = findTableIndexByPath(name);
+  const QString leaf = idx >= 0 ? m_tables[static_cast<size_t>(idx)].name : name;
+  int registerCount  = 0;
+  if (idx >= 0)
+    registerCount = static_cast<int>(m_tables[static_cast<size_t>(idx)].registers.size());
 
   const QString informative =
     registerCount == 0
@@ -5337,7 +5533,7 @@ void DataModel::ProjectModel::confirmDeleteTable(const QString& name)
       : tr("This removes %1 register(s) along with the table. This action cannot be undone.")
           .arg(registerCount);
 
-  const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(name),
+  const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(leaf),
                                                      informative,
                                                      QMessageBox::Warning,
                                                      tr("Delete Table"),
@@ -5374,17 +5570,16 @@ void DataModel::ProjectModel::confirmDeleteRegister(const QString& table,
  */
 void DataModel::ProjectModel::exportTableToCsv(const QString& tableName)
 {
-  const auto it = std::find_if(m_tables.begin(), m_tables.end(), [&](const DataModel::TableDef& t) {
-    return t.name == tableName;
-  });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(tableName);
+  if (idx < 0)
     return;
+
+  const auto it = m_tables.begin() + idx;
 
   const auto path = QFileDialog::getSaveFileName(
     nullptr,
     tr("Export Table"),
-    QStringLiteral("%1/%2.csv").arg(Misc::WorkspaceManager::instance().path("CSV"), tableName),
+    QStringLiteral("%1/%2.csv").arg(Misc::WorkspaceManager::instance().path("CSV"), it->name),
     tr("CSV files (*.csv)"));
 
   if (path.isEmpty())
@@ -5417,12 +5612,11 @@ void DataModel::ProjectModel::exportTableToCsv(const QString& tableName)
  */
 void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
 {
-  auto it = std::find_if(m_tables.begin(), m_tables.end(), [&](const DataModel::TableDef& t) {
-    return t.name == tableName;
-  });
-
-  if (it == m_tables.end())
+  const int idx = findTableIndexByPath(tableName);
+  if (idx < 0)
     return;
+
+  auto it = m_tables.begin() + idx;
 
   const auto path = QFileDialog::getOpenFileName(nullptr,
                                                  tr("Import Table"),
@@ -5649,6 +5843,26 @@ QString DataModel::ProjectModel::workspaceTitle(int workspaceId) const
 }
 
 /**
+ * @brief Returns the icon of a workspace, or empty if not found.
+ */
+QString DataModel::ProjectModel::workspaceIcon(int workspaceId) const
+{
+  for (const auto& ws : m_workspaces)
+    if (ws.workspaceId == workspaceId)
+      return ws.icon;
+
+  return QString();
+}
+
+/**
+ * @brief Convenience slot that sets only the icon of a workspace.
+ */
+void DataModel::ProjectModel::setWorkspaceIcon(int workspaceId, const QString& icon)
+{
+  updateWorkspace(workspaceId, QString(), icon, QString(), false, true, false);
+}
+
+/**
  * @brief Prompts for a new workspace name and creates it. The new workspace
  *        is then selected in the project editor.
  */
@@ -5685,6 +5899,759 @@ void DataModel::ProjectModel::promptRenameWorkspace(int workspaceId)
   renameWorkspace(workspaceId, name.trimmed());
 }
 
+//--------------------------------------------------------------------------------------------------
+// Workspace folder CRUD
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the title of a workspace folder, or empty if not found.
+ */
+QString DataModel::ProjectModel::workspaceFolderTitle(int folderId) const
+{
+  for (const auto& f : m_workspaceFolders)
+    if (f.folderId == folderId)
+      return f.title;
+
+  return QString();
+}
+
+/**
+ * @brief Adds a folder under @p parentFolderId (-1 = top level); returns its new id.
+ */
+int DataModel::ProjectModel::addWorkspaceFolder(int parentFolderId, const QString& title)
+{
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return -1;
+
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  if (parentFolderId != -1 && !folderExists(m_workspaceFolders, parentFolderId))
+    parentFolderId = -1;
+
+  int newId = 1;
+  for (const auto& f : std::as_const(m_workspaceFolders))
+    if (f.folderId >= newId)
+      newId = f.folderId + 1;
+
+  DataModel::WorkspaceFolder folder;
+  folder.folderId       = newId;
+  folder.parentFolderId = parentFolderId;
+  folder.title          = title.simplified().isEmpty() ? tr("Folder") : title.simplified();
+  m_workspaceFolders.push_back(folder);
+
+  setModified(true);
+  Q_EMIT editorWorkspacesChanged();
+  Q_EMIT activeWorkspacesChanged();
+  return newId;
+}
+
+/**
+ * @brief Renames a workspace folder; ignores empty names.
+ */
+void DataModel::ProjectModel::renameWorkspaceFolder(int folderId, const QString& title)
+{
+  if (title.simplified().isEmpty())
+    return;
+
+  for (auto& f : m_workspaceFolders) {
+    if (f.folderId != folderId)
+      continue;
+
+    f.title = title.simplified();
+    setModified(true);
+    Q_EMIT editorWorkspacesChanged();
+    Q_EMIT activeWorkspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Deletes a folder, promoting its child folders and workspaces to its parent.
+ */
+void DataModel::ProjectModel::deleteWorkspaceFolder(int folderId)
+{
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  auto it = std::find_if(m_workspaceFolders.begin(),
+                         m_workspaceFolders.end(),
+                         [folderId](const auto& f) { return f.folderId == folderId; });
+  if (it == m_workspaceFolders.end())
+    return;
+
+  const int promoteTo = it->parentFolderId;
+  for (auto& f : m_workspaceFolders)
+    if (f.parentFolderId == folderId)
+      f.parentFolderId = promoteTo;
+
+  for (auto& ws : m_workspaces)
+    if (ws.parentFolderId == folderId)
+      ws.parentFolderId = promoteTo;
+
+  m_workspaceFolders.erase(it);
+
+  setModified(true);
+  Q_EMIT editorWorkspacesChanged();
+  Q_EMIT activeWorkspacesChanged();
+}
+
+/**
+ * @brief Files a workspace into folder @p parentFolderId (-1 = top level).
+ */
+void DataModel::ProjectModel::moveWorkspaceToFolder(int workspaceId, int parentFolderId)
+{
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  if (parentFolderId != -1 && !folderExists(m_workspaceFolders, parentFolderId))
+    return;
+
+  for (auto& ws : m_workspaces) {
+    if (ws.workspaceId != workspaceId)
+      continue;
+
+    if (ws.parentFolderId == parentFolderId)
+      return;
+
+    ws.parentFolderId = parentFolderId;
+    setModified(true);
+    Q_EMIT editorWorkspacesChanged();
+    Q_EMIT activeWorkspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Re-parents a folder, rejecting a cyclic move into its own subtree.
+ */
+void DataModel::ProjectModel::moveFolderToFolder(int folderId, int parentFolderId)
+{
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  if (parentFolderId != -1 && !folderExists(m_workspaceFolders, parentFolderId))
+    return;
+
+  if (folderIsSelfOrDescendant(m_workspaceFolders, folderId, parentFolderId))
+    return;
+
+  for (auto& f : m_workspaceFolders) {
+    if (f.folderId != folderId)
+      continue;
+
+    if (f.parentFolderId == parentFolderId)
+      return;
+
+    f.parentFolderId = parentFolderId;
+    setModified(true);
+    Q_EMIT editorWorkspacesChanged();
+    Q_EMIT activeWorkspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Reorders a workspace among its siblings in the same folder.
+ */
+void DataModel::ProjectModel::moveWorkspaceInFolder(int workspaceId, int direction)
+{
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  const int n = static_cast<int>(m_workspaces.size());
+  int from    = -1;
+  for (int i = 0; i < n; ++i)
+    if (m_workspaces[static_cast<size_t>(i)].workspaceId == workspaceId) {
+      from = i;
+      break;
+    }
+
+  if (from < 0)
+    return;
+
+  const int parent = m_workspaces[static_cast<size_t>(from)].parentFolderId;
+  const int step   = (direction < 0) ? -1 : 1;
+  for (int j = from + step; j >= 0 && j < n; j += step) {
+    if (m_workspaces[static_cast<size_t>(j)].parentFolderId != parent)
+      continue;
+
+    std::swap(m_workspaces[static_cast<size_t>(from)], m_workspaces[static_cast<size_t>(j)]);
+    setModified(true);
+    Q_EMIT editorWorkspacesChanged();
+    Q_EMIT activeWorkspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Reorders a folder among its sibling folders in the same parent.
+ */
+void DataModel::ProjectModel::moveWorkspaceFolderInParent(int folderId, int direction)
+{
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  const int n = static_cast<int>(m_workspaceFolders.size());
+  int from    = -1;
+  for (int i = 0; i < n; ++i)
+    if (m_workspaceFolders[static_cast<size_t>(i)].folderId == folderId) {
+      from = i;
+      break;
+    }
+
+  if (from < 0)
+    return;
+
+  const int parent = m_workspaceFolders[static_cast<size_t>(from)].parentFolderId;
+  const int step   = (direction < 0) ? -1 : 1;
+  for (int j = from + step; j >= 0 && j < n; j += step) {
+    if (m_workspaceFolders[static_cast<size_t>(j)].parentFolderId != parent)
+      continue;
+
+    std::swap(m_workspaceFolders[static_cast<size_t>(from)],
+              m_workspaceFolders[static_cast<size_t>(j)]);
+    setModified(true);
+    Q_EMIT editorWorkspacesChanged();
+    Q_EMIT activeWorkspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Prompts for a name and creates a folder under @p parentFolderId.
+ */
+void DataModel::ProjectModel::promptAddWorkspaceFolder(int parentFolderId)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Folder"), tr("Name:"), QLineEdit::Normal, tr("Folder"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  const int newId = addWorkspaceFolder(parentFolderId, name.trimmed());
+  QTimer::singleShot(
+    0, this, [newId] { DataModel::ProjectEditor::instance().selectWorkspaceFolder(newId); });
+}
+
+/**
+ * @brief Prompts for a name, creates a workspace, and files it into @p parentFolderId.
+ */
+void DataModel::ProjectModel::promptAddWorkspaceInFolder(int parentFolderId)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Workspace"), tr("Name:"), QLineEdit::Normal, tr("Workspace"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  const int newId = addWorkspace(name.trimmed());
+  moveWorkspaceToFolder(newId, parentFolderId);
+  QTimer::singleShot(
+    0, this, [newId] { DataModel::ProjectEditor::instance().selectWorkspace(newId); });
+}
+
+/**
+ * @brief Prompts for a new title for the given folder.
+ */
+void DataModel::ProjectModel::promptRenameWorkspaceFolder(int folderId)
+{
+  const QString current = workspaceFolderTitle(folderId);
+  if (current.isEmpty())
+    return;
+
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("Rename Folder"), tr("Name:"), QLineEdit::Normal, current, &ok);
+
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+    return;
+
+  renameWorkspaceFolder(folderId, name.trimmed());
+}
+
+/**
+ * @brief Confirms before deleting a folder; its contents move to the parent.
+ */
+void DataModel::ProjectModel::confirmDeleteWorkspaceFolder(int folderId)
+{
+  const QString name = workspaceFolderTitle(folderId);
+  if (name.isEmpty())
+    return;
+
+  const int choice = Misc::Utilities::showMessageBox(
+    tr("Delete folder \"%1\"?").arg(name),
+    tr("The folder is removed; its workspaces and sub-folders move up to the parent."),
+    QMessageBox::Warning,
+    tr("Delete Folder"),
+    QMessageBox::Yes | QMessageBox::Cancel,
+    QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Yes)
+    deleteWorkspaceFolder(folderId);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Group folder CRUD (editor-only organization; never reorders m_groups)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the title of a group folder, or empty if not found.
+ */
+QString DataModel::ProjectModel::groupFolderTitle(int folderId) const
+{
+  for (const auto& f : m_groupFolders)
+    if (f.folderId == folderId)
+      return f.title;
+
+  return QString();
+}
+
+/**
+ * @brief Adds a group folder under @p parentFolderId (-1 = top level); returns its new id.
+ */
+int DataModel::ProjectModel::addGroupFolder(int parentFolderId, const QString& title)
+{
+  if (parentFolderId != -1 && !folderExists(m_groupFolders, parentFolderId))
+    parentFolderId = -1;
+
+  int newId = 1;
+  for (const auto& f : std::as_const(m_groupFolders))
+    if (f.folderId >= newId)
+      newId = f.folderId + 1;
+
+  DataModel::GroupFolder folder;
+  folder.folderId       = newId;
+  folder.parentFolderId = parentFolderId;
+  folder.title          = title.simplified().isEmpty() ? tr("Folder") : title.simplified();
+  m_groupFolders.push_back(folder);
+
+  setModified(true);
+  Q_EMIT groupsChanged();
+  return newId;
+}
+
+/**
+ * @brief Renames a group folder; ignores empty names.
+ */
+void DataModel::ProjectModel::renameGroupFolder(int folderId, const QString& title)
+{
+  if (title.simplified().isEmpty())
+    return;
+
+  for (auto& f : m_groupFolders) {
+    if (f.folderId != folderId)
+      continue;
+
+    f.title = title.simplified();
+    setModified(true);
+    Q_EMIT groupsChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Deletes a group folder, promoting its child folders and groups to its parent.
+ */
+void DataModel::ProjectModel::deleteGroupFolder(int folderId)
+{
+  auto it = std::find_if(m_groupFolders.begin(), m_groupFolders.end(), [folderId](const auto& f) {
+    return f.folderId == folderId;
+  });
+  if (it == m_groupFolders.end())
+    return;
+
+  const int promoteTo = it->parentFolderId;
+  for (auto& f : m_groupFolders)
+    if (f.parentFolderId == folderId)
+      f.parentFolderId = promoteTo;
+
+  for (auto& g : m_groups)
+    if (g.parentFolderId == folderId)
+      g.parentFolderId = promoteTo;
+
+  m_groupFolders.erase(it);
+
+  setModified(true);
+  Q_EMIT groupsChanged();
+}
+
+/**
+ * @brief Files a group into folder @p parentFolderId (-1 = top level); never reorders m_groups.
+ */
+void DataModel::ProjectModel::moveGroupToFolder(int groupId, int parentFolderId)
+{
+  if (parentFolderId != -1 && !folderExists(m_groupFolders, parentFolderId))
+    return;
+
+  if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
+    return;
+
+  auto& group = m_groups[static_cast<size_t>(groupId)];
+  if (group.parentFolderId == parentFolderId)
+    return;
+
+  group.parentFolderId = parentFolderId;
+  setModified(true);
+  Q_EMIT groupsChanged();
+}
+
+/**
+ * @brief Re-parents a group folder, rejecting a cyclic move into its own subtree.
+ */
+void DataModel::ProjectModel::moveGroupFolderToFolder(int folderId, int parentFolderId)
+{
+  if (parentFolderId != -1 && !folderExists(m_groupFolders, parentFolderId))
+    return;
+
+  if (folderIsSelfOrDescendant(m_groupFolders, folderId, parentFolderId))
+    return;
+
+  for (auto& f : m_groupFolders) {
+    if (f.folderId != folderId)
+      continue;
+
+    if (f.parentFolderId == parentFolderId)
+      return;
+
+    f.parentFolderId = parentFolderId;
+    setModified(true);
+    Q_EMIT groupsChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Reorders a group folder among its sibling folders in the same parent.
+ */
+void DataModel::ProjectModel::moveGroupFolderInParent(int folderId, int direction)
+{
+  const int n = static_cast<int>(m_groupFolders.size());
+  int from    = -1;
+  for (int i = 0; i < n; ++i)
+    if (m_groupFolders[static_cast<size_t>(i)].folderId == folderId) {
+      from = i;
+      break;
+    }
+
+  if (from < 0)
+    return;
+
+  const int parent = m_groupFolders[static_cast<size_t>(from)].parentFolderId;
+  const int step   = (direction < 0) ? -1 : 1;
+  for (int j = from + step; j >= 0 && j < n; j += step) {
+    if (m_groupFolders[static_cast<size_t>(j)].parentFolderId != parent)
+      continue;
+
+    std::swap(m_groupFolders[static_cast<size_t>(from)], m_groupFolders[static_cast<size_t>(j)]);
+    setModified(true);
+    Q_EMIT groupsChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Prompts for a name and creates a group folder under @p parentFolderId.
+ */
+void DataModel::ProjectModel::promptAddGroupFolder(int parentFolderId)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Folder"), tr("Name:"), QLineEdit::Normal, tr("Folder"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  const int newId = addGroupFolder(parentFolderId, name.trimmed());
+  QTimer::singleShot(
+    0, this, [newId] { DataModel::ProjectEditor::instance().selectGroupFolder(newId); });
+}
+
+/**
+ * @brief Prompts for a new title for the given group folder.
+ */
+void DataModel::ProjectModel::promptRenameGroupFolder(int folderId)
+{
+  const QString current = groupFolderTitle(folderId);
+  if (current.isEmpty())
+    return;
+
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("Rename Folder"), tr("Name:"), QLineEdit::Normal, current, &ok);
+
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+    return;
+
+  renameGroupFolder(folderId, name.trimmed());
+}
+
+/**
+ * @brief Confirms before deleting a group folder; its contents move to the parent.
+ */
+void DataModel::ProjectModel::confirmDeleteGroupFolder(int folderId)
+{
+  const QString name = groupFolderTitle(folderId);
+  if (name.isEmpty())
+    return;
+
+  const int choice = Misc::Utilities::showMessageBox(
+    tr("Delete folder \"%1\"?").arg(name),
+    tr("The folder is removed; its groups and sub-folders move up to the parent."),
+    QMessageBox::Warning,
+    tr("Delete Folder"),
+    QMessageBox::Yes | QMessageBox::Cancel,
+    QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Yes)
+    deleteGroupFolder(folderId);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Table folder CRUD (folder path is part of each table's accessor; titles cannot contain '/')
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the title of a table folder, or empty if not found.
+ */
+QString DataModel::ProjectModel::tableFolderTitle(int folderId) const
+{
+  for (const auto& f : m_tableFolders)
+    if (f.folderId == folderId)
+      return f.title;
+
+  return QString();
+}
+
+/**
+ * @brief Adds a table folder under @p parentFolderId (-1 = top level); returns its new id.
+ */
+int DataModel::ProjectModel::addTableFolder(int parentFolderId, const QString& title)
+{
+  if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
+    parentFolderId = -1;
+
+  int newId = 1;
+  for (const auto& f : std::as_const(m_tableFolders))
+    if (f.folderId >= newId)
+      newId = f.folderId + 1;
+
+  DataModel::TableFolder folder;
+  folder.folderId       = newId;
+  folder.parentFolderId = parentFolderId;
+  folder.title          = title.simplified().remove(QLatin1Char('/'));
+  if (folder.title.isEmpty())
+    folder.title = tr("Folder");
+
+  m_tableFolders.push_back(folder);
+  setModified(true);
+  Q_EMIT tablesChanged();
+  return newId;
+}
+
+/**
+ * @brief Renames a table folder (slashes stripped); ignores empty names.
+ */
+void DataModel::ProjectModel::renameTableFolder(int folderId, const QString& title)
+{
+  const QString clean = title.simplified().remove(QLatin1Char('/'));
+  if (clean.isEmpty())
+    return;
+
+  for (auto& f : m_tableFolders) {
+    if (f.folderId != folderId)
+      continue;
+
+    f.title = clean;
+    setModified(true);
+    Q_EMIT tablesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Deletes a table folder, promoting its child folders and tables to its parent.
+ */
+void DataModel::ProjectModel::deleteTableFolder(int folderId)
+{
+  auto it = std::find_if(m_tableFolders.begin(), m_tableFolders.end(), [folderId](const auto& f) {
+    return f.folderId == folderId;
+  });
+  if (it == m_tableFolders.end())
+    return;
+
+  const int promoteTo = it->parentFolderId;
+  for (auto& f : m_tableFolders)
+    if (f.parentFolderId == folderId)
+      f.parentFolderId = promoteTo;
+
+  for (auto& t : m_tables)
+    if (t.parentFolderId == folderId)
+      t.parentFolderId = promoteTo;
+
+  m_tableFolders.erase(it);
+
+  setModified(true);
+  Q_EMIT tablesChanged();
+}
+
+/**
+ * @brief Files a table into folder @p parentFolderId; rejects a leaf-name collision in the target.
+ */
+void DataModel::ProjectModel::moveTableToFolder(const QString& tablePath, int parentFolderId)
+{
+  if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
+    return;
+
+  const int idx = findTableIndexByPath(tablePath);
+  if (idx < 0)
+    return;
+
+  auto& table = m_tables[static_cast<size_t>(idx)];
+  if (table.parentFolderId == parentFolderId)
+    return;
+
+  for (size_t i = 0; i < m_tables.size(); ++i)
+    if (static_cast<int>(i) != idx && m_tables[i].parentFolderId == parentFolderId
+        && m_tables[i].name == table.name)
+      return;
+
+  table.parentFolderId = parentFolderId;
+  setModified(true);
+  Q_EMIT tablesChanged();
+}
+
+/**
+ * @brief Re-parents a table folder, rejecting a cyclic move into its own subtree.
+ */
+void DataModel::ProjectModel::moveTableFolderToFolder(int folderId, int parentFolderId)
+{
+  if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
+    return;
+
+  if (folderIsSelfOrDescendant(m_tableFolders, folderId, parentFolderId))
+    return;
+
+  for (auto& f : m_tableFolders) {
+    if (f.folderId != folderId)
+      continue;
+
+    if (f.parentFolderId == parentFolderId)
+      return;
+
+    f.parentFolderId = parentFolderId;
+    setModified(true);
+    Q_EMIT tablesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Reorders a table folder among its sibling folders in the same parent.
+ */
+void DataModel::ProjectModel::moveTableFolderInParent(int folderId, int direction)
+{
+  const int n = static_cast<int>(m_tableFolders.size());
+  int from    = -1;
+  for (int i = 0; i < n; ++i)
+    if (m_tableFolders[static_cast<size_t>(i)].folderId == folderId) {
+      from = i;
+      break;
+    }
+
+  if (from < 0)
+    return;
+
+  const int parent = m_tableFolders[static_cast<size_t>(from)].parentFolderId;
+  const int step   = (direction < 0) ? -1 : 1;
+  for (int j = from + step; j >= 0 && j < n; j += step) {
+    if (m_tableFolders[static_cast<size_t>(j)].parentFolderId != parent)
+      continue;
+
+    std::swap(m_tableFolders[static_cast<size_t>(from)], m_tableFolders[static_cast<size_t>(j)]);
+    setModified(true);
+    Q_EMIT tablesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Prompts for a name and creates a table folder under @p parentFolderId.
+ */
+void DataModel::ProjectModel::promptAddTableFolder(int parentFolderId)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Folder"), tr("Name:"), QLineEdit::Normal, tr("Folder"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  const int newId = addTableFolder(parentFolderId, name.trimmed());
+  QTimer::singleShot(
+    0, this, [newId] { DataModel::ProjectEditor::instance().selectTableFolder(newId); });
+}
+
+/**
+ * @brief Prompts for a name, creates a table, and files it into @p parentFolderId.
+ */
+void DataModel::ProjectModel::promptAddTableInFolder(int parentFolderId)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Shared Table"), tr("Name:"), QLineEdit::Normal, tr("Shared Table"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  const QString added = addTable(name.trimmed(), parentFolderId);
+  QTimer::singleShot(
+    0, this, [added] { DataModel::ProjectEditor::instance().selectUserTable(added); });
+}
+
+/**
+ * @brief Prompts for a new title for the given table folder.
+ */
+void DataModel::ProjectModel::promptRenameTableFolder(int folderId)
+{
+  const QString current = tableFolderTitle(folderId);
+  if (current.isEmpty())
+    return;
+
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("Rename Folder"), tr("Name:"), QLineEdit::Normal, current, &ok);
+
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+    return;
+
+  renameTableFolder(folderId, name.trimmed());
+}
+
+/**
+ * @brief Confirms before deleting a table folder; its contents move to the parent.
+ */
+void DataModel::ProjectModel::confirmDeleteTableFolder(int folderId)
+{
+  const QString name = tableFolderTitle(folderId);
+  if (name.isEmpty())
+    return;
+
+  const int choice = Misc::Utilities::showMessageBox(
+    tr("Delete folder \"%1\"?").arg(name),
+    tr("The folder is removed; its tables and sub-folders move up to the parent. The accessor "
+       "path of those tables changes accordingly."),
+    QMessageBox::Warning,
+    tr("Delete Folder"),
+    QMessageBox::Yes | QMessageBox::Cancel,
+    QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Yes)
+    deleteTableFolder(folderId);
+}
+
 /**
  * @brief Returns whether the user has opted in to customising workspaces.
  */
@@ -5707,9 +6674,11 @@ void DataModel::ProjectModel::setCustomizeWorkspaces(const bool enabled)
   m_customizeWorkspaces = enabled;
 
   if (enabled) {
-    m_workspaces   = buildAutoWorkspaces();
-    m_autoSnapshot = m_workspaces;
+    m_workspaces       = buildAutoWorkspaces();
+    m_workspaceFolders = buildAutoWorkspaceFoldersFor(m_workspaces);
+    m_autoSnapshot     = m_workspaces;
   } else {
+    m_workspaceFolders.clear();
     regenerateAutoWorkspacesUnnotified();
   }
 
@@ -5775,6 +6744,32 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     result.push_back(std::move(ws));
   }
 
+  appendAutoGroupWorkspaces(result, groups, perGroupRefs);
+  return result;
+}
+
+/**
+ * @brief Emits group workspaces for the auto layout: a leaf group folder (no sub-folders) collapses
+ *        into one workspace aggregating every widget of the groups in it; groups in a container
+ *        folder or at the top level each get their own workspace.
+ */
+void DataModel::ProjectModel::appendAutoGroupWorkspaces(
+  std::vector<DataModel::Workspace>& result,
+  const std::vector<DataModel::Group>& groups,
+  const QMap<int, std::vector<DataModel::WidgetRef>>& perGroupRefs) const
+{
+  QHash<int, int> folderParent;
+  QHash<int, QString> folderTitle;
+  QSet<int> containerFolders;
+  for (const auto& f : m_groupFolders) {
+    folderParent.insert(f.folderId, f.parentFolderId);
+    folderTitle.insert(f.folderId, f.title);
+    if (f.parentFolderId != -1)
+      containerFolders.insert(f.parentFolderId);
+  }
+
+  QHash<int, int> leafWorkspaceIndex;
+
   for (const auto& group : groups) {
     if (m_hiddenGroupIds.contains(group.groupId))
       continue;
@@ -5783,11 +6778,69 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     if (it == perGroupRefs.constEnd())
       continue;
 
+    const int fk = group.parentFolderId;
+    if (fk != -1 && !containerFolders.contains(fk)) {
+      const auto existing = leafWorkspaceIndex.constFind(fk);
+      if (existing != leafWorkspaceIndex.constEnd()) {
+        auto& ws = result[static_cast<size_t>(existing.value())];
+        ws.widgetRefs.insert(ws.widgetRefs.end(), it.value().begin(), it.value().end());
+        continue;
+      }
+
+      DataModel::Workspace ws;
+      ws.workspaceId    = WorkspaceIds::PerFolderStart + fk;
+      ws.parentFolderId = folderParent.value(fk, -1);
+      ws.title          = folderTitle.value(fk);
+      ws.widgetRefs     = it.value();
+      leafWorkspaceIndex.insert(fk, static_cast<int>(result.size()));
+      result.push_back(std::move(ws));
+      continue;
+    }
+
     DataModel::Workspace ws;
-    ws.workspaceId = WorkspaceIds::PerGroupStart + group.groupId;
-    ws.title       = group.title;
-    ws.widgetRefs  = it.value();
+    ws.workspaceId    = WorkspaceIds::PerGroupStart + group.groupId;
+    ws.parentFolderId = fk;
+    ws.title          = group.title;
+    ws.widgetRefs     = it.value();
     result.push_back(std::move(ws));
+  }
+}
+
+/**
+ * @brief Derives the auto-layout workspace folder tree from the group folders, mirroring (1:1 ids)
+ *        every group folder that transitively contains one of @p workspaces. Empty branches are
+ *        pruned. The result is regenerated, never persisted, so it always tracks the group tree.
+ */
+std::vector<DataModel::WorkspaceFolder> DataModel::ProjectModel::buildAutoWorkspaceFoldersFor(
+  const std::vector<DataModel::Workspace>& workspaces) const
+{
+  std::vector<DataModel::WorkspaceFolder> result;
+  if (m_groupFolders.empty())
+    return result;
+
+  QHash<int, int> parentOf;
+  for (const auto& f : std::as_const(m_groupFolders))
+    parentOf.insert(f.folderId, f.parentFolderId);
+
+  QSet<int> needed;
+  const int kMax = static_cast<int>(m_groupFolders.size());
+  for (const auto& ws : workspaces) {
+    int id = ws.parentFolderId;
+    for (int i = 0; i <= kMax && id != -1 && !needed.contains(id); ++i) {
+      needed.insert(id);
+      id = parentOf.value(id, -1);
+    }
+  }
+
+  for (const auto& f : m_groupFolders) {
+    if (!needed.contains(f.folderId))
+      continue;
+
+    DataModel::WorkspaceFolder wf;
+    wf.folderId       = f.folderId;
+    wf.parentFolderId = f.parentFolderId;
+    wf.title          = f.title;
+    result.push_back(wf);
   }
 
   return result;
@@ -5801,8 +6854,9 @@ void DataModel::ProjectModel::regenerateAutoWorkspacesUnnotified()
   if (m_customizeWorkspaces)
     return;
 
-  m_workspaces   = buildAutoWorkspaces();
-  m_autoSnapshot = m_workspaces;
+  m_workspaces       = buildAutoWorkspaces();
+  m_workspaceFolders = buildAutoWorkspaceFoldersFor(m_workspaces);
+  m_autoSnapshot     = m_workspaces;
 }
 
 /**
@@ -5870,8 +6924,10 @@ bool DataModel::ProjectModel::mergeAutoWorkspaceUpdates()
 
   m_autoSnapshot = current;
 
-  if (dirty)
+  if (dirty) {
+    sanitizeWorkspaceFolders();
     setModified(true);
+  }
 
   return dirty;
 }
@@ -5893,6 +6949,7 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
     return -1;
 
   m_workspaces           = std::move(seed);
+  m_workspaceFolders     = buildAutoWorkspaceFoldersFor(m_workspaces);
   m_autoSnapshot         = m_workspaces;
   const bool flagChanged = !m_customizeWorkspaces;
   m_customizeWorkspaces  = true;
@@ -5910,6 +6967,32 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
 }
 
 /**
+ * @brief Repairs folder records after load: detaches cyclic or dangling folder parents and
+ * resets workspaces pointing at a missing folder. Folder placement rides on each Workspace
+ * object (m_workspaces is merged in place, never rebuilt), so this only guards hand-edited files.
+ */
+void DataModel::ProjectModel::sanitizeWorkspaceFolders()
+{
+  sanitizeFolderTree(m_workspaceFolders, m_workspaces);
+}
+
+/**
+ * @brief Repairs the group folder tree after load (cyclic/dangling parents -> top level).
+ */
+void DataModel::ProjectModel::sanitizeGroupFolders()
+{
+  sanitizeFolderTree(m_groupFolders, m_groups);
+}
+
+/**
+ * @brief Repairs the table folder tree after load (cyclic/dangling parents -> top level).
+ */
+void DataModel::ProjectModel::sanitizeTableFolders()
+{
+  sanitizeFolderTree(m_tableFolders, m_tables);
+}
+
+/**
  * @brief Drops user customisations and returns the project to the synthetic
  *        auto-layout. Idempotent: a no-op when already in auto mode.
  */
@@ -5922,6 +7005,7 @@ void DataModel::ProjectModel::resetWorkspacesToAuto()
     return;
 
   m_customizeWorkspaces = false;
+  m_workspaceFolders.clear();
   regenerateAutoWorkspacesUnnotified();
 
   setModified(true);
@@ -6866,9 +7950,9 @@ void DataModel::ProjectModel::duplicateSelectedItems(const QVariantList& items)
 }
 
 /**
- * @brief Deletes every item described in @p items in dependency-safe order,
- * sorting descending by parentId/id within each kind so each removal never
- * shifts the indices of items still pending deletion.
+ * @brief Deletes every item described in @p items in dependency-safe order:
+ * children (higher kind) before parents, then descending parentId/id within a
+ * kind, so each removal never shifts the indices of items still pending deletion.
  */
 void DataModel::ProjectModel::deleteSelectedItems(const QVariantList& items)
 {
@@ -6876,6 +7960,7 @@ void DataModel::ProjectModel::deleteSelectedItems(const QVariantList& items)
     int kind;
     int id;
     int parentId;
+    QString path;
   };
 
   QList<Entry> entries;
@@ -6886,12 +7971,13 @@ void DataModel::ProjectModel::deleteSelectedItems(const QVariantList& items)
     e.kind     = m.value(QStringLiteral("kind"), -1).toInt();
     e.id       = m.value(QStringLiteral("id"), -1).toInt();
     e.parentId = m.value(QStringLiteral("parentId"), -1).toInt();
+    e.path     = m.value(QStringLiteral("path")).toString();
     entries.append(e);
   }
 
   std::sort(entries.begin(), entries.end(), [](const Entry& a, const Entry& b) {
     if (a.kind != b.kind)
-      return a.kind < b.kind;
+      return a.kind > b.kind;
 
     if (a.parentId != b.parentId)
       return a.parentId > b.parentId;
@@ -6912,6 +7998,83 @@ void DataModel::ProjectModel::deleteSelectedItems(const QVariantList& items)
         break;
       case ProjectEditor::KindOutputWidget:
         deleteOutputWidget(e.parentId, e.id, false);
+        break;
+      case ProjectEditor::KindWorkspace:
+        deleteWorkspace(e.id);
+        break;
+      case ProjectEditor::KindWorkspaceFolder:
+        deleteWorkspaceFolder(e.id);
+        break;
+      case ProjectEditor::KindGroupFolder:
+        deleteGroupFolder(e.id);
+        break;
+      case ProjectEditor::KindUserTable:
+        deleteTable(e.path);
+        break;
+      case ProjectEditor::KindTableFolder:
+        deleteTableFolder(e.id);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+/**
+ * @brief Prompts before deleting a multi-selection, then deletes it. A single
+ * item is removed without a prompt to preserve the existing delete behavior.
+ */
+void DataModel::ProjectModel::confirmDeleteSelectedItems(const QVariantList& items)
+{
+  if (items.isEmpty())
+    return;
+
+  const int count = static_cast<int>(items.size());
+  if (count > 1) {
+    const int choice = Misc::Utilities::showMessageBox(tr("Delete %1 selected items?").arg(count),
+                                                       tr("This action cannot be undone."),
+                                                       QMessageBox::Warning,
+                                                       tr("Delete Items"),
+                                                       QMessageBox::Yes | QMessageBox::Cancel,
+                                                       QMessageBox::Cancel);
+
+    if (choice != QMessageBox::Yes)
+      return;
+  }
+
+  deleteSelectedItems(items);
+}
+
+/**
+ * @brief Files every item in @p items into folder @p folderId via its per-kind move. The caller
+ * filters the selection to a single section so @p folderId is interpreted correctly.
+ */
+void DataModel::ProjectModel::moveSelectedItemsToFolder(const QVariantList& items, int folderId)
+{
+  for (const auto& v : items) {
+    const auto m       = v.toMap();
+    const int kind     = m.value(QStringLiteral("kind"), -1).toInt();
+    const int id       = m.value(QStringLiteral("id"), -1).toInt();
+    const QString path = m.value(QStringLiteral("path")).toString();
+
+    switch (kind) {
+      case ProjectEditor::KindWorkspace:
+        moveWorkspaceToFolder(id, folderId);
+        break;
+      case ProjectEditor::KindWorkspaceFolder:
+        moveFolderToFolder(id, folderId);
+        break;
+      case ProjectEditor::KindGroup:
+        moveGroupToFolder(id, folderId);
+        break;
+      case ProjectEditor::KindGroupFolder:
+        moveGroupFolderToFolder(id, folderId);
+        break;
+      case ProjectEditor::KindUserTable:
+        moveTableToFolder(path, folderId);
+        break;
+      case ProjectEditor::KindTableFolder:
+        moveTableFolderToFolder(id, folderId);
         break;
       default:
         break;

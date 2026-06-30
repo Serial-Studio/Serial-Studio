@@ -30,8 +30,11 @@ Widgets.Pane {
 
   implicitWidth: 0
   implicitHeight: 0
-  title: Cpp_JSON_ProjectEditor.selectedUserTable
   icon: "qrc:/icons/project-editor/treeview/shared-table.svg"
+  title: {
+    const i = root.tableName.lastIndexOf('/')
+    return i >= 0 ? root.tableName.substring(i + 1) : root.tableName
+  }
 
   readonly property int rowHeight: 30
   readonly property int colTypeWidth: 140

@@ -28,10 +28,12 @@
 #include <QDir>
 #include <QFile>
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QJavascriptHighlighter>
 #include <QJSEngine>
 #include <QLuaHighlighter>
 #include <QMenu>
+#include <QMessageBox>
 #include <QShortcut>
 #include <QTextCursor>
 
@@ -45,6 +47,7 @@
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/Translator.h"
+#include "Misc/Utilities.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -110,6 +113,11 @@ void DataModel::DatasetTransformEditor::buildEditorWidgets()
 
   m_applyButton  = new QPushButton(tr("Apply"), this);
   m_cancelButton = new QPushButton(tr("Cancel"), this);
+
+  m_testButton->setIcon(QIcon(QStringLiteral(":/icons/buttons/test.svg")));
+  m_clearButton->setIcon(QIcon(QStringLiteral(":/icons/buttons/clear.svg")));
+  m_applyButton->setIcon(QIcon(QStringLiteral(":/icons/buttons/apply.svg")));
+  m_cancelButton->setIcon(QIcon(QStringLiteral(":/icons/buttons/close.svg")));
 }
 
 /**
@@ -276,13 +284,39 @@ int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Emits the transform if transform() is defined, otherwise emits empty.
+ * @brief Applies valid code; on a syntax error or missing transform() it warns and keeps the
+ *        dialog open so the user does not lose their edits.
  */
 void DataModel::DatasetTransformEditor::onApply()
 {
-  QString code = m_editor->toPlainText();
-  if (!definesTransformFunction(code, m_language))
-    code.clear();
+  const QString code = m_editor->toPlainText();
+
+  if (code.trimmed().isEmpty() || isDefaultPlaceholder(code, m_language)) {
+    Q_EMIT transformApplied(QString(), m_language, m_targetGroupId, m_targetDatasetId);
+    QDialog::accept();
+    return;
+  }
+
+  QString error;
+  const TransformStatus status = validateTransform(code, m_language, error);
+  if (status == TransformStatus::SyntaxError) {
+    Misc::Utilities::showMessageBox(
+      tr("The value transform has a syntax error and was not applied."),
+      error,
+      QMessageBox::Warning,
+      windowTitle());
+    return;
+  }
+
+  if (status == TransformStatus::NoFunction) {
+    Misc::Utilities::showMessageBox(
+      tr("The value transform must define a transform(value) function."),
+      tr("Define a transform(value) function that returns a number, or use Clear to remove the "
+         "transform."),
+      QMessageBox::Warning,
+      windowTitle());
+    return;
+  }
 
   Q_EMIT transformApplied(code, m_language, m_targetGroupId, m_targetDatasetId);
   QDialog::accept();
@@ -557,19 +591,23 @@ bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code
 }
 
 /**
- * @brief Returns true if the code defines a callable transform() global.
+ * @brief Compiles the code and reports whether it is valid, errored, or lacks transform().
  */
-bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& code, int language)
+DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEditor::
+  validateTransform(const QString& code, int language, QString& error)
 {
+  error.clear();
   if (code.trimmed().isEmpty())
-    return false;
+    return TransformStatus::NoFunction;
 
   DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
 
   if (language == SerialStudio::Lua) {
     lua_State* L = luaL_newstate();
-    if (!L)
-      return false;
+    if (!L) {
+      error = tr("Failed to create the Lua engine.");
+      return TransformStatus::SyntaxError;
+    }
 
     static const luaL_Reg kSafeLibs[] = {
       {    "_G",   luaopen_base},
@@ -590,24 +628,29 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
 
     const QByteArray utf8 = code.toUtf8();
     if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
+      error = QString::fromUtf8(lua_tostring(L, -1));
       lua_close(L);
-      return false;
+      return TransformStatus::SyntaxError;
     }
 
     lua_getglobal(L, "transform");
     const bool hasFn = lua_isfunction(L, -1);
     lua_close(L);
-    return hasFn;
+    return hasFn ? TransformStatus::Ok : TransformStatus::NoFunction;
   }
 
   QJSEngine jsEngine;
   DataModel::ScriptApiCall::installAll(&jsEngine, 0);
   auto evalResult = jsEngine.evaluate(code);
-  if (evalResult.isError())
-    return false;
+  if (evalResult.isError()) {
+    error = tr("Line %1: %2")
+              .arg(evalResult.property(QStringLiteral("lineNumber")).toInt())
+              .arg(evalResult.toString());
+    return TransformStatus::SyntaxError;
+  }
 
   auto transformFn = jsEngine.globalObject().property(QStringLiteral("transform"));
-  return transformFn.isCallable();
+  return transformFn.isCallable() ? TransformStatus::Ok : TransformStatus::NoFunction;
 }
 
 /**

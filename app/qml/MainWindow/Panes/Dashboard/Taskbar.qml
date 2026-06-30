@@ -717,102 +717,79 @@ Item {
     //
     // Workspace switcher
     //
-    Widgets.Combo {
+    Item {
       id: _switcher
 
-      textRole: "text"
+      Layout.fillHeight: true
       Layout.maximumWidth: 220
       Layout.alignment: Qt.AlignVCenter
-      model: taskBar ? taskBar.workspaceModel : []
-      currentIndex: taskBar ? Math.max(0, taskBar.activeGroupIndex) : 0
-      onActivated: {
-        if (taskBar && currentIndex !== taskBar.activeGroupIndex)
-          taskBar.activeGroupIndex = currentIndex
+      implicitWidth: _switcherRow.implicitWidth
+
+      readonly property string currentText: {
+        if (!taskBar)
+          return ""
+
+        const m = taskBar.workspaceModel
+        for (let i = 0; i < m.length; ++i)
+          if (m[i].id === taskBar.activeGroupId)
+            return m[i].text
+
+        return m.length > 0 ? m[0].text : ""
       }
 
-      popup.width: 240
-      popup.y: -popup.height - _switcher.y + 1
-      popup.x: Cpp_Misc_Translator.rtl ? 0 : _switcher.width - popup.width
-
-      popup.background: Rectangle {
-        border.width: 1
-        color: Cpp_ThemeManager.colors["start_menu_background"]
-        border.color: Cpp_ThemeManager.colors["start_menu_border"]
-      }
-
-      popup.enter: Transition {
-        NumberAnimation {
-          duration: 150
-          from: 0; to: 1
-          property: "opacity"
-          easing.type: Easing.OutCubic
-        }
-      }
-
-      popup.exit: Transition {
-        NumberAnimation {
-          duration: 100
-          from: 1; to: 0
-          property: "opacity"
-          easing.type: Easing.InCubic
-        }
-      }
-
-      indicator: Item {}
-
-      background: Rectangle {
-        border.width: 0
-        color: "transparent"
-      }
-
-      delegate: ItemDelegate {
-        width: _switcher.popup.width
-
-        contentItem: RowLayout {
-          spacing: 8
-
-          Image {
-            source: modelData["icon"] || ""
-            sourceSize: Qt.size(16, 16)
-            fillMode: Image.PreserveAspectFit
+      //
+      // Recursively populates a menu from a workspaceTree() level. Folders become
+      // cascading sub-menus; workspaces become items that activate by id.
+      //
+      function populateMenu(menu, nodes) {
+        for (let i = 0; i < nodes.length; ++i) {
+          const node = nodes[i]
+          if (node.isFolder) {
+            const sub = _subMenuComponent.createObject(
+                          null, { folderTitle: node.text, folderIcon: node.icon })
+            menu.addMenu(sub)
+            _switcher.populateMenu(sub, node.children)
           }
 
-          Label {
-            text: modelData["text"]
-            elide: Text.ElideRight
-            Layout.fillWidth: true
-            verticalAlignment: Text.AlignVCenter
-            LayoutMirroring.enabled: false
-            horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignRight
-                                                         : Text.AlignLeft
-            font: text === _switcher.currentText
-                  ? Cpp_Misc_CommonFonts.boldUiFont
-                  : Cpp_Misc_CommonFonts.uiFont
-            color: hovered
-                   ? Cpp_ThemeManager.colors["start_menu_highlighted_text"]
-                   : Cpp_ThemeManager.colors["start_menu_text"]
+          else {
+            const item = _menuItemComponent.createObject(
+                           null, { wsId: node.id, wsText: node.text, wsIcon: node.icon })
+            menu.addItem(item)
           }
-        }
-
-        background: Rectangle {
-          color: hovered
-                 ? Cpp_ThemeManager.colors["start_menu_highlight"]
-                 : "transparent"
         }
       }
 
-      contentItem: RowLayout {
+      MouseArea {
+        anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+          if (!taskBar)
+            return
+
+          const menu = _menuComponent.createObject(_switcher)
+          if (!menu)
+            return
+
+          _switcher.populateMenu(menu, taskBar.workspaceTree())
+          menu.closed.connect(function() { menu.destroy() })
+          menu.popup(_switcher, 0, -menu.height)
+        }
+      }
+
+      RowLayout {
+        id: _switcherRow
+
         spacing: 4
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.fill: parent
 
         Label {
           Layout.fillWidth: true
           text: _switcher.currentText
           LayoutMirroring.enabled: false
-          horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignLeft
-                                                       : Text.AlignRight
           font: Cpp_Misc_CommonFonts.boldUiFont
           verticalAlignment: Text.AlignVCenter
+          horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignLeft
+                                                       : Text.AlignRight
           color: Cpp_ThemeManager.colors["pane_caption_foreground"]
         }
 
@@ -844,7 +821,6 @@ Item {
             const topY = (height - totalHeight) / 2;
             const downTopY = topY + triangleHeight + spacing;
 
-            // Up Triangle
             ctx.beginPath();
             ctx.moveTo(centerX, topY);
             ctx.lineTo(centerX - triangleWidth / 2, topY + triangleHeight);
@@ -852,7 +828,6 @@ Item {
             ctx.closePath();
             ctx.fill();
 
-            // Down Triangle
             ctx.beginPath();
             ctx.moveTo(centerX, downTopY + triangleHeight);
             ctx.lineTo(centerX - triangleWidth / 2, downTopY);
@@ -860,6 +835,52 @@ Item {
             ctx.closePath();
             ctx.fill();
           }
+        }
+      }
+
+      Component {
+        id: _menuComponent
+
+        Menu {
+          height: Math.min(implicitHeight, Overlay.overlay ? Overlay.overlay.height - 48 : 480)
+
+          background: Rectangle {
+            implicitWidth: 200
+            border.width: 1
+            color: Cpp_ThemeManager.colors["start_menu_background"]
+            border.color: Cpp_ThemeManager.colors["start_menu_border"]
+          }
+        }
+      }
+
+      Component {
+        id: _menuItemComponent
+
+        MenuItem {
+          property int wsId: -1
+          property string wsText: ""
+          property string wsIcon: ""
+
+          text: wsText
+          icon.width: 18
+          icon.height: 18
+          icon.source: wsIcon
+          onTriggered: if (taskBar) taskBar.selectWorkspaceById(wsId)
+        }
+      }
+
+      Component {
+        id: _subMenuComponent
+
+        Menu {
+          property string folderIcon: ""
+          property string folderTitle: ""
+
+          icon.width: 18
+          icon.height: 18
+          title: folderTitle
+          icon.source: folderIcon
+          height: Math.min(implicitHeight, Overlay.overlay ? Overlay.overlay.height - 48 : 480)
         }
       }
     }

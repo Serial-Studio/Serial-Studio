@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60pt" height="60pt" viewBox="0 0 60 60" version="1.1">
+<g id="surface26">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(85.882354%,69.01961%,39.607844%);fill-opacity:1;" d="M 2.25 53.25 L 2.25 6.75 L 17.699219 6.75 L 22.199219 11.25 L 57.75 11.25 L 57.75 51 C 57.75 52.199219 56.699219 53.25 55.5 53.25 Z M 2.25 53.25 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(58.823532%,47.843137%,26.666668%);fill-opacity:1;" d="M 17.398438 7.5 L 21.898438 12 L 57 12 L 57 51 C 57 51.898438 56.398438 52.5 55.5 52.5 L 3 52.5 L 3 7.5 L 17.398438 7.5 M 18 6 L 1.5 6 L 1.5 54 L 55.5 54 C 57.148438 54 58.5 52.648438 58.5 51 L 58.5 10.5 L 22.5 10.5 Z M 18 6 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(96.078432%,80.784315%,52.156866%);fill-opacity:1;" d="M 2.25 53.25 L 2.25 14.25 L 18.300781 14.25 L 22.800781 11.25 L 57.75 11.25 L 57.75 51 C 57.75 52.199219 56.699219 53.25 55.5 53.25 Z M 2.25 53.25 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(58.823532%,47.843137%,26.666668%);fill-opacity:1;" d="M 57 12 L 57 51 C 57 51.898438 56.398438 52.5 55.5 52.5 L 3 52.5 L 3 15 L 18.449219 15 L 18.898438 14.699219 L 22.949219 12 L 57 12 M 58.5 10.5 L 22.5 10.5 L 18 13.5 L 1.5 13.5 L 1.5 54 L 55.5 54 C 57.148438 54 58.5 52.648438 58.5 51 Z M 58.5 10.5 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(72.941178%,87.843138%,74.117649%);fill-opacity:1;" d="M 46.5 33.75 C 39.449219 33.75 33.75 39.449219 33.75 46.5 C 33.75 53.550781 39.449219 59.25 46.5 59.25 C 53.550781 59.25 59.25 53.550781 59.25 46.5 C 59.25 39.449219 53.550781 33.75 46.5 33.75 Z M 46.5 33.75 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(36.862746%,61.176473%,46.27451%);fill-opacity:1;" d="M 46.5 34.5 C 53.101562 34.5 58.5 39.898438 58.5 46.5 C 58.5 53.101562 53.101562 58.5 46.5 58.5 C 39.898438 58.5 34.5 53.101562 34.5 46.5 C 34.5 39.898438 39.898438 34.5 46.5 34.5 M 46.5 33 C 39 33 33 39 33 46.5 C 33 54 39 60 46.5 60 C 54 60 60 54 60 46.5 C 60 39 54 33 46.5 33 Z M 46.5 33 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 31 36 L 31 26 M 26 31 L 36 31 " transform="matrix(1.5,0,0,1.5,0,0)"/>
+</g>
+</svg>

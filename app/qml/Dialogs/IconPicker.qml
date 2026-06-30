@@ -142,7 +142,7 @@ SmartDialog {
       Widgets.IconButton {
         horizontalPadding: 8
         text: qsTr("Cancel")
-        icon.source: "qrc:/icons/buttons/cancel.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
         onClicked: root.close()
       }
     }

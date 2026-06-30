@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Workspaces")
-  icon: "qrc:/icons/project-editor/treeview/datagrid.svg"
+  icon: "qrc:/icons/project-editor/treeview/workspaces.svg"
 
   readonly property bool rtl: Cpp_Misc_Translator.rtl
 
@@ -39,7 +39,7 @@ Widgets.Pane {
   property int unresolvedCount: 0
 
   function refresh() {
-    summary = Cpp_JSON_ProjectEditor.workspacesSummary()
+    summary = Cpp_JSON_ProjectEditor.workspaceFolderContents(-1)
     unresolvedCount = Cpp_JSON_ProjectEditor.unresolvedWorkspaceWidgetCount()
   }
 
@@ -118,6 +118,30 @@ Widgets.Pane {
             verticalCenter: parent.verticalCenter
           }
 
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Add Folder")
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Add a top-level folder")
+            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
+            onClicked: Cpp_JSON_ProjectModel.promptAddWorkspaceFolder(-1)
+            icon.source: "qrc:/icons/project-editor/actions/add-folder.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Add Workspace")
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Add workspace")
+            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
+            onClicked: Cpp_JSON_ProjectModel.promptAddWorkspace()
+            icon.source: "qrc:/icons/project-editor/toolbar/add-group.svg"
+          }
+
+          Item { Layout.fillWidth: true }
+
           //
           // Off: synthetic layout read-only. On: editable, persisted workspaces.
           //
@@ -135,45 +159,6 @@ Widgets.Pane {
               else
                 Cpp_JSON_ProjectModel.customizeWorkspaces = true
             }
-          }
-
-          Item { Layout.fillWidth: true }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Move Up")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Move the selected workspace up")
-            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
-                     && Cpp_JSON_ProjectEditor.selectedWorkspaceId >= 5000
-            onClicked: Cpp_JSON_ProjectEditor.moveWorkspace(
-                         Cpp_JSON_ProjectEditor.selectedWorkspaceId, -1)
-            icon.source: "qrc:/icons/project-editor/actions/move-up.svg"
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Move Down")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Move the selected workspace down")
-            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
-                     && Cpp_JSON_ProjectEditor.selectedWorkspaceId >= 5000
-            onClicked: Cpp_JSON_ProjectEditor.moveWorkspace(
-                         Cpp_JSON_ProjectEditor.selectedWorkspaceId, 1)
-            icon.source: "qrc:/icons/project-editor/actions/move-down.svg"
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Add Workspace")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Add workspace")
-            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
-            onClicked: Cpp_JSON_ProjectModel.promptAddWorkspace()
-            icon.source: "qrc:/icons/project-editor/toolbar/add-group.svg"
           }
 
           Widgets.ToolbarButton {
@@ -200,8 +185,8 @@ Widgets.Pane {
       Widgets.ProjectTableHeader {
         Layout.fillWidth: true
         columns: [
-          { title: qsTr("Title"),   width: 280 },
-          { title: qsTr("Widgets"), width: -1  }
+          { title: qsTr("Title"),    width: 280 },
+          { title: qsTr("Contents"), width: -1  }
         ]
       }
 
@@ -225,7 +210,12 @@ Widgets.Pane {
           MouseArea {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
-            onClicked: Cpp_JSON_ProjectEditor.selectWorkspace(modelData.id)
+            onClicked: {
+              if (modelData.isFolder)
+                Cpp_JSON_ProjectEditor.selectWorkspaceFolder(modelData.id)
+              else
+                Cpp_JSON_ProjectEditor.selectWorkspace(modelData.id)
+            }
           }
 
           RowLayout {
@@ -234,14 +224,30 @@ Widgets.Pane {
             LayoutMirroring.enabled: root.rtl
             LayoutMirroring.childrenInherit: true
 
-            Label {
-              leftPadding: 8
-              text: modelData.title
-              elide: Text.ElideRight
-              color: wsRow.textColor
+            Item {
+              Layout.fillHeight: true
               Layout.preferredWidth: 280
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.uiFont
+
+              RowLayout {
+                spacing: 6
+                anchors.fill: parent
+                anchors.leftMargin: 8
+
+                Image {
+                  source: modelData.icon
+                  sourceSize: Qt.size(16, 16)
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                Label {
+                  text: modelData.title
+                  elide: Text.ElideRight
+                  Layout.fillWidth: true
+                  color: wsRow.textColor
+                  Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.uiFont
+                }
+              }
             }
 
             Rectangle {
@@ -252,9 +258,9 @@ Widgets.Pane {
 
             Label {
               leftPadding: 8
+              text: modelData.count
               Layout.fillWidth: true
               color: wsRow.textColor
-              text: modelData.widgetCount
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
             }

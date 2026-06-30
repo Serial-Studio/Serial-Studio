@@ -2321,7 +2321,7 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
 void DataModel::FrameBuilder::initializeTableStore()
 {
   const auto& pm = DataModel::ProjectModel::instance();
-  m_tableStore.initialize(pm.tables(), m_frame);
+  m_tableStore.initialize(pm.tables(), pm.editorTableFolders(), m_frame);
   m_captureFlagsDirty = true;
 }
 
@@ -2334,7 +2334,7 @@ void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
   DataModel::Frame scratch;
   scratch.title  = pm.title();
   scratch.groups = pm.groups();
-  m_tableStore.initialize(pm.tables(), scratch);
+  m_tableStore.initialize(pm.tables(), pm.editorTableFolders(), scratch);
   m_captureFlagsDirty = true;
 }
 

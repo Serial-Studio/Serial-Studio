@@ -810,6 +810,14 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::rebuildDevices,
           Qt::QueuedConnection);
 
+#ifdef BUILD_COMMERCIAL
+  connect(&Licensing::LemonSqueezy::instance(),
+          &Licensing::LemonSqueezy::activatedChanged,
+          this,
+          &IO::ConnectionManager::rebuildDevices,
+          Qt::QueuedConnection);
+#endif
+
   wireUiDriver(m_uartUi.get());
   wireUiDriver(m_networkUi.get());
   wireUiDriver(m_bluetoothLEUi.get());

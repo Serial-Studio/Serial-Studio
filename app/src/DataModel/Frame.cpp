@@ -140,6 +140,53 @@ bool DataModel::read(RegisterDef& r, const QJsonObject& obj)
   return true;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Table folder paths (single source of truth for the store key + script accessor)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Walks a table folder's parent chain to build its "/"-joined path (root -> leaf).
+ */
+QString DataModel::tableFolderPath(const std::vector<TableFolder>& folders, int parentFolderId)
+{
+  if (parentFolderId == -1)
+    return QString();
+
+  QString path;
+  const int kMax = static_cast<int>(folders.size());
+  int id         = parentFolderId;
+  for (int i = 0; i <= kMax && id != -1; ++i) {
+    const TableFolder* match = nullptr;
+    for (const auto& f : folders)
+      if (f.folderId == id) {
+        match = &f;
+        break;
+      }
+
+    if (!match)
+      break;
+
+    path = path.isEmpty() ? match->title : (match->title + QLatin1Char('/') + path);
+    id   = match->parentFolderId;
+  }
+
+  return path;
+}
+
+/**
+ * @brief Joins a table's folder path with its leaf name to form the full accessor/store path.
+ */
+QString DataModel::tableFullPath(const std::vector<TableFolder>& folders,
+                                 int parentFolderId,
+                                 const QString& name)
+{
+  const QString folderPath = tableFolderPath(folders, parentFolderId);
+  if (folderPath.isEmpty())
+    return name;
+
+  return folderPath + QLatin1Char('/') + name;
+}
+
 /**
  * @brief Deserializes an OutputWidget from a QJsonObject.
  */

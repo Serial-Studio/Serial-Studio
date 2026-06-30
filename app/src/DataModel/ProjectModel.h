@@ -227,6 +227,9 @@ public:
   [[nodiscard]] const std::vector<Action>& actions() const noexcept;
   [[nodiscard]] const std::vector<Source>& sources() const noexcept;
   [[nodiscard]] const std::vector<Workspace>& editorWorkspaces() const noexcept;
+  [[nodiscard]] const std::vector<WorkspaceFolder>& editorWorkspaceFolders() const noexcept;
+  [[nodiscard]] const std::vector<GroupFolder>& editorGroupFolders() const noexcept;
+  [[nodiscard]] const std::vector<TableFolder>& editorTableFolders() const noexcept;
   [[nodiscard]] const std::vector<Workspace>& activeWorkspaces() const;
   [[nodiscard]] const QSet<int>& hiddenGroupIds() const noexcept;
   [[nodiscard]] int workspaceCount() const noexcept;
@@ -285,7 +288,7 @@ public slots:
   void setPlotTimeRange(const double seconds);
   void clearJsonFilePath();
 
-  Q_INVOKABLE QString addTable(const QString& name);
+  Q_INVOKABLE QString addTable(const QString& name, int parentFolderId = -1);
   Q_INVOKABLE [[nodiscard]] QVariantList registersForTable(const QString& table) const;
 
   void deleteTable(const QString& name);
@@ -358,7 +361,10 @@ public slots:
   void restoreSourceSettings(int sourceId);
   void setSource0BusType(int busType);
   void setSource0ConnectionSettings(const QJsonObject& settings);
-  void addGroup(const QString& title, const SerialStudio::GroupWidget widget, int sourceId = -1);
+  void addGroup(const QString& title,
+                const SerialStudio::GroupWidget widget,
+                int sourceId       = -1,
+                int parentFolderId = -1);
   bool setGroupWidget(const int group, const SerialStudio::GroupWidget widget);
 
   void setModified(const bool modified);
@@ -395,6 +401,7 @@ public slots:
   Q_INVOKABLE int addWorkspace(const QString& title);
   Q_INVOKABLE int autoGenerateWorkspaces();
   Q_INVOKABLE [[nodiscard]] QString workspaceTitle(int workspaceId) const;
+  Q_INVOKABLE [[nodiscard]] QString workspaceIcon(int workspaceId) const;
   Q_INVOKABLE [[nodiscard]] QVariantList hiddenGroupsSummary() const;
   void resetWorkspacesToAuto();
   void confirmResetWorkspacesToAuto();
@@ -410,6 +417,7 @@ public slots:
                        bool setTitle,
                        bool setIcon,
                        bool setDescription);
+  void setWorkspaceIcon(int workspaceId, const QString& icon);
   void reorderWorkspaces(const QList<int>& userWorkspaceIds);
   void addWidgetToWorkspace(int workspaceId, int widgetType, int groupUniqueId, int relativeIndex);
   void removeWidgetFromWorkspace(int workspaceId,
@@ -421,6 +429,45 @@ public slots:
   void promptAddWorkspace();
   void promptRenameWorkspace(int workspaceId);
   void confirmDeleteWorkspace(int workspaceId);
+
+  Q_INVOKABLE int addWorkspaceFolder(int parentFolderId, const QString& title);
+  Q_INVOKABLE [[nodiscard]] QString workspaceFolderTitle(int folderId) const;
+  void renameWorkspaceFolder(int folderId, const QString& title);
+  void deleteWorkspaceFolder(int folderId);
+  void moveWorkspaceToFolder(int workspaceId, int parentFolderId);
+  void moveFolderToFolder(int folderId, int parentFolderId);
+  void moveWorkspaceInFolder(int workspaceId, int direction);
+  void moveWorkspaceFolderInParent(int folderId, int direction);
+
+  void promptAddWorkspaceFolder(int parentFolderId);
+  void promptAddWorkspaceInFolder(int parentFolderId);
+  void promptRenameWorkspaceFolder(int folderId);
+  void confirmDeleteWorkspaceFolder(int folderId);
+
+  Q_INVOKABLE int addGroupFolder(int parentFolderId, const QString& title);
+  Q_INVOKABLE [[nodiscard]] QString groupFolderTitle(int folderId) const;
+  void renameGroupFolder(int folderId, const QString& title);
+  void deleteGroupFolder(int folderId);
+  void moveGroupToFolder(int groupId, int parentFolderId);
+  void moveGroupFolderToFolder(int folderId, int parentFolderId);
+  void moveGroupFolderInParent(int folderId, int direction);
+
+  void promptAddGroupFolder(int parentFolderId);
+  void promptRenameGroupFolder(int folderId);
+  void confirmDeleteGroupFolder(int folderId);
+
+  Q_INVOKABLE int addTableFolder(int parentFolderId, const QString& title);
+  Q_INVOKABLE [[nodiscard]] QString tableFolderTitle(int folderId) const;
+  void renameTableFolder(int folderId, const QString& title);
+  void deleteTableFolder(int folderId);
+  void moveTableToFolder(const QString& tablePath, int parentFolderId);
+  void moveTableFolderToFolder(int folderId, int parentFolderId);
+  void moveTableFolderInParent(int folderId, int direction);
+
+  void promptAddTableFolder(int parentFolderId);
+  void promptAddTableInFolder(int parentFolderId);
+  void promptRenameTableFolder(int folderId);
+  void confirmDeleteTableFolder(int folderId);
 
   void removeWidgetFromWorkspace(int workspaceId, int index);
   void hideGroup(int groupId);
@@ -441,6 +488,8 @@ public slots:
 
   void duplicateSelectedItems(const QVariantList& items);
   void deleteSelectedItems(const QVariantList& items);
+  void confirmDeleteSelectedItems(const QVariantList& items);
+  void moveSelectedItemsToFolder(const QVariantList& items, int folderId);
 
 public:
   void flushAutoSave();
@@ -479,6 +528,11 @@ private:
   void persistLegacyMigration();
 
   [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
+  void appendAutoGroupWorkspaces(std::vector<Workspace>& result,
+                                 const std::vector<Group>& groups,
+                                 const QMap<int, std::vector<WidgetRef>>& perGroupRefs) const;
+  [[nodiscard]] std::vector<WorkspaceFolder> buildAutoWorkspaceFoldersFor(
+    const std::vector<Workspace>& workspaces) const;
 
   void regenerateAutoWorkspacesUnnotified();
 
@@ -498,6 +552,11 @@ private:
   void remapAutoWorkspaceIdsAfterReorder(const std::vector<int>& oldToNewGid);
 
   bool mergeAutoWorkspaceUpdates();
+  void sanitizeWorkspaceFolders();
+  void sanitizeGroupFolders();
+  void sanitizeTableFolders();
+  [[nodiscard]] int findTableIndexByPath(const QString& tablePath) const;
+  [[nodiscard]] QString tablePathFor(const DataModel::TableDef& table) const;
 
   [[nodiscard]] int allocateUniqueId();
   void seedNextUniqueIdFromGroups();
@@ -532,6 +591,9 @@ private:
   QSet<int> m_hiddenGroupIds;
   std::vector<DataModel::Workspace> m_workspaces;
   std::vector<DataModel::Workspace> m_autoSnapshot;
+  std::vector<DataModel::WorkspaceFolder> m_workspaceFolders;
+  std::vector<DataModel::GroupFolder> m_groupFolders;
+  std::vector<DataModel::TableFolder> m_tableFolders;
   std::vector<DataModel::TableDef> m_tables;
 
   bool m_customizeWorkspaces;

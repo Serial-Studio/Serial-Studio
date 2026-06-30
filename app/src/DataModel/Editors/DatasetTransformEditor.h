@@ -70,11 +70,19 @@ private slots:
   void showEditorContextMenu(const QPoint& localPos);
 
 private:
+  enum class TransformStatus {
+    Ok,
+    SyntaxError,
+    NoFunction
+  };
+
   [[nodiscard]] int detectTemplate() const;
   [[nodiscard]] QString testTransform(const QString& code, int language, double inputValue);
   [[nodiscard]] static QString defaultPlaceholder(int language);
   [[nodiscard]] static bool isDefaultPlaceholder(const QString& code, int language);
-  [[nodiscard]] static bool definesTransformFunction(const QString& code, int language);
+  [[nodiscard]] static TransformStatus validateTransform(const QString& code,
+                                                         int language,
+                                                         QString& error);
 
   void buildEditorWidgets();
   [[nodiscard]] QHBoxLayout* buildToolbarLayout();

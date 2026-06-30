@@ -323,14 +323,21 @@ Popup {
         //
         // Workspace model + separator + "New Workspace..." (hidden in operator runtime mode)
         //
-        var items = taskBar.workspaceModel
         var model = []
-        for (var i = 0; i < items.length; ++i) {
-          var item = Object.assign({}, items[i])
-          if (item["id"] === taskBar.activeGroupId)
-            item["checked"] = true
+        var roots = taskBar.workspaceTree()
+        for (var r = 0; r < roots.length; ++r) {
+          var node = roots[r]
+          if (node.isFolder) {
+            model.push({ "folder": true, "separator": false, "children": node.children,
+                         "id": node.id, "text": node.text, "icon": node.icon })
+          } else {
+            var entry = { "id": node.id, "separator": false,
+                          "text": node.text, "icon": node.icon }
+            if (node.id === taskBar.activeGroupId)
+              entry["checked"] = true
 
-          model.push(item)
+            model.push(entry)
+          }
         }
 
         var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
@@ -365,13 +372,13 @@ Popup {
         //
         _groups.popup.y = root.y
         _groups.popup.showCheckable = true
-        _groups.popup.model = model
         _groups.popup.maximumHeight = root.height
         _groups.popup.x = Cpp_Misc_Translator.rtl
                           ? root.x - _groups.popup.width + 1
                           : root.x + root.width - 1
         _groups.popup.currentValue = taskBar.activeGroupId
         _groups.popup.placeholderText = qsTr("No Workspaces Available")
+        _groups.popup.setRootModel(model)
 
         //
         // Open the popup

@@ -527,6 +527,11 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/SourceFrameParserView.qml
   qml/ProjectEditor/Views/ControlScriptView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
+  qml/ProjectEditor/Views/WorkspaceFolderView.qml
+  qml/ProjectEditor/Views/GroupsView.qml
+  qml/ProjectEditor/Views/GroupFolderView.qml
+  qml/ProjectEditor/Views/TableFolderView.qml
+  qml/ProjectEditor/Views/GroupTemplateMenu.qml
   qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml
   qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml
   qml/ProjectEditor/ProjectEditor.qml

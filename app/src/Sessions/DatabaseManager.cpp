@@ -160,6 +160,8 @@ void Sessions::DatabaseManager::initWorker()
     m_worker, &DatabaseWorker::csvExportFinished, this, &DatabaseManager::onWorkerCsvFinished);
   connect(
     m_worker, &DatabaseWorker::reportDataReady, this, &DatabaseManager::onWorkerReportDataReady);
+  connect(
+    m_worker, &DatabaseWorker::datasetListReady, this, &DatabaseManager::sessionDatasetsReady);
   connect(m_worker,
           &DatabaseWorker::globalProjectJsonReady,
           this,
@@ -817,6 +819,11 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   opts.lineWidth           = SerialStudio::toDouble(options.value("lineWidth", 1.4));
   opts.lineStyle           = options.value("lineStyle", QStringLiteral("solid")).toString();
 
+  const auto selList = options.value("selectedUniqueIds").toList();
+  opts.selectedUniqueIds.reserve(selList.size());
+  for (const auto& v : selList)
+    opts.selectedUniqueIds.push_back(v.toInt());
+
   const QString fmtStr = options.value("outputFormat", QStringLiteral("pdf")).toString().toLower();
   if (fmtStr == QStringLiteral("html"))
     opts.format = HtmlReportOptions::Format::Html;
@@ -855,12 +862,30 @@ void Sessions::DatabaseManager::launchPdfExport(int sessionId, HtmlReportOptions
     Q_EMIT pdfExportProgressChanged();
   }
 
+  QVariantList selectedUniqueIds;
+  selectedUniqueIds.reserve(static_cast<int>(m_pendingPdfOpts.selectedUniqueIds.size()));
+  for (const int uid : m_pendingPdfOpts.selectedUniqueIds)
+    selectedUniqueIds.append(uid);
+
   QMetaObject::invokeMethod(m_worker,
                             "runReportDataLoad",
                             Qt::QueuedConnection,
                             Q_ARG(int, sessionId),
                             Q_ARG(bool, m_pendingPdfOpts.includeCharts),
-                            Q_ARG(int, 10000));
+                            Q_ARG(int, 10000),
+                            Q_ARG(QVariantList, selectedUniqueIds));
+}
+
+/**
+ * @brief Asks the worker thread to enumerate a session's datasets for the selection UI.
+ */
+void Sessions::DatabaseManager::requestSessionDatasets(int sessionId)
+{
+  if (!isOpen())
+    return;
+
+  QMetaObject::invokeMethod(
+    m_worker, "runDatasetListLoad", Qt::QueuedConnection, Q_ARG(int, sessionId));
 }
 
 /**

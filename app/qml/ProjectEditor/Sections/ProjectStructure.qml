@@ -125,7 +125,113 @@ Widgets.Pane {
       //
       property int ctxItemId: -1
       property int ctxItemParentId: -1
+      property string ctxItemPath: ""
       property int ctxItemKind: ProjectEditor.KindNone
+      property int moveExcludeId: -1
+      property bool moveHasTargets: false
+      property var moveTargetsTree: []
+      property var dynamicMoveMenus: []
+
+      readonly property bool ctxItemOrderable:
+        ctxItemKind === ProjectEditor.KindGroup
+        || ctxItemKind === ProjectEditor.KindDataset
+        || ctxItemKind === ProjectEditor.KindAction
+        || ctxItemKind === ProjectEditor.KindOutputWidget
+        || ctxItemKind === ProjectEditor.KindWorkspace
+        || ctxItemKind === ProjectEditor.KindWorkspaceFolder
+        || ctxItemKind === ProjectEditor.KindGroupFolder
+        || ctxItemKind === ProjectEditor.KindTableFolder
+
+      readonly property bool ctxIsFolder:
+        ctxItemKind === ProjectEditor.KindWorkspaceFolder
+        || ctxItemKind === ProjectEditor.KindGroupFolder
+        || ctxItemKind === ProjectEditor.KindTableFolder
+
+      readonly property bool ctxSupportsFolders:
+        ctxIsFolder
+        || ctxItemKind === ProjectEditor.KindWorkspace
+        || ctxItemKind === ProjectEditor.KindGroup
+        || ctxItemKind === ProjectEditor.KindUserTable
+
+      readonly property bool ctxRenameable:
+        ctxIsFolder
+        || ctxItemKind === ProjectEditor.KindGroup
+        || ctxItemKind === ProjectEditor.KindDataset
+        || ctxItemKind === ProjectEditor.KindAction
+        || ctxItemKind === ProjectEditor.KindSource
+        || ctxItemKind === ProjectEditor.KindWorkspace
+        || ctxItemKind === ProjectEditor.KindUserTable
+
+      function renameCtxItem() {
+        if (ctxItemKind === ProjectEditor.KindGroup)
+          Cpp_JSON_ProjectModel.promptRenameGroup(ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindDataset)
+          Cpp_JSON_ProjectModel.promptRenameDataset(ctxItemParentId, ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindAction)
+          Cpp_JSON_ProjectModel.promptRenameAction(ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindSource)
+          Cpp_JSON_ProjectModel.promptRenameSource(ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindWorkspace)
+          Cpp_JSON_ProjectModel.promptRenameWorkspace(ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindUserTable)
+          Cpp_JSON_ProjectModel.promptRenameTable(ctxItemPath)
+        else if (ctxIsFolder)
+          renameFolderForCtx()
+      }
+
+      function folderTreeForCtx() {
+        if (ctxItemKind === ProjectEditor.KindGroup
+            || ctxItemKind === ProjectEditor.KindGroupFolder)
+          return Cpp_JSON_ProjectEditor.groupFolderTree()
+
+        if (ctxItemKind === ProjectEditor.KindUserTable
+            || ctxItemKind === ProjectEditor.KindTableFolder)
+          return Cpp_JSON_ProjectEditor.tableFolderTree()
+
+        return Cpp_JSON_ProjectEditor.workspaceFolderTree()
+      }
+
+      //
+      // Build the cascading "Move to Folder" submenu (directory-explorer style): one level of
+      // folders per menu, drilling into children. Rebuilt on each context-menu open.
+      //
+      function clearMoveMenus() {
+        for (let i = 0; i < dynamicMoveMenus.length; ++i) {
+          const m = dynamicMoveMenus[i]
+          if (m) {
+            moveToFolderMenu.removeMenu(m)
+            m.destroy()
+          }
+        }
+
+        dynamicMoveMenus = []
+      }
+
+      function populateMoveMenu(menu, nodes) {
+        for (let i = 0; i < nodes.length; ++i) {
+          const node = nodes[i]
+          if (node.id === moveExcludeId)
+            continue
+
+          const kids = (node.children !== undefined) && (node.children.length > 0)
+          const sub = _moveFolderMenu.createObject(
+                        null, { folderId2: node.id, folderTitle: node.title, hasChildren: kids })
+          menu.addMenu(sub)
+          if (menu === moveToFolderMenu)
+            dynamicMoveMenus.push(sub)
+
+          if (kids)
+            treeView.populateMoveMenu(sub, node.children)
+        }
+      }
+
+      function rebuildMoveMenu() {
+        clearMoveMenus()
+        moveExcludeId   = ctxIsFolder ? ctxItemId : -1
+        moveTargetsTree = folderTreeForCtx()
+        populateMoveMenu(moveToFolderMenu, moveTargetsTree)
+        moveHasTargets = dynamicMoveMenus.length > 0
+      }
 
       function moveContextItemBy(direction) {
         if (ctxItemKind === ProjectEditor.KindGroup)
@@ -140,18 +246,89 @@ Widgets.Pane {
                                                  ctxItemId, ctxItemId + direction)
         else if (ctxItemKind === ProjectEditor.KindWorkspace)
           Cpp_JSON_ProjectEditor.moveWorkspace(ctxItemId, direction)
+        else if (ctxItemKind === ProjectEditor.KindWorkspaceFolder)
+          Cpp_JSON_ProjectModel.moveWorkspaceFolderInParent(ctxItemId, direction)
+        else if (ctxItemKind === ProjectEditor.KindGroupFolder)
+          Cpp_JSON_ProjectModel.moveGroupFolderInParent(ctxItemId, direction)
+        else if (ctxItemKind === ProjectEditor.KindTableFolder)
+          Cpp_JSON_ProjectModel.moveTableFolderInParent(ctxItemId, direction)
+      }
+
+      function ctxSectionOf(kind) {
+        if (kind === ProjectEditor.KindGroup || kind === ProjectEditor.KindGroupFolder)
+          return "group"
+
+        if (kind === ProjectEditor.KindUserTable || kind === ProjectEditor.KindTableFolder)
+          return "table"
+
+        if (kind === ProjectEditor.KindWorkspace || kind === ProjectEditor.KindWorkspaceFolder)
+          return "workspace"
+
+        return ""
+      }
+
+      function moveCtxItemToFolder(folderId) {
+        const section = ctxSectionOf(ctxItemKind)
+        if (section === "")
+          return
+
+        const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
+                        .filter(it => treeView.ctxSectionOf(it.kind) === section)
+        if (items.length > 0)
+          Cpp_JSON_ProjectModel.moveSelectedItemsToFolder(items, folderId)
+      }
+
+      function newTopFolderForCtx() {
+        if (ctxItemKind === ProjectEditor.KindGroup
+            || ctxItemKind === ProjectEditor.KindGroupFolder)
+          Cpp_JSON_ProjectModel.promptAddGroupFolder(-1)
+        else if (ctxItemKind === ProjectEditor.KindUserTable
+                 || ctxItemKind === ProjectEditor.KindTableFolder)
+          Cpp_JSON_ProjectModel.promptAddTableFolder(-1)
+        else
+          Cpp_JSON_ProjectModel.promptAddWorkspaceFolder(-1)
+      }
+
+      function newSubFolderForCtx() {
+        if (ctxItemKind === ProjectEditor.KindGroupFolder)
+          Cpp_JSON_ProjectModel.promptAddGroupFolder(ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindTableFolder)
+          Cpp_JSON_ProjectModel.promptAddTableFolder(ctxItemId)
+        else
+          Cpp_JSON_ProjectModel.promptAddWorkspaceFolder(ctxItemId)
+      }
+
+      function renameFolderForCtx() {
+        if (ctxItemKind === ProjectEditor.KindGroupFolder)
+          Cpp_JSON_ProjectModel.promptRenameGroupFolder(ctxItemId)
+        else if (ctxItemKind === ProjectEditor.KindTableFolder)
+          Cpp_JSON_ProjectModel.promptRenameTableFolder(ctxItemId)
+        else
+          Cpp_JSON_ProjectModel.promptRenameWorkspaceFolder(ctxItemId)
       }
 
       //
       // Reactive selection counters
       //
+      property int deletableSelectionCount: 0
       property int selectableSelectionCount: 0
       function refreshSelectableCount() {
-        selectableSelectionCount = Cpp_JSON_ProjectEditor.selectedTreeItems().filter(
+        const sel = Cpp_JSON_ProjectEditor.selectedTreeItems()
+        selectableSelectionCount = sel.filter(
           it => it.kind === ProjectEditor.KindGroup
                 || it.kind === ProjectEditor.KindDataset
                 || it.kind === ProjectEditor.KindAction
                 || it.kind === ProjectEditor.KindOutputWidget).length
+        deletableSelectionCount = sel.filter(
+          it => it.kind === ProjectEditor.KindGroup
+                || it.kind === ProjectEditor.KindDataset
+                || it.kind === ProjectEditor.KindAction
+                || it.kind === ProjectEditor.KindOutputWidget
+                || it.kind === ProjectEditor.KindWorkspace
+                || it.kind === ProjectEditor.KindWorkspaceFolder
+                || it.kind === ProjectEditor.KindGroupFolder
+                || it.kind === ProjectEditor.KindUserTable
+                || it.kind === ProjectEditor.KindTableFolder).length
       }
 
       Connections {
@@ -166,28 +343,56 @@ Widgets.Pane {
         id: sharedContextMenu
 
         MenuItem {
+          icon.width: 16
+          icon.height: 16
           text: qsTr("Move Up")
+          visible: treeView.ctxItemOrderable
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/move-up.svg"
           onTriggered: treeView.moveContextItemBy(-1)
         }
 
         MenuItem {
+          icon.width: 16
+          icon.height: 16
           text: qsTr("Move Down")
+          visible: treeView.ctxItemOrderable
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/move-down.svg"
           onTriggered: treeView.moveContextItemBy(1)
         }
 
-        MenuSeparator {}
+        MenuSeparator {
+          height: visible ? implicitHeight : 0
+          visible: treeView.ctxItemOrderable && treeView.deletableSelectionCount > 0
+        }
+
+        MenuItem {
+          icon.width: 16
+          icon.height: 16
+          text: qsTr("Rename")
+          visible: treeView.ctxRenameable
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/rename.svg"
+          onTriggered: treeView.renameCtxItem()
+        }
 
         //
         // Bulk-aware duplicate
         //
         MenuItem {
+          icon.width: 16
+          icon.height: 16
           text: treeView.selectableSelectionCount > 1
                 ? qsTr("Duplicate Selected (%1)").arg(treeView.selectableSelectionCount)
                 : qsTr("Duplicate")
           visible: treeView.selectableSelectionCount > 0
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
           onTriggered: {
             const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
                             .filter(it => it.kind !== ProjectEditor.KindWorkspace
+                                          && it.kind !== ProjectEditor.KindWorkspaceFolder
                                           && it.kind !== ProjectEditor.KindNone)
             if (items.length > 0)
               Cpp_JSON_ProjectModel.duplicateSelectedItems(items)
@@ -195,23 +400,135 @@ Widgets.Pane {
         }
 
         MenuItem {
-          text: treeView.selectableSelectionCount > 1
-                ? qsTr("Delete Selected (%1)").arg(treeView.selectableSelectionCount)
+          icon.width: 16
+          icon.height: 16
+          text: treeView.deletableSelectionCount > 1
+                ? qsTr("Delete Selected (%1)").arg(treeView.deletableSelectionCount)
                 : qsTr("Delete")
-          visible: treeView.selectableSelectionCount > 0
-                   || treeView.ctxItemKind === ProjectEditor.KindWorkspace
+          visible: treeView.deletableSelectionCount > 0
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/delete.svg"
           onTriggered: {
-            if (treeView.ctxItemKind === ProjectEditor.KindWorkspace
-                && treeView.selectableSelectionCount === 0) {
-              Cpp_JSON_ProjectModel.confirmDeleteWorkspace(treeView.ctxItemId)
-              return
+            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
+                            .filter(it => it.kind !== ProjectEditor.KindNone)
+            if (items.length === 1) {
+              const it = items[0]
+              if (it.kind === ProjectEditor.KindWorkspace) {
+                Cpp_JSON_ProjectModel.confirmDeleteWorkspace(it.id)
+                return
+              }
+
+              if (it.kind === ProjectEditor.KindWorkspaceFolder) {
+                Cpp_JSON_ProjectModel.confirmDeleteWorkspaceFolder(it.id)
+                return
+              }
+
+              if (it.kind === ProjectEditor.KindGroupFolder) {
+                Cpp_JSON_ProjectModel.confirmDeleteGroupFolder(it.id)
+                return
+              }
+
+              if (it.kind === ProjectEditor.KindTableFolder) {
+                Cpp_JSON_ProjectModel.confirmDeleteTableFolder(it.id)
+                return
+              }
+
+              if (it.kind === ProjectEditor.KindUserTable) {
+                Cpp_JSON_ProjectModel.confirmDeleteTable(it.path)
+                return
+              }
             }
 
-            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-                            .filter(it => it.kind !== ProjectEditor.KindWorkspace
-                                          && it.kind !== ProjectEditor.KindNone)
             if (items.length > 0)
-              Cpp_JSON_ProjectModel.deleteSelectedItems(items)
+              Cpp_JSON_ProjectModel.confirmDeleteSelectedItems(items)
+          }
+        }
+
+        //
+        // Folder actions (workspaces, groups, shared-memory tables)
+        //
+        MenuSeparator {
+          height: visible ? implicitHeight : 0
+          visible: treeView.ctxSupportsFolders
+        }
+
+        MenuItem {
+          icon.width: 16
+          icon.height: 16
+          text: qsTr("New Folder")
+          height: visible ? implicitHeight : 0
+          visible: treeView.ctxSupportsFolders
+          icon.source: "qrc:/icons/project-editor/actions/add-folder.svg"
+          onTriggered: treeView.newTopFolderForCtx()
+        }
+
+        MenuItem {
+          icon.width: 16
+          icon.height: 16
+          text: qsTr("New Sub-folder")
+          visible: treeView.ctxIsFolder
+          height: visible ? implicitHeight : 0
+          icon.source: "qrc:/icons/project-editor/actions/add-folder.svg"
+          onTriggered: treeView.newSubFolderForCtx()
+        }
+
+        //
+        // Move an item or folder into another folder, navigated like a directory tree.
+        // Child folders are filled dynamically by rebuildMoveMenu() on each open.
+        //
+        Menu {
+          id: moveToFolderMenu
+
+          icon.width: 16
+          icon.height: 16
+          title: qsTr("Move to Folder")
+          enabled: treeView.ctxSupportsFolders
+          icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
+
+          MenuItem {
+            icon.width: 16
+            icon.height: 16
+            text: qsTr("Top Level")
+            icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
+            onTriggered: treeView.moveCtxItemToFolder(-1)
+          }
+
+          MenuSeparator {
+            visible: treeView.moveHasTargets
+            height: visible ? implicitHeight : 0
+          }
+        }
+      }
+
+      //
+      // One cascading sub-menu per folder: a "Move Here" target plus its child folders.
+      //
+      Component {
+        id: _moveFolderMenu
+
+        Menu {
+          id: folderSubMenu
+
+          property int folderId2: -1
+          property string folderTitle: ""
+          property bool hasChildren: false
+
+          icon.width: 16
+          icon.height: 16
+          title: folderTitle
+          icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
+
+          MenuItem {
+            icon.width: 16
+            icon.height: 16
+            text: qsTr("Move Here")
+            icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
+            onTriggered: treeView.moveCtxItemToFolder(folderSubMenu.folderId2)
+          }
+
+          MenuSeparator {
+            visible: folderSubMenu.hasChildren
+            height: visible ? implicitHeight : 0
           }
         }
       }
@@ -307,7 +624,7 @@ Widgets.Pane {
                             .filter(it => it.kind !== ProjectEditor.KindWorkspace
                                           && it.kind !== ProjectEditor.KindNone)
                           if (items.length > 0) {
-                            Cpp_JSON_ProjectModel.deleteSelectedItems(items)
+                            Cpp_JSON_ProjectModel.confirmDeleteSelectedItems(items)
                             event.accepted = true
                           } else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView) {
                             Cpp_JSON_ProjectModel.deleteCurrentDataset()
@@ -332,6 +649,7 @@ Widgets.Pane {
         required property int depth
         required property int column
         required property bool current
+        required property bool selected
         required property bool expanded
         required property bool isTreeNode
         required property bool hasChildren
@@ -346,6 +664,8 @@ Widgets.Pane {
         readonly property int itemId: model.treeItemId === undefined ? -1 : model.treeItemId
         readonly property int itemParentId: model.treeItemParentId === undefined
                                             ? -1 : model.treeItemParentId
+        readonly property string itemPath: model.treeItemPath === undefined
+                                           ? "" : model.treeItemPath
 
         //
         // Restore expanded state from C++ model
@@ -405,7 +725,7 @@ Widgets.Pane {
           id: background
 
           anchors.fill: parent
-          color: current ? Cpp_ThemeManager.colors["highlight"] : "transparent"
+          color: (selected || current) ? Cpp_ThemeManager.colors["highlight"] : "transparent"
 
           MouseArea {
             anchors.fill: parent
@@ -426,6 +746,8 @@ Widgets.Pane {
                   treeView.ctxItemKind     = item.itemKind
                   treeView.ctxItemId       = item.itemId
                   treeView.ctxItemParentId = item.itemParentId
+                  treeView.ctxItemPath     = item.itemPath
+                  treeView.rebuildMoveMenu()
                   sharedContextMenu.popup()
                 }
                 return
@@ -450,13 +772,16 @@ Widgets.Pane {
 
               if (mouse.modifiers & Qt.ShiftModifier) {
                 const curIdx = treeView.selectionModel.currentIndex
-                if (curIdx && curIdx.valid && curIdx.row !== row) {
-                  const startRow = Math.min(curIdx.row, row)
-                  const endRow   = Math.max(curIdx.row, row)
+                const anchorRow = curIdx && curIdx.valid ? treeView.rowAtIndex(curIdx) : -1
+                if (anchorRow >= 0 && anchorRow !== row) {
+                  const startRow = Math.min(anchorRow, row)
+                  const endRow   = Math.max(anchorRow, row)
                   treeView.selectionModel.clear()
-                  for (let r = startRow; r <= endRow; ++r)
-                    treeView.selectionModel.select(treeView.index(r, column),
-                                                   ItemSelectionModel.Select)
+                  for (let r = startRow; r <= endRow; ++r) {
+                    const ri = treeView.index(r, column)
+                    if (ri && ri.valid)
+                      treeView.selectionModel.select(ri, ItemSelectionModel.Select)
+                  }
 
                   treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
                   return
@@ -539,22 +864,22 @@ Widgets.Pane {
                                                          : Text.AlignLeft
             font: depth === 0 ? Cpp_Misc_CommonFonts.boldUiFont :
                                 Cpp_Misc_CommonFonts.uiFont
-            color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
-                             (label.stale ? "#B8860B"
-                                          : Cpp_ThemeManager.colors["text"])
+            color: (selected || current)
+                   ? Cpp_ThemeManager.colors["highlighted_text"]
+                   : (label.stale ? "#B8860B" : Cpp_ThemeManager.colors["text"])
           }
 
           Label {
             id: sourceBadge
 
-            opacity: current ? 1.0 : 0.85
+            opacity: (selected || current) ? 1.0 : 0.85
             font: Cpp_Misc_CommonFonts.monoFont
             text: "[" + String.fromCharCode(65 + model.treeViewSourceId) + "]"
             visible: model.treeViewSourceName !== undefined
                      && model.treeViewSourceName !== ""
             Layout.alignment: Qt.AlignVCenter
             color: {
-              if (current)
+              if (selected || current)
                 return Cpp_ThemeManager.colors["highlighted_text"]
 
               if (Cpp_JSON_ProjectModel.sourceCount > 1)
@@ -567,7 +892,7 @@ Widgets.Pane {
           Label {
             id: frameIndex
 
-            opacity: current ? 1.0 : 0.85
+            opacity: (selected || current) ? 1.0 : 0.85
             font: Cpp_Misc_CommonFonts.monoFont
             visible: depth > 1 && (model.treeViewVirtual === true
                                    || model.treeViewFrameIndex >= 0
@@ -584,7 +909,7 @@ Widgets.Pane {
             }
             Layout.alignment: Qt.AlignVCenter
             color: {
-              if (current)
+              if (selected || current)
                 return Cpp_ThemeManager.colors["highlighted_text"]
 
               if (Cpp_JSON_ProjectModel.sourceCount > 1)

@@ -157,6 +157,7 @@ public:
   Q_INVOKABLE [[nodiscard]] QVariantList workspaceWidgetIds(int workspaceId) const;
   Q_INVOKABLE [[nodiscard]] TaskbarModel::WindowState windowState(QQuickItem* window) const;
   Q_INVOKABLE [[nodiscard]] QQuickItem* nextActiveWindow(int delta) const;
+  Q_INVOKABLE [[nodiscard]] QVariantList workspaceTree() const;
 
   [[nodiscard]] QVector<int> taskbarWindowIds() const;
 
@@ -166,6 +167,7 @@ public slots:
   void setSearchFilter(const QString& filter);
   void setActiveGroupId(int groupId);
   void setActiveGroupIndex(int index);
+  void selectWorkspaceById(int workspaceId);
   void setDesiredGroupId(int groupId);
   void setIndependentWorkspace(bool independent);
   void setLayoutScope(const QString& scope);

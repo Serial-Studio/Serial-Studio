@@ -46,7 +46,25 @@ Widgets.Pane {
   // view is shown.
   //
   function refresh() {
-    summary = Cpp_JSON_ProjectEditor.tablesSummary()
+    var rows = []
+    var sys = Cpp_JSON_ProjectEditor.tablesSummary()
+    if (sys.length > 0) {
+      rows.push({
+                  "isSystem": true,
+                  "isFolder": false,
+                  "title": sys[0].name,
+                  "icon": "qrc:/icons/project-editor/treeview/dataset-values.svg",
+                  "count": sys[0].entryCount
+                })
+    }
+
+    var fc = Cpp_JSON_ProjectEditor.tableFolderContents(-1)
+    for (var i = 0; i < fc.length; ++i) {
+      fc[i].isSystem = false
+      rows.push(fc[i])
+    }
+
+    summary = rows
   }
 
   onVisibleChanged: if (visible) Qt.callLater(refresh)
@@ -146,6 +164,16 @@ Widgets.Pane {
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
+              text: qsTr("Add Folder")
+              Layout.alignment: Qt.AlignVCenter
+              ToolTip.text: qsTr("Add a top-level folder")
+              onClicked: Cpp_JSON_ProjectModel.promptAddTableFolder(-1)
+              icon.source: "qrc:/icons/project-editor/actions/add-folder.svg"
+            }
+
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
               text: qsTr("Add Shared Table")
               Layout.alignment: Qt.AlignVCenter
               ToolTip.text: qsTr("Add shared table")
@@ -171,9 +199,8 @@ Widgets.Pane {
       Widgets.ProjectTableHeader {
         Layout.fillWidth: true
         columns: [
-          { title: qsTr("Name"),        width: 220 },
-          { title: qsTr("Description"), width: -1  },
-          { title: qsTr("Entries"),     width: 100 }
+          { title: qsTr("Title"),     width: 280 },
+          { title: qsTr("Registers"), width: -1  }
         ]
       }
 
@@ -192,88 +219,84 @@ Widgets.Pane {
           policy: ScrollBar.AsNeeded
         }
 
-          delegate: Widgets.ProjectTableRow {
-            id: rowDel
+        delegate: Widgets.ProjectTableRow {
+          id: rowDel
 
-            MouseArea {
-              id: rowMouse
+          MouseArea {
+            anchors.fill: parent
+            cursorShape: modelData.isSystem ? Qt.ArrowCursor : Qt.PointingHandCursor
+            onClicked: {
+              if (modelData.isSystem)
+                return
 
-              hoverEnabled: true
-              anchors.fill: parent
-              cursorShape: modelData.isSystem ? Qt.ArrowCursor : Qt.PointingHandCursor
-              onClicked: {
-                if (!modelData.isSystem)
-                  Cpp_JSON_ProjectEditor.selectUserTable(modelData.name)
-              }
-            }
-
-            RowLayout {
-              spacing: 0
-              anchors.fill: parent
-              LayoutMirroring.enabled: root.rtl
-              LayoutMirroring.childrenInherit: true
-
-              Label {
-                text: modelData.name
-                elide: Text.ElideRight
-                color: rowDel.textColor
-                Layout.preferredWidth: 220
-                leftPadding: root.rtl ? 0 : 8
-                rightPadding: root.rtl ? 8 : 0
-                Layout.alignment: Qt.AlignVCenter
-                font: Cpp_Misc_CommonFonts.monoFont
-                horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
-              }
-
-              Rectangle {
-                implicitWidth: 1
-                Layout.fillHeight: true
-                color: rowDel.separatorColor
-              }
-
-              Label {
-                opacity: 0.75
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-                color: rowDel.textColor
-                text: modelData.description
-                leftPadding: root.rtl ? 0 : 8
-                rightPadding: root.rtl ? 8 : 0
-                Layout.alignment: Qt.AlignVCenter
-                horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
-              }
-
-              Rectangle {
-                implicitWidth: 1
-                Layout.fillHeight: true
-                color: rowDel.separatorColor
-              }
-
-              Label {
-                color: rowDel.textColor
-                Layout.preferredWidth: 100
-                text: modelData.entryCount
-                leftPadding: root.rtl ? 8 : 0
-                rightPadding: root.rtl ? 0 : 8
-                Layout.alignment: Qt.AlignVCenter
-                font: Cpp_Misc_CommonFonts.monoFont
-                horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
-              }
+              if (modelData.isFolder)
+                Cpp_JSON_ProjectEditor.selectTableFolder(modelData.id)
+              else
+                Cpp_JSON_ProjectEditor.selectUserTable(modelData.path)
             }
           }
 
-          footer: Item {
-            height: 40
-            width: ListView.view ? ListView.view.width : 0
+          RowLayout {
+            spacing: 0
+            anchors.fill: parent
+            LayoutMirroring.enabled: root.rtl
+            LayoutMirroring.childrenInherit: true
+
+            Item {
+              Layout.fillHeight: true
+              Layout.preferredWidth: 280
+
+              RowLayout {
+                spacing: 6
+                anchors.fill: parent
+                anchors.leftMargin: 8
+
+                Image {
+                  source: modelData.icon
+                  sourceSize: Qt.size(16, 16)
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                Label {
+                  text: modelData.title
+                  elide: Text.ElideRight
+                  Layout.fillWidth: true
+                  color: rowDel.textColor
+                  Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.uiFont
+                }
+              }
+            }
+
+            Rectangle {
+              implicitWidth: 1
+              Layout.fillHeight: true
+              color: rowDel.separatorColor
+            }
 
             Label {
-              anchors.centerIn: parent
-              opacity: 0.5
-              color: Cpp_ThemeManager.colors["text"]
-              visible: root.summary.length <= 1
-              text: qsTr("No shared tables.")
+              leftPadding: 8
+              text: modelData.count
+              Layout.fillWidth: true
+              color: rowDel.textColor
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
             }
           }
+        }
+
+        footer: Item {
+          height: 40
+          width: ListView.view ? ListView.view.width : 0
+
+          Label {
+            anchors.centerIn: parent
+            opacity: 0.5
+            color: Cpp_ThemeManager.colors["text"]
+            visible: root.summary.length <= 1
+            text: qsTr("No shared tables.")
+          }
+        }
       }
     }
   }

@@ -16,6 +16,7 @@
 #ifdef BUILD_COMMERCIAL
 
 #  include <QDateTime>
+#  include <QSet>
 #  include <QString>
 #  include <QStringList>
 #  include <QVariantList>
@@ -75,12 +76,15 @@ struct ReportData {
   QStringList tags;
   std::vector<DatasetStats> datasets;
 
-  [[nodiscard]] static ReportData buildFromSession(QSqlDatabase& db, int sessionId);
+  [[nodiscard]] static ReportData buildFromSession(QSqlDatabase& db,
+                                                   int sessionId,
+                                                   const QSet<int>& selectedUniqueIds = {});
 };
 
 [[nodiscard]] std::vector<DatasetSeries> loadChartSeries(QSqlDatabase& db,
                                                          int sessionId,
-                                                         int maxSamples);
+                                                         int maxSamples,
+                                                         const QSet<int>& selectedUniqueIds = {});
 
 }  // namespace Sessions
 

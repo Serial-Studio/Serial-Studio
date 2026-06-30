@@ -93,6 +93,10 @@ QString Misc::IconEngine::resolveActionIconSource(const QString& icon)
     return QStringLiteral("image://actionicon/%1").arg(base64);
   }
 
+  if (icon.startsWith(QStringLiteral("qrc:")) || icon.startsWith(QChar(':'))
+      || icon.contains(QStringLiteral("://")))
+    return icon;
+
   return QStringLiteral("qrc:/actions/%1.svg").arg(icon);
 }
 

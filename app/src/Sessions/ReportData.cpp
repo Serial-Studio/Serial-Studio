@@ -20,6 +20,7 @@
 #  include <limits>
 #  include <map>
 #  include <QDateTime>
+#  include <QSet>
 #  include <QSqlDatabase>
 #  include <QSqlError>
 #  include <QSqlQuery>
@@ -74,7 +75,8 @@ static bool loadSessionHeader(QSqlDatabase& db, int sessionId, Sessions::ReportD
  */
 static bool loadDatasetSkeleton(QSqlDatabase& db,
                                 int sessionId,
-                                std::vector<Sessions::DatasetStats>& datasets)
+                                std::vector<Sessions::DatasetStats>& datasets,
+                                const QSet<int>& selectedUniqueIds)
 {
   QSqlQuery colQ(db);
   colQ.prepare("SELECT unique_id, group_title, title, units, source_title "
@@ -84,8 +86,12 @@ static bool loadDatasetSkeleton(QSqlDatabase& db,
     return false;
 
   while (colQ.next()) {
+    const int uid = colQ.value(0).toInt();
+    if (!selectedUniqueIds.isEmpty() && !selectedUniqueIds.contains(uid))
+      continue;
+
     Sessions::DatasetStats ds;
-    ds.uniqueId       = colQ.value(0).toInt();
+    ds.uniqueId       = uid;
     ds.group          = colQ.value(1).toString();
     ds.title          = colQ.value(2).toString();
     ds.units          = colQ.value(3).toString();
@@ -227,7 +233,9 @@ static void loadSessionTags(QSqlDatabase& db, int sessionId, Sessions::ReportDat
 /**
  * @brief Queries session metadata, columns, tags, and per-dataset stats.
  */
-Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, int sessionId)
+Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db,
+                                                            int sessionId,
+                                                            const QSet<int>& selectedUniqueIds)
 {
   ReportData out;
   out.valid      = false;
@@ -242,7 +250,7 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
     return out;
 
   std::vector<DatasetStats> datasets;
-  if (!loadDatasetSkeleton(db, sessionId, datasets))
+  if (!loadDatasetSkeleton(db, sessionId, datasets, selectedUniqueIds))
     return out;
 
   if (!loadNumericAggregates(db, sessionId, datasets))
@@ -554,7 +562,8 @@ static std::map<int, qint64> loadSampleCounts(QSqlDatabase& db, int sessionId)
  */
 std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
                                                                int sessionId,
-                                                               int maxSamples)
+                                                               int maxSamples,
+                                                               const QSet<int>& selectedUniqueIds)
 {
   std::vector<DatasetSeries> out;
   if (!db.isOpen() || sessionId < 0 || maxSamples < 2)
@@ -574,6 +583,9 @@ std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
   DSP::AxisData y(16);
 
   for (const auto& m : metas) {
+    if (!selectedUniqueIds.isEmpty() && !selectedUniqueIds.contains(m.uid))
+      continue;
+
     const auto it      = counts.find(m.uid);
     const qint64 total = (it != counts.end()) ? it->second : 0;
     if (total < 2)
