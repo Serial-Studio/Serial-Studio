@@ -134,34 +134,34 @@ Widgets.Pane {
       property var dynamicMoveMenus: []
 
       readonly property bool ctxItemOrderable:
-        ctxItemKind === ProjectEditor.KindGroup
-        || ctxItemKind === ProjectEditor.KindDataset
-        || ctxItemKind === ProjectEditor.KindAction
-        || ctxItemKind === ProjectEditor.KindOutputWidget
-        || ctxItemKind === ProjectEditor.KindWorkspace
-        || ctxItemKind === ProjectEditor.KindWorkspaceFolder
-        || ctxItemKind === ProjectEditor.KindGroupFolder
-        || ctxItemKind === ProjectEditor.KindTableFolder
+          ctxItemKind === ProjectEditor.KindGroup
+          || ctxItemKind === ProjectEditor.KindDataset
+          || ctxItemKind === ProjectEditor.KindAction
+          || ctxItemKind === ProjectEditor.KindOutputWidget
+          || ctxItemKind === ProjectEditor.KindWorkspace
+          || ctxItemKind === ProjectEditor.KindWorkspaceFolder
+          || ctxItemKind === ProjectEditor.KindGroupFolder
+          || ctxItemKind === ProjectEditor.KindTableFolder
 
       readonly property bool ctxIsFolder:
-        ctxItemKind === ProjectEditor.KindWorkspaceFolder
-        || ctxItemKind === ProjectEditor.KindGroupFolder
-        || ctxItemKind === ProjectEditor.KindTableFolder
+          ctxItemKind === ProjectEditor.KindWorkspaceFolder
+          || ctxItemKind === ProjectEditor.KindGroupFolder
+          || ctxItemKind === ProjectEditor.KindTableFolder
 
       readonly property bool ctxSupportsFolders:
-        ctxIsFolder
-        || ctxItemKind === ProjectEditor.KindWorkspace
-        || ctxItemKind === ProjectEditor.KindGroup
-        || ctxItemKind === ProjectEditor.KindUserTable
+          ctxIsFolder
+          || ctxItemKind === ProjectEditor.KindWorkspace
+          || ctxItemKind === ProjectEditor.KindGroup
+          || ctxItemKind === ProjectEditor.KindUserTable
 
       readonly property bool ctxRenameable:
-        ctxIsFolder
-        || ctxItemKind === ProjectEditor.KindGroup
-        || ctxItemKind === ProjectEditor.KindDataset
-        || ctxItemKind === ProjectEditor.KindAction
-        || ctxItemKind === ProjectEditor.KindSource
-        || ctxItemKind === ProjectEditor.KindWorkspace
-        || ctxItemKind === ProjectEditor.KindUserTable
+          ctxIsFolder
+          || ctxItemKind === ProjectEditor.KindGroup
+          || ctxItemKind === ProjectEditor.KindDataset
+          || ctxItemKind === ProjectEditor.KindAction
+          || ctxItemKind === ProjectEditor.KindSource
+          || ctxItemKind === ProjectEditor.KindWorkspace
+          || ctxItemKind === ProjectEditor.KindUserTable
 
       function renameCtxItem() {
         if (ctxItemKind === ProjectEditor.KindGroup)
@@ -216,7 +216,7 @@ Widgets.Pane {
 
           const kids = (node.children !== undefined) && (node.children.length > 0)
           const sub = _moveFolderMenu.createObject(
-                        null, { folderId2: node.id, folderTitle: node.title, hasChildren: kids })
+                      null, { folderId2: node.id, folderTitle: node.title, hasChildren: kids })
           menu.addMenu(sub)
           if (menu === moveToFolderMenu)
             dynamicMoveMenus.push(sub)
@@ -274,7 +274,7 @@ Widgets.Pane {
           return
 
         const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-                        .filter(it => treeView.ctxSectionOf(it.kind) === section)
+        .filter(it => treeView.ctxSectionOf(it.kind) === section)
         if (items.length > 0)
           Cpp_JSON_ProjectModel.moveSelectedItemsToFolder(items, folderId)
       }
@@ -313,23 +313,28 @@ Widgets.Pane {
       //
       property int deletableSelectionCount: 0
       property int selectableSelectionCount: 0
+      property int enableableSelectionCount: 0
       function refreshSelectableCount() {
         const sel = Cpp_JSON_ProjectEditor.selectedTreeItems()
         selectableSelectionCount = sel.filter(
-          it => it.kind === ProjectEditor.KindGroup
-                || it.kind === ProjectEditor.KindDataset
-                || it.kind === ProjectEditor.KindAction
-                || it.kind === ProjectEditor.KindOutputWidget).length
+              it => it.kind === ProjectEditor.KindGroup
+              || it.kind === ProjectEditor.KindDataset
+              || it.kind === ProjectEditor.KindAction
+              || it.kind === ProjectEditor.KindOutputWidget).length
+        enableableSelectionCount = sel.filter(
+              it => it.kind === ProjectEditor.KindGroup
+              || it.kind === ProjectEditor.KindDataset
+              || it.kind === ProjectEditor.KindGroupFolder).length
         deletableSelectionCount = sel.filter(
-          it => it.kind === ProjectEditor.KindGroup
-                || it.kind === ProjectEditor.KindDataset
-                || it.kind === ProjectEditor.KindAction
-                || it.kind === ProjectEditor.KindOutputWidget
-                || it.kind === ProjectEditor.KindWorkspace
-                || it.kind === ProjectEditor.KindWorkspaceFolder
-                || it.kind === ProjectEditor.KindGroupFolder
-                || it.kind === ProjectEditor.KindUserTable
-                || it.kind === ProjectEditor.KindTableFolder).length
+              it => it.kind === ProjectEditor.KindGroup
+              || it.kind === ProjectEditor.KindDataset
+              || it.kind === ProjectEditor.KindAction
+              || it.kind === ProjectEditor.KindOutputWidget
+              || it.kind === ProjectEditor.KindWorkspace
+              || it.kind === ProjectEditor.KindWorkspaceFolder
+              || it.kind === ProjectEditor.KindGroupFolder
+              || it.kind === ProjectEditor.KindUserTable
+              || it.kind === ProjectEditor.KindTableFolder).length
       }
 
       Connections {
@@ -343,6 +348,9 @@ Widgets.Pane {
       Menu {
         id: sharedContextMenu
 
+        //
+        // Move Up / Move Down
+        //
         MenuItem {
           icon.width: 16
           icon.height: 16
@@ -351,9 +359,7 @@ Widgets.Pane {
           height: visible ? implicitHeight : 0
           icon.source: "qrc:/icons/project-editor/actions/move-up.svg"
           onTriggered: treeView.moveContextItemBy(-1)
-        }
-
-        MenuItem {
+        } MenuItem {
           icon.width: 16
           icon.height: 16
           text: qsTr("Move Down")
@@ -363,40 +369,50 @@ Widgets.Pane {
           onTriggered: treeView.moveContextItemBy(1)
         }
 
+        //
+        // Separator
+        //
         MenuSeparator {
           height: visible ? implicitHeight : 0
           visible: treeView.ctxItemOrderable && treeView.deletableSelectionCount > 0
         }
 
+        //
+        // Rename
+        //
         MenuItem {
           icon.width: 16
           icon.height: 16
           text: qsTr("Rename")
           visible: treeView.ctxRenameable
           height: visible ? implicitHeight : 0
-          icon.source: "qrc:/icons/project-editor/actions/rename.svg"
           onTriggered: treeView.renameCtxItem()
+          icon.source: "qrc:/icons/project-editor/actions/rename.svg"
         }
 
         //
-        // Enable/disable a group or dataset (excludes it from frame building, greyed in the tree)
+        // Hide/show the selection (groups, datasets, and group folders which cascade to their
+        // groups); hidden items are excluded from frame building and greyed in the tree
         //
         MenuItem {
           icon.width: 16
           icon.height: 16
-          text: treeView.ctxItemEnabled ? qsTr("Disable") : qsTr("Enable")
-          visible: treeView.ctxItemKind === ProjectEditor.KindGroup
-                   || treeView.ctxItemKind === ProjectEditor.KindDataset
           height: visible ? implicitHeight : 0
-          icon.source: "qrc:/icons/project-editor/actions/led.svg"
+          visible: treeView.enableableSelectionCount > 0
+          text: treeView.enableableSelectionCount > 1
+                ? (treeView.ctxItemEnabled
+                   ? qsTr("Hide Selected (%1)").arg(treeView.enableableSelectionCount)
+                   : qsTr("Show Selected (%1)").arg(treeView.enableableSelectionCount))
+                : (treeView.ctxItemEnabled ? qsTr("Hide") : qsTr("Show"))
+          icon.source: treeView.ctxItemEnabled ? "qrc:/icons/project-editor/actions/hide.svg" :
+                                                 "qrc:/icons/project-editor/actions/show.svg"
           onTriggered: {
-            if (treeView.ctxItemKind === ProjectEditor.KindGroup)
-              Cpp_JSON_ProjectModel.setGroupEnabled(treeView.ctxItemId,
-                                                     !treeView.ctxItemEnabled)
-            else if (treeView.ctxItemKind === ProjectEditor.KindDataset)
-              Cpp_JSON_ProjectModel.setDatasetEnabled(treeView.ctxItemParentId,
-                                                       treeView.ctxItemId,
-                                                       !treeView.ctxItemEnabled)
+            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
+            .filter(it => it.kind === ProjectEditor.KindGroup
+                    || it.kind === ProjectEditor.KindDataset
+                    || it.kind === ProjectEditor.KindGroupFolder)
+            if (items.length > 0)
+              Cpp_JSON_ProjectModel.setItemsEnabled(items, !treeView.ctxItemEnabled)
           }
         }
 
@@ -406,34 +422,38 @@ Widgets.Pane {
         MenuItem {
           icon.width: 16
           icon.height: 16
+          height: visible ? implicitHeight : 0
+          visible: treeView.selectableSelectionCount > 0
+          icon.source: "qrc:/icons/project-editor/actions/duplicate-small.svg"
           text: treeView.selectableSelectionCount > 1
                 ? qsTr("Duplicate Selected (%1)").arg(treeView.selectableSelectionCount)
                 : qsTr("Duplicate")
-          visible: treeView.selectableSelectionCount > 0
-          height: visible ? implicitHeight : 0
-          icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
+
           onTriggered: {
             const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-                            .filter(it => it.kind !== ProjectEditor.KindWorkspace
-                                          && it.kind !== ProjectEditor.KindWorkspaceFolder
-                                          && it.kind !== ProjectEditor.KindNone)
+            .filter(it => it.kind !== ProjectEditor.KindWorkspace
+                    && it.kind !== ProjectEditor.KindWorkspaceFolder
+                    && it.kind !== ProjectEditor.KindNone)
             if (items.length > 0)
               Cpp_JSON_ProjectModel.duplicateSelectedItems(items)
           }
         }
 
+        //
+        // Bulk-aware delete
+        //
         MenuItem {
           icon.width: 16
           icon.height: 16
+          height: visible ? implicitHeight : 0
+          visible: treeView.deletableSelectionCount > 0
+          icon.source: "qrc:/icons/project-editor/actions/delete-small.svg"
           text: treeView.deletableSelectionCount > 1
                 ? qsTr("Delete Selected (%1)").arg(treeView.deletableSelectionCount)
                 : qsTr("Delete")
-          visible: treeView.deletableSelectionCount > 0
-          height: visible ? implicitHeight : 0
-          icon.source: "qrc:/icons/project-editor/actions/delete.svg"
           onTriggered: {
             const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-                            .filter(it => it.kind !== ProjectEditor.KindNone)
+            .filter(it => it.kind !== ProjectEditor.KindNone)
             if (items.length === 1) {
               const it = items[0]
               if (it.kind === ProjectEditor.KindWorkspace) {
@@ -475,24 +495,30 @@ Widgets.Pane {
           visible: treeView.ctxSupportsFolders
         }
 
+        //
+        // New Folder
+        //
         MenuItem {
           icon.width: 16
           icon.height: 16
           text: qsTr("New Folder")
           height: visible ? implicitHeight : 0
           visible: treeView.ctxSupportsFolders
-          icon.source: "qrc:/icons/project-editor/actions/add-folder.svg"
           onTriggered: treeView.newTopFolderForCtx()
+          icon.source: "qrc:/icons/project-editor/actions/add-folder-small.svg"
         }
 
+        //
+        // New Sub Folder
+        //
         MenuItem {
           icon.width: 16
           icon.height: 16
-          text: qsTr("New Sub-folder")
+          text: qsTr("New Sub-Folder")
           visible: treeView.ctxIsFolder
           height: visible ? implicitHeight : 0
-          icon.source: "qrc:/icons/project-editor/actions/add-folder.svg"
           onTriggered: treeView.newSubFolderForCtx()
+          icon.source: "qrc:/icons/project-editor/actions/add-folder-small.svg"
         }
 
         //
@@ -506,14 +532,14 @@ Widgets.Pane {
           icon.height: 16
           title: qsTr("Move to Folder")
           enabled: treeView.ctxSupportsFolders
-          icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
+          icon.source: "qrc:/icons/project-editor/actions/move-folder.svg"
 
           MenuItem {
             icon.width: 16
             icon.height: 16
             text: qsTr("Top Level")
-            icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
             onTriggered: treeView.moveCtxItemToFolder(-1)
+            icon.source: "qrc:/icons/project-editor/actions/top-level-folder.svg"
           }
 
           MenuSeparator {
@@ -545,7 +571,7 @@ Widgets.Pane {
             icon.width: 16
             icon.height: 16
             text: qsTr("Move Here")
-            icon.source: "qrc:/icons/project-editor/treeview/folder.svg"
+            icon.source: "qrc:/icons/project-editor/actions/move-here.svg"
             onTriggered: treeView.moveCtxItemToFolder(folderSubMenu.folderId2)
           }
 
@@ -609,7 +635,7 @@ Widgets.Pane {
 
         if (view === ProjectEditor.WorkspaceView)
           return Cpp_JSON_ProjectEditor.moveWorkspace(
-                   Cpp_JSON_ProjectEditor.selectedWorkspaceId, direction)
+                Cpp_JSON_ProjectEditor.selectedWorkspaceId, direction)
 
         return false
       }
@@ -623,7 +649,7 @@ Widgets.Pane {
                             && (event.key === Qt.Key_Up || event.key === Qt.Key_Down)) {
                           const dir = event.key === Qt.Key_Up ? -1 : 1
                           if (treeView.reorderCurrentSelection(dir))
-                            event.accepted = true
+                          event.accepted = true
 
                           return
                         }
@@ -644,8 +670,8 @@ Widgets.Pane {
 
                         else if (event.key === Qt.Key_Delete) {
                           const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-                            .filter(it => it.kind !== ProjectEditor.KindWorkspace
-                                          && it.kind !== ProjectEditor.KindNone)
+                          .filter(it => it.kind !== ProjectEditor.KindWorkspace
+                                  && it.kind !== ProjectEditor.KindNone)
                           if (items.length > 0) {
                             Cpp_JSON_ProjectModel.confirmDeleteSelectedItems(items)
                             event.accepted = true
@@ -758,66 +784,66 @@ Widgets.Pane {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: (mouse) => {
-              const idx = treeView.index(row, column)
+                         const idx = treeView.index(row, column)
 
-              //
-              // Right click: preserve multi-selection when the click lands on an
-              // already-selected row; otherwise drop to single-select on that row.
-              //
-              if (mouse.button === Qt.RightButton) {
-                if (item.itemKind !== ProjectEditor.KindNone) {
-                  treeView.forceActiveFocus()
-                  if (!treeView.selectionModel.isSelected(idx))
-                    onLabelClicked()
+                         //
+                         // Right click: preserve multi-selection when the click lands on an
+                         // already-selected row; otherwise drop to single-select on that row.
+                         //
+                         if (mouse.button === Qt.RightButton) {
+                           if (item.itemKind !== ProjectEditor.KindNone) {
+                             treeView.forceActiveFocus()
+                             if (!treeView.selectionModel.isSelected(idx))
+                             onLabelClicked()
 
-                  treeView.ctxItemKind     = item.itemKind
-                  treeView.ctxItemId       = item.itemId
-                  treeView.ctxItemParentId = item.itemParentId
-                  treeView.ctxItemPath     = item.itemPath
-                  treeView.ctxItemEnabled  = item.itemSelfEnabled
-                  treeView.rebuildMoveMenu()
-                  sharedContextMenu.popup()
-                }
-                return
-              }
+                             treeView.ctxItemKind     = item.itemKind
+                             treeView.ctxItemId       = item.itemId
+                             treeView.ctxItemParentId = item.itemParentId
+                             treeView.ctxItemPath     = item.itemPath
+                             treeView.ctxItemEnabled  = item.itemSelfEnabled
+                             treeView.rebuildMoveMenu()
+                             sharedContextMenu.popup()
+                           }
+                           return
+                         }
 
-              //
-              // Left click: modifiers drive multi-select. Skip spacer rows so
-              // they still cannot become "selected".
-              //
-              if (model.treeViewText.trim().length === 0) {
-                onLabelClicked()
-                return
-              }
+                         //
+                         // Left click: modifiers drive multi-select. Skip spacer rows so
+                         // they still cannot become "selected".
+                         //
+                         if (model.treeViewText.trim().length === 0) {
+                           onLabelClicked()
+                           return
+                         }
 
-              treeView.forceActiveFocus()
+                         treeView.forceActiveFocus()
 
-              if (mouse.modifiers & Qt.ControlModifier) {
-                treeView.selectionModel.select(idx, ItemSelectionModel.Toggle)
-                treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
-                return
-              }
+                         if (mouse.modifiers & Qt.ControlModifier) {
+                           treeView.selectionModel.select(idx, ItemSelectionModel.Toggle)
+                           treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
+                           return
+                         }
 
-              if (mouse.modifiers & Qt.ShiftModifier) {
-                const curIdx = treeView.selectionModel.currentIndex
-                const anchorRow = curIdx && curIdx.valid ? treeView.rowAtIndex(curIdx) : -1
-                if (anchorRow >= 0 && anchorRow !== row) {
-                  const startRow = Math.min(anchorRow, row)
-                  const endRow   = Math.max(anchorRow, row)
-                  treeView.selectionModel.clear()
-                  for (let r = startRow; r <= endRow; ++r) {
-                    const ri = treeView.index(r, column)
-                    if (ri && ri.valid)
-                      treeView.selectionModel.select(ri, ItemSelectionModel.Select)
-                  }
+                         if (mouse.modifiers & Qt.ShiftModifier) {
+                           const curIdx = treeView.selectionModel.currentIndex
+                           const anchorRow = curIdx && curIdx.valid ? treeView.rowAtIndex(curIdx) : -1
+                           if (anchorRow >= 0 && anchorRow !== row) {
+                             const startRow = Math.min(anchorRow, row)
+                             const endRow   = Math.max(anchorRow, row)
+                             treeView.selectionModel.clear()
+                             for (let r = startRow; r <= endRow; ++r) {
+                               const ri = treeView.index(r, column)
+                               if (ri && ri.valid)
+                               treeView.selectionModel.select(ri, ItemSelectionModel.Select)
+                             }
 
-                  treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
-                  return
-                }
-              }
+                             treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
+                             return
+                           }
+                         }
 
-              onLabelClicked()
-            }
+                         onLabelClicked()
+                       }
             onDoubleClicked: onLabelDoubleClicked()
           }
         }
@@ -993,7 +1019,7 @@ Widgets.Pane {
             color: Cpp_ThemeManager.colors["text"]
             text: Cpp_JSON_ProjectModel.saveBlockerTitle
             font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)
-          }   
+          }
         }
 
         Label {

@@ -230,6 +230,7 @@ Widgets.SmartWindow {
               case ProjectEditor.TableFolderView:       return "Views/TableFolderView.qml"
               case ProjectEditor.MqttPublisherView:     return "Views/MqttPublisherView.qml"
               case ProjectEditor.ControlScriptView:     return "Views/ControlScriptView.qml"
+              case ProjectEditor.MultiSelectionView:    return "Views/MultiSelectionView.qml"
               }
               return ""
             }

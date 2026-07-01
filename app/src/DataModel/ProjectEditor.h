@@ -82,6 +82,12 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(CurrentView currentView
              READ currentView
              NOTIFY currentViewChanged)
+  Q_PROPERTY(int multiSelectionKind
+             READ multiSelectionKind
+             NOTIFY currentViewChanged)
+  Q_PROPERTY(int multiSelectionCount
+             READ multiSelectionCount
+             NOTIFY currentViewChanged)
   Q_PROPERTY(QString selectedText
              READ selectedText
              NOTIFY selectedTextChanged)
@@ -204,6 +210,7 @@ public:
     TableFolderView,
     MqttPublisherView,
     ControlScriptView,
+    MultiSelectionView,
   };
   Q_ENUM(CurrentView)
 
@@ -279,6 +286,8 @@ public:
   Q_ENUM(ItemKind)
 
   [[nodiscard]] CurrentView currentView() const;
+  [[nodiscard]] int multiSelectionKind() const noexcept;
+  [[nodiscard]] int multiSelectionCount() const noexcept;
   [[nodiscard]] QString selectedText() const;
   [[nodiscard]] QString selectedIcon() const;
   [[nodiscard]] const QString actionIcon() const;
@@ -392,6 +401,7 @@ public slots:
   void setSuppressViewChange(bool suppress) noexcept;
   void openAlarmBandsEditorForSelection();
   void commitAlarmBands(const QVariantList& bands);
+  void changeDatasetOptionForSelection(int option, bool checked);
 
   Q_INVOKABLE [[nodiscard]] bool moveCurrentGroup(int direction);
   Q_INVOKABLE [[nodiscard]] bool moveCurrentDataset(int direction);
@@ -409,10 +419,16 @@ private slots:
   void onDatasetItemChanged(QStandardItem* item);
   void onOutputWidgetItemChanged(QStandardItem* item);
   void onMqttPublisherItemChanged(QStandardItem* item);
+  void onMultiSelectionItemChanged(QStandardItem* item);
   void setCurrentView(const DataModel::ProjectEditor::CurrentView view);
   void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
 private:
+  bool tryMultiSelection();
+  void buildMultiSelectionModel();
+  void buildMultiDatasetModel();
+  [[nodiscard]] QHash<int, QVariant> datasetEditValues(const DataModel::Dataset& dataset);
+
   void addGeneralSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addDatasetRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
   void addPlotSection(CustomModel* model, const DataModel::Dataset& dataset);
@@ -520,6 +536,10 @@ private:
 private:
   CurrentView m_currentView;
   bool m_suppressViewChange;
+
+  ItemKind m_batchKind;
+  bool m_batchApplying;
+  QVector<QPair<int, int>> m_batchItems;
 
   QMap<QStandardItem*, int> m_rootItems;
   QMap<QStandardItem*, DataModel::Group> m_groupItems;

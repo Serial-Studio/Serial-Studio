@@ -112,6 +112,8 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
           &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::searchResultsChanged);
+  connect(
+    this, &UI::Taskbar::workspaceModelChanged, this, &UI::Taskbar::refreshWorkspaceSwitcherModel);
 
   connect(this, &UI::Taskbar::workspaceModelChanged, this, [this] {
     if (m_independentWorkspace && !m_rebuildInProgress)
@@ -119,6 +121,7 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   });
 
   rebuildModel();
+  refreshWorkspaceSwitcherModel();
 
   UISessionRegistry::instance().registerTaskbar(this);
 }
@@ -1420,7 +1423,8 @@ QVariantList UI::Taskbar::workspaceModel() const
 }
 
 /**
- * @brief Recursively builds one level of the workspace folder tree.
+ * @brief Recursively builds one level of the workspace folder tree, skipping empty workspaces
+ *        and folders whose subtree resolves to nothing.
  */
 static QVariantList buildWorkspaceTreeLevel(int parentFolderId,
                                             const std::vector<DataModel::Workspace>& workspaces,
@@ -1432,17 +1436,24 @@ static QVariantList buildWorkspaceTreeLevel(int parentFolderId,
     if (f.parentFolderId != parentFolderId)
       continue;
 
+    const auto children = buildWorkspaceTreeLevel(f.folderId, workspaces, folders);
+    if (children.isEmpty())
+      continue;
+
     QVariantMap node;
     node[QStringLiteral("isFolder")] = true;
     node[QStringLiteral("id")]       = f.folderId;
     node[QStringLiteral("text")]     = f.title;
     node[QStringLiteral("icon")]     = QStringLiteral("qrc:/icons/dashboard-small/folder.svg");
-    node[QStringLiteral("children")] = buildWorkspaceTreeLevel(f.folderId, workspaces, folders);
+    node[QStringLiteral("children")] = children;
     level.append(node);
   }
 
   for (const auto& ws : workspaces) {
     if (ws.parentFolderId != parentFolderId)
+      continue;
+
+    if (ws.widgetRefs.empty())
       continue;
 
     QVariantMap node;
@@ -1471,6 +1482,81 @@ QVariantList UI::Taskbar::workspaceTree() const
   const bool projectMode = AppState::instance().operationMode() == SerialStudio::ProjectFile;
   const auto& folders    = projectMode ? pm.editorWorkspaceFolders() : noFolders;
   return buildWorkspaceTreeLevel(-1, workspaces, folders);
+}
+
+/**
+ * @brief Peels a lone top-level folder into its children, repeating until the level holds more
+ *        than one item or a non-folder leaf, so the switcher never opens on a single redundant
+ *        folder.
+ */
+static QVariantList collapseSingleFolderRoots(QVariantList level)
+{
+  int guard = 0;
+  while (level.size() == 1 && guard++ < 256) {
+    const auto node = level.first().toMap();
+    if (!node.value(QStringLiteral("isFolder")).toBool())
+      break;
+
+    const auto children = node.value(QStringLiteral("children")).toList();
+    if (children.isEmpty())
+      break;
+
+    level = children;
+  }
+
+  return level;
+}
+
+/**
+ * @brief Flattens the switcher tree into leaf workspaces, prefixing each label with its folder
+ *        path so nested workspaces stay distinguishable without submenus.
+ */
+static void flattenSwitcherNodes(const QVariantList& nodes,
+                                 const QString& prefix,
+                                 QVariantList& out)
+{
+  for (const auto& value : nodes) {
+    const auto node     = value.toMap();
+    const auto title    = node.value(QStringLiteral("text")).toString();
+    const bool isFolder = node.value(QStringLiteral("isFolder")).toBool();
+
+    if (isFolder) {
+      const auto branch = prefix.isEmpty() ? title : prefix + QStringLiteral(" / ") + title;
+      flattenSwitcherNodes(node.value(QStringLiteral("children")).toList(), branch, out);
+      continue;
+    }
+
+    QVariantMap entry;
+    entry[QStringLiteral("id")] = node.value(QStringLiteral("id"));
+    entry[QStringLiteral("text")] =
+      prefix.isEmpty() ? title : prefix + QStringLiteral(" / ") + title;
+    entry[QStringLiteral("icon")] = node.value(QStringLiteral("icon"));
+    out.append(entry);
+  }
+}
+
+/**
+ * @brief Returns the cached flat switcher list: empty workspaces removed, a lone root folder
+ *        collapsed, each entry labeled with its folder path.
+ */
+QVariantList UI::Taskbar::workspaceSwitcherModel() const
+{
+  return m_workspaceSwitcherModel;
+}
+
+/**
+ * @brief Recomputes the flat switcher list and emits only when its contents actually change, so
+ *        unrelated widget-count churn cannot reassign (and thereby close) the open switcher popup.
+ */
+void UI::Taskbar::refreshWorkspaceSwitcherModel()
+{
+  QVariantList updated;
+  flattenSwitcherNodes(collapseSingleFolderRoots(workspaceTree()), QString(), updated);
+  if (updated == m_workspaceSwitcherModel)
+    return;
+
+  m_workspaceSwitcherModel = updated;
+  Q_EMIT workspaceSwitcherModelChanged();
 }
 
 /**

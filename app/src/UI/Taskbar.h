@@ -88,6 +88,9 @@ class Taskbar : public QQuickItem {
   Q_PROPERTY(QVariantList workspaceModel
              READ workspaceModel
              NOTIFY workspaceModelChanged)
+  Q_PROPERTY(QVariantList workspaceSwitcherModel
+             READ workspaceSwitcherModel
+             NOTIFY workspaceSwitcherModelChanged)
   Q_PROPERTY(QString searchFilter
              READ searchFilter
              WRITE setSearchFilter
@@ -131,6 +134,7 @@ signals:
   void layoutScopeChanged();
   void registeredWindowsChanged();
   void independentWorkspaceChanged();
+  void workspaceSwitcherModelChanged();
 
 public:
   Taskbar(QQuickItem* parent = nullptr);
@@ -144,6 +148,7 @@ public:
   [[nodiscard]] QVariantList allWidgets() const;
   [[nodiscard]] QVariantList searchResults() const;
   [[nodiscard]] QVariantList workspaceModel() const;
+  [[nodiscard]] QVariantList workspaceSwitcherModel() const;
   [[nodiscard]] QQuickItem* activeWindow() const;
 
   [[nodiscard]] TaskbarModel* fullModel() const;
@@ -202,6 +207,7 @@ private:
   void populateTaskbarFromGroup(int groupId);
   void removeWorkspaceTaskbarRow(int windowId);
   void selectGroupAfterRebuild();
+  void refreshWorkspaceSwitcherModel();
   void appendGroupChildItem(QStandardItem* groupItem,
                             int groupId,
                             const QString& groupName,
@@ -238,6 +244,7 @@ private:
   bool m_independentWorkspace;
   QString m_layoutScope;
   QString m_searchFilter;
+  QVariantList m_workspaceSwitcherModel;
 
   QQuickItem* m_activeWindow;
   UI::WindowManager* m_windowManager;

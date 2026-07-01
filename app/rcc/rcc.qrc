@@ -357,6 +357,7 @@
         <file>icons/project-editor/actions/add-compass.svg</file>
         <file>icons/project-editor/actions/add-dataset.svg</file>
         <file>icons/project-editor/actions/add-fft.svg</file>
+        <file>icons/project-editor/actions/add-folder-small.svg</file>
         <file>icons/project-editor/actions/add-folder.svg</file>
         <file>icons/project-editor/actions/add-gauge.svg</file>
         <file>icons/project-editor/actions/add-led.svg</file>
@@ -378,20 +379,25 @@
         <file>icons/project-editor/actions/connect.svg</file>
         <file>icons/project-editor/actions/customize.svg</file>
         <file>icons/project-editor/actions/delete-register.svg</file>
+        <file>icons/project-editor/actions/delete-small.svg</file>
         <file>icons/project-editor/actions/delete-table.svg</file>
         <file>icons/project-editor/actions/delete.svg</file>
         <file>icons/project-editor/actions/disconnect.svg</file>
+        <file>icons/project-editor/actions/duplicate-small.svg</file>
         <file>icons/project-editor/actions/duplicate.svg</file>
         <file>icons/project-editor/actions/edit-code.svg</file>
         <file>icons/project-editor/actions/export-table.svg</file>
         <file>icons/project-editor/actions/fft.svg</file>
         <file>icons/project-editor/actions/gauge.svg</file>
+        <file>icons/project-editor/actions/hide.svg</file>
         <file>icons/project-editor/actions/import-table.svg</file>
         <file>icons/project-editor/actions/insert-constant.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/load-ca-certs.svg</file>
         <file>icons/project-editor/actions/meter.svg</file>
         <file>icons/project-editor/actions/move-down.svg</file>
+        <file>icons/project-editor/actions/move-folder.svg</file>
+        <file>icons/project-editor/actions/move-here.svg</file>
         <file>icons/project-editor/actions/move-up.svg</file>
         <file>icons/project-editor/actions/output-button.svg</file>
         <file>icons/project-editor/actions/output-knob.svg</file>
@@ -402,7 +408,9 @@
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/actions/rename-table.svg</file>
         <file>icons/project-editor/actions/rename.svg</file>
+        <file>icons/project-editor/actions/show.svg</file>
         <file>icons/project-editor/actions/test-connection.svg</file>
+        <file>icons/project-editor/actions/top-level-folder.svg</file>
         <file>icons/project-editor/actions/transform.svg</file>
         <file>icons/project-editor/actions/waterfall.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>

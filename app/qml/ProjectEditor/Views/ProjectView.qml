@@ -142,9 +142,11 @@ Widgets.Pane {
             id: settingsButton
 
             iconSize: 18
+            leftPadding: 8
+            rightPadding: 8
             text: qsTr("Settings")
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/toolbar/settings.svg"
+            icon.source: "qrc:/icons/buttons/wrench.svg"
             onClicked: settingsPopup.visible ? settingsPopup.close() : settingsPopup.open()
 
             Popup {
@@ -157,6 +159,7 @@ Widgets.Pane {
 
               background: Rectangle {
                 radius: 4
+                opacity: 0.95
                 color: Cpp_ThemeManager.colors["window"]
                 border.color: Cpp_ThemeManager.colors["groupbox_border"]
               }
@@ -191,11 +194,16 @@ Widgets.Pane {
                   }
 
                   from: 0
-                  to: presets.length - 1
                   editable: true
+                  to: presets.length - 1
                   Layout.fillWidth: true
+                  Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                   value: nearestIndex(Cpp_JSON_ProjectModel.plotTimeRange)
-                  textFromValue: function(value, locale) { return timeRangeField.formatSeconds(presets[value]) }
+
+                  textFromValue: function(value, locale) {
+                    return timeRangeField.formatSeconds(presets[value])
+                  }
+
                   valueFromText: function(text, locale) {
                     var t = String(text).toLowerCase()
                     var num = parseFloat(t.replace(/[^0-9.]/g, ""))
@@ -205,6 +213,7 @@ Widgets.Pane {
                     var secs = (t.indexOf("ms") >= 0) ? num / 1000 : num
                     return timeRangeField.nearestIndex(secs)
                   }
+
                   onValueModified: Cpp_JSON_ProjectModel.setPlotTimeRange(presets[value])
                 }
 
@@ -222,6 +231,7 @@ Widgets.Pane {
                   editable: true
                   Layout.fillWidth: true
                   value: Cpp_JSON_ProjectModel.pointCount
+                  Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                   onValueModified: Cpp_JSON_ProjectModel.setPointCount(value)
                 }
 
@@ -231,7 +241,8 @@ Widgets.Pane {
                 }
 
                 Switch {
-                  Layout.alignment: Qt.AlignVCenter
+                  Layout.leftMargin: -9
+                  Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                   checked: Cpp_JSON_ProjectModel.changeDrivenTransforms
 
                   ToolTip.delay: 700

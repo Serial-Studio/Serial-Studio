@@ -168,6 +168,9 @@ inline constexpr KeyView WidgetSettings("widgetSettings");
 // Project-editor tree state (path-keyed node expansion map)
 inline constexpr KeyView TreeExpansion("treeExpansion");
 
+// Project-overview diagram state (stable-id keyed node collapse map)
+inline constexpr KeyView DiagramCollapse("diagramCollapse");
+
 // Plot history keys
 inline constexpr KeyView PointCount("pointCount");
 inline constexpr KeyView PlotTimeRange("plotTimeRange");

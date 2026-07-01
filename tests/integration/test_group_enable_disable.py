@@ -203,6 +203,53 @@ def test_disabled_items_excluded_siblings_keep_indices(
 
 @pytest.mark.integration
 @pytest.mark.project
+def test_batch_disabled_groups_all_excluded(api_client, device_simulator, clean_state):
+    """
+    Batch-disabling several groups at once (the tree "Hide Selected" action, and a group-folder
+    cascade, set each group's `disabled` flag) removes every one of them from the runtime frame
+    while a surviving group keeps its datasets. There is no API mutator for the flag, so this
+    drives the same JSON path the editor produces; the batch slot + folder cascade themselves are
+    exercised in-app.
+    """
+    api_client.create_new_project()
+    time.sleep(0.2)
+
+    keep = api_client.add_group("Keep", widget_type=0)
+    api_client.add_dataset(keep, options=1)
+    for title in ("HideA", "HideB", "HideC"):
+        group = api_client.add_group(title, widget_type=0)
+        api_client.add_dataset(group, options=1)
+
+    api_client.set_operation_mode("project")
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        checksum_algorithm="",
+        frame_detection=1,
+        operation_mode=0,
+    )
+    api_client.set_frame_parser_code(JS_PASSTHROUGH, language=0, source_id=0)
+    time.sleep(0.15)
+
+    config = api_client.command("project.exportJson")["config"]
+    _normalize_indices(config)
+    for title in ("HideA", "HideB", "HideC"):
+        _group_by_title(config, title)["disabled"] = True
+
+    api_client.command("project.loadJson", {"config": config})
+    time.sleep(0.3)
+
+    data = _send_csv_and_read(api_client, device_simulator, [b"10,20,30,40"])
+    groups = _runtime_groups(data)
+
+    assert "Keep" in groups, "enabled group must survive a batch disable"
+    for title in ("HideA", "HideB", "HideC"):
+        assert title not in groups, f"batch-disabled group {title!r} must be excluded"
+    assert groups["Keep"] != {}, "surviving group keeps its dataset"
+
+
+@pytest.mark.integration
+@pytest.mark.project
 def test_all_disabled_project_does_not_crash(api_client, device_simulator, clean_state):
     """A project whose only groups are all disabled ingests frames without crashing."""
     config = _build_two_group_project(api_client)

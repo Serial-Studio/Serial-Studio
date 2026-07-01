@@ -117,6 +117,9 @@ class ProjectModel : public QObject {
              READ mqttPublisher
              WRITE setMqttPublisher
              NOTIFY mqttPublisherChanged)
+  Q_PROPERTY(QJsonObject diagramCollapse
+             READ diagramCollapse
+             NOTIFY diagramCollapseChanged)
   // clang-format on
 
 signals:
@@ -152,6 +155,7 @@ signals:
   void customizeWorkspacesChanged();
   void lockedChanged();
   void mqttPublisherChanged();
+  void diagramCollapseChanged();
   void saveDialogCompleted(bool accepted);
   void importCompleted(bool accepted, const QString& savedPath);
 
@@ -268,6 +272,7 @@ public:
   Q_INVOKABLE [[nodiscard]] QJsonArray externalWindows() const;
 
   [[nodiscard]] const QJsonObject& treeExpansion() const noexcept;
+  [[nodiscard]] const QJsonObject& diagramCollapse() const noexcept;
 
 public slots:
   void lockProject();
@@ -277,6 +282,7 @@ public slots:
   void saveWidgetSetting(const QString& widgetId, const QString& key, const QVariant& value);
   void setExternalWindows(const QJsonArray& windows);
   void setTreeExpansion(const QJsonObject& expansion);
+  void setDiagramCollapse(const QJsonObject& state);
 
   void setupExternalConnections();
   void setSuppressMessageBoxes(const bool suppress);
@@ -499,6 +505,7 @@ public slots:
   void deleteSelectedItems(const QVariantList& items);
   void confirmDeleteSelectedItems(const QVariantList& items);
   void moveSelectedItemsToFolder(const QVariantList& items, int folderId);
+  void setItemsEnabled(const QVariantList& items, bool enabled);
 
 public:
   void flushAutoSave();
@@ -506,6 +513,9 @@ public:
   void setAutoSaveSuspended(bool suspend);
 
 private:
+  [[nodiscard]] bool setGroupsInFolderEnabled(int folderId, bool enabled);
+  void syncRuntime();
+
   int nextDatasetIndex();
   bool finalizeProjectSave();
   void clearTransientState();
@@ -615,6 +625,7 @@ private:
 
   QTimer* m_autoSaveTimer;
   bool m_autoSaveSuspended;
+  bool m_runtimeDirty;
   qint64 m_mutationEpoch;
 
   QFileSystemWatcher* m_fileWatcher;
@@ -632,5 +643,6 @@ private:
   QJsonObject m_widgetSettings;
   QJsonObject m_mqttPublisher;
   QJsonObject m_treeExpansion;
+  QJsonObject m_diagramCollapse;
 };
 }  // namespace DataModel

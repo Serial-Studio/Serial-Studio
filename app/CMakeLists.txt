@@ -512,6 +512,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/ActionView.qml
   qml/ProjectEditor/Views/OutputWidgetView.qml
   qml/ProjectEditor/Views/DatasetView.qml
+  qml/ProjectEditor/Views/MultiSelectionView.qml
   qml/ProjectEditor/Views/DataTablesView.qml
   qml/ProjectEditor/Views/SystemDatasetsView.qml
   qml/ProjectEditor/Views/UserTableView.qml

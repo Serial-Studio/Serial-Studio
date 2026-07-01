@@ -56,6 +56,33 @@ Item {
   property real contentH: 0
 
   //
+  // Collapse state: a map of stable-id node keys (grpfolder:<id>, tblfolder:<id>, grp:<groupId>)
+  // whose children are hidden. Seeded from the project file and persisted back as editor UI state.
+  //
+  property var collapsedKeys: ({})
+
+  function isCollapsed(key) {
+    if (key in collapsedKeys)
+      return collapsedKeys[key] === true
+
+    // Auto-collapse: folders start folded so a foldered project opens compact; groups start open.
+    return key.indexOf("grpfolder:") === 0 || key.indexOf("tblfolder:") === 0
+  }
+
+  function seedCollapseFromModel() {
+    collapsedKeys = Object.assign({}, Cpp_JSON_ProjectModel.diagramCollapse)
+  }
+
+  function toggleCollapse(key) {
+    const next = Object.assign({}, collapsedKeys)
+    next[key] = !isCollapsed(key)
+
+    collapsedKeys = next
+    Cpp_JSON_ProjectModel.setDiagramCollapse(next)
+    reloadDiagram()
+  }
+
+  //
   // Public interface.
   //
   function reloadDiagram() {
@@ -81,13 +108,10 @@ Item {
     const newArrows = []
     tables = tables || []
 
-    // -- column x positions ------------------------------------------------
-    const colDev   = pad                               // device column
-    const colFP    = pad + nodeW + hGap                // frame-parser / action column
-    const colGrp   = colFP  + nodeW + hGap             // group column
-    const colTrans = colGrp + nodeW + hGap             // transform block column
-    const colChip  = colTrans + transW + transGap      // dataset column
-    const colMqtt  = colChip + chipW + hGap            // mqtt publisher column
+    // -- fixed left columns (device + frame parser); folder/group columns computed below -----
+    const colW   = nodeW + hGap
+    const colDev = pad
+    const colFP  = pad + colW
 
     // Collected dataset pill centres, fed into the MQTT Publisher node below
     const datasetAnchors = []
@@ -98,115 +122,97 @@ Item {
       return Math.max(nodeH, dsCount * (chipH + vGap) - vGap)
     }
 
-    // groupY[sid] = next-group y-cursor; srcTotalH[sid] = total slot height with gaps.
-    const groupY    = {}
-    const srcTotalH = {}
-
-    // initialise cursors; handle zero-source case (treat as single source 0)
+    // zero-source case: treat as a single source 0
     const fallback = [{ sourceId: 0, busType: SerialStudio.UART, title: "" }]
     const srcList = sources.length > 0 ? sources : fallback
 
-    // First pass: measure total height per source (skipping Output groups)
-    for (const src of srcList)
-      srcTotalH[src.sourceId] = 0
+    // -- group folder metadata: DFS parent + title maps ---------------------
+    const gfTree   = Cpp_JSON_ProjectEditor.groupFolderTree()
+    const gfParent = {}
+    const gfTitle  = {}
+    function walkGF(nodes, parentId) {
+      for (const n of nodes) {
+        gfParent[n.id] = parentId
+        gfTitle[n.id]  = n.title
+        walkGF(n.children || [], n.id)
+      }
+    }
+    walkGF(gfTree, -1)
+    const gfCount = Object.keys(gfParent).length
 
-    for (const grp of groups) {
-      if (grp.groupType === SerialStudio.GroupOutput) continue
-
-      const sid = grp.sourceId || 0
-      if (srcTotalH[sid] === undefined) srcTotalH[sid] = 0
-
-      const pillCount = (grp.datasets || []).length
-      srcTotalH[sid] += slotH(pillCount) + vGap
+    function folderOf(grp) {
+      return (grp.parentFolderId === undefined) ? -1 : grp.parentFolderId
+    }
+    function folderDepth(fid) {
+      let cur = fid, d = 0, guard = 0
+      while (cur !== -1 && cur !== undefined && guard <= gfCount) {
+        cur = gfParent[cur]; ++d; ++guard
+      }
+      return Math.max(0, d - 1)
+    }
+    function folderIsSelfOrAncestor(anc, node) {
+      let cur = node, guard = 0
+      while (cur !== -1 && cur !== undefined && guard <= gfCount) {
+        if (cur === anc) return true
+        cur = gfParent[cur]; ++guard
+      }
+      return false
+    }
+    function subtreeHasSourceGroups(fid, sid) {
+      for (const g of groups) {
+        if (g.groupType === SerialStudio.GroupOutput) continue
+        if ((g.sourceId || 0) !== sid) continue
+        if (folderOf(g) !== -1 && folderIsSelfOrAncestor(fid, folderOf(g)))
+          return true
+      }
+      return false
     }
 
-    // remove trailing vGap; ensure minimum nodeH
-    for (const sid in srcTotalH)
-      srcTotalH[sid] = Math.max((srcTotalH[sid] || 0) - vGap, nodeH)
+    // Deepest folder that actually owns groups -> how many folder columns to reserve.
+    let maxFolderDepth = -1
+    for (const g of groups) {
+      if (g.groupType === SerialStudio.GroupOutput) continue
 
-    // sources stack vertically: compute starting y for each source's block
-    const srcBlockY = {}
-    let   nextBlockY = pad
-    for (const src of srcList) {
-      srcBlockY[src.sourceId] = nextBlockY
-      groupY[src.sourceId]    = nextBlockY
-      nextBlockY += srcTotalH[src.sourceId] + vGap * 3   // extra gap between sources
+      const fid = folderOf(g)
+      if (fid !== -1)
+        maxFolderDepth = Math.max(maxFolderDepth, folderDepth(fid))
     }
 
-    // -- place device + frame-parser nodes ---------------------------------
-    const fpNodeY = {}   // frame-parser card y per source (for arrow origins)
+    // -- folder / group / dataset columns (one column per folder level) -----
+    const colFolder = colFP + colW                             // first folder column
+    const colGrp    = colFolder + (maxFolderDepth + 1) * colW  // group column
+    const colTrans  = colGrp + colW                            // transform block column
+    const colChip   = colTrans + transW + transGap             // dataset column
+    const colMqtt   = colChip + chipW + hGap                   // mqtt publisher column
 
-    for (const src of srcList) {
-      const sid  = src.sourceId
-      const th   = srcTotalH[sid]
-      const midY = srcBlockY[sid] + (th - nodeH) / 2
-
-      fpNodeY[sid] = midY
-
-      //
-      // Frame-parser card (always shown)
-      //
-      newNodes.push({
-        type:      "frameparser",
-        sourceId:  sid,
-        groupId:   -1,
-        datasetId: -1,
-        actionId:  -1,
-        x:         colFP,
-        y:         midY,
-        w:         nodeW,
-        h:         nodeH,
-        label:     qsTr("Frame Parser"),
-        icon:      "qrc:/icons/project-editor/treeview/code.svg"
-      })
-
-      //
-      // Device card (always shown)
-      //
-      const devTitle = src.title || qsTr("Device %1").arg(sid + 1)
-      newNodes.push({
-        type:      "source",
-        sourceId:  sid,
-        groupId:   -1,
-        datasetId: -1,
-        actionId:  -1,
-        x:         colDev,
-        y:         midY,
-        w:         nodeW,
-        h:         nodeH,
-        label:     devTitle,
-        icon:      busTypeIcon(src.busType),
-        badge:     sources.length > 1
-          ? "[" + String.fromCharCode(65 + sid) + "]"
-          : ""
-      })
-
-      //
-      // Arrow: device -> frame-parser
-      //
-      newArrows.push({
-        x1: colDev + nodeW, y1: midY + nodeH / 2,
-        x2: colFP,          y2: midY + nodeH / 2
-      })
-
+    function folderX(depth) {
+      return colFolder + depth * colW
     }
 
-    // Place group + dataset nodes (Output groups render below as TX cards)
-    for (const grp of groups) {
-      if (grp.groupType === SerialStudio.GroupOutput) continue
+    // Tidy-tree cursor (advances down as leaves are placed) + frame-parser Y per source.
+    const fpNodeY = {}
+    let cursorY   = pad
 
-      const sid    = grp.sourceId || 0
-      const dsList = grp.datasets || []
+    // Places a group centred on its pills (one slot when it has none or is collapsed); returns Y.
+    function placeGroup(grp, sid) {
+      const dsList    = grp.datasets || []
+      const collapsed = root.isCollapsed("grp:" + grp.groupId)
+      const pills     = collapsed ? [] : dsList
 
-      const pillCount = dsList.length
-      const sh = slotH(pillCount)
+      let centerY
+      const chipYs = []
+      if (pills.length === 0) {
+        centerY = cursorY + nodeH / 2
+        cursorY += nodeH + vGap
+      } else {
+        for (let di = 0; di < pills.length; ++di) {
+          chipYs.push(cursorY)
+          cursorY += chipH + vGap
+        }
+        centerY = (chipYs[0] + chipYs[chipYs.length - 1] + chipH) / 2
+      }
 
-      const slotTop = groupY[sid] !== undefined ? groupY[sid] : pad
-      const cardY   = slotTop + (sh - nodeH) / 2
-
-      //
-      // Group card
-      //
+      const cardY = centerY - nodeH / 2
       newNodes.push({
         type:         "group",
         sourceId:     sid,
@@ -214,6 +220,8 @@ Item {
         datasetId:    -1,
         actionId:     -1,
         widget:       grp.widget || "",
+        collapsed:    collapsed,
+        collapseKey:  dsList.length > 0 ? ("grp:" + grp.groupId) : undefined,
         siblingCount: groups.length,
         x:            colGrp,
         y:            cardY,
@@ -224,116 +232,249 @@ Item {
         badge:        ""
       })
 
-      //
-      // Arrow: frame-parser -> group
-      //
-      const fpMidY = fpNodeY[sid] !== undefined
-        ? fpNodeY[sid] + nodeH / 2
-        : cardY + nodeH / 2
-      newArrows.push({
-        x1: colFP + nodeW, y1: fpMidY,
-        x2: colGrp,        y2: cardY + nodeH / 2
-      })
+      for (let di = 0; di < pills.length; ++di) {
+        const ds    = pills[di]
+        const chipY = chipYs[di]
+        const hasTransform = ds.hasTransform === true
 
-      //
-      // Dataset pills (datasets with a transform get an intermediate block)
-      //
-      if (pillCount > 0) {
-        const blockH   = pillCount * chipH + (pillCount - 1) * vGap
-        const blockTop = slotTop + (sh - blockH) / 2
-
-        for (let di = 0; di < pillCount; ++di) {
-          const ds    = dsList[di]
-          const chipY = blockTop + di * (chipH + vGap)
-          const hasTransform = ds.hasTransform === true
-
-          //
-          // Transform block (only for datasets with a non-empty transform).
-          //
-          if (hasTransform) {
-            newNodes.push({
-              type:      "transform",
-              sourceId:  sid,
-              groupId:   grp.groupId,
-              datasetId: ds.datasetId,
-              widgetId:  -1,
-              actionId:  -1,
-              x:         colTrans,
-              y:         chipY,
-              w:         transW,
-              h:         chipH,
-              label:     "",
-              icon:      "",
-              badge:     ""
-            })
-
-            newArrows.push({
-              x1: colGrp + nodeW, y1: cardY + nodeH / 2,
-              x2: colTrans,       y2: chipY + chipH / 2
-            })
-            newArrows.push({
-              x1: colTrans + transW, y1: chipY + chipH / 2,
-              x2: colChip,           y2: chipY + chipH / 2
-            })
-          } else {
-            newArrows.push({
-              x1: colGrp + nodeW, y1: cardY + nodeH / 2,
-              x2: colTrans,       y2: chipY + chipH / 2,
-              noHead: true
-            })
-            newArrows.push({
-              x1: colTrans, y1: chipY + chipH / 2,
-              x2: colChip,  y2: chipY + chipH / 2
-            })
-          }
-
+        if (hasTransform) {
           newNodes.push({
-            type:         "dataset",
-            sourceId:     sid,
-            groupId:      grp.groupId,
-            datasetId:    ds.datasetId,
-            widgetId:     -1,
-            actionId:     -1,
-            siblingCount: pillCount,
-            x:            colChip,
-            y:            chipY,
-            w:            chipW,
-            h:            chipH,
-            label:        ds.units ? (ds.title + " [" + ds.units + "]") : ds.title,
-            icon:         datasetIcon(),
-            badge:        "",
-            hasTransform: hasTransform
+            type:      "transform",
+            sourceId:  sid,
+            groupId:   grp.groupId,
+            datasetId: ds.datasetId,
+            widgetId:  -1,
+            actionId:  -1,
+            x:         colTrans,
+            y:         chipY,
+            w:         transW,
+            h:         chipH,
+            label:     "",
+            icon:      "",
+            badge:     ""
           })
 
-          datasetAnchors.push(chipY + chipH / 2)
+          newArrows.push({
+            x1: colGrp + nodeW, y1: cardY + nodeH / 2,
+            x2: colTrans,       y2: chipY + chipH / 2
+          })
+          newArrows.push({
+            x1: colTrans + transW, y1: chipY + chipH / 2,
+            x2: colChip,           y2: chipY + chipH / 2
+          })
+        } else {
+          newArrows.push({
+            x1: colGrp + nodeW, y1: cardY + nodeH / 2,
+            x2: colTrans,       y2: chipY + chipH / 2,
+            noHead: true
+          })
+          newArrows.push({
+            x1: colTrans, y1: chipY + chipH / 2,
+            x2: colChip,  y2: chipY + chipH / 2
+          })
+        }
+
+        newNodes.push({
+          type:         "dataset",
+          sourceId:     sid,
+          groupId:      grp.groupId,
+          datasetId:    ds.datasetId,
+          widgetId:     -1,
+          actionId:     -1,
+          siblingCount: pills.length,
+          x:            colChip,
+          y:            chipY,
+          w:            chipW,
+          h:            chipH,
+          label:        ds.units ? (ds.title + " [" + ds.units + "]") : ds.title,
+          icon:         datasetIcon(),
+          badge:        "",
+          hasTransform: hasTransform
+        })
+
+        datasetAnchors.push(chipY + chipH / 2)
+      }
+
+      return centerY
+    }
+
+    function placeFolder(f, sid) {
+      const depth     = folderDepth(f.id)
+      const collapsed = root.isCollapsed("grpfolder:" + f.id)
+      const x         = folderX(depth)
+
+      let centerY
+      if (collapsed) {
+        centerY = cursorY + nodeH / 2
+        cursorY += nodeH + vGap
+      } else {
+        const kids = []
+        for (const sub of (f.children || []))
+          if (subtreeHasSourceGroups(sub.id, sid))
+            kids.push({ y: placeFolder(sub, sid), x: folderX(folderDepth(sub.id)) })
+
+        for (const g of groups)
+          if (g.groupType !== SerialStudio.GroupOutput
+              && (g.sourceId || 0) === sid && folderOf(g) === f.id)
+            kids.push({ y: placeGroup(g, sid), x: colGrp })
+
+        if (kids.length === 0) {
+          centerY = cursorY + nodeH / 2
+          cursorY += nodeH + vGap
+        } else {
+          centerY = (kids[0].y + kids[kids.length - 1].y) / 2
+          for (const k of kids)
+            newArrows.push({ x1: x + nodeW, y1: centerY, x2: k.x, y2: k.y })
         }
       }
 
-      //
-      // Advance cursor for this source
-      //
-      if (groupY[sid] !== undefined)
-        groupY[sid] = slotTop + sh + vGap
+      newNodes.push({
+        type:       "groupfolder",
+        collapsed:  collapsed,
+        collapseKey: "grpfolder:" + f.id,
+        folderId:   f.id,
+        sourceId:   sid,
+        groupId:    -1,
+        datasetId:  -1,
+        actionId:   -1,
+        depth:      depth,
+        x:          x,
+        y:          centerY - nodeH / 2,
+        w:          nodeW,
+        h:          nodeH,
+        label:      f.title || qsTr("Folder"),
+        icon:       "qrc:/icons/project-editor/treeview/folder.svg"
+      })
+
+      return centerY
+    }
+
+    function sourceHasContent(sid) {
+      for (const g of groups)
+        if ((g.sourceId || 0) === sid) return true
+
+      for (const a of actions)
+        if ((a.sourceId || 0) === sid) return true
+
+      return false
     }
 
     //
-    // Stack floor: clear the group y-cursor AND the frame-parser cards (same colFP
-    // column), so the stack never overlaps the parser even with zero groups.
+    // Control Loop card (project-global): the first root, at device level.
     //
-    let blockCursor = pad
-    for (const sid in groupY)
-      blockCursor = Math.max(blockCursor, groupY[sid])
+    const controlLoopY = cursorY
+    cursorY += nodeH + vGap * 3
+    newNodes.push({
+      type:      "controlscript",
+      sourceId:  -1,
+      groupId:   -1,
+      datasetId: -1,
+      actionId:  -1,
+      x:         colDev,
+      y:         controlLoopY,
+      w:         nodeW,
+      h:         nodeH,
+      label:     qsTr("Control Loop"),
+      icon:      "qrc:/icons/project-editor/treeview/control-script.svg",
+      badge:     Cpp_JSON_ProjectModel.controlScriptCode.length > 0 ? "" : qsTr("empty")
+    })
 
-    for (const sid in fpNodeY)
-      blockCursor = Math.max(blockCursor, fpNodeY[sid] + nodeH)
+    for (const src of srcList) {
+      const sid          = src.sourceId
+      const srcCollapsed = isCollapsed("src:" + sid)
+      const tops         = []
+
+      if (!srcCollapsed) {
+        for (const f of gfTree)
+          if (subtreeHasSourceGroups(f.id, sid))
+            tops.push({ y: placeFolder(f, sid), x: folderX(0) })
+
+        for (const g of groups)
+          if (g.groupType !== SerialStudio.GroupOutput
+              && (g.sourceId || 0) === sid && folderOf(g) === -1)
+            tops.push({ y: placeGroup(g, sid), x: colGrp })
+      }
+
+      let fpCenter
+      if (tops.length === 0) {
+        fpCenter = cursorY + nodeH / 2
+        cursorY += nodeH + vGap
+      } else {
+        fpCenter = (tops[0].y + tops[tops.length - 1].y) / 2
+      }
+      fpNodeY[sid] = fpCenter - nodeH / 2
+
+      //
+      // Frame-parser card (hidden when the device is collapsed)
+      //
+      if (!srcCollapsed)
+        newNodes.push({
+          type:      "frameparser",
+          sourceId:  sid,
+          groupId:   -1,
+          datasetId: -1,
+          actionId:  -1,
+          x:         colFP,
+          y:         fpCenter - nodeH / 2,
+          w:         nodeW,
+          h:         nodeH,
+          label:     qsTr("Frame Parser"),
+          icon:      "qrc:/icons/project-editor/treeview/code.svg"
+        })
+
+      //
+      // Device card (always shown; carries the collapse chevron when it has downstream content)
+      //
+      const devTitle = src.title || qsTr("Device %1").arg(sid + 1)
+      newNodes.push({
+        type:        "source",
+        sourceId:    sid,
+        groupId:     -1,
+        datasetId:   -1,
+        actionId:    -1,
+        collapsed:   srcCollapsed,
+        collapseKey: sourceHasContent(sid) ? ("src:" + sid) : undefined,
+        x:           colDev,
+        y:           fpCenter - nodeH / 2,
+        w:           nodeW,
+        h:           nodeH,
+        label:       devTitle,
+        icon:        busTypeIcon(src.busType),
+        badge:       sources.length > 1
+          ? "[" + String.fromCharCode(65 + sid) + "]"
+          : ""
+      })
+
+      //
+      // Arrows: device -> parser, then parser -> each top-level folder / group.
+      //
+      if (!srcCollapsed) {
+        newArrows.push({
+          x1: colDev + nodeW, y1: fpCenter,
+          x2: colFP,          y2: fpCenter
+        })
+
+        for (const t of tops)
+          newArrows.push({
+            x1: colFP + nodeW, y1: fpCenter,
+            x2: t.x,           y2: t.y
+          })
+      }
+
+      cursorY += vGap * 3
+    }
+
+    let blockCursor = cursorY
 
     if (actions.length > 0) {
-      const actBlockTop = blockCursor + vGap * 2
+      let actY          = blockCursor + vGap * 2
+      let placedActions = 0
 
       for (let ai = 0; ai < actions.length; ++ai) {
-        const act  = actions[ai]
-        const sid  = act.sourceId || 0
-        const actY = actBlockTop + ai * (nodeH + vGap)
+        const act = actions[ai]
+        const sid = act.sourceId || 0
+        if (isCollapsed("src:" + sid))
+          continue
 
         newNodes.push({
           type:         "action",
@@ -360,25 +501,31 @@ Item {
           x2: colDev + nodeW / 2, y2: devTopY + nodeH,
           verticalEnd: true
         })
+
+        actY += nodeH + vGap
+        ++placedActions
       }
 
-      blockCursor = actBlockTop + actions.length * (nodeH + vGap)
+      if (placedActions > 0)
+        blockCursor = actY
     }
 
     //
     // Output panels (TX direction): mirror image of the RX flow
     //
-    const outputGroups = groups.filter(g => g.groupType === SerialStudio.GroupOutput)
+    const allOutputGroups = groups.filter(g => g.groupType === SerialStudio.GroupOutput)
+    const outputGroups = allOutputGroups.filter(g => !isCollapsed("src:" + (g.sourceId || 0)))
 
     if (outputGroups.length > 0) {
       let outCursor = blockCursor + vGap * 2
 
       for (const grp of outputGroups) {
-        const sid     = grp.sourceId || 0
-        const owList  = grp.outputWidgets || []
-        const wCount  = owList.length
-        const wsh     = slotH(wCount)
-        const panelY  = outCursor + (wsh - nodeH) / 2
+        const sid            = grp.sourceId || 0
+        const panelCollapsed = isCollapsed("grp:" + grp.groupId)
+        const owList         = grp.outputWidgets || []
+        const wCount         = panelCollapsed ? 0 : owList.length
+        const wsh            = slotH(wCount)
+        const panelY         = outCursor + (wsh - nodeH) / 2
 
         //
         // Panel card (the parent group) in colFP
@@ -391,7 +538,9 @@ Item {
           widgetId:     -1,
           actionId:     -1,
           widget:       grp.widget || "",
-          siblingCount: outputGroups.length,
+          collapsed:    panelCollapsed,
+          collapseKey:  owList.length > 0 ? ("grp:" + grp.groupId) : undefined,
+          siblingCount: allOutputGroups.length,
           x:            colFP,
           y:            panelY,
           w:            nodeW,
@@ -454,17 +603,68 @@ Item {
     }
 
     //
-    // Data tables (shared scratch space, no per-frame arrows)
+    // Data tables (shared scratch space): table folders flow into their table cards, mirroring the
+    // group folder columns. No arrows from the frame pipeline.
     //
     if (tables.length > 0) {
-      const tblBlockTop = blockCursor + vGap * 2
+      const tfTree   = Cpp_JSON_ProjectEditor.tableFolderTree()
+      const tfParent = {}
+      const tfTitle  = {}
+      function walkTF(nodes, parentId) {
+        for (const n of nodes) {
+          tfParent[n.id] = parentId
+          tfTitle[n.id]  = n.title
+          walkTF(n.children || [], n.id)
+        }
+      }
+      walkTF(tfTree, -1)
+      const tfCount = Object.keys(tfParent).length
 
-      for (let ti = 0; ti < tables.length; ++ti) {
-        const tbl   = tables[ti]
-        const tblY  = tblBlockTop + ti * (nodeH + vGap)
+      function tableFolderOf(tbl) {
+        return (tbl.parentFolderId === undefined) ? -1 : tbl.parentFolderId
+      }
+      function tableFolderDepth(fid) {
+        let cur = fid, d = 0, guard = 0
+        while (cur !== -1 && cur !== undefined && guard <= tfCount) {
+          cur = tfParent[cur]; ++d; ++guard
+        }
+        return Math.max(0, d - 1)
+      }
+      function tfIsSelfOrAncestor(anc, node) {
+        let cur = node, guard = 0
+        while (cur !== -1 && cur !== undefined && guard <= tfCount) {
+          if (cur === anc) return true
+          cur = tfParent[cur]; ++guard
+        }
+        return false
+      }
+      function subtreeHasTables(fid) {
+        for (const t of tables)
+          if (tableFolderOf(t) !== -1 && tfIsSelfOrAncestor(fid, tableFolderOf(t)))
+            return true
+
+        return false
+      }
+
+      let maxTblDepth = -1
+      for (const t of tables) {
+        const fid = tableFolderOf(t)
+        if (fid !== -1)
+          maxTblDepth = Math.max(maxTblDepth, tableFolderDepth(fid))
+      }
+
+      const colTblFolder = colFP
+      const colTbl       = colTblFolder + (maxTblDepth + 1) * colW
+      function tblFolderX(depth) {
+        return colTblFolder + depth * colW
+      }
+
+      function placeTable(tbl) {
+        const centerY = cursorY + nodeH / 2
+        cursorY += nodeH + vGap
+
         const regs  = tbl.registerCount || 0
         const label = tbl.name && tbl.name.length > 0 ? tbl.name : qsTr("Table")
-
         newNodes.push({
           type:      "table",
           sourceId:  -1,
@@ -472,38 +672,117 @@ Item {
           datasetId: -1,
           actionId:  -1,
           tableName: tbl.name || "",
-          x:         colFP,
-          y:         tblY,
+          x:         colTbl,
+          y:         centerY - nodeH / 2,
           w:         nodeW,
           h:         nodeH,
           label:     label,
           icon:      "qrc:/icons/project-editor/treeview/shared-table.svg",
-          badge:     regs > 0
-                       ? qsTr("%1 regs").arg(regs)
-                       : qsTr("empty")
+          badge:     regs > 0 ? qsTr("%1 regs").arg(regs) : qsTr("empty")
         })
+        return centerY
       }
 
-      blockCursor = tblBlockTop + tables.length * (nodeH + vGap)
-    }
+      function placeTableFolder(f) {
+        const depth     = tableFolderDepth(f.id)
+        const collapsed = root.isCollapsed("tblfolder:" + f.id)
+        const x         = tblFolderX(depth)
 
-    //
-    // Control Script card (project-global, like the data tables)
-    //
-    newNodes.push({
-      type:      "controlscript",
-      sourceId:  -1,
-      groupId:   -1,
-      datasetId: -1,
-      actionId:  -1,
-      x:         colFP,
-      y:         blockCursor + vGap * 2,
-      w:         nodeW,
-      h:         nodeH,
-      label:     qsTr("Control Loop"),
-      icon:      "qrc:/icons/project-editor/treeview/control-script.svg",
-      badge:     Cpp_JSON_ProjectModel.controlScriptCode.length > 0 ? "" : qsTr("empty")
-    })
+        let centerY
+        if (collapsed) {
+          centerY = cursorY + nodeH / 2
+          cursorY += nodeH + vGap
+        } else {
+          const kids = []
+          for (const sub of (f.children || []))
+            if (subtreeHasTables(sub.id))
+              kids.push({ y: placeTableFolder(sub), x: tblFolderX(tableFolderDepth(sub.id)) })
+
+          for (const t of tables)
+            if (tableFolderOf(t) === f.id)
+              kids.push({ y: placeTable(t), x: colTbl })
+
+          if (kids.length === 0) {
+            centerY = cursorY + nodeH / 2
+            cursorY += nodeH + vGap
+          } else {
+            centerY = (kids[0].y + kids[kids.length - 1].y) / 2
+            for (const k of kids)
+              newArrows.push({ x1: x + nodeW, y1: centerY, x2: k.x, y2: k.y })
+          }
+        }
+
+        newNodes.push({
+          type:        "tablefolder",
+          collapsed:   collapsed,
+          collapseKey: "tblfolder:" + f.id,
+          folderId:    f.id,
+          sourceId:    -1,
+          groupId:     -1,
+          datasetId:   -1,
+          actionId:    -1,
+          depth:       depth,
+          x:           x,
+          y:           centerY - nodeH / 2,
+          w:           nodeW,
+          h:           nodeH,
+          label:       f.title || qsTr("Folder"),
+          icon:        "qrc:/icons/project-editor/treeview/folder.svg"
+        })
+        return centerY
+      }
+
+      cursorY = blockCursor + vGap * 2
+      const smCollapsed = root.isCollapsed("sharedmem")
+      const tblTops     = []
+
+      if (!smCollapsed) {
+        for (const f of tfTree)
+          if (subtreeHasTables(f.id))
+            tblTops.push({ y: placeTableFolder(f), x: colTblFolder })
+
+        for (const t of tables)
+          if (tableFolderOf(t) === -1)
+            tblTops.push({ y: placeTable(t), x: colTbl })
+      }
+
+      let smCenter
+      if (tblTops.length === 0) {
+        smCenter = cursorY + nodeH / 2
+        cursorY += nodeH + vGap
+      } else {
+        smCenter = (tblTops[0].y + tblTops[tblTops.length - 1].y) / 2
+      }
+
+      //
+      // Shared Memory root at device level, centred on its tables.
+      //
+      newNodes.push({
+        type:        "shared-memory",
+        sourceId:    -1,
+        groupId:     -1,
+        datasetId:   -1,
+        actionId:    -1,
+        collapsed:   smCollapsed,
+        collapseKey: "sharedmem",
+        x:           colDev,
+        y:           smCenter - nodeH / 2,
+        w:           nodeW,
+        h:           nodeH,
+        label:       qsTr("Shared Memory"),
+        icon:        "qrc:/icons/project-editor/treeview/shared-memory.svg",
+        badge:       ""
+      })
+
+      if (!smCollapsed)
+        for (const t of tblTops)
+          newArrows.push({
+            x1: colDev + nodeW, y1: smCenter,
+            x2: t.x,            y2: t.y
+          })
+
+      blockCursor = cursorY
+    }
 
     //
     // MQTT Publisher node: collects every dataset pill (commercial, opt-in)
@@ -640,6 +919,7 @@ Item {
     function onTablesChanged()        { root.reloadDiagram() }
     function onTitleChanged()         { root.reloadDiagram() }
     function onControlScriptChanged() { root.reloadDiagram() }
+    function onJsonFileChanged()      { root.seedCollapseFromModel(); root.reloadDiagram() }
   }
 
   // Repaint when the publisher is toggled on/off so the node appears/disappears.
@@ -657,7 +937,7 @@ Item {
     function onLanguageChanged() { root.reloadDiagram() }
   }
 
-  Component.onCompleted: reloadDiagram()
+  Component.onCompleted: { seedCollapseFromModel(); reloadDiagram() }
   onVisibleChanged: if (visible) { reloadDiagram(); canvas.requestPaint() }
   onWidthChanged:   if (visible && width > 0) reloadDiagram()
   onHeightChanged:  if (visible && height > 0) reloadDiagram()
@@ -849,9 +1129,13 @@ Item {
           property bool isSource:      modelData.type === "source"
           property bool isDataset:     modelData.type === "dataset"
           property bool isTransform:   modelData.type === "transform"
+          property bool isFolder:      isGroupFolder || isTableFolder
           property bool isFP:          modelData.type === "frameparser"
+          property bool isGroupFolder: modelData.type === "groupfolder"
+          property bool isTableFolder: modelData.type === "tablefolder"
           property bool isOutputPanel: modelData.type === "output-panel"
           property bool isControlScript: modelData.type === "controlscript"
+          property bool collapsibleCard: !isFolder && !!modelData.collapseKey
 
           readonly property string nodeKey: menuController.keyOf(modelData)
           readonly property bool isPinned: menuController.pinnedKey === nodeKey
@@ -935,7 +1219,7 @@ Item {
           // -- Card (source / group / frame-parser / action / table) ----
           //
           Rectangle {
-            visible: !nd.isPill && !nd.isTransform
+            visible: !nd.isPill && !nd.isTransform && !nd.isGroupFolder
             anchors.fill: parent
             radius: 6 * root.zoom
             color: nd.active
@@ -1000,9 +1284,78 @@ Item {
             }
           }
 
+          //
+          // -- Folder (group / table): a card in the flow; chevron shows expand/collapse state --
+          //
+          Rectangle {
+            visible: nd.isFolder
+            anchors.fill: parent
+            radius: 6 * root.zoom
+            color: nd.active
+              ? Cpp_ThemeManager.colors["highlight"]
+              : Cpp_ThemeManager.colors["groupbox_background"]
+            border.width: 1
+            border.color: nd.active
+              ? Cpp_ThemeManager.colors["highlight"]
+              : Cpp_ThemeManager.colors["groupbox_border"]
+
+            Row {
+              spacing: 6 * root.zoom
+              anchors {
+                left: parent.left
+                right: parent.right
+                leftMargin:  8 * root.zoom
+                rightMargin: 8 * root.zoom
+                verticalCenter: parent.verticalCenter
+              }
+
+              Image {
+                smooth: true
+                width:  9 * root.zoom
+                height: 9 * root.zoom
+                sourceSize: Qt.size(9, 9)
+                rotation: modelData.collapsed ? 270 : 0
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/icons/project-editor/treeview/indicator.svg"
+              }
+
+              Image {
+                smooth: true
+                width:  18 * root.zoom
+                height: 18 * root.zoom
+                source: modelData.icon
+                sourceSize: Qt.size(18, 18)
+                opacity: nd.active ? 1.0 : 0.85
+                anchors.verticalCenter: parent.verticalCenter
+              }
+
+              Text {
+                width: parent.width - 45 * root.zoom
+                elide: Text.ElideRight
+                text: modelData.label
+                font.bold: true
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Math.max(8, 12 * root.zoom)
+                color: nd.active
+                  ? Cpp_ThemeManager.colors["highlighted_text"]
+                  : Cpp_ThemeManager.colors["text"]
+              }
+            }
+
+            MouseArea {
+              hoverEnabled: true
+              anchors.fill: parent
+              cursorShape: Qt.PointingHandCursor
+              onEntered: nd.hovered = true
+              onExited:  nd.hovered = false
+              onClicked: root.toggleCollapse(modelData.collapseKey)
+            }
+          }
+
           MouseArea {
             hoverEnabled: true
             anchors.fill: parent
+            enabled: !nd.isFolder
             cursorShape:  Qt.PointingHandCursor
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onEntered: nd.hovered = true
@@ -1054,6 +1407,33 @@ Item {
                   break
               }
             }
+          }
+
+          //
+          // -- Collapse chevron for collapsible cards (device / group / output panel) ----
+          //
+          Image {
+            smooth: true
+            width:  9 * root.zoom
+            height: 9 * root.zoom
+            sourceSize: Qt.size(9, 9)
+            visible: nd.collapsibleCard
+            rotation: modelData.collapsed ? 270 : 0
+            source: "qrc:/icons/project-editor/treeview/indicator.svg"
+            anchors {
+              right: parent.right
+              rightMargin: 8 * root.zoom
+              verticalCenter: parent.verticalCenter
+            }
+          }
+
+          MouseArea {
+            width: 24 * root.zoom
+            visible: nd.collapsibleCard
+            enabled: nd.collapsibleCard
+            cursorShape: Qt.PointingHandCursor
+            anchors { top: parent.top; right: parent.right; bottom: parent.bottom }
+            onClicked: root.toggleCollapse(modelData.collapseKey)
           }
         }
       }

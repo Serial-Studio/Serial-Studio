@@ -378,6 +378,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_apiCallAllowFullSurface(false)
   , m_autoSaveTimer(new QTimer(this))
   , m_autoSaveSuspended(false)
+  , m_runtimeDirty(false)
   , m_mutationEpoch(0)
   , m_fileWatcher(new QFileSystemWatcher(this))
   , m_diskCheckPending(false)
@@ -414,6 +415,20 @@ DataModel::ProjectModel::ProjectModel()
   connect(this, &ProjectModel::editorWorkspacesChanged, this, bumpEpoch);
   connect(this, &ProjectModel::tablesChanged, this, bumpEpoch);
   connect(this, &ProjectModel::titleChanged, this, bumpEpoch);
+
+  const auto markDirty = [this] {
+    m_runtimeDirty = true;
+    scheduleAutoSave();
+  };
+  connect(this, &ProjectModel::groupsChanged, this, markDirty);
+  connect(this, &ProjectModel::groupDataChanged, this, markDirty);
+  connect(this, &ProjectModel::actionsChanged, this, markDirty);
+  connect(this, &ProjectModel::sourcesChanged, this, markDirty);
+  connect(this, &ProjectModel::sourceChanged, this, markDirty);
+  connect(this, &ProjectModel::sourceStructureChanged, this, markDirty);
+  connect(this, &ProjectModel::frameDetectionChanged, this, markDirty);
+  connect(this, &ProjectModel::sourceFrameParserCodeChanged, this, markDirty);
+  connect(this, &ProjectModel::tablesChanged, this, markDirty);
 
   connect(this, &ProjectModel::titleChanged, this, &ProjectModel::saveStatusChanged);
   connect(this, &ProjectModel::groupsChanged, this, &ProjectModel::saveStatusChanged);
@@ -1444,6 +1459,28 @@ void DataModel::ProjectModel::setTreeExpansion(const QJsonObject& expansion)
 }
 
 /**
+ * @brief Stable-id keyed Project Overview diagram node collapse map (persisted in the file).
+ */
+const QJsonObject& DataModel::ProjectModel::diagramCollapse() const noexcept
+{
+  return m_diagramCollapse;
+}
+
+/**
+ * @brief Stores the diagram collapse map, marking the project dirty when it changed.
+ */
+void DataModel::ProjectModel::setDiagramCollapse(const QJsonObject& state)
+{
+  if (m_diagramCollapse == state)
+    return;
+
+  m_diagramCollapse = state;
+  Q_EMIT diagramCollapseChanged();
+  setModified(true);
+  scheduleAutoSave();
+}
+
+/**
  * @brief Stages a plugin's state in the project and marks it dirty.
  */
 void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
@@ -1978,6 +2015,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   if (!m_treeExpansion.isEmpty())
     json.insert(Keys::TreeExpansion, m_treeExpansion);
 
+  if (!m_diagramCollapse.isEmpty())
+    json.insert(Keys::DiagramCollapse, m_diagramCollapse);
+
   if (!m_mqttPublisher.isEmpty())
     json.insert(Keys::MqttPublisher, m_mqttPublisher);
 
@@ -2070,13 +2110,15 @@ void DataModel::ProjectModel::newJsonFile()
   m_title                   = tr("Untitled Project");
   m_pointCount              = 100;
   m_plotTimeRange           = 10.0;
+  m_changeDrivenTransforms  = false;
   m_nextUniqueId            = 1;
   m_controlScriptCode       = "";
   DataModel::ControlScript::instance().setCode(m_controlScriptCode);
-  m_frameDecoder   = SerialStudio::PlainText;
-  m_frameDetection = SerialStudio::EndDelimiterOnly;
-  m_widgetSettings = QJsonObject();
-  m_treeExpansion  = QJsonObject();
+  m_frameDecoder    = SerialStudio::PlainText;
+  m_frameDetection  = SerialStudio::EndDelimiterOnly;
+  m_widgetSettings  = QJsonObject();
+  m_treeExpansion   = QJsonObject();
+  m_diagramCollapse = QJsonObject();
 
   DataModel::Source defaultSource;
   defaultSource.sourceId              = 0;
@@ -2370,8 +2412,9 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   m_actions.clear();
   m_sources.clear();
   m_workspaces.clear();
-  m_widgetSettings = QJsonObject();
-  m_treeExpansion  = QJsonObject();
+  m_widgetSettings  = QJsonObject();
+  m_treeExpansion   = QJsonObject();
+  m_diagramCollapse = QJsonObject();
 
   m_filePath = sourcePath;
 
@@ -2428,6 +2471,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     persistLegacyMigration();
 
   m_autoSaveSuspended = false;
+  m_runtimeDirty      = false;
 
   if (olderSchema && !sourcePath.isEmpty()) {
     const QString title = tr("Project upgraded from an earlier file format");
@@ -2858,8 +2902,9 @@ void DataModel::ProjectModel::resolveDatasetVirtualFlags()
  */
 void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject& json)
 {
-  m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
-  m_treeExpansion  = json.value(Keys::TreeExpansion).toObject();
+  m_widgetSettings  = json.value(Keys::WidgetSettings).toObject();
+  m_treeExpansion   = json.value(Keys::TreeExpansion).toObject();
+  m_diagramCollapse = json.value(Keys::DiagramCollapse).toObject();
 
   m_workspaces.clear();
   m_workspaceFolders.clear();
@@ -3244,7 +3289,9 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
   if (rebuildTree)
     Q_EMIT groupsChanged();
 
+  m_runtimeDirty = true;
   setModified(true);
+  scheduleAutoSave();
 }
 
 /**
@@ -3264,7 +3311,7 @@ void DataModel::ProjectModel::setGroupEnabled(const int groupId, const bool enab
 
   Q_EMIT groupsChanged();
   setModified(true);
-  DataModel::FrameBuilder::instance().syncFromProjectModel();
+  syncRuntime();
 }
 
 /**
@@ -3288,7 +3335,7 @@ void DataModel::ProjectModel::setDatasetEnabled(const int groupId,
 
   Q_EMIT groupsChanged();
   setModified(true);
-  DataModel::FrameBuilder::instance().syncFromProjectModel();
+  syncRuntime();
 }
 
 /**
@@ -7534,12 +7581,13 @@ QVariantList DataModel::ProjectModel::groupsForDiagram() const
       outputWidgets.append(owMap);
     }
 
-    map[Keys::SourceId]      = grp.sourceId;
-    map[Keys::Title]         = grp.title;
-    map[Keys::Widget]        = grp.widget;
-    map[Keys::GroupType]     = static_cast<int>(grp.groupType);
-    map[Keys::Datasets]      = datasets;
-    map[Keys::OutputWidgets] = outputWidgets;
+    map[Keys::SourceId]       = grp.sourceId;
+    map[Keys::Title]          = grp.title;
+    map[Keys::Widget]         = grp.widget;
+    map[Keys::GroupType]      = static_cast<int>(grp.groupType);
+    map[Keys::ParentFolderId] = grp.parentFolderId;
+    map[Keys::Datasets]       = datasets;
+    map[Keys::OutputWidgets]  = outputWidgets;
     result.append(map);
   }
 
@@ -7577,6 +7625,7 @@ QVariantList DataModel::ProjectModel::tablesForDiagram() const
   for (const auto& tbl : m_tables) {
     QVariantMap map;
     map[Keys::Name]                      = tbl.name;
+    map[Keys::ParentFolderId]            = tbl.parentFolderId;
     map[QStringLiteral("registerCount")] = static_cast<int>(tbl.registers.size());
     result.append(map);
   }
@@ -7604,6 +7653,19 @@ void DataModel::ProjectModel::autoSave()
   }
 
   setModified(false);
+
+  if (m_runtimeDirty)
+    syncRuntime();
+}
+
+/**
+ * @brief Rebuilds the live frame pipeline from the current project and clears the runtime-dirty
+ *        flag. Resets the dashboard the same way the enable/disable toggle does.
+ */
+void DataModel::ProjectModel::syncRuntime()
+{
+  m_runtimeDirty = false;
+  DataModel::FrameBuilder::instance().syncFromProjectModel();
 }
 
 /**
@@ -8156,4 +8218,80 @@ void DataModel::ProjectModel::moveSelectedItemsToFolder(const QVariantList& item
         break;
     }
   }
+}
+
+/**
+ * @brief Applies @p enabled to every group whose folder is @p folderId or nested beneath it, so a
+ *        folder toggle cascades to its whole subtree. Returns true when a group actually changed.
+ */
+bool DataModel::ProjectModel::setGroupsInFolderEnabled(const int folderId, const bool enabled)
+{
+  bool changed = false;
+  for (auto& g : m_groups) {
+    if (g.parentFolderId == -1)
+      continue;
+
+    if (!folderIsSelfOrDescendant(m_groupFolders, folderId, g.parentFolderId))
+      continue;
+
+    if (g.enabled == enabled)
+      continue;
+
+    g.enabled = enabled;
+    changed   = true;
+  }
+
+  return changed;
+}
+
+/**
+ * @brief Enables or disables every applicable item in a tree multi-selection in one pass; a group
+ *        folder cascades to its whole subtree. Emits one change, refreshes the runtime frame once,
+ *        and folds the batch into a single autosave.
+ */
+void DataModel::ProjectModel::setItemsEnabled(const QVariantList& items, const bool enabled)
+{
+  if (items.isEmpty())
+    return;
+
+  const int groupCount = static_cast<int>(m_groups.size());
+
+  setAutoSaveSuspended(true);
+  bool changed = false;
+  for (const auto& v : items) {
+    const auto m     = v.toMap();
+    const int kind   = m.value(QStringLiteral("kind"), -1).toInt();
+    const int id     = m.value(QStringLiteral("id"), -1).toInt();
+    const int parent = m.value(QStringLiteral("parentId"), -1).toInt();
+
+    if (kind == ProjectEditor::KindGroupFolder) {
+      changed |= setGroupsInFolderEnabled(id, enabled);
+      continue;
+    }
+
+    if (kind == ProjectEditor::KindGroup && id >= 0 && id < groupCount
+        && m_groups[id].enabled != enabled) {
+      m_groups[id].enabled = enabled;
+      changed              = true;
+      continue;
+    }
+
+    if (kind == ProjectEditor::KindDataset && parent >= 0 && parent < groupCount) {
+      auto& datasets = m_groups[parent].datasets;
+      if (id < 0 || static_cast<size_t>(id) >= datasets.size() || datasets[id].enabled == enabled)
+        continue;
+
+      datasets[id].enabled = enabled;
+      changed              = true;
+    }
+  }
+
+  setAutoSaveSuspended(false);
+  if (!changed)
+    return;
+
+  Q_EMIT groupsChanged();
+  setModified(true);
+  syncRuntime();
+  flushAutoSave();
 }
