@@ -456,17 +456,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
         <source>Acknowledgements</source>
         <translation>תודות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="76"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="75"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="87"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="86"/>
         <source>About Qt…</source>
         <translation>אודות QT…</translation>
     </message>
@@ -2697,7 +2697,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CsvPlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="36"/>
+        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>נגן CSV</translation>
     </message>
@@ -3134,12 +3134,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="313"/>
         <source>The value transform must define a transform(value) function.</source>
-        <translation>טרנספורמציית הערך חייבת להגדיר פונקציית (transform(value.</translation>
+        <translation>טרנספורמציית הערך חייבת להגדיר פונקציית transform(value).</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="314"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
-        <translation>הגדר פונקציית (transform(value שמחזירה מספר, או השתמש ב-Clear כדי להסיר את הטרנספורמציה.</translation>
+        <translation>הגדר פונקציית transform(value) שמחזירה מספר, או השתמש בניקוי כדי להסיר את הטרנספורמציה.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="332"/>
@@ -5280,141 +5280,141 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="501"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="510"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="523"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="538"/>
         <source>Project error</source>
         <translation>שגיאת פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
         <source>Project title cannot be empty!</source>
         <translation>כותרת הפרויקט אינה יכולה להיות ריקה!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="510"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
         <source>You need to add at least one group!</source>
         <translation>יש להוסיף לפחות קבוצה אחת!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="523"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="538"/>
         <source>You need to add at least one dataset!</source>
         <translation>יש להוסיף לפחות מערך נתונים אחד!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="585"/>
         <source>Your project needs a title</source>
         <translation>הפרויקט שלך זקוק לכותרת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="572"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source>Add a group to get started</source>
         <translation>הוסף קבוצה כדי להתחיל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="589"/>
         <source>Add a dataset to a group</source>
         <translation>הוסף מערך נתונים לקבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="603"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>פתח את תצוגת הפרויקט בראש העץ והזן שם. ניתן לשנות את שם הפרויקט בכל עת.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="606"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>קבוצות מארגנות מערכי נתונים לווידג'טים בלוח הבקרה. השתמש בלחצן קבוצה בסרגל הכלים למעלה כדי ליצור אחת, ולאחר מכן הוסף אליה מערכי נתונים.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="610"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>מערכי נתונים הם הערכים המוצגים בלוח הבקרה. בחר קבוצה בעץ והשתמש בלחצן מערך נתונים בסרגל הכלים כדי להוסיף אחד.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="629"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="638"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="653"/>
         <source>Lock Project</source>
         <translation>נעל פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="630"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="645"/>
         <source>Choose a password to lock the project:</source>
         <translation>בחר סיסמה לנעילת הפרויקט:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="638"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="653"/>
         <source>Confirm the password:</source>
         <translation>אשר את הסיסמה:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="643"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="658"/>
         <source>Passwords do not match</source>
         <translation>הסיסמאות אינן תואמות</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="659"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>שתי הסיסמאות שהזנת אינן תואמות. הפרויקט לא ננעל.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="693"/>
         <source>Unlock Project</source>
         <translation>בטל נעילת פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="694"/>
         <source>Enter the project password:</source>
         <translation>הזן את סיסמת הפרויקט:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="689"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="704"/>
         <source>Incorrect password</source>
         <translation>סיסמה שגויה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="690"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="705"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>הסיסמה שהזנת אינה תואמת לזו השמורה בקובץ הפרויקט.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="721"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="736"/>
         <source>New Project</source>
         <translation>פרויקט חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="921"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="936"/>
         <source>Samples</source>
         <translation>דגימות</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="969"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="935"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="984"/>
         <source>Time</source>
         <translation>זמן</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1508"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>מספר מקורות נתונים דורשים רישיון Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1524"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro מאפשר התחברות למספר התקנים במקביל. יש לשדרג כדי לפתוח תכונה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1521"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1536"/>
         <source>Device %1</source>
         <translation>התקן %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1553"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>האם למחוק את מקור הנתונים "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1554"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1569"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>קבוצות המשתמשות במקור זה יועברו למקור ברירת המחדל. לא ניתן לבטל פעולה זו.</translation>
     </message>
@@ -5423,119 +5423,119 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">(עותק)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1791"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1806"/>
         <source>Do you want to save your changes?</source>
         <translation>לשמור את השינויים?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1792"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1807"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>יש שינויים שלא נשמרו בפרויקט זה!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1831"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1846"/>
         <source>Save Serial Studio Project</source>
         <translation>שמירת פרויקט Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1833"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2496"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1848"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2512"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>קבצי פרויקט Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1854"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2095"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2487"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2503"/>
         <source>Untitled Project</source>
         <translation>פרויקט ללא שם</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2642"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2125"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
         <source>Device A</source>
         <translation>התקן A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2322"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2337"/>
         <source>Select Project File</source>
         <translation>בחירת קובץ פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2324"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2339"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>קבצי פרויקט (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2368"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2383"/>
         <source>JSON validation error</source>
         <translation>שגיאת אימות JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2477"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>הפרויקט שודרג מתבנית קובץ ישנה יותר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2478"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>פרויקט זה נשמר עם גרסת סכימה %1; הגרסה הנוכחית היא %2. ערכי ברירת מחדל הוחלו על שדות חדשים. שמור את הפרויקט כדי לנעול את השדרוג.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2510"/>
         <source>Save Imported Project</source>
         <translation>שמירת פרויקט מיובא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2702"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>פרויקטים רב-מקוריים דורשים רישיון Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2687"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2703"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>פרויקט זה מכיל מספר מקורות נתונים. רק המקור הראשון נטען. נדרש רישיון Serial Studio Pro לשימוש בפרויקטים רב-מקוריים.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2925"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2941"/>
         <source>Workspace IDs remapped on load</source>
         <translation>מזהי ה-Workspace הותאמו מחדש בעת הטעינה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2926"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2942"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>‏%1 מזהי סביבות עבודה מותאמות חפפו את הטווח האוטומטי החדש והועברו לטווח המשתמש. שמור את הפרויקט כדי להפוך את המיפוי לקבוע.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3125"/>
         <source>Legacy frame parser function updated</source>
         <translation>פונקציית מנתח מסגרות מדור קודם עודכנה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3126"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>הפרויקט שלך השתמש בפונקציית מנתח מסגרות מדור קודם עם ארגומנט 'separator'. היא הומרה אוטומטית לפורמט החדש.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3352"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3370"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>למחוק את הקבוצה "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3353"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3398"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3430"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4168"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3371"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3416"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3448"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4186"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>לא ניתן לבטל פעולה זו. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>למחוק את הפעולה "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3429"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3447"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>למחוק את מערך הנתונים "%1"?</translation>
     </message>
@@ -5544,78 +5544,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (עותק)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4080"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4116"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4098"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4134"/>
         <source>Output Controls</source>
         <translation>בקרות פלט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4146"/>
         <source>New Button</source>
         <translation>כפתור חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4131"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4149"/>
         <source>New Slider</source>
         <translation>מחוון חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4134"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4152"/>
         <source>New Toggle</source>
         <translation>מתג חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4137"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4155"/>
         <source>New Text Field</source>
         <translation>שדה טקסט חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4140"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4158"/>
         <source>New Knob</source>
         <translation>כפתור סיבוב חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4167"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4185"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>למחוק את וידג'ט הפלט "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4332"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
         <source>Group</source>
         <translation>קבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4368"/>
         <source>New Dataset</source>
         <translation>מערך נתונים חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4353"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
         <source>New Plot</source>
         <translation>גרף חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4375"/>
         <source>New FFT Plot</source>
         <translation>תרשים FFT חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4379"/>
         <source>New Level Indicator</source>
         <translation>מחוון רמה חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
         <source>New Gauge</source>
         <translation>מד חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4387"/>
         <source>New Compass</source>
         <translation>מצפן חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4375"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4393"/>
         <source>New Meter</source>
         <translation>מד חדש</translation>
     </message>
@@ -5624,327 +5624,327 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">מדחום חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4379"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
         <source>New LED Indicator</source>
         <translation>מחוון LED חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4401"/>
         <source>New Waterfall</source>
         <translation>תרשים מפל חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4451"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4469"/>
         <source>Channel %1</source>
         <translation>ערוץ %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4522"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4540"/>
         <source>New Action</source>
         <translation>פעולה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4663"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4681"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>האם לשנות את הווידג'ט ברמת הקבוצה?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4683"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>מערכי הנתונים הקיימים של קבוצה זו יימחקו</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4733"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4734"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4751"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4752"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4753"/>
         <source>Accelerometer %1</source>
         <translation>מד תאוצה %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4750"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4750"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4750"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
         <source>Gyro %1</source>
         <translation>ג'ירוסקופ %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4783"/>
         <source>Latitude</source>
         <translation>קו רוחב</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4783"/>
         <source>Longitude</source>
         <translation>קו אורך</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4783"/>
         <source>Altitude</source>
         <translation>גובה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4780"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4794"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4812"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4780"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4794"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4812"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4780"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4794"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4812"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5052"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5978"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6250"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5070"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6268"/>
         <source>Workspace</source>
         <translation>סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5241"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5447"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6709"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5259"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6727"/>
         <source>Shared Table</source>
         <translation>טבלה משותפת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5336"/>
         <source>register</source>
         <translation>רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5447"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6709"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6727"/>
         <source>New Shared Table</source>
         <translation>טבלה משותפת חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5447"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5470"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5489"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5513"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5540"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5559"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5581"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5603"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5978"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5999"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6250"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6272"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6692"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6709"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6730"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5507"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5531"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5577"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5599"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5621"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6017"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6268"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6290"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6506"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6727"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6748"/>
         <source>Name:</source>
         <translation>שם:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5488"/>
         <source>Rename Table</source>
         <translation>שינוי שם טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5489"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5507"/>
         <source>Rename Group</source>
         <translation>שינוי שם קבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5513"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5531"/>
         <source>Rename Dataset</source>
         <translation>שינוי שם מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5540"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
         <source>Rename Data Source</source>
         <translation>שינוי שם מקור נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5559"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5577"/>
         <source>Rename Action</source>
         <translation>שינוי שם פעולה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5580"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5598"/>
         <source>New Register</source>
         <translation>רגיסטר חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5621"/>
         <source>Rename Register</source>
         <translation>שינוי שם רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5662"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7371"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="8142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5655"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5680"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7389"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="8173"/>
         <source>This action cannot be undone.</source>
         <translation>לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5638"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5656"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>פעולה זו תסיר %1 רגיסטר(ים) יחד עם הטבלה. לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5641"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5661"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7370"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5659"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5679"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7388"/>
         <source>Delete "%1"?</source>
         <translation>למחוק את "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5662"/>
         <source>Delete Table</source>
         <translation>מחק טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5664"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5682"/>
         <source>Delete Register</source>
         <translation>מחק רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5704"/>
         <source>Export Table</source>
         <translation>ייצא טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5688"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5747"/>
         <source>CSV files (*.csv)</source>
         <translation>קבצי CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5727"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5745"/>
         <source>Import Table</source>
         <translation>ייבא טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5978"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6250"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6268"/>
         <source>New Workspace</source>
         <translation>סביבת עבודה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5999"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6017"/>
         <source>Rename Workspace</source>
         <translation>שנה שם סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6045"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6333"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6551"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6692"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6063"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6351"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6710"/>
         <source>Folder</source>
         <translation>תיקייה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6692"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6710"/>
         <source>New Folder</source>
         <translation>תיקייה חדשה</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6272"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6730"/>
-        <source>Rename Folder</source>
-        <translation>שנה שם תיקייה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6290"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6506"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6748"/>
+        <source>Rename Folder</source>
+        <translation>שנה שם תיקייה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6308"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6524"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6766"/>
         <source>Delete folder "%1"?</source>
         <translation>למחוק את התיקייה "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6291"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6309"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation>התיקייה תוסר; סביבות העבודה ותתי־התיקיות שלה יועברו לתיקיית האב.</translation>
+        <translation>התיקייה תוסר; מרחבי העבודה ותתי־התיקיות שלה יועברו לתיקיית האב.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6293"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6752"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6527"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6770"/>
         <source>Delete Folder</source>
         <translation>מחק תיקייה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6507"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6525"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
         <translation>התיקייה תוסר; הקבוצות ותתי־התיקיות שלה יועברו לתיקיית האב.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6767"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation>התיקייה נמחקת; הטבלאות ותיקיות המשנה שלה עוברות לתיקייה האב. נתיב הגישה של הטבלאות משתנה בהתאם.</translation>
+        <translation>התיקייה תוסר; הטבלאות ותתי־התיקיות שלה יועברו לתיקיית האב. נתיב הגישה של הטבלאות הללו ישתנה בהתאם.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6837"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6855"/>
         <source>Overview</source>
         <translation>סקירה כללית</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6864"/>
         <source>All Data</source>
         <translation>כל הנתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7139"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7157"/>
         <source>Discard workspace customisations?</source>
         <translation>לבטל התאמות אישיות של סביבת עבודה?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7140"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7158"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>כיבוי התאמה אישית מבטל את העריכות ובונה מחדש את רשימת סביבות העבודה מקבוצות הפרויקט.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7143"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7161"/>
         <source>Customize Workspaces</source>
         <translation>התאמה אישית של סביבות עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7373"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7391"/>
         <source>Delete Workspace</source>
         <translation>מחיקת סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7787"/>
         <source>Project file removed from disk</source>
         <translation>קובץ הפרויקט הוסר מהדיסק</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7757"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7788"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 נמחק או שונה שמו על ידי תוכנית אחרת. שמור את הפרויקט כדי ליצור אותו מחדש.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7778"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7799"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7809"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7830"/>
         <source>Project file changed on disk</source>
         <translation>קובץ הפרויקט שונה בדיסק</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7779"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7810"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 שונה על ידי תוכנית אחרת. הפרויקט בזיכרון נשמר; פתח מחדש את הקובץ כדי לטעון את השינויים החיצוניים.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7826"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -5953,7 +5953,7 @@ Reload it and discard your unsaved changes?</source>
 לטעון אותו מחדש ולמחוק את השינויים שלא נשמרו?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7828"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -5962,22 +5962,22 @@ Reload it?</source>
 לטעון אותו מחדש?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7859"/>
         <source>File save error</source>
         <translation>שגיאת שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="8141"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="8172"/>
         <source>Delete %1 selected items?</source>
         <translation>למחוק %1 פריטים נבחרים?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="8144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="8175"/>
         <source>Delete Items</source>
-        <translation>מחיקת פריטים</translation>
+        <translation>מחק פריטים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2546"/>
         <source>File open error</source>
         <translation>שגיאת פתיחת קובץ</translation>
     </message>
@@ -6178,12 +6178,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="167"/>
         <source>Add Folder</source>
-        <translation>הוספת תיקייה</translation>
+        <translation>הוסף תיקייה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="169"/>
         <source>Add a top-level folder</source>
-        <translation>הוספת תיקייה ברמה העליונה</translation>
+        <translation>הוסף תיקייה ברמה העליונה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="177"/>
@@ -6509,37 +6509,37 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Donate</name>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="37"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
         <translation>תמוך ב־Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="85"/>
         <source>Support the development of %1!</source>
         <translation>תמוך בפיתוח של %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="97"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio היא תוכנה חופשית בקוד פתוח הנתמכת על ידי מתנדבים. שקול לתרום או לרכוש רישיון Pro כדי לתמוך במאמצי הפיתוח :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="110"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="109"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>ניתן גם לתמוך בפרויקט זה על ידי שיתוף, דיווח על באגים והצעת תכונות חדשות!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="123"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="135"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="134"/>
         <source>Donate</source>
         <translation>תרום</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="149"/>
         <source>Get Serial Studio Pro</source>
         <translation>רכוש את Serial Studio Pro</translation>
     </message>
@@ -6708,102 +6708,102 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExamplesBrowser</name>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="34"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
         <source>Examples Browser</source>
         <translation>דפדפן דוגמאות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="91"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="90"/>
         <source>Search in Examples…</source>
         <translation>חיפוש בדוגמאות…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="120"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="119"/>
         <source>Back</source>
         <translation>חזור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="152"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="151"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="173"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="172"/>
         <source>Download &amp;&amp; Open</source>
         <translation>הורד ופתח</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="188"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="187"/>
         <source>View on GitHub</source>
         <translation>הצג ב-GitHub</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="245"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
         <source>Fetching examples…</source>
         <translation>מאחזר דוגמאות…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
         <source>Loading...</source>
         <translation>טוען...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
         <source>No README available.</source>
         <translation>אין README זמין.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="609"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
         <source>Copied to Clipboard</source>
         <translation>הועתק ללוח</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="672"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
         <source>No screenshot available</source>
         <translation>אין צילום מסך זמין</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="704"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
         <source>Details</source>
         <translation>פרטים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="733"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
         <source>Info</source>
         <translation>מידע</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
         <source>Category:</source>
         <translation>קטגוריה:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="769"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
         <source>Difficulty:</source>
         <translation>רמת קושי:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="787"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
         <source>Project:</source>
         <translation>פרויקט:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="829"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
         <source>No Results Found</source>
         <translation>לא נמצאו תוצאות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="840"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>בדוק את האיות או נסה מונח חיפוש אחר.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="855"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
         <source>%1 examples</source>
         <translation>%1 דוגמאות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="864"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -6811,192 +6811,192 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="31"/>
         <source>Extension Manager</source>
         <translation>מנהל הרחבות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="77"/>
         <source>Search extensions…</source>
         <translation>חיפוש הרחבות…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="118"/>
         <source>Refresh</source>
         <translation>רענן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="132"/>
         <source>Repos</source>
         <translation>מאגרים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="162"/>
         <source>Repository Settings</source>
         <translation>הגדרות מאגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="174"/>
         <source>Back</source>
         <translation>חזור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="215"/>
         <source>Install</source>
         <translation>התקן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="232"/>
         <source>Uninstall</source>
         <translation>הסר התקנה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="259"/>
         <source>Run</source>
         <translation>הפעל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="283"/>
         <source>Stop</source>
         <translation>עצור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="317"/>
         <source>Reset</source>
         <translation>אפס</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="367"/>
         <source>Fetching extensions…</source>
         <translation>מביא הרחבות…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="605"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="604"/>
         <source>Running</source>
         <translation>פועל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="626"/>
         <source>Update</source>
         <translation>עדכן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="626"/>
         <source>Installed</source>
         <translation>מותקן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="644"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="643"/>
         <source>Unavailable</source>
         <translation>לא זמין</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="823"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="822"/>
         <source>No description available.</source>
         <translation>אין תיאור זמין.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="864"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="863"/>
         <source>Details</source>
         <translation>פרטים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="885"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="884"/>
         <source>Type:</source>
         <translation>סוג:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="898"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="897"/>
         <source>Author:</source>
         <translation>מחבר:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="910"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="909"/>
         <source>Version:</source>
         <translation>גרסה:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="922"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="921"/>
         <source>License:</source>
         <translation>רישיון:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="982"/>
         <source>No preview</source>
         <translation>אין תצוגה מקדימה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1012"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1011"/>
         <source>  PLUGIN OUTPUT</source>
         <translation>פלט תוסף</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1042"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1041"/>
         <source>No output yet. Run the plugin to see its log here.</source>
         <translation>אין פלט עדיין. הפעל את התוסף כדי לראות את היומן שלו כאן.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1077"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1076"/>
         <source>No preview available</source>
         <translation>אין תצוגה מקדימה זמינה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1121"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1120"/>
         <source>Repositories</source>
         <translation>מאגרים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1134"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1133"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
         <translation>הוסף כתובות URL למאגרים מרוחקים או נתיבי תיקיות מקומיות.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1171"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1170"/>
         <source>LOCAL</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1228"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1227"/>
         <source>URL or local path…</source>
         <translation>כתובת URL או נתיב מקומי…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1236"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1235"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1259"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1258"/>
         <source>Browse…</source>
         <translation>עיון…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1296"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1295"/>
         <source>No Results Found</source>
         <translation>לא נמצאו תוצאות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1307"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1306"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>בדוק את האיות או נסה מונח חיפוש אחר.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1331"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1330"/>
         <source>No Extensions Available</source>
         <translation>אין הרחבות זמינות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1342"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1341"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>הוסף כתובת URL של מאגר או נתיב מקומי בהגדרות המאגרים, ולאחר מכן רענן.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1357"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1356"/>
         <source>%1 extensions</source>
         <translation>%1 הרחבות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1366"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1365"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -7070,98 +7070,98 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="34"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
         <source>File Transmission</source>
         <translation>שידור קובץ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="102"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="101"/>
         <source>Transfer Protocol:</source>
         <translation>פרוטוקול העברה:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="135"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="134"/>
         <source>File Selection:</source>
         <translation>בחירת קובץ:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="152"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="151"/>
         <source>Select File…</source>
         <translation>בחר קובץ…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="170"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="169"/>
         <source>Transmission Interval:</source>
         <translation>מרווח שידור:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="272"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
         <source>msecs</source>
         <translation>אלפיות שנייה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="206"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="205"/>
         <source>Block Size:</source>
         <translation>גודל בלוק:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="234"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
         <source>bytes</source>
         <translation>בתים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
         <source>Timeout:</source>
         <translation>פסק זמן:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="282"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="281"/>
         <source>Max Retries:</source>
         <translation>ניסיונות מקסימליים:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="340"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="339"/>
         <source>Progress: %1%</source>
         <translation>התקדמות: %1%</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="373"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="372"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 בתים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="381"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="380"/>
         <source>Errors: %1</source>
         <translation>שגיאות: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="418"/>
         <source>Pause Transmission</source>
         <translation>השהה שידור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
         <source>Resume Transmission</source>
         <translation>המשך שידור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="422"/>
         <source>Stop Transmission</source>
         <translation>עצור שידור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
         <source>Begin Transmission</source>
         <translation>התחל שידור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="461"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="460"/>
         <source>Activity Log</source>
         <translation>יומן פעילות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="465"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="464"/>
         <source>Clear</source>
         <translation>נקה</translation>
     </message>
@@ -7169,55 +7169,55 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="448"/>
         <source>Frame Parser</source>
         <translation>מנתח מסגרות</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="455"/>
         <source>Device %1</source>
         <translation>התקן %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="230"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="245"/>
         <source>Group</source>
         <translation>קבוצה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="345"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="372"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="756"/>
         <source>Folder</source>
         <translation>תיקייה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="490"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="517"/>
         <source>Action</source>
         <translation>פעולה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="548"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1826"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="575"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1862"/>
         <source>Output Panel</source>
         <translation>לוח פלט</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="592"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="619"/>
         <source>Control</source>
         <translation>בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="667"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="694"/>
         <source>Table</source>
         <translation>טבלה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="708"/>
         <source>%1 regs</source>
         <translation>%1 רגיסטרים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="406"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="708"/>
         <source>empty</source>
         <translation>ריק</translation>
     </message>
@@ -7226,111 +7226,111 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">סקריפט בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="807"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="843"/>
         <source>MQTT Publisher</source>
         <translation>מפרסם MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1215"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1251"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>פתח את עורך קוד ההמרה עבור מערך נתונים זה.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1596"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1599"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1635"/>
         <source>Dataset Container</source>
         <translation>מיכל מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1608"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1644"/>
         <source>Multi-Plot</source>
         <translation>גרף מרובה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1611"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1647"/>
         <source>Multiple Plot</source>
         <translation>גרף מרובה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1620"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1623"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1656"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1659"/>
         <source>Accelerometer</source>
         <translation>מד תאוצה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1635"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1668"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1671"/>
         <source>Gyroscope</source>
         <translation>גירוסקופ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1644"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1647"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1680"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1683"/>
         <source>GPS Map</source>
         <translation>מפת GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1655"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1691"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1694"/>
         <source>3D Plot</source>
         <translation>גרף תלת־ממדי</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1666"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1669"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1702"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1705"/>
         <source>Image View</source>
         <translation>תצוגת תמונה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1678"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1681"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1714"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1717"/>
         <source>Painter Widget</source>
         <translation>וידג׳ט ציור</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1690"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1693"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1726"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1729"/>
         <source>Web View</source>
         <translation>תצוגת אינטרנט</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1702"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1705"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1738"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1741"/>
         <source>Data Grid</source>
         <translation>רשת נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1718"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1754"/>
         <source>Generic</source>
         <translation>כללי</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1731"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1767"/>
         <source>Plot</source>
         <translation>גרף</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1744"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1780"/>
         <source>FFT Plot</source>
         <translation>גרף FFT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1757"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1793"/>
         <source>Gauge</source>
         <translation>מד</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1770"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1806"/>
         <source>Level Indicator</source>
         <translation>מחוון רמה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1783"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1819"/>
         <source>Compass</source>
         <translation>מצפן</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1796"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1832"/>
         <source>Meter</source>
         <translation>מד</translation>
     </message>
@@ -7343,154 +7343,154 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">מדחום</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="404"/>
         <source>Control Loop</source>
         <translation>לולאת בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="772"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="799"/>
         <source>Shared Memory</source>
         <translation>זיכרון משותף</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1809"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1845"/>
         <source>LED Indicator</source>
         <translation>מחוון LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1838"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1874"/>
         <source>Slider</source>
         <translation>סליידר</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1851"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1887"/>
         <source>Toggle</source>
         <translation>מתג</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1864"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1900"/>
         <source>Knob</source>
         <translation>כפתור סיבוב</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1877"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1913"/>
         <source>Text Field</source>
         <translation>שדה טקסט</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1890"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1926"/>
         <source>Button</source>
         <translation>כפתור</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1914"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1990"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2078"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1950"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2026"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2114"/>
         <source>Add Group</source>
         <translation>הוסף קבוצה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1930"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2006"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2094"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2139"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1966"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2042"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2130"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2175"/>
         <source>Add Dataset</source>
         <translation>הוסף מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1944"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2020"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2108"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2153"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2360"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1980"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2056"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2144"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2189"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2396"/>
         <source>Add Output</source>
         <translation>הוסף פלט</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1960"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2033"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1996"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2069"/>
         <source>Add Action</source>
         <translation>הוסף פעולה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1969"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2005"/>
         <source>Add Data Source</source>
         <translation>הוסף מקור נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1976"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2012"/>
         <source>Add Data Table</source>
         <translation>הוסף טבלת נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2044"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2180"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2247"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2375"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2409"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2465"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2080"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2216"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2283"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2411"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2445"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2501"/>
         <source>Rename…</source>
         <translation>שנה שם…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2052"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2210"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2280"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2332"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2383"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2439"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2088"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2246"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2316"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2368"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2419"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2475"/>
         <source>Duplicate</source>
         <translation>שכפל</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2063"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2221"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2292"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2344"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2394"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2450"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2476"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2099"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2257"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2328"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2380"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2430"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2486"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2512"/>
         <source>Delete…</source>
         <translation>מחק…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2124"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2160"/>
         <source>Edit Frame Parser…</source>
         <translation>ערוך מנתח מסגרות…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2166"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2202"/>
         <source>Edit Painter Code…</source>
         <translation>ערוך קוד ציור…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2188"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2256"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2308"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2417"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2224"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2292"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2344"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2453"/>
         <source>Move Up</source>
         <translation>העבר למעלה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2199"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2268"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2320"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2428"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2235"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2304"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2356"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2464"/>
         <source>Move Down</source>
         <translation>העבר למטה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2236"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2272"/>
         <source>Edit Transform Code…</source>
         <translation>ערוך קוד טרנספורמציה…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2491"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2527"/>
         <source>Edit Code…</source>
         <translation>ערוך קוד…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2506"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2542"/>
         <source>Edit Control Loop…</source>
         <translation>ערוך לולאת בקרה…</translation>
     </message>
@@ -7769,12 +7769,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupFolderView.qml" line="132"/>
         <source>Add Sub-folder</source>
-        <translation>הוספת תיקיית משנה</translation>
+        <translation>הוסף תת-תיקייה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupFolderView.qml" line="134"/>
         <source>Add a sub-folder inside this folder</source>
-        <translation>הוספת תיקיית משנה בתוך תיקייה זו</translation>
+        <translation>הוסף תת-תיקייה בתוך תיקייה זו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupFolderView.qml" line="142"/>
@@ -7880,7 +7880,7 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="107"/>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="109"/>
         <source>Web View</source>
-        <translation>תצוגת Web</translation>
+        <translation>תצוגת אינטרנט</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="115"/>
@@ -8095,7 +8095,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="33"/>
         <source>Dashboard Widgets</source>
-        <translation>ווידג'טים של לוח הבקרה</translation>
+        <translation>וידג'טים של לוח הבקרה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="127"/>
@@ -8182,47 +8182,47 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="33"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>מרכז עזרה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="94"/>
         <source>Fetching help pages…</source>
         <translation>טוען דפי עזרה…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="129"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="128"/>
         <source>Search…</source>
         <translation>חיפוש…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="247"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="246"/>
         <source>Loading…</source>
         <translation>טוען…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="291"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="290"/>
         <source>Select a page from the sidebar</source>
         <translation>בחר דף מסרגל הצד</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="321"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="320"/>
         <source>Copied to Clipboard</source>
         <translation>הועתק ללוח</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="353"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="352"/>
         <source>View Online</source>
         <translation>הצג באינטרנט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="372"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="371"/>
         <source>%1 pages</source>
         <translation>%1 דפים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="380"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -8439,35 +8439,35 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>יצירת התקן CAN נכשלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>לא ניתן ליצור התקן CAN. בדוק את החומרה והמנהלים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="301"/>
         <source>CAN Connection Failed</source>
         <translation>חיבור CAN נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="299"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>לא ניתן להתחבר להתקן CAN. בדוק את חיבור החומרה וההגדרות.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="335"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus לא זמין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="319"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8476,7 +8476,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 ב-Linux, יש לוודא שמודולי הליבה של SOCKETCAN טעונים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="325"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8485,7 +8485,7 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 ב-Windows, יש להתקין מנהלי התקן לחומרת CAN (PEAK, VECTOR וכו').</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="331"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8494,108 +8494,108 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 תמיכה ב-CAN bus ב-macOS מוגבלת ועשויה לדרוש מנהלי התקן של צד שלישי.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="336"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>אין תוספי CAN bus זמינים בפלטפורמה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="348"/>
         <source>Invalid CAN Configuration</source>
         <translation>תצורת CAN לא תקינה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="349"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>תצורת CAN bus אינה שלמה. יש לבחור תוסף וממשק תקינים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="356"/>
         <source>Invalid Selection</source>
         <translation>בחירה לא תקינה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="357"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>התוסף או הממשק שנבחרו אינם זמינים עוד. יש לרענן את הרשימות ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="365"/>
         <source>No Devices Available</source>
         <translation>אין התקנים זמינים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="366"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>רשימת התוספים או הממשקים ריקה. רענן את הרשימות וודא שחומרת ה-CAN שלך מחוברת.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="695"/>
         <source>CAN Bus Error</source>
         <translation>שגיאת אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="696"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>אירעה שגיאה אך התקן ה-CAN אינו זמין עוד.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="703"/>
         <source>Error code: %1</source>
         <translation>קוד שגיאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="706"/>
         <source>CAN Bus Communication Error</source>
         <translation>שגיאת תקשורת אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="721"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>חבר מתאם %1 ולאחר מכן רענן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="725"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>טען תחילה מודולי ליבה של SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="728"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>הגדר תחילה ממשק CAN וירטואלי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="730"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="730"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="750"/>
         <source>No interfaces found for %1</source>
         <translation>לא נמצאו ממשקים עבור %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="734"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;מנהלי התקן PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="738"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;מנהלי התקן VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="742"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;מנהלי התקן SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="745"/>
         <source>Install %1 drivers</source>
         <translation>התקן מנהלי התקן %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="748"/>
         <source>Install %1 drivers for macOS</source>
         <translation>התקן מנהלי התקן %1 עבור macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="762"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -8606,37 +8606,37 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="785"/>
         <source>No CAN driver selected</source>
         <translation>לא נבחר מנהל התקן CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="869"/>
         <source>Plugin</source>
         <translation>תוסף</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="877"/>
         <source>Interface</source>
         <translation>ממשק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="885"/>
         <source>Bitrate</source>
         <translation>קצב סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="894"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="901"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="908"/>
         <source>Listen-Only</source>
         <translation>האזנה בלבד</translation>
     </message>
@@ -10189,22 +10189,22 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="42"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
         <translation>בחר סמל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="119"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="118"/>
         <source>Search Online…</source>
         <translation>חיפוש מקוון…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="132"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="131"/>
         <source>OK</source>
         <translation>אישור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="144"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="143"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
@@ -10461,8 +10461,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="170"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="332"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="381"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="333"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="382"/>
         <source>Copy</source>
         <translation>העתק</translation>
     </message>
@@ -10473,73 +10473,100 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="182"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="338"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="387"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="339"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="388"/>
         <source>Select All</source>
         <translation>בחר הכול</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="234"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="235"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="426"/>
         <source>Product</source>
         <translation>מוצר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="252"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="253"/>
         <source>Licensee</source>
         <translation>בעל רישיון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="271"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="272"/>
         <source>Licensee E-Mail</source>
         <translation>דוא״ל בעל הרישיון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="288"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="289"/>
         <source>Device Usage</source>
         <translation>שימוש במכשירים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="297"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 מכשירים בשימוש (תוכנית ללא הגבלה)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="297"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 מתוך %2 מכשירים בשימוש</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="307"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="308"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="443"/>
         <source>Device ID</source>
         <translation>מזהה מכשיר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="354"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="355"/>
         <source>License Key</source>
         <translation>מפתח רישיון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="409"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="433"/>
+        <source>Serial Studio %1 (Offline)</source>
+        <translation>Serial Studio %1 (לא מקוון)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="460"/>
+        <source>Expires</source>
+        <translation>תוקף</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="467"/>
+        <source>%1 (%2 days left)</source>
+        <translation>%1 (נותרו %2 ימים)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="480"/>
+        <source>Your offline license expires soon. Request a new certificate to stay activated.</source>
+        <translation>הרישיון הלא־מקוון שלך יפוג בקרוב. יש לבקש אישור חדש כדי להישאר מופעל.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="497"/>
         <source>Customer Portal</source>
         <translation>פורטל לקוחות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="420"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="508"/>
         <source>Buy License</source>
         <translation>רכישת רישיון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="427"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="515"/>
         <source>Activate</source>
         <translation>הפעלה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="437"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="526"/>
+        <source>Activate Offline…</source>
+        <translation>הפעלה לא־מקוונת…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="535"/>
         <source>Deactivate</source>
         <translation>ביטול הפעלה</translation>
     </message>
@@ -10547,133 +10574,151 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="517"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="512"/>
         <source>There was an issue validating your license.</source>
         <translation>אירעה בעיה באימות הרישיון שלך.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="535"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="716"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="835"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="530"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>מפתח הרישיון שסיפקת אינו שייך ל-Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="536"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>יש לוודא שרכשת את הרישיון מהחנות הרשמית של Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="547"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
         <source>This license key was activated on a different device.</source>
         <translation>מפתח רישיון זה הופעל במכשיר אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="548"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="726"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="543"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="721"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>יש לבטל את ההפעלה שם תחילה או לפנות לתמיכה לקבלת עזרה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="559"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="736"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
         <source>This license is not currently active.</source>
         <translation>רישיון זה אינו פעיל כרגע.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="732"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>ייתכן שפג תוקפו או שבוטלה הפעלתו (סטטוס: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
         <source>Something went wrong on the server.</source>
         <translation>משהו השתבש בשרת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="571"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="747"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="742"/>
         <source>No activation ID was returned.</source>
         <translation>לא הוחזר מזהה הפעלה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
         <source>Could not validate your license at this time.</source>
         <translation>לא ניתן לאמת את הרישיון כעת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="756"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="840"/>
         <source>Try again later.</source>
         <translation>יש לנסות שוב מאוחר יותר.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="602"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
         <source>Your license has been successfully activated.</source>
         <translation>הרישיון הופעל בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="649"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>תודה על התמיכה ב-Serial Studio!
 כעת יש לך גישה לכל התכונות המתקדמות.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="708"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>There was an issue activating your license.</source>
         <translation>הייתה בעיה בהפעלת הרישיון.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="717"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="712"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>יש לוודא שהרישיון נרכש מהחנות הרשמית של Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
         <source>Something went wrong on the server…</source>
         <translation>משהו השתבש בשרת…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
         <source>Could not activate your license at this time.</source>
         <translation>לא ניתן להפעיל את הרישיון שלך כעת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="827"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
         <source>There was an issue deactivating your license.</source>
         <translation>הייתה בעיה בביטול הרישיון שלך.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="844"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="839"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>לא ניתן לבטל את הרישיון שלך כעת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
         <source>Your license has been deactivated.</source>
         <translation>הרישיון שלך בוטל.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>הגישה לתכונות Pro הוסרה.
 תודה שוב על תמיכתך ב־Serial Studio!</translation>
+    </message>
+</context>
+<context>
+    <name>Licensing::OfflineLicense</name>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="183"/>
+        <source>Could not open the certificate file.</source>
+        <translation>לא ניתן לפתוח את קובץ האישור.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="190"/>
+        <source>The certificate file is too large to be valid.</source>
+        <translation>קובץ האישור גדול מדי כדי להיות תקף.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="217"/>
+        <source>Could not write the device file.</source>
+        <translation>לא ניתן לכתוב את קובץ ההתקן.</translation>
     </message>
 </context>
 <context>
@@ -11255,7 +11300,7 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>Mdf4Player</name>
     <message>
-        <location filename="../../qml/Dialogs/Mdf4Player.qml" line="24"/>
+        <location filename="../../qml/Dialogs/Mdf4Player.qml" line="23"/>
         <source>MDF4 Player</source>
         <translation>נגן MDF4</translation>
     </message>
@@ -11688,8 +11733,8 @@ Would you like to open the download page?</source>
         <translation>לא ניתן ליצור את מבנה התיקיות של bundle מסוג .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של Windows אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -11720,8 +11765,8 @@ Would you like to open the download page?</source>
         <translation>שמירת קובץ .lnk נכשלה (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של macOS אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -12249,12 +12294,10 @@ Add groups above to poll multiple register types.</source>
 </context>
 <context>
     <name>MultiSelectionView</name>
-    <message numerus="yes">
+    <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="35"/>
-        <source>%n items selected</source>
-        <translation>%n פריטים נבחרו<numerusform/>
-            <numerusform/>
-        </translation>
+        <source>%1 items selected</source>
+        <translation>%1 פריטים נבחרו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="118"/>
@@ -12269,7 +12312,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="127"/>
         <source>Toggle 2D plot for every selected dataset</source>
-        <translation>הפעל/כבה גרף דו־ממדי עבור כל מערך נתונים נבחר</translation>
+        <translation>החלפת מצב גרף דו־ממדי עבור כל מערך נתונים נבחר</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="139"/>
@@ -12279,7 +12322,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="142"/>
         <source>Toggle FFT plot for every selected dataset</source>
-        <translation>הפעל/כבה גרף FFT עבור כל מערך נתונים נבחר</translation>
+        <translation>החלף תרשים FFT עבור כל מערכי הנתונים שנבחרו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="154"/>
@@ -12289,7 +12332,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="157"/>
         <source>Toggle waterfall for every selected dataset</source>
-        <translation>הפעל מפל עבור כל מערך נתונים שנבחר</translation>
+        <translation>החלף מפל עבור כל מערכי הנתונים שנבחרו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="173"/>
@@ -12304,7 +12347,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="182"/>
         <source>Set bar/level for every selected dataset</source>
-        <translation>הגדר עמודה/רמה עבור כל מערך נתונים שנבחר</translation>
+        <translation>הגדר עמודה/רמה עבור כל מערכי הנתונים שנבחרו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="193"/>
@@ -12314,7 +12357,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="197"/>
         <source>Set gauge for every selected dataset</source>
-        <translation>הגדר מד עבור כל מערך נתונים שנבחר</translation>
+        <translation>הגדר מד עבור כל מערכי הנתונים שנבחרו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="209"/>
@@ -12324,7 +12367,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="212"/>
         <source>Set compass for every selected dataset</source>
-        <translation>הגדר מצפן עבור כל מערך נתונים שנבחר</translation>
+        <translation>הגדר מצפן עבור כל מערכי הנתונים שנבחרו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="223"/>
@@ -12334,7 +12377,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="227"/>
         <source>Set meter for every selected dataset</source>
-        <translation>הגדר מד עבור כל מערך נתונים שנבחר</translation>
+        <translation>הגדר מד לכל מערך נתונים שנבחר</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="238"/>
@@ -12344,7 +12387,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="242"/>
         <source>Toggle LED for every selected dataset</source>
-        <translation>החלף LED עבור כל מערך נתונים שנבחר</translation>
+        <translation>החלף מצב LED לכל מערך נתונים שנבחר</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="266"/>
@@ -12366,12 +12409,10 @@ Add groups above to poll multiple register types.</source>
         <source>Delete every selected dataset</source>
         <translation>מחק כל מערך נתונים שנבחר</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="319"/>
-        <source>Editing %n items. Shared fields apply to all; per-item fields are locked.</source>
-        <translation>עריכת %n פריטים. שדות משותפים חלים על כולם; שדות ייחודיים נעולים.<numerusform/>
-            <numerusform/>
-        </translation>
+        <source>Editing %1 items. Shared fields apply to all; per-item fields are locked.</source>
+        <translation>עריכת %1 פריטים. שדות משותפים חלים על כולם; שדות ייחודיים נעולים.</translation>
     </message>
 </context>
 <context>
@@ -12739,39 +12780,155 @@ Add groups above to poll multiple register types.</source>
     </message>
 </context>
 <context>
+    <name>OfflineActivation</name>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="37"/>
+        <source>Activate Offline</source>
+        <translation>הפעל במצב לא מקוון</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
+        <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
+        <translation>הפעלת Serial Studio Pro במחשב ללא גישה לאינטרנט. אין צורך בחשבון או בחיבור במחשב זה.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
+        <source>Save your device file</source>
+        <translation>שמירת קובץ המכשיר שלך</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <translation>שמור את קובץ המכשיר של מחשב זה. הוא מזהה מחשב זה ואינו מכיל מידע אישי.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
+        <source>Save Device File…</source>
+        <translation>שמירת קובץ מכשיר…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="136"/>
+        <source>Get your license file</source>
+        <translation>קבלת קובץ הרישיון שלך</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
+        <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
+        <translation>במחשב אחר עם גישה לאינטרנט, עבור לכתובת למטה, העלה את קובץ המכשיר והזן את כתובת הדוא״ל ומפתח הרישיון שלך.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
+        <source>Open in Browser</source>
+        <translation>פתיחה בדפדפן</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="193"/>
+        <source>Import your license</source>
+        <translation>ייבוא הרישיון שלך</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
+        <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
+        <translation>העתק את קובץ הרישיון למחשב זה וייבא אותו. תכונות Pro יפתחו מיד.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
+        <source>Import License File…</source>
+        <translation>ייבוא קובץ רישיון…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="224"/>
+        <source>Save Device File</source>
+        <translation>שמירת קובץ מכשיר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
+        <source>Serial Studio device file (*.ssmachine)</source>
+        <translation>קובץ מכשיר Serial Studio (*.ssmachine)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="235"/>
+        <source>Import License File</source>
+        <translation>ייבוא קובץ רישיון</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <source>Serial Studio license (*.sslic)</source>
+        <translation>רישיון Serial Studio (*.sslic)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <source>All files (*)</source>
+        <translation>כל הקבצים (*)</translation>
+    </message>
+</context>
+<context>
+    <name>OfflineLicense</name>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
+        <source>License certificate is valid.</source>
+        <translation>אישור הרישיון תקין.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <source>The certificate signature is invalid or corrupted.</source>
+        <translation>חתימת האישור אינה תקינה או פגומה.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="197"/>
+        <source>This certificate was issued for a different device.</source>
+        <translation>אישור זה הונפק עבור מכשיר אחר.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="200"/>
+        <source>This certificate has expired.</source>
+        <translation>אישור זה פג תוקף.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="202"/>
+        <source>This certificate does not grant a valid license tier.</source>
+        <translation>אישור זה אינו מעניק רמת רישיון תקינה.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="206"/>
+        <source>The certificate file is malformed or unreadable.</source>
+        <translation>קובץ האישור פגום או לא ניתן לקריאה.</translation>
+    </message>
+</context>
+<context>
     <name>OnlineIconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="42"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
         <source>Search Online Icons</source>
         <translation>חיפוש סמלים מקוונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="72"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="71"/>
         <source>Download failed: %1</source>
         <translation>ההורדה נכשלה: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="97"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="96"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>חיפוש סמלים (לדוגמה: טמפרטורה, חץ, הפעלה)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="109"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="108"/>
         <source>Search</source>
         <translation>חיפוש</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="148"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="147"/>
         <source>Search for icons above to get started</source>
         <translation>חפש סמלים למעלה כדי להתחיל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="249"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="248"/>
         <source>OK</source>
         <translation>אישור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="259"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="258"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
@@ -13533,19 +13690,6 @@ Click Refresh to update the list.</source>
         <translation>הצג</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="517"/>
-        <source>New Sub-Folder</source>
-        <translation>תיקיית משנה חדשה</translation>
-    </message>
-    <message>
-        <source>Disable</source>
-        <translation type="vanished">השבת</translation>
-    </message>
-    <message>
-        <source>Enable</source>
-        <translation type="vanished">הפעל</translation>
-    </message>
-    <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="429"/>
         <source>Duplicate Selected (%1)</source>
         <translation>שכפל את הנבחר (%1)</translation>
@@ -13571,8 +13715,9 @@ Click Refresh to update the list.</source>
         <translation>תיקייה חדשה</translation>
     </message>
     <message>
-        <source>New Sub-folder</source>
-        <translation type="vanished">תיקיית משנה חדשה</translation>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="517"/>
+        <source>New Sub-Folder</source>
+        <translation>תת-תיקייה חדשה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="533"/>
@@ -14032,7 +14177,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="250"/>
         <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
-        <translation>הרץ טרנספורמציה של Dataset רק כאשר אחד מהקלטים שלו משתנה. מאיץ פרויקטים גדולים מונעי-טבלאות; כבוי כברירת מחדל.</translation>
+        <translation>הרץ טרנספורמציה של מערך נתונים רק כאשר אחד מהקלטים שלו משתנה. מאיץ פרויקטים גדולים מונעי-טבלאות; כבוי כברירת מחדל.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="297"/>
@@ -14209,22 +14354,22 @@ Click Refresh to update the list.</source>
         <translation>טעינת טקסט הפתיחה נכשלה :(</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="191"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="192"/>
         <source>Critical</source>
         <translation>קריטי</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="191"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="192"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="577"/>
+        <location filename="../../src/Misc/CLI.cpp" line="585"/>
         <source>Project file not found</source>
         <translation>קובץ הפרויקט לא נמצא</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="578"/>
+        <location filename="../../src/Misc/CLI.cpp" line="586"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -14233,17 +14378,17 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="581"/>
+        <location filename="../../src/Misc/CLI.cpp" line="589"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>האם למחוק את קיצור הדרך?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="585"/>
+        <location filename="../../src/Misc/CLI.cpp" line="593"/>
         <source>Delete Shortcut</source>
         <translation>מחק קיצור דרך</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="587"/>
+        <location filename="../../src/Misc/CLI.cpp" line="595"/>
         <source>Quit</source>
         <translation>יציאה</translation>
     </message>
@@ -14323,34 +14468,34 @@ Click Refresh to update the list.</source>
         <translation>לא הוגדר מפתח API של Gemini. פתח ניהול מפתחות כדי להוסיף אחד.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="251"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="250"/>
         <source>Network error</source>
         <translation>שגיאת רשת</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="254"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="270"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="302"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="253"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="269"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="301"/>
         <source>Trial Activation Error</source>
         <translation>שגיאת הפעלת תקופת ניסיון</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="266"/>
         <source>Invalid server response</source>
         <translation>תגובת שרת לא חוקית</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="268"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
         <source>The server returned malformed data: %1</source>
         <translation>השרת החזיר נתונים פגומים: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="299"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
         <source>Unexpected server response</source>
         <translation>תגובת שרת לא צפויה</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="300"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="299"/>
         <source>The server response is missing required fields.</source>
         <translation>תגובת השרת חסרה שדות נדרשים.</translation>
     </message>
@@ -14365,8 +14510,8 @@ Click Refresh to update the list.</source>
         <translation>Serial Studio משמיט מסגרות כדי לשמור על היענות האפליקציה. יש לפשט או לייעל את סקריפט מנתח המסגרות כדי להפחית את עומס העבודה שלו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>מנתח מסגרות מושבת</translation>
     </message>
@@ -14408,8 +14553,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>פונקציית Parse חסרה</translation>
     </message>
@@ -14425,8 +14570,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>שגיאת זמן ריצה בפונקציית Parse</translation>
     </message>
@@ -14724,6 +14869,11 @@ function parse(%1) { ... }
         <source>Native Parser Error</source>
         <translation type="vanished">שגיאת מנתח מקורי</translation>
     </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="51"/>
+        <source>Offline Activation</source>
+        <translation>הפעלה לא מקוונת</translation>
+    </message>
 </context>
 <context>
     <name>QuaGzipFile</name>
@@ -15020,7 +15170,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="928"/>
         <source>Select at least one dataset to include.</source>
-        <translation>יש לבחור לפחות מערך נתונים אחד לכלול.</translation>
+        <translation>בחר לפחות מערך נתונים אחד לכלול.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="937"/>
@@ -16132,7 +16282,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
         <source>Window decoration changes apply after restarting %1.</source>
-        <translation>שינויי עיצוב החלון יחולו לאחר הפעלה מחדש של %1.</translation>
+        <translation>שינויים בעיצוב החלון ייכנסו לתוקף לאחר הפעלה מחדש של %1.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="320"/>
@@ -16889,12 +17039,12 @@ function parse(%1) { ... }
 <context>
     <name>SqlitePlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="25"/>
+        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="24"/>
         <source>Session Player</source>
         <translation>נגן סשן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="92"/>
+        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="91"/>
         <source>Loading session…</source>
         <translation>טוען סשן…</translation>
     </message>
@@ -17258,7 +17408,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="126"/>
         <source>Add Sub-folder</source>
-        <translation>הוסף תיקיית משנה</translation>
+        <translation>הוסף תת-תיקייה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="128"/>
@@ -19075,7 +19225,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="141"/>
         <source>Add a workspace inside this folder</source>
-        <translation>הוסף מרחב עבודה בתוך תיקייה זו</translation>
+        <translation>הוסף סביבת עבודה בתוך תיקייה זו</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="151"/>
@@ -19148,7 +19298,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="171"/>
         <source>Move workspace down</source>
-        <translation>העבר סביבת עבודה למטה</translation>
+        <translation>העבר מרחב עבודה למטה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="181"/>
@@ -19158,7 +19308,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="183"/>
         <source>Change workspace icon</source>
-        <translation>שנה סמל סביבת עבודה</translation>
+        <translation>שנה סמל מרחב עבודה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="198"/>

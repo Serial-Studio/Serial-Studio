@@ -52,6 +52,7 @@
 #  include "Console/Export.h"
 #  include "CSV/Export.h"
 #  include "Licensing/LemonSqueezy.h"
+#  include "Licensing/OfflineSelfTest.h"
 #  include "Licensing/Trial.h"
 #  include "MDF4/Export.h"
 #  include "Misc/ShortcutGenerator.h"
@@ -117,6 +118,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.themeOpt);
   m_parser.addOption(m_opts.activateOpt);
   m_parser.addOption(m_opts.deactivateOpt);
+  m_parser.addOption(m_opts.selftestOfflineOpt);
   m_parser.addOption(m_opts.modbusRtuOpt);
   m_parser.addOption(m_opts.modbusTcpOpt);
   m_parser.addOption(m_opts.modbusSlaveOpt);
@@ -173,6 +175,7 @@ bool CLI::isCliEarlyExit(int argc, char** argv)
                                        "--reset",
                                        "--activate",
                                        "--deactivate",
+                                       "--selftest-offline-license",
                                        "--dump-api-schema"};
 
   for (const char* flag : kFlags)
@@ -223,6 +226,11 @@ CLI::ProcessResult CLI::process(QApplication& app)
     return dumpApiSchema(m_parser.value(m_opts.dumpApiSchemaOpt));
 
 #ifdef BUILD_COMMERCIAL
+  if (m_parser.isSet(m_opts.selftestOfflineOpt)) {
+    return Licensing::runOfflineSelfTest() == 0 ? ProcessResult::ExitSuccess
+                                                : ProcessResult::ExitFailure;
+  }
+
   if (m_parser.isSet(m_opts.activateOpt)) {
     return activateLicense(app, m_parser.value(m_opts.activateOpt)) == EXIT_SUCCESS
            ? ProcessResult::ExitSuccess

@@ -23,10 +23,9 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets"
 import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   title: qsTr("Extension Manager")
@@ -71,7 +70,7 @@ SmartDialog {
       Layout.maximumWidth: 860
       visible: !root.showDetail && !root.showRepos
 
-      SearchField {
+      Widgets.SearchField {
         id: searchField
 
         Layout.fillWidth: true

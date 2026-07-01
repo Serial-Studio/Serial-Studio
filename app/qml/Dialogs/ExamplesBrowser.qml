@@ -25,10 +25,9 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Effects
 
-import "../Widgets"
 import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   title: qsTr("Examples Browser")
@@ -82,7 +81,7 @@ SmartDialog {
     //
     // Search bar (grid page only)
     //
-    SearchField {
+    Widgets.SearchField {
       id: searchField
 
       Layout.fillWidth: true

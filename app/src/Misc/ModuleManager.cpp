@@ -100,6 +100,7 @@
 #  include "DataModel/Importers/DBCImporter.h"
 #  include "DataModel/Importers/ModbusMapImporter.h"
 #  include "Licensing/LemonSqueezy.h"
+#  include "Licensing/OfflineLicense.h"
 #  include "Licensing/Trial.h"
 #  include "Misc/ShortcutGenerator.h"
 #  include "MQTT/Publisher.h"
@@ -619,6 +620,7 @@ void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_JSON_ModbusMapImporter", &DataModel::ModbusMapImporter::instance());
   ctx->setContextProperty("Cpp_Licensing_Trial", &Licensing::Trial::instance());
   ctx->setContextProperty("Cpp_Licensing_LemonSqueezy", &Licensing::LemonSqueezy::instance());
+  ctx->setContextProperty("Cpp_Licensing_OfflineLicense", &Licensing::OfflineLicense::instance());
   ctx->setContextProperty("Cpp_Sessions_Export", &Sessions::Export::instance());
   ctx->setContextProperty("Cpp_Sessions_Player", &Sessions::Player::instance());
   ctx->setContextProperty("Cpp_Sessions_Manager", &Sessions::DatabaseManager::instance());

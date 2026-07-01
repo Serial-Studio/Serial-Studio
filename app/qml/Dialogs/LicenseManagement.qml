@@ -22,13 +22,13 @@
 
 import QtCore
 import QtQuick
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets"
 import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   //
@@ -56,7 +56,7 @@ SmartDialog {
       // Page index
       //
       readonly property int pageIdx: Cpp_Licensing_LemonSqueezy.busy ? 0 :
-          (Cpp_Licensing_LemonSqueezy.isActivated ? 2 : 1)
+          ((Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_OfflineLicense.activated) ? 2 : 1)
 
       //
       // Busy page
@@ -210,7 +210,8 @@ SmartDialog {
         radius: 2
         border.width: 1
         Layout.fillWidth: true
-        visible: column.pageIdx === 2
+        visible: column.pageIdx === 2 && Cpp_Licensing_LemonSqueezy.isActivated
+                 && !Cpp_Licensing_OfflineLicense.activated
         implicitHeight: licenseDetailsLayout.implicitHeight + 32
         color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
@@ -395,6 +396,93 @@ SmartDialog {
       }
 
       //
+      // Offline license page
+      //
+      Rectangle {
+        radius: 2
+        border.width: 1
+        Layout.fillWidth: true
+        implicitHeight: offlineDetailsLayout.implicitHeight + 32
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        visible: column.pageIdx === 2 && Cpp_Licensing_OfflineLicense.activated
+
+        GridLayout {
+          id: offlineDetailsLayout
+
+          columns: 3
+          rowSpacing: 8
+          columnSpacing: 12
+          anchors.margins: 16
+          anchors.fill: parent
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/icons/licensing/plan.svg"
+          }
+
+          Label {
+            text: qsTr("Product") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("Serial Studio %1 (Offline)").arg(Cpp_Licensing_OfflineLicense.variantName)
+          }
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/icons/licensing/uuid.svg"
+          }
+
+          Label {
+            text: qsTr("Device ID") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: Cpp_Licensing_OfflineLicense.machineId
+          }
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/icons/licensing/key.svg"
+          }
+
+          Label {
+            text: qsTr("Expires") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("%1 (%2 days left)")
+                  .arg(Cpp_Licensing_OfflineLicense.expiresAt.toLocaleDateString(Qt.locale()))
+                  .arg(Cpp_Licensing_OfflineLicense.daysRemaining)
+          }
+
+          Item {}
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["alarm"]
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            visible: Cpp_Licensing_OfflineLicense.daysRemaining < 14
+            text: qsTr("Your offline license expires soon. Request a new certificate to stay activated.")
+          }
+        }
+      }
+
+      //
       // Buttons
       //
       RowLayout {
@@ -426,10 +514,20 @@ SmartDialog {
           horizontalPadding: 8
           text: qsTr("Activate")
           opacity: enabled ? 1 : 0.5
-          visible: !Cpp_Licensing_LemonSqueezy.isActivated
-          onClicked: Cpp_Licensing_LemonSqueezy.activate()
           icon.source: "qrc:/icons/buttons/activate.svg"
+          onClicked: Cpp_Licensing_LemonSqueezy.activate()
           enabled: Cpp_Licensing_LemonSqueezy.canActivate && !Cpp_Licensing_LemonSqueezy.busy
+          visible: !Cpp_Licensing_LemonSqueezy.isActivated && !Cpp_Licensing_OfflineLicense.activated
+        }
+
+
+        Widgets.IconButton {
+          horizontalPadding: 8
+          text: qsTr("Activate Offline…")
+          onClicked: _offlineWizard.show()
+          enabled: !Cpp_Licensing_LemonSqueezy.busy
+          icon.source: "qrc:/icons/buttons/activate.svg"
+          visible: !Cpp_Licensing_LemonSqueezy.isActivated && !Cpp_Licensing_OfflineLicense.activated
         }
 
         Widgets.IconButton {
@@ -437,10 +535,14 @@ SmartDialog {
           text: qsTr("Deactivate")
           opacity: enabled ? 1 : 0.5
           enabled: !Cpp_Licensing_LemonSqueezy.busy
-          visible: Cpp_Licensing_LemonSqueezy.isActivated
+          visible: Cpp_Licensing_LemonSqueezy.isActivated && !Cpp_Licensing_OfflineLicense.activated
           onClicked: Cpp_Licensing_LemonSqueezy.deactivate()
           icon.source: "qrc:/icons/buttons/deactivate.svg"
         }
       }
+    }
+
+    OfflineActivation {
+      id: _offlineWizard
     }
 }

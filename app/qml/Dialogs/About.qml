@@ -23,9 +23,9 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets"
+import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   //

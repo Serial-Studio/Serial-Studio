@@ -25,10 +25,9 @@ import QtQuick.Controls
 
 import QtCore as Core
 
-import "../Widgets"
 import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   title: qsTr("File Transmission")

@@ -460,17 +460,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
         <source>Acknowledgements</source>
         <translation>Подяки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="76"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="75"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="87"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="86"/>
         <source>About Qt…</source>
         <translation>Про QT…</translation>
     </message>
@@ -2709,7 +2709,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CsvPlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="36"/>
+        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>Програвач CSV</translation>
     </message>
@@ -3154,7 +3154,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="313"/>
         <source>The value transform must define a transform(value) function.</source>
-        <translation>Перетворення значення повинно визначати функцію transform(value).</translation>
+        <translation>Перетворення значення має визначати функцію transform(value).</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="314"/>
@@ -5308,12 +5308,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="4908"/>
         <source>(multiple)</source>
-        <translation>(декілька)</translation>
+        <translation>(кілька)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="4922"/>
         <source>Mixed</source>
-        <translation>Змішаний</translation>
+        <translation>Змішано</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="5512"/>
@@ -5376,73 +5376,73 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="629"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="638"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="653"/>
         <source>Lock Project</source>
         <translation>Заблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="630"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="645"/>
         <source>Choose a password to lock the project:</source>
         <translation>Виберіть пароль для блокування проєкту:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="638"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="653"/>
         <source>Confirm the password:</source>
         <translation>Підтвердіть пароль:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="643"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="658"/>
         <source>Passwords do not match</source>
         <translation>Паролі не збігаються</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="659"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Введені паролі не збігаються. Проєкт не заблоковано.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="693"/>
         <source>Unlock Project</source>
         <translation>Розблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="694"/>
         <source>Enter the project password:</source>
         <translation>Введіть пароль проєкту:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="689"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="704"/>
         <source>Incorrect password</source>
         <translation>Неправильний пароль</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="690"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="705"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Введений пароль не збігається з паролем, збереженим у файлі проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="721"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="736"/>
         <source>New Project</source>
         <translation>Новий Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="921"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="936"/>
         <source>Samples</source>
         <translation>Зразки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1508"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Кілька джерел даних вимагають ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1524"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro дозволяє підключатися до кількох пристроїв одночасно. Будь ласка, оновіть версію, щоб розблокувати цю функцію.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1521"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1536"/>
         <source>Device %1</source>
         <translation>Пристрій %1</translation>
     </message>
@@ -5451,187 +5451,187 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">(Копія)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1791"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1806"/>
         <source>Do you want to save your changes?</source>
         <translation>Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1792"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1807"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>У цьому проєкті є незбережені зміни!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="501"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="510"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="523"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="538"/>
         <source>Project error</source>
         <translation>Помилка проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
         <source>Project title cannot be empty!</source>
         <translation>Назва проєкту не може бути порожньою!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="510"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
         <source>You need to add at least one group!</source>
         <translation>Необхідно додати принаймні одну групу!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="523"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="538"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необхідно додати принаймні один набір даних!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="585"/>
         <source>Your project needs a title</source>
         <translation>Проєкту потрібна назва</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="572"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source>Add a group to get started</source>
         <translation>Додайте групу, щоб почати</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="589"/>
         <source>Add a dataset to a group</source>
         <translation>Додайте набір даних до групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="603"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Відкрийте вигляд Проєкту у верхній частині дерева та введіть назву. Проєкт можна перейменувати в будь-який час.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="606"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Групи організовують набори даних у віджети панелі. Використайте кнопку Група на панелі інструментів вище, щоб створити групу, а потім додайте до неї набори даних.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="610"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Набори даних — це значення, які відображаються на панелі приладів. Виберіть групу в дереві та використайте кнопку «Набір даних» на панелі інструментів, щоб додати його.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="969"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="935"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="984"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1553"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Видалити джерело даних "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1554"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1569"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Групи, що використовують це джерело, буде переміщено до типового джерела. Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1831"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1846"/>
         <source>Save Serial Studio Project</source>
         <translation>Зберегти Проєкт Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1833"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2496"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1848"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2512"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файли Проєктів Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1854"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2095"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2487"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2503"/>
         <source>Untitled Project</source>
         <translation>Проєкт Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2642"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2125"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
         <source>Device A</source>
         <translation>Пристрій A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2322"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2337"/>
         <source>Select Project File</source>
         <translation>Вибрати Файл Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2324"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2339"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Файли Проєктів (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2368"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2383"/>
         <source>JSON validation error</source>
         <translation>Помилка валідації JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2477"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Проєкт оновлено з попереднього формату файлу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2478"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Цей проєкт було збережено зі схемою версії %1; поточна версія — %2. Для нових полів застосовано значення за замовчуванням. Збережіть проєкт, щоб зафіксувати оновлення.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2510"/>
         <source>Save Imported Project</source>
         <translation>Зберегти Імпортований Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2702"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Багатоджерельні проєкти потребують ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2687"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2703"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Цей проєкт містить кілька джерел даних. Завантажено лише перше джерело. Для використання багатоджерельних проєктів потрібна ліцензія Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2925"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2941"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Ідентифікатори робочих просторів переназначено під час завантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2926"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2942"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 власних ідентифікаторів робочих просторів перекрили новий зарезервований автоматичний діапазон і були переміщені в користувацький діапазон. Збережіть проєкт, щоб зробити переназначення постійним.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3125"/>
         <source>Legacy frame parser function updated</source>
         <translation>Застарілу функцію парсера кадрів оновлено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3126"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ваш проєкт використовував застарілу функцію парсера фреймів з аргументом 'separator'. Її автоматично перенесено до нового формату.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3352"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3370"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Видалити групу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3353"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3398"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3430"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4168"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3371"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3416"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3448"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4186"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Цю дію неможливо скасувати. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Видалити дію "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3429"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3447"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Видалити набір даних "%1"?</translation>
     </message>
@@ -5640,78 +5640,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (Копія)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4080"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4116"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4098"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4134"/>
         <source>Output Controls</source>
         <translation>Елементи Керування Виводом</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4146"/>
         <source>New Button</source>
         <translation>Нова Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4131"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4149"/>
         <source>New Slider</source>
         <translation>Новий Повзунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4134"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4152"/>
         <source>New Toggle</source>
         <translation>Новий Перемикач</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4137"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4155"/>
         <source>New Text Field</source>
         <translation>Нове Текстове Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4140"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4158"/>
         <source>New Knob</source>
         <translation>Новий Регулятор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4167"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4185"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Видалити віджет виводу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4332"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
         <source>Group</source>
         <translation>Група</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4368"/>
         <source>New Dataset</source>
         <translation>Новий Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4353"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
         <source>New Plot</source>
         <translation>Новий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4375"/>
         <source>New FFT Plot</source>
         <translation>Новий FFT Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4379"/>
         <source>New Level Indicator</source>
         <translation>Новий Індикатор Рівня</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
         <source>New Gauge</source>
         <translation>Новий Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4387"/>
         <source>New Compass</source>
         <translation>Новий Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4375"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4393"/>
         <source>New Meter</source>
         <translation>Новий Лічильник</translation>
     </message>
@@ -5720,327 +5720,327 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Новий Термометр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4379"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
         <source>New LED Indicator</source>
         <translation>Новий Світлодіодний Індикатор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4401"/>
         <source>New Waterfall</source>
         <translation>Новий Водоспад</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4451"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4469"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4522"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4540"/>
         <source>New Action</source>
         <translation>Нова Дія</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4663"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4681"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Ви впевнені, що хочете змінити віджет рівня групи?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4683"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Наявні набори даних для цієї групи буде видалено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4733"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4734"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4751"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4752"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4753"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4750"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4750"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4750"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
         <source>Gyro %1</source>
         <translation>Гіроскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4783"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4783"/>
         <source>Longitude</source>
         <translation>Довгота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4783"/>
         <source>Altitude</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4780"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4794"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4812"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4780"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4794"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4812"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4780"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4794"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4812"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5052"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5978"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6250"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5070"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6268"/>
         <source>Workspace</source>
         <translation>Робоча Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5241"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5447"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6709"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5259"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6727"/>
         <source>Shared Table</source>
         <translation>Спільна Таблиця</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5336"/>
         <source>register</source>
         <translation>регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5447"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6709"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6727"/>
         <source>New Shared Table</source>
         <translation>Нова Спільна Таблиця</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5447"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5470"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5489"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5513"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5540"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5559"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5581"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5603"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5978"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5999"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6250"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6272"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6692"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6709"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6730"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5507"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5531"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5577"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5599"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5621"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6017"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6268"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6290"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6506"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6727"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6748"/>
         <source>Name:</source>
         <translation>Назва:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5488"/>
         <source>Rename Table</source>
         <translation>Перейменувати Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5489"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5507"/>
         <source>Rename Group</source>
         <translation>Перейменувати Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5513"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5531"/>
         <source>Rename Dataset</source>
         <translation>Перейменувати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5540"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
         <source>Rename Data Source</source>
         <translation>Перейменувати Джерело Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5559"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5577"/>
         <source>Rename Action</source>
         <translation>Перейменувати Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5580"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5598"/>
         <source>New Register</source>
         <translation>Новий Регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5621"/>
         <source>Rename Register</source>
         <translation>Перейменувати Регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5662"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7371"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="8142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5655"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5680"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7389"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="8173"/>
         <source>This action cannot be undone.</source>
         <translation>Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5638"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5656"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Це видалить %1 регістр(ів) разом із таблицею. Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5641"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5661"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7370"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5659"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5679"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7388"/>
         <source>Delete "%1"?</source>
         <translation>Видалити "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5662"/>
         <source>Delete Table</source>
         <translation>Видалити Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5664"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5682"/>
         <source>Delete Register</source>
         <translation>Видалити Регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5704"/>
         <source>Export Table</source>
         <translation>Експортувати Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5688"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5747"/>
         <source>CSV files (*.csv)</source>
         <translation>Файли CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5727"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5745"/>
         <source>Import Table</source>
         <translation>Імпортувати Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5978"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6250"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6268"/>
         <source>New Workspace</source>
         <translation>Нова Робоча Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5999"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6017"/>
         <source>Rename Workspace</source>
         <translation>Перейменувати Робочу Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6045"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6333"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6551"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6692"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6063"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6351"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6710"/>
         <source>Folder</source>
         <translation>Тека</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6467"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6692"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6710"/>
         <source>New Folder</source>
         <translation>Нова Тека</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6272"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6730"/>
-        <source>Rename Folder</source>
-        <translation>Перейменувати Теку</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6290"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6506"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="6748"/>
+        <source>Rename Folder</source>
+        <translation>Перейменувати Теку</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6308"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6524"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6766"/>
         <source>Delete folder "%1"?</source>
         <translation>Видалити теку "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6291"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6309"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation>Теку буде вилучено; її робочі простори та підтеки переміщуються до батьківської теки.</translation>
+        <translation>Теку буде видалено; її робочі простори та підтеки переміщуються до батьківської теки.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6293"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6752"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6527"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6770"/>
         <source>Delete Folder</source>
         <translation>Видалити Теку</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6507"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6525"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
-        <translation>Теку буде вилучено; її групи та підтеки переміщуються до батьківської теки.</translation>
+        <translation>Теку буде видалено; її групи та підтеки переміщуються до батьківської теки.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6767"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation>Теку видалено; її таблиці та підтеки переміщуються до батьківської. Шлях доступу цих таблиць змінюється відповідно.</translation>
+        <translation>Теку буде видалено; її таблиці та підтеки переміщуються до батьківської теки. Шлях доступу цих таблиць змінюється відповідно.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6837"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6855"/>
         <source>Overview</source>
         <translation>Огляд</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6864"/>
         <source>All Data</source>
         <translation>Усі Дані</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7139"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7157"/>
         <source>Discard workspace customisations?</source>
         <translation>Відкинути налаштування робочого простору?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7140"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7158"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Вимкнення режиму налаштування відкине ваші зміни та перебудує список робочих просторів із груп проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7143"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7161"/>
         <source>Customize Workspaces</source>
         <translation>Налаштувати Робочі Простори</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7373"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7391"/>
         <source>Delete Workspace</source>
         <translation>Видалити Робочу Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7787"/>
         <source>Project file removed from disk</source>
         <translation>Файл проєкту видалено з диска</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7757"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7788"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 було видалено або перейменовано іншою програмою. Збережіть проєкт, щоб відновити його.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7778"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7799"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7809"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7830"/>
         <source>Project file changed on disk</source>
         <translation>Файл проєкту змінено на диску</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7779"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7810"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 було змінено іншою програмою. Проєкт у пам'яті збережено; відкрийте файл повторно, щоб завантажити зовнішні зміни.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7826"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -6049,7 +6049,7 @@ Reload it and discard your unsaved changes?</source>
 Перезавантажити його та відкинути незбережені зміни?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7828"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -6058,22 +6058,22 @@ Reload it?</source>
 Перезавантажити його?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="7828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="7859"/>
         <source>File save error</source>
         <translation>Помилка збереження файлу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="8141"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="8172"/>
         <source>Delete %1 selected items?</source>
         <translation>Видалити вибрані елементи (%1)?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="8144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="8175"/>
         <source>Delete Items</source>
         <translation>Видалити Елементи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2546"/>
         <source>File open error</source>
         <translation>Помилка відкриття файлу</translation>
     </message>
@@ -6605,37 +6605,37 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Donate</name>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="37"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
         <translation>Підтримати Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="85"/>
         <source>Support the development of %1!</source>
         <translation>Підтримайте розробку %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="97"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio — це безплатне програмне забезпечення з відкритим кодом, яке підтримується волонтерами. Розгляньте можливість зробити внесок або придбати ліцензію Pro для підтримки розробки :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="110"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="109"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Ви також можете підтримати цей проєкт, поширюючи його, повідомляючи про помилки та пропонуючи нові функції!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="123"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="135"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="134"/>
         <source>Donate</source>
         <translation>Підтримати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="149"/>
         <source>Get Serial Studio Pro</source>
         <translation>Отримати Serial Studio Pro</translation>
     </message>
@@ -6804,102 +6804,102 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExamplesBrowser</name>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="34"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
         <source>Examples Browser</source>
         <translation>Огляд Прикладів</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="120"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="119"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="152"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="151"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="173"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="172"/>
         <source>Download &amp;&amp; Open</source>
         <translation>Завантажити та Відкрити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="188"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="187"/>
         <source>View on GitHub</source>
         <translation>Переглянути на GitHub</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="91"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="90"/>
         <source>Search in Examples…</source>
         <translation>Пошук у Прикладах…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="245"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
         <source>Fetching examples…</source>
         <translation>Отримання прикладів…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
         <source>Loading...</source>
         <translation>Завантаження...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
         <source>No README available.</source>
         <translation>README недоступний.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="609"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
         <source>Copied to Clipboard</source>
         <translation>Скопійовано до Буфера Обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="672"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
         <source>No screenshot available</source>
         <translation>Знімок екрана недоступний</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="704"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
         <source>Details</source>
         <translation>Деталі</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="733"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
         <source>Info</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
         <source>Category:</source>
         <translation>Категорія:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="769"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
         <source>Difficulty:</source>
         <translation>Складність:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="787"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
         <source>Project:</source>
         <translation>Проєкт:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="829"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
         <source>No Results Found</source>
         <translation>Результатів Не Знайдено</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="840"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Перевірте правопис або спробуйте інший пошуковий запит.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="855"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
         <source>%1 examples</source>
         <translation>Приклади: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="864"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -6907,192 +6907,192 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="31"/>
         <source>Extension Manager</source>
         <translation>Менеджер Розширень</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="118"/>
         <source>Refresh</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="132"/>
         <source>Repos</source>
         <translation>Репозиторії</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="162"/>
         <source>Repository Settings</source>
         <translation>Налаштування Репозиторію</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="174"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="215"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="232"/>
         <source>Uninstall</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="259"/>
         <source>Run</source>
         <translation>Запустити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="283"/>
         <source>Stop</source>
         <translation>Зупинити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="317"/>
         <source>Reset</source>
         <translation>Скинути</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="77"/>
         <source>Search extensions…</source>
         <translation>Пошук розширень…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="367"/>
         <source>Fetching extensions…</source>
         <translation>Отримання розширень…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="605"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="604"/>
         <source>Running</source>
         <translation>Виконується</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="626"/>
         <source>Update</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="626"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="644"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="643"/>
         <source>Unavailable</source>
         <translation>Недоступно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="823"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="822"/>
         <source>No description available.</source>
         <translation>Опис недоступний.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="864"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="863"/>
         <source>Details</source>
         <translation>Подробиці</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="885"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="884"/>
         <source>Type:</source>
         <translation>Тип:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="898"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="897"/>
         <source>Author:</source>
         <translation>Автор:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="910"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="909"/>
         <source>Version:</source>
         <translation>Версія:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="922"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="921"/>
         <source>License:</source>
         <translation>Ліцензія:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="982"/>
         <source>No preview</source>
         <translation>Немає попереднього перегляду</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1012"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1011"/>
         <source>  PLUGIN OUTPUT</source>
         <translation>ВИВІД ПЛАГІНА</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1042"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1041"/>
         <source>No output yet. Run the plugin to see its log here.</source>
         <translation>Виводу ще немає. Запустіть плагін, щоб побачити його журнал тут.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1077"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1076"/>
         <source>No preview available</source>
         <translation>Попередній перегляд недоступний</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1121"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1120"/>
         <source>Repositories</source>
         <translation>Репозиторії</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1134"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1133"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
         <translation>Додайте URL віддалених репозиторіїв або шляхи до локальних папок.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1171"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1170"/>
         <source>LOCAL</source>
         <translation>ЛОКАЛЬНИЙ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1228"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1227"/>
         <source>URL or local path…</source>
         <translation>URL або локальний шлях…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1259"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1258"/>
         <source>Browse…</source>
         <translation>Огляд…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1236"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1235"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1296"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1295"/>
         <source>No Results Found</source>
         <translation>Результатів Не Знайдено</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1307"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1306"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Перевірте правопис або спробуйте інший пошуковий запит.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1331"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1330"/>
         <source>No Extensions Available</source>
         <translation>Розширення Недоступні</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1342"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1341"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>Додайте URL репозиторію або локальний шлях у налаштуваннях Репозиторіїв, потім оновіть.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1357"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1356"/>
         <source>%1 extensions</source>
         <translation>%1 розширень</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1366"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1365"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -7166,98 +7166,98 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="34"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
         <source>File Transmission</source>
         <translation>Передача Файлу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="102"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="101"/>
         <source>Transfer Protocol:</source>
         <translation>Протокол Передачі:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="135"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="134"/>
         <source>File Selection:</source>
         <translation>Вибір Файлу:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="152"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="151"/>
         <source>Select File…</source>
         <translation>Вибрати Файл…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="170"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="169"/>
         <source>Transmission Interval:</source>
         <translation>Інтервал Передачі:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="272"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
         <source>msecs</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="206"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="205"/>
         <source>Block Size:</source>
         <translation>Розмір Блоку:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="234"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
         <source>bytes</source>
         <translation>байт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
         <source>Timeout:</source>
         <translation>Тайм-аут:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="282"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="281"/>
         <source>Max Retries:</source>
         <translation>Макс. Повторів:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="340"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="339"/>
         <source>Progress: %1%</source>
         <translation>Прогрес: %1%</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="373"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="372"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 байт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="381"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="380"/>
         <source>Errors: %1</source>
         <translation>Помилки: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="461"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="460"/>
         <source>Activity Log</source>
         <translation>Журнал Активності</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="465"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="464"/>
         <source>Clear</source>
         <translation>Очистити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="418"/>
         <source>Pause Transmission</source>
         <translation>Призупинити Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
         <source>Resume Transmission</source>
         <translation>Відновити Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="422"/>
         <source>Stop Transmission</source>
         <translation>Зупинити Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
         <source>Begin Transmission</source>
         <translation>Почати Передачу</translation>
     </message>
@@ -7265,39 +7265,39 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="448"/>
         <source>Frame Parser</source>
         <translation>Парсер Кадрів</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="455"/>
         <source>Device %1</source>
         <translation>Пристрій %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="548"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1826"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="575"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1862"/>
         <source>Output Panel</source>
         <translation>Панель Виводу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="592"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="619"/>
         <source>Control</source>
         <translation>Керування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="667"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="694"/>
         <source>Table</source>
         <translation>Таблиця</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="708"/>
         <source>%1 regs</source>
         <translation>%1 рег.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="406"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="708"/>
         <source>empty</source>
         <translation>порожньо</translation>
     </message>
@@ -7306,111 +7306,111 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">Скрипт Керування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="807"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="843"/>
         <source>MQTT Publisher</source>
         <translation>Видавець MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1215"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1251"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>Відкрити редактор коду перетворення для цього набору даних.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1596"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1599"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1635"/>
         <source>Dataset Container</source>
         <translation>Контейнер Наборів Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1608"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1644"/>
         <source>Multi-Plot</source>
         <translation>Множинний Графік</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1611"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1647"/>
         <source>Multiple Plot</source>
         <translation>Множинний Графік</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1620"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1623"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1656"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1659"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1635"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1668"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1671"/>
         <source>Gyroscope</source>
         <translation>Гіроскоп</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1644"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1647"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1680"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1683"/>
         <source>GPS Map</source>
         <translation>Карта GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1655"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1691"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1694"/>
         <source>3D Plot</source>
         <translation>3D Графік</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1666"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1669"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1702"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1705"/>
         <source>Image View</source>
         <translation>Перегляд Зображень</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1678"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1681"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1714"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1717"/>
         <source>Painter Widget</source>
         <translation>Віджет Малювання</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1690"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1693"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1726"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1729"/>
         <source>Web View</source>
         <translation>Веб-перегляд</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1702"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1705"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1738"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1741"/>
         <source>Data Grid</source>
         <translation>Таблиця Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1718"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1754"/>
         <source>Generic</source>
         <translation>Загальний</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1731"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1767"/>
         <source>Plot</source>
         <translation>Графік</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1744"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1780"/>
         <source>FFT Plot</source>
         <translation>FFT-Графік</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1757"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1793"/>
         <source>Gauge</source>
         <translation>Датчик</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1770"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1806"/>
         <source>Level Indicator</source>
         <translation>Індикатор Рівня</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1783"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1819"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1796"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1832"/>
         <source>Meter</source>
         <translation>Лічильник</translation>
     </message>
@@ -7423,170 +7423,170 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">Термометр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="404"/>
         <source>Control Loop</source>
         <translation>Цикл Керування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="772"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="799"/>
         <source>Shared Memory</source>
         <translation>Спільна Пам'ять</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1809"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1845"/>
         <source>LED Indicator</source>
         <translation>LED-Індикатор</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1838"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1874"/>
         <source>Slider</source>
         <translation>Повзунок</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1851"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1887"/>
         <source>Toggle</source>
         <translation>Перемикач</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1864"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1900"/>
         <source>Knob</source>
         <translation>Регулятор</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1877"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1913"/>
         <source>Text Field</source>
         <translation>Текстове Поле</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1890"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1926"/>
         <source>Button</source>
         <translation>Кнопка</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1914"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1990"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2078"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1950"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2026"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2114"/>
         <source>Add Group</source>
         <translation>Додати Групу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1930"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2006"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2094"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2139"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1966"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2042"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2130"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2175"/>
         <source>Add Dataset</source>
         <translation>Додати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1944"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2020"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2108"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2153"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2360"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1980"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2056"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2144"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2189"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2396"/>
         <source>Add Output</source>
         <translation>Додати Вихід</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1960"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2033"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1996"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2069"/>
         <source>Add Action</source>
         <translation>Додати Дію</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1969"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2005"/>
         <source>Add Data Source</source>
         <translation>Додати Джерело Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1976"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2012"/>
         <source>Add Data Table</source>
         <translation>Додати Таблицю Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2044"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2180"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2247"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2375"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2409"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2465"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2080"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2216"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2283"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2411"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2445"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2501"/>
         <source>Rename…</source>
         <translation>Перейменувати…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2052"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2210"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2280"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2332"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2383"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2439"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2088"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2246"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2316"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2368"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2419"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2475"/>
         <source>Duplicate</source>
         <translation>Дублювати</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2063"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2221"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2292"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2344"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2394"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2450"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2476"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2099"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2257"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2328"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2380"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2430"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2486"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2512"/>
         <source>Delete…</source>
         <translation>Видалити…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2124"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2160"/>
         <source>Edit Frame Parser…</source>
         <translation>Редагувати Парсер Кадрів…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2166"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2202"/>
         <source>Edit Painter Code…</source>
         <translation>Редагувати Код Painter…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2188"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2256"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2308"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2417"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2224"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2292"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2344"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2453"/>
         <source>Move Up</source>
         <translation>Перемістити Вгору</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2199"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2268"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2320"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2428"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2235"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2304"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2356"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2464"/>
         <source>Move Down</source>
         <translation>Перемістити Вниз</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2236"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2272"/>
         <source>Edit Transform Code…</source>
         <translation>Редагувати Код Transform…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2491"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2527"/>
         <source>Edit Code…</source>
         <translation>Редагувати Код…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2506"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2542"/>
         <source>Edit Control Loop…</source>
         <translation>Редагувати Цикл Керування…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="230"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="245"/>
         <source>Group</source>
         <translation>Група</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="345"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="372"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="756"/>
         <source>Folder</source>
         <translation>Тека</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="490"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="517"/>
         <source>Action</source>
         <translation>Дія</translation>
     </message>
@@ -8205,7 +8205,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="129"/>
         <source>Add a top-level folder</source>
-        <translation>Додати теку верхнього рівня</translation>
+        <translation>Додайте теку верхнього рівня</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="137"/>
@@ -8215,7 +8215,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="139"/>
         <source>Add a group from a template</source>
-        <translation>Додати групу з шаблону</translation>
+        <translation>Додайте групу з шаблону</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="154"/>
@@ -8282,47 +8282,47 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="33"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>Центр Довідки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="94"/>
         <source>Fetching help pages…</source>
         <translation>Завантаження сторінок довідки…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="129"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="128"/>
         <source>Search…</source>
         <translation>Пошук…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="247"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="246"/>
         <source>Loading…</source>
         <translation>Завантаження…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="291"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="290"/>
         <source>Select a page from the sidebar</source>
         <translation>Виберіть сторінку з бічної панелі</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="321"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="320"/>
         <source>Copied to Clipboard</source>
         <translation>Скопійовано до буфера обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="353"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="352"/>
         <source>View Online</source>
         <translation>Переглянути Онлайн</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="372"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="371"/>
         <source>%1 pages</source>
         <translation>%1 сторінок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="380"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -8539,15 +8539,15 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="335"/>
         <source>CAN Bus Not Available</source>
         <translation>Magistrala CAN Недоступна</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="331"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8556,37 +8556,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Підтримка magistrali CAN на macOS обмежена і може вимагати сторонніх апаратних драйверів.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="336"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Плагіни magistrali CAN недоступні на цій платформі.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="348"/>
         <source>Invalid CAN Configuration</source>
         <translation>Недійсна Конфігурація CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="356"/>
         <source>Invalid Selection</source>
         <translation>Недійсний Вибір</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="365"/>
         <source>No Devices Available</source>
         <translation>Немає Доступних Пристроїв</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>Не Вдалося Створити Пристрій CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="301"/>
         <source>CAN Connection Failed</source>
         <translation>Не Вдалося Підключитися до CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="319"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8595,7 +8595,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 У Linux переконайтеся, що завантажено модулі ядра SOCKETCAN.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="325"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8604,103 +8604,103 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 У Windows встановіть драйвери апаратного забезпечення CAN (PEAK, VECTOR тощо).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="349"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Конфігурація шини CAN неповна. Виберіть дійсний плагін та інтерфейс.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="357"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Вибраний плагін або інтерфейс більше недоступний. Оновіть списки та спробуйте ще раз.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="366"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Список плагінів або інтерфейсів порожній. Оновіть списки та переконайтеся, що апаратне забезпечення CAN підключено.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Не вдалося створити пристрій шини CAN. Перевірте апаратне забезпечення та драйвери.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="299"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Не вдалося підключитися до пристрою шини CAN. Перевірте апаратне підключення та налаштування.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="695"/>
         <source>CAN Bus Error</source>
         <translation>Помилка Magistrali CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="696"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>Сталася помилка, але пристрій CAN більше недоступний.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="703"/>
         <source>Error code: %1</source>
         <translation>Код помилки: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="706"/>
         <source>CAN Bus Communication Error</source>
         <translation>Помилка Зв'язку Magistrali CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="785"/>
         <source>No CAN driver selected</source>
         <translation>Не вибрано драйвер CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="725"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Спочатку завантажте модулі ядра SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="721"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Підключіть адаптер %1, потім оновіть</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="728"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Спочатку налаштуйте віртуальний інтерфейс CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="730"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="730"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="750"/>
         <source>No interfaces found for %1</source>
         <translation>Не знайдено інтерфейсів для %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="734"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Встановіть &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;драйвери PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="738"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Встановіть &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;драйвери VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="742"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Встановіть &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;драйвери SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="745"/>
         <source>Install %1 drivers</source>
         <translation>Встановіть драйвери %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="748"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Встановіть драйвери %1 для macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="762"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -8711,32 +8711,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="869"/>
         <source>Plugin</source>
         <translation>Плагін</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="877"/>
         <source>Interface</source>
         <translation>Інтерфейс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="885"/>
         <source>Bitrate</source>
         <translation>Бітрейт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="894"/>
         <source>CAN FD</source>
         <translation>CAN-FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="901"/>
         <source>Loopback</source>
         <translation>Зворотна Петля</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/CanBus.cpp" line="908"/>
         <source>Listen-Only</source>
         <translation>Тільки Прослуховування</translation>
     </message>
@@ -10297,22 +10297,22 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="42"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
         <translation>Вибрати Іконку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="119"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="118"/>
         <source>Search Online…</source>
         <translation>Пошук Онлайн…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="132"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="131"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="144"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="143"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -10581,8 +10581,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="170"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="332"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="381"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="333"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="382"/>
         <source>Copy</source>
         <translation>Копіювати</translation>
     </message>
@@ -10593,73 +10593,100 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="182"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="338"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="387"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="339"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="388"/>
         <source>Select All</source>
         <translation>Вибрати Все</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="234"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="235"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="426"/>
         <source>Product</source>
         <translation>Продукт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="252"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="253"/>
         <source>Licensee</source>
         <translation>Ліцензіат</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="271"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="272"/>
         <source>Licensee E-Mail</source>
         <translation>E-mail Ліцензіата</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="288"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="289"/>
         <source>Device Usage</source>
         <translation>Використання Пристроїв</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="297"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 пристроїв використовується (Необмежений план)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="297"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 з %2 пристроїв використано</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="307"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="308"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="443"/>
         <source>Device ID</source>
         <translation>ID Пристрою</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="354"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="355"/>
         <source>License Key</source>
         <translation>Ліцензійний Ключ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="409"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="433"/>
+        <source>Serial Studio %1 (Offline)</source>
+        <translation>Serial Studio %1 (Офлайн)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="460"/>
+        <source>Expires</source>
+        <translation>Закінчується</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="467"/>
+        <source>%1 (%2 days left)</source>
+        <translation>%1 (залишилось %2 днів)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="480"/>
+        <source>Your offline license expires soon. Request a new certificate to stay activated.</source>
+        <translation>Термін дії вашої офлайн-ліцензії скоро закінчується. Запитайте новий сертифікат, щоб залишатися активованим.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="497"/>
         <source>Customer Portal</source>
         <translation>Портал Клієнта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="420"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="508"/>
         <source>Buy License</source>
         <translation>Купити Ліцензію</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="427"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="515"/>
         <source>Activate</source>
         <translation>Активувати</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="437"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="526"/>
+        <source>Activate Offline…</source>
+        <translation>Активувати Офлайн…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="535"/>
         <source>Deactivate</source>
         <translation>Деактивувати</translation>
     </message>
@@ -10667,133 +10694,151 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="517"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="512"/>
         <source>There was an issue validating your license.</source>
         <translation>Виникла проблема під час перевірки вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="535"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="716"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="835"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="530"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Наданий вами ліцензійний ключ не належить Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="536"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Переконайтеся, що ви придбали ліцензію в офіційному магазині Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="547"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
         <source>This license key was activated on a different device.</source>
         <translation>Цей ліцензійний ключ активовано на іншому пристрої.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="548"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="726"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="543"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="721"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Спочатку деактивуйте його там або зверніться до служби підтримки.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="559"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="736"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
         <source>This license is not currently active.</source>
         <translation>Ця ліцензія наразі неактивна.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="732"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Можливо, термін її дії закінчився або її деактивовано (статус: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
         <source>Something went wrong on the server.</source>
         <translation>Сталася помилка на сервері.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="571"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="747"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="742"/>
         <source>No activation ID was returned.</source>
         <translation>Ідентифікатор активації не повернуто.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
         <source>Could not validate your license at this time.</source>
         <translation>Не вдалося перевірити вашу ліцензію.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="756"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="840"/>
         <source>Try again later.</source>
         <translation>Спробуйте пізніше.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="717"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="712"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Переконайтеся, що ви придбали ліцензію в офіційному магазині Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
         <source>Something went wrong on the server…</source>
         <translation>Щось пішло не так на сервері…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="602"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
         <source>Your license has been successfully activated.</source>
         <translation>Вашу ліцензію успішно активовано.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="649"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Дякуємо за підтримку Serial Studio!
 Тепер у вас є доступ до всіх преміум-функцій.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="708"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>There was an issue activating your license.</source>
         <translation>Виникла проблема під час активації вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
         <source>Could not activate your license at this time.</source>
         <translation>Не вдалося активувати вашу ліцензію зараз.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="827"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Виникла проблема під час деактивації вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="844"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="839"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Не вдалося деактивувати вашу ліцензію зараз.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
         <source>Your license has been deactivated.</source>
         <translation>Вашу ліцензію деактивовано.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Доступ до функцій Pro вилучено.
 Дякуємо ще раз за підтримку Serial Studio!</translation>
+    </message>
+</context>
+<context>
+    <name>Licensing::OfflineLicense</name>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="183"/>
+        <source>Could not open the certificate file.</source>
+        <translation>Не вдалося відкрити файл сертифіката.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="190"/>
+        <source>The certificate file is too large to be valid.</source>
+        <translation>Файл сертифіката занадто великий, щоб бути дійсним.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="217"/>
+        <source>Could not write the device file.</source>
+        <translation>Не вдалося записати файл пристрою.</translation>
     </message>
 </context>
 <context>
@@ -11753,7 +11798,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Mdf4Player</name>
     <message>
-        <location filename="../../qml/Dialogs/Mdf4Player.qml" line="24"/>
+        <location filename="../../qml/Dialogs/Mdf4Player.qml" line="23"/>
         <source>MDF4 Player</source>
         <translation>Програвач MDF4</translation>
     </message>
@@ -12186,8 +12231,8 @@ Would you like to open the download page?</source>
         <translation>Не вдалося записати Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Засіб створення ярликів Windows недоступний на цій платформі.</translation>
     </message>
@@ -12218,8 +12263,8 @@ Would you like to open the download page?</source>
         <translation>Збереження файлу .lnk завершилося невдало (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Засіб створення ярликів macOS недоступний на цій платформі.</translation>
     </message>
@@ -12759,13 +12804,10 @@ Add groups above to poll multiple register types.</source>
 </context>
 <context>
     <name>MultiSelectionView</name>
-    <message numerus="yes">
+    <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="35"/>
-        <source>%n items selected</source>
-        <translation>Вибрано елементів: %n<numerusform/>
-            <numerusform/>
-            <numerusform/>
-        </translation>
+        <source>%1 items selected</source>
+        <translation>Вибрано елементів: %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="118"/>
@@ -12780,7 +12822,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="127"/>
         <source>Toggle 2D plot for every selected dataset</source>
-        <translation>Перемкнути 2D графік для кожного вибраного набору даних</translation>
+        <translation>Увімкнути 2D графік для кожного вибраного набору даних</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="139"/>
@@ -12790,7 +12832,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="142"/>
         <source>Toggle FFT plot for every selected dataset</source>
-        <translation>Перемкнути FFT-графік для кожного вибраного набору даних</translation>
+        <translation>Увімкнути графік FFT для кожного вибраного набору даних</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="154"/>
@@ -12820,12 +12862,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="193"/>
         <source>Gauge</source>
-        <translation>Датчик</translation>
+        <translation>Шкала</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="197"/>
         <source>Set gauge for every selected dataset</source>
-        <translation>Встановити датчик для кожного вибраного набору даних</translation>
+        <translation>Встановити шкалу для кожного вибраного набору даних</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="209"/>
@@ -12855,7 +12897,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="242"/>
         <source>Toggle LED for every selected dataset</source>
-        <translation>Перемкнути світлодіод для кожного вибраного набору даних</translation>
+        <translation>Перемкнути СВІТЛОДІОД для кожного вибраного набору даних</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="266"/>
@@ -12877,13 +12919,10 @@ Add groups above to poll multiple register types.</source>
         <source>Delete every selected dataset</source>
         <translation>Видалити кожен вибраний набір даних</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="319"/>
-        <source>Editing %n items. Shared fields apply to all; per-item fields are locked.</source>
-        <translation>Редагування %n елементів. Спільні поля застосовуються до всіх; окремі поля заблоковані.<numerusform/>
-            <numerusform/>
-            <numerusform/>
-        </translation>
+        <source>Editing %1 items. Shared fields apply to all; per-item fields are locked.</source>
+        <translation>Редагування %1 елементів. Спільні поля застосовуються до всіх; окремі поля заблоковані.</translation>
     </message>
 </context>
 <context>
@@ -13255,39 +13294,155 @@ Add groups above to poll multiple register types.</source>
     </message>
 </context>
 <context>
+    <name>OfflineActivation</name>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="37"/>
+        <source>Activate Offline</source>
+        <translation>Активувати Офлайн</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
+        <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
+        <translation>Активувати Serial Studio Pro на комп'ютері без доступу до інтернету. Обліковий запис або підключення на цьому комп'ютері не потрібні.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
+        <source>Save your device file</source>
+        <translation>Зберегти файл пристрою</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <translation>Зберегти файл пристрою цього комп'ютера. Він ідентифікує цю машину і не містить особистої інформації.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
+        <source>Save Device File…</source>
+        <translation>Зберегти Файл Пристрою…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="136"/>
+        <source>Get your license file</source>
+        <translation>Отримати файл ліцензії</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
+        <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
+        <translation>На іншому комп'ютері з доступом до інтернету перейдіть за адресою нижче, завантажте файл пристрою та введіть свою електронну адресу й ліцензійний ключ.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
+        <source>Open in Browser</source>
+        <translation>Відкрити в Браузері</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="193"/>
+        <source>Import your license</source>
+        <translation>Імпортувати ліцензію</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
+        <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
+        <translation>Скопіюйте файл ліцензії на цей комп'ютер і імпортуйте його. Функції Pro розблокуються негайно.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
+        <source>Import License File…</source>
+        <translation>Імпортувати Файл Ліцензії…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="224"/>
+        <source>Save Device File</source>
+        <translation>Зберегти Файл Пристрою</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
+        <source>Serial Studio device file (*.ssmachine)</source>
+        <translation>Файл пристрою Serial Studio (*.ssmachine)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="235"/>
+        <source>Import License File</source>
+        <translation>Імпортувати Файл Ліцензії</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <source>Serial Studio license (*.sslic)</source>
+        <translation>Ліцензія Serial Studio (*.sslic)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <source>All files (*)</source>
+        <translation>Усі файли (*)</translation>
+    </message>
+</context>
+<context>
+    <name>OfflineLicense</name>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
+        <source>License certificate is valid.</source>
+        <translation>Сертифікат ліцензії дійсний.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <source>The certificate signature is invalid or corrupted.</source>
+        <translation>Підпис сертифіката недійсний або пошкоджений.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="197"/>
+        <source>This certificate was issued for a different device.</source>
+        <translation>Цей сертифікат видано для іншого пристрою.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="200"/>
+        <source>This certificate has expired.</source>
+        <translation>Термін дії цього сертифіката закінчився.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="202"/>
+        <source>This certificate does not grant a valid license tier.</source>
+        <translation>Цей сертифікат не надає дійсний рівень ліцензії.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="206"/>
+        <source>The certificate file is malformed or unreadable.</source>
+        <translation>Файл сертифіката пошкоджений або нечитабельний.</translation>
+    </message>
+</context>
+<context>
     <name>OnlineIconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="42"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
         <source>Search Online Icons</source>
         <translation>Пошук Іконок Онлайн</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="72"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="71"/>
         <source>Download failed: %1</source>
         <translation>Помилка завантаження: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="97"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="96"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>Пошук іконок (наприклад, temperature, arrow, play)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="109"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="108"/>
         <source>Search</source>
         <translation>Пошук</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="148"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="147"/>
         <source>Search for icons above to get started</source>
         <translation>Шукайте іконки вище, щоб почати</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="249"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="248"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="259"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="258"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -14035,12 +14190,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="404"/>
         <source>Hide Selected (%1)</source>
-        <translation>Приховати Вибране (%1)</translation>
+        <translation>Показати Вибране (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="405"/>
         <source>Show Selected (%1)</source>
-        <translation>Показати Вибране (%1)</translation>
+        <translation>Приховати Вибране (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="406"/>
@@ -14051,19 +14206,6 @@ Click Refresh to update the list.</source>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="406"/>
         <source>Show</source>
         <translation>Показати</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="517"/>
-        <source>New Sub-Folder</source>
-        <translation>Нова Підтека</translation>
-    </message>
-    <message>
-        <source>Disable</source>
-        <translation type="vanished">Вимкнути</translation>
-    </message>
-    <message>
-        <source>Enable</source>
-        <translation type="vanished">Увімкнути</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="429"/>
@@ -14091,8 +14233,9 @@ Click Refresh to update the list.</source>
         <translation>Нова Тека</translation>
     </message>
     <message>
-        <source>New Sub-folder</source>
-        <translation type="vanished">Нова Підтека</translation>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="517"/>
+        <source>New Sub-Folder</source>
+        <translation>Нова Підтека</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="533"/>
@@ -14737,34 +14880,34 @@ Click Refresh to update the list.</source>
         <translation>Не вдалося завантажити вітальний текст :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="251"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="250"/>
         <source>Network error</source>
         <translation>Помилка мережі</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="254"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="270"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="302"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="253"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="269"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="301"/>
         <source>Trial Activation Error</source>
         <translation>Помилка Активації Пробної Версії</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="266"/>
         <source>Invalid server response</source>
         <translation>Неправильна відповідь сервера</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="268"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
         <source>The server returned malformed data: %1</source>
         <translation>Сервер повернув некоректні дані: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="299"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
         <source>Unexpected server response</source>
         <translation>Неочікувана відповідь сервера</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="300"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="299"/>
         <source>The server response is missing required fields.</source>
         <translation>У відповіді сервера відсутні обов'язкові поля.</translation>
     </message>
@@ -14799,8 +14942,8 @@ Click Refresh to update the list.</source>
         <translation>Загальна помилка введення/виведення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Парсер Фреймів Вимкнено</translation>
     </message>
@@ -14842,8 +14985,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>Відсутня Функція Parse</translation>
     </message>
@@ -14859,8 +15002,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>Помилка Виконання Функції Parse</translation>
     </message>
@@ -15021,22 +15164,22 @@ function parse(%1) { ... }
 Параметр роздільника більше не потрібен.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="191"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="192"/>
         <source>Critical</source>
         <translation>Критично</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="191"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="192"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="577"/>
+        <location filename="../../src/Misc/CLI.cpp" line="585"/>
         <source>Project file not found</source>
         <translation>Файл проєкту не знайдено</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="578"/>
+        <location filename="../../src/Misc/CLI.cpp" line="586"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -15045,17 +15188,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="581"/>
+        <location filename="../../src/Misc/CLI.cpp" line="589"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Видалити цей ярлик?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="585"/>
+        <location filename="../../src/Misc/CLI.cpp" line="593"/>
         <source>Delete Shortcut</source>
         <translation>Видалити Ярлик</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="587"/>
+        <location filename="../../src/Misc/CLI.cpp" line="595"/>
         <source>Quit</source>
         <translation>Вийти</translation>
     </message>
@@ -15251,6 +15394,11 @@ function parse(%1) { ... }
     <message>
         <source>Native Parser Error</source>
         <translation type="vanished">Помилка Вбудованого Парсера</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="51"/>
+        <source>Offline Activation</source>
+        <translation>Офлайн-активація</translation>
     </message>
 </context>
 <context>
@@ -16655,7 +16803,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="221"/>
         <source>Custom Window Decorations</source>
-        <translation>Користувацькі Декорації Вікна</translation>
+        <translation>Власні Декорації Вікна</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="237"/>
@@ -16675,7 +16823,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="320"/>
         <source>API &amp; Plugins</source>
-        <translation>API і Плагіни</translation>
+        <translation>API та Плагіни</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="452"/>
@@ -17535,12 +17683,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>SqlitePlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="25"/>
+        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="24"/>
         <source>Session Player</source>
         <translation>Програвач Сесій</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="92"/>
+        <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="91"/>
         <source>Loading session…</source>
         <translation>Завантаження сесії…</translation>
     </message>
@@ -17913,7 +18061,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="128"/>
         <source>Add a sub-folder inside this folder</source>
-        <translation>Додати підпапку всередині цієї папки</translation>
+        <translation>Додати підтеку всередині цієї теки</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="136"/>
@@ -17923,7 +18071,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="138"/>
         <source>Add a shared table inside this folder</source>
-        <translation>Додати спільну таблицю всередині цієї папки</translation>
+        <translation>Додати спільну таблицю всередині цієї теки</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="148"/>
@@ -17933,7 +18081,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="150"/>
         <source>Rename folder</source>
-        <translation>Перейменувати папку</translation>
+        <translation>Перейменувати теку</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="158"/>
@@ -17943,7 +18091,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="160"/>
         <source>Delete folder</source>
-        <translation>Видалити папку</translation>
+        <translation>Видалити теку</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="173"/>
@@ -17958,7 +18106,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="264"/>
         <source>This folder is empty. Use the toolbar to add a table or sub-folder.</source>
-        <translation>Ця папка порожня. Використовуйте панель інструментів, щоб додати таблицю або підпапку.</translation>
+        <translation>Ця тека порожня. Використовуйте панель інструментів, щоб додати таблицю або підтеку.</translation>
     </message>
 </context>
 <context>
@@ -19749,17 +19897,17 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="42"/>
         <source>Folder</source>
-        <translation>Папка</translation>
+        <translation>Тека</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="127"/>
         <source>Add Sub-folder</source>
-        <translation>Додати Підпапку</translation>
+        <translation>Додати Підтеку</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="130"/>
         <source>Add a sub-folder inside this folder</source>
-        <translation>Додати підпапку всередині цієї папки</translation>
+        <translation>Додати підтеку всередину цієї теки</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="138"/>
@@ -19769,7 +19917,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="141"/>
         <source>Add a workspace inside this folder</source>
-        <translation>Додати робочу область всередині цієї папки</translation>
+        <translation>Додати робочий простір всередину цієї теки</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="151"/>
@@ -19779,7 +19927,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="153"/>
         <source>Rename folder</source>
-        <translation>Перейменувати папку</translation>
+        <translation>Перейменувати теку</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="162"/>
@@ -19789,7 +19937,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="164"/>
         <source>Delete folder</source>
-        <translation>Видалити папку</translation>
+        <translation>Видалити теку</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceFolderView.qml" line="178"/>
@@ -19842,7 +19990,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="171"/>
         <source>Move workspace down</source>
-        <translation>Перемістити робочий простір вниз</translation>
+        <translation>Перемістити робочу область вниз</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="181"/>
@@ -19852,7 +20000,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="183"/>
         <source>Change workspace icon</source>
-        <translation>Змінити іконку робочого простору</translation>
+        <translation>Змінити іконку робочої області</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="198"/>

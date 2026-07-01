@@ -639,6 +639,11 @@ if(BUILD_COMMERCIAL)
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
     src/Licensing/CommercialToken.h
+    src/Licensing/MonotonicClock.h
+    src/Licensing/OfflinePublicKey.h
+    src/Licensing/OfflineCertificate.h
+    src/Licensing/OfflineLicense.h
+    src/Licensing/OfflineSelfTest.h
     src/Sessions/DatabaseManager.h
     src/Sessions/DatabaseWorker.h
     src/Sessions/Export.h
@@ -733,6 +738,10 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
+    src/Licensing/MonotonicClock.cpp
+    src/Licensing/OfflineCertificate.cpp
+    src/Licensing/OfflineLicense.cpp
+    src/Licensing/OfflineSelfTest.cpp
     src/UI/Widgets/Output/Base.cpp
     src/UI/Widgets/Output/Button.cpp
     src/UI/Widgets/Output/Slider.cpp
@@ -776,6 +785,7 @@ if(BUILD_COMMERCIAL)
   set(QML_SOURCES
     ${QML_SOURCES}
     qml/Dialogs/LicenseManagement.qml
+    qml/Dialogs/OfflineActivation.qml
     qml/Dialogs/ShortcutGenerator.qml
     qml/Dialogs/RuntimeReconfigure.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml

@@ -120,6 +120,9 @@ struct CliOptions {
     "activate", "Activate a license key and exit (for CI/headless setup)", "key"};
   QCommandLineOption deactivateOpt{
     "deactivate", "Deactivate the current license instance and exit (for CI cleanup)"};
+  QCommandLineOption selftestOfflineOpt{
+    "selftest-offline-license",
+    "Run offline-certificate verifier self-test vectors and exit (Pro)"};
   QCommandLineOption modbusRtuOpt{
     "modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port"};
   QCommandLineOption modbusTcpOpt{

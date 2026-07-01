@@ -98,6 +98,7 @@ public:
   [[nodiscard]] int seatLimit() const;
   [[nodiscard]] int seatUsage() const;
   [[nodiscard]] bool isActivated() const;
+  [[nodiscard]] bool isOnlineActivated() const noexcept;
   [[nodiscard]] bool canActivate() const;
   [[nodiscard]] const QString& appName() const;
   [[nodiscard]] const QString& license() const;

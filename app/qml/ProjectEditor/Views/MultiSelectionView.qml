@@ -32,7 +32,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   icon: "qrc:/icons/project-editor/model/dataset.svg"
-  title: qsTr("%n items selected", "", Cpp_JSON_ProjectEditor.multiSelectionCount)
+  title: qsTr("%1 items selected").arg(Cpp_JSON_ProjectEditor.multiSelectionCount)
 
   //
   // Picks the aggregate form model for the current multi-selection kind.
@@ -316,8 +316,7 @@ Widgets.Pane {
             Layout.fillWidth: true
             elide: Label.ElideRight
             color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Editing %n items. Shared fields apply to all; per-item fields are locked.",
-                       "", Cpp_JSON_ProjectEditor.multiSelectionCount)
+            text: qsTr("Editing %1 items. Shared fields apply to all; per-item fields are locked.").arg(Cpp_JSON_ProjectEditor.multiSelectionCount)
           }
         }
 

@@ -28,6 +28,8 @@
 #include "AppInfo.h"
 #include "Licensing/CommercialToken.h"
 #include "Licensing/MachineID.h"
+#include "Licensing/MonotonicClock.h"
+#include "Licensing/OfflineLicense.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -118,9 +120,18 @@ int Licensing::LemonSqueezy::seatUsage() const
 }
 
 /**
- * @brief Returns true if the current license has been successfully activated.
+ * @brief Returns true when Pro is active via an online license or an imported
+ * offline certificate; the single "is Pro activated" check used app-wide.
  */
 bool Licensing::LemonSqueezy::isActivated() const
+{
+  return m_activated || OfflineLicense::instance().isActivated();
+}
+
+/**
+ * @brief Returns true only for an online (LemonSqueezy) activation, ignoring offline.
+ */
+bool Licensing::LemonSqueezy::isOnlineActivated() const noexcept
 {
   return m_activated;
 }
@@ -292,7 +303,7 @@ void Licensing::LemonSqueezy::validate()
  */
 void Licensing::LemonSqueezy::deactivate()
 {
-  if (!isActivated())
+  if (!isOnlineActivated())
     return;
 
   if (busy())
@@ -412,23 +423,7 @@ void Licensing::LemonSqueezy::writeSettings()
  */
 QDateTime Licensing::LemonSqueezy::monotonicNow()
 {
-  auto effective = QDateTime::currentDateTime();
-
-  m_settings.beginGroup("licensing");
-  const auto stored = m_settings.value("lastSeen", "").toString();
-  m_settings.endGroup();
-  if (!stored.isEmpty()) {
-    const auto seen = QDateTime::fromString(m_simpleCrypt.decryptToString(stored), Qt::RFC2822Date);
-    if (seen.isValid() && seen > effective)
-      effective = seen;
-  }
-
-  const auto encoded = m_simpleCrypt.encryptToString(effective.toString(Qt::RFC2822Date));
-  m_settings.beginGroup("licensing");
-  m_settings.setValue("lastSeen", encoded);
-  m_settings.endGroup();
-
-  return effective;
+  return MonotonicClock::now();
 }
 
 /**

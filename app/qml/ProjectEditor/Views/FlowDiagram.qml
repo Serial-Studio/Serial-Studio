@@ -167,23 +167,38 @@ Item {
       }
       return false
     }
-
-    // Deepest folder that actually owns groups -> how many folder columns to reserve.
-    let maxFolderDepth = -1
-    for (const g of groups) {
-      if (g.groupType === SerialStudio.GroupOutput) continue
-
-      const fid = folderOf(g)
-      if (fid !== -1)
-        maxFolderDepth = Math.max(maxFolderDepth, folderDepth(fid))
+    function subtreeHasDatasets(fid, sid) {
+      for (const g of groups) {
+        if (g.groupType === SerialStudio.GroupOutput) continue
+        if ((g.sourceId || 0) !== sid) continue
+        if (folderOf(g) !== -1 && folderIsSelfOrAncestor(fid, folderOf(g))
+            && (g.datasets || []).length > 0)
+          return true
+      }
+      return false
     }
+
+    // Deepest folder column actually rendered (collapsed folders hide children -> reserve less).
+    let maxFolderDepth = -1
+    function scanVisibleFolders(nodes, sid) {
+      for (const n of nodes) {
+        if (!subtreeHasSourceGroups(n.id, sid))
+          continue
+
+        maxFolderDepth = Math.max(maxFolderDepth, folderDepth(n.id))
+        if (!isCollapsed("grpfolder:" + n.id))
+          scanVisibleFolders(n.children || [], sid)
+      }
+    }
+    for (const src of srcList)
+      if (!isCollapsed("src:" + src.sourceId))
+        scanVisibleFolders(gfTree, src.sourceId)
 
     // -- folder / group / dataset columns (one column per folder level) -----
     const colFolder = colFP + colW                             // first folder column
     const colGrp    = colFolder + (maxFolderDepth + 1) * colW  // group column
     const colTrans  = colGrp + colW                            // transform block column
     const colChip   = colTrans + transW + transGap             // dataset column
-    const colMqtt   = colChip + chipW + hGap                   // mqtt publisher column
 
     function folderX(depth) {
       return colFolder + depth * colW
@@ -231,6 +246,12 @@ Item {
         icon:         groupIcon(grp),
         badge:        ""
       })
+
+      //
+      // Collapsed group still feeds the MQTT Publisher; anchor the fan-in on the card edge.
+      //
+      if (collapsed && dsList.length > 0)
+        datasetAnchors.push({ x: colGrp + nodeW, y: centerY })
 
       for (let di = 0; di < pills.length; ++di) {
         const ds    = pills[di]
@@ -292,7 +313,7 @@ Item {
           hasTransform: hasTransform
         })
 
-        datasetAnchors.push(chipY + chipH / 2)
+        datasetAnchors.push({ x: colChip + chipW, y: chipY + chipH / 2 })
       }
 
       return centerY
@@ -307,6 +328,12 @@ Item {
       if (collapsed) {
         centerY = cursorY + nodeH / 2
         cursorY += nodeH + vGap
+
+        //
+        // Collapsed folder hides its groups; still feed MQTT from the folder card edge.
+        //
+        if (subtreeHasDatasets(f.id, sid))
+          datasetAnchors.push({ x: x + nodeW, y: centerY })
       } else {
         const kids = []
         for (const sub of (f.children || []))
@@ -788,10 +815,19 @@ Item {
     // MQTT Publisher node: collects every dataset pill (commercial, opt-in)
     //
     if (mqttPublisherEnabled() && datasetAnchors.length > 0) {
-      const minY     = datasetAnchors[0]
-      const maxYAnch = datasetAnchors[datasetAnchors.length - 1]
+      const minY     = datasetAnchors[0].y
+      const maxYAnch = datasetAnchors[datasetAnchors.length - 1].y
       const midY     = (minY + maxYAnch) / 2
       const mqttY    = midY - nodeH / 2
+
+      //
+      // Sit just right of the rightmost fan-in origin so a collapsed project stays compact.
+      //
+      let colMqtt = 0
+      for (const a of datasetAnchors)
+        colMqtt = Math.max(colMqtt, a.x)
+
+      colMqtt += hGap
 
       newNodes.push({
         type:      "mqtt-publisher",
@@ -809,10 +845,10 @@ Item {
         badge:     ""
       })
 
-      for (const dy of datasetAnchors) {
+      for (const a of datasetAnchors) {
         newArrows.push({
-          x1: colChip + chipW, y1: dy,
-          x2: colMqtt,         y2: mqttY + nodeH / 2
+          x1: a.x,     y1: a.y,
+          x2: colMqtt, y2: mqttY + nodeH / 2
         })
       }
     }

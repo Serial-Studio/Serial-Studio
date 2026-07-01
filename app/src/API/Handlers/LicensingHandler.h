@@ -34,7 +34,10 @@ public:
   static void registerCommands();
 
 private:
+  static void registerOfflineCommand();
+
   static CommandResponse setLicense(const QString& id, const QJsonObject& params);
+  static CommandResponse activateOffline(const QString& id, const QJsonObject& params);
   static CommandResponse activate(const QString& id, const QJsonObject& params);
   static CommandResponse deactivate(const QString& id, const QJsonObject& params);
   static CommandResponse validate(const QString& id, const QJsonObject& params);

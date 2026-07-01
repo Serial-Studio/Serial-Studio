@@ -509,6 +509,10 @@ license is tied to the hardware ID and is cached locally; Serial Studio
 revalidates it online when a connection is available, and a 30-day offline
 grace period covers machines that stay disconnected between checks.
 
+A machine that can never reach the internet can be activated with a signed
+license file instead of connecting online. See
+[Offline Activation](Offline-Activation.md).
+
 ## Educational Discounts
 
 Students and educators can get discounted Pro licenses:

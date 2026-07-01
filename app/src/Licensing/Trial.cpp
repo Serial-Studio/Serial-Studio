@@ -129,8 +129,7 @@ bool Licensing::Trial::trialExpired() const
  */
 bool Licensing::Trial::trialAvailable() const
 {
-  const bool activated = LemonSqueezy::instance().isActivated();
-  return !activated;
+  return !LemonSqueezy::instance().isActivated();
 }
 
 /**

@@ -233,7 +233,9 @@ If you need dataset B to consume dataset A's final value, make sure A comes befo
 
 By default every dataset's transform runs on every frame. For a large table-driven project, where the frame parser writes table registers and many virtual datasets each read one register, that means a frame for one device re-runs the transforms of *every* dataset, even the ones whose data did not change.
 
-The **Change-driven transforms** toggle in the Project Editor's Project Summary turns on a faster mode: a virtual dataset's transform runs only when one of the registers (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio discovers what each transform reads automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option just skips recomputing values that did not change.
+The **Change-Driven Transforms** toggle turns on a faster mode: a virtual dataset's transform runs only when one of the registers (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio discovers what each transform reads automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option just skips recomputing values that did not change.
+
+Find it in the Project Editor: select the project root, click the **Settings** button (wrench icon) next to the Project Title, and toggle **Change-Driven Transforms** in the popup, alongside Time Range and Point Count.
 
 It is **off by default** and saved per project. Turn it on for heavy table-driven dashboards that are dropping frames. Two things to know:
 

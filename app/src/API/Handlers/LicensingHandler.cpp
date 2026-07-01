@@ -25,6 +25,7 @@
 #include "API/CommandRegistry.h"
 #include "Licensing/CommercialToken.h"
 #include "Licensing/LemonSqueezy.h"
+#include "Licensing/OfflineLicense.h"
 #include "Licensing/Trial.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -63,6 +64,8 @@ void API::Handlers::LicensingHandler::registerCommands()
                              emptySchema,
                              &activate);
   }
+
+  registerOfflineCommand();
 
   {
     QJsonObject emptySchema;
@@ -126,6 +129,31 @@ void API::Handlers::LicensingHandler::registerCommands()
   }
 }
 
+/**
+ * @brief Registers the offline certificate activation command.
+ */
+void API::Handlers::LicensingHandler::registerOfflineCommand()
+{
+  auto& registry = CommandRegistry::instance();
+
+  QJsonObject props;
+  props[QStringLiteral("path")] = QJsonObject{
+    {       QStringLiteral("type"),                       QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Path to a .sslic certificate")}
+  };
+
+  QJsonObject schema;
+  schema[QStringLiteral("type")]       = QStringLiteral("object");
+  schema[QStringLiteral("properties")] = props;
+  schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("path")};
+
+  registry.registerCommand(
+    QStringLiteral("licensing.activateOffline"),
+    QStringLiteral("Activate Pro from an offline license certificate (params: path)"),
+    schema,
+    &activateOffline);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Command implementations
 //--------------------------------------------------------------------------------------------------
@@ -143,6 +171,24 @@ API::CommandResponse API::Handlers::LicensingHandler::setLicense(const QString& 
 
   Licensing::LemonSqueezy::instance().setLicense(
     params.value(QStringLiteral("licenseKey")).toString());
+
+  return CommandResponse::makeSuccess(id, {});
+}
+
+/**
+ * @brief Activate Pro from a signed offline certificate file, with no network access.
+ */
+API::CommandResponse API::Handlers::LicensingHandler::activateOffline(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("path"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: path"));
+  }
+
+  auto& offline = Licensing::OfflineLicense::instance();
+  if (!offline.activateFromFile(params.value(QStringLiteral("path")).toString()))
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, offline.lastError());
 
   return CommandResponse::makeSuccess(id, {});
 }
@@ -215,6 +261,7 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
                                                                 const QJsonObject&)
 {
   const auto& ls = Licensing::LemonSqueezy::instance();
+  const auto& ol = Licensing::OfflineLicense::instance();
   const auto& tk = Licensing::CommercialToken::current();
 
   QString tierName;
@@ -251,6 +298,12 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
   result[QStringLiteral("seatUsage")]        = ls.seatUsage();
   result[QStringLiteral("featureTier")]      = tierName;
   result[QStringLiteral("featureTierValue")] = static_cast<int>(tk.featureTier());
+
+  result[QStringLiteral("machineId")]            = ol.machineId();
+  result[QStringLiteral("offlineActivated")]     = ol.isActivated();
+  result[QStringLiteral("offlineDaysRemaining")] = ol.daysRemaining();
+  result[QStringLiteral("offlineExpiresAt")] =
+    ol.isActivated() ? ol.expiresAt().toString(Qt::ISODate) : QString();
 
   return CommandResponse::makeSuccess(id, result);
 }

@@ -57,6 +57,7 @@
   { "id": "become-an-affiliate", "title": "Become an Affiliate", "section": "Support", "file": "Become-an-Affiliate.md" },
   { "id": "comparison", "title": "Comparison with Alternatives", "section": "Support", "file": "Comparison.md" },
   { "id": "pro-vs-free", "title": "Pro vs Free Features", "section": "Licensing", "file": "Pro-vs-Free.md" },
+  { "id": "offline-activation", "title": "Offline Activation", "section": "Licensing", "file": "Offline-Activation.md" },
   { "id": "license-agreement", "title": "License Agreement", "section": "Licensing", "file": "License-Agreement.md" },
   { "id": "privacy-policy", "title": "Privacy Policy", "section": "Licensing", "file": "Privacy-Policy.md" },
   { "id": "earn-pro-license", "title": "Earn a Pro License", "section": "Licensing", "file": "Earn-Pro-License.md" },

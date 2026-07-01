@@ -23,10 +23,9 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets"
 import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   fixedSize: false
@@ -122,7 +121,7 @@ SmartDialog {
         //
         // Search bar
         //
-        SearchField {
+        Widgets.SearchField {
           id: searchField
 
           Layout.fillWidth: true

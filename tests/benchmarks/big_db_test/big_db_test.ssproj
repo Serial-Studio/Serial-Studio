@@ -2,8 +2,12 @@
     "actions": [
     ],
     "changeDrivenTransforms": true,
-    "controlScriptCode": "/**\n * BigDB Watchdog Control Script\n *\n * Monitors frame arrival. If no frame is seen for WATCHDOG_TIMEOUT_MS the\n * whole group is marked as a signal loss and every channel on every\n * board (all three types, ids 1..6) is invalidated. Normal arrival clears it.\n */\n\nconst WATCHDOG_TIMEOUT_MS = 1000;\nconst BOARD_COUNT = 6;\nconst TYPES = [\n  { name: \"TA\", valkey: \"resistance\", extra: [] },\n  { name: \"TB\", valkey: \"val\",        extra: [\"mode\"] },\n  { name: \"TC\", valkey: \"temp\",       extra: [\"type\"] },\n];\n\nlet lastFrameTime = 0;\nlet watchdogTriggered = false;\n\nfunction setup() {\n}\n\nfunction markCommLoss() {\n  watchdogTriggered = true;\n\n  for (let t = 0; t < TYPES.length; t++) {\n    const ty = TYPES[t];\n    for (let brd = 1; brd <= BOARD_COUNT; brd++) {\n      const board = \"DAQ/\" + ty.name + \"/BRD-\" + brd;\n      tableSet(board, \"boot_reset_cause\", 0x01);\n      tableSet(board, \"boot_selftest\", 0xFF);\n\n      for (let ch = 1; ch <= 8; ch++) {\n        tableSet(board, \"ch\" + ch + \"_\" + ty.valkey, 0xFFFF);\n        tableSet(board, \"ch\" + ch + \"_diag\", 0xFF);\n        for (let e = 0; e < ty.extra.length; e++)\n          tableSet(board, \"ch\" + ch + \"_\" + ty.extra[e], 0x00);\n      }\n    }\n  }\n\n  refreshDashboard();\n}\n\nfunction clearCommLoss() {\n  watchdogTriggered = false;\n  notifyInfo(\"Information\", \"CAN communications restored\");\n}\n\nfunction loop() {\n  const frame = newFrame();\n\n  if (frame) {\n    lastFrameTime = Date.now();\n\n    if (watchdogTriggered)\n      clearCommLoss();\n\n    delay(100);\n    return;\n  }\n\n  if (lastFrameTime === 0) {\n    delay(100);\n    return;\n  }\n\n  const elapsed = Date.now() - lastFrameTime;\n  if (elapsed > WATCHDOG_TIMEOUT_MS && !watchdogTriggered) {\n    notifyCritical(\"CAN Bus Error\", \"No CAN frames received for \" + elapsed + \" milliseconds\");\n    markCommLoss();\n  }\n\n  delay(100);\n}\n",
+    "controlScriptCode": "/**\n * BigDB Watchdog Control Script\n *\n * Monitors frame arrival. If no frame is seen for WATCHDOG_TIMEOUT_MS the\n * whole group is marked as a signal loss and every channel on every\n * board (all three types, ids 1..6) is invalidated. Normal arrival clears it.\n */\n\nconst WATCHDOG_TIMEOUT_MS = 1000;\nconst BOARD_COUNT = 6;\nconst TYPES = [\n  { name: \"TA\", valkey: \"resistance\", extra: [] },\n  { name: \"TB\", valkey: \"val\",        extra: [\"mode\"] },\n  { name: \"TC\", valkey: \"temp\",       extra: [\"type\"] },\n];\n\nlet lastFrameTime = 0;\nlet watchdogTriggered = false;\n\nfunction setup() {\n}\n\nfunction markCommLoss() {\n  watchdogTriggered = true;\n\n  for (let t = 0; t < TYPES.length; t++) {\n    const ty = TYPES[t];\n    for (let brd = 1; brd <= BOARD_COUNT; brd++) {\n      const board = \"DAQ/\" + ty.name + \"/BRD-\" + brd;\n      tableSet(board, \"boot_reset_cause\", 0x01);\n      tableSet(board, \"boot_selftest\", 0xFF);\n\n      for (let ch = 1; ch <= 8; ch++) {\n        tableSet(board, \"ch\" + ch + \"_\" + ty.valkey, 0xFFFF);\n        tableSet(board, \"ch\" + ch + \"_diag\", 0xFF);\n        for (let e = 0; e < ty.extra.length; e++)\n          tableSet(board, \"ch\" + ch + \"_\" + ty.extra[e], 0x00);\n      }\n    }\n  }\n\n  refreshDashboard();\n}\n\nfunction clearCommLoss() {\n  watchdogTriggered = false;\n  notifyInfo(\"Information\", \"CAN communications restored\");\n}\n\nfunction loop() {\n  const frame = newFrame();\n\n  if (frame) {\n    lastFrameTime = Date.now();\n\n    if (watchdogTriggered)\n      clearCommLoss();\n\n    dashboardTick();\n    return;\n  }\n\n  if (lastFrameTime === 0) {\n    delay(100);\n    return;\n  }\n\n  const elapsed = Date.now() - lastFrameTime;\n  if (elapsed > WATCHDOG_TIMEOUT_MS && !watchdogTriggered) {\n    notifyCritical(\"CAN Bus Error\", \"No CAN frames received for \" + elapsed + \" milliseconds\");\n    markCommLoss();\n  }\n\n  delay(100);\n}\n",
     "customizeWorkspaces": true,
+    "diagramCollapse": {
+        "grp:66": true,
+        "grp:67": true
+    },
     "groupFolders": [
         {
             "folderId": 1,
@@ -18499,7 +18503,7 @@
             "decoderMethod": 3,
             "frameDetection": 2,
             "frameEnd": "\n",
-            "frameParserCode": "/**\n * BigDB unified parser - decodes all three Board board types onto one bus.\n *\n * 11-bit standard CAN ID:\n *   bits [9:8] board type  (1 = TA, 2 = TB, 3 = TC)\n *   bits [7:3] board id    (1..6)\n *   bits [2:0] reading id  (0/1 data, 2 diag, 5 cal[TB], 6 info, 7 boot)\n *\n * Readings land in a per-board table named \"DAQ/<TYPE>/BRD-<id>\" (e.g. \"DAQ/TA/BRD-3\"),\n * so the same board id across different types never collides.\n */\n\nconst TYPE_NAMES = { 1: \"TA\", 2: \"TB\", 3: \"TC\" };\nconst VAL_KEY    = { 1: \"resistance\", 2: \"val\", 3: \"temp\" };\n\nfunction decode_can_id(id) {\n  const board_type = (id >> 8) & 0x03;\n  const board_id = (id >> 3) & 0x1F;\n  const reading_id = id & 0x07;\n  return { board_type, board_id, reading_id };\n}\n\nfunction u16_be(frame, byte_offset) {\n  const frame_index = 3 + byte_offset;\n  if (frame_index + 1 >= frame.length)\n    return 0xFFFF;\n    \n  return (frame[frame_index] * 256) + frame[frame_index + 1];\n}\n\nfunction set_block(table, valkey, base_ch, frame) {\n  for (let i = 0; i < 4; i++) {\n    const v = u16_be(frame, i * 2);\n    const ch = base_ch + i;\n    \n    const diag = tableGet(table, \"ch\" + ch + \"_diag\");\n    if (diag !== 0x00 && diag !== 0xA6 && diag !== 0xA7) {\n      tableSet(table, \"ch\" + ch + \"_\" + valkey, 0xFFFF);\n      continue;\n    }\n\n    tableSet(table, \"ch\" + ch + \"_\" + valkey, v);\n    if (v < 0xFFFD)\n      tableSet(table, \"ch\" + ch + \"_diag\", 0x00);\n  }\n}\n\nfunction parse(frame) {\n  if (!frame || frame.length < 3) {\n    if (io.getStatus().isConnected)\n      console.log(\"[BigDB] ERROR: Frame too short: \" + (frame ? frame.length : 0) + \" bytes\");\n      \n    return [];\n  }\n\n  const can_id = (frame[0] * 256) + frame[1];\n  const { board_type, board_id, reading_id } = decode_can_id(can_id);\n\n  const type_name = TYPE_NAMES[board_type];\n  if (!type_name) {\n    console.log(\"[BigDB] SKIP: unknown board_type=\" + board_type);\n    return [];\n  }\n\n  const table = \"DAQ/\" + type_name + \"/BRD-\" + board_id;\n  const valkey = VAL_KEY[board_type];\n\n  if (reading_id === 0) {\n    if (frame.length < 11) \n      return [];\n    \n    set_block(table, valkey, 1, frame);\n  }\n  \n  else if (reading_id === 1) {\n    if (frame.length < 11) \n      return [];\n      \n    set_block(table, valkey, 5, frame);\n  }\n  \n  else if (reading_id === 2) {\n    if (frame.length < 11) \n      return [];\n      \n    for (let ch = 0; ch < 8; ch++) {\n      const fault = frame[3 + ch];\n      tableSet(table, \"ch\" + (ch + 1) + \"_diag\", fault);\n      if (fault !== 0x00 && fault !== 0xA6 && fault !== 0xA7)\n        tableSet(table, \"ch\" + (ch + 1) + \"_\" + valkey, 0xFFFF);\n    }\n  }\n  \n  else if (reading_id === 5 && board_type === 2) {\n    if (frame.length < 5)\n       return [];\n       \n    tableSet(table, \"cal_accepted\", frame[3]);\n    tableSet(table, \"cal_stored\", frame[4]);\n    \n    if (frame.length >= 9) {\n      const cal_epoch = (frame[5] * 16777216) + (frame[6] * 65536) + (frame[7] * 256) + frame[8];\n      tableSet(table, \"cal_epoch\", cal_epoch);\n      if (cal_epoch > 0) {\n        const cal_date = new Date(cal_epoch * 1000);\n        const pad = function (n) { return (n < 10 ? \"0\" : \"\") + n; };\n        tableSet(table, \"cal_time\",\n                 cal_date.getUTCFullYear() + \"-\" + pad(cal_date.getUTCMonth() + 1) + \"-\" + pad(cal_date.getUTCDate())\n                 + \" \" + pad(cal_date.getUTCHours()) + \":\" + pad(cal_date.getUTCMinutes()) + \" UTC\");\n      } else {\n        tableSet(table, \"cal_time\", \"\");\n      }\n    }\n  }\n  \n  else if (reading_id === 6) {\n    if (frame.length < 11)\n      return [];\n      \n    for (let ch = 0; ch < 8; ch++)\n      tableSet(table, \"ch\" + (ch + 1) + \"_mode\", frame[3 + ch]);\n  }\n  \n  else if (reading_id === 7) {\n    if (frame.length < 5)\n      return [];\n      \n    tableSet(table, \"boot_reset_cause\", frame[3]);\n    tableSet(table, \"boot_selftest\", frame[4]);\n  }\n  \n  return [0];\n}\n",
+            "frameParserCode": "/**\n * BigDB unified parser - decodes all three Board board types onto one bus.\n *\n * 11-bit standard CAN ID:\n *   bits [9:8] board type  (1 = TA, 2 = TB, 3 = TC)\n *   bits [7:3] board id    (1..6)\n *   bits [2:0] reading id  (0/1 data, 2 diag, 5 cal[TB], 6 info, 7 boot)\n *\n * Readings land in a per-board table named \"DAQ/<TYPE>/BRD-<id>\" (e.g. \"DAQ/TA/BRD-3\"),\n * so the same board id across different types never collides.\n */\n\nconst TYPE_NAMES = { 1: \"TA\", 2: \"TB\", 3: \"TC\" };\nconst VAL_KEY    = { 1: \"resistance\", 2: \"val\", 3: \"temp\" };\n\nfunction decode_can_id(id) {\n  const board_type = (id >> 8) & 0x03;\n  const board_id = (id >> 3) & 0x1F;\n  const reading_id = id & 0x07;\n  return { board_type, board_id, reading_id };\n}\n\nfunction u16_be(frame, byte_offset) {\n  const frame_index = 3 + byte_offset;\n  if (frame_index + 1 >= frame.length)\n    return 0xFFFF;\n    \n  return (frame[frame_index] * 256) + frame[frame_index + 1];\n}\n\nfunction set_block(table, valkey, base_ch, frame) {\n  for (let i = 0; i < 4; i++) {\n    const v = u16_be(frame, i * 2);\n    const ch = base_ch + i;\n    \n    const diag = tableGet(table, \"ch\" + ch + \"_diag\");\n    if (diag !== 0x00 && diag !== 0xA6 && diag !== 0xA7) {\n      tableSet(table, \"ch\" + ch + \"_\" + valkey, 0xFFFF);\n      continue;\n    }\n\n    tableSet(table, \"ch\" + ch + \"_\" + valkey, v);\n    if (v < 0xFFFD)\n      tableSet(table, \"ch\" + ch + \"_diag\", 0x00);\n  }\n}\n\nfunction parse(frame) {\n  if (!frame || frame.length < 3) {\n    if (io.getStatus().isConnected)\n      console.log(\"[BigDB] ERROR: Frame too short: \" + (frame ? frame.length : 0) + \" bytes\");\n      \n    return [];\n  }\n\n  const can_id = (frame[0] * 256) + frame[1];\n  const { board_type, board_id, reading_id } = decode_can_id(can_id);\n\n  const type_name = TYPE_NAMES[board_type];\n  if (!type_name) {\n    console.log(\"[BigDB] SKIP: unknown board_type=\" + board_type);\n    return [];\n  }\n\n  const table = \"DAQ/\" + type_name + \"/BRD-\" + board_id;\n  const valkey = VAL_KEY[board_type];\n\n  if (reading_id === 0) {\n    if (frame.length < 11) \n      return [];\n    \n    set_block(table, valkey, 1, frame);\n  }\n  \n  else if (reading_id === 1) {\n    if (frame.length < 11) \n      return [];\n      \n    set_block(table, valkey, 5, frame);\n  }\n  \n  else if (reading_id === 2) {\n    if (frame.length < 11) \n      return [];\n      \n    for (let ch = 0; ch < 8; ch++) {\n      const fault = frame[3 + ch];\n      tableSet(table, \"ch\" + (ch + 1) + \"_diag\", fault);\n      if (fault !== 0x00 && fault !== 0xA6 && fault !== 0xA7)\n        tableSet(table, \"ch\" + (ch + 1) + \"_\" + valkey, 0xFFFF);\n    }\n  }\n  \n  else if (reading_id === 5 && board_type === 2) {\n    if (frame.length < 5)\n       return [];\n       \n    tableSet(table, \"cal_accepted\", frame[3]);\n    tableSet(table, \"cal_stored\", frame[4]);\n    \n    if (frame.length >= 9) {\n      const cal_epoch = (frame[5] * 16777216) + (frame[6] * 65536) + (frame[7] * 256) + frame[8];\n      tableSet(table, \"cal_epoch\", cal_epoch);\n      if (cal_epoch > 0) {\n        const cal_date = new Date(cal_epoch * 1000);\n        const pad = function (n) { return (n < 10 ? \"0\" : \"\") + n; };\n        tableSet(table, \"cal_time\",\n                 cal_date.getUTCFullYear() + \"-\" + pad(cal_date.getUTCMonth() + 1) + \"-\" + pad(cal_date.getUTCDate())\n                 + \" \" + pad(cal_date.getUTCHours()) + \":\" + pad(cal_date.getUTCMinutes()) + \" UTC\");\n      } else {\n        tableSet(table, \"cal_time\", \"\");\n      }\n    }\n  }\n  \n  else if (reading_id === 6) {\n    if (frame.length < 11)\n      return [];\n      \n    for (let ch = 0; ch < 8; ch++)\n      tableSet(table, \"ch\" + (ch + 1) + \"_mode\", frame[3 + ch]);\n  }\n  \n  else if (reading_id === 7) {\n    if (frame.length < 5)\n      return [];\n      \n    tableSet(table, \"boot_reset_cause\", frame[3]);\n    tableSet(table, \"boot_selftest\", frame[4]);\n  }\n  \n  return [];\n}\n",
             "frameParserParams": {
                 "quoteChar": "",
                 "separator": ",",
@@ -21182,7 +21186,7 @@
         "BigDB/Dashboard Widgets/DAQ/TA/Summary/TA-6 Temperatures/Channel 6": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Summary/TA-6 Temperatures/Channel 7": false,
         "BigDB/Dashboard Widgets/DAQ/TA/Summary/TA-6 Temperatures/Channel 8": false,
-        "BigDB/Dashboard Widgets/DAQ/TB": false,
+        "BigDB/Dashboard Widgets/DAQ/TB": true,
         "BigDB/Dashboard Widgets/DAQ/TB/Boot Status": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Boot Status/TB-1 Boot Status": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Boot Status/TB-1 Boot Status/Last Calibration": false,
@@ -21208,7 +21212,7 @@
         "BigDB/Dashboard Widgets/DAQ/TB/Boot Status/TB-6 Boot Status/Last Calibration": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Boot Status/TB-6 Boot Status/Reset Cause": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Boot Status/TB-6 Boot Status/Self-Test Result": false,
-        "BigDB/Dashboard Widgets/DAQ/TB/Calibration": false,
+        "BigDB/Dashboard Widgets/DAQ/TB/Calibration": true,
         "BigDB/Dashboard Widgets/DAQ/TB/Calibration/TB Calibration": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Calibration/TB Calibration/Calibrate Board 1": false,
         "BigDB/Dashboard Widgets/DAQ/TB/Calibration/TB Calibration/Calibrate Board 2": false,
@@ -21631,7 +21635,7 @@
         "9:0:1": {
             "showAreaUnderPlot": false
         },
-        "activeGroup": 5000,
+        "activeGroup": 5009,
         "externalWindows": {
             "data": [
             ]
@@ -23226,68 +23230,68 @@
         "layout:5000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 478,
-                "canvasWidth": 1032,
+                "canvasHeight": 521,
+                "canvasWidth": 991,
                 "geometries": [
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 19,
                         "relativeIndex": 18,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 344,
+                        "width": 331,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 23,
                         "relativeIndex": 22,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 344,
-                        "x": 343,
+                        "width": 331,
+                        "x": 330,
                         "y": 0
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 27,
                         "relativeIndex": 26,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 344,
-                        "x": 686,
+                        "width": 331,
+                        "x": 660,
                         "y": 0
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 31,
                         "relativeIndex": 30,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 344,
+                        "width": 331,
                         "x": 0,
-                        "y": 238
+                        "y": 260
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 35,
                         "relativeIndex": 34,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 344,
-                        "x": 343,
-                        "y": 238
+                        "width": 331,
+                        "x": 330,
+                        "y": 260
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 39,
                         "relativeIndex": 38,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 344,
-                        "x": 686,
-                        "y": 238
+                        "width": 331,
+                        "x": 660,
+                        "y": 260
                     }
                 ],
                 "userReordered": false,
@@ -24370,11 +24374,11 @@
         "layout:5012": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 478,
+                "canvasHeight": 521,
                 "canvasWidth": 991,
                 "geometries": [
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 80,
                         "relativeIndex": 12,
                         "state": "normal",
@@ -24384,7 +24388,7 @@
                         "y": 0
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 81,
                         "relativeIndex": 13,
                         "state": "normal",
@@ -24394,7 +24398,7 @@
                         "y": 0
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 82,
                         "relativeIndex": 14,
                         "state": "normal",
@@ -24404,34 +24408,34 @@
                         "y": 0
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 83,
                         "relativeIndex": 15,
                         "state": "normal",
                         "widgetType": 8,
                         "width": 331,
                         "x": 0,
-                        "y": 238
+                        "y": 260
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 84,
                         "relativeIndex": 16,
                         "state": "normal",
                         "widgetType": 8,
                         "width": 331,
                         "x": 330,
-                        "y": 238
+                        "y": 260
                     },
                     {
-                        "height": 239,
+                        "height": 261,
                         "id": 85,
                         "relativeIndex": 17,
                         "state": "normal",
                         "widgetType": 8,
                         "width": 331,
                         "x": 660,
-                        "y": 238
+                        "y": 260
                     }
                 ],
                 "userReordered": false,
