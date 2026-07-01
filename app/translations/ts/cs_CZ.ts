@@ -15458,258 +15458,278 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Generovat Sestavu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
         <source>Solid</source>
         <translation>Plná</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="70"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
         <source>Dashed</source>
         <translation>Čárkovaná</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Dotted</source>
         <translation>Tečkovaná</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="94"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8,5 × 11 palců)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8,5 × 14 palců)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7,25 × 10,5 palců)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 palců)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 palců)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Zpráva o Relaci</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="560"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="125"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="661"/>
         <source>Session Report</source>
         <translation>Zpráva o Relaci</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="462"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Branding</source>
         <translation>Značka</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="468"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="569"/>
         <source>Page</source>
         <translation>Stránka</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="474"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="575"/>
         <source>Sections</source>
         <translation>Sekce</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="480"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="581"/>
         <source>Datasets</source>
         <translation>Datové Sady</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="629"/>
         <source>Identity</source>
         <translation>Identita</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="542"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="643"/>
         <source>Company</source>
         <translation>Společnost</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
         <source>e.g. Acme Test Systems</source>
         <translation>např. Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="654"/>
         <source>Document title</source>
         <translation>Název dokumentu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="564"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="665"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="571"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="672"/>
         <source>Prepared by (optional)</source>
         <translation>Připravil (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="580"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="681"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="694"/>
         <source>File</source>
         <translation>Soubor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="604"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="705"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG nebo SVG (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="606"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="707"/>
         <source>Browse…</source>
         <translation>Procházet…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="609"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="710"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="751"/>
         <source>Paper</source>
         <translation>Papír</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="662"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Page size</source>
         <translation>Velikost stránky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="891"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Anotovat min., max. a průměrné hodnoty na grafech</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="822"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="927"/>
         <source>Include datasets</source>
         <translation>Zahrnout datové sady</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="908"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="941"/>
+        <source>Expand All</source>
+        <translation>Rozbalit Vše</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="950"/>
+        <source>Collapse All</source>
+        <translation>Sbalit Vše</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="962"/>
+        <source>Search datasets</source>
+        <translation>Hledat datové sady</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
         <source>Loading datasets...</source>
         <translation>Načítání datových sad...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="928"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <source>No datasets match your search.</source>
+        <translation>Žádné datové sady neodpovídají vašemu hledání.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
         <source>Select at least one dataset to include.</source>
         <translation>Vyberte alespoň jednu datovou sadu k zahrnutí.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export HTML</source>
         <translation>Exportovat HTML</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="879"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Titulní strana (logo, název dokumentu, podtitul testu)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="781"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="882"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Informace o testu (projekt, časové značky, klasifikace a poznámky)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="885"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Souhrn měření (min, max, průměr, směr. odchylka pro každý parametr)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="787"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="888"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Trendy parametrů (časový graf pro každý číselný parametr)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="677"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
         <source>Plot appearance</source>
         <translation>Vzhled grafu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="691"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Line width</source>
         <translation>Šířka čáry</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="824"/>
         <source>Line style</source>
         <translation>Styl čáry</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="864"/>
         <source>Include</source>
         <translation>Zahrnout</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="937"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export PDF</source>
         <translation>Exportovat PDF</translation>
     </message>

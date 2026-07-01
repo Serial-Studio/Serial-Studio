@@ -15458,258 +15458,278 @@ function parse(%1) { ... }
         <translation>보고서 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
         <source>Solid</source>
         <translation>실선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="70"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
         <source>Dashed</source>
         <translation>파선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Dotted</source>
         <translation>점선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="94"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
         <source>%1 — Session Report</source>
         <translation>%1 — 세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="560"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="125"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="661"/>
         <source>Session Report</source>
         <translation>세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="462"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Branding</source>
         <translation>브랜딩</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="468"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="569"/>
         <source>Page</source>
         <translation>페이지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="474"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="575"/>
         <source>Sections</source>
         <translation>섹션</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="480"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="581"/>
         <source>Datasets</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="629"/>
         <source>Identity</source>
         <translation>식별 정보</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="542"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="643"/>
         <source>Company</source>
         <translation>회사</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
         <source>e.g. Acme Test Systems</source>
         <translation>예: Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="654"/>
         <source>Document title</source>
         <translation>문서 제목</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="564"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="665"/>
         <source>Author</source>
         <translation>작성자</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="571"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="672"/>
         <source>Prepared by (optional)</source>
         <translation>작성자 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="580"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="681"/>
         <source>Logo</source>
         <translation>로고</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="694"/>
         <source>File</source>
         <translation>파일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="604"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="705"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG 또는 SVG (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="606"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="707"/>
         <source>Browse…</source>
         <translation>찾아보기…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="609"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="710"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="751"/>
         <source>Paper</source>
         <translation>용지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="662"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Page size</source>
         <translation>페이지 크기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="891"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>플롯에 최소값, 최대값 및 평균값 주석 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="822"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="927"/>
         <source>Include datasets</source>
         <translation>데이터셋 포함</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="908"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="941"/>
+        <source>Expand All</source>
+        <translation>모두 펼치기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="950"/>
+        <source>Collapse All</source>
+        <translation>모두 접기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="962"/>
+        <source>Search datasets</source>
+        <translation>데이터셋 검색</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
         <source>Loading datasets...</source>
         <translation>데이터셋 로드 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="928"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <source>No datasets match your search.</source>
+        <translation>검색 조건과 일치하는 데이터셋이 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
         <source>Select at least one dataset to include.</source>
         <translation>포함할 데이터셋을 하나 이상 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export HTML</source>
         <translation>HTML 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="879"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>표지 (로고, 문서 제목, 테스트 부제목)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="781"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="882"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>테스트 정보 (프로젝트, 타임스탬프, 분류 및 메모)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="885"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>측정 요약 (매개변수별 최소값, 최대값, 평균, 표준 편차)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="787"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="888"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>매개변수 추세 (숫자 매개변수별 시계열 차트)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="677"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
         <source>Plot appearance</source>
         <translation>플롯 모양</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="691"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Line width</source>
         <translation>선 두께</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="824"/>
         <source>Line style</source>
         <translation>선 스타일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="864"/>
         <source>Include</source>
         <translation>포함</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="937"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export PDF</source>
         <translation>PDF 내보내기</translation>
     </message>

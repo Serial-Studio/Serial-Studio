@@ -33,6 +33,8 @@ Widgets.SmartDialog {
   // Dialog state
   //
   property int sessionId: -1
+  property int visibleRowCount: 0
+  property string datasetSearch: ""
   property int selectedDatasetCount: 0
 
   //
@@ -112,6 +114,7 @@ Widgets.SmartDialog {
   function openFor(id) {
     root.sessionId = id
     _datasetModel.clear()
+    _datasetSearch.text = ""
     root.selectedDatasetCount = 0
     Cpp_Sessions_Manager.requestSessionDatasets(id)
 
@@ -185,8 +188,7 @@ Widgets.SmartDialog {
   }
 
   //
-  // Build the flattened group/dataset selection model from the worker payload.
-  // Datasets arrive in column order; groups keep first-seen order.
+  // Build the collapsible folder/group/dataset tree, emitted depth-first.
   //
   function buildDatasetModel(datasets) {
     _datasetModel.clear()
@@ -200,9 +202,6 @@ Widgets.SmartDialog {
       sourcesPerGroup[g][datasets[i].sourceTitle] = true
     }
 
-    //
-    // Folder path per group title from the current project (empty = top level)
-    //
     const folderByGroup = Cpp_JSON_ProjectEditor.groupFolderPaths()
 
     const order = []
@@ -216,7 +215,7 @@ Widgets.SmartDialog {
           group: d.group,
           sourceTitle: d.sourceTitle,
           showSource: distinct > 1 && d.sourceTitle.length > 0,
-          folderKey: (folderByGroup[d.group] !== undefined) ? folderByGroup[d.group] : "",
+          folderPath: (folderByGroup[d.group] !== undefined) ? folderByGroup[d.group] : "",
           items: []
         }
         order.push(key)
@@ -224,187 +223,276 @@ Widgets.SmartDialog {
       byKey[key].items.push(d)
     }
 
-    //
-    // Bucket groups under their folder, preserving first-seen folder order
-    //
-    const folderOrder = []
-    const groupsByFolder = {}
+    const rootNode = { fullPath: "", children: {}, childOrder: [], groups: [] }
     for (let k = 0; k < order.length; ++k) {
-      const fk = byKey[order[k]].folderKey
-      if (groupsByFolder[fk] === undefined) {
-        groupsByFolder[fk] = []
-        folderOrder.push(fk)
-      }
-      groupsByFolder[fk].push(order[k])
-    }
-
-    for (let f = 0; f < folderOrder.length; ++f) {
-      const fk = folderOrder[f]
-      if (fk.length > 0) {
-        _datasetModel.append({
-          "isFolder": true,
-          "isGroup": false,
-          "folderKey": fk,
-          "groupKey": "",
-          "folderLabel": fk,
-          "groupLabel": "",
-          "sourceLabel": "",
-          "checkState": Qt.Checked,
-          "uniqueId": -1,
-          "datasetLabel": "",
-          "checked": true
-        })
-      }
-
-      const gkeys = groupsByFolder[fk]
-      for (let k = 0; k < gkeys.length; ++k) {
-        const grp = byKey[gkeys[k]]
-        _datasetModel.append({
-          "isFolder": false,
-          "isGroup": true,
-          "folderKey": fk,
-          "groupKey": gkeys[k],
-          "folderLabel": "",
-          "groupLabel": grp.group,
-          "sourceLabel": grp.showSource ? grp.sourceTitle : "",
-          "checkState": Qt.Checked,
-          "uniqueId": -1,
-          "datasetLabel": "",
-          "checked": true
-        })
-        for (let j = 0; j < grp.items.length; ++j) {
-          const it = grp.items[j]
-          const lbl = (it.units && it.units.length > 0)
-                      ? it.title + " (" + it.units + ")"
-                      : it.title
-          _datasetModel.append({
-            "isFolder": false,
-            "isGroup": false,
-            "folderKey": fk,
-            "groupKey": gkeys[k],
-            "folderLabel": "",
-            "groupLabel": "",
-            "sourceLabel": "",
-            "checkState": Qt.Unchecked,
-            "uniqueId": it.uniqueId,
-            "datasetLabel": lbl,
-            "checked": true
-          })
+      const path = byKey[order[k]].folderPath
+      const segs = (path.length > 0) ? path.split("/") : []
+      let node = rootNode
+      for (let s = 0; s < segs.length; ++s) {
+        const seg = segs[s]
+        if (node.children[seg] === undefined) {
+          node.children[seg] = {
+            fullPath: (node.fullPath.length > 0) ? (node.fullPath + "/" + seg) : seg,
+            children: {},
+            childOrder: [],
+            groups: []
+          }
+          node.childOrder.push(seg)
         }
+        node = node.children[seg]
+      }
+      node.groups.push(order[k])
+    }
+
+    root.emitFolderNode(rootNode, 0, byKey)
+    root.recomputeVisibility()
+    root.refreshSelectedCount()
+  }
+
+  //
+  // Depth-first emit of one folder node: nested subfolders first (recursively),
+  // then the groups it holds, then each group's datasets.
+  //
+  function emitFolderNode(node, depth, byKey) {
+    const parentId = (node.fullPath.length > 0) ? ("F:" + node.fullPath) : ""
+    for (let c = 0; c < node.childOrder.length; ++c) {
+      const seg = node.childOrder[c]
+      const child = node.children[seg]
+      _datasetModel.append({
+        "kind": "folder",
+        "nodeId": "F:" + child.fullPath,
+        "parentId": parentId,
+        "depth": depth,
+        "expanded": false,
+        "hasChildren": child.childOrder.length > 0 || child.groups.length > 0,
+        "rowVisible": depth === 0,
+        "label": seg,
+        "sourceLabel": "",
+        "checkState": Qt.Checked,
+        "uniqueId": -1,
+        "checked": true
+      })
+      root.emitFolderNode(child, depth + 1, byKey)
+    }
+
+    for (let g = 0; g < node.groups.length; ++g) {
+      const grp = byKey[node.groups[g]]
+      _datasetModel.append({
+        "kind": "group",
+        "nodeId": "G:" + node.groups[g],
+        "parentId": parentId,
+        "depth": depth,
+        "expanded": false,
+        "hasChildren": grp.items.length > 0,
+        "rowVisible": depth === 0,
+        "label": grp.group,
+        "sourceLabel": grp.showSource ? grp.sourceTitle : "",
+        "checkState": Qt.Checked,
+        "uniqueId": -1,
+        "checked": true
+      })
+      for (let j = 0; j < grp.items.length; ++j) {
+        const it = grp.items[j]
+        const lbl = (it.units && it.units.length > 0)
+                    ? it.title + " (" + it.units + ")"
+                    : it.title
+        _datasetModel.append({
+          "kind": "dataset",
+          "nodeId": "D:" + it.uniqueId,
+          "parentId": "G:" + node.groups[g],
+          "depth": depth + 1,
+          "expanded": false,
+          "hasChildren": false,
+          "rowVisible": false,
+          "label": lbl,
+          "sourceLabel": "",
+          "checkState": Qt.Unchecked,
+          "uniqueId": it.uniqueId,
+          "checked": true
+        })
       }
     }
-
-    root.refreshSelectedCount()
   }
 
   //
-  // Check or uncheck an entire folder and everything it contains.
+  // Recompute row visibility, either from the expansion state or the search
+  // filter when a query is active.
   //
-  function setFolderChecked(folderKey, checked) {
+  function recomputeVisibility() {
+    if (root.datasetSearch.length === 0)
+      root.recomputeCollapsedVisibility()
+    else
+      root.recomputeSearchVisibility()
+  }
+
+  //
+  // Collapsed view: a row shows only when every ancestor is expanded.
+  //
+  function recomputeCollapsedVisibility() {
+    let shownCount = 0
+    const shown = {}
     for (let i = 0; i < _datasetModel.count; ++i) {
       const row = _datasetModel.get(i)
-      if (row.folderKey !== folderKey)
-        continue
+      const visible = (row.parentId.length === 0) ? true : (shown[row.parentId] === true)
+      if (row.rowVisible !== visible)
+        _datasetModel.setProperty(i, "rowVisible", visible)
 
-      if (row.isFolder || row.isGroup)
-        _datasetModel.setProperty(i, "checkState", checked ? Qt.Checked : Qt.Unchecked)
-      else
-        _datasetModel.setProperty(i, "checked", checked)
+      shown[row.nodeId] = visible && (row.expanded === true)
+      if (visible)
+        ++shownCount
     }
 
-    root.refreshSelectedCount()
+    root.visibleRowCount = shownCount
   }
 
   //
-  // Check or uncheck an entire group and all of its datasets, then refresh its folder.
+  // Search view: show every row that matches the query, plus its ancestors.
   //
-  function setGroupChecked(groupKey, checked) {
-    let folderKey = ""
+  function recomputeSearchVisibility() {
+    const q = root.datasetSearch
+    const visible = new Array(_datasetModel.count)
+    for (let i = 0; i < _datasetModel.count; ++i)
+      visible[i] = false
+
     for (let i = 0; i < _datasetModel.count; ++i) {
       const row = _datasetModel.get(i)
-      if (row.groupKey !== groupKey)
+      if (row.label.toLowerCase().indexOf(q) < 0)
         continue
 
-      folderKey = row.folderKey
-      if (row.isGroup)
-        _datasetModel.setProperty(i, "checkState", checked ? Qt.Checked : Qt.Unchecked)
-      else
-        _datasetModel.setProperty(i, "checked", checked)
+      visible[i] = true
+      root.markAncestorsVisible(row.parentId, visible)
     }
 
-    root.recomputeFolder(folderKey)
+    let shownCount = 0
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      if (_datasetModel.get(i).rowVisible !== visible[i])
+        _datasetModel.setProperty(i, "rowVisible", visible[i])
+
+      if (visible[i])
+        ++shownCount
+    }
+
+    root.visibleRowCount = shownCount
+  }
+
+  //
+  // Flag every ancestor of a matched row as visible.
+  //
+  function markAncestorsVisible(parentId, visible) {
+    let pid = parentId
+    for (let guard = 0; guard < _datasetModel.count && pid.length > 0; ++guard) {
+      const idx = root.indexOfNode(pid)
+      if (idx < 0)
+        break
+
+      visible[idx] = true
+      pid = _datasetModel.get(idx).parentId
+    }
+  }
+
+  //
+  // Toggle the expansion of a folder or group row.
+  //
+  function toggleExpanded(index) {
+    const row = _datasetModel.get(index)
+    if (!row.hasChildren)
+      return
+
+    _datasetModel.setProperty(index, "expanded", !row.expanded)
+    root.recomputeVisibility()
+  }
+
+  //
+  // Expand or collapse every folder/group node at once.
+  //
+  function setAllExpanded(expanded) {
+    for (let i = 0; i < _datasetModel.count; ++i) {
+      const row = _datasetModel.get(i)
+      if (row.hasChildren && row.expanded !== expanded)
+        _datasetModel.setProperty(i, "expanded", expanded)
+    }
+
+    root.recomputeVisibility()
+  }
+
+  //
+  // Linear lookup of a row by its stable node id.
+  //
+  function indexOfNode(nodeId) {
+    for (let i = 0; i < _datasetModel.count; ++i)
+      if (_datasetModel.get(i).nodeId === nodeId)
+        return i
+
+    return -1
+  }
+
+  //
+  // Check or uncheck a node and its whole subtree (contiguous rows of greater
+  // depth), then refresh every ancestor's tri-state.
+  //
+  function setSubtreeChecked(index, checked) {
+    const base = _datasetModel.get(index)
+    root.applyRowChecked(index, checked)
+    for (let i = index + 1; i < _datasetModel.count; ++i) {
+      if (_datasetModel.get(i).depth <= base.depth)
+        break
+
+      root.applyRowChecked(i, checked)
+    }
+
+    root.recomputeAncestors(base.parentId)
     root.refreshSelectedCount()
   }
 
   //
-  // Toggle one dataset, then refresh its group header tri-state.
+  // Write the checked state onto one row, respecting its kind.
   //
-  function toggleDataset(index, checked) {
-    _datasetModel.setProperty(index, "checked", checked)
-    root.recomputeGroup(_datasetModel.get(index).groupKey)
-    root.recomputeFolder(_datasetModel.get(index).folderKey)
-    root.refreshSelectedCount()
+  function applyRowChecked(index, checked) {
+    if (_datasetModel.get(index).kind === "dataset")
+      _datasetModel.setProperty(index, "checked", checked)
+    else
+      _datasetModel.setProperty(index, "checkState", checked ? Qt.Checked : Qt.Unchecked)
   }
 
   //
-  // Recompute a group header check state from its datasets.
+  // Walk up the parent chain, recomputing each container's tri-state.
   //
-  function recomputeGroup(groupKey) {
+  function recomputeAncestors(parentId) {
+    let pid = parentId
+    for (let guard = 0; guard < _datasetModel.count && pid.length > 0; ++guard) {
+      const idx = root.indexOfNode(pid)
+      if (idx < 0)
+        break
+
+      root.recomputeNode(idx)
+      pid = _datasetModel.get(idx).parentId
+    }
+  }
+
+  //
+  // Recompute a folder/group header tri-state from the leaf datasets it holds.
+  //
+  function recomputeNode(headerIndex) {
+    const base = _datasetModel.get(headerIndex)
+    if (base.kind === "dataset")
+      return
+
     let total = 0
     let checked = 0
-    let headerIndex = -1
-    for (let i = 0; i < _datasetModel.count; ++i) {
+    for (let i = headerIndex + 1; i < _datasetModel.count; ++i) {
       const row = _datasetModel.get(i)
-      if (row.groupKey !== groupKey)
-        continue
+      if (row.depth <= base.depth)
+        break
 
-      if (row.isGroup) {
-        headerIndex = i
+      if (row.kind !== "dataset")
         continue
-      }
 
       ++total
       if (row.checked)
         ++checked
     }
 
-    if (headerIndex < 0)
-      return
-
-    const state = (checked === 0) ? Qt.Unchecked
-                : ((checked === total) ? Qt.Checked : Qt.PartiallyChecked)
-    _datasetModel.setProperty(headerIndex, "checkState", state)
-  }
-
-  //
-  // Recompute a folder header check state from the datasets it contains.
-  //
-  function recomputeFolder(folderKey) {
-    if (folderKey.length === 0)
-      return
-
-    let total = 0
-    let checked = 0
-    let headerIndex = -1
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      if (row.folderKey !== folderKey)
-        continue
-
-      if (row.isFolder) {
-        headerIndex = i
-        continue
-      }
-
-      if (row.isGroup)
-        continue
-
-      ++total
-      if (row.checked)
-        ++checked
-    }
-
-    if (headerIndex < 0)
+    if (total === 0)
       return
 
     const state = (checked === 0) ? Qt.Unchecked
@@ -419,11 +507,24 @@ Widgets.SmartDialog {
     let n = 0
     for (let i = 0; i < _datasetModel.count; ++i) {
       const row = _datasetModel.get(i)
-      if (!row.isGroup && !row.isFolder && row.checked)
+      if (row.kind === "dataset" && row.checked)
         ++n
     }
 
     root.selectedDatasetCount = n
+  }
+
+  //
+  // Tree icon for a row kind (folder, group or dataset).
+  //
+  function iconForKind(kind) {
+    if (kind === "folder")
+      return "qrc:/icons/project-editor/treeview/folder.svg"
+
+    if (kind === "group")
+      return "qrc:/icons/project-editor/treeview/group.svg"
+
+    return "qrc:/icons/project-editor/treeview/dataset.svg"
   }
 
   //
@@ -433,7 +534,7 @@ Widgets.SmartDialog {
     const ids = []
     for (let i = 0; i < _datasetModel.count; ++i) {
       const row = _datasetModel.get(i)
-      if (!row.isGroup && !row.isFolder && row.checked)
+      if (row.kind === "dataset" && row.checked)
         ids.push(row.uniqueId)
     }
 
@@ -818,11 +919,52 @@ Widgets.SmartDialog {
           anchors.margins: 12
           anchors.fill: parent
 
-          Label {
-            text: qsTr("Include datasets")
-            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
-            color: Cpp_ThemeManager.colors["pane_section_label"]
-            Component.onCompleted: font.capitalization = Font.AllUppercase
+          RowLayout {
+            spacing: 8
+            Layout.fillWidth: true
+
+            Label {
+              text: qsTr("Include datasets")
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+              color: Cpp_ThemeManager.colors["pane_section_label"]
+              Component.onCompleted: font.capitalization = Font.AllUppercase
+            }
+
+            Item {
+              Layout.fillWidth: true
+            }
+
+            Button {
+              flat: true
+              padding: 4
+              text: qsTr("Expand All")
+              enabled: _datasetModel.count > 0
+              font: Cpp_Misc_CommonFonts.uiFont
+              onClicked: root.setAllExpanded(true)
+            }
+
+            Button {
+              flat: true
+              padding: 4
+              text: qsTr("Collapse All")
+              enabled: _datasetModel.count > 0
+              font: Cpp_Misc_CommonFonts.uiFont
+              onClicked: root.setAllExpanded(false)
+            }
+          }
+
+          Widgets.SearchField {
+            id: _datasetSearch
+
+            implicitHeight: 28
+            Layout.fillWidth: true
+            placeholderText: qsTr("Search datasets")
+            color: Cpp_ThemeManager.colors["window"]
+            onTextChanged: {
+              root.datasetSearch = text.trim().toLowerCase()
+              root.recomputeVisibility()
+            }
           }
 
           Rectangle {
@@ -835,7 +977,7 @@ Widgets.SmartDialog {
             id: _datasetList
 
             clip: true
-            spacing: 2
+            spacing: 0
             model: _datasetModel
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -846,8 +988,9 @@ Widgets.SmartDialog {
             }
 
             delegate: Item {
+              visible: model.rowVisible
               width: ListView.view.width
-              implicitHeight: _rowLayout.implicitHeight + 4
+              implicitHeight: model.rowVisible ? _rowLayout.implicitHeight + 4 : 0
 
               RowLayout {
                 id: _rowLayout
@@ -855,37 +998,71 @@ Widgets.SmartDialog {
                 spacing: 6
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.leftMargin: 4 + model.depth * 16
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: model.isFolder ? 0 : (model.isGroup ? 18 : 36)
+
+                Item {
+                  implicitWidth: 10
+                  implicitHeight: 10
+                  Layout.alignment: Qt.AlignVCenter
+
+                  Image {
+                    anchors.centerIn: parent
+                    sourceSize: Qt.size(8, 8)
+                    visible: model.hasChildren
+                    rotation: model.expanded ? 0 : 270
+                    source: "qrc:/icons/project-editor/treeview/indicator.svg"
+                  }
+
+                  MouseArea {
+                    anchors.fill: parent
+                    enabled: model.hasChildren
+                    onClicked: root.toggleExpanded(index)
+                  }
+                }
 
                 CheckBox {
                   Layout.alignment: Qt.AlignVCenter
-                  tristate: model.isFolder || model.isGroup
-                  checkState: (model.isFolder || model.isGroup)
+                  tristate: model.kind !== "dataset"
+                  checkState: (model.kind !== "dataset")
                               ? model.checkState
                               : (model.checked ? Qt.Checked : Qt.Unchecked)
                   nextCheckState: function() { return checkState }
                   onClicked: {
-                    if (model.isFolder)
-                      root.setFolderChecked(model.folderKey, model.checkState !== Qt.Checked)
-                    else if (model.isGroup)
-                      root.setGroupChecked(model.groupKey, model.checkState !== Qt.Checked)
+                    if (model.kind === "dataset")
+                      root.setSubtreeChecked(index, !model.checked)
                     else
-                      root.toggleDataset(index, !model.checked)
+                      root.setSubtreeChecked(index, model.checkState !== Qt.Checked)
+                  }
+                }
+
+                Item {
+                  implicitWidth: 14
+                  implicitHeight: 14
+                  Layout.alignment: Qt.AlignVCenter
+
+                  Image {
+                    anchors.centerIn: parent
+                    sourceSize: Qt.size(14, 14)
+                    source: root.iconForKind(model.kind)
                   }
                 }
 
                 Label {
                   Layout.fillWidth: true
                   elide: Text.ElideRight
+                  text: model.label
                   Layout.alignment: Qt.AlignVCenter
                   color: Cpp_ThemeManager.colors["text"]
-                  text: model.isFolder
-                        ? model.folderLabel
-                        : (model.isGroup ? model.groupLabel : model.datasetLabel)
-                  font: (model.isFolder || model.isGroup)
+                  font: (model.kind !== "dataset")
                         ? Cpp_Misc_CommonFonts.customUiFont(1.0, true)
                         : Cpp_Misc_CommonFonts.uiFont
+
+                  MouseArea {
+                    anchors.fill: parent
+                    enabled: model.hasChildren
+                    onClicked: root.toggleExpanded(index)
+                  }
                 }
 
                 Label {
@@ -894,7 +1071,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   font: Cpp_Misc_CommonFonts.uiFont
                   color: Cpp_ThemeManager.colors["text"]
-                  visible: model.isGroup && model.sourceLabel.length > 0
+                  visible: model.kind === "group" && model.sourceLabel.length > 0
                 }
               }
             }
@@ -902,10 +1079,13 @@ Widgets.SmartDialog {
             Label {
               opacity: 0.5
               anchors.centerIn: parent
-              visible: _datasetModel.count === 0
               color: Cpp_ThemeManager.colors["text"]
               font: Cpp_Misc_CommonFonts.uiFont
-              text: qsTr("Loading datasets...")
+              visible: _datasetModel.count === 0
+                       || (root.datasetSearch.length > 0 && root.visibleRowCount === 0)
+              text: _datasetModel.count === 0
+                    ? qsTr("Loading datasets...")
+                    : qsTr("No datasets match your search.")
             }
           }
         }

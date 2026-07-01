@@ -14932,258 +14932,278 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Tạo Báo Cáo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
         <source>Solid</source>
         <translation>Liền Nét</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="70"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
         <source>Dashed</source>
         <translation>Gạch Đứt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Dotted</source>
         <translation>Chấm</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="94"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Báo Cáo Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="560"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="125"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="661"/>
         <source>Session Report</source>
         <translation>Báo Cáo Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="462"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Branding</source>
         <translation>Thương Hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="468"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="569"/>
         <source>Page</source>
         <translation>Trang</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="474"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="575"/>
         <source>Sections</source>
         <translation>Các Phần</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="480"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="581"/>
         <source>Datasets</source>
         <translation>Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="629"/>
         <source>Identity</source>
         <translation>Danh Tính</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="542"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="643"/>
         <source>Company</source>
         <translation>Công Ty</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
         <source>e.g. Acme Test Systems</source>
         <translation>ví dụ: Hệ Thống Kiểm Tra Acme</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="654"/>
         <source>Document title</source>
         <translation>Tiêu đề tài liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="564"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="665"/>
         <source>Author</source>
         <translation>Tác Giả</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="571"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="672"/>
         <source>Prepared by (optional)</source>
         <translation>Người chuẩn bị (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="580"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="681"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="694"/>
         <source>File</source>
         <translation>Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="604"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="705"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG hoặc SVG (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="606"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="707"/>
         <source>Browse…</source>
         <translation>Duyệt…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="609"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="710"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="751"/>
         <source>Paper</source>
         <translation>Giấy</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="662"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Page size</source>
         <translation>Kích thước trang</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="677"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
         <source>Plot appearance</source>
         <translation>Giao diện biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="691"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Line width</source>
         <translation>Độ rộng đường</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="824"/>
         <source>Line style</source>
         <translation>Kiểu đường</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="864"/>
         <source>Include</source>
         <translation>Bao Gồm</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="879"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Trang bìa (logo, tiêu đề tài liệu, phụ đề kiểm tra)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="781"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="882"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Thông tin kiểm tra (dự án, dấu thời gian, phân loại và ghi chú)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="885"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Tóm tắt đo lường (min, max, trung bình, độ lệch chuẩn cho mỗi tham số)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="787"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="888"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Xu hướng tham số (biểu đồ chuỗi thời gian cho mỗi tham số số)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="891"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Chú thích giá trị min, max và trung bình trên biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="822"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="927"/>
         <source>Include datasets</source>
         <translation>Bao gồm tập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="908"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="941"/>
+        <source>Expand All</source>
+        <translation>Mở Rộng Tất Cả</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="950"/>
+        <source>Collapse All</source>
+        <translation>Thu Gọn Tất Cả</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="962"/>
+        <source>Search datasets</source>
+        <translation>Tìm kiếm tập dữ liệu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
         <source>Loading datasets...</source>
         <translation>Đang tải tập dữ liệu...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="928"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <source>No datasets match your search.</source>
+        <translation>Không có tập dữ liệu nào khớp với tìm kiếm của bạn.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
         <source>Select at least one dataset to include.</source>
         <translation>Chọn ít nhất một tập dữ liệu để bao gồm.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="937"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export PDF</source>
         <translation>Xuất PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export HTML</source>
         <translation>Xuất HTML</translation>
     </message>

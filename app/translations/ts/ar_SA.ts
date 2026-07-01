@@ -14932,258 +14932,278 @@ function parse(%1) { ... }
         <translation>إنشاء تقرير</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
         <source>Solid</source>
         <translation>صلب</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="70"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
         <source>Dashed</source>
         <translation>متقطع</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Dotted</source>
         <translation>منقط</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="94"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 مم)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 بوصة)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 بوصة)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 بوصة)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 بوصة)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 بوصة)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
         <source>%1 — Session Report</source>
         <translation>%1 — تقرير الجلسة</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="560"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="125"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="661"/>
         <source>Session Report</source>
         <translation>تقرير الجلسة</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="462"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Branding</source>
         <translation>العلامة التجارية</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="468"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="569"/>
         <source>Page</source>
         <translation>الصفحة</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="474"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="575"/>
         <source>Sections</source>
         <translation>الأقسام</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="480"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="581"/>
         <source>Datasets</source>
         <translation>مجموعات البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="629"/>
         <source>Identity</source>
         <translation>الهوية</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="542"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="643"/>
         <source>Company</source>
         <translation>الشركة</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
         <source>e.g. Acme Test Systems</source>
         <translation>مثال: أنظمة اختبار أكمي</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="654"/>
         <source>Document title</source>
         <translation>عنوان المستند</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="564"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="665"/>
         <source>Author</source>
         <translation>المؤلف</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="571"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="672"/>
         <source>Prepared by (optional)</source>
         <translation>أعده (اختياري)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="580"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="681"/>
         <source>Logo</source>
         <translation>الشعار</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="694"/>
         <source>File</source>
         <translation>ملف</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="604"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="705"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG أو JPG أو SVG (اختياري)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="606"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="707"/>
         <source>Browse…</source>
         <translation>استعراض…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="609"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="710"/>
         <source>Clear</source>
         <translation>مسح</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="751"/>
         <source>Paper</source>
         <translation>ورق</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="662"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Page size</source>
         <translation>حجم الصفحة</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="677"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
         <source>Plot appearance</source>
         <translation>مظهر الرسم البياني</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="691"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Line width</source>
         <translation>عرض الخط</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="824"/>
         <source>Line style</source>
         <translation>نمط الخط</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="864"/>
         <source>Include</source>
         <translation>تضمين</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="879"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>صفحة الغلاف (الشعار، عنوان المستند، العنوان الفرعي للاختبار)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="781"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="882"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>معلومات الاختبار (المشروع، الطوابع الزمنية، التصنيف والملاحظات)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="885"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>ملخص القياسات (الحد الأدنى، الحد الأقصى، المتوسط، الانحراف المعياري لكل معامل)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="787"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="888"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>اتجاهات المعاملات (مخطط السلاسل الزمنية لكل معامل رقمي)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="891"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>إضافة تعليقات توضيحية لقيم الحد الأدنى والأقصى والمتوسط على المخططات</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="822"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="927"/>
         <source>Include datasets</source>
         <translation>تضمين مجموعات البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="908"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="941"/>
+        <source>Expand All</source>
+        <translation>توسيع الكل</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="950"/>
+        <source>Collapse All</source>
+        <translation>طي الكل</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="962"/>
+        <source>Search datasets</source>
+        <translation>بحث في مجموعات البيانات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
         <source>Loading datasets...</source>
         <translation>جارٍ تحميل مجموعات البيانات...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="928"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <source>No datasets match your search.</source>
+        <translation>لا توجد مجموعات بيانات تطابق البحث.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
         <source>Select at least one dataset to include.</source>
         <translation>حدد مجموعة بيانات واحدة على الأقل لتضمينها.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="937"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export PDF</source>
         <translation>تصدير PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="945"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
         <source>Export HTML</source>
         <translation>تصدير HTML</translation>
     </message>
