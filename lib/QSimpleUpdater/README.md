@@ -4,11 +4,28 @@
     <img width="112px" height="112px" src="etc/icon.png" align="right" />
 </a>
 
-[![Build Status](https://github.com/alex-spataru/QSimpleUpdater/workflows/Build/badge.svg)](#)
+[![Build Status](https://github.com/alex-spataru/QSimpleUpdater/actions/workflows/main.yml/badge.svg)](https://github.com/alex-spataru/QSimpleUpdater/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 
-QSimpleUpdater is an implementation of an auto-updating system to be used with Qt projects. It allows you to easily check for updates, download them and install them. Additionally, the QSimpleUpdater allows you to check for updates for different "modules" of your application. Check the [FAQ](#faq) for more information.
+QSimpleUpdater is an auto-updating library for Qt applications. It checks for updates by downloading a JSON definitions file, compares versions, and can download and launch the installer for you, or hand everything over to your own code through signals. It also supports checking updates for different "modules" of your application independently. Check the [FAQ](#faq) for more information.
 
 [![Downloading](etc/screenshots/downloading.png)](etc/screenshots/)
+
+**Requirements:** Qt 5.15+ or Qt 6 (Core, Gui, Network, Widgets), C++17.
+
+## Quick Start
+
+```cpp
+#include <QSimpleUpdater.h>
+
+const QString url = "https://example.com/updates.json";
+
+auto* updater = QSimpleUpdater::getInstance();
+updater->setModuleVersion(url, "1.2.0");  // Optional: defaults to qApp version
+updater->checkForUpdates(url);
+```
+
+If the remote version is newer, the user is prompted to download and install the update. Everything else (notifications, downloader, install behavior) is configurable per URL; see the [FAQ](#faq).
 
 ## Integrating QSimpleUpdater with your projects
 
@@ -25,11 +42,29 @@ add_subdirectory(3rd-party/QSimpleUpdater)
 target_link_libraries(YourApp PRIVATE QSimpleUpdater)
 ```
 
+Available CMake options:
+
+| Option                           | Default | Description                                      |
+|----------------------------------|---------|--------------------------------------------------|
+| `QSIMPLE_UPDATER_BUILD_TUTORIAL` | `OFF`   | Build the example/tutorial application.          |
+| `QSIMPLE_UPDATER_BUILD_TESTS`    | `ON`    | Build the unit tests.                            |
+| `QSIMPLE_UPDATER_BUILD_SHARED`   | `OFF`   | Build as a shared library instead of static.     |
+| `QSIMPLE_UPDATER_INSTALL`        | (auto)  | Generate install rules. `ON` when built top-level, `OFF` when embedded via `add_subdirectory()`. |
+| `QSU_QT_VERSION_MAJOR`           | (auto)  | Set to `5` or `6` to skip Qt auto-detection.     |
+
 ### Using qmake
 
 1. Copy the QSimpleUpdater folder in your "3rd-party" folder.
 2. Include the QSimpleUpdater project include (*.pri*) file using the `include()` function.
 3. That's all! Check the [tutorial project](/tutorial) as a reference for your project.
+
+## Building & Running Tests
+
+```bash
+cmake -B build -DQSIMPLE_UPDATER_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
 
 ## Update Definitions File
 
@@ -65,13 +100,13 @@ QSimpleUpdater downloads a JSON file that describes the latest version and downl
 
 ### Fields
 
-| Field              | Type    | Description                                                                |
-|--------------------|---------|----------------------------------------------------------------------------|
-| `open-url`         | string  | If set, opens this URL in a browser instead of downloading.                |
-| `latest-version`   | string  | The latest version string (e.g. `"2.0.0"`, `"v1.3.0-beta2"`).             |
-| `download-url`     | string  | Direct download URL for the update file.                                   |
-| `changelog`        | string  | HTML-formatted changelog text shown to the user.                           |
-| `mandatory-update` | boolean | If `true`, the user cannot skip the update; the app quits on cancellation. |
+| Field              | Type    | Description                                                                 |
+|--------------------|---------|-----------------------------------------------------------------------------|
+| `open-url`         | string  | If set, opens this URL in a browser instead of downloading.                 |
+| `latest-version`   | string  | The latest version string (e.g. `"2.0.0"`, `"v1.3.0-beta2"`).               |
+| `download-url`     | string  | Direct download URL for the update file.                                    |
+| `changelog`        | string  | HTML-formatted changelog text shown to the user.                            |
+| `mandatory-update` | boolean | If `true`, the user cannot skip the update; the app quits on cancellation.  |
 
 ### Platform keys
 
@@ -89,12 +124,12 @@ You can also set custom platform keys with `setPlatformKey()`.
 
 QSimpleUpdater supports semantic versioning with optional pre-release suffixes:
 
-- `1.2.3` vs `1.2.4` — patch upgrade detected
-- `v1.0.0-alpha1` vs `v1.0.0` — stable is newer than pre-release
-- `v1.0.0-alpha1` vs `v1.0.0-beta1` — beta is newer than alpha
-- `v1.0.0-rc1` vs `v1.0.0-rc2` — rc2 is newer than rc1
+- `1.2.3` vs `1.2.4`: patch upgrade detected
+- `v1.0.0-alpha1` vs `v1.0.0`: stable is newer than pre-release
+- `v1.0.0-alpha1` vs `v1.0.0-beta1`: beta is newer than alpha
+- `v1.0.0-rc9` vs `v1.0.0-rc10`: suffix numbers compare numerically
 
-The `v` prefix is optional and ignored during comparison.
+The `v` prefix is optional and ignored during comparison. You can also use the comparison logic directly via `QSimpleUpdater::compareVersions(remote, local)`.
 
 ## FAQ
 
@@ -120,7 +155,7 @@ QSimpleUpdater::getInstance()->checkForUpdates(url);
 
 ### 3. Is the application able to download the updates directly?
 
-Yes. If there is an update available, the library will prompt the user if he/she wants to download the update. You can enable or disable the integrated downloader with the following code:
+Yes. If there is an update available, the library will prompt the user about downloading the update. You can enable or disable the integrated downloader with the following code:
 
 ```cpp
 QString url = "https://example.com/updates.json";
@@ -167,6 +202,16 @@ connect(QSimpleUpdater::getInstance(), &QSimpleUpdater::downloadFinished,
         [](const QString &url, const QString &filepath) {
     // Handle the downloaded file at 'filepath'
 });
+```
+
+### 7. Does the server need HTTP basic authentication?
+
+That's supported too. Set the credentials before checking for updates:
+
+```cpp
+QString url = "https://example.com/updates.json";
+QSimpleUpdater::getInstance()->setDownloadUserName(url, "user");
+QSimpleUpdater::getInstance()->setDownloadPassword(url, "secret");
 ```
 
 ## License

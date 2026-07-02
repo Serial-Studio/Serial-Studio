@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef _QSIMPLEUPDATER_MAIN_H
-#define _QSIMPLEUPDATER_MAIN_H
+#ifndef QSIMPLEUPDATER_MAIN_H
+#define QSIMPLEUPDATER_MAIN_H
 
 #include <QList>
 #include <QObject>
@@ -82,6 +82,7 @@ public:
   QString getLatestVersion(const QString& url) const;
   QString getModuleVersion(const QString& url) const;
   QString getUserAgentString(const QString& url) const;
+  bool getMandatoryUpdate(const QString& url) const;
 
 public slots:
   void checkForUpdates(const QString& url);

@@ -116,6 +116,12 @@ private slots:
     needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-alpha1", "v1.0.0-alpha19");
     QVERIFY(!needsUpgrade);
 
+    // Suffix numbers must be compared numerically, not lexicographically
+    needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-alpha10", "v1.0.0-alpha2");
+    QVERIFY(needsUpgrade);
+    needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-alpha2", "v1.0.0-alpha10");
+    QVERIFY(!needsUpgrade);
+
     needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0", "v1.0.0-alpha1");
     QVERIFY(needsUpgrade);
     needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0", "v1.0.0-alpha10");
@@ -172,6 +178,10 @@ private slots:
     QVERIFY(!needsUpgrade);
     needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-rc2", "v1.0.0-rc1");
     QVERIFY(needsUpgrade);
+    needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-rc10", "v1.0.0-rc9");
+    QVERIFY(needsUpgrade);
+    needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-rc9", "v1.0.0-rc10");
+    QVERIFY(!needsUpgrade);
 
     needsUpgrade = QSimpleUpdater::compareVersions("v1.0.0-rc1", "v1.0.0-alpha1");
     QVERIFY(needsUpgrade);

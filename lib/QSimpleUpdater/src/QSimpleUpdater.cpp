@@ -66,9 +66,12 @@ QSimpleUpdater* QSimpleUpdater::getInstance()
  */
 bool QSimpleUpdater::compareVersions(const QString& remote, const QString& local)
 {
+  // Suffix letters and digits are captured separately so that e.g. alpha10 is
+  // compared numerically against alpha2 (a \w+ suffix would swallow the digits
+  // and force a lexicographic comparison)
   // clang-format off
   static QRegularExpression re(
-    "v?(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:-(\\w+)(?:(\\d+))?)?"
+    "v?(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:-([A-Za-z]+)(\\d+)?)?"
   );
   // clang-format on
 
@@ -292,6 +295,20 @@ QString QSimpleUpdater::getModuleVersion(const QString& url) const
 QString QSimpleUpdater::getUserAgentString(const QString& url) const
 {
   return getUpdater(url)->userAgentString();
+}
+
+/**
+ * @brief Returns @c true if the update is mandatory for the Updater registered
+ *        with the given @a url.
+ *
+ * When mandatory, the application will quit if the user declines the update.
+ *
+ * @note If no Updater is registered with the given @a url, one will be created
+ *       automatically.
+ */
+bool QSimpleUpdater::getMandatoryUpdate(const QString& url) const
+{
+  return getUpdater(url)->mandatoryUpdate();
 }
 
 /**

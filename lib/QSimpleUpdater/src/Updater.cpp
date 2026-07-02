@@ -485,7 +485,7 @@ void Updater::setUpdateAvailable(const bool available)
       text += tr("<strong>Change log:</strong><br/>%1").arg(m_changelog);
 
     QString title = "<h3>"
-                  + tr("Version %1 of %2 has been released!").arg(latestVersion()).arg(moduleName())
+                  + tr("Version %1 of %2 has been released!").arg(latestVersion(), moduleName())
                   + "</h3>";
 
     box.setText(title);

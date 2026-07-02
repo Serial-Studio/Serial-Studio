@@ -42,12 +42,19 @@ target_link_libraries(YourApp PRIVATE QSimpleUpdater)
 include(path/to/QSimpleUpdater.pri)
 ```
 
-Key CMake options: `QSIMPLE_UPDATER_BUILD_TUTORIAL`, `QSIMPLE_UPDATER_BUILD_TESTS`, `QSU_QT_VERSION_MAJOR`.
+Key CMake options: `QSIMPLE_UPDATER_BUILD_TUTORIAL`, `QSIMPLE_UPDATER_BUILD_TESTS`,
+`QSIMPLE_UPDATER_BUILD_SHARED`, `QSU_QT_VERSION_MAJOR`, `QSIMPLE_UPDATER_INSTALL`
+(install rules; defaults `ON` top-level, `OFF` when embedded via `add_subdirectory()`).
+
+### CI
+
+GitHub Actions (`.github/workflows/main.yml`) builds on Linux, macOS, and Windows and runs
+`ctest` with `QT_QPA_PLATFORM=offscreen` on every push and pull request.
 
 ## Project Overview
 
 QSimpleUpdater: cross-platform auto-update library for Qt applications.
-MIT license. Supports Qt 5 and Qt 6. C++17.
+MIT license. Supports Qt 5.15+ and Qt 6. C++17.
 
 Features: JSON-based update definitions, semantic version comparison (with pre-release suffixes), integrated download UI, mandatory update enforcement, HTTP basic auth, custom appcast parsing.
 
@@ -128,8 +135,15 @@ Platform keys: `windows`, `osx`, `linux`, `ios`, `android` (or custom via `setPl
 ### Key Invariants
 
 - `m_reply` is always `nullptr` when no download is active. Null-checked before every access.
+  `Downloader::finished()` calls `deleteLater()` and resets it on both success and error paths;
+  `startDownload()` cleans up any previous `m_reply` before starting a new one.
 - `reply->deleteLater()` is called in `Updater::onReply()` to prevent memory leaks.
-- `Downloader::startDownload()` cleans up any previous `m_reply` before starting a new one.
+- The `Downloader` constructor calls `Q_INIT_RESOURCE(qsimpleupdater)` so `:/icons/update.png`
+  resolves when the library is built statically.
+- Filenames from `Content-Disposition` headers are reduced to their base name (via `QFileInfo`)
+  so a malicious server cannot write outside the download directory.
+- `compareVersions()` captures pre-release suffix letters and digits separately, so `alpha10`
+  compares numerically against `alpha2` (never lexicographically).
 - All `connect()` calls use type-safe functor syntax (no `SIGNAL()`/`SLOT()` macros).
 
 ## Code Style
@@ -137,7 +151,8 @@ Platform keys: `windows`, `osx`, `linux`, `ios`, `android` (or custom via `setPl
 ### Formatting
 
 100-column limit, 2-space indent. Pointer/reference bind to type (`int* ptr`, `const Foo& ref`).
-Run `clang-format` (config in `.clang-format`).
+Run `clang-format` (config in `.clang-format`). LF line endings everywhere (enforced via
+`.gitattributes`). Header guards use `QSIMPLEUPDATER_*` names (no leading underscores).
 
 ### Comments & Doxygen
 
