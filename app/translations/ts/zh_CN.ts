@@ -6647,152 +6647,152 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="142"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>Downloading updates</source>
         <translation>正在下载更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="470"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="483"/>
         <source>Time remaining</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Cannot find downloaded update!</source>
         <translation>找不到已下载的更新!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="260"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
         <source>Download complete!</source>
         <translation>下载完成!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
         <source>Click "OK" to begin installing the update</source>
         <translation>单击"确定"开始安装更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="270"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
         <source>In order to install the update, you may need to quit the application.</source>
         <translation>要安装更新，可能需要退出应用程序。</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="261"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="269"/>
         <source>The installer opens separately</source>
         <translation>安装程序将单独打开</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="274"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="282"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application.</source>
         <translation>要安装更新，可能需要退出应用程序。这是强制更新，现在退出将关闭应用程序。</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="290"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
         <source>Click the "Open" button to apply the update</source>
         <translation>单击"打开"按钮应用更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="303"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
         <source>Updater</source>
         <translation>更新程序</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="307"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="315"/>
         <source>Are you sure you want to cancel the download?</source>
         <translation>确定要取消下载吗？</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="309"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="317"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
         <translation>确定要取消下载吗？这是强制更新，现在退出将关闭应用程序</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="364"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="371"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="379"/>
         <source>%1 bytes</source>
         <translation>%1 字节</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="366"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="373"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="374"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="381"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="368"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="375"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="376"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="383"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>of</source>
         <translation>/</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="430"/>
         <source>Downloading Updates</source>
         <translation>正在下载更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Time Remaining</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="446"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="459"/>
         <source>about %1 hours</source>
         <translation>大约 %1 小时</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="448"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="461"/>
         <source>about one hour</source>
         <translation>大约一小时</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="456"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="469"/>
         <source>%1 minutes</source>
         <translation>%1 分钟</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="458"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="471"/>
         <source>1 minute</source>
         <translation>1 分钟</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="465"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="478"/>
         <source>%1 seconds</source>
         <translation>%1 秒</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="467"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="480"/>
         <source>1 second</source>
         <translation>1 秒</translation>
     </message>
@@ -10698,129 +10698,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="512"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="518"/>
         <source>There was an issue validating your license.</source>
         <translation>验证许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="530"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="536"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="717"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>您提供的许可证密钥不属于 Serial Studio。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="537"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>请仔细检查您是否从 Serial Studio 官方商店购买了许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="548"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="726"/>
         <source>This license key was activated on a different device.</source>
         <translation>此许可证密钥已在其他设备上激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="543"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="721"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="727"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>请先在该设备上停用或联系支持寻求帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>This license is not currently active.</source>
         <translation>此许可证当前未激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="732"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="738"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>可能已过期或已停用(状态：%1)。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="571"/>
         <source>Something went wrong on the server.</source>
         <translation>服务器发生错误。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="742"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="572"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="748"/>
         <source>No activation ID was returned.</source>
         <translation>未返回激活 ID。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
         <source>Could not validate your license at this time.</source>
         <translation>目前无法验证许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="840"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="583"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="757"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
         <source>Try again later.</source>
         <translation>请稍后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="712"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="718"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="837"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>请仔细检查您是否从 Serial Studio 官方商店购买了许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="747"/>
         <source>Something went wrong on the server…</source>
         <translation>服务器出现问题…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="601"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
         <source>Your license has been successfully activated.</source>
         <translation>许可证已成功激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="649"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="655"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>感谢您支持 Serial Studio！
 现在可以使用所有高级功能。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>There was an issue activating your license.</source>
         <translation>激活许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="756"/>
         <source>Could not activate your license at this time.</source>
         <translation>目前无法激活许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="828"/>
         <source>There was an issue deactivating your license.</source>
         <translation>停用许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="839"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>当前无法停用您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
         <source>Your license has been deactivated.</source>
         <translation>您的许可证已停用。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro 功能访问权限已移除。
@@ -10830,19 +10830,43 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="183"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="186"/>
+        <source>Remove the offline license from this device?</source>
+        <translation>从此设备移除离线许可证？</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="187"/>
+        <source>This deletes the local activation certificate, but it does not free up your license seat automatically.
+
+To reuse this seat on another device, email alex@serial-studio.com with your device ID or your .ssmachine file so the seat can be released manually.</source>
+        <translation>这将删除本地激活证书，但不会自动释放您的许可证席位。
+
+要在其他设备上重新使用此席位，请将您的设备 ID 或 .ssmachine 文件发送至 alex@serial-studio.com，以便手动释放席位。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="192"/>
+        <source>Offline Activation</source>
+        <translation>离线激活</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="213"/>
         <source>Could not open the certificate file.</source>
         <translation>无法打开证书文件。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="220"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>证书文件过大,无效。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="217"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="247"/>
         <source>Could not write the device file.</source>
         <translation>无法写入设备文件。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="285"/>
+        <source>The stored certificate could not be decrypted on this machine.</source>
+        <translation>存储的证书无法在此计算机上解密。</translation>
     </message>
 </context>
 <context>
@@ -12248,8 +12272,8 @@ Would you like to open the download page?</source>
         <translation>无法写入 Info.plist：%1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>此平台不支持 Windows 快捷方式写入器。</translation>
     </message>
@@ -12280,8 +12304,8 @@ Would you like to open the download page?</source>
         <translation>保存 .lnk 文件失败（HRESULT 0x%1）。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>此平台不支持 macOS 快捷方式写入器。</translation>
     </message>
@@ -13396,32 +13420,32 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>License certificate is valid.</source>
         <translation>许可证证书有效。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="184"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>证书签名无效或已损坏。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="187"/>
         <source>This certificate was issued for a different device.</source>
         <translation>此证书是为其他设备颁发的。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate has expired.</source>
         <translation>此证书已过期。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>此证书未授予有效的许可证层级。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="196"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>证书文件格式错误或无法读取。</translation>
     </message>
@@ -14959,8 +14983,8 @@ Click Refresh to update the list.</source>
         <translation>常规 I/O 错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>帧解析器已禁用</translation>
     </message>
@@ -15002,8 +15026,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>缺少解析函数</translation>
     </message>
@@ -15019,8 +15043,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>解析函数运行时错误</translation>
     </message>
@@ -15413,7 +15437,7 @@ function parse(%1) { ... }
         <translation type="vanished">原生解析器错误</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="51"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="52"/>
         <source>Offline Activation</source>
         <translation>离线激活</translation>
     </message>

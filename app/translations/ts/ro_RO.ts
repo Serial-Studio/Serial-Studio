@@ -6647,152 +6647,152 @@ Format valid: 01 A2 FF 3C</translation>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="142"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
         <source>Stop</source>
         <translation>Oprește</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>Downloading updates</source>
         <translation>Se descarcă actualizări</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="470"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="483"/>
         <source>Time remaining</source>
         <translation>Timp rămas</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
         <source>unknown</source>
         <translation>necunoscut</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Error</source>
         <translation>Eroare</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Cannot find downloaded update!</source>
         <translation>Nu se poate găsi actualizarea descărcată!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="260"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
         <source>Download complete!</source>
         <translation>Descărcare finalizată!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
         <source>Click "OK" to begin installing the update</source>
         <translation>Faceți clic pe „OK" pentru a începe instalarea actualizării</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="270"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
         <source>In order to install the update, you may need to quit the application.</source>
         <translation>Pentru a instala actualizarea, poate fi necesar să închideți aplicația.</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="261"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="269"/>
         <source>The installer opens separately</source>
         <translation>Programul de instalare se deschide separat</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="274"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="282"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application.</source>
         <translation>Pentru a instala actualizarea, poate fi necesar să închideți aplicația. Aceasta este o actualizare obligatorie, ieșirea acum va închide aplicația.</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="290"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
         <source>Click the "Open" button to apply the update</source>
         <translation>Faceți clic pe butonul „Deschide" pentru a aplica actualizarea</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="303"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
         <source>Updater</source>
         <translation>Actualizator</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="307"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="315"/>
         <source>Are you sure you want to cancel the download?</source>
         <translation>Sigur doriți să anulați descărcarea?</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="309"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="317"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
         <translation>Sigur doriți să anulați descărcarea? Aceasta este o actualizare obligatorie, ieșirea acum va închide aplicația</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="364"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="371"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="379"/>
         <source>%1 bytes</source>
         <translation>%1 octeți</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="366"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="373"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="374"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="381"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="368"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="375"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="376"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="383"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>of</source>
         <translation>din</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="430"/>
         <source>Downloading Updates</source>
         <translation>Descărcare Actualizări</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Time Remaining</source>
         <translation>Timp Rămas</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="446"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="459"/>
         <source>about %1 hours</source>
         <translation>aproximativ %1 ore</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="448"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="461"/>
         <source>about one hour</source>
         <translation>aproximativ o oră</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="456"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="469"/>
         <source>%1 minutes</source>
         <translation>%1 minute</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="458"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="471"/>
         <source>1 minute</source>
         <translation>1 minut</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="465"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="478"/>
         <source>%1 seconds</source>
         <translation>%1 secunde</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="467"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="480"/>
         <source>1 second</source>
         <translation>1 secundă</translation>
     </message>
@@ -10698,129 +10698,129 @@ Planurile includ opțiuni Lunare, Anuale și pe Viață.</translation>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="512"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="518"/>
         <source>There was an issue validating your license.</source>
         <translation>A apărut o problemă la validarea licenței.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="530"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="536"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="717"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Cheia de licență furnizată nu aparține Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="537"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Verifică că ai achiziționat licența din magazinul oficial Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="548"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="726"/>
         <source>This license key was activated on a different device.</source>
         <translation>Această cheie de licență a fost activată pe un alt dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="543"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="721"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="727"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Dezactivează-o mai întâi acolo sau contactează suportul pentru asistență.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>This license is not currently active.</source>
         <translation>Această licență nu este activă în prezent.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="732"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="738"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Este posibil să fi expirat sau să fi fost dezactivată (stare: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="571"/>
         <source>Something went wrong on the server.</source>
         <translation>Ceva nu a funcționat pe server.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="742"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="572"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="748"/>
         <source>No activation ID was returned.</source>
         <translation>Nu s-a returnat niciun ID de activare.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
         <source>Could not validate your license at this time.</source>
         <translation>Nu s-a putut valida licența în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="840"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="583"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="757"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
         <source>Try again later.</source>
         <translation>Încearcă din nou mai târziu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="712"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="718"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="837"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Verifică din nou că ai achiziționat licența din magazinul oficial Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="747"/>
         <source>Something went wrong on the server…</source>
         <translation>Ceva nu a funcționat pe server…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="601"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
         <source>Your license has been successfully activated.</source>
         <translation>Licența ta a fost activată cu succes.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="649"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="655"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Mulțumim că susții Serial Studio!
 Acum ai acces la toate funcționalitățile premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>There was an issue activating your license.</source>
         <translation>A apărut o problemă la activarea licenței tale.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="756"/>
         <source>Could not activate your license at this time.</source>
         <translation>Nu s-a putut activa licența ta în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="828"/>
         <source>There was an issue deactivating your license.</source>
         <translation>A apărut o problemă la dezactivarea licenței tale.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="839"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Nu s-a putut dezactiva licența în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
         <source>Your license has been deactivated.</source>
         <translation>Licența a fost dezactivată.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Accesul la funcțiile Pro a fost eliminat.
@@ -10830,19 +10830,43 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="183"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="186"/>
+        <source>Remove the offline license from this device?</source>
+        <translation>Elimini licența offline de pe acest dispozitiv?</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="187"/>
+        <source>This deletes the local activation certificate, but it does not free up your license seat automatically.
+
+To reuse this seat on another device, email alex@serial-studio.com with your device ID or your .ssmachine file so the seat can be released manually.</source>
+        <translation>Aceasta șterge certificatul de activare local, dar nu eliberează automat locul de licență.
+
+Pentru a reutiliza acest loc pe alt dispozitiv, trimiteți un email la alex@serial-studio.com cu ID-ul dispozitivului sau fișierul .ssmachine pentru ca locul să poată fi eliberat manual.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="192"/>
+        <source>Offline Activation</source>
+        <translation>Activare Offline</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="213"/>
         <source>Could not open the certificate file.</source>
         <translation>Nu s-a putut deschide fișierul certificat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="220"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>Fișierul certificat este prea mare pentru a fi valid.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="217"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="247"/>
         <source>Could not write the device file.</source>
         <translation>Nu s-a putut scrie fișierul dispozitiv.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="285"/>
+        <source>The stored certificate could not be decrypted on this machine.</source>
+        <translation>Certificatul stocat nu a putut fi decriptat pe această mașină.</translation>
     </message>
 </context>
 <context>
@@ -12248,8 +12272,8 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation>Nu s-a putut scrie Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Scrierea de comenzi rapide Windows nu este disponibilă pe această platformă.</translation>
     </message>
@@ -12280,8 +12304,8 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation>Salvarea fișierului .lnk a eșuat (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Scrierea de comenzi rapide macOS nu este disponibilă pe această platformă.</translation>
     </message>
@@ -13396,32 +13420,32 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>License certificate is valid.</source>
         <translation>Certificatul de licență este valid.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="184"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>Semnătura certificatului este invalidă sau coruptă.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="187"/>
         <source>This certificate was issued for a different device.</source>
         <translation>Acest certificat a fost emis pentru un alt dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate has expired.</source>
         <translation>Acest certificat a expirat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>Acest certificat nu acordă un nivel de licență valid.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="196"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>Fișierul certificatului este malformat sau ilizibil.</translation>
     </message>
@@ -14959,8 +14983,8 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
         <translation>Eroare generală de I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Analizor de Trame Dezactivat</translation>
     </message>
@@ -15002,8 +15026,8 @@ Cauza cea mai probabilă: o buclă infinită sau o operație extrem de lentă î
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>Funcție Parse Lipsă</translation>
     </message>
@@ -15019,8 +15043,8 @@ Asigurați-vă că codul include:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>Eroare de Execuție A Funcției Parse</translation>
     </message>
@@ -15413,7 +15437,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Eroare Parser Nativ</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="51"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="52"/>
         <source>Offline Activation</source>
         <translation>Activare Offline</translation>
     </message>

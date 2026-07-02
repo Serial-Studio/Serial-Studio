@@ -535,7 +535,7 @@ Widgets.SmartDialog {
           text: qsTr("Deactivate")
           opacity: enabled ? 1 : 0.5
           enabled: !Cpp_Licensing_LemonSqueezy.busy
-          visible: Cpp_Licensing_LemonSqueezy.isActivated && !Cpp_Licensing_OfflineLicense.activated
+          visible: Cpp_Licensing_LemonSqueezy.isActivated
           onClicked: Cpp_Licensing_LemonSqueezy.deactivate()
           icon.source: "qrc:/icons/buttons/deactivate.svg"
         }

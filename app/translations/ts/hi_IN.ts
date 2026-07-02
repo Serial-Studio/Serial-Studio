@@ -6647,152 +6647,152 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="142"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
         <source>Stop</source>
         <translation>रोकें</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>Downloading updates</source>
         <translation>अपडेट डाउनलोड हो रहे हैं</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="470"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="483"/>
         <source>Time remaining</source>
         <translation>शेष समय</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
         <source>unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Error</source>
         <translation>त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Cannot find downloaded update!</source>
         <translation>डाउनलोड किया गया अपडेट नहीं मिला!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="260"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
         <source>Download complete!</source>
         <translation>डाउनलोड पूर्ण!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
         <source>Click "OK" to begin installing the update</source>
         <translation>अपडेट इंस्टॉल करना शुरू करने के लिए "OK" पर क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="270"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
         <source>In order to install the update, you may need to quit the application.</source>
         <translation>अपडेट इंस्टॉल करने के लिए, एप्लिकेशन बंद करना आवश्यक हो सकता है।</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="261"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="269"/>
         <source>The installer opens separately</source>
         <translation>इंस्टॉलर अलग से खुलता है</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="274"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="282"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application.</source>
         <translation>अपडेट इंस्टॉल करने के लिए, एप्लिकेशन बंद करना आवश्यक हो सकता है। यह अनिवार्य अपडेट है, अभी बाहर निकलने से एप्लिकेशन बंद हो जाएगा।</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="290"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
         <source>Click the "Open" button to apply the update</source>
         <translation>अपडेट लागू करने के लिए "Open" बटन पर क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="303"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
         <source>Updater</source>
         <translation>अपडेटर</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="307"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="315"/>
         <source>Are you sure you want to cancel the download?</source>
         <translation>क्या आप वाकई डाउनलोड रद्द करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="309"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="317"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
         <translation>क्या आप वाकई डाउनलोड रद्द करना चाहते हैं? यह अनिवार्य अपडेट है, अभी बाहर निकलने से एप्लिकेशन बंद हो जाएगा।</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="364"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="371"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="379"/>
         <source>%1 bytes</source>
         <translation>%1 बाइट्स</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="366"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="373"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="374"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="381"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="368"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="375"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="376"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="383"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>of</source>
         <translation>का</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="430"/>
         <source>Downloading Updates</source>
         <translation>अपडेट डाउनलोड हो रहे हैं</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Time Remaining</source>
         <translation>शेष समय</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="446"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="459"/>
         <source>about %1 hours</source>
         <translation>लगभग %1 घंटे</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="448"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="461"/>
         <source>about one hour</source>
         <translation>लगभग एक घंटा</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="456"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="469"/>
         <source>%1 minutes</source>
         <translation>%1 मिनट</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="458"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="471"/>
         <source>1 minute</source>
         <translation>1 मिनट</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="465"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="478"/>
         <source>%1 seconds</source>
         <translation>%1 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="467"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="480"/>
         <source>1 second</source>
         <translation>1 सेकंड</translation>
     </message>
@@ -10698,129 +10698,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="512"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="518"/>
         <source>There was an issue validating your license.</source>
         <translation>आपके लाइसेंस को मान्य करने में समस्या आई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="530"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="536"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="717"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>आपके द्वारा प्रदान की गई लाइसेंस कुंजी Serial Studio से संबंधित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="537"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>कृपया दोबारा जाँचें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="548"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="726"/>
         <source>This license key was activated on a different device.</source>
         <translation>यह लाइसेंस कुंजी किसी अन्य डिवाइस पर सक्रिय की गई थी।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="543"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="721"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="727"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>पहले उसे वहाँ निष्क्रिय करें या सहायता के लिए समर्थन से संपर्क करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>This license is not currently active.</source>
         <translation>यह लाइसेंस वर्तमान में सक्रिय नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="732"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="738"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>यह समाप्त हो गया होगा या निष्क्रिय कर दिया गया होगा (स्थिति: %1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="571"/>
         <source>Something went wrong on the server.</source>
         <translation>सर्वर पर कुछ गड़बड़ हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="742"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="572"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="748"/>
         <source>No activation ID was returned.</source>
         <translation>कोई सक्रियण ID नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
         <source>Could not validate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस सत्यापित नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="840"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="583"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="757"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
         <source>Try again later.</source>
         <translation>बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="712"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="718"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="837"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>दोबारा जाँचें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="747"/>
         <source>Something went wrong on the server…</source>
         <translation>सर्वर पर कुछ गड़बड़ हुई…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="601"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
         <source>Your license has been successfully activated.</source>
         <translation>आपका लाइसेंस सफलतापूर्वक सक्रिय हो गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="649"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="655"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Serial Studio का समर्थन करने के लिए धन्यवाद!
 अब आपके पास सभी प्रीमियम सुविधाओं तक पहुंच है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>There was an issue activating your license.</source>
         <translation>आपका लाइसेंस सक्रिय करने में समस्या हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="756"/>
         <source>Could not activate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस सक्रिय नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="828"/>
         <source>There was an issue deactivating your license.</source>
         <translation>आपका लाइसेंस निष्क्रिय करने में समस्या आई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="839"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस निष्क्रिय नहीं किया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
         <source>Your license has been deactivated.</source>
         <translation>आपका लाइसेंस निष्क्रिय कर दिया गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro फीचर्स की एक्सेस हटा दी गई है।
@@ -10830,19 +10830,43 @@ Serial Studio को सपोर्ट करने के लिए पुन�
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="183"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="186"/>
+        <source>Remove the offline license from this device?</source>
+        <translation>इस डिवाइस से ऑफ़लाइन लाइसेंस हटाएँ?</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="187"/>
+        <source>This deletes the local activation certificate, but it does not free up your license seat automatically.
+
+To reuse this seat on another device, email alex@serial-studio.com with your device ID or your .ssmachine file so the seat can be released manually.</source>
+        <translation>यह स्थानीय सक्रियण प्रमाणपत्र डिलीट करता है, लेकिन आपकी लाइसेंस सीट स्वचालित रूप से मुक्त नहीं होती।
+
+इस सीट को दूसरे डिवाइस पर पुनः उपयोग करने के लिए, अपनी डिवाइस ID या .ssmachine फ़ाइल के साथ alex@serial-studio.com पर ईमेल करें ताकि सीट मैन्युअली रिलीज़ की जा सके।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="192"/>
+        <source>Offline Activation</source>
+        <translation>ऑफ़लाइन सक्रियण</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="213"/>
         <source>Could not open the certificate file.</source>
         <translation>प्रमाणपत्र फ़ाइल खोली नहीं जा सकी।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="220"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>प्रमाणपत्र फ़ाइल मान्य होने के लिए बहुत बड़ी है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="217"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="247"/>
         <source>Could not write the device file.</source>
         <translation>डिवाइस फ़ाइल लिखी नहीं जा सकी।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="285"/>
+        <source>The stored certificate could not be decrypted on this machine.</source>
+        <translation>संग्रहीत प्रमाणपत्र इस मशीन पर डिक्रिप्ट नहीं किया जा सका।</translation>
     </message>
 </context>
 <context>
@@ -12248,8 +12272,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist नहीं लिखा जा सका: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -12280,8 +12304,8 @@ Would you like to open the download page?</source>
         <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -13396,32 +13420,32 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>License certificate is valid.</source>
         <translation>लाइसेंस प्रमाणपत्र मान्य है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="184"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>प्रमाणपत्र हस्ताक्षर अमान्य या दूषित है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="187"/>
         <source>This certificate was issued for a different device.</source>
         <translation>यह प्रमाणपत्र किसी अन्य डिवाइस के लिए जारी किया गया था।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate has expired.</source>
         <translation>यह प्रमाणपत्र समाप्त हो चुका है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>यह प्रमाणपत्र कोई मान्य लाइसेंस स्तर प्रदान नहीं करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="196"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>प्रमाणपत्र फ़ाइल विकृत या अपठनीय है।</translation>
     </message>
@@ -14959,8 +14983,8 @@ Click Refresh to update the list.</source>
         <translation>सामान्य I/O त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Parser अक्षम</translation>
     </message>
@@ -15002,8 +15026,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>Parse फ़ंक्शन अनुपलब्ध</translation>
     </message>
@@ -15019,8 +15043,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
@@ -15413,7 +15437,7 @@ function parse(%1) { ... }
         <translation type="vanished">नेटिव पार्सर त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="51"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="52"/>
         <source>Offline Activation</source>
         <translation>ऑफ़लाइन सक्रियण</translation>
     </message>

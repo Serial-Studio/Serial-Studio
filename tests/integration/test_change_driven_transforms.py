@@ -65,14 +65,29 @@ def _registers():
 
 
 def _project(change_driven: bool) -> dict:
+    # Parser code/language live per-source: the loader ignores them at the top
+    # level (only the legacy "frameParser" key or a "sources" array is read).
     return {
         "title": "Change-driven test",
         "changeDrivenTransforms": change_driven,
         "frameEnd": "\n",
         "frameDetection": 0,
         "decoder": 0,
-        "frameParserCode": _PARSER,
-        "frameParserLanguage": 0,
+        "sources": [
+            {
+                "sourceId": 0,
+                "title": "Device A",
+                "busType": 0,
+                "frameStart": "$",
+                "frameEnd": "\n",
+                "frameDetection": 0,
+                "checksumAlgorithm": "",
+                "decoderMethod": 0,
+                "frameParserCode": _PARSER,
+                "frameParserLanguage": 0,
+                "connectionSettings": {},
+            }
+        ],
         "tables": [{"name": "T", "registers": _registers()}],
         "groups": [
             {
@@ -103,6 +118,14 @@ def _project(change_driven: bool) -> dict:
 
 
 def _attach(api_client, device_simulator):
+    # Tests re-attach after loading a second project; drop any live connection
+    # first (io.connect errors when already connected) and give the simulator's
+    # watcher thread time to clear the dead client socket before reconnecting.
+    try:
+        api_client.disconnect_device()
+        time.sleep(0.6)
+    except Exception:
+        pass
     api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
     time.sleep(0.1)
     api_client.set_operation_mode("project")

@@ -6647,152 +6647,152 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="142"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="143"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>Downloading updates</source>
         <translation>Updates downloaden</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="470"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="483"/>
         <source>Time remaining</source>
         <translation>Resterende tijd</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="144"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="145"/>
         <source>unknown</source>
         <translation>onbekend</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="251"/>
         <source>Cannot find downloaded update!</source>
         <translation>Kan gedownloade update niet vinden!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="260"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
         <source>Download complete!</source>
         <translation>Download voltooid!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="268"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
         <source>Click "OK" to begin installing the update</source>
         <translation>Klik op "OK" om de installatie van de update te starten</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="270"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
         <source>In order to install the update, you may need to quit the application.</source>
         <translation>Om de update te installeren moet u mogelijk de applicatie afsluiten.</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="261"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="269"/>
         <source>The installer opens separately</source>
         <translation>Het installatieprogramma wordt apart geopend</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="274"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="282"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application.</source>
         <translation>Om de update te installeren moet u mogelijk de applicatie afsluiten. Dit is een verplichte update; nu afsluiten sluit de applicatie.</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="290"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
         <source>Click the "Open" button to apply the update</source>
         <translation>Klik op de knop "Openen" om de update toe te passen</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="303"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
         <source>Updater</source>
         <translation>Updater</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="307"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="315"/>
         <source>Are you sure you want to cancel the download?</source>
         <translation>Weet u zeker dat u de download wilt annuleren?</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="309"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="317"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
         <translation>Weet u zeker dat u de download wilt annuleren? Dit is een verplichte update; nu afsluiten sluit de applicatie</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="364"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="371"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="379"/>
         <source>%1 bytes</source>
         <translation>%1 bytes</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="366"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="373"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="374"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="381"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="368"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="375"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="376"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="383"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="377"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="385"/>
         <source>of</source>
         <translation>van</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="430"/>
         <source>Downloading Updates</source>
         <translation>Updates Downloaden</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Time Remaining</source>
         <translation>Resterende Tijd</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="422"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="446"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="459"/>
         <source>about %1 hours</source>
         <translation>ongeveer %1 uur</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="448"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="461"/>
         <source>about one hour</source>
         <translation>ongeveer een uur</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="456"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="469"/>
         <source>%1 minutes</source>
         <translation>%1 minuten</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="458"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="471"/>
         <source>1 minute</source>
         <translation>1 minuut</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="465"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="478"/>
         <source>%1 seconds</source>
         <translation>%1 seconden</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="467"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="480"/>
         <source>1 second</source>
         <translation>1 seconde</translation>
     </message>
@@ -10698,129 +10698,129 @@ Abonnementen zijn beschikbaar als Maandelijks, Jaarlijks en Levenslang.</transla
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="512"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="518"/>
         <source>There was an issue validating your license.</source>
         <translation>Er is een probleem opgetreden bij het valideren van uw licentie.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="530"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="536"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="717"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>De licentiesleutel die u heeft opgegeven behoort niet tot Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="537"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Controleer of u uw licentie heeft gekocht in de officiële Serial Studio-winkel.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="548"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="726"/>
         <source>This license key was activated on a different device.</source>
         <translation>Deze licentiesleutel is geactiveerd op een ander apparaat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="543"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="721"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="727"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Deactiveer deze eerst daar of neem contact op met ondersteuning voor hulp.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>This license is not currently active.</source>
         <translation>Deze licentie is momenteel niet actief.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="732"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="738"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Deze kan zijn verlopen of gedeactiveerd (status: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="571"/>
         <source>Something went wrong on the server.</source>
         <translation>Er is iets misgegaan op de server.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="742"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="572"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="748"/>
         <source>No activation ID was returned.</source>
         <translation>Geen activerings-ID geretourneerd.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
         <source>Could not validate your license at this time.</source>
         <translation>Kon uw licentie op dit moment niet valideren.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="840"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="583"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="757"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
         <source>Try again later.</source>
         <translation>Probeer later opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="712"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="718"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="837"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Controleer of u uw licentie hebt gekocht in de officiële Serial Studio-winkel.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="747"/>
         <source>Something went wrong on the server…</source>
         <translation>Er is iets misgegaan op de server…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="601"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
         <source>Your license has been successfully activated.</source>
         <translation>Uw licentie is succesvol geactiveerd.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="649"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="655"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Bedankt voor het ondersteunen van Serial Studio!
 U hebt nu toegang tot alle premium-functies.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>There was an issue activating your license.</source>
         <translation>Er is een probleem opgetreden bij het activeren van uw licentie.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="756"/>
         <source>Could not activate your license at this time.</source>
         <translation>Uw licentie kon op dit moment niet worden geactiveerd.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="828"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Er is een probleem opgetreden bij het deactiveren van uw licentie.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="839"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Uw licentie kon op dit moment niet worden gedeactiveerd.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
         <source>Your license has been deactivated.</source>
         <translation>Uw licentie is gedeactiveerd.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Toegang tot Pro-functies is verwijderd.
@@ -10830,19 +10830,43 @@ Nogmaals bedankt voor uw steun aan Serial Studio!</translation>
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="183"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="186"/>
+        <source>Remove the offline license from this device?</source>
+        <translation>Offline licentie van dit apparaat verwijderen?</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="187"/>
+        <source>This deletes the local activation certificate, but it does not free up your license seat automatically.
+
+To reuse this seat on another device, email alex@serial-studio.com with your device ID or your .ssmachine file so the seat can be released manually.</source>
+        <translation>Dit verwijdert het lokale activeringscertificaat, maar maakt uw licentieplaats niet automatisch vrij.
+
+Om deze plaats op een ander apparaat te hergebruiken, stuur een e-mail naar alex@serial-studio.com met uw apparaat-ID of uw .ssmachine-bestand zodat de plaats handmatig kan worden vrijgegeven.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="192"/>
+        <source>Offline Activation</source>
+        <translation>Offline Activatie</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="213"/>
         <source>Could not open the certificate file.</source>
         <translation>Kan het certificaatbestand niet openen.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="220"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>Het certificaatbestand is te groot om geldig te zijn.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="217"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="247"/>
         <source>Could not write the device file.</source>
         <translation>Kan het apparaatbestand niet schrijven.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="285"/>
+        <source>The stored certificate could not be decrypted on this machine.</source>
+        <translation>Het opgeslagen certificaat kon niet worden ontsleuteld op deze machine.</translation>
     </message>
 </context>
 <context>
@@ -12248,8 +12272,8 @@ Wilt u de downloadpagina openen?</translation>
         <translation>Kon Info.plist niet schrijven: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
     </message>
@@ -12280,8 +12304,8 @@ Wilt u de downloadpagina openen?</translation>
         <translation>Opslaan van .lnk-bestand mislukt (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
     </message>
@@ -13396,32 +13420,32 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>License certificate is valid.</source>
         <translation>Licentiecertificaat is geldig.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="184"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>De certificaathandtekening is ongeldig of beschadigd.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="187"/>
         <source>This certificate was issued for a different device.</source>
         <translation>Dit certificaat is uitgegeven voor een ander apparaat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate has expired.</source>
         <translation>Dit certificaat is verlopen.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>Dit certificaat verleent geen geldige licentielaag.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="196"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>Het certificaatbestand is ongeldig of onleesbaar.</translation>
     </message>
@@ -14959,8 +14983,8 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
         <translation>Algemene I/O-fout</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Uitgeschakeld</translation>
     </message>
@@ -15002,8 +15026,8 @@ Meest waarschijnlijke oorzaak: een oneindige lus of extreem trage bewerking in h
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
         <source>Missing Parse Function</source>
         <translation>Ontbrekende Parse-functie</translation>
     </message>
@@ -15019,8 +15043,8 @@ Zorg ervoor dat uw code het volgende bevat:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
         <source>Parse Function Runtime Error</source>
         <translation>Runtime-fout in Parse-functie</translation>
     </message>
@@ -15413,7 +15437,7 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation type="vanished">Native Parserfout</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="51"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="52"/>
         <source>Offline Activation</source>
         <translation>Offline Activatie</translation>
     </message>

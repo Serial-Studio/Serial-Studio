@@ -48,6 +48,20 @@ const QString& DataModel::systemDataTableName()
   return kSystemTable;
 }
 
+/**
+ * @brief Returns true when two register values are identical (same type and payload); identical
+ *        rewrites must not bump slot versions or change-driven transforms would re-run on every
+ *        parser write instead of on value changes.
+ */
+[[nodiscard]] static bool sameRegisterValue(const DataModel::RegisterValue& a,
+                                            const DataModel::RegisterValue& b)
+{
+  if (a.isNumeric != b.isNumeric)
+    return false;
+
+  return a.isNumeric ? (a.numericValue == b.numericValue) : (a.stringValue == b.stringValue);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Initialization
 //--------------------------------------------------------------------------------------------------
@@ -194,7 +208,8 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByInternedKey(cons
 }
 
 /**
- * @brief Hot-path write keyed by Lua's interned string pointers.
+ * @brief Hot-path write keyed by Lua's interned string pointers; an identical value is a
+ *        successful no-op that leaves the slot version untouched.
  */
 bool DataModel::DataTableStore::setByInternedKey(const char* table,
                                                  const char* reg,
@@ -227,6 +242,9 @@ bool DataModel::DataTableStore::setByInternedKey(const char* table,
                << QLatin1StringView(table) << "/" << QLatin1StringView(reg);
     return false;
   }
+
+  if (sameRegisterValue(m_storage[static_cast<size_t>(idx)], val))
+    return true;
 
   m_storage[static_cast<size_t>(idx)] = val;
   m_version[static_cast<size_t>(idx)] = ++m_writeClock;
@@ -314,7 +332,8 @@ const DataModel::RegisterValue* DataModel::DataTableStore::get(const QString& ta
 }
 
 /**
- * @brief Writes to a computed register; no-op for constant or system registers.
+ * @brief Writes to a computed register; no-op for constant or system registers, and an identical
+ *        value is a successful no-op that leaves the slot version untouched.
  */
 bool DataModel::DataTableStore::set(const QString& table,
                                     const QString& reg,
@@ -331,6 +350,9 @@ bool DataModel::DataTableStore::set(const QString& table,
     qWarning() << "[DataTableStore] Cannot write to non-computed register" << table << "/" << reg;
     return false;
   }
+
+  if (sameRegisterValue(m_storage[static_cast<size_t>(idx)], val))
+    return true;
 
   m_storage[static_cast<size_t>(idx)] = val;
   m_version[static_cast<size_t>(idx)] = ++m_writeClock;
@@ -380,6 +402,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByHandle(qint64 ha
 /**
  * @brief Hot-path write by handle; non-computed (guard matches set()), stale, or invalid handles
  *        are ignored silently, with no warning so a misused handle cannot spam the log per frame.
+ *        An identical value is a successful no-op that leaves the slot version untouched.
  */
 bool DataModel::DataTableStore::setByHandle(qint64 handle, const RegisterValue& val)
 {
@@ -396,6 +419,9 @@ bool DataModel::DataTableStore::setByHandle(qint64 handle, const RegisterValue& 
 
   if (!m_isComputed[static_cast<size_t>(index)]) [[unlikely]]
     return false;
+
+  if (sameRegisterValue(m_storage[static_cast<size_t>(index)], val))
+    return true;
 
   m_storage[static_cast<size_t>(index)] = val;
   m_version[static_cast<size_t>(index)] = ++m_writeClock;

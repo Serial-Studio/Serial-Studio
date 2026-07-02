@@ -31,17 +31,29 @@ def _mission_clock(api_client) -> float:
 
 
 def _start_demo_and_wait(api_client, timeout: float = 15.0) -> float:
-    """Start the demo and poll until the simulation writes its first value."""
+    """Start the demo and poll until the simulation is ticking the mission clock."""
     api_client.command("system.startDemo")
 
+    # The register reads back its 0.0 default as soon as the table store is
+    # built, before the control loop's first write; returning that default
+    # breaks callers that expect a live countdown value. Wait until the clock
+    # actually moves between two polls.
+    last = None
     deadline = time.time() + timeout
     while time.time() < deadline:
         try:
-            return _mission_clock(api_client)
+            value = _mission_clock(api_client)
         except (APIError, KeyError, ValueError):
             time.sleep(0.25)
+            continue
 
-    pytest.fail("Flight table never appeared after system.startDemo")
+        if last is not None and value != last:
+            return value
+
+        last = value
+        time.sleep(0.25)
+
+    pytest.fail("mission clock never started ticking after system.startDemo")
 
 
 @pytest.mark.integration

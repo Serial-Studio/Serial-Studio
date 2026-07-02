@@ -22,6 +22,7 @@
 
 #include "Licensing/OfflineLicense.h"
 
+#include <QDebug>
 #include <QDesktopServices>
 #include <QFile>
 #include <QJsonDocument>
@@ -172,6 +173,35 @@ const QString& Licensing::OfflineLicense::lastError() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Removes the offline certificate from this device after user confirmation;
+ * the seat itself can only be released manually by support, so the prompt tells
+ * the user to email their device ID or .ssmachine file first.
+ */
+void Licensing::OfflineLicense::deactivate()
+{
+  if (!m_activated)
+    return;
+
+  const int answer = Misc::Utilities::showMessageBox(
+    tr("Remove the offline license from this device?"),
+    tr("This deletes the local activation certificate, but it does not free up "
+       "your license seat automatically.\n\nTo reuse this seat on another device, "
+       "email alex@serial-studio.com with your device ID or your .ssmachine file "
+       "so the seat can be released manually."),
+    QMessageBox::Question,
+    tr("Offline Activation"),
+    QMessageBox::Yes | QMessageBox::No,
+    QMessageBox::No);
+  if (answer != QMessageBox::Yes)
+    return;
+
+  if (!LemonSqueezy::instance().isOnlineActivated())
+    CommercialToken::clearCurrent();
+
+  clearOfflineLicense();
+}
+
+/**
  * @brief Imports and activates a certificate from a local file or file URL.
  */
 bool Licensing::OfflineLicense::activateFromFile(const QString& path)
@@ -237,7 +267,9 @@ void Licensing::OfflineLicense::openActivationPortal()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Restores and re-verifies a stored certificate on startup.
+ * @brief Restores and re-verifies a stored certificate on startup; a failed restore
+ * only drops the in-memory activation, never the stored blob, so a transient
+ * fingerprint or clock glitch cannot destroy a certificate that may still be valid.
  */
 void Licensing::OfflineLicense::readSettings()
 {
@@ -249,8 +281,13 @@ void Licensing::OfflineLicense::readSettings()
     return;
 
   const auto framed = m_simpleCrypt.decryptToByteArray(stored);
-  if (framed.isEmpty() || !applyCertificate(framed, false))
-    clearOfflineLicense();
+  if (framed.isEmpty())
+    m_lastError = tr("The stored certificate could not be decrypted on this machine.");
+  else if (applyCertificate(framed, false))
+    return;
+
+  qWarning() << "[OfflineLicense] stored certificate not restored:" << m_lastError;
+  resetActivationState();
 }
 
 /**
@@ -274,17 +311,26 @@ void Licensing::OfflineLicense::onOnlineActivationChanged()
 }
 
 /**
- * @brief Clears the stored certificate and offline activation state.
+ * @brief Clears the stored certificate and offline activation state (explicit
+ * deactivation only; startup restore failures go through resetActivationState).
  */
 void Licensing::OfflineLicense::clearOfflineLicense()
+{
+  m_settings.beginGroup("offlineLicense");
+  m_settings.setValue("cert", "");
+  m_settings.endGroup();
+
+  resetActivationState();
+}
+
+/**
+ * @brief Drops the in-memory activation state and notifies listeners.
+ */
+void Licensing::OfflineLicense::resetActivationState()
 {
   m_activated   = false;
   m_variantName = QString();
   m_expiresAt   = QDateTime();
-
-  m_settings.beginGroup("offlineLicense");
-  m_settings.setValue("cert", "");
-  m_settings.endGroup();
 
   Q_EMIT activatedChanged();
 }

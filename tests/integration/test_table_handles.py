@@ -30,6 +30,8 @@ CHANNELS = ["ch1", "ch2", "ch3", "ch4"]
 
 def _project_with_table_and_parser(parser_code: str, parser_language: int) -> dict:
     """A project carrying a 'DAQ' table of computed registers plus a frame parser."""
+    # Parser code/language live per-source: the loader ignores them at the top
+    # level (only the legacy "frameParser" key or a "sources" array is read).
     return {
         "title": "Handle API test",
         "frameStart": "/*",
@@ -39,8 +41,21 @@ def _project_with_table_and_parser(parser_code: str, parser_language: int) -> di
         "checksum": "",
         "checksumAlgorithm": "",
         "frameDetection": 1,
-        "frameParserCode": parser_code,
-        "frameParserLanguage": parser_language,
+        "sources": [
+            {
+                "sourceId": 0,
+                "title": "Device A",
+                "busType": 0,
+                "frameStart": "/*",
+                "frameEnd": "*/",
+                "frameDetection": 1,
+                "checksumAlgorithm": "",
+                "decoderMethod": 0,
+                "frameParserCode": parser_code,
+                "frameParserLanguage": parser_language,
+                "connectionSettings": {},
+            }
+        ],
         "tables": [
             {
                 "name": "DAQ",

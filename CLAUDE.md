@@ -159,6 +159,9 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
   `m_changeDriven` (project property `changeDrivenTransforms`, opt-in/off by default) skips a
   virtual dataset's transform when none of its captured read-set slots changed since its last
   run (per-slot version vs `DataTableStore::writeClock`); refreshed in `refreshDatasetCaptureFlag`.
+  "Changed" means value change, not write: the store's computed-register write paths treat an
+  identical value as a successful no-op and skip the version bump, so a parser rewriting the same
+  value every frame doesn't defeat the skip.
   `m_captureLatestFrame` (control script running or API server on) gates the latest-frame
   capture behind `io.getLatestFrame`: it retains one `CapturedDataPtr` per source (the
   FrameReader pool probe skips pinned slots) plus the channel tokens — keep it gated and

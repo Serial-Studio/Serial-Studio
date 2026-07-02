@@ -68,7 +68,8 @@ struct CertificateFields {
                                     QByteArray& signature);
 
 /**
- * @brief Verifies signature, machine binding, and expiry; fills fields on success.
+ * @brief Verifies signature, machine binding, and expiry (with nowSecs floored at the
+ *        signed issue time to bound clock-rewind abuse); fills fields on success.
  */
 [[nodiscard]] CertStatus verifyCertificate(const QByteArray& framed,
                                            const std::array<std::uint8_t, 32>& publicKey,

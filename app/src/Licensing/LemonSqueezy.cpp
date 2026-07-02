@@ -299,10 +299,16 @@ void Licensing::LemonSqueezy::validate()
 }
 
 /**
- * @brief Deactivates the license key instance on this machine.
+ * @brief Deactivates the license on this machine; an offline certificate routes
+ * to OfflineLicense::deactivate() so the UI, CLI, and API share one entry point.
  */
 void Licensing::LemonSqueezy::deactivate()
 {
+  if (OfflineLicense::instance().isActivated()) {
+    OfflineLicense::instance().deactivate();
+    return;
+  }
+
   if (!isOnlineActivated())
     return;
 

@@ -135,7 +135,9 @@ bool Licensing::parseCertificate(const QByteArray& framed,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Verifies signature first (security invariant), then machine binding and expiry.
+ * @brief Verifies signature first (security invariant), then machine binding and expiry;
+ * now is floored at the signed issue time, so a rewound clock (even with the local
+ * monotonic-floor store wiped) can never grant more than the cert's own iat-to-exp window.
  */
 Licensing::CertStatus Licensing::verifyCertificate(const QByteArray& framed,
                                                    const std::array<std::uint8_t, 32>& publicKey,
@@ -157,7 +159,7 @@ Licensing::CertStatus Licensing::verifyCertificate(const QByteArray& framed,
   if (fields.machineId != machineId)
     return CertStatus::MachineMismatch;
 
-  if (fields.expiresAt <= nowSecs)
+  if (fields.expiresAt <= qMax(nowSecs, fields.issuedAt))
     return CertStatus::Expired;
 
   if (tierFromCertVariant(fields.variant) == FeatureTier::None)

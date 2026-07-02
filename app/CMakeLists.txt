@@ -1294,13 +1294,22 @@ endif()
 # is initialized from a 17-byte string literal, both legal C but hard errors in C++.
 # Blanket-suppress warnings on the vendored code (it is not held to the project's
 # strict flags) and keep it out of any unity build, since its short file-local helper
-# names (A, M, add, pack, ...) would collide with other translation units.
+# names (A, M, add, pack, ...) would collide with other translation units. On cl.exe,
+# serial_studio_harden's /sdl promotes C4146 (constant-time masking, e.g. `-(h[16]>>7)`)
+# to an error that /w cannot demote, so this file alone gets /sdl- (source-level
+# options come after target options and win); clang-cl never receives /sdl.
 #
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
   if(MSVC)
-    set_source_files_properties(src/ThirdParty/tweetnacl.c PROPERTIES COMPILE_OPTIONS "/w")
+    if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+      set_source_files_properties(src/ThirdParty/tweetnacl.c PROPERTIES COMPILE_OPTIONS "/w")
+    else()
+      set_source_files_properties(src/ThirdParty/tweetnacl.c
+        PROPERTIES COMPILE_OPTIONS "/w;/sdl-"
+      )
+    endif()
   else()
     set_source_files_properties(src/ThirdParty/tweetnacl.c PROPERTIES COMPILE_OPTIONS "-w")
   endif()

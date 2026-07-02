@@ -1775,6 +1775,11 @@ jobs:
             ;;
         esac
 
+    - name: '🔏 Offline license self-test'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: '"$SS_RUN" --selftest-offline-license'
+
     - name: '🔑 Activate Serial Studio license'
       env:
         QT_QPA_PLATFORM: offscreen

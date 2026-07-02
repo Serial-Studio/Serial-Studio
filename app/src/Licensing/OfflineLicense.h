@@ -79,6 +79,7 @@ public:
   [[nodiscard]] const QString& lastError() const noexcept;
 
 public slots:
+  void deactivate();
   bool activateFromFile(const QString& path);
   bool exportMachineInfo(const QString& path);
   void openActivationPortal();
@@ -87,6 +88,7 @@ private slots:
   void readSettings();
   void writeSettings(const QByteArray& framedCert);
   void clearOfflineLicense();
+  void resetActivationState();
   void onOnlineActivationChanged();
 
 private:

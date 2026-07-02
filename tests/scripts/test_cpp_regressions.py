@@ -364,7 +364,7 @@ def test_session_report_series_preserve_raw_points_under_budget():
     assert "std::sort(indices.begin(), indices.end());" in report
     assert "series.values.size() == std::min<std::size_t>(count, maxSamples)" in report
     assert "Q_ARG(int, 10000)" in manager
-    assert "loadChartSeries(m_db, sessionId, chartMaxSamples)" in worker
+    assert "loadChartSeries(m_db, sessionId, chartMaxSamples, selected)" in worker
     assert runtime.count("tension: 0") >= 2
     assert runtime.count("decimation: { enabled: false }") >= 2
 
