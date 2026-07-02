@@ -26,6 +26,11 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
   cycle — it won't.
 - Each `setup()`/`loop()` call has a **2000 ms watchdog**; `delay(ms)` and `apiCall(...)`
   pause it. `loop()` re-arms ~1 ms after it returns, so pace it with `delay(...)`.
+  Pacing is not optional when the loop writes: every `tableSet`, `apiCall`,
+  `dashboardTick`, or `notify*` call is a blocking hop to the GUI thread, and a
+  free-running loop making a dozen writes per pass floods the UI with 10k+ hops per
+  second and visibly stalls the whole dashboard. `delay(20)` (~50 Hz) is smooth for
+  dashboard-feeding simulations; 50-250 ms is plenty for device polling.
 - A `loop()` exception or watchdog timeout stops the script and reports the error.
 
 ## Globals available inside the script

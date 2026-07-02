@@ -174,7 +174,7 @@ The context exposes a Canvas2D-style API backed by `QPainter`. The sections belo
 
 | Property       | Notes |
 |----------------|-------|
-| `fillStyle`    | CSS color string (`"#22c55e"`, `"rgba(255,0,0,0.5)"`, named colors). |
+| `fillStyle`    | Color string: hex (`"#22c55e"`, or `"#80ff0000"` for 50% red — alpha byte first) and named colors. CSS `rgb()`/`rgba()` strings are not supported. |
 | `strokeStyle`  | Same syntax as `fillStyle`. |
 | `lineWidth`    | Pixels. |
 | `lineCap`      | `"butt"`, `"round"`, `"square"`. |

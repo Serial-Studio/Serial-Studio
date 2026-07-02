@@ -347,6 +347,19 @@ for (let i = 0; i < datasets.length; i++) {
 The `theme` global stays in sync when the user switches between light
 and dark themes. Hard-coded hex breaks that.
 
+When you do need a literal color (scenery, brand colors), it must be hex
+or an SVG name — `rgba(...)` strings are not parsed (see "Style state").
+For alpha, Qt hex puts the alpha byte FIRST (`#80FF0000` is 50% red), or
+set `ctx.globalAlpha` around the draw. A tiny helper keeps this readable:
+
+```js
+function argbHex(a, r, g, b) {
+  var s = function(n) { n = Math.round(n); return (n < 16 ? "0" : "") + n.toString(16); };
+  return "#" + s(a * 255) + s(r) + s(g) + s(b);
+}
+ctx.fillStyle = argbHex(0.45, 0, 0, 0);   // 45% black
+```
+
 ## Worked example 1: progress rings (multi-dataset)
 
 Lays out one circular ring per dataset. Demonstrates a square-ish grid,
@@ -566,8 +579,12 @@ list below is exhaustive: anything not listed is not implemented and
 calling it from your script will throw or no-op.
 
 **Style state**
-- `fillStyle`, `strokeStyle`: accept a CSS color string OR a gradient
-  object OR a pattern object (see "Gradients & patterns" below).
+- `fillStyle`, `strokeStyle`: accept a color string OR a gradient object
+  OR a pattern object (see "Gradients & patterns" below). Color strings
+  are parsed by QColor: hex `#RRGGBB` / `#AARRGGBB` (alpha comes FIRST,
+  not last), SVG named colors, and `"transparent"`. CSS functional
+  notation — `rgb(...)`, `rgba(...)`, `hsl(...)` — is NOT parsed; such a
+  string silently yields an invalid color and garbage rendering.
 - `lineWidth`, `lineCap` ("butt" / "round" / "square"),
   `lineJoin` ("miter" / "round" / "bevel"), `miterLimit`.
 - `setLineDash([on, off, ...])`, `getLineDash()`, `lineDashOffset`.
@@ -580,8 +597,10 @@ calling it from your script will throw or no-op.
 - Shadows: `shadowColor`, `shadowBlur`, `shadowOffsetX`, `shadowOffsetY`.
   Applied to `fill`, `stroke`, `fillRect`, `strokeRect`, `fillText`,
   `strokeText`. A box-blur approximation is used for `shadowBlur > 0`;
-  large blur radii are expensive, so keep shadows out of per-frame
-  hotpaths if you can.
+  every blurred draw pays a raster blur pass, so keep shadows out of
+  per-frame work. For a glow that redraws every frame (engine flames,
+  pulsing indicators), fill a radial gradient instead — it costs a plain
+  fill, not a blur.
 - `imageSmoothingEnabled`, `imageSmoothingQuality` ("low" / "medium" /
   "high"; Qt has only one filter so quality is recorded for parity but not
   switched).
@@ -595,6 +614,11 @@ calling it from your script will throw or no-op.
   `quadraticCurveTo`, `bezierCurveTo`.
 - Path consumers: `fill`, `stroke`, `clip`, `isPointInPath(x, y)`,
   `isPointInStroke(x, y)`.
+- OVERLAPPING subpaths in one path fill with the odd-even rule (Qt default,
+  unlike the browser's nonzero winding): where two subpaths overlap, the
+  fill cancels and leaves a hole. To build a blob from overlapping circles
+  or ellipses (clouds, smoke), fill each shape as its own
+  `beginPath`/`fill` pair instead of stacking them in one path.
 
 **Rectangles**
 - `fillRect`, `strokeRect`, `clearRect`.
@@ -664,14 +688,14 @@ function paint(ctx, w, h) {
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
 
-  ctx.shadowColor   = "rgba(0,0,0,0.45)";
+  ctx.shadowColor   = "#73000000";   // 45% black; alpha byte first, never rgba()
   ctx.shadowBlur    = 8;
   ctx.shadowOffsetY = 2;
   ctx.fillStyle     = theme.widget_text;
   ctx.font          = "bold 24px sans-serif";
   ctx.fillText("Live", 12, 32);
   ctx.shadowBlur = 0;
-  ctx.shadowColor = "rgba(0,0,0,0)";
+  ctx.shadowColor = "transparent";
 }
 ```
 

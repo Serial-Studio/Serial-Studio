@@ -63,7 +63,7 @@ function loop() {
 
 ### loop() pacing with delay()
 
-By default `loop()` runs as fast as the worker can schedule it (the next call is queued only after the current one returns, so it never stacks up). To pace it, call `delay(ms)` exactly like an Arduino sketch:
+By default `loop()` runs as fast as the worker can schedule it (the next call is queued only after the current one returns, so it never stacks up). Pacing matters: every I/O, table, or dashboard call in the loop crosses to the interface thread, so an unpaced loop that writes on every pass can starve the user interface. To pace it, call `delay(ms)` exactly like an Arduino sketch:
 
 ```javascript
 function loop() {

@@ -149,7 +149,9 @@ function loop() {
 }
 ```
 
-Rules: always pace a polling loop with `delay()` (50-250 ms is plenty); do not
+Rules: always pace a loop with `delay()` (50-250 ms for polling; ~20 ms floor for
+dashboard-feeding simulations — every `tableSet`/`apiCall` is a blocking GUI-thread
+hop, and a free-running loop that writes on each pass stalls the dashboard); do not
 hand-roll exists-checks with `project.group.list` loops (ensureDashboard does
 the diff); renaming a generated group in the editor makes the script recreate
 it under the original title (the spec is the source of truth); ConsoleOnly mode
