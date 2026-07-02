@@ -22,10 +22,11 @@
 
 #include "Licensing/OfflineCertificate.h"
 
-#include <openssl/evp.h>
 #include <QCborMap>
 #include <QCborValue>
 #include <QCoreApplication>
+
+#include "ThirdParty/ed25519_verify.h"
 
 //--------------------------------------------------------------------------------------------------
 // Certificate format constants (must match the signing portal's output)
@@ -86,25 +87,12 @@ bool Licensing::parseCertificate(const QByteArray& framed,
                                           const QByteArray& signature,
                                           const std::array<std::uint8_t, 32>& publicKey)
 {
-  EVP_PKEY* key =
-    EVP_PKEY_new_raw_public_key(EVP_PKEY_ED25519, nullptr, publicKey.data(), publicKey.size());
-  if (!key)
+  if (signature.size() != kSignatureBytes)
     return false;
 
-  EVP_MD_CTX* ctx = EVP_MD_CTX_new();
-  bool ok         = false;
-  if (ctx && EVP_DigestVerifyInit(ctx, nullptr, nullptr, nullptr, key) == 1) {
-    const auto* sig = reinterpret_cast<const unsigned char*>(signature.constData());
-    const auto* msg = reinterpret_cast<const unsigned char*>(payload.constData());
-    ok =
-      EVP_DigestVerify(
-        ctx, sig, static_cast<size_t>(signature.size()), msg, static_cast<size_t>(payload.size()))
-      == 1;
-  }
-
-  EVP_MD_CTX_free(ctx);
-  EVP_PKEY_free(key);
-  return ok;
+  const auto* sig = reinterpret_cast<const std::uint8_t*>(signature.constData());
+  const auto* msg = reinterpret_cast<const std::uint8_t*>(payload.constData());
+  return ed25519_verify(sig, msg, static_cast<std::size_t>(payload.size()), publicKey.data());
 }
 
 //--------------------------------------------------------------------------------------------------

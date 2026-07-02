@@ -34,7 +34,7 @@
 #---------------------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
-project(app LANGUAGES CXX VERSION ${PROJECT_VERSION})
+project(app LANGUAGES C CXX VERSION ${PROJECT_VERSION})
 
 #---------------------------------------------------------------------------------------------------
 # Qt automation and C++ standard
@@ -652,6 +652,8 @@ if(BUILD_COMMERCIAL)
     src/Sessions/PlayerLoaderWorker.h
     src/Sessions/ReportData.h
     src/ThirdParty/miniaudio.h
+    src/ThirdParty/tweetnacl.h
+    src/ThirdParty/ed25519_verify.h
     src/UI/Widgets/Output/Base.h
     src/UI/Widgets/Output/Button.h
     src/UI/Widgets/Output/Slider.h
@@ -742,6 +744,8 @@ if(BUILD_COMMERCIAL)
     src/Licensing/OfflineCertificate.cpp
     src/Licensing/OfflineLicense.cpp
     src/Licensing/OfflineSelfTest.cpp
+    src/ThirdParty/tweetnacl.c
+    src/ThirdParty/ed25519_verify.cpp
     src/UI/Widgets/Output/Base.cpp
     src/UI/Widgets/Output/Button.cpp
     src/UI/Widgets/Output/Slider.cpp
@@ -1278,6 +1282,33 @@ if (BUILD_COMMERCIAL)
   if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" AND NOT APPLE)
     target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_SUPPORT_NEON)
   endif()
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# TweetNaCl (offline license Ed25519 verification, Pro only)
+#---------------------------------------------------------------------------------------------------
+#
+# tweetnacl.c is vendored byte-verbatim from the canonical public-domain release
+# (v20140427, https://tweetnacl.cr.yp.to/) and compiled as C -- the only reason the
+# project() call above enables the C language. It cannot compile as C++: its
+# zero-initialized `static const` tables (_0, gf0) have no initializers and sigma[16]
+# is initialized from a 17-byte string literal, both legal C but hard errors in C++.
+# Blanket-suppress warnings on the vendored code (it is not held to the project's
+# strict flags) and keep it out of any unity build, since its short file-local helper
+# names (A, M, add, pack, ...) would collide with other translation units.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+  if(MSVC)
+    set_source_files_properties(src/ThirdParty/tweetnacl.c PROPERTIES COMPILE_OPTIONS "/w")
+  else()
+    set_source_files_properties(src/ThirdParty/tweetnacl.c PROPERTIES COMPILE_OPTIONS "-w")
+  endif()
+
+  set_source_files_properties(src/ThirdParty/tweetnacl.c
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+  )
 endif()
 
 #---------------------------------------------------------------------------------------------------
