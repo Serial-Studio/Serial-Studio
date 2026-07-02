@@ -352,40 +352,44 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <source>Project Demo</source>
+        <translation>Projektdemo</translation>
+    </message>
+    <message>
         <source>What's New</source>
-        <translation>Vad Är Nytt</translation>
+        <translation type="vanished">Vad Är Nytt</translation>
     </message>
     <message>
         <source>Tips &amp;&amp; Tricks</source>
         <translation type="vanished">Tips &amp; Tricks</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>License Agreement</source>
         <translation>Licensavtal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>Report Bug</source>
         <translation>Rapportera Bugg</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Acknowledgements</source>
         <translation>Erkännanden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="267"/>
+        <location filename="../../qml/Dialogs/About.qml" line="270"/>
         <source>Website</source>
         <translation>Webbplats</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="283"/>
+        <location filename="../../qml/Dialogs/About.qml" line="286"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
@@ -8539,15 +8543,15 @@ Giltigt format: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="318"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="330"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN-buss Ej Tillgänglig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8556,37 +8560,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 CAN-buss-stöd på macOS är begränsat och kan kräva tredjepartshårdvarudrivrutiner.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="336"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Inga CAN-buss-plugins är tillgängliga på denna plattform.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>Invalid CAN Configuration</source>
         <translation>Ogiltig CAN-konfiguration</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
         <source>Invalid Selection</source>
         <translation>Ogiltigt Val</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="365"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
         <source>No Devices Available</source>
         <translation>Inga Enheter Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>Misslyckades Att Skapa CAN-enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
         <source>CAN Connection Failed</source>
         <translation>CAN-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="319"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8595,7 +8599,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 På Linux, säkerställ att SOCKETCAN-kärnmoduler är laddade.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8604,103 +8608,103 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 På Windows, installera CAN-hårdvarudrivrutiner (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN-bus-konfigurationen är ofullständig. Välj ett giltigt plugin och gränssnitt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="357"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Det valda pluginet eller gränssnittet är inte längre tillgängligt. Uppdatera listorna och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Plugin- eller gränssnittslistan är tom. Uppdatera listorna och säkerställ att din CAN-hårdvara är ansluten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Kan inte skapa CAN-bus-enhet. Kontrollera din hårdvara och drivrutiner.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Kan inte ansluta till CAN-bus-enhet. Kontrollera din hårdvaruanslutning och inställningar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="698"/>
         <source>CAN Bus Error</source>
         <translation>CAN-bussfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="699"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>Ett fel uppstod men CAN-enheten är inte längre tillgänglig.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>Error code: %1</source>
         <translation>Felkod: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN-busskommunikationsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="788"/>
         <source>No CAN driver selected</source>
         <translation>Ingen CAN-drivrutin vald</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="728"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Ladda SOCKETCAN-kärnmoduler först</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="724"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Anslut en %1-adapter och uppdatera sedan</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="731"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Konfigurera ett virtuellt CAN-gränssnitt först</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="730"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="753"/>
         <source>No interfaces found for %1</source>
         <translation>Inga gränssnitt hittades för %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Installera &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Installera &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Installera &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
         <source>Install %1 drivers</source>
         <translation>Installera %1-drivrutiner</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="751"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Installera %1-drivrutiner för macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="765"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -8711,32 +8715,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="872"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="880"/>
         <source>Interface</source>
         <translation>Gränssnitt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="888"/>
         <source>Bitrate</source>
         <translation>Bithastighet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="897"/>
         <source>CAN FD</source>
         <translation>CAN-FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="904"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
         <source>Listen-Only</source>
         <translation>Endast Lyssning</translation>
     </message>
@@ -11971,6 +11975,19 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     </message>
 </context>
 <context>
+    <name>Misc::DemoLauncher</name>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="194"/>
+        <source>Cannot start the demo</source>
+        <translation>Kan inte starta demon</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="195"/>
+        <source>The demo project could not be staged or opened. Check the application data directory permissions.</source>
+        <translation>Demoprojektet kunde inte förberedas eller öppnas. Kontrollera behörigheterna för applikationens datakatalog.</translation>
+    </message>
+</context>
+<context>
     <name>Misc::Examples</name>
     <message>
         <location filename="../../src/Misc/Examples.cpp" line="282"/>
@@ -12231,8 +12248,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Kunde inte skriva Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -12263,8 +12280,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Sparande av .lnk-filen misslyckades (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -13379,32 +13396,32 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
         <source>License certificate is valid.</source>
         <translation>Licenscertifikatet är giltigt.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>Certifikatsignaturen är ogiltig eller skadad.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="197"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
         <source>This certificate was issued for a different device.</source>
         <translation>Detta certifikat utfärdades för en annan enhet.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="200"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
         <source>This certificate has expired.</source>
         <translation>Detta certifikat har gått ut.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="202"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>Detta certifikat beviljar inte en giltig licensnivå.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="206"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>Certifikatfilen är felaktig eller oläsbar.</translation>
     </message>
@@ -14942,8 +14959,8 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation>Allmänt I/O-fel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Inaktiverad</translation>
     </message>
@@ -14985,8 +15002,8 @@ Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkrop
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <source>Missing Parse Function</source>
         <translation>Parse-funktion Saknas</translation>
     </message>
@@ -15002,8 +15019,8 @@ Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <source>Parse Function Runtime Error</source>
         <translation>Körningsfel i Parse-funktionen</translation>
     </message>
@@ -15664,22 +15681,22 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Sök datamängder</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
         <source>Loading datasets...</source>
         <translation>Laddar datamängder...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1088"/>
         <source>No datasets match your search.</source>
         <translation>Inga datamängder matchar din sökning.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1108"/>
         <source>Select at least one dataset to include.</source>
         <translation>Välj minst en datamängd att inkludera.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export HTML</source>
         <translation>Exportera HTML</translation>
     </message>
@@ -15724,12 +15741,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Inkludera</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1117"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export PDF</source>
         <translation>Exportera PDF</translation>
     </message>
@@ -16742,33 +16759,33 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Exportera…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="635"/>
         <source>Data Plotting</source>
         <translation>Dataritning</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="702"/>
         <source>Point Count</source>
         <translation>Punktantal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="727"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Ui-uppdateringsfrekvens (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
         <source>Show Actions Panel</source>
         <translation>Visa Åtgärdspanel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1037"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Visa Alltid Aktivitetsfältsknappar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1149"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
@@ -16791,7 +16808,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Tillåt Externa API-anslutningar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="874"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Dölj Verktygsfält Automatiskt</translation>
     </message>
@@ -16876,144 +16893,143 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Uppdateringar &amp; Nyheter</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
-        <translation>Visa Vad Är Nytt vid Uppstart</translation>
+        <translation type="vanished">Visa Vad Är Nytt vid Uppstart</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="650"/>
         <source>Time Range</source>
         <translation>Tidsintervall</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Small</source>
         <translation>Liten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Large</source>
         <translation>Stor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Extra Large</source>
         <translation>Extra Stor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Custom</source>
         <translation>Anpassad</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="843"/>
         <source>Layout</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="890"/>
         <source>Auto-Layout Margin</source>
         <translation>Automatisk Layout-marginal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="915"/>
         <source>Auto-Layout Spacing</source>
         <translation>Automatisk Layout-avstånd</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="947"/>
         <source>Video Export</source>
         <translation>Videoexport</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="965"/>
         <source>Save Videos by Default</source>
         <translation>Spara Videor som Standard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1016"/>
         <source>Behavior</source>
         <translation>Beteende</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1052"/>
         <source>Show Search Field</source>
         <translation>Visa Sökfält</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1067"/>
         <source>Auto-hide Taskbar</source>
         <translation>Dölj Aktivitetsfält Automatiskt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1085"/>
         <source>Hide Delay (ms)</source>
         <translation>Dölj Fördröjning (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Pinned Buttons</source>
         <translation>Fästa Knappar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1127"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Dra en fäst knapp i aktivitetsfältet för att ändra ordning.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1148"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1151"/>
         <source>Clock</source>
         <translation>Klocka</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1152"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1153"/>
         <source>Pause / Resume</source>
         <translation>Pausa / Återuppta</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1154"/>
         <source>File Transmission</source>
         <translation>Filöverföring</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1155"/>
         <source>AI Assistant</source>
         <translation>Ai-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1284"/>
         <source>Display</source>
         <translation>Display</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1299"/>
         <source>Display Mode</source>
         <translation>Displayläge</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="764"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1312"/>
         <source>Font Family</source>
         <translation>Teckensnittsfamilj</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1150"/>
         <source>Notifications</source>
         <translation>Notifikationer</translation>
     </message>
@@ -17023,13 +17039,13 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Exportera Protobuf-fil</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="749"/>
         <source>Dashboard Font</source>
         <translation>Typsnitt för Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1327"/>
         <source>Font Size</source>
         <translation>Teckenstorlek</translation>
     </message>
@@ -17042,97 +17058,97 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Spara Bilder som Standard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1344"/>
         <source>Show Timestamps</source>
         <translation>Visa Tidsstämplar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
         <source>Data Transmission</source>
         <translation>Dataöverföring</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1378"/>
         <source>Line Ending</source>
         <translation>Radslut</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
         <source>Input Mode</source>
         <translation>Ingångsläge</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1404"/>
         <source>Text Encoding</source>
         <translation>Textkodning</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1417"/>
         <source>Checksum</source>
         <translation>Kontrollsumma</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1430"/>
         <source>Echo Sent Data</source>
         <translation>Eka Skickad Data</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1449"/>
         <source>Escape Codes</source>
         <translation>Escape-koder</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1464"/>
         <source>VT100 Emulation</source>
         <translation>Vt100-emulering</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
         <source>ANSI Colors</source>
         <translation>Ansi-färger</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1541"/>
         <source>Delivery</source>
         <translation>Leverans</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1556"/>
         <source>System Notifications</source>
         <translation>Systemnotifikationer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1577"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Visa varnings-/kritiska händelser som skrivbordsnotifikationer när Serial Studio inte är det aktiva fönstret.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1587"/>
         <source>Application Logs</source>
         <translation>Applikationsloggar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1602"/>
         <source>Route Warnings to Notifications</source>
         <translation>Dirigera Varningar till Notifikationer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1623"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Av som standard — QT och QML genererar varningar frekvent och att aktivera detta kan överrösta verkliga larm. Kritiska meddelanden dirigeras alltid oavsett denna inställning.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1642"/>
         <source>Reset</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1682"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1690"/>
         <source>Apply</source>
         <translation>Tillämpa</translation>
     </message>
@@ -19414,17 +19430,26 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
         <translation>Aktivera</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="472"/>
+        <source>See it in Action</source>
+        <translation>Se det i Aktion</translation>
+    </message>
+    <message>
+        <source>See it in action</source>
+        <translation type="vanished">Se det i aktion</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Open in Limited Mode</source>
         <translation>Öppna i Begränsat Läge</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Continue</source>
         <translation>Fortsätt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Start Trial</source>
         <translation>Starta Provperiod</translation>
     </message>
@@ -19432,189 +19457,156 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
 <context>
     <name>WhatsNew</name>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="31"/>
         <source>What's New in %1</source>
-        <translation>Vad Är Nytt i %1</translation>
+        <translation type="vanished">Vad Är Nytt i %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="58"/>
         <source>Lua &amp; Built-In Parsers</source>
-        <translation>Lua &amp; Inbyggda Tolkar</translation>
+        <translation type="vanished">Lua &amp; Inbyggda Tolkar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
         <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
-        <translation>Tolka frames i Lua 5.4 eller med kodfria inbyggda mallar, tillsammans med JavaScript.</translation>
+        <translation type="vanished">Tolka frames i Lua 5.4 eller med kodfria inbyggda mallar, tillsammans med JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="67"/>
         <source>AI Assistant</source>
-        <translation>Ai-assistent</translation>
+        <translation type="vanished">Ai-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
         <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
-        <translation>En inbyggd assistent med åtta leverantörer som kan skapa och redigera projekt åt dig.</translation>
+        <translation type="vanished">En inbyggd assistent med åtta leverantörer som kan skapa och redigera projekt åt dig.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="76"/>
         <source>Device Control Loops</source>
-        <translation>Enhetskontrollslingor</translation>
+        <translation type="vanished">Enhetskontrollslingor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
         <source>Automate your device with an Arduino-style setup() and loop() routine that can read, write, and drive the dashboard.</source>
-        <translation>Automatisera din enhet med en Arduino-liknande setup()- och loop()-rutin som kan läsa, skriva och styra instrumentpanelen.</translation>
+        <translation type="vanished">Automatisera din enhet med en Arduino-liknande setup()- och loop()-rutin som kan läsa, skriva och styra instrumentpanelen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="85"/>
         <source>Oscilloscope Sweep &amp; Trigger</source>
-        <translation>Oscilloskop-svep &amp; Trigger</translation>
+        <translation type="vanished">Oscilloskop-svep &amp; Trigger</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
         <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
-        <translation>Svep i oscilloskopstil med en animerad triggermarkör som kan dras på plottet.</translation>
+        <translation type="vanished">Svep i oscilloskopstil med en animerad triggermarkör som kan dras på plottet.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="94"/>
         <source>Output Controls</source>
-        <translation>Utgångskontroller</translation>
+        <translation type="vanished">Utgångskontroller</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
         <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
-        <translation>Skicka tillbaka till din enhet med kontrollwidgets och en protokollhjälpmotor.</translation>
+        <translation type="vanished">Skicka tillbaka till din enhet med kontrollwidgets och en protokollhjälpmotor.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="103"/>
         <source>Dashboard Workspaces</source>
-        <translation>Dashboard-arbetsytor</translation>
+        <translation type="vanished">Dashboard-arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
         <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
-        <translation>Gruppera widgets i dina egna dashboards och hitta dem via aktivitetsfältets sökfunktion.</translation>
+        <translation type="vanished">Gruppera widgets i dina egna dashboards och hitta dem via aktivitetsfältets sökfunktion.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="112"/>
         <source>Session Database &amp; Reports</source>
-        <translation>Sessionsdatabas och Rapporter</translation>
+        <translation type="vanished">Sessionsdatabas och Rapporter</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
         <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
-        <translation>Spela in sessioner till SQLITE, spela upp dem och exportera HTML- eller PDF-rapporter.</translation>
+        <translation type="vanished">Spela in sessioner till SQLITE, spela upp dem och exportera HTML- eller PDF-rapporter.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="121"/>
         <source>Operator Deployments</source>
-        <translation>Operatörsdistributioner</translation>
+        <translation type="vanished">Operatörsdistributioner</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
         <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
-        <translation>Leverera en låst, specialanpassad version till operatörer med endast körläge.</translation>
+        <translation type="vanished">Leverera en låst, specialanpassad version till operatörer med endast körläge.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="130"/>
         <source>New Dashboard Widgets</source>
-        <translation>Nya Dashboard-widgets</translation>
+        <translation type="vanished">Nya Dashboard-widgets</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
         <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
-        <translation>Mätar- och visartavlor med livevisning, samt Klocka, Stoppur och Vattenfall.</translation>
+        <translation type="vanished">Mätar- och visartavlor med livevisning, samt Klocka, Stoppur och Vattenfall.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="139"/>
         <source>Dataset Transforms</source>
-        <translation>Datamängdstransformeringar</translation>
+        <translation type="vanished">Datamängdstransformeringar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
         <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
-        <translation>Kalibrera, filtrera och konvertera varje kanal med en funktion per dataset, eller lägg till virtuella dataset som beräknar nya kanaler.</translation>
+        <translation type="vanished">Kalibrera, filtrera och konvertera varje kanal med en funktion per dataset, eller lägg till virtuella dataset som beräknar nya kanaler.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="148"/>
         <source>Painter Widget</source>
-        <translation>Painter-widget</translation>
+        <translation type="vanished">Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
         <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
-        <translation>Rita helt anpassad grafik från inkommande data med ditt eget ritningsskript.</translation>
+        <translation type="vanished">Rita helt anpassad grafik från inkommande data med ditt eget ritningsskript.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="157"/>
         <source>Data Tables</source>
-        <translation>Datatabeller</translation>
+        <translation type="vanished">Datatabeller</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
         <source>Live register-style tables with virtual datasets and editable cells.</source>
-        <translation>Levande registerliknande tabeller med virtuella dataset och redigerbara celler.</translation>
+        <translation type="vanished">Levande registerliknande tabeller med virtuella dataset och redigerbara celler.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="166"/>
         <source>Image Widget</source>
-        <translation>Bild-widget</translation>
+        <translation type="vanished">Bild-widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
         <source>Decode and display image frames streamed straight from your device.</source>
-        <translation>Avkoda och visa bildramar som strömmas direkt från din enhet.</translation>
+        <translation type="vanished">Avkoda och visa bildramar som strömmas direkt från din enhet.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="175"/>
         <source>Notifications &amp; Alarms</source>
-        <translation>Notiser &amp; Larm</translation>
+        <translation type="vanished">Notiser &amp; Larm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
         <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
-        <translation>Multibands-datasetlarm med allvarlighetsnivåer, dirigerade till Notiscenter.</translation>
+        <translation type="vanished">Multibands-datasetlarm med allvarlighetsnivåer, dirigerade till Notiscenter.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="184"/>
         <source>Project Lock</source>
-        <translation>Projektlås</translation>
+        <translation type="vanished">Projektlås</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
         <source>Lock a project to separate operator use from editing, with an access code.</source>
-        <translation>Lås ett projekt för att separera operatörsanvändning från redigering, med en åtkomstkod.</translation>
+        <translation type="vanished">Lås ett projekt för att separera operatörsanvändning från redigering, med en åtkomstkod.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="193"/>
         <source>MQTT, Protobuf &amp; File Transfer</source>
-        <translation>MQTT, Protobuf &amp; Filöverföring</translation>
+        <translation type="vanished">MQTT, Protobuf &amp; Filöverföring</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="194"/>
         <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
-        <translation>MQTT-inmatning och publicering, Protobuf-import och XMODEM / YMODEM / ZMODEM-överföringar.</translation>
+        <translation type="vanished">MQTT-inmatning och publicering, Protobuf-import och XMODEM / YMODEM / ZMODEM-överföringar.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="240"/>
         <source>Welcome to %1!</source>
-        <translation>Välkommen till %1!</translation>
+        <translation type="vanished">Välkommen till %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="250"/>
         <source>Here's what's new in version %1.</source>
-        <translation>Här är vad som är nytt i version %1.</translation>
+        <translation type="vanished">Här är vad som är nytt i version %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="423"/>
         <source>Show on Startup</source>
-        <translation>Visa vid start</translation>
+        <translation type="vanished">Visa vid start</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="430"/>
+        <source>See it in action</source>
+        <translation type="vanished">Se det i aktion</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>Stäng</translation>
+        <translation type="vanished">Stäng</translation>
     </message>
 </context>
 <context>

@@ -207,11 +207,11 @@ set(SOURCES
   src/Misc/WorkspaceManager.cpp
   src/Misc/ExtensionManager.cpp
   src/Misc/Examples.cpp
+  src/Misc/DemoLauncher.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
   src/Misc/GraphicsBackend.cpp
   src/Misc/CrashTracker.cpp
-  src/Misc/WhatsNew.cpp
   src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
   src/Benchmark/HotpathBenchmark.cpp
@@ -336,11 +336,11 @@ set(HEADERS
   src/Misc/WorkspaceManager.h
   src/Misc/ExtensionManager.h
   src/Misc/Examples.h
+  src/Misc/DemoLauncher.h
   src/Misc/HelpCenter.h
   src/Misc/IconEngine.h
   src/Misc/GraphicsBackend.h
   src/Misc/CrashTracker.h
-  src/Misc/WhatsNew.h
   src/Misc/BackupManager.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
@@ -487,7 +487,6 @@ set(QML_SOURCES
   qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
-  qml/Dialogs/WhatsNew.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExamplesBrowser.qml

@@ -348,40 +348,44 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <source>Project Demo</source>
+        <translation>הדגמת פרויקט</translation>
+    </message>
+    <message>
         <source>What's New</source>
-        <translation>מה חדש</translation>
+        <translation type="vanished">מה חדש</translation>
     </message>
     <message>
         <source>Tips &amp;&amp; Tricks</source>
         <translation type="vanished">טיפים וטריקים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>License Agreement</source>
         <translation>הסכם רישיון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>Report Bug</source>
         <translation>דיווח על באג</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Acknowledgements</source>
         <translation>אישורים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Benchmark</source>
         <translation>מדד ביצועים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="267"/>
+        <location filename="../../qml/Dialogs/About.qml" line="270"/>
         <source>Website</source>
         <translation>אתר אינטרנט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="283"/>
+        <location filename="../../qml/Dialogs/About.qml" line="286"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -8439,35 +8443,35 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>יצירת התקן CAN נכשלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>לא ניתן ליצור התקן CAN. בדוק את החומרה והמנהלים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
         <source>CAN Connection Failed</source>
         <translation>חיבור CAN נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>לא ניתן להתחבר להתקן CAN. בדוק את חיבור החומרה וההגדרות.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="318"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="330"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus לא זמין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="319"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8476,7 +8480,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 ב-Linux, יש לוודא שמודולי הליבה של SOCKETCAN טעונים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8485,7 +8489,7 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 ב-Windows, יש להתקין מנהלי התקן לחומרת CAN (PEAK, VECTOR וכו').</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8494,108 +8498,108 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 תמיכה ב-CAN bus ב-macOS מוגבלת ועשויה לדרוש מנהלי התקן של צד שלישי.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="336"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>אין תוספי CAN bus זמינים בפלטפורמה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>Invalid CAN Configuration</source>
         <translation>תצורת CAN לא תקינה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>תצורת CAN bus אינה שלמה. יש לבחור תוסף וממשק תקינים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
         <source>Invalid Selection</source>
         <translation>בחירה לא תקינה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="357"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>התוסף או הממשק שנבחרו אינם זמינים עוד. יש לרענן את הרשימות ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="365"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
         <source>No Devices Available</source>
         <translation>אין התקנים זמינים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>רשימת התוספים או הממשקים ריקה. רענן את הרשימות וודא שחומרת ה-CAN שלך מחוברת.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="698"/>
         <source>CAN Bus Error</source>
         <translation>שגיאת אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="699"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>אירעה שגיאה אך התקן ה-CAN אינו זמין עוד.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>Error code: %1</source>
         <translation>קוד שגיאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>CAN Bus Communication Error</source>
         <translation>שגיאת תקשורת אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="724"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>חבר מתאם %1 ולאחר מכן רענן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="728"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>טען תחילה מודולי ליבה של SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="731"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>הגדר תחילה ממשק CAN וירטואלי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="730"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="753"/>
         <source>No interfaces found for %1</source>
         <translation>לא נמצאו ממשקים עבור %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;מנהלי התקן PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;מנהלי התקן VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;מנהלי התקן SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
         <source>Install %1 drivers</source>
         <translation>התקן מנהלי התקן %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="751"/>
         <source>Install %1 drivers for macOS</source>
         <translation>התקן מנהלי התקן %1 עבור macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="765"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -8606,37 +8610,37 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="788"/>
         <source>No CAN driver selected</source>
         <translation>לא נבחר מנהל התקן CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="872"/>
         <source>Plugin</source>
         <translation>תוסף</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="880"/>
         <source>Interface</source>
         <translation>ממשק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="888"/>
         <source>Bitrate</source>
         <translation>קצב סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="897"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="904"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
         <source>Listen-Only</source>
         <translation>האזנה בלבד</translation>
     </message>
@@ -11473,6 +11477,19 @@ Thank you again for supporting Serial Studio!</source>
     </message>
 </context>
 <context>
+    <name>Misc::DemoLauncher</name>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="194"/>
+        <source>Cannot start the demo</source>
+        <translation>לא ניתן להפעיל את ההדגמה</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="195"/>
+        <source>The demo project could not be staged or opened. Check the application data directory permissions.</source>
+        <translation>לא ניתן להכין או לפתוח את פרויקט ההדגמה. בדוק את הרשאות ספריית נתוני האפליקציה.</translation>
+    </message>
+</context>
+<context>
     <name>Misc::Examples</name>
     <message>
         <location filename="../../src/Misc/Examples.cpp" line="282"/>
@@ -11733,8 +11750,8 @@ Would you like to open the download page?</source>
         <translation>לא ניתן ליצור את מבנה התיקיות של bundle מסוג .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של Windows אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -11765,8 +11782,8 @@ Would you like to open the download page?</source>
         <translation>שמירת קובץ .lnk נכשלה (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של macOS אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -12865,32 +12882,32 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
         <source>License certificate is valid.</source>
         <translation>אישור הרישיון תקין.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>חתימת האישור אינה תקינה או פגומה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="197"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
         <source>This certificate was issued for a different device.</source>
         <translation>אישור זה הונפק עבור מכשיר אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="200"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
         <source>This certificate has expired.</source>
         <translation>אישור זה פג תוקף.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="202"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>אישור זה אינו מעניק רמת רישיון תקינה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="206"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>קובץ האישור פגום או לא ניתן לקריאה.</translation>
     </message>
@@ -14510,8 +14527,8 @@ Click Refresh to update the list.</source>
         <translation>Serial Studio משמיט מסגרות כדי לשמור על היענות האפליקציה. יש לפשט או לייעל את סקריפט מנתח המסגרות כדי להפחית את עומס העבודה שלו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <source>Frame Parser Disabled</source>
         <translation>מנתח מסגרות מושבת</translation>
     </message>
@@ -14553,8 +14570,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <source>Missing Parse Function</source>
         <translation>פונקציית Parse חסרה</translation>
     </message>
@@ -14570,8 +14587,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <source>Parse Function Runtime Error</source>
         <translation>שגיאת זמן ריצה בפונקציית Parse</translation>
     </message>
@@ -15178,32 +15195,32 @@ function parse(%1) { ... }
         <translation>חיפוש מערכי נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
         <source>Loading datasets...</source>
         <translation>טוען מערכי נתונים...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1088"/>
         <source>No datasets match your search.</source>
         <translation>אין מערכי נתונים התואמים לחיפוש.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1108"/>
         <source>Select at least one dataset to include.</source>
         <translation>בחר לפחות מערך נתונים אחד לכלול.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1117"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export PDF</source>
         <translation>ייצוא PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export HTML</source>
         <translation>ייצוא HTML</translation>
     </message>
@@ -16151,13 +16168,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1149"/>
         <source>Console</source>
         <translation>קונסול</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1150"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
@@ -16200,7 +16217,7 @@ function parse(%1) { ... }
         <translation>מנגנון רינדור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="874"/>
         <source>Auto-Hide Toolbar</source>
         <translation>הסתר סרגל כלים אוטומטית</translation>
     </message>
@@ -16265,22 +16282,21 @@ function parse(%1) { ... }
         <translation>עדכונים וחדשות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
-        <translation>הצג מה חדש בהפעלה</translation>
+        <translation type="vanished">הצג מה חדש בהפעלה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="635"/>
         <source>Data Plotting</source>
         <translation>שרטוט נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="702"/>
         <source>Point Count</source>
         <translation>מספר נקודות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="650"/>
         <source>Time Range</source>
         <translation>טווח זמן</translation>
     </message>
@@ -16310,249 +16326,249 @@ function parse(%1) { ... }
         <translation>API ותוספים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="727"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>קצב רענון ממשק (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="749"/>
         <source>Dashboard Font</source>
         <translation>גופן לוח בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="764"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1312"/>
         <source>Font Family</source>
         <translation>משפחת גופן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1327"/>
         <source>Font Size</source>
         <translation>גודל גופן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Small</source>
         <translation>קטן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Normal</source>
         <translation>רגיל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Large</source>
         <translation>גדול</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Extra Large</source>
         <translation>גדול במיוחד</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Custom</source>
         <translation>מותאם אישית</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="843"/>
         <source>Layout</source>
         <translation>פריסה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
         <source>Show Actions Panel</source>
         <translation>הצג לוח פעולות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="890"/>
         <source>Auto-Layout Margin</source>
         <translation>שולי פריסה אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="915"/>
         <source>Auto-Layout Spacing</source>
         <translation>ריווח פריסה אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="947"/>
         <source>Video Export</source>
         <translation>ייצוא וידאו</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="965"/>
         <source>Save Videos by Default</source>
         <translation>שמור סרטונים כברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1016"/>
         <source>Behavior</source>
         <translation>התנהגות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1037"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>הצג תמיד כפתורי שורת משימות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1052"/>
         <source>Show Search Field</source>
         <translation>הצג שדה חיפוש</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1067"/>
         <source>Auto-hide Taskbar</source>
         <translation>הסתר אוטומטית שורת משימות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1085"/>
         <source>Hide Delay (ms)</source>
         <translation>עיכוב הסתרה (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Pinned Buttons</source>
         <translation>כפתורים מוצמדים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1127"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>גרור כפתור מוצמד בשורת המשימות כדי לשנות את סדרו.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1148"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1151"/>
         <source>Clock</source>
         <translation>שעון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1152"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1153"/>
         <source>Pause / Resume</source>
         <translation>השהה / המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1154"/>
         <source>File Transmission</source>
         <translation>שידור קובץ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1155"/>
         <source>AI Assistant</source>
         <translation>עוזר AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1284"/>
         <source>Display</source>
         <translation>תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1299"/>
         <source>Display Mode</source>
         <translation>מצב תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1344"/>
         <source>Show Timestamps</source>
         <translation>הצג חותמות זמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
         <source>Data Transmission</source>
         <translation>שידור נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1378"/>
         <source>Line Ending</source>
         <translation>סיום שורה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
         <source>Input Mode</source>
         <translation>מצב קלט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1404"/>
         <source>Text Encoding</source>
         <translation>קידוד טקסט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1417"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1430"/>
         <source>Echo Sent Data</source>
         <translation>הדהד נתונים שנשלחו</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1449"/>
         <source>Escape Codes</source>
         <translation>קודי Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1464"/>
         <source>VT100 Emulation</source>
         <translation>אמולציית VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
         <source>ANSI Colors</source>
         <translation>צבעי ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1541"/>
         <source>Delivery</source>
         <translation>מסירה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1556"/>
         <source>System Notifications</source>
         <translation>התראות מערכת</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1577"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>הצג אירועי אזהרה/קריטיים כהתראות שולחן עבודה של מערכת ההפעלה כאשר Serial Studio אינו בחלון הקדמי.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1587"/>
         <source>Application Logs</source>
         <translation>יומני יישום</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1602"/>
         <source>Route Warnings to Notifications</source>
         <translation>נתב אזהרות להתראות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1623"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>כבוי כברירת מחדל — QT ו-QML פולטים אזהרות לעיתים קרובות והפעלת אפשרות זו עלולה להציף התראות אמיתיות. הודעות קריטיות תמיד מנותבות ללא קשר להגדרה זו.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1642"/>
         <source>Reset</source>
         <translation>אפס</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1682"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1690"/>
         <source>Apply</source>
         <translation>החל</translation>
     </message>
@@ -18726,17 +18742,26 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>הפעל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="472"/>
+        <source>See it in Action</source>
+        <translation>צפה בפעולה</translation>
+    </message>
+    <message>
+        <source>See it in action</source>
+        <translation type="vanished">צפה בפעולה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Open in Limited Mode</source>
         <translation>פתח במצב מוגבל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Start Trial</source>
         <translation>התחל ניסיון</translation>
     </message>
@@ -18744,189 +18769,156 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WhatsNew</name>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="31"/>
         <source>What's New in %1</source>
-        <translation>מה חדש ב-%1</translation>
+        <translation type="vanished">מה חדש ב-%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="58"/>
         <source>Lua &amp; Built-In Parsers</source>
-        <translation>Lua ומנתחים מובנים</translation>
+        <translation type="vanished">Lua ומנתחים מובנים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
         <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
-        <translation>ניתוח מסגרות ב-Lua 5.4 או באמצעות תבניות מובנות ללא קוד, לצד JavaScript.</translation>
+        <translation type="vanished">ניתוח מסגרות ב-Lua 5.4 או באמצעות תבניות מובנות ללא קוד, לצד JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="67"/>
         <source>AI Assistant</source>
-        <translation>עוזר AI</translation>
+        <translation type="vanished">עוזר AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
         <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
-        <translation>עוזר מובנה באפליקציה על פני שמונה ספקים שיכול לבנות ולערוך פרויקטים עבורך.</translation>
+        <translation type="vanished">עוזר מובנה באפליקציה על פני שמונה ספקים שיכול לבנות ולערוך פרויקטים עבורך.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="76"/>
         <source>Device Control Loops</source>
-        <translation>לולאות בקרה למכשיר</translation>
+        <translation type="vanished">לולאות בקרה למכשיר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
         <source>Automate your device with an Arduino-style setup() and loop() routine that can read, write, and drive the dashboard.</source>
-        <translation>הפוך את המכשיר לאוטומטי עם שגרת setup()‎ ו-loop()‎ בסגנון Arduino שיכולה לקרוא, לכתוב ולהפעיל את לוח המחוונים.</translation>
+        <translation type="vanished">הפוך את המכשיר לאוטומטי עם שגרת setup()‎ ו-loop()‎ בסגנון Arduino שיכולה לקרוא, לכתוב ולהפעיל את לוח המחוונים.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="85"/>
         <source>Oscilloscope Sweep &amp; Trigger</source>
-        <translation>סריקה וטריגר אוסילוסקופ</translation>
+        <translation type="vanished">סריקה וטריגר אוסילוסקופ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
         <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
-        <translation>סריקה בסגנון אוסילוסקופ עם סמן טריגר מונפש שניתן לגרור על הגרף.</translation>
+        <translation type="vanished">סריקה בסגנון אוסילוסקופ עם סמן טריגר מונפש שניתן לגרור על הגרף.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="94"/>
         <source>Output Controls</source>
-        <translation>בקרות פלט</translation>
+        <translation type="vanished">בקרות פלט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
         <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
-        <translation>שדר חזרה למכשיר שלך עם ווידג'טים לבקרה ומנוע עזר פרוטוקול.</translation>
+        <translation type="vanished">שדר חזרה למכשיר שלך עם ווידג'טים לבקרה ומנוע עזר פרוטוקול.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="103"/>
         <source>Dashboard Workspaces</source>
-        <translation>מרחבי עבודה ללוח בקרה</translation>
+        <translation type="vanished">מרחבי עבודה ללוח בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
         <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
-        <translation>קבץ ווידג'טים ללוחות בקרה משלך ומצא אותם מחיפוש שורת המשימות.</translation>
+        <translation type="vanished">קבץ ווידג'טים ללוחות בקרה משלך ומצא אותם מחיפוש שורת המשימות.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="112"/>
         <source>Session Database &amp; Reports</source>
-        <translation>מסד נתוני סשן ודוחות</translation>
+        <translation type="vanished">מסד נתוני סשן ודוחות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
         <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
-        <translation>הקלט סשנים ל־SQLITE, הפעל אותם מחדש, וייצא דוחות HTML או PDF.</translation>
+        <translation type="vanished">הקלט סשנים ל־SQLITE, הפעל אותם מחדש, וייצא דוחות HTML או PDF.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="121"/>
         <source>Operator Deployments</source>
-        <translation>פריסות למפעיל</translation>
+        <translation type="vanished">פריסות למפעיל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
         <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
-        <translation>שלח גרסה נעולה ייעודית למפעילים עם מצב זמן ריצה בלבד.</translation>
+        <translation type="vanished">שלח גרסה נעולה ייעודית למפעילים עם מצב זמן ריצה בלבד.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="130"/>
         <source>New Dashboard Widgets</source>
-        <translation>ווידג'טים חדשים ללוח בקרה</translation>
+        <translation type="vanished">ווידג'טים חדשים ללוח בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
         <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
-        <translation>פני מד ומחוון עם קריאות חיות, בתוספת שעון, שעון עצר ומפל.</translation>
+        <translation type="vanished">פני מד ומחוון עם קריאות חיות, בתוספת שעון, שעון עצר ומפל.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="139"/>
         <source>Dataset Transforms</source>
-        <translation>טרנספורמציות מערך נתונים</translation>
+        <translation type="vanished">טרנספורמציות מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
         <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
-        <translation>כייל, סנן והמר כל ערוץ עם פונקציה לכל Dataset, או הוסף Datasets וירטואליים שמחשבים ערוצים חדשים.</translation>
+        <translation type="vanished">כייל, סנן והמר כל ערוץ עם פונקציה לכל Dataset, או הוסף Datasets וירטואליים שמחשבים ערוצים חדשים.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="148"/>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation type="vanished">וידג'ט ציור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
         <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
-        <translation>צייר גרפיקה מותאמת אישית מנתונים נכנסים עם סקריפט ציור משלך.</translation>
+        <translation type="vanished">צייר גרפיקה מותאמת אישית מנתונים נכנסים עם סקריפט ציור משלך.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="157"/>
         <source>Data Tables</source>
-        <translation>טבלאות נתונים</translation>
+        <translation type="vanished">טבלאות נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
         <source>Live register-style tables with virtual datasets and editable cells.</source>
-        <translation>טבלאות חיות בסגנון רגיסטרים עם Datasets וירטואליים ותאים הניתנים לעריכה.</translation>
+        <translation type="vanished">טבלאות חיות בסגנון רגיסטרים עם Datasets וירטואליים ותאים הניתנים לעריכה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="166"/>
         <source>Image Widget</source>
-        <translation>וידג'ט תמונה</translation>
+        <translation type="vanished">וידג'ט תמונה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
         <source>Decode and display image frames streamed straight from your device.</source>
-        <translation>פענח והצג מסגרות תמונה המוזרמות ישירות מהמכשיר שלך.</translation>
+        <translation type="vanished">פענח והצג מסגרות תמונה המוזרמות ישירות מהמכשיר שלך.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="175"/>
         <source>Notifications &amp; Alarms</source>
-        <translation>התראות ואזעקות</translation>
+        <translation type="vanished">התראות ואזעקות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
         <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
-        <translation>אזעקות Dataset רב-רצועתיות עם דרגות חומרה, המנותבות למרכז ההתראות.</translation>
+        <translation type="vanished">אזעקות Dataset רב-רצועתיות עם דרגות חומרה, המנותבות למרכז ההתראות.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="184"/>
         <source>Project Lock</source>
-        <translation>נעל פרויקט</translation>
+        <translation type="vanished">נעל פרויקט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
         <source>Lock a project to separate operator use from editing, with an access code.</source>
-        <translation>נעילת פרויקט להפרדת שימוש מפעיל מעריכה, עם קוד גישה.</translation>
+        <translation type="vanished">נעילת פרויקט להפרדת שימוש מפעיל מעריכה, עם קוד גישה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="193"/>
         <source>MQTT, Protobuf &amp; File Transfer</source>
-        <translation>MQTT, Protobuf והעברת קבצים</translation>
+        <translation type="vanished">MQTT, Protobuf והעברת קבצים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="194"/>
         <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
-        <translation>קלט ופרסום MQTT, ייבוא Protobuf והעברות XMODEM / YMODEM / ZMODEM.</translation>
+        <translation type="vanished">קלט ופרסום MQTT, ייבוא Protobuf והעברות XMODEM / YMODEM / ZMODEM.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="240"/>
         <source>Welcome to %1!</source>
-        <translation>ברוכים הבאים ל-%1!</translation>
+        <translation type="vanished">ברוכים הבאים ל-%1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="250"/>
         <source>Here's what's new in version %1.</source>
-        <translation>הנה מה חדש בגרסה %1.</translation>
+        <translation type="vanished">הנה מה חדש בגרסה %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="423"/>
         <source>Show on Startup</source>
-        <translation>הצג בהפעלה</translation>
+        <translation type="vanished">הצג בהפעלה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="430"/>
+        <source>See it in action</source>
+        <translation type="vanished">צפה בפעולה</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>סגור</translation>
+        <translation type="vanished">סגור</translation>
     </message>
 </context>
 <context>

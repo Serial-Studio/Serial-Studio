@@ -352,40 +352,44 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <source>Project Demo</source>
+        <translation>Démo du Projet</translation>
+    </message>
+    <message>
         <source>What's New</source>
-        <translation>Nouveautés</translation>
+        <translation type="vanished">Nouveautés</translation>
     </message>
     <message>
         <source>Tips &amp;&amp; Tricks</source>
         <translation type="vanished">Astuces et Conseils</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>License Agreement</source>
         <translation>Contrat de Licence</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>Report Bug</source>
         <translation>Signaler un Bug</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Acknowledgements</source>
         <translation>Remerciements</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="267"/>
+        <location filename="../../qml/Dialogs/About.qml" line="270"/>
         <source>Website</source>
         <translation>Site Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="283"/>
+        <location filename="../../qml/Dialogs/About.qml" line="286"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -8539,15 +8543,15 @@ Format valide : 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="318"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="330"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
         <source>CAN Bus Not Available</source>
         <translation>Bus CAN Non Disponible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8556,37 +8560,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 La prise en charge du bus CAN sur macOS est limitée et peut nécessiter des pilotes matériels tiers.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="336"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Aucun plugin de bus CAN n'est disponible sur cette plateforme.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>Invalid CAN Configuration</source>
         <translation>Configuration CAN Invalide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
         <source>Invalid Selection</source>
         <translation>Sélection Invalide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="365"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
         <source>No Devices Available</source>
         <translation>Aucun Périphérique Disponible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>Échec de la Création du Périphérique CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
         <source>CAN Connection Failed</source>
         <translation>Échec de la Connexion CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="319"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8595,7 +8599,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Sous Linux, assurez-vous que les modules noyau SOCKETCAN sont chargés.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8604,103 +8608,103 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Sous Windows, installez les pilotes matériels CAN (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>La configuration du bus CAN est incomplète. Sélectionnez un plugin et une interface valides.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="357"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Le plugin ou l'interface sélectionné n'est plus disponible. Actualisez les listes et réessayez.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>La liste des plugins ou des interfaces est vide. Actualisez les listes et assurez-vous que votre matériel CAN est connecté.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Impossible de créer le périphérique de bus CAN. Vérifiez votre matériel et vos pilotes.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Impossible de se connecter au périphérique de bus CAN. Vérifiez votre connexion matérielle et vos paramètres.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="698"/>
         <source>CAN Bus Error</source>
         <translation>Erreur de Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="699"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>Une erreur s'est produite mais le périphérique CAN n'est plus disponible.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>Error code: %1</source>
         <translation>Code d'erreur : %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>CAN Bus Communication Error</source>
         <translation>Erreur de Communication du Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="788"/>
         <source>No CAN driver selected</source>
         <translation>Aucun pilote CAN sélectionné</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="728"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Charger d'abord les modules noyau SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="724"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Connectez un adaptateur %1, puis actualisez</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="731"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Configurer d'abord une interface CAN virtuelle</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="730"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="753"/>
         <source>No interfaces found for %1</source>
         <translation>Aucune interface trouvée pour %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Installer les &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;pilotes PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Installer les &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;pilotes VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Installer les &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;pilotes CAN SysTec&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
         <source>Install %1 drivers</source>
         <translation>Installer les pilotes %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="751"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Installer les pilotes %1 pour macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="765"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -8711,32 +8715,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="872"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="880"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="888"/>
         <source>Bitrate</source>
         <translation>Débit Binaire</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="897"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="904"/>
         <source>Loopback</source>
         <translation>Bouclage</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
         <source>Listen-Only</source>
         <translation>Écoute Seule</translation>
     </message>
@@ -11971,6 +11975,19 @@ Veuillez fournir les identifiants nécessaires.</translation>
     </message>
 </context>
 <context>
+    <name>Misc::DemoLauncher</name>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="194"/>
+        <source>Cannot start the demo</source>
+        <translation>Impossible de Démarrer la Démo</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="195"/>
+        <source>The demo project could not be staged or opened. Check the application data directory permissions.</source>
+        <translation>Le projet de démonstration n'a pas pu être préparé ou ouvert. Vérifier les permissions du répertoire de données de l'application.</translation>
+    </message>
+</context>
+<context>
     <name>Misc::Examples</name>
     <message>
         <location filename="../../src/Misc/Examples.cpp" line="282"/>
@@ -12231,8 +12248,8 @@ Souhaitez-vous ouvrir la page de téléchargement ?</translation>
         <translation>Impossible d'écrire Info.plist : %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Le générateur de raccourcis Windows n'est pas disponible sur cette plateforme.</translation>
     </message>
@@ -12263,8 +12280,8 @@ Souhaitez-vous ouvrir la page de téléchargement ?</translation>
         <translation>L'enregistrement du fichier .lnk a échoué (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Le générateur de raccourcis macOS n'est pas disponible sur cette plateforme.</translation>
     </message>
@@ -13379,32 +13396,32 @@ Ajoutez des groupes ci-dessus pour interroger plusieurs types de registres.</tra
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
         <source>License certificate is valid.</source>
         <translation>Le certificat de licence est valide.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>La signature du certificat est invalide ou corrompue.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="197"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
         <source>This certificate was issued for a different device.</source>
         <translation>Ce certificat a été émis pour un périphérique différent.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="200"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
         <source>This certificate has expired.</source>
         <translation>Ce certificat a expiré.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="202"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>Ce certificat n'accorde pas de niveau de licence valide.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="206"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>Le fichier de certificat est mal formé ou illisible.</translation>
     </message>
@@ -14942,8 +14959,8 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
         <translation>Erreur d'E/S générale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyseur de Trames Désactivé</translation>
     </message>
@@ -14985,8 +15002,8 @@ Cause la plus probable : une boucle infinie ou une opération extrêmement lente
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <source>Missing Parse Function</source>
         <translation>Fonction Parse Manquante</translation>
     </message>
@@ -15002,8 +15019,8 @@ Assurez-vous que votre code inclut :
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <source>Parse Function Runtime Error</source>
         <translation>Erreur D'exécution de la Fonction D'analyse</translation>
     </message>
@@ -15664,22 +15681,22 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Rechercher des jeux de données</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
         <source>Loading datasets...</source>
         <translation>Chargement des jeux de données...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1088"/>
         <source>No datasets match your search.</source>
         <translation>Aucun jeu de données ne correspond à votre recherche.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1108"/>
         <source>Select at least one dataset to include.</source>
         <translation>Sélectionner au moins un jeu de données à inclure.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export HTML</source>
         <translation>Exporter HTML</translation>
     </message>
@@ -15724,12 +15741,12 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Inclure</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1117"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export PDF</source>
         <translation>Exporter PDF</translation>
     </message>
@@ -16737,27 +16754,27 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Exporter…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="635"/>
         <source>Data Plotting</source>
         <translation>Tracé des Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="702"/>
         <source>Point Count</source>
         <translation>Nombre de Points</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="727"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Fréquence de Rafraîchissement de L'interface (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1037"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Toujours Afficher les Boutons de la Barre des Tâches</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
         <source>Show Actions Panel</source>
         <translation>Afficher le Panneau D'actions</translation>
     </message>
@@ -16768,7 +16785,7 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1149"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
@@ -16791,7 +16808,7 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Autoriser les Connexions API Externes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="874"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Masquer Automatiquement la Barre D'outils</translation>
     </message>
@@ -16876,144 +16893,143 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Mises à Jour et Actualités</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
-        <translation>Afficher les Nouveautés au Démarrage</translation>
+        <translation type="vanished">Afficher les Nouveautés au Démarrage</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="650"/>
         <source>Time Range</source>
         <translation>Plage Temporelle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Small</source>
         <translation>Petit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Large</source>
         <translation>Grand</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Extra Large</source>
         <translation>Très Grand</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Custom</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="843"/>
         <source>Layout</source>
         <translation>Disposition</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="890"/>
         <source>Auto-Layout Margin</source>
         <translation>Marge de la Disposition Automatique</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="915"/>
         <source>Auto-Layout Spacing</source>
         <translation>Espacement de la Disposition Automatique</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="947"/>
         <source>Video Export</source>
         <translation>Export Vidéo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="965"/>
         <source>Save Videos by Default</source>
         <translation>Enregistrer les Vidéos par Défaut</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1016"/>
         <source>Behavior</source>
         <translation>Comportement</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1052"/>
         <source>Show Search Field</source>
         <translation>Afficher le Champ de Recherche</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1067"/>
         <source>Auto-hide Taskbar</source>
         <translation>Masquer Automatiquement la Barre des Tâches</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1085"/>
         <source>Hide Delay (ms)</source>
         <translation>Délai de Masquage (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Pinned Buttons</source>
         <translation>Boutons Épinglés</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1127"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Faites glisser un bouton épinglé sur la barre des tâches pour le réorganiser.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1148"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1151"/>
         <source>Clock</source>
         <translation>Horloge</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1152"/>
         <source>Stopwatch</source>
         <translation>Chronomètre</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1153"/>
         <source>Pause / Resume</source>
         <translation>Pause / Reprendre</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1154"/>
         <source>File Transmission</source>
         <translation>Transmission de Fichier</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1155"/>
         <source>AI Assistant</source>
         <translation>Assistant IA</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1284"/>
         <source>Display</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1299"/>
         <source>Display Mode</source>
         <translation>Mode D'affichage</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="764"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1312"/>
         <source>Font Family</source>
         <translation>Famille de Police</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1150"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
@@ -17023,13 +17039,13 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Exporter le Fichier Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="749"/>
         <source>Dashboard Font</source>
         <translation>Police du Tableau de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1327"/>
         <source>Font Size</source>
         <translation>Taille de Police</translation>
     </message>
@@ -17042,97 +17058,97 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation type="vanished">Enregistrer les Images par Défaut</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1344"/>
         <source>Show Timestamps</source>
         <translation>Afficher les Horodatages</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
         <source>Data Transmission</source>
         <translation>Transmission de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1378"/>
         <source>Line Ending</source>
         <translation>Fin de Ligne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
         <source>Input Mode</source>
         <translation>Mode D'entrée</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1404"/>
         <source>Text Encoding</source>
         <translation>Encodage de Texte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1417"/>
         <source>Checksum</source>
         <translation>Somme de Contrôle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1430"/>
         <source>Echo Sent Data</source>
         <translation>Écho des Données Envoyées</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1449"/>
         <source>Escape Codes</source>
         <translation>Codes D'échappement</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1464"/>
         <source>VT100 Emulation</source>
         <translation>Émulation VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
         <source>ANSI Colors</source>
         <translation>Couleurs ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1541"/>
         <source>Delivery</source>
         <translation>Livraison</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1556"/>
         <source>System Notifications</source>
         <translation>Notifications Système</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1577"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Afficher les événements d'avertissement/critiques comme notifications de bureau du système d'exploitation lorsque Serial Studio n'est pas la fenêtre au premier plan.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1587"/>
         <source>Application Logs</source>
         <translation>Journaux de L'application</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1602"/>
         <source>Route Warnings to Notifications</source>
         <translation>Rediriger les Avertissements vers les Notifications</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1623"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Désactivé par défaut — QT et QML émettent fréquemment des avertissements et activer ceci peut noyer les vraies alarmes. Les messages critiques sont toujours acheminés indépendamment de ce paramètre.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1642"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1682"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1690"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -19414,17 +19430,26 @@ Je comprends qu'à son expiration, je devrai acheter une licence ou compiler la 
         <translation>Activer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="472"/>
+        <source>See it in Action</source>
+        <translation>Voir en Action</translation>
+    </message>
+    <message>
+        <source>See it in action</source>
+        <translation type="vanished">Voir en Action</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Open in Limited Mode</source>
         <translation>Ouvrir en Mode Limité</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Continue</source>
         <translation>Continuer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Start Trial</source>
         <translation>Démarrer L'essai</translation>
     </message>
@@ -19432,189 +19457,156 @@ Je comprends qu'à son expiration, je devrai acheter une licence ou compiler la 
 <context>
     <name>WhatsNew</name>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="31"/>
         <source>What's New in %1</source>
-        <translation>Nouveautés de %1</translation>
+        <translation type="vanished">Nouveautés de %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="58"/>
         <source>Lua &amp; Built-In Parsers</source>
-        <translation>Lua et Analyseurs Intégrés</translation>
+        <translation type="vanished">Lua et Analyseurs Intégrés</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
         <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
-        <translation>Analysez les trames en Lua 5.4 ou avec des modèles intégrés sans code, en complément de JavaScript.</translation>
+        <translation type="vanished">Analysez les trames en Lua 5.4 ou avec des modèles intégrés sans code, en complément de JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="67"/>
         <source>AI Assistant</source>
-        <translation>Assistant IA</translation>
+        <translation type="vanished">Assistant IA</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
         <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
-        <translation>Un assistant intégré à l'application compatible avec huit fournisseurs, capable de créer et modifier des projets pour vous.</translation>
+        <translation type="vanished">Un assistant intégré à l'application compatible avec huit fournisseurs, capable de créer et modifier des projets pour vous.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="76"/>
         <source>Device Control Loops</source>
-        <translation>Boucles de Contrôle du Périphérique</translation>
+        <translation type="vanished">Boucles de Contrôle du Périphérique</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
         <source>Automate your device with an Arduino-style setup() and loop() routine that can read, write, and drive the dashboard.</source>
-        <translation>Automatisez votre périphérique avec une routine setup() et loop() de style Arduino qui peut lire, écrire et piloter le tableau de bord.</translation>
+        <translation type="vanished">Automatisez votre périphérique avec une routine setup() et loop() de style Arduino qui peut lire, écrire et piloter le tableau de bord.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="85"/>
         <source>Oscilloscope Sweep &amp; Trigger</source>
-        <translation>Balayage et Déclenchement Oscilloscope</translation>
+        <translation type="vanished">Balayage et Déclenchement Oscilloscope</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
         <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
-        <translation>Balayage de type oscilloscope avec un curseur de déclenchement animé que vous pouvez déplacer sur le graphique.</translation>
+        <translation type="vanished">Balayage de type oscilloscope avec un curseur de déclenchement animé que vous pouvez déplacer sur le graphique.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="94"/>
         <source>Output Controls</source>
-        <translation>Contrôles de Sortie</translation>
+        <translation type="vanished">Contrôles de Sortie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
         <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
-        <translation>Transmettez vers votre appareil avec des widgets de contrôle et un moteur d'assistance de protocole.</translation>
+        <translation type="vanished">Transmettez vers votre appareil avec des widgets de contrôle et un moteur d'assistance de protocole.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="103"/>
         <source>Dashboard Workspaces</source>
-        <translation>Espaces de Travail du Tableau de Bord</translation>
+        <translation type="vanished">Espaces de Travail du Tableau de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
         <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
-        <translation>Regroupez les widgets dans vos propres tableaux de bord et trouvez-les depuis la recherche de la barre des tâches.</translation>
+        <translation type="vanished">Regroupez les widgets dans vos propres tableaux de bord et trouvez-les depuis la recherche de la barre des tâches.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="112"/>
         <source>Session Database &amp; Reports</source>
-        <translation>Base de Données de Session et Rapports</translation>
+        <translation type="vanished">Base de Données de Session et Rapports</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
         <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
-        <translation>Enregistrez les sessions dans SQLITE, rejouez-les et exportez des rapports HTML ou PDF.</translation>
+        <translation type="vanished">Enregistrez les sessions dans SQLITE, rejouez-les et exportez des rapports HTML ou PDF.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="121"/>
         <source>Operator Deployments</source>
-        <translation>Déploiements pour Opérateurs</translation>
+        <translation type="vanished">Déploiements pour Opérateurs</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
         <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
-        <translation>Distribuez une version verrouillée à usage unique aux opérateurs avec un mode d'exécution seule.</translation>
+        <translation type="vanished">Distribuez une version verrouillée à usage unique aux opérateurs avec un mode d'exécution seule.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="130"/>
         <source>New Dashboard Widgets</source>
-        <translation>Nouveaux Widgets du Tableau de Bord</translation>
+        <translation type="vanished">Nouveaux Widgets du Tableau de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
         <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
-        <translation>Cadrans de jauge et compteur avec affichages en direct, plus horloge, chronomètre et cascade.</translation>
+        <translation type="vanished">Cadrans de jauge et compteur avec affichages en direct, plus horloge, chronomètre et cascade.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="139"/>
         <source>Dataset Transforms</source>
-        <translation>Transformations de Jeu de Données</translation>
+        <translation type="vanished">Transformations de Jeu de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
         <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
-        <translation>Calibrez, filtrez et convertissez chaque canal avec une fonction par jeu de données, ou ajoutez des jeux de données virtuels qui calculent de nouveaux canaux.</translation>
+        <translation type="vanished">Calibrez, filtrez et convertissez chaque canal avec une fonction par jeu de données, ou ajoutez des jeux de données virtuels qui calculent de nouveaux canaux.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="148"/>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
         <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
-        <translation>Dessinez des graphiques entièrement personnalisés à partir des données entrantes avec votre propre script de dessin.</translation>
+        <translation type="vanished">Dessinez des graphiques entièrement personnalisés à partir des données entrantes avec votre propre script de dessin.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="157"/>
         <source>Data Tables</source>
-        <translation>Tableaux de Données</translation>
+        <translation type="vanished">Tableaux de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
         <source>Live register-style tables with virtual datasets and editable cells.</source>
-        <translation>Tableaux en direct de style registre avec jeux de données virtuels et cellules éditables.</translation>
+        <translation type="vanished">Tableaux en direct de style registre avec jeux de données virtuels et cellules éditables.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="166"/>
         <source>Image Widget</source>
-        <translation>Widget Image</translation>
+        <translation type="vanished">Widget Image</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
         <source>Decode and display image frames streamed straight from your device.</source>
-        <translation>Décodez et affichez les trames d'image diffusées directement depuis votre appareil.</translation>
+        <translation type="vanished">Décodez et affichez les trames d'image diffusées directement depuis votre appareil.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="175"/>
         <source>Notifications &amp; Alarms</source>
-        <translation>Notifications et Alarmes</translation>
+        <translation type="vanished">Notifications et Alarmes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
         <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
-        <translation>Alarmes de jeu de données multi-bandes avec niveaux de gravité, acheminées vers le Centre de Notifications.</translation>
+        <translation type="vanished">Alarmes de jeu de données multi-bandes avec niveaux de gravité, acheminées vers le Centre de Notifications.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="184"/>
         <source>Project Lock</source>
-        <translation>Verrouillage de Projet</translation>
+        <translation type="vanished">Verrouillage de Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
         <source>Lock a project to separate operator use from editing, with an access code.</source>
-        <translation>Verrouiller un projet pour séparer l'utilisation opérateur de l'édition, avec un code d'accès.</translation>
+        <translation type="vanished">Verrouiller un projet pour séparer l'utilisation opérateur de l'édition, avec un code d'accès.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="193"/>
         <source>MQTT, Protobuf &amp; File Transfer</source>
-        <translation>MQTT, Protobuf et Transfert de Fichiers</translation>
+        <translation type="vanished">MQTT, Protobuf et Transfert de Fichiers</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="194"/>
         <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
-        <translation>Entrée et publication MQTT, import Protobuf, et transferts XMODEM / YMODEM / ZMODEM.</translation>
+        <translation type="vanished">Entrée et publication MQTT, import Protobuf, et transferts XMODEM / YMODEM / ZMODEM.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="240"/>
         <source>Welcome to %1!</source>
-        <translation>Bienvenue dans %1 !</translation>
+        <translation type="vanished">Bienvenue dans %1 !</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="250"/>
         <source>Here's what's new in version %1.</source>
-        <translation>Voici les nouveautés de la version %1.</translation>
+        <translation type="vanished">Voici les nouveautés de la version %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="423"/>
         <source>Show on Startup</source>
-        <translation>Afficher au Démarrage</translation>
+        <translation type="vanished">Afficher au Démarrage</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="430"/>
+        <source>See it in action</source>
+        <translation type="vanished">Voir en Action</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="vanished">Fermer</translation>
     </message>
 </context>
 <context>

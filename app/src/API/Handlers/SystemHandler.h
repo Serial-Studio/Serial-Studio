@@ -38,6 +38,7 @@ private:
   static CommandResponse exec(const QString& id, const QJsonObject& params);
   static CommandResponse kill(const QString& id, const QJsonObject& params);
   static CommandResponse runningProcesses(const QString& id, const QJsonObject& params);
+  static CommandResponse startDemo(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

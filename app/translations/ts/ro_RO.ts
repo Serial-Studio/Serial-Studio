@@ -352,40 +352,44 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <source>Project Demo</source>
+        <translation>Demonstrație Proiect</translation>
+    </message>
+    <message>
         <source>What's New</source>
-        <translation>Ce Este Nou</translation>
+        <translation type="vanished">Ce Este Nou</translation>
     </message>
     <message>
         <source>Tips &amp;&amp; Tricks</source>
         <translation type="vanished">Sfaturi și Trucuri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>License Agreement</source>
         <translation>Acord de Licență</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>Report Bug</source>
         <translation>Raportează Eroare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Acknowledgements</source>
         <translation>Mulțumiri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="267"/>
+        <location filename="../../qml/Dialogs/About.qml" line="270"/>
         <source>Website</source>
         <translation>Site Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="283"/>
+        <location filename="../../qml/Dialogs/About.qml" line="286"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
@@ -8539,15 +8543,15 @@ Format valid: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="318"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="330"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="335"/>
         <source>CAN Bus Not Available</source>
         <translation>Magistrala CAN Indisponibilă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -8556,37 +8560,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Suportul pentru magistrala CAN pe macOS este limitat și poate necesita drivere hardware de la terți.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="336"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Nu există plugin-uri disponibile pentru magistrala CAN pe această platformă.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>Invalid CAN Configuration</source>
         <translation>Configurație CAN Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
         <source>Invalid Selection</source>
         <translation>Selecție Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="365"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="365"/>
         <source>No Devices Available</source>
         <translation>Niciun Dispozitiv Disponibil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>CAN Device Creation Failed</source>
         <translation>Crearea Dispozitivului CAN A Eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
         <source>CAN Connection Failed</source>
         <translation>Conexiunea CAN A Eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="319"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -8595,7 +8599,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Pe Linux, asigură-te că modulele kernel SOCKETCAN sunt încărcate.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -8604,103 +8608,103 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Pe Windows, instalează drivere hardware CAN (PEAK, VECTOR etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Configurația magistralei CAN este incompletă. Selectează un plugin și o interfață valide.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="357"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Plugin-ul sau interfața selectată nu mai este disponibilă. Reîmprospătează listele și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Lista de plugin-uri sau interfețe este goală. Reîmprospătează listele și asigură-te că hardware-ul CAN este conectat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Imposibil de creat dispozitivul de magistrală CAN. Verifică hardware-ul și driverele.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Imposibil de conectat la dispozitivul de magistrală CAN. Verifică conexiunea hardware și setările.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="698"/>
         <source>CAN Bus Error</source>
         <translation>Eroare Magistrală CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="699"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>A apărut o eroare, dar dispozitivul CAN nu mai este disponibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>Error code: %1</source>
         <translation>Cod eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>CAN Bus Communication Error</source>
         <translation>Eroare de Comunicare Magistrală CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="788"/>
         <source>No CAN driver selected</source>
         <translation>Niciun driver CAN selectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="728"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Încărcați mai întâi modulele kernel SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="724"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Conectați un adaptor %1, apoi reîmprospătați</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="731"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Configurați mai întâi o interfață CAN virtuală</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="730"/>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="753"/>
         <source>No interfaces found for %1</source>
         <translation>Nicio interfață găsită pentru %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Instalați &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;driverele PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Instalați &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;driverele VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Instalează &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;driverele CAN SysTec&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
         <source>Install %1 drivers</source>
         <translation>Instalează driverele %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="751"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Instalează driverele %1 pentru macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="765"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -8711,32 +8715,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="872"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="880"/>
         <source>Interface</source>
         <translation>Interfață</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="888"/>
         <source>Bitrate</source>
         <translation>Rată de Biți</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="897"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="904"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CanBus.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
         <source>Listen-Only</source>
         <translation>Doar Ascultare</translation>
     </message>
@@ -11971,6 +11975,19 @@ Furniză acreditările necesare.</translation>
     </message>
 </context>
 <context>
+    <name>Misc::DemoLauncher</name>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="194"/>
+        <source>Cannot start the demo</source>
+        <translation>Nu se poate porni demonstrația</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="195"/>
+        <source>The demo project could not be staged or opened. Check the application data directory permissions.</source>
+        <translation>Proiectul demonstrativ nu a putut fi pregătit sau deschis. Verifică permisiunile directorului de date al aplicației.</translation>
+    </message>
+</context>
+<context>
     <name>Misc::Examples</name>
     <message>
         <location filename="../../src/Misc/Examples.cpp" line="282"/>
@@ -12231,8 +12248,8 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation>Nu s-a putut scrie Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Scrierea de comenzi rapide Windows nu este disponibilă pe această platformă.</translation>
     </message>
@@ -12263,8 +12280,8 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation>Salvarea fișierului .lnk a eșuat (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Scrierea de comenzi rapide macOS nu este disponibilă pe această platformă.</translation>
     </message>
@@ -13379,32 +13396,32 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
 <context>
     <name>OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="192"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="180"/>
         <source>License certificate is valid.</source>
         <translation>Certificatul de licență este valid.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="182"/>
         <source>The certificate signature is invalid or corrupted.</source>
         <translation>Semnătura certificatului este invalidă sau coruptă.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="197"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="185"/>
         <source>This certificate was issued for a different device.</source>
         <translation>Acest certificat a fost emis pentru un alt dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="200"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="188"/>
         <source>This certificate has expired.</source>
         <translation>Acest certificat a expirat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="202"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="190"/>
         <source>This certificate does not grant a valid license tier.</source>
         <translation>Acest certificat nu acordă un nivel de licență valid.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="206"/>
+        <location filename="../../src/Licensing/OfflineCertificate.cpp" line="194"/>
         <source>The certificate file is malformed or unreadable.</source>
         <translation>Fișierul certificatului este malformat sau ilizibil.</translation>
     </message>
@@ -14942,8 +14959,8 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
         <translation>Eroare generală de I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="252"/>
         <source>Frame Parser Disabled</source>
         <translation>Analizor de Trame Dezactivat</translation>
     </message>
@@ -14985,8 +15002,8 @@ Cauza cea mai probabilă: o buclă infinită sau o operație extrem de lentă î
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="393"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="478"/>
         <source>Missing Parse Function</source>
         <translation>Funcție Parse Lipsă</translation>
     </message>
@@ -15002,8 +15019,8 @@ Asigurați-vă că codul include:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="456"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="530"/>
         <source>Parse Function Runtime Error</source>
         <translation>Eroare de Execuție A Funcției Parse</translation>
     </message>
@@ -15664,22 +15681,22 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Căutare seturi de date</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1086"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
         <source>Loading datasets...</source>
         <translation>Se încarcă seturi de date...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1088"/>
         <source>No datasets match your search.</source>
         <translation>Niciun set de date nu corespunde căutării.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1108"/>
         <source>Select at least one dataset to include.</source>
         <translation>Selectează cel puțin un set de date de inclus.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export HTML</source>
         <translation>Exportă HTML</translation>
     </message>
@@ -15724,12 +15741,12 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Include</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1116"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1117"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
         <source>Export PDF</source>
         <translation>Exportă PDF</translation>
     </message>
@@ -16742,33 +16759,33 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Export…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="649"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="635"/>
         <source>Data Plotting</source>
         <translation>Reprezentare Grafică Date</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="702"/>
         <source>Point Count</source>
         <translation>Număr de Puncte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="741"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="727"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Rată de Reîmprospătare UI (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
         <source>Show Actions Panel</source>
         <translation>Afișează Panoul de Acțiuni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1051"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1037"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Afișează Întotdeauna Butoanele din Bara de Activități</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1163"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1149"/>
         <source>Console</source>
         <translation>Consolă</translation>
     </message>
@@ -16791,7 +16808,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Permite Conexiuni API Externe</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="874"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Ascunde Automat Bara de Unelte</translation>
     </message>
@@ -16876,144 +16893,143 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Actualizări și Noutăți</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
         <source>Show What's New on Startup</source>
-        <translation>Afișează Ce Este Nou la Pornire</translation>
+        <translation type="vanished">Afișează Ce Este Nou la Pornire</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="650"/>
         <source>Time Range</source>
         <translation>Interval de Timp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Small</source>
         <translation>Mic</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Large</source>
         <translation>Mare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Extra Large</source>
         <translation>Extra Mare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
         <source>Custom</source>
         <translation>Personalizat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="843"/>
         <source>Layout</source>
         <translation>Aspect</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="904"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="890"/>
         <source>Auto-Layout Margin</source>
         <translation>Margine Aspect Automat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="929"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="915"/>
         <source>Auto-Layout Spacing</source>
         <translation>Spațiere Aspect Automat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="961"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="947"/>
         <source>Video Export</source>
         <translation>Export Video</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="979"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="965"/>
         <source>Save Videos by Default</source>
         <translation>Salvează Videoclipuri în Mod Implicit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1016"/>
         <source>Behavior</source>
         <translation>Comportament</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1052"/>
         <source>Show Search Field</source>
         <translation>Afișează Câmp de Căutare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1067"/>
         <source>Auto-hide Taskbar</source>
         <translation>Ascunde Automat Bara de Activități</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1099"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1085"/>
         <source>Hide Delay (ms)</source>
         <translation>Întârziere Ascundere (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1123"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Pinned Buttons</source>
         <translation>Butoane Fixate</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1127"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Trageți un buton fixat pe bara de activități pentru a-l reordona.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1162"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1148"/>
         <source>Settings</source>
         <translation>Setări</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1151"/>
         <source>Clock</source>
         <translation>Ceas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1152"/>
         <source>Stopwatch</source>
         <translation>Cronometru</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1167"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1153"/>
         <source>Pause / Resume</source>
         <translation>Pauză / Reia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1168"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1154"/>
         <source>File Transmission</source>
         <translation>Transmisie Fișier</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1155"/>
         <source>AI Assistant</source>
         <translation>Asistent AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1298"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1284"/>
         <source>Display</source>
         <translation>Afișare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1299"/>
         <source>Display Mode</source>
         <translation>Mod Afișare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1326"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="764"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1312"/>
         <source>Font Family</source>
         <translation>Familie Font</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1164"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1150"/>
         <source>Notifications</source>
         <translation>Notificări</translation>
     </message>
@@ -17023,13 +17039,13 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Exportă Fișier Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="763"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="749"/>
         <source>Dashboard Font</source>
         <translation>Font Tablou de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="793"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1327"/>
         <source>Font Size</source>
         <translation>Dimensiune Font</translation>
     </message>
@@ -17042,97 +17058,97 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Salvează Imagini în Mod Implicit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1358"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1344"/>
         <source>Show Timestamps</source>
         <translation>Afișează Marcaje Temporale</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1377"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
         <source>Data Transmission</source>
         <translation>Transmisie Date</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1392"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1378"/>
         <source>Line Ending</source>
         <translation>Terminare de Linie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1405"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1391"/>
         <source>Input Mode</source>
         <translation>Mod Intrare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1418"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1404"/>
         <source>Text Encoding</source>
         <translation>Codificare Text</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1431"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1417"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1444"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1430"/>
         <source>Echo Sent Data</source>
         <translation>Afișează Datele Trimise</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1449"/>
         <source>Escape Codes</source>
         <translation>Coduri de Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1478"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1464"/>
         <source>VT100 Emulation</source>
         <translation>Emulare VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1497"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1483"/>
         <source>ANSI Colors</source>
         <translation>Culori ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1555"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1541"/>
         <source>Delivery</source>
         <translation>Livrare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1570"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1556"/>
         <source>System Notifications</source>
         <translation>Notificări de Sistem</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1577"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Afișează evenimentele de avertizare/critice ca notificări desktop ale sistemului de operare când Serial Studio nu este fereastra activă.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1601"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1587"/>
         <source>Application Logs</source>
         <translation>Jurnale Aplicație</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1616"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1602"/>
         <source>Route Warnings to Notifications</source>
         <translation>Redirecționează Avertizările către Notificări</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1637"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1623"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Dezactivat implicit — QT și QML emit avertismente frecvent și activarea acestei opțiuni poate acoperi alarmele reale. Mesajele critice sunt întotdeauna direcționate indiferent de această setare.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1656"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1642"/>
         <source>Reset</source>
         <translation>Resetează</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1696"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1682"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1704"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1690"/>
         <source>Apply</source>
         <translation>Aplică</translation>
     </message>
@@ -19414,17 +19430,26 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>Activează</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="472"/>
+        <source>See it in Action</source>
+        <translation>Vezi în Acțiune</translation>
+    </message>
+    <message>
+        <source>See it in action</source>
+        <translation type="vanished">Vezi în acțiune</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Open in Limited Mode</source>
         <translation>Deschide în Mod Limitat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Continue</source>
         <translation>Continuă</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="491"/>
         <source>Start Trial</source>
         <translation>Începe Perioada de Probă</translation>
     </message>
@@ -19432,189 +19457,156 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WhatsNew</name>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="31"/>
         <source>What's New in %1</source>
-        <translation>Noutăți în %1</translation>
+        <translation type="vanished">Noutăți în %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="58"/>
         <source>Lua &amp; Built-In Parsers</source>
-        <translation>Lua și Parsere Integrate</translation>
+        <translation type="vanished">Lua și Parsere Integrate</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
         <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
-        <translation>Parsează cadre în Lua 5.4 sau cu șabloane integrate fără cod, alături de JavaScript.</translation>
+        <translation type="vanished">Parsează cadre în Lua 5.4 sau cu șabloane integrate fără cod, alături de JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="67"/>
         <source>AI Assistant</source>
-        <translation>Asistent AI</translation>
+        <translation type="vanished">Asistent AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
         <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
-        <translation>Un asistent integrat în aplicație cu opt furnizori care poate construi și edita proiecte pentru tine.</translation>
+        <translation type="vanished">Un asistent integrat în aplicație cu opt furnizori care poate construi și edita proiecte pentru tine.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="76"/>
         <source>Device Control Loops</source>
-        <translation>Bucle de Control Dispozitiv</translation>
+        <translation type="vanished">Bucle de Control Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
         <source>Automate your device with an Arduino-style setup() and loop() routine that can read, write, and drive the dashboard.</source>
-        <translation>Automatizează dispozitivul cu o rutină setup() și loop() în stil Arduino care poate citi, scrie și controla tabloul de bord.</translation>
+        <translation type="vanished">Automatizează dispozitivul cu o rutină setup() și loop() în stil Arduino care poate citi, scrie și controla tabloul de bord.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="85"/>
         <source>Oscilloscope Sweep &amp; Trigger</source>
-        <translation>Baleiaj și Declanșare Osciloscop</translation>
+        <translation type="vanished">Baleiaj și Declanșare Osciloscop</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
         <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
-        <translation>Baleiaj în stil osciloscop cu un cursor de declanșare animat pe care îl poți trage pe grafic.</translation>
+        <translation type="vanished">Baleiaj în stil osciloscop cu un cursor de declanșare animat pe care îl poți trage pe grafic.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="94"/>
         <source>Output Controls</source>
-        <translation>Controale de Ieșire</translation>
+        <translation type="vanished">Controale de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
         <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
-        <translation>Transmite înapoi către dispozitivul tău cu widget-uri de control și un motor de asistență pentru protocoale.</translation>
+        <translation type="vanished">Transmite înapoi către dispozitivul tău cu widget-uri de control și un motor de asistență pentru protocoale.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="103"/>
         <source>Dashboard Workspaces</source>
-        <translation>Spații de Lucru Tablou de Bord</translation>
+        <translation type="vanished">Spații de Lucru Tablou de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
         <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
-        <translation>Grupează widget-urile în propriile tale tablouri de bord și găsește-le din căutarea din bara de activități.</translation>
+        <translation type="vanished">Grupează widget-urile în propriile tale tablouri de bord și găsește-le din căutarea din bara de activități.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="112"/>
         <source>Session Database &amp; Reports</source>
-        <translation>Bază de Date Sesiune &amp; Rapoarte</translation>
+        <translation type="vanished">Bază de Date Sesiune &amp; Rapoarte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
         <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
-        <translation>Înregistrează sesiuni în SQLITE, redă-le și exportă rapoarte HTML sau PDF.</translation>
+        <translation type="vanished">Înregistrează sesiuni în SQLITE, redă-le și exportă rapoarte HTML sau PDF.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="121"/>
         <source>Operator Deployments</source>
-        <translation>Implementări pentru Operator</translation>
+        <translation type="vanished">Implementări pentru Operator</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
         <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
-        <translation>Livrează o versiune blocată, cu scop unic, operatorilor, cu un mod doar de rulare.</translation>
+        <translation type="vanished">Livrează o versiune blocată, cu scop unic, operatorilor, cu un mod doar de rulare.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="130"/>
         <source>New Dashboard Widgets</source>
-        <translation>Widget-uri Noi pentru Tabloul de Bord</translation>
+        <translation type="vanished">Widget-uri Noi pentru Tabloul de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
         <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
-        <translation>Fețe de Indicator și Contor cu afișaj live, plus Ceas, Cronometru și Waterfall.</translation>
+        <translation type="vanished">Fețe de Indicator și Contor cu afișaj live, plus Ceas, Cronometru și Waterfall.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="139"/>
         <source>Dataset Transforms</source>
-        <translation>Transformări de Conjunturi de Date</translation>
+        <translation type="vanished">Transformări de Conjunturi de Date</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
         <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
-        <translation>Calibrează, filtrează și convertește fiecare canal cu o funcție per set de date sau adaugă seturi de date virtuale care calculează noi canale.</translation>
+        <translation type="vanished">Calibrează, filtrează și convertește fiecare canal cu o funcție per set de date sau adaugă seturi de date virtuale care calculează noi canale.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="148"/>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
         <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
-        <translation>Desenează grafice complet personalizate din datele primite folosind propriul tău script de desenare.</translation>
+        <translation type="vanished">Desenează grafice complet personalizate din datele primite folosind propriul tău script de desenare.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="157"/>
         <source>Data Tables</source>
-        <translation>Tabele de Date</translation>
+        <translation type="vanished">Tabele de Date</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
         <source>Live register-style tables with virtual datasets and editable cells.</source>
-        <translation>Tabele de tip registru, în timp real, cu seturi de date virtuale și celule editabile.</translation>
+        <translation type="vanished">Tabele de tip registru, în timp real, cu seturi de date virtuale și celule editabile.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="166"/>
         <source>Image Widget</source>
-        <translation>Widget Imagine</translation>
+        <translation type="vanished">Widget Imagine</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
         <source>Decode and display image frames streamed straight from your device.</source>
-        <translation>Decodifică și afișează cadre de imagine transmise direct de pe dispozitivul tău.</translation>
+        <translation type="vanished">Decodifică și afișează cadre de imagine transmise direct de pe dispozitivul tău.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="175"/>
         <source>Notifications &amp; Alarms</source>
-        <translation>Notificări și Alarme</translation>
+        <translation type="vanished">Notificări și Alarme</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
         <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
-        <translation>Alarme pe seturi de date multi-bandă cu niveluri de severitate, direcționate către Centrul de Notificări.</translation>
+        <translation type="vanished">Alarme pe seturi de date multi-bandă cu niveluri de severitate, direcționate către Centrul de Notificări.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="184"/>
         <source>Project Lock</source>
-        <translation>Blocare Proiect</translation>
+        <translation type="vanished">Blocare Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
         <source>Lock a project to separate operator use from editing, with an access code.</source>
-        <translation>Blochează un proiect pentru a separa utilizarea operatorului de editare, cu un cod de acces.</translation>
+        <translation type="vanished">Blochează un proiect pentru a separa utilizarea operatorului de editare, cu un cod de acces.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="193"/>
         <source>MQTT, Protobuf &amp; File Transfer</source>
-        <translation>MQTT, Protobuf și Transfer de Fișiere</translation>
+        <translation type="vanished">MQTT, Protobuf și Transfer de Fișiere</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="194"/>
         <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
-        <translation>Intrare și publicare MQTT, import Protobuf și transferuri XMODEM / YMODEM / ZMODEM.</translation>
+        <translation type="vanished">Intrare și publicare MQTT, import Protobuf și transferuri XMODEM / YMODEM / ZMODEM.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="240"/>
         <source>Welcome to %1!</source>
-        <translation>Bine ai venit în %1!</translation>
+        <translation type="vanished">Bine ai venit în %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="250"/>
         <source>Here's what's new in version %1.</source>
-        <translation>Iată ce este nou în versiunea %1.</translation>
+        <translation type="vanished">Iată ce este nou în versiunea %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="423"/>
         <source>Show on Startup</source>
-        <translation>Afișează la pornire</translation>
+        <translation type="vanished">Afișează la pornire</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="430"/>
+        <source>See it in action</source>
+        <translation type="vanished">Vezi în acțiune</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>Închide</translation>
+        <translation type="vanished">Închide</translation>
     </message>
 </context>
 <context>

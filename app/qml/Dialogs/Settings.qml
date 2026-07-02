@@ -594,20 +594,6 @@ Widgets.SmartDialog {
             }
           }
 
-          Label {
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Show What's New on Startup")
-          } Switch {
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            checked: Cpp_Misc_WhatsNew.showWhatsNewOnStartup
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_Misc_WhatsNew.showWhatsNewOnStartup)
-                Cpp_Misc_WhatsNew.showWhatsNewOnStartup = checked
-            }
-          }
-
           Item { Layout.fillHeight: true }
           Item { Layout.fillHeight: true }
         }

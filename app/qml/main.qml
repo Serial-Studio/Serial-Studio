@@ -142,8 +142,6 @@ Item {
   // Boot path: runtime mode skips the welcome dialog
   //
   Component.onCompleted: {
-    Cpp_Misc_WhatsNew.syncVersion()
-
     if (Cpp_Misc_CrashTracker.previousRunCrashed
         && Cpp_Misc_CrashTracker.recoveryRecommended) {
       crashRecoveryDialog.activate()
@@ -215,12 +213,10 @@ Item {
         if (!app.rhiStartupConfirmed) {
           app.rhiStartupConfirmed = true
           rhiConfirmTimer.start()
-          app.showStartupDialogs()
         }
         return
       }
 
-      whatsNewDialog.close()
       aboutDialog.close()
       donateDialog.close()
       licenseDialog.close()
@@ -430,15 +426,6 @@ Item {
   }
 
   //
-  // "What's New" dialog: auto-shown once per version upgrade
-  //
-  DialogLoader {
-    id: whatsNewDialog
-
-    source: "qrc:/serial-studio.com/gui/qml/Dialogs/WhatsNew.qml"
-  }
-
-  //
   // AI assistant (Pro, author-only): lazy DialogLoader, hosts a SmartWindow
   //
   DialogLoader {
@@ -513,24 +500,6 @@ Item {
   }
 
   //
-  // "What's New" dialog: explicit open from menus
-  //
-  function showWhatsNew() {
-    whatsNewDialog.activate()
-  }
-
-  //
-  // First-show auto-open: What's New on an upgrade.
-  //
-  function showStartupDialogs() {
-    if (app.runtimeMode)
-      return
-
-    if (Cpp_Misc_WhatsNew.shouldShowWhatsNew)
-      whatsNewDialog.activate()
-  }
-
-  //
   // About dialog: author-only
   //
   function showAboutDialog() {
@@ -576,6 +545,14 @@ Item {
   function showExamplesBrowser() {
     if (!app.runtimeMode)
       examplesBrowser.activate()
+  }
+
+  //
+  // Zero-hardware demo project: author-only
+  //
+  function showDemo() {
+    if (!app.runtimeMode)
+      Cpp_Misc_Demo.startDemo()
   }
 
   //

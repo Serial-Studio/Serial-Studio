@@ -148,6 +148,7 @@
         <file>api/SerialStudio.lua</file>
         <file>chartjs/chart.umd.min.js</file>
         <file>chartjs/LICENSE.md</file>
+        <file>demo/RocketLaunch.ssproj</file>
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
@@ -579,22 +580,6 @@
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/sessions.svg</file>
         <file>icons/toolbar/settings.svg</file>
-        <file>icons/whats-new/ai.svg</file>
-        <file>icons/whats-new/alarms.svg</file>
-        <file>icons/whats-new/connectivity.svg</file>
-        <file>icons/whats-new/control-script.svg</file>
-        <file>icons/whats-new/deployments.svg</file>
-        <file>icons/whats-new/image.svg</file>
-        <file>icons/whats-new/lock.svg</file>
-        <file>icons/whats-new/oscilloscope.svg</file>
-        <file>icons/whats-new/output.svg</file>
-        <file>icons/whats-new/painter.svg</file>
-        <file>icons/whats-new/scripting.svg</file>
-        <file>icons/whats-new/sessions.svg</file>
-        <file>icons/whats-new/tables.svg</file>
-        <file>icons/whats-new/transforms.svg</file>
-        <file>icons/whats-new/widgets.svg</file>
-        <file>icons/whats-new/workspaces.svg</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/dialog-banner.svg</file>

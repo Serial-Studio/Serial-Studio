@@ -1,0 +1,912 @@
+{
+ "actions": [],
+ "changeDrivenTransforms": true,
+ "controlScriptCode": "/**\n * Rocket Launch Demo - Control Loop (self-contained simulation)\n *\n * The whole flight lives in this control script: there is no external data\n * generator and no hardware. loop() advances a simulated sounding-rocket\n * flight in wall-clock time, writes the results into the \"Flight\" data table\n * with tableSet(), then dashboardTick() renders the virtual datasets (whose\n * Lua transforms read the table). The UDP source is a dummy, kept only so a\n * connection can be opened; its Lua frame parser returns {} and no bytes are\n * ever parsed.\n *\n * Flight profile (MET = mission elapsed time, seconds):\n *   T-10..0   countdown, ignition rumble from T-3\n *   0..20     stage 1 boost\n *   20..22    stage separation coast\n *   22..32    stage 2 boost, MECO at 32\n *   32..50    unpowered coast, apogee at T+50 (about 13 km)\n *   50..84    descent; drogue and main parachute callouts on the way down\n *   84..90    touchdown hold, then the next flight starts\n *\n * The coast leg blends velocity to zero exactly at apogee time and the\n * descent follows a cosine altitude schedule, so every flight completes the\n * full arc in about 100 seconds no matter how the constants are tuned.\n * Edit anything below and watch the dashboard react: this is a normal\n * Serial Studio project, not a special playback mode.\n */\n\n//------------------------------------------------------------------------------\n// Configuration & constants\n//------------------------------------------------------------------------------\n\n// Data table the virtual datasets read through their transforms.\nconst TABLE = \"Flight\";\n\n// Phase ids mirrored by the Mission Status LEDs.\nconst PAD = 0, BOOST = 1, STAGE2 = 2, COAST = 3, DESCENT = 4, LANDED = 5;\n\n// Timeline (seconds of MET).\nconst T_COUNTDOWN = -10.0;\nconst T_SEP       = 20.0;\nconst T_STAGE2    = 22.0;\nconst T_MECO      = 32.0;\nconst T_APOGEE    = 50.0;\nconst T_DESCENT   = 34.0;\nconst T_HOLD      = 6.0;\n\n// Propulsion (demo-world numbers tuned for the 100 s loop).\nconst G         = 9.81;\nconst A_STAGE1  = 20.0;  // stage 1 net acceleration, m/s^2\nconst A_STAGE2  = 8.0;   // stage 2 net acceleration, m/s^2\nconst THRUST_S1 = 240.0; // kN\nconst THRUST_S2 = 90.0;  // kN\n\n// Descent callout altitudes (meters).\nconst ALT_DROGUE = 8000.0;\nconst ALT_MAIN   = 1000.0;\n\n//------------------------------------------------------------------------------\n// Mutable state\n//------------------------------------------------------------------------------\n\nlet met = T_COUNTDOWN;\nlet phase = PAD;\nlet alt = 0.0, vel = 0.0, acc = 0.0;\nlet fuel = 100.0, thrust = 0.0;\nlet downrange = 0.0, crossrange = 0.0;\nlet pitch = 90.0, roll = 0.0, yaw = 0.0;\nlet flightNumber = 1;\nlet apogeeAlt = 0.0, descentT = 0.0, holdTimer = 0.0;\nlet drogueOut = false, mainOut = false;\nlet lastMs = 0;\n\n//------------------------------------------------------------------------------\n// Phase transitions\n//------------------------------------------------------------------------------\n\n/**\n * @brief Switches phase and announces the event on the notification stream.\n */\nfunction setPhase(next, callout) {\n  phase = next;\n  if (callout)\n    notifyInfo(\"Rocket Demo\", \"Flight #\" + flightNumber + \": \" + callout);\n}\n\n/**\n * @brief Resets the state for the next flight of the looping demo.\n */\nfunction resetFlight() {\n  met = T_COUNTDOWN;\n  alt = 0.0; vel = 0.0; acc = 0.0;\n  fuel = 100.0; thrust = 0.0;\n  downrange = 0.0; crossrange = 0.0;\n  pitch = 90.0; roll = 0.0; yaw = 0.0;\n  apogeeAlt = 0.0; descentT = 0.0; holdTimer = 0.0;\n  drogueOut = false; mainOut = false;\n  flightNumber += 1;\n  setPhase(PAD, \"T-10 seconds, guidance is internal\");\n}\n\n//------------------------------------------------------------------------------\n// Flight dynamics\n//------------------------------------------------------------------------------\n\n/**\n * @brief Integrates the powered and coasting legs of the ascent.\n */\nfunction advanceAscent(dt) {\n  if (phase === BOOST || phase === STAGE2) {\n    const stage1 = phase === BOOST;\n    const cutoff = stage1 ? T_SEP : T_MECO;\n    const taper = Math.min(1.0, 0.55 + 0.45 * (cutoff - met) / 2.5);\n    thrust = (stage1 ? THRUST_S1 : THRUST_S2) * taper * (0.97 + 0.06 * Math.random());\n    fuel = Math.max(0.0, fuel - (stage1 ? 3.2 : 1.6) * taper * dt);\n    acc = (stage1 ? A_STAGE1 : A_STAGE2) * taper;\n    if (stage1 && met >= T_SEP) {\n      setPhase(COAST, \"Stage separation\");\n      thrust = 0.0;\n    }\n    else if (!stage1 && met >= T_MECO)\n      setPhase(COAST, \"Main engine cutoff, coasting to apogee\");\n  }\n\n  else if (phase === COAST) {\n    thrust = 0.0;\n    if (met < T_MECO) {\n      acc = -G;\n      if (met >= T_STAGE2)\n        setPhase(STAGE2, \"Stage 2 ignition\");\n    }\n    else {\n      const remaining = T_APOGEE - met;\n      acc = remaining > 0.05 ? -vel / remaining : -vel / 0.05;\n      if (met >= T_APOGEE || vel <= 0.0) {\n        apogeeAlt = alt;\n        descentT = 0.0;\n        vel = 0.0;\n        setPhase(DESCENT, \"Apogee at \" + (alt / 1000.0).toFixed(1) + \" km\");\n      }\n    }\n  }\n\n  vel += acc * dt;\n  alt = Math.max(0.0, alt + vel * dt);\n}\n\n/**\n * @brief Runs the descent on a cosine altitude schedule so every flight lands\n *        gently at the same time, then fires the recovery callouts.\n */\nfunction advanceDescent(dt) {\n  const prevAlt = alt;\n  descentT = Math.min(T_DESCENT, descentT + dt);\n  alt = apogeeAlt * (1.0 + Math.cos(Math.PI * descentT / T_DESCENT)) / 2.0;\n  vel = dt > 0.0 ? (alt - prevAlt) / dt : 0.0;\n  acc = -1.2 + 0.4 * Math.sin(met * 2.2);\n  thrust = 0.0;\n\n  if (!drogueOut && alt <= ALT_DROGUE) {\n    drogueOut = true;\n    notifyInfo(\"Rocket Demo\", \"Flight #\" + flightNumber + \": Drogue parachute deployed\");\n  }\n  if (!mainOut && alt <= ALT_MAIN) {\n    mainOut = true;\n    notifyInfo(\"Rocket Demo\", \"Flight #\" + flightNumber + \": Main parachute deployed\");\n  }\n  if (descentT >= T_DESCENT) {\n    alt = 0.0; vel = 0.0; acc = 0.0;\n    setPhase(LANDED, \"Touchdown, recovery crews dispatched\");\n  }\n}\n\n/**\n * @brief Advances the whole simulation by dt seconds.\n */\nfunction advance(dt) {\n  met += dt;\n\n  if (phase === PAD) {\n    thrust = met > -3.0 ? THRUST_S1 * 0.4 * (met + 3.0) / 3.0 : 0.0;\n    acc = 0.0;\n    if (met >= 0.0)\n      setPhase(BOOST, \"Liftoff!\");\n  }\n  else if (phase === LANDED) {\n    holdTimer += dt;\n    if (holdTimer >= T_HOLD)\n      resetFlight();\n  }\n  else if (phase === DESCENT)\n    advanceDescent(dt);\n  else\n    advanceAscent(dt);\n\n  const ascending = phase === BOOST || phase === STAGE2 || phase === COAST;\n  const flying = ascending || phase === DESCENT;\n  const target = ascending ? Math.max(45.0, 90.0 - Math.max(0.0, met) * 1.2)\n                           : (phase === DESCENT ? -80.0 : 90.0);\n  pitch += (target - pitch) * Math.min(1.0, dt * 1.2);\n  if (phase === DESCENT)\n    roll = 6.5 * Math.sin(met * 0.85) + 1.2 * Math.sin(met * 2.3 + 1.0);\n  else if (flying)\n    roll = 0.9 * Math.sin(met * 0.33) + 0.5 * Math.sin(met * 1.13 + 2.1);\n  else\n    roll = 0.0;\n\n  yaw = flying ? 0.7 * Math.sin(met * 0.27 + 1.0) + 0.4 * Math.sin(met * 0.91) : 0.0;\n\n  if (flying && alt > 0.0) {\n    const horizontal = ascending\n      ? Math.max(0.0, vel) * Math.cos(pitch * Math.PI / 180.0)\n      : 45.0;\n    downrange += horizontal * dt;\n    crossrange = 350.0 * Math.sin(downrange / 2200.0);\n  }\n}\n\n//------------------------------------------------------------------------------\n// Lifecycle\n//------------------------------------------------------------------------------\n\n/**\n * @brief Seeds the clock and starts the first countdown.\n */\nfunction setup() {\n  lastMs = Date.now();\n  notifyInfo(\"Rocket Demo\",\n             \"The flight is simulated by this project's control script; open the Project Editor to see how.\");\n  setPhase(PAD, \"T-10 seconds, guidance is internal\");\n}\n\n/**\n * @brief Advances the flight in wall-clock time and publishes it to the table. Paced to\n *        ~50 Hz with delay(): every tableSet/dashboardTick is a blocking hop to the GUI\n *        thread, so a free-running loop would flood the UI with thousands of calls per\n *        second and stall the whole dashboard.\n */\nfunction loop() {\n  const now = Date.now();\n  const dt = Math.min(0.1, Math.max(0.0, (now - lastMs) / 1000.0));\n  lastMs = now;\n\n  if (dt > 0.0)\n    advance(dt);\n\n  tableSet(TABLE, \"met\", met);\n  tableSet(TABLE, \"phase\", phase);\n  tableSet(TABLE, \"alt\", alt / 1000.0);\n  tableSet(TABLE, \"vel\", vel);\n  tableSet(TABLE, \"acc\", acc / G);\n  tableSet(TABLE, \"fuel\", fuel);\n  tableSet(TABLE, \"thrust\", thrust);\n  tableSet(TABLE, \"pitch\", pitch);\n  tableSet(TABLE, \"roll\", roll);\n  tableSet(TABLE, \"yaw\", yaw);\n  tableSet(TABLE, \"x\", downrange / 1000.0);\n  tableSet(TABLE, \"y\", crossrange / 1000.0);\n  tableSet(TABLE, \"z\", alt / 1000.0);\n  dashboardTick();\n  delay(20);\n}\n",
+ "customizeWorkspaces": true,
+ "groups": [
+  {
+   "datasets": [],
+   "disabled": true,
+   "painterCode": "/**\n * Rocket Launch Demo - Mission View (Painter widget)\n *\n * Draws the flight that the control script simulates: an animated rocket with\n * engine flame and exhaust smoke, stage separation, a parachute descent, an\n * altitude-keyed sky with stars and clouds, a scrolling altitude scale, and a\n * ghost trail of the trajectory. All data comes from the \"Flight\" data table\n * written by the control script; this painter group owns no datasets.\n *\n * Interactions:\n *   drag         pan the camera (leaves follow mode)\n *   wheel        zoom in / out\n *   double-click reset zoom and follow the rocket again\n *   click rocket pin / unpin a telemetry card\n *\n * Everything below is plain top-level `var` state so the engine can recompile\n * the script when you edit it. Colors are hex only (#RRGGBB / #AARRGGBB,\n * alpha byte first) - the painter does not parse CSS rgb()/rgba() strings.\n */\n\n// ---------------------------------------------------------------------------\n// Simulation sampling (updated in onFrame, world units: km / m/s / g / %)\n// ---------------------------------------------------------------------------\n\nvar met = -10, phase = 0, altKm = 0, vel = 0, accG = 0;\nvar fuel = 100, thrust = 0, pitch = 90, roll = 0, downKm = 0;\nvar trail = [];\nvar lastTrailMet = -999;\n\nvar PHASES = [\"COUNTDOWN\", \"STAGE 1 BOOST\", \"STAGE 2 BOOST\",\n              \"COAST\", \"DESCENT\", \"TOUCHDOWN\"];\n\nfunction num(v) {\n  var n = Number(v);\n  return isFinite(n) ? n : 0;\n}\n\nfunction onFrame() {\n  met    = num(tableGet(\"Flight\", \"met\"));\n  phase  = num(tableGet(\"Flight\", \"phase\"));\n  altKm  = num(tableGet(\"Flight\", \"alt\"));\n  vel    = num(tableGet(\"Flight\", \"vel\"));\n  accG   = num(tableGet(\"Flight\", \"acc\"));\n  fuel   = num(tableGet(\"Flight\", \"fuel\"));\n  thrust = num(tableGet(\"Flight\", \"thrust\"));\n  pitch  = num(tableGet(\"Flight\", \"pitch\"));\n  roll   = num(tableGet(\"Flight\", \"roll\"));\n  downKm = num(tableGet(\"Flight\", \"x\"));\n\n  if (met < lastTrailMet) {\n    trail = [];\n    puffs = [];\n    rings = [];\n    apogeeMark = null;\n    liftoffTick = -999;\n    prevPhase = 0;\n    lastTrailMet = met;\n  }\n\n  if (phase !== prevPhase) {\n    if (prevPhase === 1 && phase === 3)\n      rings.push({ x: downKm, y: altKm, age: 0 });\n    if (prevPhase === 3 && phase === 4)\n      apogeeMark = { alt: altKm, down: downKm };\n    if (prevPhase === 4 && phase === 5)\n      touchdownBurst();\n    if (prevPhase === 0 && phase === 1)\n      liftoffTick = tick;\n    prevPhase = phase;\n  }\n\n  if (met - lastTrailMet >= 0.25) {\n    if (altKm > 0.001) {\n      trail.push([downKm, altKm]);\n      if (trail.length > 800)\n        trail.shift();\n    }\n    lastTrailMet = met;\n  }\n}\n\nvar prevPhase = 0;\nvar apogeeMark = null;\nvar rings = [];\nvar liftoffTick = -999;\n\nfunction touchdownBurst() {\n  for (var i = 0; i < 12; i++) {\n    puffs.push({\n      x: downKm + (i - 5.5) * 0.012,\n      y: 0.01,\n      r: 8,\n      a: 0.45,\n      vx: (i < 6 ? -1 : 1) * (0.04 + 0.012 * (i % 3)),\n      vy: 0,\n    });\n  }\n}\n\n// ---------------------------------------------------------------------------\n// Camera & interaction state\n// ---------------------------------------------------------------------------\n\nvar camX = 0, camY = 0;          // world km at screen anchor (always follows the rocket)\nvar panX = 0, panY = 0;          // drag offset around the followed rocket (world km)\nvar mPerPx = 25;                 // zoom: meters per pixel\nvar cardPinned = true;\nvar rocketSX = 0, rocketSY = 0;  // rocket screen position (for hit tests)\nvar tick = 0;\n\nfunction onDrag(x, y, dx, dy) {\n  panX -= dx * mPerPx / 1000;\n  panY += dy * mPerPx / 1000;\n  var lim = 4000 / mPerPx * mPerPx / 1000;\n  panX = Math.max(-lim, Math.min(lim, panX));\n  panY = Math.max(-lim, Math.min(lim, panY));\n}\n\nfunction onWheel(x, y, delta) {\n  mPerPx *= (1.0 - delta * 0.12);\n  if (mPerPx < 4)   mPerPx = 4;\n  if (mPerPx > 220) mPerPx = 220;\n}\n\nfunction onDoubleClick(x, y) {\n  panX = 0;\n  panY = 0;\n  mPerPx = 25;\n}\n\nfunction onPress(x, y, button) {\n  var dx = x - rocketSX;\n  var dy = y - rocketSY;\n  if (Math.sqrt(dx * dx + dy * dy) < 52)\n    cardPinned = !cardPinned;\n}\n\n// ---------------------------------------------------------------------------\n// World <-> screen mapping and color helpers (hex only; alpha byte FIRST)\n// ---------------------------------------------------------------------------\n\nvar anchorX = 0.5, anchorY = 0.58;\n\nfunction sx(w, wxKm) { return w * anchorX + (wxKm - camX - panX) * 1000 / mPerPx; }\nfunction sy(h, wyKm) { return h * anchorY - (wyKm - camY - panY) * 1000 / mPerPx; }\n\nfunction lerp(a, b, t) { return a + (b - a) * Math.max(0, Math.min(1, t)); }\n\nfunction hex2(n) {\n  n = Math.max(0, Math.min(255, Math.round(n)));\n  var s = n.toString(16);\n  return s.length < 2 ? \"0\" + s : s;\n}\n\nfunction rgbHex(r, g, b) { return \"#\" + hex2(r) + hex2(g) + hex2(b); }\n\nfunction argbHex(a, r, g, b) { return \"#\" + hex2(a * 255) + hex2(r) + hex2(g) + hex2(b); }\n\n// ---------------------------------------------------------------------------\n// Sky: altitude-keyed gradient, horizon glow, stars, world-anchored clouds\n// ---------------------------------------------------------------------------\n\nvar CLOUDS = [\n  [-2.6, 0.9, 1.4], [-1.1, 1.6, 1.0], [0.8, 0.7, 1.7], [2.2, 2.3, 1.2],\n  [3.9, 1.1, 1.5], [5.4, 2.9, 1.1], [1.6, 3.8, 0.9], [-0.4, 3.1, 1.3],\n  [7.1, 1.8, 1.6], [4.6, 4.4, 1.0],\n];\n\nfunction skyColor(t) {\n  return rgbHex(lerp(96, 6, t), lerp(158, 10, t), lerp(222, 24, t));\n}\n\nfunction drawSky(ctx, w, h) {\n  var vc = camY + panY;\n  var spaceT = Math.max(0, Math.min(1, vc / 11));\n  var grad = ctx.createLinearGradient(0, 0, 0, h);\n  grad.addColorStop(0, skyColor(spaceT + 0.3));\n  grad.addColorStop(1, skyColor(spaceT - 0.12));\n  ctx.fillStyle = grad;\n  ctx.fillRect(0, 0, w, h);\n\n  var gy = sy(h, 0);\n  if (gy > -80 && gy < h + 300) {\n    var glow = ctx.createLinearGradient(0, gy - 150, 0, gy);\n    glow.addColorStop(0, argbHex(0, 255, 214, 170));\n    glow.addColorStop(1, argbHex(0.28, 255, 205, 150));\n    ctx.fillStyle = glow;\n    ctx.fillRect(0, Math.max(0, gy - 150), w, Math.min(150, Math.max(0, gy)));\n  }\n\n  var sunT = 1 - spaceT;\n  if (sunT > 0.12) {\n    var sunX = sx(w, -2.4);\n    var sunY = sy(h, 3.2);\n    var sunR = Math.max(30, Math.min(150, 1200 / mPerPx));\n    var sun = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR);\n    sun.addColorStop(0, argbHex(0.9 * sunT, 255, 246, 220));\n    sun.addColorStop(0.3, argbHex(0.35 * sunT, 255, 222, 150));\n    sun.addColorStop(1, argbHex(0, 255, 210, 130));\n    ctx.fillStyle = sun;\n    ctx.beginPath();\n    ctx.moveTo(sunX + sunR, sunY);\n    ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);\n    ctx.fill();\n  }\n\n  var starAlpha = Math.max(0, Math.min(1, (vc - 4.5) / 5));\n  if (starAlpha > 0) {\n    var band = ctx.createLinearGradient(0, h * 0.15, w, h * 0.75);\n    band.addColorStop(0, argbHex(0, 210, 220, 255));\n    band.addColorStop(0.45, argbHex(0.07 * starAlpha, 214, 224, 255));\n    band.addColorStop(0.55, argbHex(0.05 * starAlpha, 224, 214, 250));\n    band.addColorStop(1, argbHex(0, 210, 220, 255));\n    ctx.fillStyle = band;\n    ctx.fillRect(0, 0, w, h);\n  }\n  if (starAlpha > 0) {\n    for (var i = 0; i < 110; i++) {\n      var hx = Math.sin(i * 127.1 + 311.7) * 43758.5453;\n      var hy = Math.sin(i * 269.5 + 183.3) * 28001.8384;\n      hx -= Math.floor(hx);\n      hy -= Math.floor(hy);\n      var px = hx * w;\n      var py = (hy * h * 1.4 + vc * 12) % (h * 1.2) - h * 0.1;\n      var big = i % 9 === 0;\n      var tw = 0.45 + 0.55 * Math.abs(Math.sin(tick * 0.02 + i * 1.7));\n      ctx.globalAlpha = starAlpha * tw;\n      ctx.fillStyle = big ? \"#eaf2ff\" : \"#c9d6ee\";\n      ctx.fillRect(px, py, big ? 2.5 : 1.4, big ? 2.5 : 1.4);\n    }\n    ctx.globalAlpha = 1;\n  }\n\n  var cloudFade = 1 - spaceT;\n  if (cloudFade > 0.05)\n    for (var c = 0; c < CLOUDS.length; c++)\n      drawCloud(ctx, w, h, CLOUDS[c][0], CLOUDS[c][1], CLOUDS[c][2], cloudFade);\n}\n\nvar CLOUD_PUFFS = [\n  [0, 0, 1.0], [-0.85, 0.16, 0.6], [0.8, 0.13, 0.7], [-0.32, -0.24, 0.55], [0.32, -0.26, 0.6],\n];\n\nfunction drawCloud(ctx, w, h, xKm, yKm, scale, fade) {\n  var px = sx(w, xKm);\n  var py = sy(h, yKm);\n  var cs = Math.min(70, scale * 1100 / mPerPx);\n  if (px < -cs * 2.5 || px > w + cs * 2.5 || py < -cs * 1.5 || py > h + cs * 1.5)\n    return;\n\n  for (var i = 0; i < CLOUD_PUFFS.length; i++) {\n    var qx = px + CLOUD_PUFFS[i][0] * cs;\n    var qy = py + CLOUD_PUFFS[i][1] * cs * 0.7;\n    var qr = Math.max(2, cs * CLOUD_PUFFS[i][2]);\n    var g = ctx.createRadialGradient(qx, qy, 0, qx, qy, qr);\n    g.addColorStop(0, argbHex(0.3 * fade, 255, 255, 255));\n    g.addColorStop(0.65, argbHex(0.16 * fade, 252, 253, 255));\n    g.addColorStop(1, argbHex(0, 250, 251, 255));\n    ctx.fillStyle = g;\n    ctx.beginPath();\n    ctx.moveTo(qx + qr, qy);\n    ctx.arc(qx, qy, qr, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nfunction drawGround(ctx, w, h) {\n  var gy = sy(h, 0);\n  if (gy > h + 40 || gy < -40)\n    return;\n\n  var grad = ctx.createLinearGradient(0, gy, 0, gy + 140);\n  grad.addColorStop(0, \"#4a6b3d\");\n  grad.addColorStop(0.06, \"#3c5a34\");\n  grad.addColorStop(1, \"#1e3019\");\n  ctx.fillStyle = grad;\n  ctx.fillRect(0, gy, w, Math.max(0, h - gy));\n\n  var padX = sx(w, 0);\n  var padW = 900 / mPerPx;\n\n  ctx.fillStyle = \"#565b63\";\n  ctx.fillRect(padX - padW / 2, gy - 5, padW, 7);\n  ctx.fillStyle = \"#3d4148\";\n  ctx.fillRect(padX - padW * 0.6, gy + 2, padW * 1.2, 3);\n\n  var towerH = 1350 / mPerPx;\n  var towerX = padX - padW * 0.45;\n  var towerW = Math.max(2, 140 / mPerPx);\n  var tower = ctx.createLinearGradient(towerX - towerW, 0, towerX + towerW, 0);\n  tower.addColorStop(0, \"#9aa0a8\");\n  tower.addColorStop(1, \"#6a7078\");\n  ctx.fillStyle = tower;\n  ctx.fillRect(towerX - towerW / 2, gy - towerH, towerW, towerH);\n\n  ctx.strokeStyle = \"#8a8f96\";\n  ctx.lineWidth = Math.max(1, 40 / mPerPx);\n  for (var i = 1; i <= 5; i++) {\n    var ty = gy - towerH * i / 5;\n    ctx.beginPath();\n    ctx.moveTo(towerX + towerW / 2, ty);\n    ctx.lineTo(towerX + towerW / 2 + padW * 0.16, ty + towerH * 0.05);\n    ctx.stroke();\n  }\n}\n\n// ---------------------------------------------------------------------------\n// Altitude scale: world-anchored ticks give the ascent a sense of motion\n// ---------------------------------------------------------------------------\n\nfunction drawAltScale(ctx, w, h) {\n  var step = mPerPx > 100 ? 5 : (mPerPx > 40 ? 2 : 1);\n  var topKm = (camY + panY) + (h * anchorY) * mPerPx / 1000;\n  var botKm = (camY + panY) - (h * (1 - anchorY)) * mPerPx / 1000;\n  var k0 = Math.max(step, Math.ceil(botKm / step) * step);\n\n  ctx.font = \"10px monospace\";\n  ctx.textAlign = \"right\";\n  ctx.textBaseline = \"middle\";\n  for (var k = k0; k <= topKm; k += step) {\n    var y = sy(h, k);\n    ctx.strokeStyle = argbHex(0.16, 255, 255, 255);\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(0, y);\n    ctx.lineTo(w, y);\n    ctx.stroke();\n    ctx.strokeStyle = argbHex(0.5, 255, 255, 255);\n    ctx.beginPath();\n    ctx.moveTo(w - 14, y);\n    ctx.lineTo(w, y);\n    ctx.stroke();\n    ctx.fillStyle = argbHex(0.55, 230, 238, 248);\n    ctx.fillText(k + \" km\", w - 18, y);\n  }\n  ctx.textAlign = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n}\n\nfunction drawApogeeMark(ctx, w, h) {\n  if (!apogeeMark)\n    return;\n\n  var y = sy(h, apogeeMark.alt);\n  if (y < -20 || y > h + 20)\n    return;\n\n  ctx.strokeStyle = argbHex(0.4, 255, 210, 122);\n  ctx.lineWidth = 1;\n  ctx.setLineDash([6, 6]);\n  ctx.beginPath();\n  ctx.moveTo(0, y);\n  ctx.lineTo(w, y);\n  ctx.stroke();\n  ctx.setLineDash([]);\n\n  ctx.fillStyle = argbHex(0.75, 255, 210, 122);\n  ctx.font = \"bold 10px monospace\";\n  ctx.textAlign = \"right\";\n  ctx.fillText(\"APOGEE \" + apogeeMark.alt.toFixed(1) + \" km\", w - 46, y - 6);\n  ctx.textAlign = \"start\";\n}\n\nfunction drawRings(ctx, w, h) {\n  for (var i = rings.length - 1; i >= 0; i--) {\n    var ring = rings[i];\n    ring.age++;\n    var a = 0.55 * (1 - ring.age / 45);\n    if (a <= 0) {\n      rings.splice(i, 1);\n      continue;\n    }\n\n    var px = sx(w, ring.x);\n    var py = sy(h, ring.y);\n    var r = 6 + ring.age * 1.6;\n    ctx.lineWidth = 2;\n    ctx.strokeStyle = argbHex(a, 255, 220, 170);\n    ctx.beginPath();\n    ctx.moveTo(px + r, py);\n    ctx.arc(px, py, r, 0, Math.PI * 2);\n    ctx.stroke();\n    ctx.strokeStyle = argbHex(a * 0.6, 255, 244, 214);\n    ctx.beginPath();\n    ctx.moveTo(px + r * 0.65, py);\n    ctx.arc(px, py, r * 0.65, 0, Math.PI * 2);\n    ctx.stroke();\n  }\n}\n\nfunction drawTrail(ctx, w, h) {\n  if (trail.length < 2)\n    return;\n\n  ctx.strokeStyle = \"#5db8ff\";\n  ctx.lineWidth = 1.6;\n  ctx.setLineDash([1, 6]);\n  ctx.lineCap = \"round\";\n  ctx.globalAlpha = 0.7;\n  ctx.beginPath();\n  ctx.moveTo(sx(w, trail[0][0]), sy(h, trail[0][1]));\n  for (var i = 1; i < trail.length; i++)\n    ctx.lineTo(sx(w, trail[i][0]), sy(h, trail[i][1]));\n  ctx.stroke();\n  ctx.setLineDash([]);\n  ctx.globalAlpha = 1;\n  ctx.lineCap = \"butt\";\n}\n\n// ---------------------------------------------------------------------------\n// Exhaust smoke: world-anchored puffs spawned at the engine while it burns\n// ---------------------------------------------------------------------------\n\nvar puffs = [];\n\nfunction spawnPuffs(w, h, tailSX, tailSY) {\n  if (thrust < 20 || tick % 3 !== 0)\n    return;\n\n  var wx = (camX + panX) + (tailSX - w * anchorX) * mPerPx / 1000;\n  var wy = (camY + panY) + (h * anchorY - tailSY) * mPerPx / 1000;\n  if (wy < 0)\n    return;\n\n  var nearGround = wy < 0.06;\n  puffs.push({\n    x: wx + Math.sin(tick * 3.7) * 0.006,\n    y: Math.max(0.004, wy),\n    r: nearGround ? 7 : 4,\n    a: nearGround ? 0.5 : 0.34,\n    vx: nearGround ? (tick % 6 === 0 ? 0.05 : -0.05) : 0,\n    vy: nearGround ? 0 : -0.005,\n  });\n  if (puffs.length > 70)\n    puffs.shift();\n}\n\nfunction drawPuffs(ctx, w, h) {\n  for (var i = 0; i < puffs.length; i++) {\n    var p = puffs[i];\n    p.x += p.vx * 0.016;\n    p.y = Math.max(0.005, p.y + p.vy * 0.016);\n    p.r += 0.55;\n    p.a *= 0.975;\n    if (p.a < 0.02)\n      continue;\n\n    var px = sx(w, p.x);\n    var py = sy(h, p.y);\n    if (px < -80 || px > w + 80 || py < -80 || py > h + 80)\n      continue;\n\n    var g = ctx.createRadialGradient(px, py, 0, px, py, p.r);\n    g.addColorStop(0, argbHex(p.a, 226, 224, 220));\n    g.addColorStop(1, argbHex(0, 210, 208, 205));\n    ctx.fillStyle = g;\n    ctx.beginPath();\n    ctx.moveTo(px + p.r, py);\n    ctx.arc(px, py, p.r, 0, Math.PI * 2);\n    ctx.fill();\n  }\n  while (puffs.length && puffs[0].a < 0.02)\n    puffs.shift();\n}\n\n// ---------------------------------------------------------------------------\n// The rocket\n// ---------------------------------------------------------------------------\n\nfunction drawFlame(ctx, len, width) {\n  var flick = 0.82 + 0.18 * Math.sin(tick * 0.9) * Math.sin(tick * 0.37 + 1.7);\n  var L = len * flick;\n\n  var glow = ctx.createRadialGradient(0, L * 0.35, 0, 0, L * 0.35, L * 0.95);\n  glow.addColorStop(0, argbHex(0.4, 255, 150, 40));\n  glow.addColorStop(1, argbHex(0, 255, 120, 20));\n  ctx.fillStyle = glow;\n  ctx.beginPath();\n  ctx.moveTo(L * 0.95, L * 0.35);\n  ctx.arc(0, L * 0.35, L * 0.95, 0, Math.PI * 2);\n  ctx.fill();\n\n  var outer = ctx.createLinearGradient(0, 0, 0, L);\n  outer.addColorStop(0, argbHex(0.95, 255, 190, 60));\n  outer.addColorStop(0.55, argbHex(0.8, 255, 100, 16));\n  outer.addColorStop(1, argbHex(0, 255, 40, 0));\n  ctx.fillStyle = outer;\n  ctx.beginPath();\n  ctx.moveTo(-width / 2, 0);\n  ctx.bezierCurveTo(-width * 0.6, L * 0.4, -width * 0.14, L * 0.82, 0, L);\n  ctx.bezierCurveTo(width * 0.14, L * 0.82, width * 0.6, L * 0.4, width / 2, 0);\n  ctx.closePath();\n  ctx.fill();\n\n  var inner = ctx.createLinearGradient(0, 0, 0, L * 0.6);\n  inner.addColorStop(0, argbHex(0.98, 255, 255, 224));\n  inner.addColorStop(1, argbHex(0, 255, 210, 90));\n  ctx.fillStyle = inner;\n  ctx.beginPath();\n  ctx.moveTo(-width * 0.22, 0);\n  ctx.bezierCurveTo(-width * 0.24, L * 0.28, -width * 0.07, L * 0.46, 0, L * 0.6);\n  ctx.bezierCurveTo(width * 0.07, L * 0.46, width * 0.24, L * 0.28, width * 0.22, 0);\n  ctx.closePath();\n  ctx.fill();\n\n  var d1 = 0.14 + 0.05 * Math.sin(tick * 0.53);\n  ctx.fillStyle = argbHex(0.85, 255, 244, 200);\n  ctx.beginPath();\n  ctx.moveTo(width * 0.1, L * d1);\n  ctx.arc(0, L * d1, width * 0.1, 0, Math.PI * 2);\n  ctx.fill();\n}\n\nfunction drawFin(ctx, side, bw, yTop, yBot, sweep) {\n  ctx.beginPath();\n  ctx.moveTo(side * bw * 0.5, yTop);\n  ctx.bezierCurveTo(side * bw * 1.1, yTop + (yBot - yTop) * 0.35,\n                    side * bw * 1.65, yBot - (yBot - yTop) * 0.12,\n                    side * bw * 1.65, yBot + sweep);\n  ctx.lineTo(side * bw * 0.5, yBot);\n  ctx.closePath();\n  ctx.fill();\n}\n\nfunction drawBell(ctx, bw, yTop, size) {\n  var grad = ctx.createLinearGradient(-bw * 0.4, 0, bw * 0.4, 0);\n  grad.addColorStop(0, \"#23262c\");\n  grad.addColorStop(0.5, \"#565d68\");\n  grad.addColorStop(1, \"#1b1e23\");\n  ctx.fillStyle = grad;\n  ctx.beginPath();\n  ctx.moveTo(-bw * 0.24, yTop);\n  ctx.bezierCurveTo(-bw * 0.42, yTop + size * 0.5, -bw * 0.46, yTop + size * 0.8,\n                    -bw * 0.44, yTop + size);\n  ctx.lineTo(bw * 0.44, yTop + size);\n  ctx.bezierCurveTo(bw * 0.46, yTop + size * 0.8, bw * 0.42, yTop + size * 0.5,\n                    bw * 0.24, yTop);\n  ctx.closePath();\n  ctx.fill();\n}\n\nvar sheenCache = null;\n\nfunction bodySheen(ctx, bw) {\n  if (sheenCache)\n    return sheenCache;\n\n  var g = ctx.createLinearGradient(-bw * 0.55, 0, bw * 0.55, 0);\n  g.addColorStop(0, \"#9aa1ac\");\n  g.addColorStop(0.28, \"#f7f9fc\");\n  g.addColorStop(0.55, \"#e9edf2\");\n  g.addColorStop(0.8, \"#c4cad3\");\n  g.addColorStop(1, \"#878e99\");\n  sheenCache = g;\n  return g;\n}\n\nfunction drawBody(ctx, s, withBooster) {\n  var bw = s * 0.27;\n  var sheen = bodySheen(ctx, bw);\n  var bodyEnd = withBooster ? s * 0.1 : s * 0.42;\n\n  if (withBooster) {\n    ctx.fillStyle = \"#2b303a\";\n    ctx.fillRect(-bw / 2, s * 0.1, bw, s * 0.12);\n\n    ctx.fillStyle = sheen;\n    ctx.beginPath();\n    ctx.roundRect(-bw / 2, s * 0.22, bw, s * 0.72, 2);\n    ctx.fill();\n\n    ctx.fillStyle = \"#c23b2a\";\n    ctx.fillRect(-bw / 2, s * 0.24, bw, s * 0.05);\n\n    ctx.fillStyle = \"#b8352a\";\n    drawFin(ctx, -1, bw, s * 0.58, s * 0.94, s * 0.1);\n    drawFin(ctx, 1, bw, s * 0.58, s * 0.94, s * 0.1);\n    ctx.fillStyle = \"#7e241c\";\n    ctx.fillRect(-bw * 0.06, s * 0.5, bw * 0.12, s * 0.44);\n\n    drawBell(ctx, bw, s * 0.94, s * 0.14);\n  }\n\n  ctx.fillStyle = sheen;\n  ctx.beginPath();\n  ctx.moveTo(-bw / 2, bodyEnd);\n  ctx.lineTo(-bw / 2, -s * 0.52);\n  ctx.bezierCurveTo(-bw / 2, -s * 0.6, -bw * 0.44, -s * 0.64, -bw * 0.4, -s * 0.66);\n  ctx.lineTo(bw * 0.4, -s * 0.66);\n  ctx.bezierCurveTo(bw * 0.44, -s * 0.64, bw / 2, -s * 0.6, bw / 2, -s * 0.52);\n  ctx.lineTo(bw / 2, bodyEnd);\n  ctx.closePath();\n  ctx.fill();\n\n  var nose = ctx.createLinearGradient(-bw * 0.5, 0, bw * 0.5, 0);\n  nose.addColorStop(0, \"#8f2318\");\n  nose.addColorStop(0.35, \"#e2503a\");\n  nose.addColorStop(1, \"#a02b1d\");\n  ctx.fillStyle = nose;\n  ctx.beginPath();\n  ctx.moveTo(-bw * 0.4, -s * 0.66);\n  ctx.bezierCurveTo(-bw * 0.28, -s * 0.94, -bw * 0.1, -s * 1.12, 0, -s * 1.18);\n  ctx.bezierCurveTo(bw * 0.1, -s * 1.12, bw * 0.28, -s * 0.94, bw * 0.4, -s * 0.66);\n  ctx.closePath();\n  ctx.fill();\n\n  ctx.fillStyle = \"#c23b2a\";\n  ctx.fillRect(-bw / 2, -s * 0.52, bw, s * 0.045);\n\n  ctx.fillStyle = \"#274a73\";\n  ctx.beginPath();\n  ctx.moveTo(bw * 0.15, -s * 0.3);\n  ctx.arc(0, -s * 0.3, bw * 0.15, 0, Math.PI * 2);\n  ctx.fill();\n  ctx.strokeStyle = \"#c8d4e2\";\n  ctx.lineWidth = 1.6;\n  ctx.beginPath();\n  ctx.moveTo(bw * 0.15, -s * 0.3);\n  ctx.arc(0, -s * 0.3, bw * 0.15, 0, Math.PI * 2);\n  ctx.stroke();\n  ctx.fillStyle = argbHex(0.7, 210, 226, 240);\n  ctx.beginPath();\n  ctx.moveTo(-bw * 0.02, -s * 0.34);\n  ctx.arc(-bw * 0.05, -s * 0.34, bw * 0.04, 0, Math.PI * 2);\n  ctx.fill();\n\n  if (!withBooster) {\n    ctx.fillStyle = \"#b8352a\";\n    drawFin(ctx, -1, bw, s * 0.18, s * 0.42, s * 0.06);\n    drawFin(ctx, 1, bw, s * 0.18, s * 0.42, s * 0.06);\n    drawBell(ctx, bw, s * 0.42, s * 0.13);\n  }\n}\n\nfunction drawParachute(ctx, s, big) {\n  var breathe = 1 + 0.035 * Math.sin(tick * 0.07);\n  var R = s * (big ? 1.5 : 0.85) * breathe;\n  var cy = -s * 2.35;\n\n  ctx.strokeStyle = argbHex(0.8, 226, 230, 238);\n  ctx.lineWidth = 1;\n  for (var i = -3; i <= 3; i++) {\n    ctx.beginPath();\n    ctx.moveTo(0, -s * 0.45);\n    ctx.lineTo(i * R * 0.3, cy + R * 0.34);\n    ctx.stroke();\n  }\n\n  var main = big;\n  var cA = main ? \"#e2603a\" : \"#dfe3ea\";\n  var cB = main ? \"#f1f2f5\" : \"#b9bec9\";\n  for (var g = 0; g < 6; g++) {\n    var a0 = Math.PI + (g / 6) * Math.PI;\n    var a1 = Math.PI + ((g + 1) / 6) * Math.PI;\n    ctx.fillStyle = g % 2 === 0 ? cA : cB;\n    ctx.beginPath();\n    ctx.moveTo(0, cy);\n    ctx.lineTo(Math.cos(a0) * R, cy + Math.sin(a0) * R * 0.62 + R * 0.34);\n    ctx.bezierCurveTo(Math.cos((a0 + a1) / 2) * R * 1.08, cy - R * 0.62,\n                      Math.cos((a0 + a1) / 2) * R * 1.08, cy - R * 0.62,\n                      Math.cos(a1) * R, cy + Math.sin(a1) * R * 0.62 + R * 0.34);\n    ctx.closePath();\n    ctx.fill();\n  }\n}\n\nvar boosterX = 0, boosterY = 0, boosterVy = 0, boosterSeeded = false, boosterSpin = 0;\n\nfunction drawBooster(ctx, w, h, s) {\n  if (phase < 2 || phase >= 4) {\n    boosterSeeded = false;\n    return;\n  }\n\n  if (!boosterSeeded) {\n    boosterX = downKm;\n    boosterY = altKm;\n    boosterVy = vel / 1000 * 0.016;\n    boosterSeeded = true;\n    boosterSpin = 0;\n  }\n\n  boosterVy -= 0.00045;\n  boosterY += boosterVy;\n  boosterX -= 0.0006;\n  boosterSpin += 0.014;\n  if (boosterY <= 0)\n    return;\n\n  var px = sx(w, boosterX);\n  var py = sy(h, boosterY);\n  if (px < -70 || px > w + 70 || py < -70 || py > h + 70)\n    return;\n\n  var bw = s * 0.27;\n  ctx.save();\n  ctx.translate(px, py);\n  ctx.rotate(boosterSpin);\n  ctx.globalAlpha = 0.92;\n  ctx.fillStyle = \"#c3c9d2\";\n  ctx.beginPath();\n  ctx.roundRect(-bw / 2, -s * 0.36, bw, s * 0.72, 2);\n  ctx.fill();\n  ctx.fillStyle = \"#a83226\";\n  drawFin(ctx, -1, bw, s * 0.02, s * 0.34, s * 0.08);\n  drawFin(ctx, 1, bw, s * 0.02, s * 0.34, s * 0.08);\n  drawBell(ctx, bw, s * 0.36, s * 0.13);\n  ctx.globalAlpha = 1;\n  ctx.restore();\n}\n\nfunction drawRocket(ctx, w, h) {\n  rocketSX = sx(w, downKm);\n  rocketSY = sy(h, altKm);\n\n  var s = 54;\n  var descending = phase === 4 && altKm <= 8.05;\n\n  ctx.save();\n  ctx.translate(rocketSX, rocketSY);\n\n  if (descending) {\n    ctx.rotate(roll * 0.85 * Math.PI / 180);\n    drawParachute(ctx, s, altKm <= 1.05);\n    ctx.rotate(Math.PI);\n    drawBody(ctx, s, false);\n  }\n  else {\n    var tiltRad = (90 - pitch) * Math.PI / 180;\n    ctx.rotate(tiltRad);\n    var withBooster = phase <= 1 || (phase === 3 && met < 22);\n    drawBody(ctx, s, withBooster);\n    if (thrust > 1) {\n      ctx.save();\n      ctx.translate(0, s * (withBooster ? 1.08 : 0.55));\n      drawFlame(ctx, s * (0.55 + thrust / 220), s * 0.34);\n      ctx.restore();\n    }\n\n    var tailPx = s * (withBooster ? 1.15 : 0.6);\n    spawnPuffs(w, h, rocketSX - tailPx * Math.sin(tiltRad), rocketSY + tailPx * Math.cos(tiltRad));\n  }\n\n  ctx.restore();\n}\n\n// ---------------------------------------------------------------------------\n// HUD\n// ---------------------------------------------------------------------------\n\nfunction drawVignette(ctx, w, h) {\n  var R = Math.max(w, h) * 0.78;\n  var v = ctx.createRadialGradient(w / 2, h * 0.45, R * 0.55, w / 2, h * 0.45, R);\n  v.addColorStop(0, argbHex(0, 0, 0, 6));\n  v.addColorStop(1, argbHex(0.22, 0, 0, 8));\n  ctx.fillStyle = v;\n  ctx.fillRect(0, 0, w, h);\n}\n\nfunction drawCountdown(ctx, w, h) {\n  ctx.textAlign = \"center\";\n  ctx.textBaseline = \"middle\";\n\n  if (phase === 0 && met < 0 && met > -10.5) {\n    var remaining = Math.ceil(-met);\n    var frac = (-met) - Math.floor(-met);\n    var size = Math.round(58 + 26 * (1 - frac));\n    ctx.font = \"bold \" + size + \"px monospace\";\n    ctx.fillStyle = argbHex(0.14 + 0.6 * frac, 255, 255, 255);\n    ctx.fillText(String(remaining), w / 2, h * 0.34);\n  }\n  else if (liftoffTick > 0 && tick - liftoffTick < 95) {\n    var a = 1 - (tick - liftoffTick) / 95;\n    ctx.font = \"bold 42px monospace\";\n    ctx.fillStyle = argbHex(0.85 * a, 255, 205, 96);\n    ctx.fillText(\"LIFTOFF\", w / 2, h * 0.32);\n  }\n\n  ctx.textAlign = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n}\n\nvar PHASE_COLORS = [\"#8fa3bd\", \"#ff9a3c\", \"#ffb454\", \"#6ec1ff\", \"#8bd5ff\", \"#7ee787\"];\n\nfunction fmtClock() {\n  var t = Math.abs(met);\n  var m = Math.floor(t / 60);\n  var sec = Math.floor(t % 60);\n  var mm = (m < 10 ? \"0\" : \"\") + m;\n  var ss = (sec < 10 ? \"0\" : \"\") + sec;\n  return (met < 0 ? \"T-\" : \"T+\") + mm + \":\" + ss;\n}\n\nfunction drawHud(ctx, w, h) {\n  ctx.save();\n  ctx.globalAlpha = 0.66;\n  ctx.fillStyle = \"#0a0e16\";\n  ctx.beginPath();\n  ctx.roundRect(10, 10, 192, 118, 8);\n  ctx.fill();\n  ctx.globalAlpha = 1;\n  ctx.strokeStyle = argbHex(0.18, 255, 255, 255);\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.roundRect(10, 10, 192, 118, 8);\n  ctx.stroke();\n\n  var pi = Math.max(0, Math.min(5, Math.round(phase)));\n  ctx.fillStyle = PHASE_COLORS[pi];\n  ctx.beginPath();\n  ctx.roundRect(13, 14, 4, 110, 2);\n  ctx.fill();\n\n  ctx.textAlign = \"left\";\n  ctx.textBaseline = \"alphabetic\";\n  ctx.fillStyle = \"#ffffff\";\n  ctx.font = \"bold 22px monospace\";\n  ctx.fillText(fmtClock(), 26, 40);\n\n  ctx.font = \"bold 11px sans-serif\";\n  ctx.fillStyle = PHASE_COLORS[pi];\n  ctx.fillText(PHASES[pi], 26, 58);\n\n  ctx.font = \"12px monospace\";\n  ctx.fillStyle = \"#dce3ec\";\n  ctx.fillText(\"ALT \" + altKm.toFixed(2) + \" km\", 22, 79);\n  ctx.fillText(\"VEL \" + vel.toFixed(0) + \" m/s\", 22, 95);\n  ctx.fillText(\"ACC \" + accG.toFixed(1) + \" g\", 112, 79);\n  ctx.fillText(\"DWN \" + downKm.toFixed(1) + \" km\", 112, 95);\n\n  ctx.fillStyle = \"#9aa6b5\";\n  ctx.font = \"10px sans-serif\";\n  ctx.fillText(\"FUEL\", 22, 114);\n  ctx.strokeStyle = argbHex(0.45, 220, 227, 236);\n  ctx.lineWidth = 1;\n  ctx.strokeRect(52, 106, 136, 9);\n  ctx.fillStyle = fuel > 25 ? \"#7ee787\" : \"#ff6a4d\";\n  ctx.fillRect(53, 107, 134 * Math.max(0, Math.min(1, fuel / 100)), 7);\n  ctx.restore();\n}\n\nfunction drawHint(ctx, w, h) {\n  var text = \"drag: pan    wheel: zoom    double-click: reset    click rocket: info\";\n  ctx.font = \"10px sans-serif\";\n  var tw = ctx.measureTextWidth(text);\n  var cw = tw + 26;\n  var cx = (w - cw) / 2;\n  var cy = h - 32;\n\n  ctx.save();\n  ctx.globalAlpha = 0.72;\n  ctx.fillStyle = \"#0d1219\";\n  ctx.beginPath();\n  ctx.roundRect(cx, cy, cw, 22, 11);\n  ctx.fill();\n  ctx.globalAlpha = 1;\n  ctx.strokeStyle = argbHex(0.22, 255, 255, 255);\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.roundRect(cx, cy, cw, 22, 11);\n  ctx.stroke();\n\n  ctx.fillStyle = \"#cfd8e3\";\n  ctx.textAlign = \"center\";\n  ctx.textBaseline = \"middle\";\n  ctx.fillText(text, w / 2, cy + 11);\n  ctx.textAlign = \"start\";\n  ctx.textBaseline = \"alphabetic\";\n  ctx.restore();\n}\n\nfunction drawCard(ctx, w, h) {\n  if (!cardPinned)\n    return;\n\n  var cx = Math.min(w - 178, rocketSX + 58);\n  var cy = Math.max(12, rocketSY - 96);\n\n  ctx.save();\n  ctx.fillStyle = argbHex(0.8, 10, 14, 22);\n  ctx.strokeStyle = \"#5db8ff\";\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.roundRect(cx, cy, 166, 96, 6);\n  ctx.fill();\n  ctx.stroke();\n\n  ctx.beginPath();\n  ctx.moveTo(cx, cy + 60);\n  ctx.lineTo(rocketSX + 8, rocketSY - 8);\n  ctx.stroke();\n\n  ctx.textAlign = \"left\";\n  ctx.fillStyle = \"#5db8ff\";\n  ctx.font = \"bold 11px sans-serif\";\n  ctx.fillText(\"ROCKET TELEMETRY\", cx + 10, cy + 18);\n  ctx.fillStyle = \"#dce3ec\";\n  ctx.font = \"11px monospace\";\n  ctx.fillText(\"pitch \" + pitch.toFixed(1) + \" deg\", cx + 10, cy + 36);\n  ctx.fillText(\"roll  \" + roll.toFixed(1) + \" deg\", cx + 10, cy + 51);\n  ctx.fillText(\"thrust \" + thrust.toFixed(0) + \" kN\", cx + 10, cy + 66);\n  ctx.fillText(\"fuel   \" + fuel.toFixed(0) + \" %\", cx + 10, cy + 81);\n  ctx.restore();\n}\n\n// ---------------------------------------------------------------------------\n// Main paint loop\n// ---------------------------------------------------------------------------\n\nfunction paint(ctx, w, h) {\n  tick++;\n\n  camX += (downKm - camX) * 0.08;\n  camY += (altKm - camY) * 0.08;\n\n  drawSky(ctx, w, h);\n  drawAltScale(ctx, w, h);\n  drawGround(ctx, w, h);\n  drawApogeeMark(ctx, w, h);\n  drawTrail(ctx, w, h);\n  drawPuffs(ctx, w, h);\n  drawRings(ctx, w, h);\n  drawBooster(ctx, w, h, 40);\n  drawRocket(ctx, w, h);\n  drawVignette(ctx, w, h);\n  drawHud(ctx, w, h);\n  drawCard(ctx, w, h);\n  drawCountdown(ctx, w, h);\n  drawHint(ctx, w, h);\n}\n",
+   "title": "Mission View",
+   "uniqueId": 1,
+   "widget": "painter"
+  },
+  {
+   "datasets": [
+    {
+     "datasetId": 0,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 15,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": true,
+     "groupId": 1,
+     "index": 1,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 15,
+     "plotMin": 0,
+     "title": "Altitude",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"alt\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 2,
+     "units": "km",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 15,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "datasetId": 1,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 500,
+     "fftMin": -700,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": true,
+     "groupId": 1,
+     "index": 2,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 500,
+     "plotMin": -700,
+     "title": "Velocity",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"vel\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 3,
+     "units": "m/s",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 500,
+     "widgetMin": -700,
+     "xAxis": -2
+    },
+    {
+     "datasetId": 2,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 4,
+     "fftMin": -4,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": true,
+     "groupId": 1,
+     "index": 3,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 4,
+     "plotMin": -4,
+     "title": "Acceleration",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"acc\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 4,
+     "units": "g",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 4,
+     "widgetMin": -4,
+     "xAxis": -2
+    },
+    {
+     "alarmBands": [
+      {
+       "max": 100,
+       "min": 40,
+       "severity": 1
+      },
+      {
+       "label": "Low fuel",
+       "max": 40,
+       "min": 15,
+       "severity": 2
+      },
+      {
+       "label": "Fuel critical",
+       "max": 15,
+       "min": 0,
+       "severity": 3
+      }
+     ],
+     "datasetId": 3,
+     "displayFormat": "0d",
+     "displayTickCount": 11,
+     "fft": false,
+     "fftMax": 100,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 1,
+     "index": 4,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 100,
+     "plotMin": 0,
+     "title": "Fuel",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"fuel\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 5,
+     "units": "%",
+     "value": "",
+     "virtual": true,
+     "widget": "gauge",
+     "widgetMax": 100,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "datasetId": 4,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 260,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 1,
+     "index": 5,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 260,
+     "plotMin": 0,
+     "title": "Thrust",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"thrust\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 6,
+     "units": "kN",
+     "value": "",
+     "virtual": true,
+     "widget": "bar",
+     "widgetMax": 260,
+     "widgetMin": 0,
+     "xAxis": -2
+    }
+   ],
+   "title": "Flight Instruments",
+   "uniqueId": 7,
+   "widget": ""
+  },
+  {
+   "datasets": [
+    {
+     "datasetId": 0,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 180,
+     "fftMin": -180,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 2,
+     "index": 1,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 180,
+     "plotMin": -180,
+     "title": "Pitch",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"pitch\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 8,
+     "units": "deg",
+     "value": "",
+     "virtual": true,
+     "widget": "x",
+     "widgetMax": 180,
+     "widgetMin": -180,
+     "xAxis": -2
+    },
+    {
+     "datasetId": 1,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 180,
+     "fftMin": -180,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 2,
+     "index": 2,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 180,
+     "plotMin": -180,
+     "title": "Roll",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"roll\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 9,
+     "units": "deg",
+     "value": "",
+     "virtual": true,
+     "widget": "y",
+     "widgetMax": 180,
+     "widgetMin": -180,
+     "xAxis": -2
+    },
+    {
+     "datasetId": 2,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 180,
+     "fftMin": -180,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 2,
+     "index": 3,
+     "led": false,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 180,
+     "plotMin": -180,
+     "title": "Yaw",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"yaw\")\n  if v == nil then\n    return 0\n  end\n  return v\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 10,
+     "units": "deg",
+     "value": "",
+     "virtual": true,
+     "widget": "z",
+     "widgetMax": 180,
+     "widgetMin": -180,
+     "xAxis": -2
+    }
+   ],
+   "title": "Attitude",
+   "uniqueId": 11,
+   "widget": "gyro"
+  },
+  {
+   "datasets": [
+    {
+     "alarmBands": [
+      {
+       "color": "#3fb950",
+       "max": 1.5,
+       "min": 0.5,
+       "severity": 1
+      }
+     ],
+     "datasetId": 0,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 1,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 3,
+     "index": 1,
+     "led": true,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 1,
+     "plotMin": 0,
+     "title": "Countdown",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"phase\")\n  if v == 0 then\n    return 1\n  end\n  return 0\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 12,
+     "units": "",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 1,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "alarmBands": [
+      {
+       "color": "#3fb950",
+       "max": 1.5,
+       "min": 0.5,
+       "severity": 1
+      }
+     ],
+     "datasetId": 1,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 1,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 3,
+     "index": 2,
+     "led": true,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 1,
+     "plotMin": 0,
+     "title": "Boost",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"phase\")\n  if v == 1 then\n    return 1\n  end\n  return 0\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 13,
+     "units": "",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 1,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "alarmBands": [
+      {
+       "color": "#3fb950",
+       "max": 1.5,
+       "min": 0.5,
+       "severity": 1
+      }
+     ],
+     "datasetId": 2,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 1,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 3,
+     "index": 3,
+     "led": true,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 1,
+     "plotMin": 0,
+     "title": "Stage 2",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"phase\")\n  if v == 2 then\n    return 1\n  end\n  return 0\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 14,
+     "units": "",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 1,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "alarmBands": [
+      {
+       "color": "#3fb950",
+       "max": 1.5,
+       "min": 0.5,
+       "severity": 1
+      }
+     ],
+     "datasetId": 3,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 1,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 3,
+     "index": 4,
+     "led": true,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 1,
+     "plotMin": 0,
+     "title": "Coast",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"phase\")\n  if v == 3 then\n    return 1\n  end\n  return 0\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 15,
+     "units": "",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 1,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "alarmBands": [
+      {
+       "color": "#3fb950",
+       "max": 1.5,
+       "min": 0.5,
+       "severity": 1
+      }
+     ],
+     "datasetId": 4,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 1,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 3,
+     "index": 5,
+     "led": true,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 1,
+     "plotMin": 0,
+     "title": "Descent",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"phase\")\n  if v == 4 then\n    return 1\n  end\n  return 0\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 16,
+     "units": "",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 1,
+     "widgetMin": 0,
+     "xAxis": -2
+    },
+    {
+     "alarmBands": [
+      {
+       "color": "#3fb950",
+       "max": 1.5,
+       "min": 0.5,
+       "severity": 1
+      }
+     ],
+     "datasetId": 5,
+     "displayFormat": "0d",
+     "displayTickCount": 5,
+     "fft": false,
+     "fftMax": 1,
+     "fftMin": 0,
+     "fftSamples": 256,
+     "fftSamplingRate": 100,
+     "graph": false,
+     "groupId": 3,
+     "index": 6,
+     "led": true,
+     "ledHigh": 1,
+     "log": false,
+     "numericValue": 0,
+     "plotMax": 1,
+     "plotMin": 0,
+     "title": "Landed",
+     "transformCode": "function transform(value)\n  local v = tableGet(\"Flight\", \"phase\")\n  if v == 5 then\n    return 1\n  end\n  return 0\nend\n",
+     "transformLanguage": 1,
+     "uniqueId": 17,
+     "units": "",
+     "value": "",
+     "virtual": true,
+     "widget": "",
+     "widgetMax": 1,
+     "widgetMin": 0,
+     "xAxis": -2
+    }
+   ],
+   "title": "Mission Status",
+   "uniqueId": 18,
+   "widget": ""
+  }
+ ],
+ "hexadecimalDelimiters": false,
+ "mqttPublisher": {
+  "cleanSession": true,
+  "customClientId": false,
+  "enabled": false,
+  "hostname": "127.0.0.1",
+  "keepAlive": 60,
+  "mode": 0,
+  "mqttVersion": 2,
+  "notificationTopic": "",
+  "peerVerifyDepth": 10,
+  "peerVerifyMode": 3,
+  "port": 1883,
+  "publishFrequency": 10,
+  "publishNotifications": false,
+  "scriptCode": "",
+  "scriptLanguage": 0,
+  "scriptTopic": "",
+  "sslEnabled": false,
+  "sslProtocol": 5,
+  "topicBase": ""
+ },
+ "nextUniqueId": 19,
+ "plotTimeRange": 30,
+ "pointCount": 100,
+ "schemaVersion": 3,
+ "sources": [
+  {
+   "busType": 1,
+   "checksum": "",
+   "checksumAlgorithm": "",
+   "connection": {
+    "address": "127.0.0.1",
+    "socketTypeIndex": 1,
+    "udpLocalPort": 9909,
+    "udpMulticast": false,
+    "udpRemotePort": 9909
+   },
+   "decoder": 0,
+   "decoderMethod": 0,
+   "frameDetection": 0,
+   "frameEnd": "\\n",
+   "frameParserCode": "--\n-- Dummy frame parser\n--\n-- This project generates all of its data inside the control script, which\n-- writes the \"Flight\" data table and calls dashboardTick(). The UDP source\n-- is a dummy, kept only so a connection can be opened; no bytes are ever\n-- parsed.\n--\n\nfunction parse(frame)\n  return {}\nend\n",
+   "frameParserLanguage": 1,
+   "frameStart": "",
+   "hexadecimalDelimiters": false,
+   "sourceId": 0,
+   "title": "Simulated Rocket"
+  }
+ ],
+ "tables": [
+  {
+   "name": "Flight",
+   "registers": [
+    {
+     "name": "met",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "phase",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "alt",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "vel",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "acc",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "fuel",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "thrust",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "pitch",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "roll",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "yaw",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "x",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "y",
+     "type": "computed",
+     "value": 0
+    },
+    {
+     "name": "z",
+     "type": "computed",
+     "value": 0
+    }
+   ]
+  }
+ ],
+ "title": "Rocket Launch Demo",
+ "treeExpansion": {
+  "": false,
+  "Rocket Launch Demo": true,
+  "Rocket Launch Demo/ ": false,
+  "Rocket Launch Demo/Control Loop": false,
+  "Rocket Launch Demo/Dashboard Widgets": true,
+  "Rocket Launch Demo/Dashboard Widgets/Attitude": true,
+  "Rocket Launch Demo/Dashboard Widgets/Attitude/Pitch": false,
+  "Rocket Launch Demo/Dashboard Widgets/Attitude/Roll": false,
+  "Rocket Launch Demo/Dashboard Widgets/Attitude/Yaw": false,
+  "Rocket Launch Demo/Dashboard Widgets/Flight Instruments": true,
+  "Rocket Launch Demo/Dashboard Widgets/Flight Instruments/Acceleration": false,
+  "Rocket Launch Demo/Dashboard Widgets/Flight Instruments/Altitude": false,
+  "Rocket Launch Demo/Dashboard Widgets/Flight Instruments/Fuel": false,
+  "Rocket Launch Demo/Dashboard Widgets/Flight Instruments/Thrust": false,
+  "Rocket Launch Demo/Dashboard Widgets/Flight Instruments/Velocity": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status": true,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status/Boost": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status/Coast": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status/Countdown": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status/Descent": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status/Landed": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission Status/Stage 2": false,
+  "Rocket Launch Demo/Dashboard Widgets/Mission View": true,
+  "Rocket Launch Demo/MQTT Publisher": false,
+  "Rocket Launch Demo/Shared Memory": true,
+  "Rocket Launch Demo/Shared Memory/Dataset Values": false,
+  "Rocket Launch Demo/Shared Memory/Flight": false,
+  "Rocket Launch Demo/Simulated Rocket": true,
+  "Rocket Launch Demo/Simulated Rocket/Frame Parser": false,
+  "Rocket Launch Demo/Workspaces": true,
+  "Rocket Launch Demo/Workspaces/Flight Data": false,
+  "Rocket Launch Demo/Workspaces/Mission Status": false,
+  "Rocket Launch Demo/Workspaces/Summary": false
+ },
+ "widgetSettings": {
+  "activeGroup": 5000,
+  "externalWindows": {
+   "data": []
+  },
+  "layout:1005": {
+   "data": {
+    "autoLayout": true,
+    "canvasHeight": 511,
+    "canvasWidth": 1035,
+    "geometries": [
+     {
+      "height": 511,
+      "id": 3,
+      "relativeIndex": 0,
+      "state": "normal",
+      "widgetType": 8,
+      "width": 1035,
+      "x": 0,
+      "y": 0
+     }
+    ],
+    "userReordered": false,
+    "windowOrder": [
+     3
+    ],
+    "windowOrderTyped": [
+     {
+      "relativeIndex": 0,
+      "widgetType": 8
+     }
+    ]
+   }
+  },
+  "layout:5000": {
+   "data": {
+    "autoLayout": true,
+    "canvasHeight": 511,
+    "canvasWidth": 1035,
+    "geometries": [
+     {
+      "height": 511,
+      "id": 7,
+      "relativeIndex": 0,
+      "state": "normal",
+      "widgetType": 22,
+      "width": 518,
+      "x": 0,
+      "y": 0
+     },
+     {
+      "height": 511,
+      "id": 2,
+      "relativeIndex": 0,
+      "state": "normal",
+      "widgetType": 4,
+      "width": 518,
+      "x": 517,
+      "y": 0
+     }
+    ],
+    "userReordered": true,
+    "windowOrder": [
+     7,
+     2
+    ],
+    "windowOrderTyped": [
+     {
+      "relativeIndex": 0,
+      "widgetType": 22
+     },
+     {
+      "relativeIndex": 0,
+      "widgetType": 4
+     }
+    ]
+   }
+  },
+  "layout:5001": {
+   "data": {
+    "autoLayout": true,
+    "canvasHeight": 511,
+    "canvasWidth": 1035,
+    "geometries": [
+     {
+      "height": 256,
+      "id": 11,
+      "relativeIndex": 0,
+      "state": "normal",
+      "widgetType": 10,
+      "width": 518,
+      "x": 0,
+      "y": 0
+     },
+     {
+      "height": 256,
+      "id": 12,
+      "relativeIndex": 0,
+      "state": "normal",
+      "widgetType": 11,
+      "width": 518,
+      "x": 517,
+      "y": 0
+     },
+     {
+      "height": 256,
+      "id": 10,
+      "relativeIndex": 2,
+      "state": "normal",
+      "widgetType": 9,
+      "width": 345,
+      "x": 0,
+      "y": 255
+     },
+     {
+      "height": 256,
+      "id": 8,
+      "relativeIndex": 0,
+      "state": "normal",
+      "widgetType": 9,
+      "width": 345,
+      "x": 344,
+      "y": 255
+     },
+     {
+      "height": 256,
+      "id": 9,
+      "relativeIndex": 1,
+      "state": "normal",
+      "widgetType": 9,
+      "width": 345,
+      "x": 688,
+      "y": 255
+     }
+    ],
+    "userReordered": true,
+    "windowOrder": [
+     11,
+     12,
+     10,
+     8,
+     9
+    ],
+    "windowOrderTyped": [
+     {
+      "relativeIndex": 0,
+      "widgetType": 10
+     },
+     {
+      "relativeIndex": 0,
+      "widgetType": 11
+     },
+     {
+      "relativeIndex": 2,
+      "widgetType": 9
+     },
+     {
+      "relativeIndex": 0,
+      "widgetType": 9
+     },
+     {
+      "relativeIndex": 1,
+      "widgetType": 9
+     }
+    ]
+   }
+  }
+ },
+ "workspaces": [
+  {
+   "title": "Summary",
+   "widgetRefs": [
+    {
+     "groupId": 1,
+     "relativeIndex": 0,
+     "widgetType": 22
+    },
+    {
+     "groupId": 11,
+     "relativeIndex": 0,
+     "widgetType": 4
+    }
+   ],
+   "workspaceId": 5000
+  },
+  {
+   "title": "Flight Data",
+   "widgetRefs": [
+    {
+     "groupId": 7,
+     "relativeIndex": 0,
+     "widgetType": 9
+    },
+    {
+     "groupId": 7,
+     "relativeIndex": 1,
+     "widgetType": 9
+    },
+    {
+     "groupId": 7,
+     "relativeIndex": 2,
+     "widgetType": 9
+    },
+    {
+     "groupId": 7,
+     "relativeIndex": 0,
+     "widgetType": 11
+    },
+    {
+     "groupId": 7,
+     "relativeIndex": 0,
+     "widgetType": 10
+    }
+   ],
+   "workspaceId": 5001
+  },
+  {
+   "title": "Mission Status",
+   "widgetRefs": [
+    {
+     "groupId": 18,
+     "relativeIndex": 0,
+     "widgetType": 8
+    }
+   ],
+   "workspaceId": 1005
+  }
+ ],
+ "writerVersion": "4.0.1",
+ "writerVersionAtCreation": "4.0.1"
+}

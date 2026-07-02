@@ -216,12 +216,15 @@ Widgets.SmartDialog {
       }
 
       //
-      // What's New in this version
+      // Zero-hardware demo project
       //
       Button {
         Layout.fillWidth: true
-        text: qsTr("What's New")
-        onClicked: app.showWhatsNew()
+        text: qsTr("Project Demo")
+        onClicked: {
+          root.close()
+          app.showDemo()
+        }
       }
 
       //

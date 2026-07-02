@@ -467,6 +467,18 @@ Window {
             icon.source: "qrc:/icons/buttons/activate.svg"
           }
 
+          Widgets.IconButton {
+            horizontalPadding: 8
+            text: qsTr("See it in Action")
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/icons/buttons/media-play.svg"
+            onClicked: {
+              app.showMainWindow()
+              root.close()
+              Cpp_Misc_Demo.startDemo()
+            }
+          }
+
           Item {
             Layout.fillWidth: true
           }

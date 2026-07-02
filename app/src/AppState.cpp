@@ -21,6 +21,7 @@
 
 #include "AppState.h"
 
+#include <QDir>
 #include <QFileInfo>
 
 #include "DataModel/Frame.h"
@@ -92,6 +93,14 @@ IO::FrameConfig AppState::frameConfig() const noexcept
   return m_frameConfig;
 }
 
+/**
+ * @brief Returns true while the session is ephemeral (operator/runtime deployments).
+ */
+bool AppState::ephemeralSession() const noexcept
+{
+  return m_ephemeralSession;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Public slots
 //--------------------------------------------------------------------------------------------------
@@ -134,6 +143,20 @@ void AppState::setEphemeralSession(bool ephemeral)
 }
 
 /**
+ * @brief Marks a demo session rooted at demoDir: the last-project path and operation mode
+ *        are not persisted while a project inside that directory is loaded, so the bundled
+ *        demo can never hijack the next launch. Cleared when an outside project loads, which
+ *        also re-persists the live mode that was swallowed while the guard was up.
+ */
+void AppState::setDemoSession(const QString& demoDir)
+{
+  if (demoDir.isEmpty())
+    m_demoSessionDir.clear();
+  else
+    m_demoSessionDir = QDir::cleanPath(demoDir) + QStringLiteral("/");
+}
+
+/**
  * @brief Sets the operation mode, persists it, and emits derived config changes.
  */
 void AppState::setOperationMode(SerialStudio::OperationMode mode)
@@ -142,7 +165,7 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
     return;
 
   m_operationMode = mode;
-  if (!m_ephemeralSession)
+  if (!m_ephemeralSession && m_demoSessionDir.isEmpty())
     m_settings.setValue("operation_mode", static_cast<int>(mode));
 
   m_frameConfig = deriveFrameConfig();
@@ -161,9 +184,15 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
 void AppState::onProjectLoaded()
 {
   const QString path = DataModel::ProjectModel::instance().jsonFilePath();
+  if (!m_demoSessionDir.isEmpty() && !QDir::cleanPath(path).startsWith(m_demoSessionDir)) {
+    m_demoSessionDir.clear();
+    if (!m_ephemeralSession)
+      m_settings.setValue("operation_mode", static_cast<int>(m_operationMode));
+  }
+
   if (m_projectFilePath != path) {
     m_projectFilePath = path;
-    if (!m_ephemeralSession)
+    if (!m_ephemeralSession && m_demoSessionDir.isEmpty())
       m_settings.setValue("project_file_path", path);
 
     Q_EMIT projectFileChanged();
