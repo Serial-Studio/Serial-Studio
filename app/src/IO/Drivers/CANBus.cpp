@@ -669,7 +669,10 @@ void IO::Drivers::CANBus::onFramesReceived()
       } else
         publishReceivedData(std::move(data));
     }
+  } catch (const std::exception& e) {
+    qWarning() << "CAN frame read failed:" << e.what();
   } catch (...) {
+    qWarning() << "CAN frame read failed: unknown exception";
   }
 }
 
