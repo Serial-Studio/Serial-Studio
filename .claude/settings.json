@@ -8,6 +8,12 @@
       "Bash(otool *)",
       "Bash(nm *)"
     ],
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Edit(app/translations/**)",
+      "Write(app/translations/**)"
+    ],
     "deny": [
       "Bash(cmake *)",
       "Bash(jom *)",
@@ -21,6 +27,7 @@
       "Bash(g++ *)",
       "Bash(cl *)",
       "Bash(git checkout *)",
+      "Bash(git switch *)",
       "Bash(git restore *)",
       "Bash(git reset *)",
       "Bash(git stash *)",
@@ -28,6 +35,37 @@
     ]
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-dirty-files.py\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-dirty-files.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/commit-sanitize-gate.py\""
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
@@ -35,6 +73,10 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/verify-on-save.py\""
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-dirty-files.py\""
           }
         ]
       }
