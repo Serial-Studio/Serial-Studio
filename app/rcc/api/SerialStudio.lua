@@ -1061,6 +1061,12 @@ function licensing.activate()
   return apiCall('licensing.activate', p)
 end
 
+function licensing.activateOffline(path)
+  local p = {}
+  p['path'] = path
+  return apiCall('licensing.activateOffline', p)
+end
+
 function licensing.deactivate()
   local p = {}
   return apiCall('licensing.deactivate', p)
@@ -2028,6 +2034,11 @@ end
 function system.runningProcesses()
   local p = {}
   return apiCall('system.runningProcesses', p)
+end
+
+function system.startDemo()
+  local p = {}
+  return apiCall('system.startDemo', p)
 end
 
 function ui.window.getLayout()

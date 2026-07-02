@@ -1353,6 +1353,12 @@ licensing.activate = function() {
   return apiCall('licensing.activate', p);
 };
 
+licensing.activateOffline = function(path) {
+  var p = {};
+  p['path'] = path;
+  return apiCall('licensing.activateOffline', p);
+};
+
 licensing.deactivate = function() {
   var p = {};
   return apiCall('licensing.deactivate', p);
@@ -2320,6 +2326,11 @@ system.projectDir = function() {
 system.runningProcesses = function() {
   var p = {};
   return apiCall('system.runningProcesses', p);
+};
+
+system.startDemo = function() {
+  var p = {};
+  return apiCall('system.startDemo', p);
 };
 
 ui.window.getLayout = function() {

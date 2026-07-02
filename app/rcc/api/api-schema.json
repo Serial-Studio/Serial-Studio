@@ -2074,6 +2074,19 @@
         ]
     },
     {
+        "description": "Activate Pro from an offline license certificate (params: path)",
+        "name": "licensing.activateOffline",
+        "properties": {
+            "path": {
+                "description": "Path to a .sslic certificate",
+                "type": "string"
+            }
+        },
+        "required": [
+            "path"
+        ]
+    },
+    {
         "description": "Deactivate the license on this machine, freeing a seat",
         "name": "licensing.deactivate",
         "properties": {
@@ -2533,11 +2546,11 @@
         ]
     },
     {
-        "description": "Return the register list for a table (params: name)",
+        "description": "Return the register list for a table (params: name). name may be the bare table name or its full \"/\"-joined folder path.",
         "name": "project.dataTable.get",
         "properties": {
             "name": {
-                "description": "Table name",
+                "description": "Table name or full folder path",
                 "type": "string"
             }
         },
@@ -2554,7 +2567,7 @@
                 "type": "string"
             },
             "table": {
-                "description": "Owning table name",
+                "description": "Owning table: full \"/\"-joined folder path (bare name if top-level)",
                 "type": "string"
             }
         },
@@ -2585,7 +2598,7 @@
                 "type": "string"
             },
             "table": {
-                "description": "Owning table name",
+                "description": "Owning table: full \"/\"-joined folder path (bare name if top-level)",
                 "type": "string"
             }
         },
@@ -2595,7 +2608,7 @@
         ]
     },
     {
-        "description": "List all user-defined data tables",
+        "description": "List all user-defined data tables. Each entry has name (bare), path (full \"/\"-joined folder path), and registerCount. Pass path to get/getValue/handle for a table that lives inside folders.",
         "name": "project.dataTable.list",
         "properties": {
         },
@@ -4621,6 +4634,14 @@
     {
         "description": "List the helper processes currently managed by system.exec.",
         "name": "system.runningProcesses",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Start the bundled zero-hardware rocket-launch demo: stages the demo project, opens it, and connects the simulated source so the dashboard streams live data. Unavailable in operator deployments.",
+        "name": "system.startDemo",
         "properties": {
         },
         "required": [
