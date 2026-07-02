@@ -4,6 +4,20 @@ Serial Studio is a cross-platform dashboard tool for visualizing data from embed
 
 Hobbyists, educators, and professional engineers can all use it to go from raw data to a live dashboard without writing code.
 
+## What people use it for
+
+- A serial monitor and serial plotter for Arduino, ESP32, STM32, and Teensy boards
+- A real-time telemetry dashboard for rockets, drones, robots, and race cars
+- A data logger that records sensor data to CSV, MDF4, or SQLite
+- A Modbus and CAN bus monitor for industrial equipment and automotive diagnostics
+- An MQTT dashboard for IoT sensor networks
+- An FFT spectrum and waterfall display for audio and vibration analysis
+- A ground station style interface for student and research projects
+
+See the [use case catalog](doc/help/Use-Cases.md) for detailed setups in 18 fields, and the
+[comparison guide](doc/help/Comparison.md) for how Serial Studio differs from the Arduino
+Serial Plotter, Processing, MATLAB, LabVIEW, and Grafana.
+
 ## Get started
 
 The full documentation and help center lives here:

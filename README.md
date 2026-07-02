@@ -10,9 +10,13 @@
 
 Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or anything else that speaks serial, Bluetooth, a network protocol, or an industrial bus. Describe the data format once in a project file. Serial Studio draws the plots, gauges, maps, and 3D views around it. Send commands back with buttons, sliders, and knobs. Record a session, replay it, export it as a PDF.
 
+It replaces the stack of separate tools this work usually requires: a serial monitor and serial plotter for Arduino and ESP32 development, a real-time telemetry dashboard, a data logger that records to CSV or SQLite, and a Modbus, CAN bus, or MQTT monitor for industrial and IoT systems.
+
 Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 ![Software usage](doc/screenshot.png)
+
+[Use cases](./doc/help/Use-Cases.md) shows how people apply it across 18 fields, from rocketry and drones to industrial automation. [Comparison](./doc/help/Comparison.md) sets it against the Arduino IDE Serial Plotter, Processing, MATLAB, LabVIEW, and Grafana.
 
 ## What you can do with it
 
@@ -160,13 +164,17 @@ void loop() {
 
 Upload, connect Serial Studio, enable Quick Plot, and you're done.
 
-First time using it? The [help center](https://serial-studio.com/help) covers troubleshooting and common questions.
+First time using it? Start with the [getting started guide](./doc/help/Getting-Started.md). The [help center](https://serial-studio.com/help) covers troubleshooting and common questions.
 
 ## Documentation
 
 ### Official docs
 
 - [Help center](https://serial-studio.com/help): FAQs, use cases, comparisons, troubleshooting.
+- [Getting started](./doc/help/Getting-Started.md): first connection, the three operation modes, and common problems.
+- [Use cases](./doc/help/Use-Cases.md): 18 fields where Serial Studio is used, with the hardware and data rates involved.
+- [Comparison](./doc/help/Comparison.md): how it differs from the Arduino Serial Plotter, Processing, MATLAB, LabVIEW, and Grafana.
+- [Pro vs Free](./doc/help/Pro-vs-Free.md): the full feature matrix for both editions.
 - [Local help docs](./doc/help): Markdown source for the in-app help center.
 - [AI agent guide](AGENTS.md): for ChatGPT, Claude, and other assistants.
 - [API reference](./doc/help/API-Reference.md): full TCP API and automation docs.
@@ -279,7 +287,7 @@ The GPL build is intended for personal, educational, and open source projects; c
 
 ## Contributing
 
-Contributions are welcome: bug fixes, new features, or doc improvements.
+Contributions are welcome: bug fixes, new features, or doc improvements. [CONTRIBUTING.md](CONTRIBUTING.md) has the full guide.
 
 Before contributing:
 

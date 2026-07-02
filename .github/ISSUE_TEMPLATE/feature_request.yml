@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest a new capability or an improvement to an existing one
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the task you are trying to do, not just the feature you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How you imagine it working. Rough is fine.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Workarounds or alternatives you considered
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware or protocol involved
+      placeholder: ESP32 over BLE, Modbus RTU flow meter, CAN bus on a race car, ...

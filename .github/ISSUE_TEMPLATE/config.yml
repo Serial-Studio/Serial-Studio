@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/Serial-Studio/Serial-Studio/discussions
+    about: Ask questions, share projects, and discuss ideas before they become issues.
+  - name: Help center
+    url: https://serial-studio.com/help
+    about: Setup guides, troubleshooting, FAQs, and the full documentation.
+  - name: Commercial licensing and Pro support
+    url: https://serial-studio.com
+    about: Pro licenses include priority support by email.

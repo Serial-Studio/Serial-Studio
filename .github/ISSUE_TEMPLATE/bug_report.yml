@@ -1,0 +1,68 @@
+name: Bug report
+description: Something is broken or behaves unexpectedly
+labels: [bug]
+body:
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11 / macOS 15 / Ubuntu 24.04 / Raspberry Pi OS 64-bit
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Serial Studio version
+      placeholder: "3.2.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Edition
+      options:
+        - Pro (activated)
+        - Trial
+        - GPL build (compiled from source)
+    validations:
+      required: true
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Connection type
+      options:
+        - UART / Serial
+        - TCP / UDP
+        - Bluetooth LE
+        - MQTT
+        - Modbus
+        - CAN Bus
+        - USB
+        - HID
+        - Audio
+        - Process I/O
+        - Not connection related
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open project ...
+        2. Connect to ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Project file, logs, or screenshots
+      description: Attach the .ssproj file, console output, or screenshots if they help reproduce the issue.
