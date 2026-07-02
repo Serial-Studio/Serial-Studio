@@ -510,8 +510,8 @@ revalidates it online when a connection is available, and a 30-day offline
 grace period covers machines that stay disconnected between checks.
 
 A machine that can never reach the internet can be activated with a signed
-license file instead of connecting online. See
-[Offline Activation](Offline-Activation.md).
+license file instead of connecting online. This is offered for lifetime and
+test-stand licenses. See [Offline Activation](Offline-Activation.md).
 
 ## Educational Discounts
 

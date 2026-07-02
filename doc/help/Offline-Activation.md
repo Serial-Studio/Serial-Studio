@@ -10,11 +10,14 @@ occasional internet access does not need this: normal
 [online activation](Pro-vs-Free.md#upgrading-from-free-to-pro) covers brief
 disconnections with a 30-day offline grace period.
 
-Offline activation is available in the Pro (commercial) build only.
+Offline activation is available in the Pro (commercial) build only, and is
+offered for lifetime and test-stand licenses. Monthly and yearly subscriptions
+use online activation with the 30-day offline grace period instead.
 
 ## What you need
 
-- A Serial Studio Pro license key and the email address used to purchase it.
+- A Serial Studio Pro lifetime or test-stand license key and the email address
+  used to purchase it.
 - The offline machine, running a Pro build of Serial Studio.
 - A second computer with internet access (a phone, laptop, or any browser).
 - A way to move a small file between the two machines, such as a USB drive.
@@ -29,9 +32,10 @@ imports that license file.
 
 On the offline machine:
 
-1. Open the License Management dialog with the **Activate** button in the toolbar.
-2. Click **Activate Offline** to open the offline activation wizard.
-3. Click **Save Device File** and store the `.ssmachine` file.
+1. Open the **About** dialog from the toolbar, then click **Manage License**.
+2. In the License Management dialog, click **Activate Offline…** to open the
+   offline activation wizard.
+3. Click **Save Device File…** and store the `.ssmachine` file.
 
 The device file identifies this machine and carries no personal information. It
 holds a hardware fingerprint and the application version.
@@ -54,8 +58,8 @@ is required.
 
 Move the `.sslic` file to the offline machine, then:
 
-1. Return to the offline activation wizard with **Activate Offline**.
-2. Click **Import License File** and select the `.sslic` file.
+1. Reopen the wizard from **About → Manage License → Activate Offline…**.
+2. Click **Import License File…** and select the `.sslic` file.
 
 Pro features unlock immediately, and no network request is made on this machine.
 
@@ -65,11 +69,11 @@ Pro features unlock immediately, and no network request is made on this machine.
   will not activate any other machine.
 - Each offline activation uses one seat on your license, the same as an online
   activation.
-- A monthly or yearly license file carries an expiry that follows your
-  subscription. Run the three steps again after a renewal to refresh it. Serial
-  Studio shows the remaining days and warns before the file lapses.
 - A lifetime license file does not expire. It keeps working on that machine with
   no further steps.
+- A test-stand license file carries an expiry that follows your license term. Run
+  the three steps again after a renewal to refresh it. Serial Studio shows the
+  remaining days and warns before the file lapses.
 - The activation persists across restarts and needs no network on the offline
   machine.
 
