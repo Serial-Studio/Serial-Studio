@@ -1516,7 +1516,7 @@ void DataModel::ProjectModel::setFrozen(const bool frozen)
   if (m_frozen == frozen)
     return;
 
-  if (frozen && !SerialStudio::proWidgetsEnabled())
+  if (frozen && !SerialStudio::activated())
     return;
 
   m_frozen = frozen;

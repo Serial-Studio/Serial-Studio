@@ -367,9 +367,8 @@ void Widgets::GPS::setMapType(const int type)
   auto mapId = qBound(0, type, m_mapTypes.count() - 1);
   if (m_mapType != mapId) {
 #ifdef BUILD_COMMERCIAL
-    const auto& tk = Licensing::CommercialToken::current();
-    const bool proMaps =
-      tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial;
+    const auto& tk     = Licensing::CommercialToken::current();
+    const bool proMaps = tk.isValid() && SS_LICENSE_GUARD();
 #else
     const bool proMaps = false;
 #endif

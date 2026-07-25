@@ -475,6 +475,7 @@ Widgets.SmartWindow {
       context: modelData.shortcutContext === "application" ? Qt.ApplicationShortcut
                                                            : Qt.WindowShortcut
       enabled: behavior !== null && behavior.enabled !== false
+               && (!_mwPalette.opened || modelData.id === "palette.open")
       onActivated: {
         if (behavior !== null)
           behavior.run()
@@ -746,17 +747,11 @@ Widgets.SmartWindow {
       taskBar: null
       workspacesEnabled: false
       extraTools: _mwCommandModel
-      extraTitle: qsTr("Application")
     } Widgets.CommandPalette {
       id: _mwPalette
 
       title: qsTr("Command Palette")
       titleIcon: "qrc:/icons/buttons/workspaces.svg"
-
-      //
-      // Freeze dashboard focus-grabbers while the palette owns the keyboard
-      //
-      onOpenedChanged: app.commandPaletteOpen = opened
 
       //
       // When a dashboard is active, drive the single palette from its model (workspaces +

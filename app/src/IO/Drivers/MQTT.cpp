@@ -161,8 +161,7 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
   Q_UNUSED(mode);
 
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD()
-      || token.featureTier() < Licensing::FeatureTier::Trial) {
+  if (!token.isValid() || !SS_LICENSE_GUARD()) {
     Misc::Utilities::showMessageBox(
       tr("MQTT Feature Requires a Commercial License"),
       tr("Subscribing to an MQTT broker is only available with a valid Serial Studio license "
@@ -967,8 +966,7 @@ void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqtt
   Q_ASSERT(topic.isValid());
 
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD()
-      || token.featureTier() < Licensing::FeatureTier::Trial) {
+  if (!token.isValid() || !SS_LICENSE_GUARD()) {
     qCWarning(lcMqttSub) << "messageReceived dropped: no commercial license";
     return;
   }

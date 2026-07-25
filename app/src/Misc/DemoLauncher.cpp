@@ -58,11 +58,12 @@ Misc::DemoLauncher& Misc::DemoLauncher::instance()
 /**
  * @brief Stage a writable copy, open it under a demo session (never persisted as the last
  *        project), then connect so the simulation runs. A failed load restores the prior mode
- *        and session; an already-loaded demo re-arms and reconnects instead of re-staging. Every
- *        group ships enabled, so a token landing later cannot leave the Pro groups switched off.
+ *        and session; an already-loaded demo re-arms and reconnects instead of re-staging.
+ *        Commercial builds only: the demo showcases Pro widgets a GPL build cannot render.
  */
 bool Misc::DemoLauncher::startDemo()
 {
+#ifdef BUILD_COMMERCIAL
   static auto& state = AppState::instance();
   if (state.ephemeralSession())
     return false;
@@ -103,6 +104,9 @@ bool Misc::DemoLauncher::startDemo()
 
   io.connectDevice();
   return true;
+#else
+  return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

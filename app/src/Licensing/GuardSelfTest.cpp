@@ -101,18 +101,15 @@
   fails     += expect(QStringLiteral("synthetic trial token validates"),
                   Licensing::CommercialToken::current().isValid());
   fails += expect(QStringLiteral("activated() opens with trial token"), SerialStudio::activated());
-  fails += expect(QStringLiteral("proWidgetsEnabled() opens with trial token"),
-                  SerialStudio::proWidgetsEnabled());
 
   auto tampered = token;
   tampered.setFeatureTier(Licensing::FeatureTier::Enterprise);
   Licensing::CommercialToken::setCurrent(tampered);
-  fails += expect(QStringLiteral("tier mutated after seal() is rejected"),
-                  !SerialStudio::activated() && !SerialStudio::proWidgetsEnabled());
+  fails +=
+    expect(QStringLiteral("tier mutated after seal() is rejected"), !SerialStudio::activated());
 
   Licensing::CommercialToken::clearCurrent();
-  fails += expect(QStringLiteral("cleared token closes all gates"),
-                  !SerialStudio::activated() && !SerialStudio::proWidgetsEnabled());
+  fails += expect(QStringLiteral("cleared token closes all gates"), !SerialStudio::activated());
 
   Licensing::CommercialToken::setCurrent(previous);
   return fails;

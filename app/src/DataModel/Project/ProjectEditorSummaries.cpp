@@ -589,7 +589,7 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
 {
   QHash<qint64, ResolvedWidget> lookup;
   const auto& groups = pm.groups();
-  const bool pro     = SerialStudio::proWidgetsEnabled();
+  const bool pro     = SerialStudio::activated();
   QHash<int, int> groupRunning;
   QHash<int, int> datasetRunning;
 
@@ -827,7 +827,7 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;
 
   const auto& groups = m_projectModelRef.groups();
-  const bool pro     = SerialStudio::proWidgetsEnabled();
+  const bool pro     = SerialStudio::activated();
   for (const auto& group : groups) {
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;

@@ -781,9 +781,8 @@ void Sessions::Export::setExportEnabled(const bool enabled)
 {
   Q_ASSERT(m_appState);
 
-  const auto& tk = Licensing::CommercialToken::current();
-  const bool licensed =
-    tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial;
+  const auto& tk      = Licensing::CommercialToken::current();
+  const bool licensed = tk.isValid() && SS_LICENSE_GUARD();
 
   const bool allow =
     enabled && licensed && m_appState->operationMode() != SerialStudio::ConsoleOnly;

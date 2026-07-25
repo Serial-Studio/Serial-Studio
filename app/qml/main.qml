@@ -539,10 +539,10 @@ Item {
   }
 
   //
-  // File transmission: author-only
+  // File transmission: author-only unless the deployment grants runtime access
   //
   function showFileTransmission() {
-    if (!app.runtimeMode)
+    if (!app.runtimeMode || (app.proVersion && Cpp_IO_FileTransmission.runtimeAccessAllowed))
       fileTransmissionDialog.activate()
   }
 
@@ -555,10 +555,10 @@ Item {
   }
 
   //
-  // Zero-hardware demo project: author-only
+  // Zero-hardware demo project: author-only, commercial builds only
   //
   function showDemo() {
-    if (!app.runtimeMode)
+    if (!app.runtimeMode && app.proVersion)
       Cpp_Misc_Demo.startDemo()
   }
 

@@ -403,7 +403,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Kiểm Tra Cập Nhật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Project Demo</source>
         <translation>Demo Dự Án</translation>
     </message>
@@ -416,32 +416,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Mẹo &amp; Thủ Thuật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="235"/>
+        <location filename="../../qml/Dialogs/About.qml" line="236"/>
         <source>License Agreement</source>
         <translation>Thỏa Thuận Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="244"/>
+        <location filename="../../qml/Dialogs/About.qml" line="245"/>
         <source>Report Bug</source>
         <translation>Báo Cáo Lỗi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="253"/>
+        <location filename="../../qml/Dialogs/About.qml" line="254"/>
         <source>Acknowledgements</source>
         <translation>Lời Cảm Ơn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="262"/>
+        <location filename="../../qml/Dialogs/About.qml" line="263"/>
         <source>Benchmark</source>
         <translation>Đánh Giá Hiệu Năng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="270"/>
+        <location filename="../../qml/Dialogs/About.qml" line="271"/>
         <source>Website</source>
         <translation>Trang Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="286"/>
+        <location filename="../../qml/Dialogs/About.qml" line="287"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -2389,7 +2389,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>CommandPalette</name>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="332"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="377"/>
         <source>Folder</source>
         <translation>Thư Mục</translation>
     </message>
@@ -2398,32 +2398,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="70"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="86"/>
         <source>Commands</source>
         <translation>Lệnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="542"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="593"/>
         <source>Search…</source>
         <translation>Tìm Kiếm…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="558"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="609"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="606"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="657"/>
         <source>Back</source>
         <translation>Quay Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="667"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="718"/>
         <source>Type to search, Enter to open, Esc to close</source>
         <translation>Nhập để tìm kiếm, Enter để mở, Esc để đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="767"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="818"/>
         <source>No results found</source>
         <translation>Không tìm thấy kết quả</translation>
     </message>
@@ -2797,596 +2797,676 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Close</source>
+        <translation>Đóng</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
         <source>Close Window</source>
         <translation>Đóng Cửa Sổ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
+        <source>Close session file</source>
+        <translation>Đóng tệp phiên</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Collapse All</source>
         <translation>Thu Gọn Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Collapse Duplicates</source>
         <translation>Thu Gọn Trùng Lặp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Collapse repeated console lines</source>
         <translation>Thu gọn các dòng bảng điều khiển lặp lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
         <source>Collapse the project tree to its overview</source>
         <translation>Thu gọn cây dự án về chế độ tổng quan</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
         <source>Command Palette</source>
         <translation>Bảng Lệnh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="109"/>
         <source>Compass</source>
         <translation>La Bàn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="110"/>
         <source>Connect</source>
         <translation>Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="109"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="111"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Kết nối hoặc ngắt kết nối khỏi thiết bị đã cấu hình</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="110"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="112"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="111"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="113"/>
         <source>Console Echo</source>
         <translation>Echo Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="112"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="114"/>
         <source>Console Only Mode</source>
         <translation>Chế Độ Chỉ Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="113"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="115"/>
         <source>Console Timestamps</source>
         <translation>Dấu Thời Gian Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="114"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="116"/>
         <source>Console Transcript</source>
         <translation>Bản Ghi Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="115"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="117"/>
         <source>Create a new JSON project</source>
         <translation>Tạo dự án JSON mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="116"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="118"/>
         <source>Dataset</source>
         <translation>Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="117"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="119"/>
+        <source>Delete</source>
+        <translation>Xóa</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="120"/>
+        <source>Delete the selected session</source>
+        <translation>Xóa phiên đã chọn</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="121"/>
         <source>Deploy</source>
         <translation>Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="118"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="122"/>
         <source>Deploy Operator App</source>
         <translation>Triển Khai Ứng Dụng Điều Hành</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="119"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="123"/>
         <source>Disconnect</source>
         <translation>Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="120"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="124"/>
         <source>Echo transmitted data in the console</source>
         <translation>Hiển thị dữ liệu truyền đi trong bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="121"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="125"/>
         <source>Examples</source>
         <translation>Ví Dụ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="122"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="126"/>
         <source>Expand All</source>
         <translation>Mở Rộng Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="123"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="127"/>
         <source>Expand every item in the project tree</source>
         <translation>Mở rộng mọi mục trong cây dự án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="124"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="128"/>
         <source>Export</source>
         <translation>Xuất</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="125"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="129"/>
+        <source>Export CSV</source>
+        <translation>Xuất CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="130"/>
+        <source>Export PDF</source>
+        <translation>Xuất PDF</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="131"/>
+        <source>Export selected session to CSV</source>
+        <translation>Xuất phiên đã chọn sang CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="132"/>
         <source>Extensions</source>
         <translation>Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="126"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="133"/>
         <source>FFT Plot</source>
         <translation>Biểu Đồ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="127"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="134"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="128"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="135"/>
         <source>Freeze Dashboard</source>
         <translation>Đóng Băng Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="129"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
         <source>Full Screen</source>
         <translation>Toàn Màn Hình</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="130"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
         <source>GPS Map</source>
         <translation>Bản Đồ GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="131"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Gauge</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="132"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <source>Generate a PDF report for the selected session</source>
+        <translation>Tạo báo cáo PDF cho phiên đã chọn</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Tạo dự án từ lược đồ Protocol Buffers (.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="133"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Group</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="134"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Gyroscope</source>
         <translation>Con Quay Hồi Chuyển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="135"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Help Center</source>
         <translation>Trung Tâm Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Hex Display</source>
         <translation>Hiển Thị Hex</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Image</source>
         <translation>Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Import Protobuf Schema</source>
         <translation>Nhập Lược Đồ Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Knob</source>
         <translation>Núm Xoay</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>LED Indicator</source>
         <translation>Đèn Báo LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Level Indicator</source>
         <translation>Chỉ Báo Mức</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>License Management</source>
         <translation>Quản Lý Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Lock</source>
         <translation>Khóa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Lock Project Editor</source>
         <translation>Khóa Trình Soạn Thảo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>MDF4 File</source>
         <translation>Tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Quản lý giấy phép Serial Studio Pro của bạn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Minimize Window</source>
         <translation>Thu Nhỏ Cửa Sổ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Multi-Plot</source>
         <translation>Đồ Thị Đa Trục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Navigate Back</source>
         <translation>Điều Hướng Quay Lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Navigate Forward</source>
         <translation>Điều Hướng Tiến</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Network</source>
         <translation>Mạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>New</source>
         <translation>Mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>New Project</source>
         <translation>Dự Án Mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Next Workspace</source>
         <translation>Không Gian Làm Việc Tiếp Theo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Open</source>
         <translation>Mở</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Open CSV</source>
         <translation>Mở CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Open MDF4</source>
         <translation>Mở MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Open Project</source>
         <translation>Mở Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <source>Open a session file</source>
+        <translation>Mở tệp phiên</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Open an existing JSON project</source>
         <translation>Mở dự án JSON hiện có</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Open application settings and preferences</source>
         <translation>Mở cài đặt và tùy chọn ứng dụng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Open the Assistant</source>
         <translation>Mở Trợ Lý</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Open the Project Editor documentation</source>
         <translation>Mở tài liệu Trình Chỉnh Sửa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Mở Trình Chỉnh Sửa Dự Án để tạo hoặc chỉnh sửa bố cục JSON của bạn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Output</source>
         <translation>Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Painter</source>
         <translation>Painter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Phát tệp CSV như thể đó là dữ liệu cảm biến trực tiếp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Phát tệp MDF4 như thể đó là dữ liệu cảm biến trực tiếp (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
         <source>Plot</source>
         <translation>Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Preferences</source>
         <translation>Tùy Chọn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Previous Workspace</source>
         <translation>Không Gian Làm Việc Trước</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Process</source>
         <translation>Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Project Editor</source>
         <translation>Trình Soạn Thảo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Project File Mode</source>
         <translation>Chế Độ Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Quick Plot Mode</source>
         <translation>Chế Độ Biểu Đồ Nhanh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Quit</source>
         <translation>Thoát</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <source>Recover</source>
+        <translation>Khôi Phục</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <source>Replay</source>
+        <translation>Phát Lại</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <source>Replay selected session on the dashboard</source>
+        <translation>Phát lại phiên đã chọn trên bảng điều khiển</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Restore</source>
         <translation>Khôi Phục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
         <source>Restore Backup</source>
         <translation>Khôi Phục Bản Sao Lưu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <source>Restore Project</source>
+        <translation>Khôi Phục Dự Án</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Khôi phục bản sao lưu tự động gần đây của dự án hiện tại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <source>Restore the project file from this session file</source>
+        <translation>Khôi phục tệp dự án từ tệp phiên này</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Resume</source>
         <translation>Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Save</source>
         <translation>Lưu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Save As</source>
         <translation>Lưu dưới Dạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>Save Project</source>
         <translation>Lưu Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Save Project As</source>
         <translation>Lưu Dự Án dưới Dạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Search</source>
         <translation>Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Chọn kết nối Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Chọn giao tiếp CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Chọn giao tiếp thiết bị HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Chọn giao tiếp Modbus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Chọn giao tiếp cổng nối tiếp (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Chọn giao tiếp mạng TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Select audio input device (Pro)</source>
         <translation>Chọn thiết bị đầu vào âm thanh (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Chọn giao tiếp qua ống tiến trình (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Chọn giao tiếp USB thô (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Session Database</source>
         <translation>Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
         <source>Sessions</source>
         <translation>Phiên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Đặt mật khẩu và khóa Trình Chỉnh Sửa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <source>Set a password to prevent session deletions</source>
+        <translation>Đặt mật khẩu để ngăn xóa phiên</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Show application info and license details</source>
         <translation>Hiển thị thông tin ứng dụng và chi tiết giấy phép</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
         <source>Show timestamps in the console</source>
         <translation>Hiển thị dấu thời gian trong bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
         <source>Slider</source>
         <translation>Thanh Trượt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Start Menu</source>
         <translation>Menu Khởi Động</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Chuyển sang chế độ Chỉ Bảng Điều Khiển (không phân tích)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Chuyển sang chế độ Tệp Dự Án (phân tích qua dự án)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Chuyển sang chế độ Vẽ Đồ Thị Nhanh (giá trị phân tách bằng dấu phẩy)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Table</source>
         <translation>Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>Text Field</source>
         <translation>Trường Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>Toggle</source>
         <translation>Công Tắc</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Chuyển đổi hiển thị console thập lục phân</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Tools</source>
         <translation>Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <source>Unlock</source>
+        <translation>Mở Khóa</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Xem tài liệu chi tiết và đặt câu hỏi trên DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Web View</source>
         <translation>Khung Xem Web</translation>
     </message>
@@ -3402,12 +3482,12 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="338"/>
+        <location filename="../../src/Console/Export.cpp" line="337"/>
         <source>Console Export is a Pro feature.</source>
         <translation>Xuất Console là tính năng Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="339"/>
+        <location filename="../../src/Console/Export.cpp" line="338"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>Tính năng này yêu cầu giấy phép. Vui lòng mua giấy phép để kích hoạt xuất console.</translation>
     </message>
@@ -10627,7 +10707,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Tự Động Xác Minh Đối Tác</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="167"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="166"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Tính Năng MQTT Yêu Cầu Giấy Phép Thương Mại</translation>
     </message>
@@ -10636,192 +10716,192 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Đăng ký vào broker MQTT chỉ khả dụng với giấy phép thương mại Serial Studio hợp lệ (cấp Hobbyist trở lên).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="168"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="167"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Đăng ký vào MQTT broker chỉ khả dụng với giấy phép Serial Studio hợp lệ hoặc bản dùng thử đang hoạt động.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="392"/>
         <source>Use System Database</source>
         <translation>Sử Dụng Cơ Sở Dữ Liệu Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="393"/>
         <source>Load From Folder…</source>
         <translation>Tải từ Thư Mục…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="427"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="426"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Chọn Thư Mục Chứng Chỉ PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="681"/>
         <source>Hostname</source>
         <translation>Tên Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="689"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="688"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="697"/>
         <source>Topic Filter</source>
         <translation>Bộ Lọc Topic</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="704"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="711"/>
         <source>Username</source>
         <translation>Tên Người Dùng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="719"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
         <source>Password</source>
         <translation>Mật Khẩu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
         <source>MQTT Version</source>
         <translation>Phiên Bản MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="733"/>
         <source>Clean Session</source>
         <translation>Phiên Sạch</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="740"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="749"/>
         <source>Auto Keep Alive</source>
         <translation>Tự Động Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="766"/>
         <source>SSL/TLS Enabled</source>
         <translation>Đã Bật SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="777"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="776"/>
         <source>SSL Protocol</source>
         <translation>Giao Thức SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
         <source>Peer Verify Mode</source>
         <translation>Chế Độ Xác Minh Peer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="792"/>
         <source>Peer Verify Depth</source>
         <translation>Độ Sâu Xác Minh Peer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="893"/>
         <source>MQTT Subscription Error</source>
         <translation>Lỗi Đăng Ký MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="894"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Không thể đăng ký topic "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="921"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Phiên Bản Giao Thức MQTT Không Hợp Lệ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="923"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Broker từ chối phiên bản giao thức MQTT đã cấu hình.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="926"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="925"/>
         <source>Client ID Rejected</source>
         <translation>ID Máy Khách Bị từ Chối</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="926"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Broker từ chối ID máy khách. Thử mã định danh khác.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="930"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="929"/>
         <source>MQTT Server Unavailable</source>
         <translation>Máy Chủ MQTT Không Khả Dụng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="931"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="930"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Broker hiện không khả dụng. Thử lại sau.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="933"/>
         <source>Authentication Error</source>
         <translation>Lỗi Xác Thực</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="934"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Thông tin xác thực được cung cấp đã bị broker từ chối.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="937"/>
         <source>Authorization Error</source>
         <translation>Lỗi Ủy Quyền</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="939"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="938"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Tài khoản thiếu quyền cho thao tác này.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Network or Transport Error</source>
         <translation>Lỗi Mạng hoặc Truyền Tải</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="942"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Sự cố lớp mạng/truyền tải khi kết nối tới broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="945"/>
         <source>MQTT Protocol Violation</source>
         <translation>Vi Phạm Giao Thức MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="946"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Broker báo cáo vi phạm giao thức và đã đóng kết nối.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="949"/>
         <source>MQTT 5 Error</source>
         <translation>Lỗi MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="950"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Đã xảy ra lỗi cấp giao thức MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="954"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="953"/>
         <source>MQTT Error</source>
         <translation>Lỗi MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="955"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="954"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Đã xảy ra lỗi MQTT không mong đợi.</translation>
     </message>
@@ -11102,98 +11182,98 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="183"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="224"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="225"/>
         <source>Failed to start process</source>
         <translation>Không thể khởi động tiến trình</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>Không tìm thấy tệp thực thi "%1" trong PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="368"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
         <source>Select Executable</source>
         <translation>Chọn Tệp Thực Thi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
         <source>Select Working Directory</source>
         <translation>Chọn Thư Mục Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="418"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Chọn Named Pipe / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
         <source>The process crashed.</source>
         <translation>Tiến trình đã gặp sự cố.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="516"/>
         <source>Exit code: %1</source>
         <translation>Mã thoát: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="518"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
         <source>Process "%1" stopped</source>
         <translation>Tiến trình "%1" đã dừng</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="535"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
         <source>Unknown error</source>
         <translation>Lỗi không xác định</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
         <source>Process Error</source>
         <translation>Lỗi Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
         <source>Pipe Error</source>
         <translation>Lỗi Pipe</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
         <source>Could not open named pipe: %1</source>
         <translation>Không thể mở named pipe: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="760"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="771"/>
         <source>Mode</source>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="763"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
         <source>Launch Process</source>
         <translation>Khởi Chạy Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="763"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
         <source>Named Pipe</source>
         <translation>Named Pipe</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="779"/>
         <source>Executable</source>
         <translation>Tệp Thực Thi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="786"/>
         <source>Arguments</source>
         <translation>Tham Số</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="793"/>
         <source>Working Directory</source>
         <translation>Thư Mục Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="800"/>
         <source>Pipe Path</source>
         <translation>Đường Dẫn Pipe</translation>
     </message>
@@ -12513,129 +12593,129 @@ Gói Hàng năm có giá trị tốt nhất; các gói Hàng tháng và Trọn �
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="523"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="526"/>
         <source>There was an issue validating your license.</source>
         <translation>Đã xảy ra sự cố khi xác thực giấy phép của bạn.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="541"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="733"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Khóa giấy phép bạn cung cấp không thuộc về Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Vui lòng kiểm tra lại rằng bạn đã mua giấy phép từ cửa hàng chính thức của Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
         <source>This license key was activated on a different device.</source>
         <translation>Khóa giấy phép này đã được kích hoạt trên thiết bị khác.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Hủy kích hoạt ở đó trước hoặc liên hệ bộ phận hỗ trợ để được trợ giúp.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
         <source>This license is not currently active.</source>
         <translation>Giấy phép này hiện không hoạt động.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="567"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Có thể đã hết hạn hoặc bị hủy kích hoạt (trạng thái: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
         <source>Something went wrong on the server.</source>
         <translation>Đã xảy ra sự cố trên máy chủ.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
         <source>No activation ID was returned.</source>
         <translation>Không nhận được ID kích hoạt.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
         <source>Could not validate your license at this time.</source>
         <translation>Không thể xác thực giấy phép của bạn vào lúc này.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="771"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="860"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="592"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>Try again later.</source>
         <translation>Thử lại sau.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="609"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="667"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
         <source>Your license has been successfully activated.</source>
         <translation>Giấy phép của bạn đã được kích hoạt thành công.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="668"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Cảm ơn bạn đã ủng hộ Serial Studio!
 Bạn hiện có quyền truy cập vào tất cả các tính năng cao cấp.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="722"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
         <source>There was an issue activating your license.</source>
         <translation>Đã xảy ra sự cố khi kích hoạt giấy phép của bạn.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="851"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Kiểm tra kỹ rằng bạn đã mua giấy phép từ cửa hàng Serial Studio chính thức.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
         <source>Something went wrong on the server…</source>
         <translation>Đã xảy ra lỗi trên máy chủ…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="770"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>Could not activate your license at this time.</source>
         <translation>Không thể kích hoạt giấy phép của bạn vào lúc này.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="842"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Đã xảy ra sự cố khi hủy kích hoạt giấy phép của bạn.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="859"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Không thể hủy kích hoạt giấy phép của bạn vào lúc này.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="868"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>Your license has been deactivated.</source>
         <translation>Giấy phép của bạn đã được hủy kích hoạt.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="869"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Quyền truy cập vào các tính năng Pro đã bị xóa.
@@ -12645,7 +12725,7 @@ Cảm ơn bạn một lần nữa vì đã ủng hộ Serial Studio!</translatio
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="187"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="188"/>
         <source>Remove the offline license from this device?</source>
         <translation>Xóa giấy phép ngoại tuyến khỏi thiết bị này?</translation>
     </message>
@@ -12658,32 +12738,32 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 Để sử dụng lại chỗ này trên thiết bị khác, vui lòng gửi email đến alex@serial-studio.com kèm ID thiết bị hoặc tệp .ssmachine của bạn để chỗ sử dụng có thể được giải phóng thủ công.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="189"/>
         <source>This does not free your license seat, because deactivations cannot be verified on offline devices. You can reactivate this device with the same license file as long as its machine ID does not change.</source>
         <translation>Điều này không giải phóng chỗ sử dụng giấy phép của bạn, vì việc hủy kích hoạt không thể xác minh trên thiết bị ngoại tuyến. Bạn có thể kích hoạt lại thiết bị này bằng cùng tệp giấy phép miễn là ID máy không thay đổi.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="192"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="193"/>
         <source>Offline Activation</source>
         <translation>Kích Hoạt Ngoại Tuyến</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="214"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="215"/>
         <source>Could not open the certificate file.</source>
         <translation>Không thể mở tệp chứng chỉ.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="221"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="222"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>Tệp chứng chỉ quá lớn để hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="248"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="249"/>
         <source>Could not write the device file.</source>
         <translation>Không thể ghi tệp thiết bị.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="286"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="287"/>
         <source>The stored certificate could not be decrypted on this machine.</source>
         <translation>Không thể giải mã chứng chỉ đã lưu trên máy này.</translation>
     </message>
@@ -12691,12 +12771,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="649"/>
+        <location filename="../../src/MDF4/Export.cpp" line="648"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Xuất MDF4 là tính năng Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="650"/>
+        <location filename="../../src/MDF4/Export.cpp" line="649"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Tính năng này yêu cầu giấy phép. Vui lòng mua giấy phép để bật xuất MDF4.</translation>
     </message>
@@ -12714,32 +12794,32 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>Tệp MDF4 (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="279"/>
+        <location filename="../../src/MDF4/Player.cpp" line="278"/>
         <source>MDF4 Playback is a Pro feature.</source>
         <translation>Phát lại MDF4 là tính năng Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="280"/>
+        <location filename="../../src/MDF4/Player.cpp" line="279"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 playback.</source>
         <translation>Tính năng này yêu cầu giấy phép. Vui lòng mua giấy phép để kích hoạt phát lại MDF4.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="287"/>
+        <location filename="../../src/MDF4/Player.cpp" line="286"/>
         <source>Disconnect from device?</source>
         <translation>Ngắt kết nối khỏi thiết bị?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="288"/>
+        <location filename="../../src/MDF4/Player.cpp" line="287"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>Bạn phải ngắt kết nối khỏi thiết bị hiện tại trước khi mở tệp MDF4.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="483"/>
+        <location filename="../../src/MDF4/Player.cpp" line="482"/>
         <source>MDF4 data may be incomplete</source>
         <translation>Dữ liệu MDF4 có thể không đầy đủ</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="484"/>
+        <location filename="../../src/MDF4/Player.cpp" line="483"/>
         <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>Không thể đọc một phần của phần dữ liệu trong tệp; bản ghi có thể bị cắt ngắn.</translation>
     </message>
@@ -12760,12 +12840,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation type="vanished">Không đọc được cấu trúc tệp. Tệp có thể bị hỏng.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="457"/>
+        <location filename="../../src/MDF4/Player.cpp" line="456"/>
         <source>No data in file</source>
         <translation>Không có dữ liệu trong tệp</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="458"/>
+        <location filename="../../src/MDF4/Player.cpp" line="457"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>Tệp MDF4 không chứa dữ liệu đo lường.</translation>
     </message>
@@ -13232,24 +13312,23 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>Dự Án Trống</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="710"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="711"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="718"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="719"/>
         <source>Waiting for data…</source>
         <translation>Đang chờ dữ liệu…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="719"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="720"/>
         <source>Connecting to device…</source>
         <translation>Đang kết nối với thiết bị…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="749"/>
         <source>Application</source>
-        <translation>Ứng Dụng</translation>
+        <translation type="vanished">Ứng Dụng</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="753"/>
@@ -13585,12 +13664,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>Misc::DemoLauncher</name>
     <message>
-        <location filename="../../src/Misc/DemoLauncher.cpp" line="209"/>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="179"/>
         <source>Cannot start the demo</source>
         <translation>Không Thể Khởi Động Demo</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DemoLauncher.cpp" line="210"/>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="180"/>
         <source>The demo project could not be staged or opened. Check the application data directory permissions.</source>
         <translation>Dự án demo không thể được chuẩn bị hoặc mở. Kiểm tra quyền truy cập thư mục dữ liệu ứng dụng.</translation>
     </message>
@@ -15404,83 +15483,83 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>PaletteModel</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="176"/>
         <source>Add Workspace</source>
         <translation>Thêm Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="180"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="179"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="240"/>
         <source>Workspaces</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="126"/>
         <source>Tools</source>
         <translation>Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="119"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="118"/>
         <source>File</source>
         <translation>Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="120"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="119"/>
         <source>Operation Mode</source>
         <translation>Chế Độ Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="121"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="120"/>
         <source>Connection</source>
         <translation>Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="122"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="121"/>
         <source>View</source>
         <translation>Xem</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="123"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="122"/>
         <source>Data Export</source>
         <translation>Xuất Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="123"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="125"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="124"/>
         <source>Project</source>
         <translation>Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="126"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="125"/>
         <source>License</source>
         <translation>Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="128"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="127"/>
         <source>Help</source>
         <translation>Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="130"/>
         <source>Other</source>
         <translation>Khác</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="237"/>
         <source>Folders</source>
         <translation>Thư Mục</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="244"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="243"/>
         <source>Groups</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="246"/>
         <source>Widgets</source>
         <translation>Widget</translation>
     </message>
@@ -15836,56 +15915,55 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>đã chỉnh sửa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="144"/>
         <source>Project</source>
-        <translation>Dự Án</translation>
+        <translation type="vanished">Dự Án</translation>
     </message>
     <message>
         <source>Commands</source>
         <translation type="vanished">Lệnh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="420"/>
         <source>This project is password protected</source>
         <translation>Dự án này được bảo vệ bằng mật khẩu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="421"/>
         <source>Editing is available in Project mode</source>
         <translation>Chỉnh sửa khả dụng trong chế độ Dự án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="424"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="432"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Nhập mật khẩu để thực hiện thay đổi hoặc mở dự án khác.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="433"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Chuyển sang chế độ Dự án để tải và chỉnh sửa dự án.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="447"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="455"/>
         <source>Unlock</source>
         <translation>Mở Khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="448"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
         <source>Switch to Project Mode</source>
         <translation>Chuyển sang Chế Độ Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="467"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="475"/>
         <source>Open Other Project</source>
         <translation>Mở Dự Án Khác</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="468"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="476"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="484"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="492"/>
         <source>Create New Project</source>
         <translation>Tạo Dự Án Mới</translation>
     </message>
@@ -16064,72 +16142,72 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
 <context>
     <name>ProjectEditorCommandBindings</name>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="101"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="100"/>
         <source>Save the current project</source>
         <translation>Lưu dự án hiện tại</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="109"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="107"/>
         <source>Save the current project under a new name</source>
         <translation>Lưu dự án hiện tại với tên mới</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="138"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="136"/>
         <source>Dataset Container</source>
         <translation>Vùng Chứa Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="143"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="141"/>
         <source>Image View</source>
         <translation>Khung Xem Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="147"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="145"/>
         <source>Web View</source>
         <translation>Khung Xem Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="154"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="152"/>
         <source>Add a custom JavaScript-rendered painter widget</source>
         <translation>Thêm widget vẽ tùy chỉnh được render bằng JavaScript</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="155"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="153"/>
         <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
         <translation>Widget Painter yêu cầu giấy phép Pro, thêm widget này sẽ quay về dạng lưới dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="156"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="154"/>
         <source>Painter Widget</source>
         <translation>Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="160"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="158"/>
         <source>Data Grid</source>
         <translation>Lưới Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="165"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="163"/>
         <source>Multiple Plot</source>
         <translation>Biểu Đồ Đa Trục</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="170"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="168"/>
         <source>3D Plot</source>
         <translation>Đồ Thị 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
         <source>Accelerometer</source>
         <translation>Gia Tốc Kế</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="180"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="178"/>
         <source>Gyroscope</source>
         <translation>Con Quay Hồi Chuyển</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="184"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="182"/>
         <source>GPS Map</source>
         <translation>Bản Đồ GPS</translation>
     </message>
@@ -16161,87 +16239,87 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Thu Gọn Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="446"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="454"/>
         <source>Move Up</source>
         <translation>Di Chuyển Lên</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="454"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="462"/>
         <source>Move Down</source>
         <translation>Di Chuyển Xuống</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="475"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="483"/>
         <source>Rename</source>
         <translation>Đổi Tên</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="493"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="501"/>
         <source>Hide Selected (%1)</source>
         <translation>Ẩn Mục Đã Chọn (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="494"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="502"/>
         <source>Show Selected (%1)</source>
         <translation>Hiển Thị Mục Đã Chọn (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="503"/>
         <source>Hide</source>
         <translation>Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="503"/>
         <source>Show</source>
         <translation>Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="518"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="526"/>
         <source>Duplicate Selected (%1)</source>
         <translation>Nhân Bản Đã Chọn (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="519"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="527"/>
         <source>Duplicate</source>
         <translation>Nhân Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="541"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="549"/>
         <source>Delete Selected (%1)</source>
         <translation>Xóa Đã Chọn (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="542"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="550"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="590"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="598"/>
         <source>Seed Aliases from Titles</source>
         <translation>Tạo Bí Danh từ Tiêu Đề</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="609"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="617"/>
         <source>New Folder</source>
         <translation>Thư Mục Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="622"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="630"/>
         <source>New Sub-Folder</source>
         <translation>Thư Mục Con Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="646"/>
         <source>Move to Folder</source>
         <translation>Di Chuyển đến Thư Mục</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="645"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="653"/>
         <source>Top Level</source>
         <translation>Cấp Cao Nhất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="678"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="686"/>
         <source>Move Here</source>
         <translation>Di Chuyển đến Đây</translation>
     </message>
@@ -16908,34 +16986,34 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Chưa đặt khóa API Gemini. Mở Quản Lý Khóa để thêm.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="258"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="279"/>
         <source>Network error</source>
         <translation>Lỗi mạng</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="261"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="277"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="309"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
         <source>Trial Activation Error</source>
         <translation>Lỗi Kích Hoạt Dùng Thử</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="274"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
         <source>Invalid server response</source>
         <translation>Phản hồi máy chủ không hợp lệ</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="275"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="296"/>
         <source>The server returned malformed data: %1</source>
         <translation>Máy chủ trả về dữ liệu không đúng định dạng: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="306"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
         <source>Unexpected server response</source>
         <translation>Phản hồi không mong đợi từ máy chủ</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
         <source>The server response is missing required fields.</source>
         <translation>Phản hồi từ máy chủ thiếu các trường bắt buộc.</translation>
     </message>
@@ -17247,12 +17325,12 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Từ khóa cấp cao nhất không được hỗ trợ '%1'</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="171"/>
+        <location filename="../../src/Console/Export.cpp" line="170"/>
         <source>Console Output File Error</source>
         <translation>Lỗi Tệp Đầu Ra Console</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="172"/>
+        <location filename="../../src/Console/Export.cpp" line="171"/>
         <source>Cannot open file for writing!</source>
         <translation>Không thể mở tệp để ghi!</translation>
     </message>
@@ -17318,7 +17396,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Lỗi Trình Phân Tích Cú Pháp Gốc</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="52"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="53"/>
         <source>Offline Activation</source>
         <translation>Kích Hoạt Ngoại Tuyến</translation>
     </message>
@@ -17831,77 +17909,77 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="373"/>
+        <location filename="../../src/SerialStudio.cpp" line="349"/>
         <source>Data Grids</source>
         <translation>Lưới Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="376"/>
+        <location filename="../../src/SerialStudio.cpp" line="352"/>
         <source>Multiple Data Plots</source>
         <translation>Nhiều Biểu Đồ Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="379"/>
+        <location filename="../../src/SerialStudio.cpp" line="355"/>
         <source>Accelerometers</source>
         <translation>Gia Tốc Kế</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="382"/>
+        <location filename="../../src/SerialStudio.cpp" line="358"/>
         <source>Gyroscopes</source>
         <translation>Con Quay Hồi Chuyển</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="385"/>
+        <location filename="../../src/SerialStudio.cpp" line="361"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="388"/>
+        <location filename="../../src/SerialStudio.cpp" line="364"/>
         <source>FFT Plots</source>
         <translation>Biểu Đồ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="391"/>
+        <location filename="../../src/SerialStudio.cpp" line="367"/>
         <source>LED Panels</source>
         <translation>Bảng LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="394"/>
+        <location filename="../../src/SerialStudio.cpp" line="370"/>
         <source>Data Plots</source>
         <translation>Biểu Đồ Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="397"/>
+        <location filename="../../src/SerialStudio.cpp" line="373"/>
         <source>Bars</source>
         <translation>Thanh</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="400"/>
+        <location filename="../../src/SerialStudio.cpp" line="376"/>
         <source>Gauges</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="403"/>
+        <location filename="../../src/SerialStudio.cpp" line="379"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="406"/>
+        <location filename="../../src/SerialStudio.cpp" line="382"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="409"/>
+        <location filename="../../src/SerialStudio.cpp" line="385"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="412"/>
+        <location filename="../../src/SerialStudio.cpp" line="388"/>
         <source>Compasses</source>
         <translation>La Bàn</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="415"/>
+        <location filename="../../src/SerialStudio.cpp" line="391"/>
         <source>Meters</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
@@ -17910,92 +17988,92 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Nhiệt Kế</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="418"/>
+        <location filename="../../src/SerialStudio.cpp" line="394"/>
         <source>3D Plots</source>
         <translation>Biểu Đồ 3D</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="421"/>
+        <location filename="../../src/SerialStudio.cpp" line="397"/>
         <source>Web Views</source>
         <translation>Khung Xem Web</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="425"/>
+        <location filename="../../src/SerialStudio.cpp" line="401"/>
         <source>Image Views</source>
         <translation>Khung Xem Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="428"/>
+        <location filename="../../src/SerialStudio.cpp" line="404"/>
         <source>Output Panels</source>
         <translation>Bảng Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="431"/>
+        <location filename="../../src/SerialStudio.cpp" line="407"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="434"/>
+        <location filename="../../src/SerialStudio.cpp" line="410"/>
         <source>Waterfalls</source>
         <translation>Thác Nước</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="437"/>
+        <location filename="../../src/SerialStudio.cpp" line="413"/>
         <source>Painter Widgets</source>
         <translation>Widget Vẽ</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1060"/>
+        <location filename="../../src/SerialStudio.cpp" line="1036"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1061"/>
+        <location filename="../../src/SerialStudio.cpp" line="1037"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1062"/>
+        <location filename="../../src/SerialStudio.cpp" line="1038"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1063"/>
+        <location filename="../../src/SerialStudio.cpp" line="1039"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1064"/>
+        <location filename="../../src/SerialStudio.cpp" line="1040"/>
         <source>System</source>
         <translation>Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1065"/>
+        <location filename="../../src/SerialStudio.cpp" line="1041"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1066"/>
+        <location filename="../../src/SerialStudio.cpp" line="1042"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1067"/>
+        <location filename="../../src/SerialStudio.cpp" line="1043"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1068"/>
+        <location filename="../../src/SerialStudio.cpp" line="1044"/>
         <source>Shift-JIS</source>
         <translation>Shift-jis</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1069"/>
+        <location filename="../../src/SerialStudio.cpp" line="1045"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1070"/>
+        <location filename="../../src/SerialStudio.cpp" line="1046"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -19731,52 +19809,52 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Trợ Lý AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
         <source>Workspaces</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="374"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
         <source>Show "%1"</source>
         <translation>Hiển Thị "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Hiển Thị Tất Cả Không Gian Làm Việc Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
         <source>New Workspace…</source>
         <translation>Không Gian Làm Việc Mới…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="402"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="420"/>
         <source>No Workspaces Available</source>
         <translation>Không Có Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="437"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Actions</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="460"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="478"/>
         <source>No Actions Available</source>
         <translation>Không Có Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
         <source>Plugins</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="528"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="546"/>
         <source>Manage Plugins…</source>
         <translation>Quản Lý Plugin…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="538"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="556"/>
         <source>No Plugins Installed</source>
         <translation>Không Có Plugin Nào Được Cài Đặt</translation>
     </message>
@@ -19805,7 +19883,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="651"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="669"/>
         <source>No Export Formats Available</source>
         <translation>Không Có Định Dạng Xuất Nào</translation>
     </message>
@@ -19814,7 +19892,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="726"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
         <source>No Tools Available</source>
         <translation>Không Có Công Cụ Nào</translation>
     </message>
@@ -19839,17 +19917,17 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="801"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="819"/>
         <source>Edit…</source>
         <translation>Chỉnh Sửa…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="812"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="813"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
         <source>Hide</source>
         <translation>Ẩn</translation>
     </message>
@@ -21107,34 +21185,34 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2007"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2002"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2015"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2010"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2023"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2018"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2030"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2025"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2077"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2092"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2076"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2091"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Dự Phòng)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2114"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2186"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2113"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2185"/>
         <source>LED Panel (%1)</source>
         <translation>Bảng LED (%1)</translation>
     </message>
@@ -21966,12 +22044,12 @@ Tôi hiểu rằng khi kết thúc, tôi cần mua bản quyền hoặc tự bi�
         <translation>National Geographic</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="379"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="378"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>Các lớp bản đồ bổ sung chỉ khả dụng cho người dùng Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="379"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Chúng tôi không thể cung cấp quyền truy cập không giới hạn vì khóa API ArcGIS phát sinh chi phí thực tế.</translation>
     </message>

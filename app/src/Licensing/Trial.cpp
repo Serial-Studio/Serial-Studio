@@ -58,7 +58,10 @@ static void installTrialToken(int daysRemaining)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the Trial licensing system.
+ * @brief Constructs the Trial licensing system. Trial state loads unconditionally, even when a
+ *        cached license restored as activated: reassertTokenIfEntitled() must know the real
+ *        entitlement if that license is later revoked mid-session. installTrialToken() stays
+ *        gated on trialEnabled(), so loading state on a licensed machine cannot take the slot.
  */
 Licensing::Trial::Trial()
   : m_busy(false)
@@ -83,8 +86,7 @@ Licensing::Trial::Trial()
   m_crypt.setKey(machineId.machineSpecificKey());
   m_crypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
 
-  if (!lemonSqueezy.isActivated())
-    readSettings();
+  readSettings();
 
   s_trial = this;
 }
@@ -263,9 +265,10 @@ void Licensing::Trial::fetchTrialState()
 }
 
 /**
- * @brief Handles the server response for trial activation; the returned expiry
- * is clamped to a 14-day cap before the trial state and capability token are
- * derived from it.
+ * @brief Handles the server response for trial activation; the expiry is capped
+ * at 14 days. A malformed reply leaves in-memory and persisted state untouched,
+ * and the shared token slot is only cleared when the trial owns it, so neither
+ * a flaky proxy nor a mid-flight Pro activation can strip an entitlement.
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
@@ -297,39 +300,35 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     return;
   }
 
-  m_trialEnabled     = false;
-  m_deviceRegistered = false;
-  m_trialExpiry      = QDateTime::currentDateTimeUtc();
-
   const QJsonObject object    = document.object();
   const auto expiryVal        = object.value("expireAt");
   const auto enabledVal       = object.value("trialEnabled");
   const auto deviceRegistered = object.value("registered");
 
-  if (expiryVal.isString() && enabledVal.isBool() && deviceRegistered.isBool()) {
-    const QString expiryStr = expiryVal.toString();
-    QDateTime expiry        = QDateTime::fromString(expiryStr, Qt::ISODate).toUTC();
-    if (expiry.isValid()) {
-      const QDateTime now = QDateTime::currentDateTimeUtc();
-      if (expiry > now.addDays(14))
-        expiry = now.addDays(14);
+  QDateTime expiry;
+  if (expiryVal.isString() && enabledVal.isBool() && deviceRegistered.isBool())
+    expiry = QDateTime::fromString(expiryVal.toString(), Qt::ISODate).toUTC();
 
-      m_trialExpiry      = expiry;
-      m_trialEnabled     = enabledVal.toBool() && (expiry > now);
-      m_deviceRegistered = deviceRegistered.toBool();
-    }
-  }
-
-  else {
+  if (!expiry.isValid()) {
     Misc::Utilities::showMessageBox(QObject::tr("Unexpected server response"),
                                     QObject::tr("The server response is missing required fields."),
                                     QMessageBox::Warning,
                                     QObject::tr("Trial Activation Error"));
+    Q_EMIT enabledChanged();
+    return;
   }
+
+  const QDateTime now = QDateTime::currentDateTimeUtc();
+  if (expiry > now.addDays(14))
+    expiry = now.addDays(14);
+
+  m_trialExpiry      = expiry;
+  m_trialEnabled     = enabledVal.toBool() && (expiry > now);
+  m_deviceRegistered = deviceRegistered.toBool();
 
   if (trialEnabled())
     installTrialToken(daysRemaining());
-  else
+  else if (CommercialToken::current().variantName() == QStringLiteral("Trial"))
     Licensing::CommercialToken::clearCurrent();
 
   writeSettings();

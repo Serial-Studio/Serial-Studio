@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("MQTT Publisher")
-  icon: Cpp_Misc_IconRegistry.icon("editor", "mqtt-publisher", 48)
+  icon: Cpp_Misc_IconRegistry.icon("editor", "mqtt-publisher", 16)
 
   actionComponent: EditorNavActions {}
 

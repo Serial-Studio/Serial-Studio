@@ -407,7 +407,7 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation>Rechercher des Mises à Jour</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Project Demo</source>
         <translation>Démo du Projet</translation>
     </message>
@@ -420,32 +420,32 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation type="vanished">Astuces et Conseils</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="235"/>
+        <location filename="../../qml/Dialogs/About.qml" line="236"/>
         <source>License Agreement</source>
         <translation>Contrat de Licence</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="244"/>
+        <location filename="../../qml/Dialogs/About.qml" line="245"/>
         <source>Report Bug</source>
         <translation>Signaler un Bug</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="253"/>
+        <location filename="../../qml/Dialogs/About.qml" line="254"/>
         <source>Acknowledgements</source>
         <translation>Remerciements</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="262"/>
+        <location filename="../../qml/Dialogs/About.qml" line="263"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="270"/>
+        <location filename="../../qml/Dialogs/About.qml" line="271"/>
         <source>Website</source>
         <translation>Site Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="286"/>
+        <location filename="../../qml/Dialogs/About.qml" line="287"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -2401,7 +2401,7 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
 <context>
     <name>CommandPalette</name>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="332"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="377"/>
         <source>Folder</source>
         <translation>Dossier</translation>
     </message>
@@ -2410,32 +2410,32 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation type="vanished">Rechercher</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="70"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="86"/>
         <source>Commands</source>
         <translation>Commandes</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="542"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="593"/>
         <source>Search…</source>
         <translation>Rechercher…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="558"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="609"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="606"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="657"/>
         <source>Back</source>
         <translation>Retour</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="667"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="718"/>
         <source>Type to search, Enter to open, Esc to close</source>
         <translation>Saisir pour rechercher, Entrée pour ouvrir, Échap pour fermer</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="767"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="818"/>
         <source>No results found</source>
         <translation>Aucun résultat trouvé</translation>
     </message>
@@ -2809,596 +2809,676 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
         <source>Close Window</source>
         <translation>Fermer la Fenêtre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
+        <source>Close session file</source>
+        <translation>Fermer le fichier de session</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Collapse All</source>
         <translation>Tout Réduire</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Collapse Duplicates</source>
         <translation>Regrouper les Doublons</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Collapse repeated console lines</source>
         <translation>Regrouper les lignes répétées de la console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
         <source>Collapse the project tree to its overview</source>
         <translation>Réduire l'arborescence du projet à sa vue d'ensemble</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
         <source>Command Palette</source>
         <translation>Palette de Commandes</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="109"/>
         <source>Compass</source>
         <translation>Boussole</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="110"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="109"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="111"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Connecter ou déconnecter l'appareil configuré</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="110"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="112"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="111"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="113"/>
         <source>Console Echo</source>
         <translation>Écho de la Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="112"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="114"/>
         <source>Console Only Mode</source>
         <translation>Mode Console Uniquement</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="113"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="115"/>
         <source>Console Timestamps</source>
         <translation>Horodatage de la Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="114"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="116"/>
         <source>Console Transcript</source>
         <translation>Transcription de la Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="115"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="117"/>
         <source>Create a new JSON project</source>
         <translation>Créer un nouveau projet JSON</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="116"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="118"/>
         <source>Dataset</source>
         <translation>Jeu de Données</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="117"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="119"/>
+        <source>Delete</source>
+        <translation>Supprimer</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="120"/>
+        <source>Delete the selected session</source>
+        <translation>Supprimer la session sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="121"/>
         <source>Deploy</source>
         <translation>Déployer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="118"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="122"/>
         <source>Deploy Operator App</source>
         <translation>Déployer L'application Opérateur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="119"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="123"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="120"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="124"/>
         <source>Echo transmitted data in the console</source>
         <translation>Afficher les données transmises dans la console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="121"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="125"/>
         <source>Examples</source>
         <translation>Exemples</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="122"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="126"/>
         <source>Expand All</source>
         <translation>Tout Développer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="123"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="127"/>
         <source>Expand every item in the project tree</source>
         <translation>Développer tous les éléments de l'arborescence du projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="124"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="128"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="125"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="129"/>
+        <source>Export CSV</source>
+        <translation>Exporter CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="130"/>
+        <source>Export PDF</source>
+        <translation>Exporter PDF</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="131"/>
+        <source>Export selected session to CSV</source>
+        <translation>Exporter la session sélectionnée en CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="132"/>
         <source>Extensions</source>
         <translation>Extensions</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="126"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="133"/>
         <source>FFT Plot</source>
         <translation>Graphique FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="127"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="134"/>
         <source>File Transmission</source>
         <translation>Transmission de Fichier</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="128"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="135"/>
         <source>Freeze Dashboard</source>
         <translation>Figer le Tableau de Bord</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="129"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
         <source>Full Screen</source>
         <translation>Plein Écran</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="130"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
         <source>GPS Map</source>
         <translation>Carte GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="131"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Gauge</source>
         <translation>Jauge</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="132"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <source>Generate a PDF report for the selected session</source>
+        <translation>Générer un rapport PDF pour la session sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Générer un projet à partir d'un schéma Protocol Buffers (.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="133"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Group</source>
         <translation>Groupe</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="134"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Gyroscope</source>
         <translation>Gyroscope</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="135"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Help Center</source>
         <translation>Centre D'aide</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Hex Display</source>
         <translation>Affichage Hexadécimal</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Image</source>
         <translation>Image</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Import Protobuf Schema</source>
         <translation>Importer un Schéma Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Knob</source>
         <translation>Bouton Rotatif</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>LED Indicator</source>
         <translation>Indicateur LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Level Indicator</source>
         <translation>Indicateur de Niveau</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>License Management</source>
         <translation>Gestion des Licences</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Lock</source>
         <translation>Verrouiller</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Lock Project Editor</source>
         <translation>Verrouiller L'éditeur de Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>MDF4 File</source>
         <translation>Fichier MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Gérer votre licence Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Minimize Window</source>
         <translation>Réduire la Fenêtre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Multi-Plot</source>
         <translation>Graphique Multiple</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Navigate Back</source>
         <translation>Naviguer en Arrière</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Navigate Forward</source>
         <translation>Naviguer en Avant</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Network</source>
         <translation>Réseau</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>New Project</source>
         <translation>Nouveau Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Next Workspace</source>
         <translation>Espace de Travail Suivant</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Open CSV</source>
         <translation>Ouvrir CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Open MDF4</source>
         <translation>Ouvrir MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Open Project</source>
         <translation>Ouvrir un Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <source>Open a session file</source>
+        <translation>Ouvrir un fichier de session</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Open an existing JSON project</source>
         <translation>Ouvrir un projet JSON existant</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Open application settings and preferences</source>
         <translation>Ouvrir les paramètres et préférences de l'application</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Open the Assistant</source>
         <translation>Ouvrir l'Assistant</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Open the Project Editor documentation</source>
         <translation>Ouvrir la documentation de l'Éditeur de Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Ouvrir l'Éditeur de Projet pour créer ou modifier votre disposition JSON</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Painter</source>
         <translation>Peintre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Lire un fichier CSV comme s'il s'agissait de données de capteur en direct</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Lire un fichier MDF4 comme s'il s'agissait de données de capteur en direct (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
         <source>Plot</source>
         <translation>Graphique</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Previous Workspace</source>
         <translation>Espace de Travail Précédent</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Process</source>
         <translation>Processus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Project Editor</source>
         <translation>Éditeur de Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Project File Mode</source>
         <translation>Mode Fichier Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Quick Plot Mode</source>
         <translation>Mode Graphique Rapide</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <source>Recover</source>
+        <translation>Récupérer</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <source>Replay</source>
+        <translation>Rejouer</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <source>Replay selected session on the dashboard</source>
+        <translation>Rejouer la session sélectionnée sur le tableau de bord</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Restore</source>
         <translation>Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
         <source>Restore Backup</source>
         <translation>Restaurer la Sauvegarde</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <source>Restore Project</source>
+        <translation>Restaurer le Projet</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Restaurer un instantané automatique récent du projet actuel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <source>Restore the project file from this session file</source>
+        <translation>Restaurer le fichier projet depuis ce fichier de session</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Resume</source>
         <translation>Reprendre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Save As</source>
         <translation>Enregistrer Sous</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>Save Project</source>
         <translation>Enregistrer le Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Save Project As</source>
         <translation>Enregistrer le Projet Sous</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Search</source>
         <translation>Rechercher</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Sélectionner la communication Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Sélectionner la communication Bus CAN (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Sélectionner la communication périphérique HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Sélectionner la communication MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Sélectionner la communication port série (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Sélectionner la communication réseau TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Select audio input device (Pro)</source>
         <translation>Sélectionner le périphérique d'entrée audio (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Sélectionner la communication par tube de processus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Sélectionner la communication USB brute (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Session Database</source>
         <translation>Base de Données de Session</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
         <source>Sessions</source>
         <translation>Sessions</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Définir un Mot de Passe et Verrouiller l'Éditeur de Projet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <source>Set a password to prevent session deletions</source>
+        <translation>Définir un mot de passe pour empêcher la suppression de sessions</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Show application info and license details</source>
         <translation>Afficher les Informations de l'Application et les Détails de Licence</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
         <source>Show timestamps in the console</source>
         <translation>Afficher les Horodatages dans la Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
         <source>Slider</source>
         <translation>Curseur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Start Menu</source>
         <translation>Menu Démarrer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>Stopwatch</source>
         <translation>Chronomètre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Basculer en Mode Console Uniquement (sans analyse)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Basculer en Mode Fichier Projet (analyser via un projet)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Basculer en Mode Tracé Rapide (valeurs séparées par des virgules)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Table</source>
         <translation>Tableau</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>Text Field</source>
         <translation>Champ de Texte</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>Toggle</source>
         <translation>Bascule</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Basculer l'affichage hexadécimal de la console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <source>Unlock</source>
+        <translation>Déverrouiller</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Consulter la documentation détaillée et poser des questions sur DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Web View</source>
         <translation>Visionneuse Web</translation>
     </message>
@@ -3414,12 +3494,12 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="338"/>
+        <location filename="../../src/Console/Export.cpp" line="337"/>
         <source>Console Export is a Pro feature.</source>
         <translation>L'Export de Console est une fonctionnalité Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="339"/>
+        <location filename="../../src/Console/Export.cpp" line="338"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>Cette fonctionnalité nécessite une licence. Veuillez en acheter une pour activer l'export de console.</translation>
     </message>
@@ -10727,7 +10807,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Vérification Automatique du Pair</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="167"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="166"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>La Fonctionnalité MQTT Nécessite une Licence Commerciale</translation>
     </message>
@@ -10736,192 +10816,192 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">L'abonnement à un broker MQTT n'est disponible qu'avec une licence commerciale Serial Studio valide (niveau Hobbyist ou supérieur).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="168"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="167"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>L'abonnement à un broker MQTT n'est disponible qu'avec une licence Serial Studio valide ou un essai actif.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="392"/>
         <source>Use System Database</source>
         <translation>Utiliser la Base de Données Système</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="393"/>
         <source>Load From Folder…</source>
         <translation>Charger Depuis un Dossier…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="427"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="426"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Sélectionner le Répertoire des Certificats PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="681"/>
         <source>Hostname</source>
         <translation>Nom D'hôte</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="689"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="688"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="697"/>
         <source>Topic Filter</source>
         <translation>Filtre de Sujet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="704"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="711"/>
         <source>Username</source>
         <translation>Nom D'utilisateur</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="719"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
         <source>Password</source>
         <translation>Mot de Passe</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
         <source>MQTT Version</source>
         <translation>Version MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="734"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="733"/>
         <source>Clean Session</source>
         <translation>Session Propre</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="740"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="749"/>
         <source>Auto Keep Alive</source>
         <translation>Keep Alive Automatique</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="766"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Activé</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="777"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="776"/>
         <source>SSL Protocol</source>
         <translation>Protocole SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="785"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
         <source>Peer Verify Mode</source>
         <translation>Mode de Vérification du Pair</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="792"/>
         <source>Peer Verify Depth</source>
         <translation>Profondeur de Vérification du Pair</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="893"/>
         <source>MQTT Subscription Error</source>
         <translation>Erreur D'abonnement MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="894"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Échec de l'abonnement au sujet "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="921"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Version du Protocole MQTT Invalide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="923"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Le broker a rejeté la version du protocole MQTT configurée.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="926"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="925"/>
         <source>Client ID Rejected</source>
         <translation>ID Client Rejeté</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="926"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Le broker a rejeté l'ID client. Essayer un identifiant différent.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="930"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="929"/>
         <source>MQTT Server Unavailable</source>
         <translation>Serveur MQTT Indisponible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="931"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="930"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Le broker est actuellement indisponible. Réessayer plus tard.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="933"/>
         <source>Authentication Error</source>
         <translation>Erreur D'authentification</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="934"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Les identifiants fournis ont été rejetés par le broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="937"/>
         <source>Authorization Error</source>
         <translation>Erreur D'autorisation</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="939"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="938"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Le compte ne dispose pas des permissions pour cette opération.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Network or Transport Error</source>
         <translation>Erreur Réseau ou de Transport</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="942"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problème de couche réseau/transport lors de la connexion au broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="945"/>
         <source>MQTT Protocol Violation</source>
         <translation>Violation du Protocole MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="946"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Le broker a signalé une violation du protocole et a fermé la connexion.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="949"/>
         <source>MQTT 5 Error</source>
         <translation>Erreur MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="950"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Une erreur de protocole MQTT 5 s'est produite.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="954"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="953"/>
         <source>MQTT Error</source>
         <translation>Erreur MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="955"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="954"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Une erreur MQTT inattendue s'est produite.</translation>
     </message>
@@ -11210,98 +11290,98 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="183"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="224"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="225"/>
         <source>Failed to start process</source>
         <translation>Échec du démarrage du processus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>Exécutable « %1 » introuvable dans PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="368"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
         <source>Select Executable</source>
         <translation>Sélectionner L'exécutable</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
         <source>Select Working Directory</source>
         <translation>Sélectionner le Répertoire de Travail</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="418"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Sélectionner le Tube Nommé / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
         <source>The process crashed.</source>
         <translation>Le processus s'est arrêté de manière inattendue.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="516"/>
         <source>Exit code: %1</source>
         <translation>Code de sortie : %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="518"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
         <source>Process "%1" stopped</source>
         <translation>Processus « %1 » arrêté</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="535"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
         <source>Unknown error</source>
         <translation>Erreur inconnue</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
         <source>Process Error</source>
         <translation>Erreur de Processus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
         <source>Pipe Error</source>
         <translation>Erreur de Tube</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
         <source>Could not open named pipe: %1</source>
         <translation>Impossible d'ouvrir le tube nommé : %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="760"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="771"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="763"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
         <source>Launch Process</source>
         <translation>Lancer le Processus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="763"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
         <source>Named Pipe</source>
         <translation>Canal Nommé</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="779"/>
         <source>Executable</source>
         <translation>Exécutable</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="786"/>
         <source>Arguments</source>
         <translation>Arguments</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="793"/>
         <source>Working Directory</source>
         <translation>Répertoire de Travail</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="800"/>
         <source>Pipe Path</source>
         <translation>Chemin du Canal</translation>
     </message>
@@ -12633,129 +12713,129 @@ L'abonnement Annuel est le meilleur rapport qualité-prix ; les formules Mensuel
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="523"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="526"/>
         <source>There was an issue validating your license.</source>
         <translation>Un problème est survenu lors de la validation de votre licence.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="541"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="850"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="733"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>La clé de licence fournie n'appartient pas à Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Veuillez vérifier que vous avez acheté votre licence sur la boutique officielle de Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
         <source>This license key was activated on a different device.</source>
         <translation>Cette clé de licence a été activée sur un autre appareil.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Désactivez-la d'abord sur cet appareil ou contactez le support pour obtenir de l'aide.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="566"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
         <source>This license is not currently active.</source>
         <translation>Cette licence n'est pas actuellement active.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="567"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Elle a peut-être expiré ou été désactivée (statut : %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
         <source>Something went wrong on the server.</source>
         <translation>Un problème est survenu sur le serveur.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
         <source>No activation ID was returned.</source>
         <translation>Aucun identifiant d'activation n'a été retourné.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
         <source>Could not validate your license at this time.</source>
         <translation>Impossible de valider votre licence pour le moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="771"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="860"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="592"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>Try again later.</source>
         <translation>Réessayer plus tard.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="851"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Vérifiez que vous avez acheté votre licence sur la boutique officielle de Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
         <source>Something went wrong on the server…</source>
         <translation>Un problème est survenu sur le serveur…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="609"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="667"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
         <source>Your license has been successfully activated.</source>
         <translation>Votre licence a été activée avec succès.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="668"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Merci de soutenir Serial Studio !
 Vous avez maintenant accès à toutes les fonctionnalités premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="722"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
         <source>There was an issue activating your license.</source>
         <translation>Un problème est survenu lors de l'activation de votre licence.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="770"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>Could not activate your license at this time.</source>
         <translation>Impossible d'activer votre licence pour le moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="842"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Un problème est survenu lors de la désactivation de votre licence.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="859"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Impossible de désactiver votre licence pour le moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="868"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>Your license has been deactivated.</source>
         <translation>Votre licence a été désactivée.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="869"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>L'accès aux fonctionnalités Pro a été retiré.
@@ -12765,7 +12845,7 @@ Merci encore d'avoir soutenu Serial Studio !</translation>
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="187"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="188"/>
         <source>Remove the offline license from this device?</source>
         <translation>Supprimer la licence hors ligne de cet appareil ?</translation>
     </message>
@@ -12778,32 +12858,32 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 Pour réutiliser ce siège sur un autre appareil, envoyez un e-mail à alex@serial-studio.com avec votre ID d'appareil ou votre fichier .ssmachine afin que le siège puisse être libéré manuellement.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="189"/>
         <source>This does not free your license seat, because deactivations cannot be verified on offline devices. You can reactivate this device with the same license file as long as its machine ID does not change.</source>
         <translation>Cela ne libère pas votre siège de licence, car les désactivations ne peuvent pas être vérifiées sur les appareils hors ligne. Vous pouvez réactiver cet appareil avec le même fichier de licence tant que son ID machine ne change pas.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="192"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="193"/>
         <source>Offline Activation</source>
         <translation>Activation Hors Ligne</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="214"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="215"/>
         <source>Could not open the certificate file.</source>
         <translation>Impossible d'ouvrir le fichier de certificat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="221"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="222"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>Le fichier de certificat est trop volumineux pour être valide.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="248"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="249"/>
         <source>Could not write the device file.</source>
         <translation>Impossible d'écrire le fichier de périphérique.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="286"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="287"/>
         <source>The stored certificate could not be decrypted on this machine.</source>
         <translation>Le certificat stocké n'a pas pu être déchiffré sur cette machine.</translation>
     </message>
@@ -12811,12 +12891,12 @@ Pour réutiliser ce siège sur un autre appareil, envoyez un e-mail à alex@seri
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="649"/>
+        <location filename="../../src/MDF4/Export.cpp" line="648"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>L'Export MDF4 est une fonctionnalité Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="650"/>
+        <location filename="../../src/MDF4/Export.cpp" line="649"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Cette fonctionnalité nécessite une licence. Veuillez en acheter une pour activer l'export MDF4.</translation>
     </message>
@@ -12834,32 +12914,32 @@ Pour réutiliser ce siège sur un autre appareil, envoyez un e-mail à alex@seri
         <translation>Fichiers MDF4 (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="279"/>
+        <location filename="../../src/MDF4/Player.cpp" line="278"/>
         <source>MDF4 Playback is a Pro feature.</source>
         <translation>La Lecture MDF4 est une fonctionnalité Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="280"/>
+        <location filename="../../src/MDF4/Player.cpp" line="279"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 playback.</source>
         <translation>Cette fonctionnalité nécessite une licence. Veuillez en acheter une pour activer la lecture MDF4.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="287"/>
+        <location filename="../../src/MDF4/Player.cpp" line="286"/>
         <source>Disconnect from device?</source>
         <translation>Se déconnecter de l'appareil ?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="288"/>
+        <location filename="../../src/MDF4/Player.cpp" line="287"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>Vous devez vous déconnecter de l'appareil actuel avant d'ouvrir un fichier MDF4.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="483"/>
+        <location filename="../../src/MDF4/Player.cpp" line="482"/>
         <source>MDF4 data may be incomplete</source>
         <translation>Les données MDF4 peuvent être incomplètes</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="484"/>
+        <location filename="../../src/MDF4/Player.cpp" line="483"/>
         <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>Une partie de la section de données du fichier n'a pas pu être lue ; l'enregistrement peut être tronqué.</translation>
     </message>
@@ -12880,12 +12960,12 @@ Pour réutiliser ce siège sur un autre appareil, envoyez un e-mail à alex@seri
         <translation type="vanished">Échec de lecture de la structure du fichier. Le fichier peut être corrompu.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="457"/>
+        <location filename="../../src/MDF4/Player.cpp" line="456"/>
         <source>No data in file</source>
         <translation>Aucune donnée dans le fichier</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="458"/>
+        <location filename="../../src/MDF4/Player.cpp" line="457"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>Le fichier MDF4 ne contient aucune donnée de mesure.</translation>
     </message>
@@ -13730,24 +13810,23 @@ Veuillez fournir les identifiants nécessaires.</translation>
         <translation>Projet Vide</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="710"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="711"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="718"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="719"/>
         <source>Waiting for data…</source>
         <translation>En attente de données…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="719"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="720"/>
         <source>Connecting to device…</source>
         <translation>Connexion au périphérique…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="749"/>
         <source>Application</source>
-        <translation>Application</translation>
+        <translation type="vanished">Application</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="753"/>
@@ -14083,12 +14162,12 @@ Veuillez fournir les identifiants nécessaires.</translation>
 <context>
     <name>Misc::DemoLauncher</name>
     <message>
-        <location filename="../../src/Misc/DemoLauncher.cpp" line="209"/>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="179"/>
         <source>Cannot start the demo</source>
         <translation>Impossible de Démarrer la Démo</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DemoLauncher.cpp" line="210"/>
+        <location filename="../../src/Misc/DemoLauncher.cpp" line="180"/>
         <source>The demo project could not be staged or opened. Check the application data directory permissions.</source>
         <translation>Le projet de démonstration n'a pas pu être préparé ou ouvert. Vérifier les permissions du répertoire de données de l'application.</translation>
     </message>
@@ -15918,83 +15997,83 @@ Ajoutez des groupes ci-dessus pour interroger plusieurs types de registres.</tra
 <context>
     <name>PaletteModel</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="176"/>
         <source>Add Workspace</source>
         <translation>Ajouter un Espace de Travail</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="180"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="179"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="240"/>
         <source>Workspaces</source>
         <translation>Espaces de Travail</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="126"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="119"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="118"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="120"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="119"/>
         <source>Operation Mode</source>
         <translation>Mode de Fonctionnement</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="121"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="120"/>
         <source>Connection</source>
         <translation>Connexion</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="122"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="121"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="123"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="122"/>
         <source>Data Export</source>
         <translation>Export de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="123"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="125"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="124"/>
         <source>Project</source>
         <translation>Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="126"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="125"/>
         <source>License</source>
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="128"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="127"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="130"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="237"/>
         <source>Folders</source>
         <translation>Dossiers</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="244"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="243"/>
         <source>Groups</source>
         <translation>Groupes</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="246"/>
         <source>Widgets</source>
         <translation>Widgets</translation>
     </message>
@@ -16354,56 +16433,55 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
         <translation>modifié</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="144"/>
         <source>Project</source>
-        <translation>Projet</translation>
+        <translation type="vanished">Projet</translation>
     </message>
     <message>
         <source>Commands</source>
         <translation type="vanished">Commandes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="420"/>
         <source>This project is password protected</source>
         <translation>Ce projet est protégé par mot de passe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="421"/>
         <source>Editing is available in Project mode</source>
         <translation>L'édition est disponible en mode Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="424"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="432"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Entrez le mot de passe pour effectuer des modifications, ou ouvrez un autre projet.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="433"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Passez en mode Projet pour charger et modifier un projet.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="447"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="455"/>
         <source>Unlock</source>
         <translation>Déverrouiller</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="448"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
         <source>Switch to Project Mode</source>
         <translation>Passer en Mode Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="467"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="475"/>
         <source>Open Other Project</source>
         <translation>Ouvrir un Autre Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="468"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="476"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="484"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="492"/>
         <source>Create New Project</source>
         <translation>Créer un Nouveau Projet</translation>
     </message>
@@ -16582,72 +16660,72 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
 <context>
     <name>ProjectEditorCommandBindings</name>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="101"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="100"/>
         <source>Save the current project</source>
         <translation>Enregistrer le projet actuel</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="109"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="107"/>
         <source>Save the current project under a new name</source>
         <translation>Enregistrer le projet actuel sous un nouveau nom</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="138"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="136"/>
         <source>Dataset Container</source>
         <translation>Conteneur de Jeux de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="143"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="141"/>
         <source>Image View</source>
         <translation>Visionneuse D'image</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="147"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="145"/>
         <source>Web View</source>
         <translation>Visionneuse Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="154"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="152"/>
         <source>Add a custom JavaScript-rendered painter widget</source>
         <translation>Ajouter un widget de peinture personnalisé rendu en JavaScript</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="155"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="153"/>
         <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
         <translation>Les widgets Painter nécessitent une licence Pro, en ajouter un basculera vers une grille de données</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="156"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="154"/>
         <source>Painter Widget</source>
         <translation>Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="160"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="158"/>
         <source>Data Grid</source>
         <translation>Grille de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="165"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="163"/>
         <source>Multiple Plot</source>
         <translation>Graphique Multiple</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="170"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="168"/>
         <source>3D Plot</source>
         <translation>Graphique 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
         <source>Accelerometer</source>
         <translation>Accéléromètre</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="180"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="178"/>
         <source>Gyroscope</source>
         <translation>Gyroscope</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="184"/>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="182"/>
         <source>GPS Map</source>
         <translation>Carte GPS</translation>
     </message>
@@ -16679,87 +16757,87 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
         <translation>Tout Réduire</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="446"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="454"/>
         <source>Move Up</source>
         <translation>Déplacer Vers le Haut</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="454"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="462"/>
         <source>Move Down</source>
         <translation>Déplacer Vers le Bas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="475"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="483"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="493"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="501"/>
         <source>Hide Selected (%1)</source>
         <translation>Masquer la Sélection (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="494"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="502"/>
         <source>Show Selected (%1)</source>
         <translation>Afficher la Sélection (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="503"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="503"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="518"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="526"/>
         <source>Duplicate Selected (%1)</source>
         <translation>Dupliquer la Sélection (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="519"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="527"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="541"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="549"/>
         <source>Delete Selected (%1)</source>
         <translation>Supprimer la Sélection (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="542"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="550"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="590"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="598"/>
         <source>Seed Aliases from Titles</source>
         <translation>Initialiser les Alias depuis les Titres</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="609"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="617"/>
         <source>New Folder</source>
         <translation>Nouveau Dossier</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="622"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="630"/>
         <source>New Sub-Folder</source>
         <translation>Nouveau Sous-dossier</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="646"/>
         <source>Move to Folder</source>
         <translation>Déplacer vers le Dossier</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="645"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="653"/>
         <source>Top Level</source>
         <translation>Niveau Supérieur</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="678"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="686"/>
         <source>Move Here</source>
         <translation>Déplacer Ici</translation>
     </message>
@@ -17315,44 +17393,44 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
         <translation>Échec du chargement du texte de bienvenue :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="258"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="279"/>
         <source>Network error</source>
         <translation>Erreur réseau</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="261"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="277"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="309"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
         <source>Trial Activation Error</source>
         <translation>Erreur D'activation de la Version D'essai</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="274"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
         <source>Invalid server response</source>
         <translation>Réponse du serveur invalide</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="275"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="296"/>
         <source>The server returned malformed data: %1</source>
         <translation>Le serveur a retourné des données mal formées : %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="306"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
         <source>Unexpected server response</source>
         <translation>Réponse du serveur inattendue</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
         <source>The server response is missing required fields.</source>
         <translation>La réponse du serveur ne contient pas les champs requis.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="171"/>
+        <location filename="../../src/Console/Export.cpp" line="170"/>
         <source>Console Output File Error</source>
         <translation>Erreur de Fichier de Sortie Console</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="172"/>
+        <location filename="../../src/Console/Export.cpp" line="171"/>
         <source>Cannot open file for writing!</source>
         <translation>Impossible d'ouvrir le fichier en écriture !</translation>
     </message>
@@ -17844,7 +17922,7 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation type="vanished">Erreur de L'analyseur Natif</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="52"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="53"/>
         <source>Offline Activation</source>
         <translation>Activation Hors Ligne</translation>
     </message>
@@ -18361,77 +18439,77 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="373"/>
+        <location filename="../../src/SerialStudio.cpp" line="349"/>
         <source>Data Grids</source>
         <translation>Grilles de Données</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="376"/>
+        <location filename="../../src/SerialStudio.cpp" line="352"/>
         <source>Multiple Data Plots</source>
         <translation>Graphiques de Données Multiples</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="379"/>
+        <location filename="../../src/SerialStudio.cpp" line="355"/>
         <source>Accelerometers</source>
         <translation>Accéléromètres</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="382"/>
+        <location filename="../../src/SerialStudio.cpp" line="358"/>
         <source>Gyroscopes</source>
         <translation>Gyroscopes</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="385"/>
+        <location filename="../../src/SerialStudio.cpp" line="361"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="388"/>
+        <location filename="../../src/SerialStudio.cpp" line="364"/>
         <source>FFT Plots</source>
         <translation>Graphiques FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="391"/>
+        <location filename="../../src/SerialStudio.cpp" line="367"/>
         <source>LED Panels</source>
         <translation>Panneaux LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="394"/>
+        <location filename="../../src/SerialStudio.cpp" line="370"/>
         <source>Data Plots</source>
         <translation>Graphiques de Données</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="397"/>
+        <location filename="../../src/SerialStudio.cpp" line="373"/>
         <source>Bars</source>
         <translation>Barres</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="400"/>
+        <location filename="../../src/SerialStudio.cpp" line="376"/>
         <source>Gauges</source>
         <translation>Jauges</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="403"/>
+        <location filename="../../src/SerialStudio.cpp" line="379"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="406"/>
+        <location filename="../../src/SerialStudio.cpp" line="382"/>
         <source>Clock</source>
         <translation>Horloge</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="409"/>
+        <location filename="../../src/SerialStudio.cpp" line="385"/>
         <source>Stopwatch</source>
         <translation>Chronomètre</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="412"/>
+        <location filename="../../src/SerialStudio.cpp" line="388"/>
         <source>Compasses</source>
         <translation>Boussoles</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="415"/>
+        <location filename="../../src/SerialStudio.cpp" line="391"/>
         <source>Meters</source>
         <translation>Compteurs</translation>
     </message>
@@ -18440,92 +18518,92 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation type="vanished">Thermomètres</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="418"/>
+        <location filename="../../src/SerialStudio.cpp" line="394"/>
         <source>3D Plots</source>
         <translation>Graphiques 3D</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="421"/>
+        <location filename="../../src/SerialStudio.cpp" line="397"/>
         <source>Web Views</source>
         <translation>Visionneuses Web</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="425"/>
+        <location filename="../../src/SerialStudio.cpp" line="401"/>
         <source>Image Views</source>
         <translation>Visionneuses D'image</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="428"/>
+        <location filename="../../src/SerialStudio.cpp" line="404"/>
         <source>Output Panels</source>
         <translation>Panneaux de Sortie</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="431"/>
+        <location filename="../../src/SerialStudio.cpp" line="407"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="434"/>
+        <location filename="../../src/SerialStudio.cpp" line="410"/>
         <source>Waterfalls</source>
         <translation>Cascades</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="437"/>
+        <location filename="../../src/SerialStudio.cpp" line="413"/>
         <source>Painter Widgets</source>
         <translation>Widgets de Peintre</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1060"/>
+        <location filename="../../src/SerialStudio.cpp" line="1036"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1061"/>
+        <location filename="../../src/SerialStudio.cpp" line="1037"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1062"/>
+        <location filename="../../src/SerialStudio.cpp" line="1038"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1063"/>
+        <location filename="../../src/SerialStudio.cpp" line="1039"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1064"/>
+        <location filename="../../src/SerialStudio.cpp" line="1040"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1065"/>
+        <location filename="../../src/SerialStudio.cpp" line="1041"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1066"/>
+        <location filename="../../src/SerialStudio.cpp" line="1042"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1067"/>
+        <location filename="../../src/SerialStudio.cpp" line="1043"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1068"/>
+        <location filename="../../src/SerialStudio.cpp" line="1044"/>
         <source>Shift-JIS</source>
         <translation>Shift-jis</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1069"/>
+        <location filename="../../src/SerialStudio.cpp" line="1045"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="1070"/>
+        <location filename="../../src/SerialStudio.cpp" line="1046"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -20327,27 +20405,27 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
         <source>Workspaces</source>
         <translation>Espaces de Travail</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="437"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Actions</source>
         <translation>Actions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="460"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="478"/>
         <source>No Actions Available</source>
         <translation>Aucune Action Disponible</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="538"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="556"/>
         <source>No Plugins Installed</source>
         <translation>Aucun Plugin Installé</translation>
     </message>
@@ -20372,7 +20450,7 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
         <translation type="vanished">Outils</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="726"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
         <source>No Tools Available</source>
         <translation>Aucun Outil Disponible</translation>
     </message>
@@ -20385,17 +20463,17 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
         <translation type="vanished">Quitter</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="812"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="813"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
         <source>New Workspace…</source>
         <translation>Nouvel Espace de Travail…</translation>
     </message>
@@ -20420,22 +20498,22 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
         <translation type="vanished">Assistant IA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="374"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
         <source>Show "%1"</source>
         <translation>Afficher « %1 »</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Afficher Tous les Espaces de Travail Masqués</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="402"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="420"/>
         <source>No Workspaces Available</source>
         <translation>Aucun Espace de Travail Disponible</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="528"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="546"/>
         <source>Manage Plugins…</source>
         <translation>Gérer les Plugins…</translation>
     </message>
@@ -20464,7 +20542,7 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
         <translation type="vanished">Base de Données de Session</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="651"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="669"/>
         <source>No Export Formats Available</source>
         <translation>Aucun Format D'exportation Disponible</translation>
     </message>
@@ -20481,7 +20559,7 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
         <translation type="vanished">Préférences</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="801"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="819"/>
         <source>Edit…</source>
         <translation>Modifier…</translation>
     </message>
@@ -21783,34 +21861,34 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2007"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2002"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2015"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2010"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2023"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2018"/>
         <source>Clock</source>
         <translation>Horloge</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2030"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2025"/>
         <source>Stopwatch</source>
         <translation>Chronomètre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2077"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2092"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2076"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2091"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Repli)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2114"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2186"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2113"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2185"/>
         <source>LED Panel (%1)</source>
         <translation>Panneau LED (%1)</translation>
     </message>
@@ -22654,12 +22732,12 @@ Je comprends qu'à son expiration, je devrai acheter une licence ou compiler la 
         <translation>National Geographic</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="379"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="378"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>Les couches cartographiques supplémentaires sont disponibles uniquement pour les utilisateurs Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="379"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>L'accès illimité ne peut être offert car la clé API ArcGIS engendre des coûts réels.</translation>
     </message>

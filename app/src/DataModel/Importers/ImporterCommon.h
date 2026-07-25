@@ -200,7 +200,7 @@ inline void applyTableTransform(Dataset& dataset, const QString& table, const QS
     Workspace overview;
     overview.workspaceId = WorkspaceIds::UserStart;
     overview.title       = overviewTitle;
-    overview.icon        = registry.iconById(QStringLiteral("panes/overview"), 16);
+    overview.icon        = registry.iconById(QStringLiteral("panes/overview"), 32);
     for (const auto& ws : perGroup)
       overview.widgetRefs.insert(
         overview.widgetRefs.end(), ws.widgetRefs.begin(), ws.widgetRefs.end());

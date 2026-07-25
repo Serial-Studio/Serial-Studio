@@ -266,9 +266,6 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
 
   QString tierName;
   switch (tk.featureTier()) {
-    case Licensing::FeatureTier::Hobbyist:
-      tierName = QStringLiteral("Hobbyist");
-      break;
     case Licensing::FeatureTier::Trial:
       tierName = QStringLiteral("Trial");
       break;

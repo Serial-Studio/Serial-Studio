@@ -1897,8 +1897,7 @@ void MQTT::Publisher::emitStatsIfChanged()
 bool MQTT::Publisher::licenseValid() const
 {
   const auto& token = Licensing::CommercialToken::current();
-  return token.isValid() && SS_LICENSE_GUARD()
-      && token.featureTier() >= Licensing::FeatureTier::Trial;
+  return token.isValid() && SS_LICENSE_GUARD();
 }
 
 /**

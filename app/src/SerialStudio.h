@@ -288,7 +288,6 @@ public:
   };
 
   Q_INVOKABLE [[nodiscard]] static bool activated();
-  Q_INVOKABLE [[nodiscard]] static bool proWidgetsEnabled();
   Q_INVOKABLE [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group>& g);
   Q_INVOKABLE [[nodiscard]] static bool commercialCfg(const std::vector<DataModel::Group>& g);
 

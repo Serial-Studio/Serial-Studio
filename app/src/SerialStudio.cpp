@@ -54,21 +54,6 @@ bool SerialStudio::activated()
 }
 
 /**
- * @brief Checks whether Pro-only dashboard widgets (Plot3D, ImageView, OutputPanel) should be
- * materialised for this build.
- */
-bool SerialStudio::proWidgetsEnabled()
-{
-#ifdef BUILD_COMMERCIAL
-  const auto& token = Licensing::CommercialToken::current();
-  return token.isValid() && SS_LICENSE_GUARD()
-      && token.featureTier() >= Licensing::FeatureTier::Trial && !token.variantName().isEmpty();
-#else
-  return false;
-#endif
-}
-
-/**
  * @brief Classifies a group's X-axis mode from its front dataset's encoding. Empty groups and the
  * time sentinel map to Time, the samples sentinel to Samples, any dataset id to Dataset. Callers
  * apply their own guards on the empty case (Dashboard's !empty guard sends it to the samples path,

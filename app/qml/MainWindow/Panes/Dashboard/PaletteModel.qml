@@ -36,11 +36,10 @@ QtObject {
   property bool workspacesEnabled: true
 
   //
-  // Optional context-specific actions provider (the CommandModel items(filter) shape), shown
-  // as its own section before Tools in both browse and search.
+  // Optional context-specific actions provider (the CommandModel items(filter) shape); its
+  // entries land in the ordered category sections alongside toolActions.
   //
   property var extraTools: null
-  property string extraTitle: ""
 
   //
   // Navigation outcomes raised to the host palette (folder drill-in, dialog close).

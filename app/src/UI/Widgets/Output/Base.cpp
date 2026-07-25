@@ -145,7 +145,7 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
 
   m_rateLimiter.restart();
   const auto& tk = Licensing::CommercialToken::current();
-  if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Trial)
+  if (!tk.isValid() || !SS_LICENSE_GUARD())
     return;
 
   const auto data = evaluateTransmitFunction(value);

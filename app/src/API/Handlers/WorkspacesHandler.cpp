@@ -35,6 +35,7 @@
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
+#include "Misc/IconRegistryLegacy.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -395,7 +396,7 @@ struct ParsedWidgetId {
                                                    SerialStudio::DashboardWidget wtype,
                                                    int targetDatasetId = -1)
 {
-  const bool pro            = SerialStudio::proWidgetsEnabled();
+  const bool pro            = SerialStudio::activated();
   const bool isLed          = (wtype == SerialStudio::DashboardLED);
   const bool isGroupShape   = SerialStudio::isGroupWidget(wtype) && !isLed;
   const bool isDatasetShape = SerialStudio::isDatasetWidget(wtype);
@@ -728,9 +729,9 @@ API::CommandResponse API::Handlers::WorkspacesHandler::list(const QString& id,
   QJsonArray arr;
   for (const auto& ws : workspaces) {
     QJsonObject entry;
-    entry[QStringLiteral("id")]          = ws.workspaceId;
-    entry[QStringLiteral("title")]       = ws.title;
-    entry[QStringLiteral("icon")]        = SerialStudio::normalizeIconPath(ws.icon);
+    entry[QStringLiteral("id")]    = ws.workspaceId;
+    entry[QStringLiteral("title")] = ws.title;
+    entry[QStringLiteral("icon")]  = Misc::legacyIconPath(SerialStudio::normalizeIconPath(ws.icon));
     entry[QStringLiteral("description")] = ws.description;
     entry[QStringLiteral("widgetCount")] = static_cast<int>(ws.widgetRefs.size());
     arr.append(entry);
@@ -763,9 +764,9 @@ API::CommandResponse API::Handlers::WorkspacesHandler::get(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace not found: %1").arg(wid));
 
   QJsonObject result;
-  result[QStringLiteral("id")]          = it->workspaceId;
-  result[QStringLiteral("title")]       = it->title;
-  result[QStringLiteral("icon")]        = it->icon;
+  result[QStringLiteral("id")]    = it->workspaceId;
+  result[QStringLiteral("title")] = it->title;
+  result[QStringLiteral("icon")]  = Misc::legacyIconPath(SerialStudio::normalizeIconPath(it->icon));
   result[QStringLiteral("description")] = it->description;
   result[QStringLiteral("widgets")]     = refsToJson(it->workspaceId, it->widgetRefs);
   return CommandResponse::makeSuccess(id, result);

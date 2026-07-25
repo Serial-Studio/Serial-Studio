@@ -134,6 +134,11 @@ API::CommandResponse API::Handlers::SystemHandler::startDemo(const QString& id,
 {
   Q_UNUSED(params)
 
+#ifndef BUILD_COMMERCIAL
+  return CommandResponse::makeError(
+    id, ErrorCode::ExecutionError, QStringLiteral("Demo is unavailable in GPL builds"));
+#endif
+
   static auto& appState = AppState::instance();
   if (appState.ephemeralSession()) {
     return CommandResponse::makeError(

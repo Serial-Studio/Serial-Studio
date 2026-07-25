@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Dataset Values")
-  icon: Cpp_Misc_IconRegistry.icon("editor", "dataset-values", 24)
+  icon: Cpp_Misc_IconRegistry.icon("editor", "dataset-values", 16)
 
   actionComponent: EditorNavActions {}
 

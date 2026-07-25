@@ -45,6 +45,12 @@ Widgets.SmartWindow {
   title: Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : "")
 
   //
+  // Palette and registry shortcuts honor the same lock/mode gate as the blurred editor layout.
+  //
+  readonly property bool editorInteractive: !Cpp_JSON_ProjectModel.locked
+      && Cpp_AppState.operationMode === SerialStudio.ProjectFile
+
+  //
   // Ask user to save changes when closing the dialog
   //
   onClosing: (close) => close.accepted = Cpp_JSON_ProjectModel.askSave()
@@ -141,7 +147,6 @@ Widgets.SmartWindow {
     host: null
     taskBar: null
     workspacesEnabled: false
-    extraTitle: qsTr("Project")
     extraTools: _peProjectActions
   }
 
@@ -150,6 +155,7 @@ Widgets.SmartWindow {
 
     z: 5000
     model: _pePaletteModel
+    openable: root.editorInteractive
   }
 
   //
@@ -170,6 +176,8 @@ Widgets.SmartWindow {
       context: modelData.shortcutContext === "application" ? Qt.ApplicationShortcut
                                                            : Qt.WindowShortcut
       enabled: behavior !== null && behavior.enabled !== false
+               && (root.editorInteractive || modelData.id === "app.quit")
+               && (!_pePalette.opened || modelData.id === "palette.open")
       onActivated: {
         if (behavior !== null)
           behavior.run()

@@ -281,8 +281,9 @@ for time plots and the config (including `timebaseSec`) survives a Time-Range re
 (`sweepEnabled`/`sweepMode`/`triggerEdge`/`triggerLevel`/`holdoff`/`sweepTimebase`(+`triggerSource` for
 MultiPlot); `sweepTimebase` is ms, 0 = match time range). QML wiring is a Pro-gated toolbar toggle +
 `TriggerDialog.qml` (with the optional "Timebase (ms)" field), and the trigger-level line drawn in
-`PlotWidget.qml` (`sweepMode`/`triggerLevel`). Setters are runtime-gated to `FeatureTier >= Trial`. `SweepMode`/
-`TriggerEdge` enums live in `SerialStudio.h`.
+`PlotWidget.qml` (`sweepMode`/`triggerLevel`). Setters are runtime-gated on a valid commercial
+token (`isValid()` + `SS_LICENSE_GUARD()`; tier compares were removed 2026-07, trial = Pro).
+`SweepMode`/`TriggerEdge` enums live in `SerialStudio.h`.
 
 ## Output Widgets (Pro)
 
@@ -290,8 +291,9 @@ MultiPlot); `sweepTimebase` is ms, 0 = match time range). QML wiring is a Pro-ga
 Button/Toggle/Slider/TextField/Panel sharing `Base`. User JS converts UI state → device
 bytes (`app/rcc/scripts/output/*.js`); `OutputCodeEditor` edits; `TransmitTestDialog`
 previews. Protocol helpers (CRC, NMEA, Modbus, SLCAN, GRBL, GCode, SCPI, binary packet)
-injected into the engine. Gated `FeatureTier >= Pro`
-(`None=0, Hobbyist=1, Trial=2, Pro=3, Enterprise=4`).
+injected into the engine. Gated on a valid commercial token (`isValid()` +
+`SS_LICENSE_GUARD()`; the 2026-07 tier removal made trial = Pro, enum now
+`None=0, Trial=2, Pro=3, Enterprise=4`, display-only).
 
 ## Dashboard Freeze Mode (Pro) — spec 0007
 
@@ -302,7 +304,7 @@ One stored flag, one derived flag, one input gate — keep the three roles separ
   the loader (`loadFrozen`) and `serializeToJson` bypass the gate on purpose so an unlicensed
   load/save cycle never strips the flag. `newJsonFile` resets it.
 - **Effective**: read-only `UI::Dashboard::frozen` = `ProjectModel::frozen() &&
-  proWidgetsEnabled()`, notify wired to `frozenChanged` + `activatedChanged` (covers
+  SerialStudio::activated()`, notify wired to `frozenChanged` + `activatedChanged` (covers
   online/offline/trial — late activation re-derives without reload). Computed getter by
   design: binding-time reads only, never on the frame path, no cached flag to invalidate.
   QML consumes only this property.

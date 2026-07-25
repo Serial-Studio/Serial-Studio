@@ -216,9 +216,17 @@ Window {
   }
 
   //
-  // Close shortcut
+  // Set by a CommandPalette hosted in this window. Window-local on purpose: a palette open in
+  // another window must not disable this one's shortcuts.
+  //
+  property bool paletteOpen: false
+
+  //
+  // Close shortcut; yields to an open command palette in this window, whose own Cmd+W/Ctrl+W
+  // handler would otherwise turn the sequence into an ambiguous no-op for both.
   //
   Shortcut {
+    enabled: !root.paletteOpen
     sequences: [StandardKey.Close]
     onActivated: root.close()
   }

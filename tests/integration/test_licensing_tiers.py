@@ -1,9 +1,9 @@
 """
 Licensing Tier Integration Tests
 
-Tests for the per-feature tier gating system introduced with the Hobbyist tier.
-Verifies that licensing.getStatus returns the new featureTier and
-featureTierValue fields, and that tier names are correctly mapped.
+Tests for licensing.getStatus tier reporting. Since the 2026-07 feature-tier
+removal every valid license unlocks the same feature set; the tier is display
+metadata only (None/Trial/Pro/Enterprise) and must map from the variant name.
 
 These tests require Serial Studio Pro (BUILD_COMMERCIAL) to be running.
 If the licensing.getStatus command is absent the tests are skipped.
@@ -21,11 +21,10 @@ from utils.api_client import APIError
 # Helpers
 # ---------------------------------------------------------------------------
 
-VALID_TIER_NAMES = {"None", "Hobbyist", "Trial", "Pro", "Enterprise"}
+VALID_TIER_NAMES = {"None", "Trial", "Pro", "Enterprise"}
 
 TIER_VALUES = {
     "None": 0,
-    "Hobbyist": 1,
     "Trial": 2,
     "Pro": 3,
     "Enterprise": 4,
@@ -136,9 +135,7 @@ def test_variant_name_consistent_with_tier(api_client):
     # Check known mappings
     if variant.startswith("enterprise"):
         assert tier == "Enterprise"
-    elif variant.startswith("hobbyist"):
-        assert tier == "Hobbyist"
-    elif variant.startswith("pro") or variant.startswith("team"):
+    elif variant:
         assert tier == "Pro"
 
 

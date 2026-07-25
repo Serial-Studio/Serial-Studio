@@ -127,6 +127,7 @@ QtObject {
 
   readonly property QtObject cmdAppPreferences: QtObject {
     readonly property bool visible: !app.runtimeMode
+    readonly property bool enabled: !app.runtimeMode
     function run() { app.showSettingsDialog() }
   }
 
@@ -158,6 +159,8 @@ QtObject {
   readonly property QtObject cmdDashboardFreeze: QtObject {
     readonly property bool checked: Cpp_UI_Dashboard.frozen
     readonly property bool visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+        && !app.runtimeMode
+    readonly property bool enabled: Cpp_AppState.operationMode === SerialStudio.ProjectFile
         && !app.runtimeMode
     function run() {
       var allowed = Cpp_CommercialBuild
@@ -209,22 +212,25 @@ QtObject {
   // Export toggles (StartMenu.qml Export sub-menu).
   //
   readonly property QtObject cmdExportCsv: QtObject {
+    readonly property bool visible: !app.runtimeMode
     readonly property bool checked: Cpp_CSV_Export.exportEnabled
     function run() { Cpp_CSV_Export.exportEnabled = !Cpp_CSV_Export.exportEnabled }
   }
 
   readonly property QtObject cmdExportMdf4: QtObject {
+    readonly property bool visible: !app.runtimeMode
     readonly property bool checked: Cpp_MDF4_Export.exportEnabled
     function run() { Cpp_MDF4_Export.exportEnabled = !Cpp_MDF4_Export.exportEnabled }
   }
 
   readonly property QtObject cmdExportConsole: QtObject {
+    readonly property bool visible: !app.runtimeMode
     readonly property bool checked: Cpp_Console_Export.exportEnabled
     function run() { Cpp_Console_Export.exportEnabled = !Cpp_Console_Export.exportEnabled }
   }
 
   readonly property QtObject cmdExportDatabase: QtObject {
-    readonly property bool visible: Cpp_CommercialBuild
+    readonly property bool visible: Cpp_CommercialBuild && !app.runtimeMode
     readonly property bool checked: Cpp_CommercialBuild ? Cpp_Sessions_Export.exportEnabled : false
     function run() {
       if (Cpp_CommercialBuild)

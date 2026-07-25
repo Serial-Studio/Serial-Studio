@@ -1828,7 +1828,7 @@ void Widgets::Waterfall::setAudioRecordingEnabled(const bool enabled)
     return;
 
   if (enabled) {
-    if (!SerialStudio::proWidgetsEnabled())
+    if (!SerialStudio::activated())
       return;
 
     const auto& dataset = GET_DATASET(SerialStudio::DashboardWaterfall, m_index);

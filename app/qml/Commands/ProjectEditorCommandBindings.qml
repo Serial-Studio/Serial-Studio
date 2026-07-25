@@ -94,7 +94,6 @@ QtObject {
   }
 
   readonly property QtObject cmdEditorSave: QtObject {
-    readonly property bool visible: Cpp_JSON_ProjectModel.canSave
     readonly property bool enabled: Cpp_JSON_ProjectModel.modified
         && Cpp_JSON_ProjectModel.canSave
     readonly property string tooltip: Cpp_JSON_ProjectModel.canSave
@@ -103,7 +102,6 @@ QtObject {
   }
 
   readonly property QtObject cmdEditorSaveAs: QtObject {
-    readonly property bool visible: Cpp_JSON_ProjectModel.canSave
     readonly property bool enabled: Cpp_JSON_ProjectModel.canSave
     readonly property string tooltip: Cpp_JSON_ProjectModel.canSave
         ? qsTr("Save the current project under a new name")

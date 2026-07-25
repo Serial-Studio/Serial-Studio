@@ -222,9 +222,21 @@ Popup {
       return _menuModel.entryFor(commandId)
     }
 
+    //
+    // run() can refuse the toggle (e.g. freeze without a license shows a dialog instead); the
+    // deferred resync pulls the checkmark back to the real backing state in that case.
+    //
+    function resync() {
+      const e = _menuModel.entryFor(commandId)
+      if (e !== null && _toggle.checked !== e.checked)
+        _toggle.checked = e.checked
+    }
+
     onCheckedChanged: {
-      if (entry !== null && checked !== entry.checked)
+      if (entry !== null && checked !== entry.checked) {
         entry.run()
+        Qt.callLater(_toggle.resync)
+      }
     }
 
     onEntryChanged: {

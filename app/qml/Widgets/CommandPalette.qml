@@ -50,6 +50,42 @@ FocusScope {
   property bool opened: false
 
   //
+  // Host veto on opening (e.g. the Project Editor while locked or in the wrong operation mode).
+  //
+  property bool openable: true
+
+  //
+  // Publishes open state twice: the app-wide flag feeds dashboard focus-grabbers, the
+  // window-local SmartWindow flag gates that window's shortcuts without cross-window bleed.
+  //
+  onOpenedChanged: {
+    app.commandPaletteOpen = opened
+    const w = root.Window.window
+    if (w && w.paletteOpen !== undefined)
+      w.paletteOpen = opened
+  }
+
+  //
+  // External dashboard windows destroy an open palette wholesale (native close button);
+  // without this the flags stay stuck true and every shortcut in the app goes dead.
+  //
+  Component.onDestruction: {
+    if (!root.opened)
+      return
+
+    app.commandPaletteOpen = false
+    const w = root.Window.window
+    if (w && w.paletteOpen !== undefined)
+      w.paletteOpen = false
+  }
+
+  //
+  // A live model swap (dashboard shown/hidden) would orphan sections built from the old model;
+  // fold the palette instead of rendering stale entries.
+  //
+  onModelChanged: root.opened = false
+
+  //
   // Open/close fade; the dialog additionally scales in for a subtle pop.
   //
   Behavior on opacity {
@@ -82,6 +118,12 @@ FocusScope {
   property var displayNodes: []
   property int currentIndex: -1
 
+  //
+  // True only while arrow keys drive the highlight; hover must never auto-scroll, or a row
+  // sliding under the resting cursor re-fires onEntered and walks the list to the end.
+  //
+  property bool keyboardNav: false
+
   readonly property var currentNodes:
       levelStack.length > 0 ? levelStack[levelStack.length - 1].nodes : []
 
@@ -97,6 +139,9 @@ FocusScope {
   readonly property bool compact: panel.width < 460
 
   function open() {
+    if (!root.openable)
+      return
+
     _search.text = ""
     const tree = root.model ? root.model.workspaceTree() : []
     root.levelStack = [{ text: root.title, nodes: tree, folderId: -1 }]
@@ -206,6 +251,7 @@ FocusScope {
   }
 
   function move(delta) {
+    root.keyboardNav = true
     const count = root.displayNodes.length
     if (count === 0)
       return
@@ -216,6 +262,26 @@ FocusScope {
     }
 
     root.currentIndex = Math.max(0, Math.min(count - 1, root.currentIndex + delta))
+  }
+
+  //
+  // Keeps the highlighted delegate inside the scroll viewport; without this, keyboard
+  // navigation walks the highlight off-screen and Enter activates an invisible row.
+  //
+  function ensureVisible(item) {
+    if (!item || _scroll.contentHeight <= _scroll.height)
+      return
+
+    const y = item.mapToItem(_sectionColumn, 0, 0).y
+    const bottom = y + item.height
+    if (y < _scroll.contentY) {
+      _scroll.contentY = Math.max(0, y - 8)
+    }
+
+    else if (bottom > _scroll.contentY + _scroll.height) {
+      const maxY = _scroll.contentHeight - _scroll.height
+      _scroll.contentY = Math.min(maxY, bottom - _scroll.height + 8)
+    }
   }
 
   //
@@ -242,6 +308,7 @@ FocusScope {
   //
   MouseArea {
     hoverEnabled: true
+    enabled: root.opened
     anchors.fill: parent
     onClicked: root.close()
     acceptedButtons: Qt.AllButtons
@@ -276,6 +343,11 @@ FocusScope {
       readonly property bool hovered: _cellMouse.containsMouse
       readonly property bool itemEnabled: _cell.modelData.enabled !== false
       readonly property bool highlighted: _cell.modelData._idx === root.currentIndex
+
+      onHighlightedChanged: {
+        if (highlighted && root.keyboardNav)
+          root.ensureVisible(_cell)
+      }
 
       Rectangle {
         radius: 6
@@ -372,6 +444,11 @@ FocusScope {
       readonly property bool itemEnabled: _row.modelData.enabled !== false
       readonly property bool highlighted: _row.modelData._idx === root.currentIndex
 
+      onHighlightedChanged: {
+        if (highlighted && root.keyboardNav)
+          root.ensureVisible(_row)
+      }
+
       Rectangle {
         radius: 4
         anchors.fill: parent
@@ -438,7 +515,10 @@ FocusScope {
           anchors.fill: parent
           enabled: _row.itemEnabled
           cursorShape: _row.itemEnabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-          onEntered: root.currentIndex = _row.modelData._idx
+          onEntered: {
+            root.keyboardNav = false
+            root.currentIndex = _row.modelData._idx
+          }
           onClicked: {
             root.currentIndex = _row.modelData._idx
             root.activate(_row.modelData)
@@ -475,6 +555,7 @@ FocusScope {
     }
 
     MouseArea {
+      enabled: root.opened
       anchors.fill: parent
       acceptedButtons: Qt.LeftButton | Qt.RightButton
       onWheel: (wheel) => { wheel.accepted = true }

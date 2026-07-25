@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Shared Memory")
-  icon: Cpp_Misc_IconRegistry.icon("editor", "shared-memory", 24)
+  icon: Cpp_Misc_IconRegistry.icon("editor", "shared-memory", 16)
 
   actionComponent: EditorNavActions {}
 

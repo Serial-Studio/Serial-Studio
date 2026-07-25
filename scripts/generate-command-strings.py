@@ -2,8 +2,8 @@
 """Generate the lupdate-visible translation stub for the command manifests.
 
 Collects every user-visible string from app/rcc/commands/*.json and
-app/rcc/commands/layouts/*.json (command title/titleChecked/tooltip, layout
-node title/tooltip overrides, submenu titles) and writes
+app/rcc/commands/layouts/*.json (command title/titleChecked/tooltip/
+collapsedTitle, layout node title/tooltip overrides, submenu titles) and writes
 app/src/UI/CommandStrings.cpp as a block of QT_TRANSLATE_NOOP("Commands", ...)
 entries. UI::CommandRegistry translates at query time through the same
 "Commands" context, so this file is what makes the manifest strings reachable
@@ -25,8 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 COMMANDS = ROOT / "app" / "rcc" / "commands"
 OUTPUT = ROOT / "app" / "src" / "UI" / "CommandStrings.cpp"
 
-MANIFESTS = ["app.json", "dashboard.json", "projecteditor.json"]
-LAYOUTS = ["main-toolbar.json", "project-toolbar.json", "start-menu.json"]
+MANIFESTS = sorted(p.name for p in COMMANDS.glob("*.json"))
+LAYOUTS = sorted(p.name for p in (COMMANDS / "layouts").glob("*.json"))
 
 HEADER = """/*
  * Serial Studio
@@ -63,7 +63,7 @@ FOOTER = """};
 
 
 def collect_node_strings(node: dict, strings: set[str]) -> None:
-    for key in ("title", "tooltip", "titleChecked"):
+    for key in ("title", "tooltip", "titleChecked", "collapsedTitle"):
         value = node.get(key)
         if isinstance(value, str) and value:
             strings.add(value)

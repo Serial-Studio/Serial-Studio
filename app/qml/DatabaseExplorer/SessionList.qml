@@ -17,7 +17,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Sessions")
-  icon: Cpp_Misc_IconRegistry.icon("panes", "sessions", 32)
+  icon: Cpp_Misc_IconRegistry.icon("panes", "sessions", 16)
   headerVisible: typeof app === "undefined" || !app.runtimeMode
 
   //

@@ -397,6 +397,9 @@ QVariantMap UI::CommandRegistry::containerNode(const QJsonObject& node) const
   if (node.contains(QStringLiteral("title")))
     map.insert(QStringLiteral("title"), translated(node, "title"));
 
+  if (node.contains(QStringLiteral("collapsedTitle")))
+    map.insert(QStringLiteral("collapsedTitle"), translated(node, "collapsedTitle"));
+
   if (node.contains(QStringLiteral("items")))
     map.insert(QStringLiteral("items"), layoutNodes(node.value(QStringLiteral("items")).toArray()));
 

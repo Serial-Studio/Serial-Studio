@@ -605,7 +605,7 @@ void Widgets::AudioExport::setupExternalConnections()
 
   connect(
     &Licensing::LemonSqueezy::instance(), &Licensing::LemonSqueezy::activatedChanged, this, [this] {
-      if (!SerialStudio::proWidgetsEnabled())
+      if (!SerialStudio::activated())
         closeAllSessions();
     });
 }

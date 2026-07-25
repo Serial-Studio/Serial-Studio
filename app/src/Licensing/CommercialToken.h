@@ -90,7 +90,6 @@ namespace Licensing {
  */
 enum class FeatureTier : quint8 {
   None       = 0,
-  Hobbyist   = 1,
   Trial      = 2,
   Pro        = 3,
   Enterprise = 4,

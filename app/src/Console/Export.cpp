@@ -120,8 +120,7 @@ void Console::ExportWorker::closeResources()
 void Console::ExportWorker::createFile(int deviceId)
 {
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD()
-      || token.featureTier() < Licensing::FeatureTier::Trial)
+  if (!token.isValid() || !SS_LICENSE_GUARD())
     return;
 
   auto it = m_deviceFiles.find(deviceId);
@@ -311,7 +310,7 @@ void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
-  if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial) {
+  if (tk.isValid() && SS_LICENSE_GUARD()) {
     if (!enabled && isOpen())
       closeFile();
 

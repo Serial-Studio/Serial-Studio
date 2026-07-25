@@ -44,6 +44,7 @@
 #  include <poll.h>
 #  include <unistd.h>
 
+#  include <cerrno>
 #  include <sys/stat.h>
 #endif
 
@@ -642,15 +643,25 @@ void IO::Drivers::Process::pipeReadLoopPosix()
   const QByteArray pathBytes = m_pipePath.toLocal8Bit();
   struct stat st{};
   const bool exists = (::stat(pathBytes.constData(), &st) == 0);
-  if (!exists)
-    ::mkfifo(pathBytes.constData(), 0600);
-  else if (!S_ISFIFO(st.st_mode)) {
+  if (exists && !S_ISFIFO(st.st_mode)) {
+    QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
+    return;
+  }
+
+  if (!exists && ::mkfifo(pathBytes.constData(), 0600) != 0 && errno != EEXIST) {
     QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
     return;
   }
 
   const int fd = ::open(pathBytes.constData(), O_RDONLY | O_NONBLOCK);
   if (fd < 0) {
+    QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
+    return;
+  }
+
+  struct stat opened{};
+  if (::fstat(fd, &opened) != 0 || !S_ISFIFO(opened.st_mode)) {
+    ::close(fd);
     QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
     return;
   }

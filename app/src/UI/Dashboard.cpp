@@ -341,7 +341,7 @@ bool UI::Dashboard::frozen() const
 {
   static auto& appState     = AppState::instance();
   static auto& projectModel = DataModel::ProjectModel::instance();
-  return projectModel.frozen() && SerialStudio::proWidgetsEnabled()
+  return projectModel.frozen() && SerialStudio::activated()
       && appState.operationMode() == SerialStudio::ProjectFile;
 }
 
@@ -1648,8 +1648,7 @@ void UI::Dashboard::setPlotSweep(const int index,
 
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
-  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD()
-               && tk.featureTier() >= Licensing::FeatureTier::Trial;
+  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD();
 #else
   const bool ok = false;
 #endif
@@ -1681,8 +1680,7 @@ void UI::Dashboard::setMultiplotSweep(const int index,
 
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
-  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD()
-               && tk.featureTier() >= Licensing::FeatureTier::Trial;
+  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD();
 #else
   const bool ok = false;
 #endif
@@ -1984,7 +1982,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(streamAvailable());
 
-  const bool pro = SerialStudio::proWidgetsEnabled();
+  const bool pro = SerialStudio::activated();
 
   auto savedSourceFrames = m_sourceRawFrames;
   auto savedClocks       = m_plotClocks;
@@ -2050,9 +2048,9 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 
 /**
  * @brief Populates m_widgetGroups and m_widgetDatasets from the current frame. A datasetless
- *        data grid is dropped instead of materialised: painter groups own no datasets and fall
- *        back to a data grid on builds or licenses without the painter, where an empty table is
- *        worse than no widget at all.
+ *        data grid materialises as an empty table on purpose: dropping it would shift the
+ *        positional relativeIndex of every later widget of the same type and silently orphan
+ *        saved workspace references (and diverge from the editor-side widget numbering).
  */
 void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
 {
@@ -2061,10 +2059,9 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
   (void)frame;
 
   for (const auto& group : m_lastFrame.groups) {
-    const auto key       = SerialStudio::getDashboardWidget(group);
-    const bool emptyGrid = key == SerialStudio::DashboardDataGrid && group.datasets.empty();
+    const auto key = SerialStudio::getDashboardWidget(group);
 
-    if (key != SerialStudio::DashboardNoWidget && !emptyGrid)
+    if (key != SerialStudio::DashboardNoWidget)
       m_widgetGroups[key].append(group);
 
     if (key == SerialStudio::DashboardPlot3D && !pro) {
@@ -2090,11 +2087,9 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
       if (bucket.isEmpty())
         m_widgetGroups.remove(key);
 
-      if (!group.datasets.empty()) {
-        auto copy  = group;
-        copy.title = tr("%1 (Fallback)").arg(group.title);
-        m_widgetGroups[SerialStudio::DashboardDataGrid].append(copy);
-      }
+      auto copy  = group;
+      copy.title = tr("%1 (Fallback)").arg(group.title);
+      m_widgetGroups[SerialStudio::DashboardDataGrid].append(copy);
     }
 #endif
 

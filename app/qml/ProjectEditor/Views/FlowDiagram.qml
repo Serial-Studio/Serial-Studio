@@ -402,7 +402,7 @@ Item {
       w:         nodeW,
       h:         nodeH,
       label:     qsTr("Control Loop"),
-      icon:      Cpp_Misc_IconRegistry.icon("editor", "control-script", 48),
+      icon:      Cpp_Misc_IconRegistry.icon("editor", "control-script", 16),
       badge:     Cpp_JSON_ProjectModel.controlScriptCode.length > 0 ? "" : qsTr("empty")
     })
 
@@ -873,7 +873,7 @@ Item {
         w:         nodeW,
         h:         nodeH,
         label:     qsTr("MQTT Publisher"),
-        icon:      Cpp_Misc_IconRegistry.icon("editor", "mqtt-publisher", 48),
+        icon:      Cpp_Misc_IconRegistry.icon("editor", "mqtt-publisher", 16),
         badge:     ""
       })
 

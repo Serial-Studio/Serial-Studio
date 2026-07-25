@@ -496,7 +496,7 @@ void Widgets::FFTPlot::setAudioRecordingEnabled(const bool enabled)
     return;
 
   if (enabled) {
-    if (!SerialStudio::proWidgetsEnabled())
+    if (!SerialStudio::activated())
       return;
 
     const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);

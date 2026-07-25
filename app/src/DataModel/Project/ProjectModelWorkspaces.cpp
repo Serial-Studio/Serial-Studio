@@ -652,7 +652,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
   QMap<SerialStudio::DashboardWidget, int> groupIdx;
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;
 
-  const bool pro = SerialStudio::proWidgetsEnabled();
+  const bool pro = SerialStudio::activated();
 
   std::vector<DataModel::WidgetRef> allRefs;
   std::vector<DataModel::WidgetRef> overviewRefs;
@@ -680,7 +680,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     DataModel::Workspace ws;
     ws.workspaceId = WorkspaceIds::Overview;
     ws.title       = tr("Overview");
-    ws.icon        = registry.iconById(QStringLiteral("panes/overview"), 16);
+    ws.icon        = registry.iconById(QStringLiteral("panes/overview"), 32);
     ws.widgetRefs  = overviewRefs;
     result.push_back(std::move(ws));
   }
@@ -689,7 +689,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     DataModel::Workspace ws;
     ws.workspaceId = WorkspaceIds::AllData;
     ws.title       = tr("All Data");
-    ws.icon        = registry.iconById(QStringLiteral("panes/dashboard"), 16);
+    ws.icon        = registry.iconById(QStringLiteral("panes/dashboard"), 32);
     ws.widgetRefs  = allRefs;
     result.push_back(std::move(ws));
   }
@@ -982,7 +982,7 @@ QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g)
     return counts;
 
   auto groupKey = SerialStudio::getDashboardWidget(g);
-  if (groupKey == SerialStudio::DashboardPlot3D && !SerialStudio::proWidgetsEnabled())
+  if (groupKey == SerialStudio::DashboardPlot3D && !SerialStudio::activated())
     groupKey = SerialStudio::DashboardMultiPlot;
 
   const bool isEmptyOutputPanel =

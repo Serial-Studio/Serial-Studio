@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Dashboard Widgets")
-  icon: Cpp_Misc_IconRegistry.icon("editor", "dashboard-widgets", 48)
+  icon: Cpp_Misc_IconRegistry.icon("editor", "dashboard-widgets", 16)
 
   actionComponent: EditorNavActions {}
 

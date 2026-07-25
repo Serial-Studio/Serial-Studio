@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Workspaces")
-  icon: Cpp_Misc_IconRegistry.icon("editor", "workspace", 48)
+  icon: Cpp_Misc_IconRegistry.icon("editor", "workspace", 16)
 
   actionComponent: EditorNavActions {}
 

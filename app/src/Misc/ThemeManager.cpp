@@ -457,6 +457,15 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
       case Translator::Swedish:
         localized = translations.value("sv_SE").toString();
         break;
+      case Translator::Arabic:
+        localized = translations.value("ar_SA").toString();
+        break;
+      case Translator::Hebrew:
+        localized = translations.value("he_IL").toString();
+        break;
+      case Translator::Vietnamese:
+        localized = translations.value("vi_VN").toString();
+        break;
       case Translator::English:
       default:
         localized = themeObj.value("title").toString();

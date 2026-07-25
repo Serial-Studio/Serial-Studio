@@ -267,9 +267,8 @@ void MDF4::Player::openFile()
 void MDF4::Player::openFile(const QString& filePath)
 {
 #ifdef BUILD_COMMERCIAL
-  const auto& token = Licensing::CommercialToken::current();
-  const bool licensed =
-    token.isValid() && SS_LICENSE_GUARD() && token.featureTier() >= Licensing::FeatureTier::Trial;
+  const auto& token   = Licensing::CommercialToken::current();
+  const bool licensed = token.isValid() && SS_LICENSE_GUARD();
 #else
   const bool licensed = false;
 #endif

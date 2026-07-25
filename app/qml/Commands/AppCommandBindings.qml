@@ -101,13 +101,15 @@ QtObject {
 
   readonly property QtObject cmdCsvOpen: QtObject {
     readonly property bool visible: !app.runtimeMode
-    readonly property bool enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
+    readonly property bool enabled: !app.runtimeMode && !Cpp_CSV_Player.isOpen
+        && !Cpp_IO_Manager.isConnected
     function run() { Cpp_CSV_Player.openFile() }
   }
 
   readonly property QtObject cmdMdf4Open: QtObject {
     readonly property bool visible: !app.runtimeMode
-    readonly property bool enabled: !Cpp_MDF4_Player.isOpen && !Cpp_IO_Manager.isConnected
+    readonly property bool enabled: !app.runtimeMode && !Cpp_MDF4_Player.isOpen
+        && !Cpp_IO_Manager.isConnected
     function run() { Cpp_MDF4_Player.openFile() }
   }
 

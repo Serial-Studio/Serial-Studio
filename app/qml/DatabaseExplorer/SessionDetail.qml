@@ -18,7 +18,7 @@ Widgets.Pane {
 
   title: qsTr("Session Details")
   headerVisible: !root.operatorMode
-  icon: Cpp_Misc_IconRegistry.icon("panes", "details", 32)
+  icon: Cpp_Misc_IconRegistry.icon("panes", "details", 16)
 
   //
   // Custom properties

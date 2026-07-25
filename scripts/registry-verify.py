@@ -268,7 +268,14 @@ RENDER_RES = (
     re.compile(r"\bsourceSize\.height\s*:\s*(\d+)\b"),
 )
 REQUEST_RE = re.compile(r"IconRegistry\.icon(?:ById)?\([^)]*\b(\d+)\s*\)")
+ELEMENT_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_.]*)\s*\{")
 SORTED_TIERS = (16, 24, 32, 48)
+
+# Components whose icon slot renders at a fixed size declared in the component file, invisible
+# to the same-block scan (e.g. Widgets/Pane.qml draws `icon` at sourceSize 16).
+COMPONENT_SLOT_PX = {
+    "Pane": 16,
+}
 
 
 def served_tier(px: int) -> int:
@@ -324,12 +331,16 @@ def check_icon_render_sizes(errors: list[str]) -> None:
                 for match in REQUEST_RE.finditer(line):
                     stack[-1]["requests"].append((int(match.group(1)), number))
             clean, in_comment = strip_qml_noise(line, in_comment)
+            names = [m.group(1).rsplit(".", 1)[-1] for m in ELEMENT_RE.finditer(clean)]
             for char in clean:
                 if char == "{":
-                    stack.append({"render": None, "requests": []})
+                    name = names.pop(0) if names else None
+                    stack.append({"render": None, "requests": [], "name": name})
                 elif char == "}" and stack:
                     block = stack.pop()
                     render = block["render"]
+                    if render is None:
+                        render = COMPONENT_SLOT_PX.get(block["name"])
                     if render is None:
                         continue
                     for px, where in block["requests"]:
