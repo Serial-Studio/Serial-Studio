@@ -383,6 +383,7 @@ void Misc::ModuleManager::onQuit()
 
   DataModel::ProjectModel::instance().flushAutoSave();
 
+  Console::Export::instance().closeFile();
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
   MDF4::Export::instance().closeFile();
@@ -401,9 +402,31 @@ void Misc::ModuleManager::onQuit()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
+  stopFrameConsumerWorkers();
+
   Misc::CrashTracker::instance().markCleanExit();
 
   qApp->exit(0);
+}
+
+/**
+ * @brief Joins every FrameConsumer worker while qApp is alive: SessionContext::shutdown() frees
+ *        the core modules inside main(), so a worker still ticking at static destruction
+ *        dereferences freed modules (Windows 0xC0000374). stopWorker() stays idempotent for the
+ *        destructor's repeat call.
+ */
+void Misc::ModuleManager::stopFrameConsumerWorkers()
+{
+  Console::Export::instance().stopWorker();
+  CSV::Export::instance().stopWorker();
+  MDF4::Export::instance().stopWorker();
+  API::Server::instance().stopWorker();
+#ifdef BUILD_COMMERCIAL
+  Sessions::Export::instance().stopWorker();
+  MQTT::Publisher::instance().stopWorker();
+  Widgets::AudioExport::instance().stopWorker();
+  Widgets::ImageExport::instance().stopWorker();
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

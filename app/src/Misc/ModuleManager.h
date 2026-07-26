@@ -79,6 +79,7 @@ public slots:
   void setEphemeralSession(const bool ephemeral);
 
 private:
+  static void stopFrameConsumerWorkers();
   void setupCrossModuleConnections();
   void registerCoreContextProperties(QQmlContext* ctx);
   void registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable);
