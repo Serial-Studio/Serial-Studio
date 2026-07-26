@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/FrameBuilder.h"
@@ -59,6 +59,8 @@
 #include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -143,6 +145,9 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_parseBudgetWindowStart(BudgetClock::time_point{})
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
+  , m_transformErrors(0)
+  , m_lastTransformDatasetUniqueId(-1)
+  , m_lastTransformError()
   , m_jsTransformTimedOut(false)
   , m_latestFrameSourceId(-1)
   , m_latestFrameSeq(0)
@@ -173,12 +178,14 @@ DataModel::FrameBuilder::FrameBuilder()
 }
 
 /**
- * @brief Returns the singleton FrameBuilder instance.
+ * @brief Returns this session's frame builder. The object is owned by the SessionContext and built
+ *        by the composition root, so a reach before adoption is a named fatal instead of an
+ *        out-of-order lazy construction. Every hotpath caller binds it once into a static or a
+ *        member reference, so the frame path never re-enters this (spec 0039 M2, wave D1).
  */
 DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 {
-  static FrameBuilder singleton;
-  return singleton;
+  return SessionContext::current().frameBuilder();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -215,7 +222,7 @@ size_t DataModel::FrameBuilder::claimPoolSlot(int sourceId) noexcept
 {
   const size_t n = m_framePool.size();
 
-  Q_ASSERT(sourceId >= 0);
+  SS_ASSERT(sourceId >= 0, return kInvalidSlotIdx);
   SS_ASSUME(n == static_cast<size_t>(kFramePoolSize));
 
   const auto hit = m_poolSlotHintBySource.constFind(sourceId);
@@ -288,8 +295,12 @@ SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
  */
 void DataModel::FrameBuilder::bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src)
 {
-  Q_ASSERT(slot != nullptr);
+  SS_ASSERT(slot != nullptr, return);
+  // code-verify off
+  // Debug-only structural parity check: compare_frames walks every group and dataset, so a
+  // release evaluation would add an O(datasets) pass to every slot rebind.
   Q_ASSERT(compare_frames(slot->frame.data, src));
+  // code-verify on
 
   slot->matchedSrc = &src;
 
@@ -305,10 +316,14 @@ void DataModel::FrameBuilder::bindSlotTemplate(PooledFrameSlot* slot, const Data
  */
 bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src)
 {
-  Q_ASSERT(slot != nullptr);
+  SS_ASSERT(slot != nullptr, return false);
 
   if (slot->generation == m_framePoolGeneration && slot->matchedSrc == &src) [[likely]] {
+    // code-verify off
+    // Debug-only parity check on the steady-state fast path; compare_frames is an O(datasets)
+    // walk that must never run per frame in release.
     Q_ASSERT(compare_frames(slot->frame.data, src));
+    // code-verify on
     return true;
   }
 
@@ -347,7 +362,7 @@ SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
 
   slotRaw->frame.timestamp           = ts;
   slotRaw->frame.structureGeneration = m_framePoolGeneration;
-  Q_ASSERT(slotRaw->frame.data.groups.size() == src.groups.size());
+  SS_ASSERT_LOG(slotRaw->frame.data.groups.size() == src.groups.size());
 
   return TimestampedFramePtr(slotOwner, &slotRaw->frame);
 }
@@ -387,6 +402,30 @@ quint64 DataModel::FrameBuilder::parsedFrameCount() const noexcept
 quint64 DataModel::FrameBuilder::skippedFrameCount() const noexcept
 {
   return m_skippedFrameCount;
+}
+
+/**
+ * @brief Returns how many per-dataset transform calls have failed since the last engine rebuild.
+ */
+quint64 DataModel::FrameBuilder::transformErrorCount() const noexcept
+{
+  return m_transformErrors;
+}
+
+/**
+ * @brief Returns the uniqueId of the dataset whose transform error message is retained, or -1.
+ */
+int DataModel::FrameBuilder::lastTransformDataset() const noexcept
+{
+  return m_lastTransformDatasetUniqueId;
+}
+
+/**
+ * @brief Returns the retained message of the first failure of the current failing dataset.
+ */
+const QString& DataModel::FrameBuilder::lastTransformError() const noexcept
+{
+  return m_lastTransformError;
 }
 
 /**
@@ -599,7 +638,7 @@ void DataModel::FrameBuilder::refreshLatestFrameCapture()
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
   static auto& pm = DataModel::ProjectModel::instance();
-  Q_ASSERT(!pm.title().isEmpty());
+  SS_ASSERT_LOG(!pm.title().isEmpty());
 
   clear_frame(m_frame);
   m_sourceFrames.clear();
@@ -620,7 +659,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   compileTransforms();
   parseBudgetReset();
 
-  Q_ASSERT(!m_frame.title.isEmpty());
+  SS_ASSERT_LOG(!m_frame.title.isEmpty());
 
   Q_EMIT jsonFileMapChanged();
 }
@@ -653,8 +692,8 @@ void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& header
  */
 void DataModel::FrameBuilder::captureLatestChunk(int sourceId, const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(data);
-  Q_ASSERT(m_captureLatestFrame);
+  SS_ASSERT(data, return);
+  SS_ASSERT(m_captureLatestFrame, return);
 
   auto& entry    = m_latestFrames[sourceId];
   entry.chunk    = data;
@@ -672,8 +711,8 @@ void DataModel::FrameBuilder::captureLatestChunk(int sourceId, const IO::Capture
  */
 void DataModel::FrameBuilder::captureLatestChannels(int sourceId, const QStringList& channels)
 {
-  Q_ASSERT(m_captureLatestFrame);
-  Q_ASSERT(!channels.isEmpty());
+  SS_ASSERT(m_captureLatestFrame, return);
+  SS_ASSERT(!channels.isEmpty(), return);
 
   const auto it = m_latestFrames.find(sourceId);
   if (it == m_latestFrames.end()) [[unlikely]]
@@ -691,9 +730,10 @@ void DataModel::FrameBuilder::captureLatestChannelSpans(int sourceId,
                                                         const QByteArrayView* spans,
                                                         qsizetype count)
 {
-  Q_ASSERT(spans != nullptr);
-  Q_ASSERT(m_captureLatestFrame);
-  Q_ASSERT(count > 0 && count <= kMaxSpanFields);
+  SS_ASSERT(spans != nullptr, return);
+  SS_ASSERT(m_captureLatestFrame, return);
+  SS_ASSERT(count > 0 && count <= kMaxSpanFields,
+            count = std::clamp<qsizetype>(count, 0, kMaxSpanFields));
 
   const auto it = m_latestFrames.find(sourceId);
   if (it == m_latestFrames.end()) [[unlikely]]
@@ -711,9 +751,13 @@ void DataModel::FrameBuilder::captureLatestChannelSpans(int sourceId,
  */
 void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
+  SS_ASSERT(data, return);
+  SS_ASSERT(!data->data.isEmpty(), return);
+  // code-verify off
+  // Debug-only cache-coherence probe: polling AppState::instance() per frame in release is exactly
+  // the singleton read the cached m_operationMode exists to avoid (spec 0001).
   Q_ASSERT(m_operationMode == AppState::instance().operationMode());
+  // code-verify on
 
   if (m_captureLatestFrame) [[unlikely]]
     captureLatestChunk(0, data);
@@ -737,9 +781,9 @@ void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
  */
 void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT(data, return);
+  SS_ASSERT(!data->data.isEmpty(), return);
 
   if (m_operationMode != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
@@ -772,8 +816,9 @@ void DataModel::FrameBuilder::onSourceRemoved()
 void DataModel::FrameBuilder::onOperationModeChanged()
 {
   static auto& appState = AppState::instance();
-  Q_ASSERT(appState.operationMode() >= SerialStudio::ProjectFile
-           && appState.operationMode() <= SerialStudio::QuickPlot);
+  SS_ASSERT(appState.operationMode() >= SerialStudio::ProjectFile
+              && appState.operationMode() <= SerialStudio::QuickPlot,
+            return);
 
   m_operationMode     = appState.operationMode();
   m_quickPlotChannels = -1;
@@ -902,8 +947,9 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
   static auto& appState  = AppState::instance();
   static auto& ioManager = IO::ConnectionManager::instance();
-  Q_ASSERT(appState.operationMode() >= SerialStudio::ProjectFile
-           && appState.operationMode() <= SerialStudio::QuickPlot);
+  SS_ASSERT(appState.operationMode() >= SerialStudio::ProjectFile
+              && appState.operationMode() <= SerialStudio::QuickPlot,
+            return);
 
   const bool nowConnected = ioManager.isConnected();
   if (nowConnected == m_lastConnectedState)
@@ -933,7 +979,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  Q_ASSERT(!m_frame.title.isEmpty());
+  SS_ASSERT_LOG(!m_frame.title.isEmpty());
   initializeTableStore();
   static auto& parser = DataModel::FrameParser::instance();
   parser.readCode();
@@ -975,8 +1021,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
  */
 void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
+  SS_ASSERT(data, return);
+  SS_ASSERT(!data->data.isEmpty(), return);
 
   if (m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1028,9 +1074,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
  */
 void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT(data, return);
+  SS_ASSERT(!data->data.isEmpty(), return);
 
   if (m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1089,9 +1135,9 @@ void DataModel::FrameBuilder::replayChannels(
   const QStringList& channels,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(m_playerOpen);
-  Q_ASSERT(m_operationMode == SerialStudio::ProjectFile);
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT(m_playerOpen, return);
+  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
 
   if (channels.isEmpty() || m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1119,14 +1165,18 @@ static void assignFormattedDouble(QString& dst, double value)
   char buf[32];
 #ifdef SS_APPLE_NO_FLOAT_TO_CHARS
   const int len = snprintf_l(buf, sizeof(buf), nullptr, "%.10g", value);
-  Q_ASSERT(len > 0 && static_cast<size_t>(len) < sizeof(buf));
+  SS_ASSERT(len > 0 && static_cast<size_t>(len) < sizeof(buf), return);
   DataModel::assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(len)));
 #else
   const auto res = std::to_chars(buf, buf + sizeof(buf), value, std::chars_format::general, 10);
-  Q_ASSERT(res.ec == std::errc());
+  SS_ASSERT(res.ec == std::errc(), return);
   DataModel::assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(res.ptr - buf)));
 #endif
+  // code-verify off
+  // Debug-only parity scaffolding (spec 0022): QString::number allocates, so this can never
+  // become a per-cell runtime check.
   Q_ASSERT(dst == QString::number(value, 'g', 10));
+  // code-verify on
 }
 
 /**
@@ -1135,8 +1185,8 @@ static void assignFormattedDouble(QString& dst, double value)
  */
 const std::unordered_map<int, int>* DataModel::FrameBuilder::replayColumnsFor(int sourceId) const
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(SerialStudio::isFinalValuePlayerOpen());
+  SS_ASSERT(sourceId >= 0, return nullptr);
+  SS_ASSERT(SerialStudio::isFinalValuePlayerOpen(), return nullptr);
 
   const auto it = m_replayColumnMap.find(sourceId);
   return (it != m_replayColumnMap.end()) ? &it->second : nullptr;
@@ -1152,8 +1202,8 @@ void DataModel::FrameBuilder::applyReplaySpanValue(Dataset& dataset,
                                                    qsizetype count,
                                                    const std::unordered_map<int, int>* columns)
 {
-  Q_ASSERT(cells != nullptr);
-  Q_ASSERT(count > 0);
+  SS_ASSERT(cells != nullptr, return);
+  SS_ASSERT(count > 0, return);
 
   if (columns) [[likely]] {
     const auto it       = columns->find(dataset.uniqueId);
@@ -1204,8 +1254,8 @@ void DataModel::FrameBuilder::applyReplayTypedValue(Dataset& dataset,
                                                     qsizetype count,
                                                     const std::unordered_map<int, int>* columns)
 {
-  Q_ASSERT(cells != nullptr);
-  Q_ASSERT(count > 0);
+  SS_ASSERT(cells != nullptr, return);
+  SS_ASSERT(count > 0, return);
 
   const auto applyCell = [&](const ReplayCell& cell) {
     if (cell.text) {
@@ -1266,10 +1316,10 @@ void DataModel::FrameBuilder::replayChannelSpans(
   qsizetype count,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(cells != nullptr || count == 0);
-  Q_ASSERT(m_playerOpen);
-  Q_ASSERT(m_operationMode == SerialStudio::ProjectFile);
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT(cells != nullptr || count == 0, return);
+  SS_ASSERT(m_playerOpen, return);
+  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
 
   if (count <= 0 || m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1307,10 +1357,10 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   qsizetype count,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(cells != nullptr || count == 0);
-  Q_ASSERT(m_playerOpen);
-  Q_ASSERT(m_operationMode == SerialStudio::ProjectFile);
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT(cells != nullptr || count == 0, return);
+  SS_ASSERT(m_playerOpen, return);
+  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
 
   if (count <= 0 || m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1346,8 +1396,8 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
                                          DataModel::Frame& frame,
                                          const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(data);
+  SS_ASSERT(sourceId >= 0, return -1);
+  SS_ASSERT(data, return -1);
 
   if (m_playerOpen) [[unlikely]]
     return -1;
@@ -1644,7 +1694,7 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
                                                            qsizetype count,
                                                            const TransformFrameInfo& info)
 {
-  Q_ASSERT(spans != nullptr);
+  SS_ASSERT(spans != nullptr, return);
   SS_ASSUME(count > 0);
 
   DatasetDeps* dep = nullptr;
@@ -1731,9 +1781,11 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
     m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
   }
 
-  const bool armJsWatchdog = (m_jsEngineForSource != nullptr);
+  const bool armJsWatchdog =
+    (m_jsEngineForSource != nullptr) && (m_jsEngineForSource->jsWatchdog != nullptr);
+  SS_ASSERT_LOG(m_jsEngineForSource == nullptr || m_jsEngineForSource->jsWatchdog);
+
   if (armJsWatchdog) [[unlikely]] {
-    Q_ASSERT(m_jsEngineForSource->jsWatchdog);
     m_jsTransformTimedOut = false;
     m_jsEngineForSource->jsWatchdog->arm();
   }
@@ -1748,7 +1800,7 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
  */
 void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
 {
-  Q_ASSERT(m_compileGuard > 0);
+  SS_ASSERT(m_compileGuard > 0, m_compileGuard = 1);
 
   --m_compileGuard;
 
@@ -1796,8 +1848,8 @@ void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
  */
 bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
 {
-  Q_ASSERT(m_operationMode == SerialStudio::ProjectFile);
-  Q_ASSERT(!frame.groups.empty());
+  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return false);
+  SS_ASSERT(!frame.groups.empty(), return false);
 
   TransformFrameInfo info;
   info.sourceId    = frame.sourceId;
@@ -1889,8 +1941,8 @@ void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Frame& frame,
                                                       qsizetype count,
                                                       const TransformFrameInfo& info)
 {
-  Q_ASSERT(spans != nullptr);
-  Q_ASSERT(count > 0);
+  SS_ASSERT(spans != nullptr, return);
+  SS_ASSERT(count > 0, return);
 
   const bool armedWatchdog = beginDatasetPass(info);
 
@@ -1914,8 +1966,8 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValuesSpans(
   qsizetype count,
   const TransformFrameInfo& info)
 {
-  Q_ASSERT(datasets != nullptr);
-  Q_ASSERT(spans != nullptr);
+  SS_ASSERT(datasets != nullptr, return);
+  SS_ASSERT(spans != nullptr, return);
 
   const bool armedWatchdog = beginDatasetPass(info);
 
@@ -1931,9 +1983,9 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValuesSpans(
  */
 void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
-  Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+  SS_ASSERT(data, return);
+  SS_ASSERT(!data->data.isEmpty(), return);
+  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
 
   QList<QStringList> splitRows;
   if (m_playerOpen) [[unlikely]]
@@ -2021,8 +2073,8 @@ DataModel::Source DataModel::FrameBuilder::makeQuickPlotSource() const
  */
 void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 {
-  Q_ASSERT(!channels.isEmpty());
-  Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+  SS_ASSERT(!channels.isEmpty(), return);
+  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
 
   invalidateFramePool();
 
@@ -2097,8 +2149,8 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
  */
 void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channels)
 {
-  Q_ASSERT(!channels.isEmpty());
-  Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+  SS_ASSERT(!channels.isEmpty(), return);
+  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
 
 #ifdef BUILD_COMMERCIAL
   static auto& ioManager = IO::ConnectionManager::instance();
@@ -2205,9 +2257,9 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
  */
 void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  Q_ASSERT(frame);
-  Q_ASSERT(!frame->data.groups.empty());
-  Q_ASSERT(!frame->data.title.isEmpty());
+  SS_ASSERT(frame, return);
+  SS_ASSERT(!frame->data.groups.empty(), return);
+  SS_ASSERT(!frame->data.title.isEmpty(), return);
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.hotpathRxFrame(frame);
@@ -2248,9 +2300,9 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
  */
 void DataModel::FrameBuilder::publishReplayFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  Q_ASSERT(frame);
-  Q_ASSERT(m_playerOpen);
-  Q_ASSERT(!frame->data.groups.empty());
+  SS_ASSERT(frame, return);
+  SS_ASSERT(m_playerOpen, return);
+  SS_ASSERT(!frame->data.groups.empty(), return);
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.hotpathRxFrame(frame);
@@ -2378,7 +2430,7 @@ void DataModel::FrameBuilder::compileTransforms()
   }
 
   destroyTransformEngines();
-  Q_ASSERT(m_transformEngines.empty());
+  SS_ASSERT_LOG(m_transformEngines.empty());
 
   if (m_playerOpen)
     return;
@@ -2398,7 +2450,10 @@ void DataModel::FrameBuilder::compileTransforms()
 
   for (auto& [key, entries] : byKey) {
     auto [it, inserted] = m_transformEngines.emplace(key, TransformEngine{});
-    Q_ASSERT(inserted);
+    SS_ASSERT_LOG(inserted);
+    if (!inserted) [[unlikely]]
+      continue;
+
     TransformEngine& engine = it->second;
 
     if (key.language == SerialStudio::Lua)
@@ -2420,7 +2475,6 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
                                                    const std::vector<TransformEntry>& entries)
 {
   lua_State* L = luaL_newstate();
-  Q_ASSERT(L != nullptr);
   if (!L) [[unlikely]]
     return;
 
@@ -2519,7 +2573,7 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
     engine.luaRefs[entry.uniqueId] = LuaTransformRef{luaL_ref(L, LUA_REGISTRYINDEX), acceptsInfo};
 
     lua_pop(L, 1);
-    Q_ASSERT(lua_gettop(L) == baseTop);
+    SS_ASSERT(lua_gettop(L) == baseTop, lua_settop(L, baseTop));
   } catch (const std::exception& e) {
     qWarning() << "[FrameBuilder] Transform compile uncaught exception for dataset"
                << entry.uniqueId << ":" << e.what();
@@ -2592,7 +2646,9 @@ void DataModel::FrameBuilder::collectTransformEngineGarbage()
 }
 
 /**
- * @brief Destroys all per-source transform engines and releases resources.
+ * @brief Destroys all per-source transform engines and releases resources. The transform-error
+ *        statistics reset with them, so a repaired transform stops being reported once the
+ *        engines recompile.
  */
 void DataModel::FrameBuilder::destroyTransformEngines()
 {
@@ -2600,6 +2656,10 @@ void DataModel::FrameBuilder::destroyTransformEngines()
   m_luaEngineForSource  = nullptr;
   m_jsEngineForSource   = nullptr;
   m_captureFlagsDirty   = true;
+
+  m_transformErrors              = 0;
+  m_lastTransformDatasetUniqueId = -1;
+  m_lastTransformError.clear();
 
   m_tableStore.clearLookupCache();
 
@@ -2624,7 +2684,35 @@ void DataModel::FrameBuilder::destroyTransformEngines()
   }
 
   m_transformEngines.clear();
-  Q_ASSERT(m_transformEngines.empty());
+  SS_ASSERT_LOG(m_transformEngines.empty());
+}
+
+/**
+ * @brief Counts a transform failure and retains its message only when the failing dataset differs
+ *        from the one already recorded, so a dataset that throws on every frame stores the string
+ *        once instead of allocating per frame.
+ */
+SS_COLD void DataModel::FrameBuilder::noteTransformError(int uniqueId, const char* message)
+{
+  ++m_transformErrors;
+  if (m_lastTransformDatasetUniqueId == uniqueId)
+    return;
+
+  m_lastTransformDatasetUniqueId = uniqueId;
+  m_lastTransformError           = QString::fromUtf8(message ? message : "");
+}
+
+/**
+ * @brief Overload for the JavaScript branch, whose message string is already materialized.
+ */
+SS_COLD void DataModel::FrameBuilder::noteTransformError(int uniqueId, const QString& message)
+{
+  ++m_transformErrors;
+  if (m_lastTransformDatasetUniqueId == uniqueId)
+    return;
+
+  m_lastTransformDatasetUniqueId = uniqueId;
+  m_lastTransformError           = message;
 }
 
 /**
@@ -2636,9 +2724,9 @@ QVariant DataModel::FrameBuilder::applyTransform(int language,
                                                  const QVariant& rawValue,
                                                  const TransformFrameInfo& info)
 {
-  Q_ASSERT(info.sourceId >= 0);
-  Q_ASSERT(uniqueId >= 0);
-  Q_ASSERT(info.sourceId == m_engineCacheSourceId);
+  SS_ASSERT(info.sourceId >= 0, return rawValue);
+  SS_ASSERT(uniqueId >= 0, return rawValue);
+  SS_ASSERT(info.sourceId == m_engineCacheSourceId, return rawValue);
 
   TransformEngine* engine =
     (language == SerialStudio::Lua) ? m_luaEngineForSource : m_jsEngineForSource;
@@ -2710,6 +2798,7 @@ QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
     if (pcallStatus != LUA_OK) [[unlikely]] {
       qWarning() << "[FrameBuilder] Lua transform call failed for dataset" << uniqueId << ":"
                  << lua_tostring(L, -1);
+      noteTransformError(uniqueId, lua_tostring(L, -1));
       lua_pop(L, 1);
       return rawValue;
     }
@@ -2779,6 +2868,7 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
     m_jsTransformTimedOut = true;
     qWarning() << "[FrameBuilder] JS transform for dataset" << uniqueId << "timed out after"
                << kTransformWatchdogMs << "ms";
+    noteTransformError(uniqueId, "transform timed out");
     return rawValue;
   }
 
@@ -2793,9 +2883,12 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
   if (result.isString())
     return QVariant(result.toString());
 
-  if (result.isError()) [[unlikely]]
+  if (result.isError()) [[unlikely]] {
+    const auto message = result.toString();
     qWarning() << "[FrameBuilder] JS transform call failed for dataset" << uniqueId << ":"
-               << result.toString();
+               << message;
+    noteTransformError(uniqueId, message);
+  }
 
   return rawValue;
 }
@@ -2844,7 +2937,10 @@ void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
 static int luaTableGet(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   const char* table = luaL_checkstring(L, 1);
   const char* reg   = luaL_checkstring(L, 2);
@@ -2872,7 +2968,7 @@ static int luaTableGet(lua_State* L)
 static int luaTableSet(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, return 0);
 
   const char* table = luaL_checkstring(L, 1);
   const char* reg   = luaL_checkstring(L, 2);
@@ -2899,7 +2995,10 @@ static int luaTableSet(lua_State* L)
 static int luaTableHandle(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   const char* table   = luaL_checkstring(L, 1);
   const char* reg     = luaL_checkstring(L, 2);
@@ -2916,7 +3015,10 @@ static int luaTableHandle(lua_State* L)
 static int luaTableHandleMany(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   const QString table = QString::fromUtf8(luaL_checkstring(L, 1));
   luaL_checktype(L, 2, LUA_TTABLE);
@@ -2940,7 +3042,10 @@ static int luaTableHandleMany(lua_State* L)
 static int luaTableGetH(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   const qint64 handle = static_cast<qint64>(luaL_checknumber(L, 1));
   const auto* val     = store->getByHandle(handle);
@@ -2967,7 +3072,7 @@ static int luaTableGetH(lua_State* L)
 static int luaTableSetH(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, return 0);
 
   const qint64 handle = static_cast<qint64>(luaL_checknumber(L, 1));
 
@@ -2994,7 +3099,10 @@ static int luaTableSetH(lua_State* L)
 static int luaDatasetGetRaw(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   const auto* val = (lua_type(L, 1) == LUA_TSTRING)
                     ? store->getDatasetRawByAliasInterned(lua_tostring(L, 1))
@@ -3022,7 +3130,10 @@ static int luaDatasetGetRaw(lua_State* L)
 static int luaDatasetGetFinal(lua_State* L)
 {
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  Q_ASSERT(store);
+  SS_ASSERT(store, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   const auto* val = (lua_type(L, 1) == LUA_TSTRING)
                     ? store->getDatasetFinalByAliasInterned(lua_tostring(L, 1))
@@ -3078,7 +3189,7 @@ static int luaMqttPublish(lua_State* L)
  */
 void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L, return);
 
   m_externalTableApiUsers = true;
   m_captureFlagsDirty     = true;
@@ -3126,7 +3237,7 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
  */
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js, return);
 
   m_externalTableApiUsers = true;
   m_captureFlagsDirty     = true;

@@ -6,7 +6,7 @@
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */

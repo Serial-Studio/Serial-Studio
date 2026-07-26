@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Console/Handler.h"
@@ -38,6 +38,8 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -137,12 +139,13 @@ Console::Handler::Handler()
 }
 
 /**
- * @brief Returns the singleton instance.
+ * @brief Returns this session's console handler. The object is owned by the SessionContext and
+ *        built by the composition root, so a reach before adoption is a named fatal instead of
+ *        an out-of-order lazy construction (spec 0039 M2, wave B1).
  */
 Console::Handler& Console::Handler::instance()
 {
-  static Handler singleton;
-  return singleton;
+  return SessionContext::current().console();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -397,7 +400,7 @@ QStringList Console::Handler::availableFonts() const
  */
 int Console::Handler::defaultCharWidth() const
 {
-  Q_ASSERT(m_commonFonts);
+  SS_ASSERT(m_commonFonts != nullptr, return 8);
   const auto defaultFont = m_commonFonts->monoFont();
   const QFontMetrics metrics(defaultFont);
   return metrics.horizontalAdvance("M");
@@ -408,7 +411,7 @@ int Console::Handler::defaultCharWidth() const
  */
 int Console::Handler::defaultCharHeight() const
 {
-  Q_ASSERT(m_commonFonts);
+  SS_ASSERT(m_commonFonts != nullptr, return 16);
   const auto defaultFont = m_commonFonts->monoFont();
   const QFontMetrics metrics(defaultFont);
   return metrics.height();
@@ -562,7 +565,7 @@ void Console::Handler::setupExternalConnections()
  */
 void Console::Handler::send(const QString& data)
 {
-  Q_ASSERT(m_connectionManager);
+  SS_ASSERT(m_connectionManager != nullptr, return);
   if (!m_connectionManager->isConnected())
     return;
 
@@ -1005,9 +1008,9 @@ void Console::Handler::setCurrentDeviceIndex(int index)
  */
 void Console::Handler::onDevicesChanged()
 {
-  Q_ASSERT(m_connectionManager);
-  Q_ASSERT(m_appState);
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_connectionManager != nullptr, return);
+  SS_ASSERT(m_appState != nullptr, return);
+  SS_ASSERT(m_projectModel != nullptr, return);
 
   const auto opMode   = m_appState->operationMode();
   const auto& sources = m_projectModel->sources();
@@ -1136,9 +1139,9 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
  */
 bool Console::Handler::hasImageWidget() const
 {
-  Q_ASSERT(m_connectionManager);
-  Q_ASSERT(m_appState);
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_connectionManager != nullptr, return false);
+  SS_ASSERT(m_appState != nullptr, return false);
+  SS_ASSERT(m_projectModel != nullptr, return false);
 
   if (!m_connectionManager->isConnected())
     return false;
@@ -1266,8 +1269,8 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
  */
 static void hexDumpAsciiColumn(QByteArrayView data, int i, char16_t* out)
 {
-  Q_ASSERT(out != nullptr);
-  Q_ASSERT(i >= 0 && i < data.length());
+  SS_ASSERT(out != nullptr, return);
+  SS_ASSERT(i >= 0 && i < data.length(), return);
 
   if (i + 16 <= data.length()) {
     DSP::simdAsciiDots16(reinterpret_cast<const quint8*>(data.data() + i), out);
@@ -1345,7 +1348,10 @@ QString Console::Handler::hexadecimalStr(QByteArrayView data)
     scratch[rowLen++] = u'|';
     scratch[rowLen++] = u'\n';
 
-    Q_ASSERT(rowLen == fullRowLen);
+    SS_ASSERT_LOG(rowLen == fullRowLen);
+    if (rowLen != fullRowLen)
+      break;
+
     out.append(reinterpret_cast<const QChar*>(scratch.data()), rowLen);
   }
 

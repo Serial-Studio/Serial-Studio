@@ -234,7 +234,7 @@ private:
   };
 
   void loadMarkers();
-  void computeSmoothedRow(const int spectrumSize);
+  void computeSmoothedRow(int spectrumSize);
   void updateMarkerStates(const int spectrumSize);
   void rebuildLogColumnTable();
   [[nodiscard]] const float* imageRow(const float* dbValues, int bins);

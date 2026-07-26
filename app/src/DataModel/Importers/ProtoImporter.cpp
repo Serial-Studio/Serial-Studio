@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Importers/ProtoImporter.h"
@@ -35,6 +35,7 @@
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
 
 //--------------------------------------------------------------------------------------------------
 // Internal: proto3 lexer + parser implementation
@@ -814,16 +815,16 @@ using namespace detail;
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the ProtoImporter singleton.
+ * @brief Constructs a proto importer bound to one session.
  */
-DataModel::ProtoImporter::ProtoImporter() {}
+DataModel::ProtoImporter::ProtoImporter(SessionContext& ctx) : m_ctx(ctx) {}
 
 /**
  * @brief Returns the singleton ProtoImporter instance.
  */
 DataModel::ProtoImporter& DataModel::ProtoImporter::instance()
 {
-  static ProtoImporter instance;
+  static ProtoImporter instance(SessionContext::current());
   return instance;
 }
 
@@ -993,7 +994,7 @@ void DataModel::ProtoImporter::confirmImport()
   if (m_messages.isEmpty())
     return;
 
-  const auto project       = generateProject();
+  const auto project       = projectFromMessages();
   const QString suggestion = QFileInfo(m_protoFilePath).baseName();
 
   const int messageCount = m_messages.size();
@@ -1001,7 +1002,7 @@ void DataModel::ProtoImporter::confirmImport()
   for (const auto& m : m_messages)
     totalFields += countFieldsRecursive(m);
 
-  static auto& pm = ProjectModel::instance();
+  auto& pm = m_ctx.projectModel();
   QObject::connect(
     &pm,
     &ProjectModel::importCompleted,
@@ -1028,9 +1029,38 @@ void DataModel::ProtoImporter::confirmImport()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Parses a .proto file and returns the generated project. Reaches no session state, so
+ *        the unit tier can run the whole generation path without a composition root; failures
+ *        return an empty object instead of raising a dialog.
+ */
+QJsonObject DataModel::ProtoImporter::projectFromProtoFile(const QString& path)
+{
+  static constexpr qsizetype kMaxProtoBytes = 10 * 1024 * 1024;
+
+  QFile file(path);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text) || file.size() > kMaxProtoBytes)
+    return QJsonObject();
+
+  QTextStream stream(&file);
+  const QString src = stream.readAll();
+  file.close();
+
+  QString package;
+  QVector<ProtoMessage> messages;
+  ParseError err{0, QString()};
+  Parser parser(src, package, messages);
+  if (!parser.parseFile(err) || messages.isEmpty())
+    return QJsonObject();
+
+  m_messages      = messages;
+  m_protoFilePath = path;
+  return projectFromMessages();
+}
+
+/**
  * @brief Builds a complete .ssproj QJsonObject with one group per top-level message.
  */
-QJsonObject DataModel::ProtoImporter::generateProject() const
+QJsonObject DataModel::ProtoImporter::projectFromMessages() const
 {
   QJsonObject project;
   const auto info         = QFileInfo(m_protoFilePath);

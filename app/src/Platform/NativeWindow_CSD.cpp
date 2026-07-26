@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <QColor>
@@ -34,6 +34,7 @@
 #include "CSD.h"
 #include "Misc/ThemeManager.h"
 #include "NativeWindow.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Static storage for window decorators
@@ -82,8 +83,8 @@ public:
    */
   bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override
   {
-    Q_ASSERT(message != nullptr);
-    Q_ASSERT(result != nullptr);
+    SS_ASSERT(message != nullptr, return false);
+    SS_ASSERT(result != nullptr, return false);
 
     if (eventType != "windows_generic_MSG")
       return false;
@@ -124,7 +125,6 @@ public:
  */
 static void enableNativeShadow(QWindow* window)
 {
-  Q_ASSERT(window != nullptr);
   if (!window)
     return;
 
@@ -136,7 +136,6 @@ static void enableNativeShadow(QWindow* window)
   }
 
   auto* hwnd = reinterpret_cast<HWND>(window->winId());
-  Q_ASSERT(hwnd != nullptr);
   if (!hwnd)
     return;
 

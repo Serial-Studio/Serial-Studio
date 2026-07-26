@@ -1,0 +1,652 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "serial-studio/property-manifest",
+  "title": "Serial Studio entity property manifest (spec 0036)",
+  "description": "Single declaration of an entity's persisted/editable properties. scripts/generate-property-registry.py derives the descriptor table, the project-JSON serializer/reader, the editor form rows and commit dispatcher, and the API field appliers plus typed schema from this file. Keys:: stays the only place a JSON key string is spelled; jsonKey names the C++ constant, never the literal.",
+  "type": "object",
+  "required": [
+    "entity",
+    "struct",
+    "optionSources",
+    "hooks",
+    "sections",
+    "form",
+    "properties",
+    "runtimeFields",
+    "subEntities"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "spec": {
+      "type": "string"
+    },
+    "entity": {
+      "type": "string"
+    },
+    "formIdEnum": {
+      "type": "string"
+    },
+    "formIdOrder": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Property ids in form-id enumerator order. Frozen to the pre-registry numbering so the generated enum is a drop-in replacement."
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "struct": {
+      "type": "object",
+      "required": [
+        "type",
+        "header"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "variable": {
+          "type": "string"
+        }
+      }
+    },
+    "optionSources": {
+      "type": "object",
+      "description": "Combo-box domains. Exactly five kinds; every choice property names one. extensibleMap is a staticMap whose declared rows a named optionProvider hook extends at runtime, so the fixed indices never move.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "kind",
+          "valueType"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "staticMap",
+              "extensibleMap",
+              "parallelValues",
+              "liveProvider",
+              "tuple"
+            ]
+          },
+          "valueType": {
+            "enum": [
+              "string",
+              "int",
+              "double",
+              "bool",
+              "boolPair"
+            ]
+          },
+          "translate": {
+            "type": "string"
+          },
+          "notFoundIndex": {
+            "type": "integer"
+          },
+          "notFoundValue": {},
+          "hook": {
+            "type": "string"
+          },
+          "labelProvider": {
+            "type": "string"
+          },
+          "valueProvider": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "label"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "value": {},
+                "values": {
+                  "type": "array"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "translated": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "hooks": {
+      "type": "object",
+      "description": "Named escape hatches implemented once in PropertyHooks.h/.cpp; registry-verify checks each name exists.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "kind",
+          "signature"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "validator",
+              "predicate",
+              "placeholder",
+              "commit",
+              "subEntity",
+              "optionProvider"
+            ]
+          },
+          "signature": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "iconCategory": {
+            "type": "string"
+          },
+          "iconName": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "form": {
+      "type": "object",
+      "required": [
+        "builders"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "builders": {
+          "type": "array",
+          "description": "Transcribed one-for-one from the existing ProjectEditor row builders; the generator never reshapes them.",
+          "items": {
+            "type": "object",
+            "required": [
+              "function",
+              "signature",
+              "rows"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "function": {
+                "type": "string"
+              },
+              "signature": {
+                "enum": [
+                  "model+dataset",
+                  "model+dataset+flag"
+                ]
+              },
+              "flagName": {
+                "type": "string"
+              },
+              "flagHook": {
+                "type": "string"
+              },
+              "section": {
+                "type": "string"
+              },
+              "rows": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "calls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/property"
+      }
+    },
+    "runtimeFields": {
+      "type": "array",
+      "description": "Struct fields that carry live frame values, never document state. Declared so registry-verify can prove every struct field is accounted for.",
+      "items": {
+        "type": "object",
+        "required": [
+          "field",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "jsonKey": {
+            "type": "string"
+          },
+          "persist": {
+            "enum": [
+              "always",
+              "never"
+            ]
+          },
+          "writeTransform": {
+            "type": "string"
+          },
+          "readTransform": {
+            "type": "string"
+          },
+          "default": {},
+          "reason": {
+            "type": "string"
+          },
+          "readBack": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "subEntities": {
+      "type": "array",
+      "description": "Nested collections handled by hand-written readers/writers (out of v1 scope).",
+      "items": {
+        "type": "object",
+        "required": [
+          "field",
+          "readHook",
+          "writeHook"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "jsonKey": {
+            "type": "string"
+          },
+          "readHook": {
+            "type": "string"
+          },
+          "writeHook": {
+            "type": "string"
+          },
+          "apiName": {
+            "type": "string"
+          },
+          "apiAliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "legacy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "hook": {
+                "type": "string"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "bool",
+                        "double",
+                        "int"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Legacy API field triple routed through a hand-written hook when the canonical field is absent."
+          }
+        }
+      }
+    },
+    "postRead": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "validateColor",
+          "deriveNumericValue",
+          "clampFftWindow",
+          "legacyRangePairs",
+          "readAlarmBands",
+          "readFrequencyMarkers",
+          "normalizeRanges"
+        ]
+      },
+      "description": "Ordered post-read steps the generated reader runs after every declared field is read."
+    }
+  },
+  "definitions": {
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "property": {
+      "type": "object",
+      "required": [
+        "id",
+        "field",
+        "type",
+        "default",
+        "scope",
+        "persist"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable registry id (PascalCase)."
+        },
+        "field": {
+          "type": "string",
+          "description": "C++ struct member name."
+        },
+        "jsonKey": {
+          "type": "string",
+          "description": "Keys:: constant identifier, not the literal."
+        },
+        "formId": {
+          "type": "string",
+          "description": "Form-id enumerator; omit for properties with no form row."
+        },
+        "deadFormId": {
+          "type": "boolean",
+          "description": "Enumerator kept for numbering compatibility; builds no row today."
+        },
+        "type": {
+          "enum": [
+            "int",
+            "double",
+            "bool",
+            "string"
+          ]
+        },
+        "default": {},
+        "scope": {
+          "enum": [
+            "document",
+            "runtime"
+          ]
+        },
+        "persist": {
+          "enum": [
+            "always",
+            "never",
+            "whenTrue",
+            "whenFalse",
+            "whenNonEmpty",
+            "whenNonZero",
+            "whenPositive",
+            "whenNonNegative",
+            "whenNonDefault",
+            "withProperty"
+          ]
+        },
+        "persistWith": {
+          "type": "string",
+          "description": "Property id whose truth gates this write (persist = withProperty)."
+        },
+        "invert": {
+          "type": "boolean",
+          "description": "Field is stored inverted relative to its key (enabled <-> disabled)."
+        },
+        "writeTransform": {
+          "enum": [
+            "simplified",
+            "pairMin",
+            "pairMax"
+          ]
+        },
+        "readTransform": {
+          "enum": [
+            "simplified",
+            "toDouble",
+            "toInt",
+            "toBool",
+            "toString",
+            "invertBool"
+          ]
+        },
+        "pairWith": {
+          "type": "string",
+          "description": "Partner property id for a min/max pair."
+        },
+        "legacyKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Read-side fallback Keys:: constants."
+        },
+        "legacyPair": {
+          "type": "boolean",
+          "description": "Pair falls back to the legacy Min/Max keys when either canonical key is absent."
+        },
+        "clamp": {
+          "type": "object",
+          "description": "Per-surface bounds; the surfaces differ today and the manifest records that rather than unifying it.",
+          "additionalProperties": false,
+          "properties": {
+            "editor": {
+              "$ref": "#/definitions/bounds"
+            },
+            "api": {
+              "$ref": "#/definitions/bounds"
+            },
+            "read": {
+              "$ref": "#/definitions/bounds"
+            }
+          }
+        },
+        "commitTransform": {
+          "enum": [
+            "simplified"
+          ],
+          "description": "Applied to the edited value on the editor commit path only."
+        },
+        "section": {
+          "type": "string"
+        },
+        "widget": {
+          "enum": [
+            "TextField",
+            "IntField",
+            "FloatField",
+            "AutoIntField",
+            "CheckBox",
+            "ComboBox",
+            "ColorPicker"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "placeholder": {},
+        "placeholderHook": {
+          "type": "string"
+        },
+        "minValue": {
+          "type": "number"
+        },
+        "maxValue": {
+          "type": "number"
+        },
+        "options": {
+          "type": "string",
+          "description": "optionSources key."
+        },
+        "tupleFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Property ids this single row drives (tuple option source)."
+        },
+        "visibleWhen": {
+          "type": "string",
+          "description": "Predicate hook; false omits the row entirely."
+        },
+        "enabledWhen": {
+          "type": "string",
+          "description": "Predicate hook; false keeps the row but clears editable/Active."
+        },
+        "validate": {
+          "type": "string",
+          "description": "Validator hook name."
+        },
+        "apiError": {
+          "type": "string",
+          "description": "Error string returned by the API when validate fails (%1 = offending value)."
+        },
+        "api": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "expose": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "aliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rebuildTree": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        },
+        "undo": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "coalesce": {
+              "type": "boolean"
+            },
+            "coalesceKey": {
+              "type": "string"
+            }
+          }
+        },
+        "rebuildTree": {
+          "type": "boolean",
+          "description": "Editor commit rebuilds the project tree."
+        },
+        "onCommit": {
+          "type": "string",
+          "description": "Commit-side-effect hook name."
+        },
+        "pro": {
+          "type": "boolean"
+        },
+        "defect": {
+          "type": "string",
+          "description": "Declared spec-0036 defect this entry fixes."
+        },
+        "notes": {
+          "type": "string"
+        },
+        "readBack": {
+          "type": "boolean",
+          "description": "False when the reader deliberately does not restore the field (positional identity assigned by the parent)."
+        },
+        "apiDescription": {
+          "type": "string",
+          "description": "Description published in the API schema when the property has no editor description."
+        }
+      }
+    }
+  }
+}

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -27,10 +27,12 @@
 #include <QHostAddress>
 #include <QJsonObject>
 #include <QObject>
+#include <QSet>
 #include <QSettings>
 #include <QTcpServer>
 #include <QTcpSocket>
 
+#include "API/CommandProtocol.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 #include "IO/HAL_Driver.h"
@@ -39,6 +41,7 @@
 
 namespace API {
 class Server;
+class MirrorPublisher;
 
 /**
  * @brief Worker that handles JSON serialization and socket I/O on a background thread.
@@ -67,6 +70,7 @@ public slots:
   void addSocket(QTcpSocket* socket, const QString& sessionId);
   void disconnectSocket(QTcpSocket* socket, const QString& sessionId);
   void writeToSocket(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
+  void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
 
 protected:
   void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
@@ -77,6 +81,9 @@ private slots:
 
 private:
   QHash<QTcpSocket*, QString> m_sockets;
+
+  // Sockets whose client opted out of the per-frame broadcast; empty for every ordinary client
+  QSet<QTcpSocket*> m_mutedSockets;
 };
 
 /**
@@ -118,17 +125,20 @@ private:
 
 public:
   [[nodiscard]] static Server& instance();
+  [[nodiscard]] static int maxClients() noexcept;
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
   [[nodiscard]] QString authToken() const;
   [[nodiscard]] bool authorizeDeviceWrite();
   [[nodiscard]] bool externalConnections() const noexcept;
+  [[nodiscard]] bool setAuthToken(const QString& token);
   [[nodiscard]] bool verifyToken(const QByteArray& provided) const;
   [[nodiscard]] bool authorizeRemoteCommand(const QString& command);
 
 public slots:
   void removeConnection();
   void regenerateAuthToken();
+  void allowExternalConnections();
   void setEnabled(const bool enabled);
   void setExternalConnections(const bool enabled);
   void hotpathTxData(const QByteArray& data);
@@ -141,6 +151,7 @@ protected:
 private slots:
   void acceptConnection();
   void onClientCountChanged(int count);
+  void sendMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& payload);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
   void onSocketDisconnected(QTcpSocket* socket, const QString& sessionId);
   void onDataReceived(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
@@ -156,6 +167,12 @@ private:
     int byteCount      = 0;
     bool authenticated = false;
     int authAttempts   = 0;
+
+    // Mirror state; streamFrames defaults true so an unmodified client sees no change at all
+    bool streamFrames     = true;
+    bool mirrorSubscribed = false;
+    int mirrorHz          = 20;
+    int mirrorPrecision   = 0;
   };
 
   /**
@@ -168,8 +185,21 @@ private:
   };
 
   void ensureAuthToken();
+  void applyExternalConnections(const bool enabled);
   void handleAuthHandshake(QTcpSocket* socket, ConnectionState& state, const QByteArray& data);
   [[nodiscard]] static bool constantTimeEquals(const QByteArray& a, const QByteArray& b);
+
+  [[nodiscard]] MirrorPublisher& mirrorPublisher();
+  [[nodiscard]] static bool isMirrorCommand(const QString& command);
+  void setStreamFrames(QTcpSocket* socket, ConnectionState& state, const bool enabled);
+  void handleMirrorCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
+  [[nodiscard]] CommandResponse mirrorSubscribe(QTcpSocket* socket,
+                                                ConnectionState& state,
+                                                const CommandRequest& request);
+  [[nodiscard]] CommandResponse mirrorSetRate(ConnectionState& state,
+                                              const CommandRequest& request);
+  [[nodiscard]] CommandResponse mirrorUnsubscribe(ConnectionState& state,
+                                                  const CommandRequest& request);
 
   void sendResponseToSocket(QTcpSocket* socket, const QByteArray& response);
   void disconnectClient(QTcpSocket* socket,
@@ -193,6 +223,7 @@ private:
   QSettings m_settings;
   int m_clientCount;
   bool m_enabled;
+  bool m_mirrorLinked;
   bool m_externalConnections;
   QString m_authToken;
   DeviceWriteConsent m_deviceWriteConsent;

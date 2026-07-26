@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "FrameReader.h"
@@ -27,6 +27,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "IO/Checksum.h"
 #include "Platform/AppPlatform.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -46,9 +47,14 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_queue(65536)
   , m_capturedPoolHint(0)
   , m_bufferPinned(false)
+  , m_bytesIn(0)
   , m_droppedFrames(0)
+  , m_checksumErrors(0)
+  , m_framesExtracted(0)
+  , m_totalOverflowBytes(0)
   , m_lastDropNotify()
   , m_lastOverflowLog()
+  , m_lastChecksumLog()
 {
   m_capturedPool.reserve(kCapturedPoolSize);
   for (int i = 0; i < kCapturedPoolSize; ++i)
@@ -69,23 +75,46 @@ IO::FrameReader::~FrameReader()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Diagnostic counters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Zeroes the link-diagnostic counters. The reader is recreated on every connect and config
+ *        change, so consumers must treat a decrease as a reset rather than a negative rate.
+ */
+void IO::FrameReader::resetDiagnosticCounters() noexcept
+{
+  m_bytesIn            = 0;
+  m_droppedFrames      = 0;
+  m_checksumErrors     = 0;
+  m_framesExtracted    = 0;
+  m_totalOverflowBytes = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Data entry point
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Processes a chunk of received bytes and extracts complete frames.
+ * @brief Processes a chunk of received bytes and extracts complete frames. An out-of-range mode
+ *        drops the chunk rather than muting the reader: the mode is owned by AppState and is
+ *        re-applied on every reconfigure, so a reader that rewrote it would stay dead after the
+ *        state it observed was already corrected.
  */
 void IO::FrameReader::processData(const CapturedDataPtr& data)
 {
-  Q_ASSERT(m_operationMode >= SerialStudio::ProjectFile
-           && m_operationMode <= SerialStudio::QuickPlot);
-  Q_ASSERT(m_checksumLength >= 0);
+  SS_ASSERT(m_operationMode >= SerialStudio::ProjectFile
+              && m_operationMode <= SerialStudio::QuickPlot,
+            return);
+  SS_ASSERT(m_checksumLength >= 0, m_checksumLength = 0);
 
   if (!data || data->data.isEmpty())
     return;
 
   if (m_operationMode == SerialStudio::ConsoleOnly)
     return;
+
+  m_bytesIn += static_cast<quint64>(data->data.size());
 
   bool framesEnqueued = false;
 
@@ -94,6 +123,8 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
     framesEnqueued = m_queue.try_enqueue(data);
     if (!framesEnqueued) [[unlikely]]
       noteDroppedFrame();
+    else
+      ++m_framesExtracted;
   }
 
   else {
@@ -106,6 +137,7 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
         qWarning() << "[FrameReader] Buffer overflow:" << overflow
                    << "bytes lost -- data rate exceeds processing capacity";
       }
+      m_totalOverflowBytes += static_cast<quint64>(overflow);
       discardPendingBytes(overflow);
       m_circularBuffer.resetOverflowCount();
     }
@@ -146,8 +178,8 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
  */
 void IO::FrameReader::appendChunk(const CapturedDataPtr& data)
 {
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
+  SS_ASSERT(data, return);
+  SS_ASSERT(!data->data.isEmpty(), return);
 
   // code-verify off
   // CircularBuffer is pre-sized SPSC; append is memcpy
@@ -234,7 +266,10 @@ void IO::FrameReader::setStartSequences(const QList<QByteArray>& starts)
     m_startSequenceLps.append(m_circularBuffer.buildKMPTable(s));
   }
 
-  Q_ASSERT(m_startSequences.size() == m_startSequenceLps.size());
+  SS_ASSERT(m_startSequences.size() == m_startSequenceLps.size(), {
+    m_startSequences.clear();
+    m_startSequenceLps.clear();
+  });
 }
 
 /**
@@ -253,7 +288,10 @@ void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
     m_finishSequenceLps.append(m_circularBuffer.buildKMPTable(f));
   }
 
-  Q_ASSERT(m_finishSequences.size() == m_finishSequenceLps.size());
+  SS_ASSERT(m_finishSequences.size() == m_finishSequenceLps.size(), {
+    m_finishSequences.clear();
+    m_finishSequenceLps.clear();
+  });
 }
 
 /**
@@ -288,7 +326,7 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 IO::CapturedData* IO::FrameReader::claimCapturedSlot(IO::CapturedDataPtr& ptr)
 {
   const size_t n = m_capturedPool.size();
-  Q_ASSERT(n == static_cast<size_t>(kCapturedPoolSize));
+  SS_ASSERT_LOG(n == static_cast<size_t>(kCapturedPoolSize));
 
   const size_t probes = std::min<size_t>(n, kMaxClaimProbes);
   for (size_t k = 0; k < probes; ++k) {
@@ -315,8 +353,11 @@ void IO::FrameReader::enqueueCaptured(IO::CapturedDataPtr&& ptr,
                                       IO::CapturedData* cd,
                                       qsizetype frameEndPos)
 {
-  Q_ASSERT(cd != nullptr);
-  Q_ASSERT(frameEndPos >= 0);
+  SS_ASSERT(cd != nullptr, {
+    noteDroppedFrame();
+    return;
+  });
+  SS_ASSERT(frameEndPos >= 0, frameEndPos = 0);
 
   cd->timestamp         = frameTimestamp(frameEndPos);
   cd->frameStep         = std::chrono::nanoseconds(1);
@@ -324,6 +365,8 @@ void IO::FrameReader::enqueueCaptured(IO::CapturedDataPtr&& ptr,
 
   if (!m_queue.try_enqueue(std::move(ptr))) [[unlikely]]
     noteDroppedFrame();
+  else
+    ++m_framesExtracted;
 
   consumeBytes(frameEndPos);
 }
@@ -360,10 +403,11 @@ void IO::FrameReader::noteDroppedFrame()
  */
 void IO::FrameReader::readEndDelimitedFrames()
 {
-  Q_ASSERT(m_circularBuffer.capacity() > 0);
-  Q_ASSERT(!m_finishSequences.isEmpty());
-  Q_ASSERT(m_operationMode == SerialStudio::QuickPlot
-           || m_frameDetectionMode == SerialStudio::EndDelimiterOnly);
+  SS_ASSERT(m_circularBuffer.capacity() > 0, return);
+  SS_ASSERT(!m_finishSequences.isEmpty(), return);
+  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot
+              || m_frameDetectionMode == SerialStudio::EndDelimiterOnly,
+            return);
 
   constexpr int kMaxFramesPerCall = 32768;
   int iterations                  = 0;
@@ -417,9 +461,9 @@ void IO::FrameReader::readEndDelimitedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
-  Q_ASSERT(!m_startSequences.isEmpty());
-  Q_ASSERT(!m_startSequenceLps.isEmpty());
-  Q_ASSERT(m_circularBuffer.capacity() > 0);
+  SS_ASSERT(!m_startSequences.isEmpty(), return);
+  SS_ASSERT(!m_startSequenceLps.isEmpty(), return);
+  SS_ASSERT(m_circularBuffer.capacity() > 0, return);
 
   const auto& startSeq = m_startSequences[0];
   const auto& startLps = m_startSequenceLps[0];
@@ -482,10 +526,10 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
-  Q_ASSERT(!m_startSequences.isEmpty());
-  Q_ASSERT(!m_startSequenceLps.isEmpty());
-  Q_ASSERT(!m_finishSequences.isEmpty());
-  Q_ASSERT(!m_finishSequenceLps.isEmpty());
+  SS_ASSERT(!m_startSequences.isEmpty(), return);
+  SS_ASSERT(!m_startSequenceLps.isEmpty(), return);
+  SS_ASSERT(!m_finishSequences.isEmpty(), return);
+  SS_ASSERT(!m_finishSequenceLps.isEmpty(), return);
 
   const auto& startSeq  = m_startSequences[0];
   const auto& startLps  = m_startSequenceLps[0];
@@ -544,18 +588,20 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Validates the checksum trailing the frame against the cached algorithm function,
- *        reading the received bytes into a reused member buffer to stay allocation-free.
+ * @brief Validates the checksum trailing the frame against the cached algorithm function, reading
+ *        the received bytes into a reused member buffer to stay allocation-free. The mismatch dump
+ *        is throttled to one every 5 s (a corrupt link would otherwise flood the console and the
+ *        notification center); the failure counter carries the rate the log used to imply.
  */
 IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetype crcPosition)
 {
-  Q_ASSERT(!frame.isEmpty());
-  Q_ASSERT(crcPosition >= 0);
+  SS_ASSERT(!frame.isEmpty(), return ValidationStatus::ChecksumError);
+  SS_ASSERT(crcPosition >= 0, return ValidationStatus::ChecksumError);
 
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;
 
-  Q_ASSERT(m_checksumFunc);
+  SS_ASSERT(m_checksumFunc, return ValidationStatus::ChecksumError);
   const auto bufferSize = m_circularBuffer.size();
   if (bufferSize < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
@@ -565,13 +611,19 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
   if (calculated == m_receivedChecksum)
     return ValidationStatus::FrameOk;
 
-  static constexpr qsizetype kMaxLogBytes = 128;
-  qWarning() << "\n"
-             << m_checksum << "failed:\n"
-             << "\t- Received:" << m_receivedChecksum.toHex(' ') << "\n"
-             << "\t- Calculated:" << calculated.toHex(' ') << "\n"
-             << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
-             << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");
+  ++m_checksumErrors;
+
+  const auto now = CapturedData::SteadyClock::now();
+  if (now - m_lastChecksumLog >= std::chrono::seconds(5)) {
+    m_lastChecksumLog                       = now;
+    static constexpr qsizetype kMaxLogBytes = 128;
+    qWarning() << "\n"
+               << m_checksum << "failed:\n"
+               << "\t- Received:" << m_receivedChecksum.toHex(' ') << "\n"
+               << "\t- Calculated:" << calculated.toHex(' ') << "\n"
+               << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
+               << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");
+  }
 
   return ValidationStatus::ChecksumError;
 }

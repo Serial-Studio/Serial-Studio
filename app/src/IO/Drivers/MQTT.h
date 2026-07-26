@@ -29,6 +29,7 @@
 #include <QSslConfiguration>
 // clang-format on
 
+#include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 #include "MQTT/CredentialVault.h"
 
@@ -130,8 +131,10 @@ public:
   MQTT& operator=(const MQTT&) = delete;
 
   void close() override;
+  void beginOpen(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -185,6 +188,7 @@ private slots:
   void onStateChanged(QMqttClient::ClientState state);
   void onErrorChanged(QMqttClient::ClientError error);
   void onMessageReceived(const QByteArray& message, const QMqttTopicName& topic);
+  void onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error);
 
 private:
   void loadPersistedSettings();
@@ -193,12 +197,22 @@ private:
   void scheduleReconnectIfActive();
   void applyPendingToClient();
 
+  [[nodiscard]] Async::Task* makeConnectStep();
+  [[nodiscard]] Async::Task* buildOpenFlow();
+  [[nodiscard]] Async::Task* buildReconnectFlow();
+  [[nodiscard]] bool dialBroker(QString& reason);
+  [[nodiscard]] bool subscribeToTopic(QString& reason);
+  [[nodiscard]] bool claimFailureReport();
+  [[nodiscard]] bool openRequestAccepted(QString& reason);
+
 private:
   bool m_sslEnabled;
   bool m_cleanSession;
   bool m_autoKeepAlive;
   bool m_userWantsOpen;
-  bool m_reconnectPending;
+  bool m_connecting;
+  bool m_failureNotified;
+  bool m_sessionEstablished;
   quint16 m_port;
   quint16 m_keepAlive;
   QMqttClient::ProtocolVersion m_protocolVersion;
@@ -210,6 +224,7 @@ private:
   QSettings m_settings;
   ::MQTT::CredentialVault m_vault;
   QMqttClient m_client;
+  Async::TaskRunner m_runner;
   QSslConfiguration m_sslConfiguration;
   QMap<QString, QSsl::SslProtocol> m_sslProtocols;
   QMap<QString, QMqttClient::ProtocolVersion> m_mqttVersions;

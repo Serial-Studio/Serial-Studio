@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/FileTransmission/ZMODEM.h"
@@ -25,6 +25,7 @@
 
 #include "DSPSimd.h"
 #include "IO/FileTransmission/CRC.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -76,8 +77,7 @@ bool IO::Protocols::ZMODEM::isActive() const
  */
 void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
 {
-  Q_ASSERT(!filePath.isEmpty());
-  Q_ASSERT(m_maxRetries > 0);
+  SS_ASSERT_LOG(!filePath.isEmpty());
 
   if (isActive())
     cancelTransfer();
@@ -135,8 +135,8 @@ void IO::Protocols::ZMODEM::cancelTransfer()
  */
 void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(isActive());
+  SS_ASSERT(!data.isEmpty(), return);
+  SS_ASSERT(isActive(), return);
 
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
@@ -451,8 +451,8 @@ void IO::Protocols::ZMODEM::sendZFILE()
  */
 void IO::Protocols::ZMODEM::sendDataSubpackets()
 {
-  Q_ASSERT(m_file.isOpen());
-  Q_ASSERT(m_fileSize > 0);
+  SS_ASSERT_LOG(m_file.isOpen());
+  SS_ASSERT_LOG(m_fileSize > 0);
 
   m_state = State::SendingData;
 
@@ -472,8 +472,7 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
  */
 void IO::Protocols::ZMODEM::sendNextDataChunk()
 {
-  Q_ASSERT(m_blockSize >= 64 && m_blockSize <= 8192);
-  Q_ASSERT(m_file.isOpen());
+  SS_ASSERT_LOG(m_file.isOpen());
 
   if (m_state != State::SendingData)
     return;
@@ -550,17 +549,21 @@ void IO::Protocols::ZMODEM::sendCancel()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles a fully parsed receiver header.
+ * @brief Handles a fully parsed receiver header. A positive acknowledgment clears the retry
+ *        budget, so the cap counts the errors of one stalled step instead of accumulating every
+ *        error of the session; ZRPOS is deliberately not such an acknowledgment, since the
+ *        receiver also sends it to ask for a retransmission.
  */
 void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 {
-  Q_ASSERT(type <= kZCAN);
-  Q_ASSERT(isActive());
+  SS_ASSERT_LOG(type <= kZCAN);
+  SS_ASSERT(isActive(), return);
 
   m_timeoutTimer.stop();
 
   switch (type) {
     case kZRINIT:
+      m_retryCount = 0;
       if (m_state == State::SentZRQINIT) {
         Q_EMIT statusMessage(tr("Receiver ready, sending file info…"));
         sendZFILE();
@@ -577,6 +580,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       break;
 
     case kZACK:
+      m_retryCount = 0;
       break;
 
     case kZSKIP:
@@ -655,8 +659,8 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
 {
-  Q_ASSERT(type <= kZCAN);
-  Q_ASSERT(isActive());
+  SS_ASSERT(type <= kZCAN, return {});
+  SS_ASSERT_LOG(isActive());
 
   QByteArray header;
   header.reserve(32);
@@ -693,8 +697,8 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
 {
-  Q_ASSERT(type <= kZCAN);
-  Q_ASSERT(m_file.isOpen());
+  SS_ASSERT(type <= kZCAN, return {});
+  SS_ASSERT_LOG(m_file.isOpen());
 
   QByteArray header;
   header.reserve(32);
@@ -727,8 +731,8 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 frameEnd)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(frameEnd >= kZCRCE && frameEnd <= kZCRCW);
+  SS_ASSERT(!data.isEmpty(), return {});
+  SS_ASSERT(frameEnd >= kZCRCE && frameEnd <= kZCRCW, return {});
 
   QByteArray packet;
   packet.reserve(data.size() * 2 + 16);
@@ -759,8 +763,8 @@ QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 
  */
 QByteArray IO::Protocols::ZMODEM::zdleEncode(const QByteArray& data)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(data.size() <= 16384);
+  SS_ASSERT(!data.isEmpty(), return {});
+  SS_ASSERT_LOG(data.size() <= 16384);
 
   QByteArray encoded;
   encoded.reserve(data.size() + data.size() / 4);
@@ -808,9 +812,6 @@ QByteArray IO::Protocols::ZMODEM::toHex(quint8 byte)
  */
 void IO::Protocols::ZMODEM::handleTimeout()
 {
-  Q_ASSERT(m_maxRetries > 0);
-  Q_ASSERT(m_timeoutMs >= 1000);
-
   if (!isActive())
     return;
 

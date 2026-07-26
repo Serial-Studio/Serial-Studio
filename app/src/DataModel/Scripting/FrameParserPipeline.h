@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -118,8 +118,8 @@ using ReplayCellViews = QVarLengthArray<QByteArrayView, 64>;
  *        into @p scratch for cells that need RFC-4180 unescaping). A trailing CR is chopped
  *        (QTextStream did that upstream); trimming covers ASCII whitespace, the one
  *        documented divergence from QString::trimmed for exotic Unicode spaces. Views stay
- *        valid while @p row's bytes and @p scratch are alive and untouched -- scratch is
- *        pre-reserved so appends never reallocate.
+ *        valid while @p row's bytes and @p scratch are alive and untouched; scratch-backed
+ *        cells are resolved after the final append, so they survive a scratch reallocation.
  */
 void splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QByteArray& scratch);
 

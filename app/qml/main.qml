@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtCore
@@ -115,6 +115,7 @@ Item {
       projectEditorLoader.item.visible = false
 
     helpCenter.close()
+    problemCenter.close()
     dbExplorerLoader.close()
     aiAssistantLoader.close()
     aiProUpgradeLoader.close()
@@ -234,6 +235,7 @@ Item {
       shortcutGeneratorDialog.close()
       runtimeReconfigureDialog.close()
       fileTransmissionDialog.close()
+      remoteAttachDialog.close()
 
       if (csvPlayerLoader.item)
         csvPlayerLoader.item.close()
@@ -344,6 +346,15 @@ Item {
     }
 
     //
+    // Remote dashboard attach: host, port, token and the live link status
+    //
+    DialogLoader {
+      id: remoteAttachDialog
+
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/RemoteAttach.qml"
+    }
+
+    //
     // CSV file playback dialog: auto-shown by Cpp_CSV_Player.isOpen
     //
     Loader {
@@ -414,6 +425,58 @@ Item {
   }
 
   //
+  // Problem center: top-level window, reachable from the main window and the
+  // project editor
+  //
+  DialogLoader {
+    id: problemCenter
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/ProblemCenter.qml"
+  }
+
+  //
+  // Project-entity navigation for a problem finding. The collector only emits
+  // the request; the editor lookup lives here so no C++ module depends on it.
+  //
+  Connections {
+    target: Cpp_Misc_ProblemCenter
+    function onJumpRequested(kind, uniqueId) {
+      app.jumpToProblemTarget(kind, uniqueId)
+    }
+  }
+
+  //
+  // Widget-extension consent: asked once per package version, before the package runs
+  //
+  DialogLoader {
+    id: extensionConsentDialog
+
+    property var pendingIds: []
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExtensionConsent.qml"
+
+    Connections {
+      target: extensionConsentDialog
+      function onLoaded() {
+        if (!extensionConsentDialog.item)
+          return
+
+        extensionConsentDialog.item.enqueue(extensionConsentDialog.pendingIds)
+        extensionConsentDialog.pendingIds = []
+      }
+    }
+  }
+
+  //
+  // A package asks for a decision the first time a project places one of its widgets
+  //
+  Connections {
+    target: Cpp_UI_WidgetExtensions
+    function onConsentRequested(id) {
+      app.showExtensionConsent(id)
+    }
+  }
+
+  //
   // License activation dialog
   //
   DialogLoader {
@@ -465,6 +528,98 @@ Item {
       Cpp_HelpCenter.showPage(pageId)
 
     helpCenter.activate()
+  }
+
+  //
+  // Problem center: standing project, link and script diagnostics
+  //
+  function showProblemCenter() {
+    problemCenter.activate()
+  }
+
+  //
+  // Remote dashboard attach: watch another instance's dashboard, read-only
+  //
+  function showRemoteAttach() {
+    remoteAttachDialog.activate()
+  }
+
+  //
+  // Connection diagnostics: instant checks land before the panel opens, probes follow
+  //
+  function runConnectionDiagnostics() {
+    Cpp_Misc_ConnectionDiagnostics.runAll()
+    problemCenter.activate()
+  }
+
+  //
+  // Opens the surface owning a finding: sourceId, actionId, groupId, dataset uniqueId or settings
+  //
+  function jumpToProblemTarget(kind, uniqueId) {
+    if (kind.indexOf("settings/") === 0) {
+      app.showSettingsDialog()
+      return
+    }
+
+    app.showProjectEditor()
+
+    if (kind === "source")
+      Cpp_JSON_ProjectEditor.selectSource(uniqueId)
+    else if (kind === "action")
+      Cpp_JSON_ProjectEditor.selectAction(uniqueId)
+    else if (kind === "group")
+      Cpp_JSON_ProjectEditor.selectGroup(uniqueId)
+    else if (kind === "dataset")
+      app.selectDatasetByUniqueId(uniqueId)
+  }
+
+  //
+  // Maps a dataset uniqueId to (groupId, datasetId): both summaries walk the same vectors in order
+  //
+  function selectDatasetByUniqueId(uniqueId) {
+    var summary = Cpp_JSON_ProjectEditor.systemDatasetsSummary()
+    var position = -1
+    for (var i = 0; i < summary.length; ++i) {
+      if (summary[i]["uniqueId"] === uniqueId) {
+        position = i
+        break
+      }
+    }
+
+    if (position < 0)
+      return
+
+    var groups = Cpp_JSON_ProjectModel.groupsForDiagram()
+    var flat = 0
+    for (var g = 0; g < groups.length; ++g) {
+      var rows = groups[g]["datasets"]
+      if (position < flat + rows.length) {
+        Cpp_JSON_ProjectEditor.selectDataset(groups[g]["groupId"],
+                                             rows[position - flat]["datasetId"])
+        return
+      }
+
+      flat += rows.length
+    }
+  }
+
+  //
+  // Widget-extension consent: reachable to operators too, since a placeholder is the
+  // alternative; the dialog itself queues packages and drops decided ones
+  //
+  function showExtensionConsent(id) {
+    if (!id || id.length <= 0)
+      return
+
+    if (extensionConsentDialog.item) {
+      extensionConsentDialog.item.enqueue([id])
+      return
+    }
+
+    if (extensionConsentDialog.pendingIds.indexOf(id) < 0)
+      extensionConsentDialog.pendingIds.push(id)
+
+    extensionConsentDialog.activate()
   }
 
   //

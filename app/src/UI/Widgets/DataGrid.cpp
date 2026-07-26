@@ -14,13 +14,14 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Widgets/DataGrid.h"
 
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -259,7 +260,7 @@ void Widgets::DataGrid::rebuildRows()
  */
 QVariantList Widgets::DataGrid::datasetWidgets(const DataModel::Dataset& dataset) const
 {
-  Q_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index));
+  SS_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index), return {});
 
   QVariantList widgets;
   QVariantList plots;

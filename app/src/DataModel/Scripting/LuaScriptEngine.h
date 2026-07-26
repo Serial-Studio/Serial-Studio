@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -48,8 +48,14 @@ public:
   [[nodiscard]] bool isLoaded() const noexcept override;
   [[nodiscard]] int language() const noexcept override;
 
-  void collectGarbage() override;
+  [[nodiscard]] bool disabled() const noexcept override;
+  [[nodiscard]] QString lastError() const override;
+  [[nodiscard]] quint64 errorCount() const noexcept override;
+  [[nodiscard]] int consecutiveTimeouts() const noexcept override;
+
   void reset() override;
+  void collectGarbage() override;
+  void resetErrorStats() override;
 
 private:
   void createState();
@@ -80,6 +86,7 @@ private:
   static constexpr int kMaxConsecutiveTimeouts = 3;
 
   [[nodiscard]] bool noteTimeoutAndCheckDisabled(int sourceId);
+  void noteError(const QString& message);
   void resetTimeoutCounter() noexcept;
 
   lua_State* m_state;
@@ -88,6 +95,8 @@ private:
   int m_sourceId;
   int m_parseRef;
   int m_consecutiveTimeouts;
+  quint64 m_errorCount;
+  QString m_lastError;
   QDeadlineTimer m_deadline;
 };
 

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cmath>
@@ -37,6 +37,7 @@
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
@@ -426,11 +427,8 @@ bool DataModel::ProjectEditor::canGoForward() const noexcept
  */
 auto DataModel::ProjectEditor::captureNavEntry(QStandardItem* item) const -> NavEntry
 {
-  Q_ASSERT(item != nullptr);
-
   NavEntry entry;
-  if (!item)
-    return entry;
+  SS_ASSERT(item != nullptr, return entry);
 
   const int kindRole = item->data(TreeItemKind).toInt();
   if (kindRole != KindNone) {
@@ -575,8 +573,8 @@ void DataModel::ProjectEditor::pushNavEntry(const NavEntry& entry)
     m_navCursor -= drop;
   }
 
-  Q_ASSERT(static_cast<int>(m_navHistory.size()) <= kMaxNavHistory);
-  Q_ASSERT(m_navCursor >= 0 && m_navCursor < static_cast<int>(m_navHistory.size()));
+  SS_ASSERT_LOG(static_cast<int>(m_navHistory.size()) <= kMaxNavHistory);
+  SS_ASSERT_LOG(m_navCursor >= 0 && m_navCursor < static_cast<int>(m_navHistory.size()));
   Q_EMIT navHistoryChanged();
 }
 
@@ -602,7 +600,7 @@ void DataModel::ProjectEditor::navigateBack()
   if (!canGoBack() || !m_selectionModel)
     return;
 
-  Q_ASSERT(m_navCursor > 0);
+  SS_ASSERT(m_navCursor > 0, return);
 
   int idx               = m_navCursor - 1;
   QStandardItem* target = nullptr;
@@ -642,8 +640,8 @@ void DataModel::ProjectEditor::navigateForward()
   if (!canGoForward() || !m_selectionModel)
     return;
 
-  Q_ASSERT(m_navCursor >= 0);
-  Q_ASSERT(m_navCursor + 1 < static_cast<int>(m_navHistory.size()));
+  SS_ASSERT(m_navCursor >= 0, return);
+  SS_ASSERT(m_navCursor + 1 < static_cast<int>(m_navHistory.size()), return);
 
   const int n           = static_cast<int>(m_navHistory.size());
   int idx               = m_navCursor + 1;

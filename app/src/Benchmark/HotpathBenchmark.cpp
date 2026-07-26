@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Benchmark/HotpathBenchmark.h"
@@ -52,6 +52,8 @@
 #include "IO/HAL_Driver.h"
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"
@@ -190,9 +192,10 @@ void HotpathBenchmark::setActive(bool active) noexcept
  */
 QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool withStrings)
 {
-  Q_ASSERT(channels > 0);
-  Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua
-           || language == SerialStudio::Native);
+  SS_ASSERT(channels > 0, return {});
+  SS_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua
+              || language == SerialStudio::Native,
+            return {});
 
   QJsonArray datasets;
   for (int i = 0; i < channels; ++i) {
@@ -256,8 +259,9 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool 
  */
 QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language, bool withStrings)
 {
-  Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua
-           || language == SerialStudio::Native);
+  SS_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua
+              || language == SerialStudio::Native,
+            return {});
 
   const auto makeDataset = [](int index, const QString& title) {
     QJsonObject ds;
@@ -359,9 +363,9 @@ QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language, bool withS
  */
 QByteArray HotpathBenchmark::buildChunk(int frames, int channels, int stringColumns)
 {
-  Q_ASSERT(frames > 0);
-  Q_ASSERT(channels > 0);
-  Q_ASSERT(stringColumns >= 0);
+  SS_ASSERT(frames > 0, return {});
+  SS_ASSERT(channels > 0, return {});
+  SS_ASSERT(stringColumns >= 0, return {});
 
   static constexpr const char* kStatusWords[] = {"OK", "WARN", "FAIL", "IDLE"};
   constexpr int kStatusWordCount              = 4;
@@ -389,7 +393,7 @@ QByteArray HotpathBenchmark::buildChunk(int frames, int channels, int stringColu
     chunk.append('\n');
   }
 
-  Q_ASSERT(!chunk.isEmpty());
+  SS_ASSERT_LOG(!chunk.isEmpty());
   return chunk;
 }
 
@@ -402,7 +406,7 @@ QByteArray HotpathBenchmark::buildChunk(int frames, int channels, int stringColu
  */
 void HotpathBenchmark::setupProject(int language, int channels, bool withStrings, bool dashboard)
 {
-  Q_ASSERT(channels > 0);
+  SS_ASSERT_LOG(channels > 0);
 
   static auto& project = DataModel::ProjectModel::instance();
   project.setSuppressMessageBoxes(true);
@@ -413,8 +417,7 @@ void HotpathBenchmark::setupProject(int language, int channels, bool withStrings
   const QJsonObject root = dashboard ? buildDashboardProjectJson(language, withStrings)
                                      : buildProjectJson(language, channels, withStrings);
   const bool loaded      = project.loadFromJsonDocument(QJsonDocument(root));
-  Q_ASSERT(loaded);
-  Q_UNUSED(loaded);
+  SS_ASSERT_LOG(loaded);
 
   static auto& parser = DataModel::FrameParser::instance();
   parser.setSuppressMessageBoxes(true);
@@ -515,9 +518,9 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
                                                            double minFps,
                                                            double minSeconds)
 {
-  Q_ASSERT(targetFrames > 0);
-  Q_ASSERT(minFps > 0.0);
-  Q_ASSERT(minSeconds >= 0.0);
+  SS_ASSERT(targetFrames > 0, return {});
+  SS_ASSERT(minFps > 0.0, return {});
+  SS_ASSERT(minSeconds >= 0.0, return {});
 
   constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
@@ -583,9 +586,9 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
                                                bool withDashboard,
                                                bool dashboardIngest)
 {
-  Q_ASSERT(targetFrames > 0);
-  Q_ASSERT(minFps > 0.0);
-  Q_ASSERT(minSeconds >= 0.0);
+  SS_ASSERT(targetFrames > 0, return {});
+  SS_ASSERT(minFps > 0.0, return {});
+  SS_ASSERT(minSeconds >= 0.0, return {});
 
   constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
@@ -681,7 +684,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
 HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Result& data,
                                                                        const Result& native)
 {
-  Q_ASSERT(data.framesParsed > 0);
+  SS_ASSERT(data.framesParsed > 0, return {});
 
   StageBreakdown stages = {};
   if (data.framesPerSecond <= 0.0 || native.framesPerSecond <= 0.0) [[unlikely]]
@@ -802,8 +805,8 @@ QString HotpathBenchmark::buildProvenance()
  */
 static void fillReportRow(const HotpathBenchmark::Result& r, const char* tag, QString* cells)
 {
-  Q_ASSERT(tag != nullptr);
-  Q_ASSERT(cells != nullptr);
+  SS_ASSERT(tag != nullptr, return);
+  SS_ASSERT(cells != nullptr, return);
 
   const bool gated = r.minFps > 1.0;
   cells[0]         = QString::fromLatin1(tag);
@@ -827,8 +830,8 @@ static void printRunTable(const HotpathBenchmark::Result* results,
                           const HotpathBenchmark::Result* coverage,
                           const PrintFn& printData)
 {
-  Q_ASSERT(results != nullptr);
-  Q_ASSERT(coverage != nullptr);
+  SS_ASSERT(results != nullptr, return);
+  SS_ASSERT(coverage != nullptr, return);
 
   static const QString s_headers[kReportColumns] = {QStringLiteral("Benchmark"),
                                                     QStringLiteral("Parsed"),
@@ -886,8 +889,8 @@ bool HotpathBenchmark::printReport(const Result* results,
                                    const StageBreakdown& stages,
                                    const QString& outputFile)
 {
-  Q_ASSERT(results != nullptr);
-  Q_ASSERT(coverage != nullptr);
+  SS_ASSERT(results != nullptr, return false);
+  SS_ASSERT(coverage != nullptr, return false);
 
   QFile file(outputFile);
   const bool fileOpen  = !outputFile.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -998,8 +1001,8 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
                                    double minSeconds,
                                    const QString& outputFile)
 {
-  Q_ASSERT(targetFrames > 0);
-  Q_ASSERT(minFps > 0.0);
+  SS_ASSERT(targetFrames > 0, return EXIT_FAILURE);
+  SS_ASSERT(minFps > 0.0, return EXIT_FAILURE);
 
   Platform::AppPlatform::registerIngestThreadWithMmcss();
 
@@ -1033,6 +1036,8 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   }
 
   const int code = printReport(results, coverage, stages, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+  SessionContext::current().shutdown();
 
 #ifdef SS_PGO_INSTRUMENT
 #  if defined(__clang__)

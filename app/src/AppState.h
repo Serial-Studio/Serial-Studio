@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -27,6 +27,8 @@
 
 #include "IO/FrameConfig.h"
 #include "SerialStudio.h"
+
+class SessionContext;
 
 namespace DataModel {
 class FrameBuilder;
@@ -58,6 +60,7 @@ signals:
   void frameConfigChanged(const IO::FrameConfig& config);
 
 private:
+  friend class ::SessionContext;
   explicit AppState();
   AppState(AppState&&)                 = delete;
   AppState(const AppState&)            = delete;

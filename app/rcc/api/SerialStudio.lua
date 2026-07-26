@@ -72,6 +72,7 @@ controlScript = controlScript or {}
 csvExport = csvExport or {}
 csvPlayer = csvPlayer or {}
 dashboard = dashboard or {}
+diagnostics = diagnostics or {}
 extensions = extensions or {}
 io = io or {}
 io.audio = io.audio or {}
@@ -86,7 +87,9 @@ io.usb = io.usb or {}
 licensing = licensing or {}
 mdf4Export = mdf4Export or {}
 mdf4Player = mdf4Player or {}
+mirror = mirror or {}
 notifications = notifications or {}
+problems = problems or {}
 project = project or {}
 project.action = project.action or {}
 project.dashboard = project.dashboard or {}
@@ -351,6 +354,12 @@ function csvExport.setEnabled(enabled)
   return apiCall('csvExport.setEnabled', p)
 end
 
+function csvExport.setInterval(intervalMs)
+  local p = {}
+  p['intervalMs'] = intervalMs
+  return apiCall('csvExport.setInterval', p)
+end
+
 function csvPlayer.close()
   local p = {}
   return apiCall('csvPlayer.close', p)
@@ -442,6 +451,17 @@ end
 function dashboard.tick()
   local p = {}
   return apiCall('dashboard.tick', p)
+end
+
+function diagnostics.run(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('diagnostics.run', p)
+end
+
+function diagnostics.status()
+  local p = {}
+  return apiCall('diagnostics.status', p)
 end
 
 function extensions.addRepository(url)
@@ -701,6 +721,7 @@ function io.disconnect()
   return apiCall('io.disconnect', p)
 end
 
+-- options.encoding: "text" | "base64" | "both"
 function io.getLatestFrame(options)
   local p = {}
   if options then for k, v in pairs(options) do p[k] = v end end
@@ -1173,6 +1194,17 @@ function mdf4Player.step(options)
   return apiCall('mdf4Player.step', p)
 end
 
+function mirror.getInfo()
+  local p = {}
+  return apiCall('mirror.getInfo', p)
+end
+
+function mirror.getStructure(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('mirror.getStructure', p)
+end
+
 function notifications.clearAll()
   local p = {}
   return apiCall('notifications.clearAll', p)
@@ -1216,6 +1248,22 @@ function notifications.resolve(options)
   local p = {}
   if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('notifications.resolve', p)
+end
+
+function problems.list(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('problems.list', p)
+end
+
+function problems.listCheckers()
+  local p = {}
+  return apiCall('problems.listCheckers', p)
+end
+
+function problems.run()
+  local p = {}
+  return apiCall('problems.run', p)
 end
 
 function project.action.add()
@@ -1440,6 +1488,13 @@ function project.dataset.getExecutionOrder(options)
   return apiCall('project.dataset.getExecutionOrder', p)
 end
 
+function project.dataset.getFFTMarkers(groupId, datasetId)
+  local p = {}
+  p['groupId'] = groupId
+  p['datasetId'] = datasetId
+  return apiCall('project.dataset.getFFTMarkers', p)
+end
+
 function project.dataset.list(options)
   local p = {}
   if options then for k, v in pairs(options) do p[k] = v end end
@@ -1460,6 +1515,14 @@ function project.dataset.setAlarmBands(groupId, datasetId, alarmBands)
   p['datasetId'] = datasetId
   p['alarmBands'] = alarmBands
   return apiCall('project.dataset.setAlarmBands', p)
+end
+
+function project.dataset.setFFTMarkers(groupId, datasetId, fftMarkers)
+  local p = {}
+  p['groupId'] = groupId
+  p['datasetId'] = datasetId
+  p['fftMarkers'] = fftMarkers
+  return apiCall('project.dataset.setFFTMarkers', p)
 end
 
 function project.dataset.setOption(groupId, datasetId, option, enabled)
@@ -1504,10 +1567,15 @@ function project.dataset.transform.dryRun(code, language, values)
   return apiCall('project.dataset.transform.dryRun', p)
 end
 
-function project.dataset.update(groupId, datasetId)
+-- options.displayFormat: "" | "0d" | "1d" | "2d" | "3d" | "sci"
+-- options.fftSamples: 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384 | 32768 | 65536 | 131072 | 262144
+-- options.fftWindow: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14
+-- options.widget: "" | "bar" | "compass" | "gauge" | "meter"
+function project.dataset.update(groupId, datasetId, options)
   local p = {}
   p['groupId'] = groupId
   p['datasetId'] = datasetId
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.dataset.update', p)
 end
 
@@ -1762,6 +1830,11 @@ function project.painter.setCode(groupId, code)
   return apiCall('project.painter.setCode', p)
 end
 
+function project.redo()
+  local p = {}
+  return apiCall('project.redo', p)
+end
+
 function project.save(options)
   local p = {}
   if options then for k, v in pairs(options) do p[k] = v end end
@@ -1854,6 +1927,11 @@ end
 function project.template.list()
   local p = {}
   return apiCall('project.template.list', p)
+end
+
+function project.undo()
+  local p = {}
+  return apiCall('project.undo', p)
 end
 
 function project.validate()

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Widgets/PlotCurve.h"
@@ -27,6 +27,7 @@
 #include <QSGVertexColorMaterial>
 
 #include "DSPSimd.h"
+#include "SSAssert.h"
 
 // Edge feather in logical pixels, straddling the stroke edge so perceived width stays lineWidth
 constexpr double kFeatherPx = 1.0;
@@ -45,10 +46,9 @@ static void setVertexColor(QSGGeometry::ColoredPoint2D& vertex,
                            const float x,
                            const float y,
                            const QColor& color,
-                           const double alpha)
+                           double alpha)
 {
-  Q_ASSERT(alpha >= 0.0);
-  Q_ASSERT(alpha <= 1.0);
+  SS_ASSERT(alpha >= 0.0 && alpha <= 1.0, alpha = std::clamp(alpha, 0.0, 1.0));
 
   vertex.set(x,
              y,
@@ -98,11 +98,11 @@ static void emitCapSection(QSGGeometry::ColoredPoint2D* vertices,
                            int& v,
                            const QPointF& p,
                            const QPointF& n,
-                           const double hw,
+                           double hw,
                            const QColor& color)
 {
-  Q_ASSERT(vertices != nullptr);
-  Q_ASSERT(hw > 0.0);
+  SS_ASSERT(vertices != nullptr, return);
+  SS_ASSERT(hw > 0.0, hw = 0.25);
 
   const double alpha = color.alphaF();
   const double face  = std::max(0.25, hw - kFeatherPx * 0.5);
@@ -147,9 +147,9 @@ static void emitFan(QSGGeometry::ColoredPoint2D* vertices,
                     const double hw,
                     const QColor& color)
 {
-  Q_ASSERT(vertices != nullptr);
-  Q_ASSERT(indices != nullptr);
-  Q_ASSERT(nFan >= 1);
+  SS_ASSERT(vertices != nullptr, return);
+  SS_ASSERT(indices != nullptr, return);
+  SS_ASSERT(nFan >= 1, return);
 
   const double alpha = color.alphaF();
   const double face  = std::max(0.25, hw - kFeatherPx * 0.5);
@@ -205,8 +205,8 @@ static void emitFan(QSGGeometry::ColoredPoint2D* vertices,
  */
 static void emitJoinIndices(quint32* indices, int& idx, const int a, const int b)
 {
-  Q_ASSERT(indices != nullptr);
-  Q_ASSERT(a >= 0 && b >= 0);
+  SS_ASSERT(indices != nullptr, return);
+  SS_ASSERT(a >= 0 && b >= 0, return);
 
   for (int k = 0; k < 3; ++k) {
     indices[idx++] = static_cast<quint32>(a + k);
@@ -387,12 +387,12 @@ void Widgets::PlotCurve::setYMax(const double value)
  *        non-finite pixels and stay run boundaries downstream.
  */
 void Widgets::PlotCurve::projectToPixels(const QPointF* pts,
-                                         const qsizetype count,
+                                         qsizetype count,
                                          const double w,
                                          const double h)
 {
-  Q_ASSERT(pts != nullptr);
-  Q_ASSERT(count >= 0);
+  SS_ASSERT(pts != nullptr, return);
+  SS_ASSERT(count >= 0, count = 0);
 
   const double sx = w / (m_xMax - m_xMin);
   const double sy = h / (m_yMax - m_yMin);
@@ -415,8 +415,8 @@ qsizetype Widgets::PlotCurve::runLength(const QPointF* pts,
                                         const qsizetype count,
                                         qsizetype& start) const
 {
-  Q_ASSERT(pts != nullptr);
-  Q_ASSERT(count >= 0);
+  SS_ASSERT(pts != nullptr, return 0);
+  SS_ASSERT(count >= 0, return 0);
 
   while (start < count && (!std::isfinite(pts[start].x()) || !std::isfinite(pts[start].y())))
     ++start;
@@ -436,8 +436,8 @@ bool Widgets::PlotCurve::runVisible(const QPointF* pts,
                                     const qsizetype start,
                                     const qsizetype len) const
 {
-  Q_ASSERT(pts != nullptr);
-  Q_ASSERT(len >= 1);
+  SS_ASSERT(pts != nullptr, return false);
+  SS_ASSERT(len >= 1, return false);
 
   double lo = pts[start].x();
   double hi = pts[start].x();
@@ -457,8 +457,8 @@ void Widgets::PlotCurve::countRun(const QPointF* px,
                                   qsizetype& vertexCount,
                                   qsizetype& indexCount) const
 {
-  Q_ASSERT(px != nullptr);
-  Q_ASSERT(len >= 2);
+  SS_ASSERT(px != nullptr, return);
+  SS_ASSERT(len >= 2, return);
 
   auto dirAt = [&](const qsizetype i, const QPointF& fallback) {
     QPointF dir = fallback;
@@ -495,12 +495,12 @@ void Widgets::PlotCurve::countRibbon(const QPointF* pts,
                                      qsizetype& vertexCount,
                                      qsizetype& indexCount) const
 {
-  Q_ASSERT(pts != nullptr);
-  Q_ASSERT(px != nullptr);
-  Q_ASSERT(count >= 2);
-
   vertexCount = 0;
   indexCount  = 0;
+
+  SS_ASSERT(pts != nullptr, return);
+  SS_ASSERT(px != nullptr, return);
+  SS_ASSERT(count >= 2, return);
 
   qsizetype start = 0;
   while (start < count) {
@@ -527,8 +527,8 @@ void Widgets::PlotCurve::emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
                                     const qsizetype count,
                                     const double hw) const
 {
-  Q_ASSERT(vertices != nullptr);
-  Q_ASSERT(indices != nullptr);
+  SS_ASSERT(vertices != nullptr, return);
+  SS_ASSERT(indices != nullptr, return);
 
   int v           = 0;
   int idx         = 0;
@@ -544,8 +544,12 @@ void Widgets::PlotCurve::emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
     start += len;
   }
 
+  // code-verify off
+  // Post-condition on a buffer already written: a soft assert cannot un-write an overrun, so the
+  // countRibbon()/emitRun() vertex-budget lockstep stays the real guard and this stays debug-only.
   Q_ASSERT(v == vertexCount);
   Q_ASSERT(idx == indexCount);
+  // code-verify on
   Q_UNUSED(vertexCount)
   Q_UNUSED(indexCount)
 }
@@ -565,9 +569,9 @@ void Widgets::PlotCurve::emitRun(QSGGeometry::ColoredPoint2D* vertices,
                                  const qsizetype len,
                                  const double hw) const
 {
-  Q_ASSERT(vertices != nullptr);
-  Q_ASSERT(indices != nullptr);
-  Q_ASSERT(len >= 2);
+  SS_ASSERT(vertices != nullptr, return);
+  SS_ASSERT(indices != nullptr, return);
+  SS_ASSERT(len >= 2, return);
 
   auto dirAt = [&](const qsizetype i, const QPointF& fallback) {
     QPointF dir = fallback;
@@ -667,7 +671,7 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
   }
 
   auto* geometry = node->geometry();
-  Q_ASSERT(geometry != nullptr);
+  SS_ASSERT(geometry != nullptr, return node);
   if (geometry->vertexCount() != vertices || geometry->indexCount() != idxs)
     geometry->allocate(vertices, idxs);
 

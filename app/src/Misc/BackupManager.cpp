@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Misc/BackupManager.h"
@@ -34,6 +34,8 @@
 #include <QTimer>
 
 #include "DataModel/ProjectModel.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 
 static constexpr int kDebounceMs       = 5000;
 static constexpr int kRetentionDefault = 50;
@@ -72,10 +74,10 @@ static QString sanitiseLabel(const QString& label)
 }
 
 /**
- * @brief Construct the singleton. Debounce timer + initial state.
+ * @brief Construct a backup manager bound to one session. Debounce timer + initial state.
  */
-Misc::BackupManager::BackupManager()
-  : m_enabled(true), m_debounceTimer(new QTimer(this)), m_projectModel(nullptr)
+Misc::BackupManager::BackupManager(SessionContext& ctx)
+  : m_ctx(ctx), m_enabled(true), m_debounceTimer(new QTimer(this)), m_projectModel(nullptr)
 {
   m_debounceTimer->setSingleShot(true);
   m_debounceTimer->setInterval(kDebounceMs);
@@ -87,7 +89,7 @@ Misc::BackupManager::BackupManager()
  */
 Misc::BackupManager& Misc::BackupManager::instance()
 {
-  static BackupManager singleton;
+  static BackupManager singleton(SessionContext::current());
   return singleton;
 }
 
@@ -96,9 +98,9 @@ Misc::BackupManager& Misc::BackupManager::instance()
  */
 void Misc::BackupManager::setupExternalConnections()
 {
-  m_projectModel = &DataModel::ProjectModel::instance();
+  auto& pm       = m_ctx.projectModel();
+  m_projectModel = &pm;
 
-  auto& pm = DataModel::ProjectModel::instance();
   connect(
     &pm, &DataModel::ProjectModel::jsonFileChanged, this, &BackupManager::onProjectFileChanged);
   connect(
@@ -117,7 +119,7 @@ void Misc::BackupManager::setupExternalConnections()
  */
 QString Misc::BackupManager::snapshot(const QString& label)
 {
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return {});
 
   if (!m_enabled)
     return {};
@@ -178,7 +180,7 @@ QString Misc::BackupManager::snapshot(const QString& label)
  */
 bool Misc::BackupManager::restore(const QString& path)
 {
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return false);
 
   if (path.isEmpty())
     return false;
@@ -342,7 +344,7 @@ QVariantMap Misc::BackupManager::summarize(const QString& path) const
  */
 QVariantMap Misc::BackupManager::currentSummary() const
 {
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return {});
 
   const auto& pm = *m_projectModel;
   QVariantMap out;
@@ -406,7 +408,7 @@ void Misc::BackupManager::onProjectFileChanged()
  */
 void Misc::BackupManager::onProjectModifiedChanged()
 {
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return);
 
   if (!m_enabled)
     return;
@@ -449,7 +451,7 @@ void Misc::BackupManager::flushDebounced()
  */
 QString Misc::BackupManager::currentProjectStem() const
 {
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return {});
 
   const auto path = m_projectModel->jsonFilePath();
   if (path.isEmpty())

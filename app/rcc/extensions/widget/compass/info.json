@@ -1,0 +1,26 @@
+{
+  "id": "compass",
+  "type": "widget",
+  "title": "Compass",
+  "description": "Analog compass rose with a digital heading page, for datasets that carry a bearing in degrees.",
+  "author": "Serial Studio",
+  "version": "1.0.0",
+  "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial",
+  "category": "Instruments",
+  "files": ["info.json", "Compass.qml"],
+  "widget": {
+    "apiVersion": "1.0",
+    "hostCompat": ">=1.0 <2.0",
+    "scope": "dataset",
+    "qml": "Compass.qml",
+    "icon": "widgets/compass",
+    "replaces": "compass",
+    "readsStringValues": false,
+    "accepts": {
+      "datasets": { "min": 1, "max": 1 },
+      "value": "numeric"
+    },
+    "defaultSize": { "width": 320, "height": 320 },
+    "experimental": false
+  }
+}

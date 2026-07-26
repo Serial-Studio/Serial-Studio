@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -38,6 +38,13 @@ Widgets.Pane {
   property int folderId: Cpp_JSON_ProjectEditor.selectedFolderId
   property string folderName: Cpp_JSON_ProjectModel.workspaceFolderTitle(folderId)
   property var contents: []
+  readonly property var filteredContents: {
+    const q = searchBand.query.trim()
+    if (q.length === 0)
+      return contents
+
+    return contents.filter((r) => SerialStudio.searchMatches(q, String(r.title)))
+  }
 
   title: folderName.length > 0 ? folderName : qsTr("Folder")
 
@@ -48,7 +55,10 @@ Widgets.Pane {
     contents = Cpp_JSON_ProjectEditor.workspaceFolderContents(folderId)
   }
 
-  onFolderIdChanged: Qt.callLater(refresh)
+  onFolderIdChanged: {
+    searchBand.query = ""
+    Qt.callLater(refresh)
+  }
   onVisibleChanged: if (visible) Qt.callLater(refresh)
   Component.onCompleted: Qt.callLater(refresh)
 
@@ -91,6 +101,15 @@ Widgets.Pane {
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
+
+      //
+      // Search band: above the secondary toolbar, aligned with the tree search
+      //
+      EditorSearchBand {
+        id: searchBand
+
+        resultCount: list.count
+      }
 
       //
       // Secondary toolbar: Add Sub-folder, Add Workspace, Rename, Delete
@@ -187,9 +206,9 @@ Widgets.Pane {
 
         clip: true
         spacing: 0
-        model: root.contents
         Layout.fillWidth: true
         Layout.fillHeight: true
+        model: root.filteredContents
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -264,7 +283,7 @@ Widgets.Pane {
           width: parent.width * 0.8
           wrapMode: Label.WordWrap
           anchors.centerIn: parent
-          visible: list.count === 0
+          visible: list.count === 0 && searchBand.query.trim().length === 0
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.uiFont
           horizontalAlignment: Text.AlignHCenter

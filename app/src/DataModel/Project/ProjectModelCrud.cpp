@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -59,6 +59,7 @@
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "ProjectModelShared.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 namespace DataModel {
@@ -117,6 +118,7 @@ void DataModel::ProjectModel::updateGroup(const int groupId,
                                           const DataModel::Group& group,
                                           const bool rebuildTree)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Group")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -138,6 +140,7 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
                                             const DataModel::Dataset& dataset,
                                             const bool rebuildTree)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Dataset")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -194,6 +197,7 @@ static QString uniqueAliasCandidate(const QString& base, const QSet<QString>& us
  */
 int DataModel::ProjectModel::seedDatasetAliases()
 {
+  const ProjectUndoScope undo_scope{*this, tr("Seed Dataset Aliases")};
   QSet<QString> used;
   for (const auto& group : m_groups)
     for (const auto& ds : group.datasets)
@@ -230,6 +234,7 @@ int DataModel::ProjectModel::seedDatasetAliases()
  */
 void DataModel::ProjectModel::setGroupEnabled(const int groupId, const bool enabled)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Group")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -251,6 +256,7 @@ void DataModel::ProjectModel::setDatasetEnabled(const int groupId,
                                                 const int datasetId,
                                                 const bool enabled)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Dataset")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -274,6 +280,7 @@ void DataModel::ProjectModel::updateAction(const int actionId,
                                            const DataModel::Action& action,
                                            const bool rebuildTree)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Action")};
   if (actionId < 0 || static_cast<size_t>(actionId) >= m_actions.size())
     return;
 
@@ -309,6 +316,8 @@ void DataModel::ProjectModel::deleteCurrentGroup()
   const auto gid = m_selectedGroup.groupId;
   if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Delete Group")};
 
   QMap<int, int> deletedTypeCounts;
   if (m_customizeWorkspaces)
@@ -355,6 +364,8 @@ void DataModel::ProjectModel::deleteCurrentAction()
   if (aid < 0 || static_cast<size_t>(aid) >= m_actions.size())
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Delete Action")};
+
   m_actions.erase(m_actions.begin() + aid);
 
   int id = 0;
@@ -391,6 +402,8 @@ void DataModel::ProjectModel::deleteCurrentDataset()
 
   if (datasetId < 0 || static_cast<size_t>(datasetId) >= m_groups[groupId].datasets.size())
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Delete Dataset")};
 
   QMap<int, int> deletedTypeCounts;
   if (m_customizeWorkspaces)
@@ -452,6 +465,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
  */
 void DataModel::ProjectModel::duplicateCurrentGroup()
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Group")};
   DataModel::Group group = m_selectedGroup;
   group.groupId          = m_groups.size();
   group.uniqueId         = allocateUniqueId();
@@ -492,6 +506,7 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
  */
 void DataModel::ProjectModel::duplicateCurrentAction()
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Action")};
   DataModel::Action action;
   action.actionId             = m_actions.size();
   action.icon                 = m_selectedAction.icon;
@@ -616,19 +631,21 @@ static int slotForAnchor(const detail::RefAnchor& a, const DataModel::Group& g)
 }
 
 /**
- * @brief Snapshots one anchor per workspace ref before a reorder.
+ * @brief Snapshots one anchor per workspace ref before a reorder, keyed by workspaceId so
+ *        the buckets survive any reordering of the workspace list between snapshot and resolve.
  */
-static std::vector<std::vector<detail::RefAnchor>> snapshotAllRefs(
+static QHash<int, std::vector<detail::RefAnchor>> snapshotAllRefs(
   const std::vector<DataModel::Workspace>& workspaces, const std::vector<DataModel::Group>& groups)
 {
-  std::vector<std::vector<detail::RefAnchor>> out;
-  out.resize(workspaces.size());
-  for (size_t w = 0; w < workspaces.size(); ++w) {
-    const auto& ws = workspaces[w];
-    auto& bucket   = out[w];
+  QHash<int, std::vector<detail::RefAnchor>> out;
+  out.reserve(static_cast<qsizetype>(workspaces.size()));
+  for (const auto& ws : workspaces) {
+    std::vector<detail::RefAnchor> bucket;
     bucket.reserve(ws.widgetRefs.size());
     for (const auto& r : ws.widgetRefs)
       bucket.push_back(anchorRef(r, groups));
+
+    out.insert(ws.workspaceId, std::move(bucket));
   }
   return out;
 }
@@ -641,9 +658,10 @@ static void resolveOneWorkspaceRefs(DataModel::Workspace& ws,
                                     const std::vector<detail::RefAnchor>& src,
                                     const std::vector<DataModel::Group>& groups)
 {
-  Q_ASSERT(src.size() == ws.widgetRefs.size());
+  SS_ASSERT_LOG(src.size() == ws.widgetRefs.size());
 
-  for (size_t i = 0; i < ws.widgetRefs.size(); ++i) {
+  const size_t count = std::min(src.size(), ws.widgetRefs.size());
+  for (size_t i = 0; i < count; ++i) {
     auto& r       = ws.widgetRefs[i];
     const auto& a = src[i];
 
@@ -662,14 +680,34 @@ static void resolveOneWorkspaceRefs(DataModel::Workspace& ws,
   }
 }
 
+/**
+ * @brief Re-resolves every workspace against its own snapshot bucket, paired by workspaceId
+ *        rather than by list position.
+ */
+static void resolveAllWorkspaceRefs(std::vector<DataModel::Workspace>& workspaces,
+                                    const QHash<int, std::vector<detail::RefAnchor>>& anchors,
+                                    const std::vector<DataModel::Group>& groups)
+{
+  for (auto& ws : workspaces) {
+    const auto it = anchors.constFind(ws.workspaceId);
+    if (it == anchors.constEnd())
+      continue;
+
+    resolveOneWorkspaceRefs(ws, it.value(), groups);
+  }
+}
+
 }  // namespace DataModel
 
 /**
  * @brief Moves a group from one position to another, preserving widget settings,
- *        workspace refs, hidden state, and auto-workspace IDs across the shift.
+ *        workspace refs, hidden state, and auto-workspace IDs across the shift. Refs are
+ *        re-resolved before the auto-workspace IDs are renumbered, because the anchor
+ *        snapshot is keyed by the workspace IDs that renumbering replaces.
  */
 void DataModel::ProjectModel::moveGroup(int fromGroupId, int toGroupId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Group")};
   const int n = static_cast<int>(m_groups.size());
   if (fromGroupId < 0 || fromGroupId >= n)
     return;
@@ -692,7 +730,7 @@ void DataModel::ProjectModel::moveGroup(int fromGroupId, int toGroupId)
 
   oldToNewGid[static_cast<size_t>(fromGroupId)] = target;
 
-  std::vector<std::vector<detail::RefAnchor>> anchors;
+  QHash<int, std::vector<detail::RefAnchor>> anchors;
   if (m_customizeWorkspaces)
     anchors = snapshotAllRefs(m_workspaces, m_groups);
 
@@ -704,11 +742,11 @@ void DataModel::ProjectModel::moveGroup(int fromGroupId, int toGroupId)
 
   remapLayoutKeysAfterReorder(oldToNewGid);
   remapHiddenGroupIdsAfterReorder(oldToNewGid);
-  remapAutoWorkspaceIdsAfterReorder(oldToNewGid);
 
   if (m_customizeWorkspaces)
-    for (size_t w = 0; w < m_workspaces.size(); ++w)
-      resolveOneWorkspaceRefs(m_workspaces[w], anchors[w], m_groups);
+    resolveAllWorkspaceRefs(m_workspaces, anchors, m_groups);
+
+  remapAutoWorkspaceIdsAfterReorder(oldToNewGid);
 
   if (m_selectedGroup.groupId == fromGroupId)
     m_selectedGroup = m_groups[target];
@@ -724,6 +762,7 @@ void DataModel::ProjectModel::moveGroup(int fromGroupId, int toGroupId)
  */
 void DataModel::ProjectModel::moveDataset(int groupId, int fromDatasetId, int toDatasetId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Dataset")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -736,7 +775,7 @@ void DataModel::ProjectModel::moveDataset(int groupId, int fromDatasetId, int to
   if (target == fromDatasetId)
     return;
 
-  std::vector<std::vector<detail::RefAnchor>> anchors;
+  QHash<int, std::vector<detail::RefAnchor>> anchors;
   if (m_customizeWorkspaces)
     anchors = snapshotAllRefs(m_workspaces, m_groups);
 
@@ -748,8 +787,7 @@ void DataModel::ProjectModel::moveDataset(int groupId, int fromDatasetId, int to
     datasets[i].datasetId = static_cast<int>(i);
 
   if (m_customizeWorkspaces)
-    for (size_t w = 0; w < m_workspaces.size(); ++w)
-      resolveOneWorkspaceRefs(m_workspaces[w], anchors[w], m_groups);
+    resolveAllWorkspaceRefs(m_workspaces, anchors, m_groups);
 
   if (m_selectedDataset.groupId == groupId && m_selectedDataset.datasetId == fromDatasetId)
     m_selectedDataset = datasets[target];
@@ -810,6 +848,7 @@ void DataModel::ProjectModel::moveWorkspace(int workspaceId, int targetIndex)
  */
 void DataModel::ProjectModel::moveAction(int fromActionId, int toActionId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Action")};
   const int n = static_cast<int>(m_actions.size());
   if (fromActionId < 0 || fromActionId >= n)
     return;
@@ -837,6 +876,7 @@ void DataModel::ProjectModel::moveAction(int fromActionId, int toActionId)
  */
 void DataModel::ProjectModel::moveOutputWidget(int groupId, int fromWidgetId, int toWidgetId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Output Widget")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -868,7 +908,7 @@ void DataModel::ProjectModel::moveOutputWidget(int groupId, int fromWidgetId, in
  */
 void DataModel::ProjectModel::remapGroupIdsAfterReorder(const std::vector<int>& oldToNewGid)
 {
-  Q_ASSERT(oldToNewGid.size() == m_groups.size());
+  SS_ASSERT_LOG(oldToNewGid.size() == m_groups.size());
 
   for (size_t i = 0; i < m_groups.size(); ++i) {
     auto& g   = m_groups[i];
@@ -977,6 +1017,7 @@ void DataModel::ProjectModel::setSelectedOutputWidget(const DataModel::OutputWid
  */
 void DataModel::ProjectModel::setOutputWidgetType(int type)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Output Widget Type")};
   const auto gid = m_selectedOutputWidget.groupId;
   const auto wid = m_selectedOutputWidget.widgetId;
 
@@ -1006,6 +1047,7 @@ void DataModel::ProjectModel::setOutputWidgetType(int type)
  */
 void DataModel::ProjectModel::setOutputWidgetIcon(const QString& icon)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Output Widget Icon")};
   const auto gid = m_selectedOutputWidget.groupId;
   const auto wid = m_selectedOutputWidget.widgetId;
 
@@ -1029,6 +1071,7 @@ void DataModel::ProjectModel::setOutputWidgetIcon(const QString& icon)
  */
 void DataModel::ProjectModel::addOutputPanel(int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Output Panel")};
   addGroup(tr("Output Controls"), SerialStudio::NoGroupWidget, sourceId);
   auto& group     = m_groups.back();
   group.groupType = DataModel::GroupType::Output;
@@ -1043,6 +1086,7 @@ void DataModel::ProjectModel::addOutputPanel(int sourceId)
 void DataModel::ProjectModel::addOutputControl(const SerialStudio::OutputWidgetType type,
                                                int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Output Widget")};
   int groupId    = -1;
   const auto sel = m_selectedGroup.groupId;
   if (sel >= 0 && static_cast<size_t>(sel) < m_groups.size()
@@ -1136,6 +1180,7 @@ void DataModel::ProjectModel::deleteCurrentOutputWidget()
   if (wid < 0 || static_cast<size_t>(wid) >= widgets.size())
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Delete Output Widget")};
   QMap<int, int> deletedTypeCounts;
   if (m_customizeWorkspaces)
     deletedTypeCounts = widgetTypeCountsForGroup(m_groups[gid]);
@@ -1177,6 +1222,7 @@ void DataModel::ProjectModel::deleteCurrentOutputWidget()
  */
 void DataModel::ProjectModel::duplicateCurrentOutputWidget()
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Output Widget")};
   const auto gid = m_selectedOutputWidget.groupId;
   if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
     return;
@@ -1209,6 +1255,7 @@ void DataModel::ProjectModel::updateOutputWidget(int groupId,
                                                  const DataModel::OutputWidget& widget,
                                                  bool rebuildTree)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Output Widget")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -1231,6 +1278,7 @@ void DataModel::ProjectModel::updateOutputWidget(int groupId,
  */
 void DataModel::ProjectModel::duplicateCurrentDataset()
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Dataset")};
   auto dataset = m_selectedDataset;
 
   if (dataset.groupId < 0 || static_cast<size_t>(dataset.groupId) >= m_groups.size())
@@ -1262,6 +1310,7 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
  */
 void DataModel::ProjectModel::ensureValidGroup(int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Group")};
   const auto isValidGroup = [sourceId](const DataModel::Group& g) -> bool {
     if (g.groupType == DataModel::GroupType::Output)
       return false;
@@ -1304,6 +1353,7 @@ void DataModel::ProjectModel::ensureValidGroup(int sourceId)
  */
 void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption option, int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Dataset")};
   ensureValidGroup(sourceId);
 
   const auto groupId = m_selectedGroup.groupId;
@@ -1398,6 +1448,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
  */
 void DataModel::ProjectModel::ensurePainterDatasets(int groupId, const QVariantList& specs)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Painter Datasets")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -1437,6 +1488,7 @@ void DataModel::ProjectModel::ensurePainterDatasets(int groupId, const QVariantL
 void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOption option,
                                                   const bool checked)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Dataset Option")};
   switch (option) {
     case SerialStudio::DatasetPlot:
       m_selectedDataset.plt = checked;
@@ -1486,6 +1538,7 @@ void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOpt
  */
 void DataModel::ProjectModel::addAction(int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Action")};
   int count     = 1;
   QString title = tr("New Action");
   for (const auto& action : std::as_const(m_actions)) {
@@ -1533,6 +1586,7 @@ void DataModel::ProjectModel::addGroup(const QString& title,
                                        int sourceId,
                                        int parentFolderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Group")};
   int count        = 1;
   QString newTitle = title;
   for (const auto& group : std::as_const(m_groups)) {
@@ -1582,6 +1636,7 @@ void DataModel::ProjectModel::addGroup(const QString& title,
 bool DataModel::ProjectModel::setGroupWidget(const int group,
                                              const SerialStudio::GroupWidget widget)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Group Widget")};
   if (group < 0 || group >= static_cast<int>(m_groups.size())) [[unlikely]]
     return false;
 
@@ -1810,6 +1865,7 @@ void DataModel::ProjectModel::deleteGroup(int groupId, bool confirm)
  */
 void DataModel::ProjectModel::duplicateGroup(int groupId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Group")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -1868,6 +1924,7 @@ void DataModel::ProjectModel::deleteDataset(int groupId, int datasetId, bool con
  */
 void DataModel::ProjectModel::duplicateDataset(int groupId, int datasetId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Dataset")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -1921,6 +1978,7 @@ void DataModel::ProjectModel::deleteAction(int actionId, bool confirm)
  */
 void DataModel::ProjectModel::duplicateAction(int actionId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Action")};
   if (actionId < 0 || static_cast<size_t>(actionId) >= m_actions.size())
     return;
 
@@ -1979,6 +2037,7 @@ void DataModel::ProjectModel::deleteOutputWidget(int groupId, int widgetId, bool
  */
 void DataModel::ProjectModel::duplicateOutputWidget(int groupId, int widgetId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Output Widget")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
@@ -2118,6 +2177,7 @@ static int batchResolveDatasetId(const std::vector<Group>& groups,
  */
 void DataModel::ProjectModel::duplicateSelectedItems(const QVariantList& items)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Selection")};
   QSet<int> selectedGroupFolders;
   QSet<int> selectedTableFolders;
   for (const auto& v : items) {
@@ -2189,6 +2249,7 @@ void DataModel::ProjectModel::duplicateSelectedItems(const QVariantList& items)
  */
 void DataModel::ProjectModel::deleteSelectedItems(const QVariantList& items)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Delete Selection")};
   QList<BatchDeleteEntry> entries;
   entries.reserve(items.size());
   for (const auto& v : items) {
@@ -2303,6 +2364,7 @@ void DataModel::ProjectModel::confirmDeleteSelectedItems(const QVariantList& ite
  */
 void DataModel::ProjectModel::moveSelectedItemsToFolder(const QVariantList& items, int folderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Selection")};
   for (const auto& v : items) {
     const auto m       = v.toMap();
     const int kind     = m.value(QStringLiteral("kind"), -1).toInt();
@@ -2365,6 +2427,7 @@ bool DataModel::ProjectModel::setGroupsInFolderEnabled(const int folderId, const
  */
 void DataModel::ProjectModel::setItemsEnabled(const QVariantList& items, const bool enabled)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Selection")};
   if (items.isEmpty())
     return;
 

@@ -33,6 +33,41 @@
               "title": "Save As"
             }
           ]
+        },
+        {
+          "type": "grid",
+          "rows": 3,
+          "itemHints": {
+            "iconSize": 16,
+            "horizontalLayout": true
+          },
+          "items": [
+            {
+              "type": "command",
+              "id": "editor.undo",
+              "title": "Undo"
+            },
+            {
+              "type": "command",
+              "id": "editor.redo",
+              "title": "Redo"
+            },
+            {
+              "type": "command",
+              "id": "editor.restoreBackup",
+              "title": "Restore"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "items": [
+        {
+          "type": "command",
+          "id": "editor.lock",
+          "title": "Lock"
         }
       ]
     },
@@ -48,28 +83,6 @@
           "type": "command",
           "id": "editor.importProto",
           "title": "Protobuf"
-        }
-      ]
-    },
-    {
-      "type": "section",
-      "collapsedIcon": "editor/recover-backup",
-      "collapsedTitle": "Recover",
-      "collapsible": true,
-      "collapsePriority": 30,
-      "collapsedCommands": [
-        "editor.restoreBackup"
-      ],
-      "items": [
-        {
-          "type": "command",
-          "id": "editor.restoreBackup",
-          "title": "Restore"
-        },
-        {
-          "type": "command",
-          "id": "editor.lock",
-          "title": "Lock"
         }
       ]
     },
@@ -271,28 +284,36 @@
     },
     {
       "type": "section",
-      "collapsedIcon": "editor/ai",
-      "collapsedTitle": "Assistant",
-      "collapsible": true,
-      "collapsePriority": 30,
+      "collapsible": false,
       "showSeparator": false,
-      "collapsedCommands": [
-        "app.ai",
-        "editor.helpCenter"
-      ],
       "items": [
         {
-          "type": "command",
-          "id": "app.ai",
-          "pro": true,
-          "title": "Assistant",
-          "icon": "editor/ai",
-          "tooltip": "Open the Assistant"
-        },
-        {
-          "type": "command",
-          "id": "editor.helpCenter",
-          "title": "Help Center"
+          "type": "grid",
+          "rows": 3,
+          "itemHints": {
+            "iconSize": 16,
+            "horizontalLayout": true
+          },
+          "items": [
+            {
+              "type": "command",
+              "id": "app.ai",
+              "pro": true,
+              "title": "Assistant",
+              "icon": "editor/ai",
+              "tooltip": "Open the Assistant"
+            },
+            {
+              "type": "command",
+              "id": "editor.helpCenter",
+              "title": "Help Center"
+            },
+            {
+              "type": "command",
+              "id": "app.problems",
+              "title": "Problem Center"
+            }
+          ]
         }
       ]
     }

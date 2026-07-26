@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -115,8 +115,10 @@ class HAL_Driver : public QObject {
   Q_OBJECT
 
 signals:
+  void linkDropped();
   void configurationChanged();
   void dataSent(const QByteArray& data);
+  void openFinished(bool ok, const QString& reason);
   void dataReceived(const IO::CapturedDataPtr& data);
 
 public:
@@ -134,6 +136,36 @@ public:
   [[nodiscard]] virtual QList<IO::DriverProperty> driverProperties() const = 0;
 
   [[nodiscard]] virtual QJsonObject deviceIdentifier() const { return {}; }
+
+  /**
+   * @brief Returns whether this driver opens through an orchestrated flow. False keeps the
+   *        driver on the synchronous open() path it has always used.
+   */
+  [[nodiscard]] virtual bool supportsAsyncOpen() const noexcept { return false; }
+
+  /**
+   * @brief Returns the ceiling on one open attempt, or zero to take the shared default. A driver
+   *        whose handshake legitimately outlasts a socket dial raises it here instead of being
+   *        cut off mid-attempt.
+   */
+  [[nodiscard]] virtual int openTimeoutMsec() const noexcept { return 0; }
+
+  /**
+   * @brief Starts an open attempt. The base implementation is today's synchronous open,
+   *        reported immediately, so a driver that opts in without overriding this behaves
+   *        exactly as it does now.
+   */
+  virtual void beginOpen(const QIODevice::OpenMode mode)
+  {
+    const bool ok = open(mode);
+    Q_EMIT openFinished(ok, ok ? QString() : QStringLiteral("driver reported open failure"));
+  }
+
+  /**
+   * @brief Stops an open attempt that is still in flight; closing is what every driver
+   *        already does to release a half-open link.
+   */
+  virtual void abortOpen() { close(); }
 
   virtual bool selectByIdentifier(const QJsonObject& id)
   {

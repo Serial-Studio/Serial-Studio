@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Misc/ExtensionManager.h"
@@ -232,6 +232,7 @@ QStringList Misc::ExtensionManager::extensionTypes() const
     QStringLiteral("frame-parser"),
     QStringLiteral("project-template"),
     QStringLiteral("plugin"),
+    QStringLiteral("widget"),
   };
 }
 
@@ -251,6 +252,9 @@ QString Misc::ExtensionManager::friendlyTypeName(const QString& type) const
 
   if (type == QStringLiteral("plugin"))
     return tr("Plugin");
+
+  if (type == QStringLiteral("widget"))
+    return tr("Widget");
 
   if (type == QStringLiteral("All"))
     return tr("All Types");

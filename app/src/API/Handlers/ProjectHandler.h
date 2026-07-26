@@ -14,13 +14,15 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
 
+#include <optional>
+#include <QJsonObject>
 #include <QSet>
 #include <QString>
 
@@ -32,6 +34,21 @@ struct Dataset;
 
 namespace API {
 namespace Handlers {
+
+/**
+ * @brief Returns the typed schema properties for the dataset verbs, derived from
+ *        app/rcc/properties/dataset.json (Generated/DatasetApiFields.cpp).
+ */
+[[nodiscard]] QJsonObject datasetFieldSchema();
+
+/**
+ * @brief Applies simple-mode alarmEnabled / alarmLow / alarmHigh fields to a dataset's alarmBands.
+ */
+void applySimpleAlarmFields(DataModel::Dataset& d,
+                            std::optional<bool> enabled,
+                            std::optional<double> low,
+                            std::optional<double> high);
+
 /**
  * @brief Registers API commands for DataModel::ProjectModel operations.
  */
@@ -43,6 +60,7 @@ private:
   static void registerFileCommands();
   static void registerFileLifecycleCommands();
   static void registerFileMetadataCommands();
+  static void registerHistoryCommands();
   static void registerGroupCommands();
   static void registerDatasetCommands();
   static void registerDatasetCrudCommands();
@@ -74,6 +92,8 @@ private:
   static void registerTemplateCommands();
 
   static CommandResponse fileNew(const QString& id, const QJsonObject& params);
+  static CommandResponse projectUndo(const QString& id, const QJsonObject& params);
+  static CommandResponse projectRedo(const QString& id, const QJsonObject& params);
   static CommandResponse fileOpen(const QString& id, const QJsonObject& params);
   static CommandResponse fileSave(const QString& id, const QJsonObject& params);
   static CommandResponse setTitle(const QString& id, const QJsonObject& params);

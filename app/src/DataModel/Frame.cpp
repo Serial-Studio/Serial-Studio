@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Frame.h"
@@ -333,93 +333,6 @@ void DataModel::readDatasetAlarmBands(Dataset& d, const QJsonObject& obj)
     high.severity = AlarmSeverity::Warning;
     d.alarmBands.push_back(std::move(high));
   }
-}
-
-//--------------------------------------------------------------------------------------------------
-// Dataset deserialization
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Deserializes a Dataset from a QJsonObject.
- *        Lives here (not inline in Frame.h) so it can reach SerialStudio::toDouble.
- */
-bool DataModel::read(Dataset& d, const QJsonObject& obj)
-{
-  if (obj.isEmpty())
-    return false;
-
-  d.index                = ss_jsr(obj, Keys::Index, -1).toInt();
-  d.fft                  = ss_jsr(obj, Keys::FFT, false).toBool();
-  d.led                  = ss_jsr(obj, Keys::LED, false).toBool();
-  d.log                  = ss_jsr(obj, Keys::Log, false).toBool();
-  d.plt                  = ss_jsr(obj, Keys::Graph, false).toBool();
-  d.waterfall            = ss_jsr(obj, Keys::Waterfall, false).toBool();
-  d.waterfallYAxis       = ss_jsr(obj, Keys::WaterfallYAxis, 0).toInt();
-  d.xAxisId              = ss_jsr(obj, Keys::XAxis, kXAxisTime).toInt();
-  d.fftLogX              = ss_jsr(obj, Keys::FFTLogX, false).toBool();
-  d.fftBallistics        = ss_jsr(obj, Keys::FFTBallistics, false).toBool();
-  d.fftBallisticsRelease = ss_jsr(obj, Keys::FFTBallisticsRelease, 300).toInt();
-  d.pltLogX              = ss_jsr(obj, Keys::PltLogX, false).toBool();
-  d.pltLogY              = ss_jsr(obj, Keys::PltLogY, false).toBool();
-
-  d.fftMin          = SerialStudio::toDouble(ss_jsr(obj, Keys::FFTMin, 0));
-  d.fftMax          = SerialStudio::toDouble(ss_jsr(obj, Keys::FFTMax, 0));
-  d.pltMin          = SerialStudio::toDouble(ss_jsr(obj, Keys::PltMin, 0));
-  d.pltMax          = SerialStudio::toDouble(ss_jsr(obj, Keys::PltMax, 0));
-  d.wgtMin          = SerialStudio::toDouble(ss_jsr(obj, Keys::WgtMin, 0));
-  d.wgtMax          = SerialStudio::toDouble(ss_jsr(obj, Keys::WgtMax, 0));
-  d.fftSamples      = ss_jsr(obj, Keys::FFTSamples, -1).toInt();
-  d.title           = ss_jsr(obj, Keys::Title, "").toString().simplified();
-  d.value           = ss_jsr(obj, Keys::Value, "").toString().simplified();
-  d.units           = ss_jsr(obj, Keys::Units, "").toString().simplified();
-  d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
-  d.ledHigh         = SerialStudio::toDouble(ss_jsr(obj, Keys::LedHigh, 0));
-  d.widget          = ss_jsr(obj, Keys::Widget, "").toString().simplified();
-  d.color           = ss_jsr(obj, Keys::Color, "").toString().simplified();
-  if (!d.color.isEmpty() && !QColor::fromString(d.color).isValid())
-    d.color.clear();
-
-  d.alias = ss_jsr(obj, Keys::Alias, "").toString().simplified();
-
-  d.fftSamplingRate   = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
-  d.fftWindow         = ss_jsr(obj, Keys::FFTWindow, SerialStudio::FFTWindowBlackmanHarris).toInt();
-  d.displayTickCount  = ss_jsr(obj, Keys::DisplayTickCount, 5).toInt();
-  d.displayFormat     = ss_jsr(obj, Keys::DisplayFormat, "0d").toString();
-  d.decimalPoints     = ss_jsr(obj, Keys::DecimalPoints, -1).toInt();
-  d.sourceId          = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
-  d.transformCode     = obj.value(Keys::TransformCode).toString();
-  d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
-  d.virtual_          = ss_jsr(obj, Keys::Virtual, false).toBool();
-  d.hideOnDashboard   = ss_jsr(obj, Keys::HideOnDashboard, false).toBool();
-  d.enabled           = !ss_jsr(obj, Keys::Disabled, false).toBool();
-  d.uniqueId          = ss_jsr(obj, Keys::UniqueId, -1).toInt();
-
-  if (!d.value.isEmpty())
-    d.numericValue = SerialStudio::toDouble(d.value, &d.isNumeric);
-
-  if (d.fftWindow < SerialStudio::FFTWindowRectangular
-      || d.fftWindow > SerialStudio::FFTWindowParzen)
-    d.fftWindow = SerialStudio::FFTWindowBlackmanHarris;
-
-  if (!obj.contains(Keys::FFTMin) || !obj.contains(Keys::FFTMax)) {
-    d.fftMin = SerialStudio::toDouble(ss_jsr(obj, Keys::Min, 0));
-    d.fftMax = SerialStudio::toDouble(ss_jsr(obj, Keys::Max, 0));
-  }
-
-  if (!obj.contains(Keys::PltMin) || !obj.contains(Keys::PltMax)) {
-    d.pltMin = SerialStudio::toDouble(ss_jsr(obj, Keys::Min, 0));
-    d.pltMax = SerialStudio::toDouble(ss_jsr(obj, Keys::Max, 0));
-  }
-
-  if (!obj.contains(Keys::WgtMin) || !obj.contains(Keys::WgtMax)) {
-    d.wgtMin = SerialStudio::toDouble(ss_jsr(obj, Keys::Min, 0));
-    d.wgtMax = SerialStudio::toDouble(ss_jsr(obj, Keys::Max, 0));
-  }
-
-  readDatasetAlarmBands(d, obj);
-  readDatasetFrequencyMarkers(d, obj);
-  normalizeDatasetRanges(d);
-  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/CommandRegistry.h"
@@ -28,6 +28,7 @@
 #include <QtLogging>
 
 #include "Misc/Translator.h"
+#include "SSAssert.h"
 
 /**
  * @brief Name-to-StandardKey table for the "StandardKey.X" shortcut spellings
@@ -42,6 +43,8 @@ static const QHash<QString, QKeySequence::StandardKey> kStandardKeys = {
   {    QStringLiteral("Forward"),     QKeySequence::Forward},
   {      QStringLiteral("Close"),       QKeySequence::Close},
   {QStringLiteral("Preferences"), QKeySequence::Preferences},
+  {       QStringLiteral("Undo"),        QKeySequence::Undo},
+  {       QStringLiteral("Redo"),        QKeySequence::Redo},
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -207,7 +210,7 @@ QJsonArray UI::CommandRegistry::filterLayoutNodes(const QJsonArray& nodes) const
  */
 QVariantList UI::CommandRegistry::commands(const QString& context) const
 {
-  Q_ASSERT(!context.isEmpty());
+  SS_ASSERT(!context.isEmpty(), return {});
 
   QList<QPair<int, int>> selected;
   for (int i = 0; i < m_commands.size(); ++i) {
@@ -237,7 +240,7 @@ QVariantList UI::CommandRegistry::commands(const QString& context) const
  */
 QVariantMap UI::CommandRegistry::command(const QString& id) const
 {
-  Q_ASSERT(!id.isEmpty());
+  SS_ASSERT(!id.isEmpty(), return {});
 
   const auto index = m_commandIndex.value(id, -1);
   if (index < 0) {
@@ -254,7 +257,7 @@ QVariantMap UI::CommandRegistry::command(const QString& id) const
  */
 QVariantMap UI::CommandRegistry::layout(const QString& surface) const
 {
-  Q_ASSERT(!surface.isEmpty());
+  SS_ASSERT(!surface.isEmpty(), return {});
 
   const auto stored = m_layouts.value(surface);
   if (stored.isEmpty()) {
@@ -277,7 +280,7 @@ QVariantMap UI::CommandRegistry::layout(const QString& surface) const
  */
 QVariantList UI::CommandRegistry::shortcutCommands(const QString& window) const
 {
-  Q_ASSERT(!window.isEmpty());
+  SS_ASSERT(!window.isEmpty(), return {});
 
   QVariantList result;
   for (const auto& command : m_commands) {

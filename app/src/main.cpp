@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <QApplication>
@@ -27,7 +27,6 @@
 #include <QStyleFactory>
 
 #include "AppInfo.h"
-#include "AppState.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/CLI.h"
 #include "Misc/CrashTracker.h"
@@ -35,6 +34,7 @@
 #include "Misc/HighDpiScaling.h"
 #include "Misc/ModuleManager.h"
 #include "Platform/AppPlatform.h"
+#include "SessionContext.h"
 
 /**
  * @brief Configures QApplication name/org/version metadata and global Qt attributes.
@@ -78,6 +78,7 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
                                    const QString& shortcutPath)
 {
   moduleManager.setHeadless(headless);
+  moduleManager.setEphemeralSession(cli.runtimeMode());
   moduleManager.configureUpdater();
   moduleManager.registerQmlTypes();
 
@@ -151,8 +152,6 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_COMMERCIAL
   cli.applyThemeOverride();
-  if (cli.runtimeMode())
-    AppState::instance().setEphemeralSession(true);
 #endif
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("module-manager-bootstrap"));
@@ -182,6 +181,9 @@ int main(int argc, char** argv)
   }
 
   IO::ConnectionManager::instance().shutdownDrivers();
+
+  qInstallMessageHandler(nullptr);
+  SessionContext::current().shutdown();
 
   Platform::AppPlatform::releaseAdjustedArgv(argc, argv);
   return status;

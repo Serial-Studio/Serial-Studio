@@ -1,0 +1,2529 @@
+{
+  "_generated": "AUTO-GENERATED from app/rcc/api/api-schema.json by scripts/generate-property-registry.py; never edit by hand.",
+  "_note": "gRPC field numbers are append-only released state. A parameter keeps its number forever, a parameter that leaves the API moves its number into 'reserved' and is never reassigned, and 1 is reserved in every message for the request id.",
+  "commands": {
+    "api.getCommands": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "assistant.checkpoint": {
+      "fields": {
+        "label": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "assistant.dataset.resolve": {
+      "fields": {
+        "path": 2,
+        "title": 3,
+        "uniqueId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "assistant.listCheckpoints": {
+      "fields": {
+        "limit": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "assistant.memory.propose": {
+      "fields": {
+        "category": 2,
+        "text": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "assistant.project.bulkApply": {
+      "fields": {
+        "ops": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "assistant.restore": {
+      "fields": {
+        "label": 2,
+        "path": 3,
+        "timestamp": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "assistant.script.apply": {
+      "fields": {
+        "code": 2,
+        "datasetId": 3,
+        "groupId": 4,
+        "kind": 5,
+        "language": 6,
+        "sourceId": 7
+      },
+      "reserved": [],
+      "next": 8
+    },
+    "assistant.script.dryRun": {
+      "fields": {
+        "code": 2,
+        "kind": 3,
+        "language": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "assistant.snapshot": {
+      "fields": {
+        "verbose": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "assistant.workspace.addTile": {
+      "fields": {
+        "createWorkspace": 2,
+        "dataset": 3,
+        "groupId": 4,
+        "ranges": 5,
+        "uniqueId": 6,
+        "widgetType": 7,
+        "workspace": 8,
+        "workspaceId": 9
+      },
+      "reserved": [],
+      "next": 10
+    },
+    "assistant.workspace.plan": {
+      "fields": {
+        "widgetType": 2,
+        "workspace": 3,
+        "workspaceId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "assistant.workspace.resolve": {
+      "fields": {
+        "workspace": 2,
+        "workspaceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "console.clear": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "console.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "console.send": {
+      "fields": {
+        "data": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setAnsiColorsEnabled": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setChecksumMethod": {
+      "fields": {
+        "methodIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setCollapseDuplicates": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setDataMode": {
+      "fields": {
+        "modeIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setDisplayMode": {
+      "fields": {
+        "modeIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setEcho": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setEncoding": {
+      "fields": {
+        "encoding": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setFontFamily": {
+      "fields": {
+        "fontFamily": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setFontSize": {
+      "fields": {
+        "fontSize": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setLineEnding": {
+      "fields": {
+        "endingIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setSearchCaseSensitive": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setShowTimestamp": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "console.setVt100Emulation": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "consoleExport.close": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "consoleExport.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "consoleExport.setEnabled": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "controlScript.dryRun": {
+      "fields": {
+        "code": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "controlScript.get": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "controlScript.getCode": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "controlScript.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "controlScript.set": {
+      "fields": {
+        "code": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "controlScript.setCode": {
+      "fields": {
+        "code": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "csvExport.close": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "csvExport.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "csvExport.setEnabled": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "csvExport.setInterval": {
+      "fields": {
+        "intervalMs": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "csvPlayer.close": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "csvPlayer.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "csvPlayer.open": {
+      "fields": {
+        "filePath": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "csvPlayer.setPaused": {
+      "fields": {
+        "paused": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "csvPlayer.setProgress": {
+      "fields": {
+        "progress": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "csvPlayer.step": {
+      "fields": {
+        "delta": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "dashboard.getData": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "dashboard.getFps": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "dashboard.getOperationMode": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "dashboard.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "dashboard.getTimeRange": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "dashboard.reprocess": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "dashboard.setFps": {
+      "fields": {
+        "fps": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "dashboard.setOperationMode": {
+      "fields": {
+        "mode": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "dashboard.setTimeRange": {
+      "fields": {
+        "seconds": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "dashboard.tailFrames": {
+      "fields": {
+        "count": 2,
+        "uniqueIds": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "dashboard.tick": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "diagnostics.run": {
+      "fields": {
+        "bus": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "diagnostics.status": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "extensions.addRepository": {
+      "fields": {
+        "url": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "extensions.getInfo": {
+      "fields": {
+        "extensionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "extensions.install": {
+      "fields": {
+        "addonIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "extensions.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "extensions.listRepositories": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "extensions.loadState": {
+      "fields": {
+        "pluginId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "extensions.refresh": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "extensions.removeRepository": {
+      "fields": {
+        "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "extensions.saveState": {
+      "fields": {
+        "pluginId": 2,
+        "state": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "extensions.uninstall": {
+      "fields": {
+        "addonIndex": 2,
+        "dryRun": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "io.audio.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.audio.listInputDevices": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.audio.listInputFormats": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.audio.listOutputDevices": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.audio.listOutputFormats": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.audio.listSampleRates": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.audio.setInputChannelConfig": {
+      "fields": {
+        "channelIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setInputDevice": {
+      "fields": {
+        "deviceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setInputSampleFormat": {
+      "fields": {
+        "formatIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setOutputChannelConfig": {
+      "fields": {
+        "channelIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setOutputDevice": {
+      "fields": {
+        "deviceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setOutputSampleFormat": {
+      "fields": {
+        "formatIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setSampleRate": {
+      "fields": {
+        "rateIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.ble.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.ble.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.ble.listCharacteristics": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.ble.listDevices": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.ble.listServices": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.ble.selectDevice": {
+      "fields": {
+        "deviceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.ble.selectService": {
+      "fields": {
+        "serviceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.ble.selectServiceByUuid": {
+      "fields": {
+        "serviceUuid": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.ble.setCharacteristicIndex": {
+      "fields": {
+        "characteristicIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.ble.setNotifyCharacteristic": {
+      "fields": {
+        "characteristicUuid": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.ble.startDiscovery": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.ble.writeCharacteristic": {
+      "fields": {
+        "characteristicUuid": 2,
+        "data": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "io.canbus.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.canbus.getInterfaceError": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.canbus.listBitrates": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.canbus.listInterfaces": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.canbus.listPlugins": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.canbus.setBitrate": {
+      "fields": {
+        "bitrate": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.canbus.setCanFd": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.canbus.setInterfaceIndex": {
+      "fields": {
+        "interfaceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.canbus.setPluginIndex": {
+      "fields": {
+        "pluginIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.connect": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.disconnect": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.getLatestFrame": {
+      "fields": {
+        "encoding": 2,
+        "sourceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "io.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.hid.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.hid.listDevices": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.hid.setDeviceIndex": {
+      "fields": {
+        "deviceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.listBuses": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.addRegisterGroup": {
+      "fields": {
+        "count": 2,
+        "startAddress": 3,
+        "type": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "io.modbus.clearRegisterGroups": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listBaudRates": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listDataBits": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listParities": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listProtocols": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listRegisterGroups": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listRegisterTypes": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listSerialPorts": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.listStopBits": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.modbus.removeRegisterGroup": {
+      "fields": {
+        "groupIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setBaudRate": {
+      "fields": {
+        "baudRate": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setDataBitsIndex": {
+      "fields": {
+        "dataBitsIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setHost": {
+      "fields": {
+        "host": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setParityIndex": {
+      "fields": {
+        "parityIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setPollInterval": {
+      "fields": {
+        "intervalMs": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setPort": {
+      "fields": {
+        "port": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setProtocolIndex": {
+      "fields": {
+        "protocolIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setSerialPortIndex": {
+      "fields": {
+        "portIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setSlaveAddress": {
+      "fields": {
+        "address": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.modbus.setStopBitsIndex": {
+      "fields": {
+        "stopBitsIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.network.listSocketTypes": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.network.lookup": {
+      "fields": {
+        "host": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setRemoteAddress": {
+      "fields": {
+        "address": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setSocketType": {
+      "fields": {
+        "socketTypeIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setTcpPort": {
+      "fields": {
+        "port": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setUdpLocalPort": {
+      "fields": {
+        "port": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setUdpMulticast": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setUdpRemotePort": {
+      "fields": {
+        "port": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.process.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.process.listRunning": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.process.setArguments": {
+      "fields": {
+        "arguments": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.process.setExecutable": {
+      "fields": {
+        "executable": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.process.setMode": {
+      "fields": {
+        "mode": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.process.setPipePath": {
+      "fields": {
+        "pipePath": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.process.setWorkingDir": {
+      "fields": {
+        "workingDir": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.setBusType": {
+      "fields": {
+        "busType": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.setPaused": {
+      "fields": {
+        "paused": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.uart.listBaudRates": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.uart.listPorts": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.uart.setAutoReconnect": {
+      "fields": {
+        "autoReconnect": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setBaudRate": {
+      "fields": {
+        "baudRate": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setDataBits": {
+      "fields": {
+        "dataBitsIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setDevice": {
+      "fields": {
+        "device": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setDtrEnabled": {
+      "fields": {
+        "dtrEnabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setFlowControl": {
+      "fields": {
+        "flowControlIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setParity": {
+      "fields": {
+        "parityIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setPortIndex": {
+      "fields": {
+        "portIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setStopBits": {
+      "fields": {
+        "stopBitsIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.usb.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.usb.listDevices": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.usb.setDeviceIndex": {
+      "fields": {
+        "deviceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.usb.setInEndpointIndex": {
+      "fields": {
+        "endpointIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.usb.setIsoPacketSize": {
+      "fields": {
+        "size": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.usb.setOutEndpointIndex": {
+      "fields": {
+        "endpointIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.usb.setTransferMode": {
+      "fields": {
+        "mode": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.writeData": {
+      "fields": {
+        "data": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "licensing.activate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "licensing.activateOffline": {
+      "fields": {
+        "path": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "licensing.deactivate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "licensing.enableTrial": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "licensing.getGuardStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "licensing.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "licensing.getTrialStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "licensing.setLicense": {
+      "fields": {
+        "licenseKey": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "licensing.validate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "mdf4Export.close": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "mdf4Export.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "mdf4Export.setEnabled": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "mdf4Player.close": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "mdf4Player.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "mdf4Player.open": {
+      "fields": {
+        "filePath": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "mdf4Player.setPaused": {
+      "fields": {
+        "paused": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "mdf4Player.setProgress": {
+      "fields": {
+        "progress": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "mdf4Player.step": {
+      "fields": {
+        "delta": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "mirror.getInfo": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "mirror.getStructure": {
+      "fields": {
+        "part": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "notifications.clearAll": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "notifications.clearChannel": {
+      "fields": {
+        "channel": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "notifications.getUnreadCount": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "notifications.list": {
+      "fields": {
+        "channel": 2,
+        "limit": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "notifications.listChannels": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "notifications.markRead": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "notifications.post": {
+      "fields": {
+        "channel": 2,
+        "level": 3,
+        "subtitle": 4,
+        "title": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "notifications.resolve": {
+      "fields": {
+        "channel": 2,
+        "subtitle": 3,
+        "title": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "problems.list": {
+      "fields": {
+        "checkerId": 2,
+        "limit": 3,
+        "severity": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "problems.listCheckers": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "problems.run": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.action.add": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.action.delete": {
+      "fields": {
+        "actionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.action.duplicate": {
+      "fields": {
+        "actionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.action.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.action.update": {
+      "fields": {
+        "actionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.activate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.batch": {
+      "fields": {
+        "ops": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dashboard.getTimeRange": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.dashboard.getWidgetTitles": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.dashboard.setTimeRange": {
+      "fields": {
+        "seconds": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dashboard.setWidgetFreezeTitle": {
+      "fields": {
+        "mode": 2,
+        "uniqueId": 3,
+        "widgetType": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dashboard.setWidgetTitle": {
+      "fields": {
+        "title": 2,
+        "uniqueId": 3,
+        "widgetType": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataTable.add": {
+      "fields": {
+        "name": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dataTable.addRegister": {
+      "fields": {
+        "computed": 2,
+        "defaultValue": 3,
+        "name": 4,
+        "table": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "project.dataTable.delete": {
+      "fields": {
+        "dryRun": 2,
+        "name": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataTable.deleteRegister": {
+      "fields": {
+        "dryRun": 2,
+        "name": 3,
+        "table": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataTable.get": {
+      "fields": {
+        "name": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dataTable.getValue": {
+      "fields": {
+        "name": 2,
+        "table": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataTable.getValueH": {
+      "fields": {
+        "handle": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dataTable.handle": {
+      "fields": {
+        "name": 2,
+        "table": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataTable.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.dataTable.rename": {
+      "fields": {
+        "newName": 2,
+        "oldName": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataTable.setValue": {
+      "fields": {
+        "name": 2,
+        "table": 3,
+        "value": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataTable.setValueH": {
+      "fields": {
+        "handle": 2,
+        "value": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataTable.updateRegister": {
+      "fields": {
+        "computed": 2,
+        "defaultValue": 3,
+        "name": 4,
+        "newName": 5,
+        "table": 6
+      },
+      "reserved": [],
+      "next": 7
+    },
+    "project.dataset.add": {
+      "fields": {
+        "groupId": 2,
+        "options": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataset.addMany": {
+      "fields": {
+        "count": 2,
+        "groupId": 3,
+        "options": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.delete": {
+      "fields": {
+        "datasetId": 2,
+        "dryRun": 3,
+        "groupId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.duplicate": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataset.getAlarmBands": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataset.getByPath": {
+      "fields": {
+        "path": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dataset.getByTitle": {
+      "fields": {
+        "groupId": 2,
+        "sourceId": 3,
+        "title": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.getByUniqueId": {
+      "fields": {
+        "uniqueId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.dataset.getExecutionOrder": {
+      "fields": {
+        "limit": 2,
+        "offset": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataset.getFFTMarkers": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataset.list": {
+      "fields": {
+        "limit": 2,
+        "offset": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.dataset.move": {
+      "fields": {
+        "dryRun": 2,
+        "newPosition": 3,
+        "uniqueId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.setAlarmBands": {
+      "fields": {
+        "alarmBands": 2,
+        "datasetId": 3,
+        "groupId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.setFFTMarkers": {
+      "fields": {
+        "datasetId": 2,
+        "fftMarkers": 3,
+        "groupId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.setOption": {
+      "fields": {
+        "datasetId": 2,
+        "enabled": 3,
+        "groupId": 4,
+        "option": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "project.dataset.setOptions": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3,
+        "options": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.setTransformCode": {
+      "fields": {
+        "code": 2,
+        "datasetId": 3,
+        "groupId": 4,
+        "language": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "project.dataset.setVirtual": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3,
+        "virtual": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.transform.dryRun": {
+      "fields": {
+        "code": 2,
+        "language": 3,
+        "values": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.dataset.update": {
+      "fields": {
+        "alias": 4,
+        "color": 5,
+        "datasetId": 2,
+        "decimalPoints": 6,
+        "displayFormat": 7,
+        "displayTickCount": 8,
+        "fft": 9,
+        "fftBallistics": 10,
+        "fftBallisticsRelease": 11,
+        "fftLogX": 12,
+        "fftMax": 13,
+        "fftMin": 14,
+        "fftSamples": 15,
+        "fftSamplingRate": 16,
+        "fftWindow": 17,
+        "graph": 18,
+        "groupId": 3,
+        "hideOnDashboard": 19,
+        "index": 20,
+        "led": 21,
+        "ledHigh": 22,
+        "log": 23,
+        "overviewDisplay": 24,
+        "plotLogX": 25,
+        "plotLogY": 26,
+        "pltMax": 27,
+        "pltMin": 28,
+        "sourceId": 29,
+        "title": 30,
+        "transformCode": 31,
+        "transformLanguage": 32,
+        "units": 33,
+        "virtual": 34,
+        "waterfall": 35,
+        "waterfallYAxis": 36,
+        "wgtMax": 37,
+        "wgtMin": 38,
+        "widget": 39,
+        "xAxisId": 40
+      },
+      "reserved": [],
+      "next": 41
+    },
+    "project.dryRun.endToEnd": {
+      "fields": {
+        "code": 2,
+        "language": 3,
+        "sampleFrame": 4,
+        "sampleFrames": 5,
+        "sourceId": 6,
+        "verbose": 7
+      },
+      "reserved": [],
+      "next": 8
+    },
+    "project.exportJson": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.frameParser.dryCompile": {
+      "fields": {
+        "code": 2,
+        "language": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.frameParser.dryRun": {
+      "fields": {
+        "checksumAlgorithm": 2,
+        "code": 3,
+        "decoderMethod": 4,
+        "frameDetection": 5,
+        "frameEnd": 6,
+        "frameStart": 7,
+        "hexadecimalDelimiters": 8,
+        "inputBytes": 9,
+        "inputBytesHex": 10,
+        "language": 11,
+        "operationMode": 12
+      },
+      "reserved": [],
+      "next": 13
+    },
+    "project.frameParser.getCode": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.frameParser.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.frameParser.getLanguage": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.frameParser.getTemplate": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.frameParser.getTemplateSchema": {
+      "fields": {
+        "template": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.frameParser.listTemplates": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.frameParser.setCode": {
+      "fields": {
+        "code": 2,
+        "language": 3,
+        "sourceId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.frameParser.setLanguage": {
+      "fields": {
+        "language": 2,
+        "sourceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.frameParser.setTemplate": {
+      "fields": {
+        "params": 2,
+        "sourceId": 3,
+        "template": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.frameParser.update": {
+      "fields": {
+        "checksumAlgorithm": 2,
+        "decoderMethod": 3,
+        "endSequence": 4,
+        "frameDetection": 5,
+        "hexadecimalDelimiters": 6,
+        "operationMode": 7,
+        "sourceId": 8,
+        "startSequence": 9
+      },
+      "reserved": [],
+      "next": 10
+    },
+    "project.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.group.add": {
+      "fields": {
+        "title": 2,
+        "widgetType": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.group.delete": {
+      "fields": {
+        "dryRun": 2,
+        "groupId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.group.duplicate": {
+      "fields": {
+        "groupId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.group.get": {
+      "fields": {
+        "groupId": 2,
+        "limit": 3,
+        "offset": 4,
+        "uniqueId": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "project.group.list": {
+      "fields": {
+        "limit": 2,
+        "offset": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.group.move": {
+      "fields": {
+        "dryRun": 2,
+        "groupId": 3,
+        "newPosition": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.group.update": {
+      "fields": {
+        "groupId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.loadJson": {
+      "fields": {
+        "config": 2,
+        "dryRun": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.mqtt.publisher.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.mqtt.publisher.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.mqtt.publisher.setConfig": {
+      "fields": {
+        "cleanSession": 2,
+        "clientId": 3,
+        "customClientId": 4,
+        "enabled": 5,
+        "hostname": 6,
+        "keepAlive": 7,
+        "mode": 8,
+        "mqttVersion": 9,
+        "notificationTopic": 10,
+        "password": 11,
+        "peerVerifyDepth": 12,
+        "peerVerifyMode": 13,
+        "port": 14,
+        "publishFrequency": 15,
+        "publishNotifications": 16,
+        "sslEnabled": 17,
+        "sslProtocol": 18,
+        "topicBase": 19,
+        "username": 20
+      },
+      "reserved": [],
+      "next": 21
+    },
+    "project.mqtt.subscriber.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.mqtt.subscriber.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.mqtt.subscriber.setConfig": {
+      "fields": {
+        "autoKeepAlive": 2,
+        "cleanSession": 3,
+        "clientId": 4,
+        "hostname": 5,
+        "keepAlive": 6,
+        "mqttVersion": 7,
+        "password": 8,
+        "peerVerifyDepth": 9,
+        "peerVerifyMode": 10,
+        "port": 11,
+        "sslEnabled": 12,
+        "sslProtocol": 13,
+        "topicFilter": 14,
+        "username": 15
+      },
+      "reserved": [],
+      "next": 16
+    },
+    "project.new": {
+      "fields": {
+        "dryRun": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.open": {
+      "fields": {
+        "dryRun": 2,
+        "filePath": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.outputWidget.add": {
+      "fields": {
+        "groupId": 2,
+        "type": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.outputWidget.delete": {
+      "fields": {
+        "groupId": 2,
+        "widgetId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.outputWidget.dryRun": {
+      "fields": {
+        "code": 2,
+        "hex": 3,
+        "inputValue": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.outputWidget.duplicate": {
+      "fields": {
+        "groupId": 2,
+        "widgetId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.outputWidget.get": {
+      "fields": {
+        "groupId": 2,
+        "widgetId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.outputWidget.update": {
+      "fields": {
+        "groupId": 2,
+        "widgetId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.painter.dryRun": {
+      "fields": {
+        "code": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.painter.getCode": {
+      "fields": {
+        "groupId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.painter.setCode": {
+      "fields": {
+        "code": 2,
+        "groupId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.redo": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.save": {
+      "fields": {
+        "askPath": 2,
+        "filePath": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.search": {
+      "fields": {
+        "groupId": 2,
+        "limit": 3,
+        "offset": 4,
+        "query": 5,
+        "sourceId": 6,
+        "type": 7
+      },
+      "reserved": [],
+      "next": 8
+    },
+    "project.setTitle": {
+      "fields": {
+        "title": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.snapshot": {
+      "fields": {
+        "limit": 2,
+        "offset": 3,
+        "sections": 4,
+        "verbose": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "project.source.add": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.source.delete": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.source.getConfig": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.source.getFrameParserCode": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.source.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.source.setFrameParserCode": {
+      "fields": {
+        "code": 2,
+        "sourceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.source.setProperties": {
+      "fields": {
+        "settings": 2,
+        "sourceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.source.setProperty": {
+      "fields": {
+        "key": 2,
+        "propertyValue": 3,
+        "sourceId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "project.source.update": {
+      "fields": {
+        "busType": 2,
+        "checksumAlgorithm": 3,
+        "decoderMethod": 4,
+        "frameDetection": 5,
+        "frameEnd": 6,
+        "frameStart": 7,
+        "hexadecimalDelimiters": 8,
+        "sourceId": 9,
+        "title": 10
+      },
+      "reserved": [],
+      "next": 11
+    },
+    "project.template.apply": {
+      "fields": {
+        "dryRun": 2,
+        "templateId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.template.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.undo": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.validate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.workspace.add": {
+      "fields": {
+        "title": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.addWidget": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3,
+        "relativeIndex": 4,
+        "widgetType": 5,
+        "workspaceId": 6
+      },
+      "reserved": [],
+      "next": 7
+    },
+    "project.workspace.autoGenerate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.workspace.cleanup": {
+      "fields": {
+        "dryRun": 2,
+        "workspaceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.workspace.clearAll": {
+      "fields": {
+        "dryRun": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.delete": {
+      "fields": {
+        "dryRun": 2,
+        "id": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.workspace.get": {
+      "fields": {
+        "id": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.getCustomizeMode": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.workspace.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.workspace.removeWidget": {
+      "fields": {
+        "groupId": 2,
+        "relativeIndex": 3,
+        "widgetId": 4,
+        "widgetType": 5,
+        "workspaceId": 6
+      },
+      "reserved": [],
+      "next": 7
+    },
+    "project.workspace.rename": {
+      "fields": {
+        "id": 2,
+        "title": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.workspace.reorder": {
+      "fields": {
+        "workspaceIds": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.setCustomizeMode": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.update": {
+      "fields": {
+        "description": 2,
+        "icon": 3,
+        "id": 4,
+        "title": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "project.workspace.validate": {
+      "fields": {
+        "workspaceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "scripts.get": {
+      "fields": {
+        "id": 2,
+        "kind": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "scripts.list": {
+      "fields": {
+        "kind": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.addTag": {
+      "fields": {
+        "label": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.assignTag": {
+      "fields": {
+        "sessionId": 2,
+        "tagId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "sessions.close": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "sessions.delete": {
+      "fields": {
+        "sessionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.deleteTag": {
+      "fields": {
+        "tagId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.exportToCsv": {
+      "fields": {
+        "sessionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.get": {
+      "fields": {
+        "sessionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.getDbPath": {
+      "fields": {
+        "projectTitle": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "sessions.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "sessions.listTags": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "sessions.openDatabase": {
+      "fields": {
+        "filePath": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.removeTag": {
+      "fields": {
+        "sessionId": 2,
+        "tagId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "sessions.renameTag": {
+      "fields": {
+        "newLabel": 2,
+        "tagId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "sessions.replay": {
+      "fields": {
+        "sessionId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.setExportEnabled": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "sessions.setNotes": {
+      "fields": {
+        "notes": 2,
+        "sessionId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "system.exec": {
+      "fields": {
+        "args": 2,
+        "program": 3,
+        "workingDir": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "system.kill": {
+      "fields": {
+        "processId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "system.projectDir": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "system.runningProcesses": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "system.startDemo": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.getLayout": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.getWidgetSettings": {
+      "fields": {
+        "widgetId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "ui.window.listGroups": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.listWindowStates": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.loadLayout": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.saveLayout": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.window.setActiveGroup": {
+      "fields": {
+        "groupId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "ui.window.setActiveGroupIndex": {
+      "fields": {
+        "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "ui.window.setAutoLayout": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "ui.window.setLayout": {
+      "fields": {
+        "layout": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "ui.window.setWidgetSetting": {
+      "fields": {
+        "key": 2,
+        "settingValue": 3,
+        "widgetId": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "ui.window.setWindowState": {
+      "fields": {
+        "id": 2,
+        "state": 3
+      },
+      "reserved": [],
+      "next": 4
+    }
+  }
+}

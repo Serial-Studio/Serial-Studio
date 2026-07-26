@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -53,6 +53,15 @@ Item {
   property real currentMagnitude: root.model.magnitude
 
   //
+  // Peak-hold: highest G seen since load or double-click on the MAX G readout
+  //
+  property real peakG: 0
+  onCurrentGChanged: {
+    if (root.currentG > root.peakG)
+      root.peakG = root.currentG
+  }
+
+  //
   // Size-aware font scale: shrinks widget text as the window gets small
   //
   readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(Math.min(width, height), 260)
@@ -65,21 +74,13 @@ Item {
     const minGaugeSize = 200
     const labelMargin = 40
     const noLabelMargin = 12
-    const leftPanelMaxWidth = 120
-    const containerLeftMargin = 8
-    const containerRightMargin = 8
-    const containerTopMargin = 8
-    const containerBottomMargin = 8
-    const spacingWithLabels = 16
+    const containerMargins = 16
+    const readoutStripHeight = 42
     const toolbarHeight = 48
 
-    const totalHorizontalOverhead = containerLeftMargin + containerRightMargin +
-                                     leftPanelMaxWidth + spacingWithLabels
-    const totalVerticalOverhead = containerTopMargin + containerBottomMargin +
-                                   (root.hasToolbar ? toolbarHeight : 0)
-
-    const polarAreaWidth = root.width - totalHorizontalOverhead
-    const polarAreaHeight = root.height - totalVerticalOverhead
+    const polarAreaWidth = root.width - containerMargins
+    const polarAreaHeight = root.height - containerMargins - readoutStripHeight -
+                            (root.hasToolbar ? toolbarHeight : 0)
 
     const widthWithLabels = polarAreaWidth - labelMargin * 2
     const heightWithLabels = polarAreaHeight - labelMargin * 2
@@ -101,7 +102,7 @@ Item {
 
     const shrinkageAcceptable = gaugeSizeWithLabels >= (gaugeSizeWithoutLabels * 0.8)
 
-    return aspectRatioOk && shrinkageAcceptable && root.height >= 320 && root.width >= Math.min(380, Math.max(320, root.height * 0.8))
+    return aspectRatioOk && shrinkageAcceptable && root.height >= 360 && root.width >= 320
   }
 
   //
@@ -192,12 +193,10 @@ Item {
   }
 
   //
-  // Main container - Row layout with indicators on left, polar plot on right
+  // Main container: polar plot on top, readout strip at the bottom
   //
-  RowLayout {
+  Item {
     id: container
-
-    spacing: root.angleLabelsVisible ? 16 : 8
 
     anchors {
       topMargin: 8
@@ -211,145 +210,20 @@ Item {
     }
 
     //
-    // Vertical indicator strip on the left
-    //
-    ColumnLayout {
-      spacing: 4
-      Layout.maximumWidth: 120
-      Layout.alignment: Qt.AlignVCenter
-
-      Item {
-        Layout.fillHeight: true
-      }
-
-      Rectangle {
-        border.width: 1
-        implicitHeight: 38
-        Layout.fillWidth: true
-        color: Cpp_ThemeManager.colors["widget_base"]
-        border.color: root.currentG > (root.displayMaxG * 0.75)
-                      ? Cpp_ThemeManager.colors["alarm"]
-                      : Cpp_ThemeManager.colors["widget_border"]
-
-        Column {
-          spacing: 1
-          anchors.margins: 4
-          anchors.fill: parent
-
-          Label {
-            opacity: 0.6
-            width: parent.width
-            text: qsTr("G-FORCE")
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-                   Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
-          }
-
-          Label {
-            width: parent.width
-            elide: Text.ElideRight
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-                   Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
-
-            // code-verify off
-            text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
-                  (root.normalize360(root.currentTheta).toFixed(0) + "").padStart(3, ' ') + "°"
-            // code-verify on
-          }
-        }
-      }
-
-      Rectangle {
-        border.width: 1
-        implicitHeight: 38
-        Layout.fillWidth: true
-        color: Cpp_ThemeManager.colors["widget_base"]
-        border.color: Cpp_ThemeManager.colors["widget_border"]
-
-        Column {
-          spacing: 1
-          anchors.margins: 4
-          anchors.fill: parent
-
-          Label {
-            opacity: 0.6
-            width: parent.width
-            text: qsTr("PITCH ↕")
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-                   Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
-          }
-
-          Label {
-            width: parent.width
-            elide: Text.ElideRight
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-                   Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
-
-            // code-verify off
-            text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
-            // code-verify on
-          }
-        }
-      }
-
-      Rectangle {
-        border.width: 1
-        implicitHeight: 38
-        Layout.fillWidth: true
-        color: Cpp_ThemeManager.colors["widget_base"]
-        border.color: Cpp_ThemeManager.colors["widget_border"]
-
-        Column {
-          spacing: 1
-          anchors.margins: 4
-          anchors.fill: parent
-
-          Label {
-            opacity: 0.6
-            width: parent.width
-            text: qsTr("ROLL ↔")
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-                   Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
-          }
-
-          Label {
-            width: parent.width
-            elide: Text.ElideRight
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
-                   Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
-
-            // code-verify off
-            text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
-            // code-verify on
-          }
-        }
-      }
-
-      Item {
-        Layout.fillHeight: true
-      }
-    }
-
-    //
-    // Polar plot area on the right
+    // Polar plot area
     //
     Item {
       id: polarArea
 
-      Layout.fillWidth: true
-      Layout.fillHeight: true
       property real margin: root.angleLabelsVisible ? 40 : 12
+
+      anchors {
+        bottomMargin: 4
+        top: parent.top
+        left: parent.left
+        right: parent.right
+        bottom: readouts.top
+      }
 
       //
       // The gauge is always square, centered in the polar area
@@ -357,16 +231,21 @@ Item {
       readonly property real gaugeSize: Math.min(width - margin * 2, height - margin * 2)
 
       //
-      // Dark circular background
+      // Dark instrument face: fixed palette (dark dial, light grid, red
+      // indicator), deliberately theme-blind like the Gyroscope horizon
       //
+
+      // code-verify off
       Rectangle {
         id: polarCircle
 
+        border.width: 1
+        color: "#21262f"
         radius: width / 2
+        border.color: "#3d4451"
         anchors.centerIn: parent
         width: polarArea.gaugeSize
         height: polarArea.gaugeSize
-        color: Cpp_ThemeManager.colors["polar_background"]
       }
 
       //
@@ -383,13 +262,15 @@ Item {
         // Radial dotted lines for each 30 deg angle
         //
         Canvas {
+          id: radialLines
+
           opacity: 0.15
           anchors.fill: parent
 
           onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
-            ctx.strokeStyle = Cpp_ThemeManager.colors["polar_foreground"];
+            ctx.strokeStyle = "#e8e8e8";
             ctx.lineWidth = 1;
             ctx.setLineDash([4, 4]);
 
@@ -406,13 +287,6 @@ Item {
               ctx.moveTo(centerX, centerY);
               ctx.lineTo(x, y);
               ctx.stroke();
-            }
-          }
-
-          Connections {
-            target: Cpp_ThemeManager
-            function onThemeChanged() {
-              parent.requestPaint();
             }
           }
 
@@ -434,10 +308,33 @@ Item {
             border.width: 1
             radius: width / 2
             color: "transparent"
+            border.color: "#e8e8e8"
             anchors.centerIn: parent
             width: rings.width * fraction
             height: rings.height * fraction
-            border.color: Cpp_ThemeManager.colors["polar_foreground"]
+          }
+        }
+
+        //
+        // Ring scale labels: magnitude at each grid circle, along the upper axis
+        //
+        Repeater {
+          model: 4
+
+          delegate: Text {
+            required property int index
+
+            readonly property real fraction: 1.0 - (index * 0.25)
+            readonly property real ringValue: root.displayMaxG * fraction
+
+            z: 2
+            opacity: 0.55
+            color: "#e8e8e8"
+            x: rings.width / 2 + 4
+            y: rings.height / 2 - rings.height / 2 * fraction + 2
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.55 * root.uiScale))
+            text: (ringValue % 1 === 0 ? ringValue.toFixed(0) : ringValue.toFixed(1)) + "G"
           }
         }
 
@@ -449,9 +346,9 @@ Item {
           width: 4
           height: 4
           opacity: 0.5
+          color: "#e8e8e8"
           radius: width / 2
           anchors.centerIn: parent
-          color: Cpp_ThemeManager.colors["polar_foreground"]
         }
 
         //
@@ -460,25 +357,27 @@ Item {
         Rectangle {
           z: 1
           width: 1
+          opacity: 0.3
+          color: "#e8e8e8"
+
           anchors {
             top: parent.top
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
           }
-          opacity: 0.3
-          color: Cpp_ThemeManager.colors["polar_foreground"]
         }
 
         Rectangle {
           z: 1
           height: 1
+          opacity: 0.3
+          color: "#e8e8e8"
+
           anchors {
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
           }
-          opacity: 0.3
-          color: Cpp_ThemeManager.colors["polar_foreground"]
         }
 
 
@@ -495,15 +394,13 @@ Item {
             readonly property real radius: rings.width / 2 + 18
             readonly property real angleRad: angle * Math.PI / 180
 
-            visible: rings.width >= 180
+            visible: root.angleLabelsVisible
             x: rings.width / 2 + radius * Math.cos(angleRad) - width / 2
             y: rings.height / 2 - radius * Math.sin(angleRad) - height / 2
 
-            opacity: 0.5
-            // code-verify off
+            opacity: 0.6
             text: angle + "°"
-            // code-verify on
-            color: Cpp_ThemeManager.colors["polar_foreground"]
+            color: Cpp_ThemeManager.colors["widget_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision,
                    Cpp_Misc_CommonFonts.widgetFont(0.6 * root.uiScale))
           }
@@ -516,8 +413,8 @@ Item {
       Rectangle {
         id: indicator
 
+        color: "#ff5252"
         radius: width / 2
-        color: Cpp_ThemeManager.colors["polar_indicator"]
 
         readonly property real dotSize: Math.max(
                                           6, Math.min(14, polarArea.gaugeSize / 20))
@@ -578,18 +475,18 @@ Item {
         Rectangle {
           width: 1
           height: 12
+          color: "#ff5252"
           x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY - height - 4
-          color: Cpp_ThemeManager.colors["polar_indicator"]
           opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
         }
 
         Rectangle {
           width: 1
           height: 12
-          x: cursorTracker.mouseX - width / 2
+          color: "#ff5252"
           y: cursorTracker.mouseY + 4
-          color: Cpp_ThemeManager.colors["polar_indicator"]
+          x: cursorTracker.mouseX - width / 2
           opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
         }
 
@@ -599,16 +496,18 @@ Item {
         Rectangle {
           height: 1
           width: 12
+          color: "#ff5252"
           x: cursorTracker.mouseX - width - 4
           y: cursorTracker.mouseY - height / 2
-          color: Cpp_ThemeManager.colors["polar_indicator"]
           opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
-        } Rectangle {
+        }
+
+        Rectangle {
           height: 1
           width: 12
+          color: "#ff5252"
           x: cursorTracker.mouseX + 4
           y: cursorTracker.mouseY - height / 2
-          color: Cpp_ThemeManager.colors["polar_indicator"]
           opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
         }
 
@@ -632,12 +531,207 @@ Item {
             elide: Text.ElideRight
             anchors.centerIn: parent
             color: Cpp_ThemeManager.colors["tooltip_text"]
-            // code-verify off
             text: cursorTracker.cursorMagnitude.toFixed(2) + "G @ " +
                   cursorTracker.cursorAngle.toFixed(0) + "°"
-            // code-verify on
             font: (Cpp_Misc_CommonFonts.widgetFontRevision,
                    Cpp_Misc_CommonFonts.widgetFont(0.7 * root.uiScale))
+          }
+        }
+      }
+    }
+    // code-verify on
+
+    //
+    // Readout strip: G-force, pitch and roll
+    //
+    Item {
+      id: readouts
+
+      visible: container.height >= 120
+      height: visible ? readoutRow.implicitHeight : 0
+
+      anchors {
+        left: parent.left
+        right: parent.right
+        bottom: parent.bottom
+      }
+
+      RowLayout {
+        id: readoutRow
+
+        spacing: 4
+        anchors.fill: parent
+
+        Rectangle {
+          border.width: 1
+          Layout.fillWidth: true
+          implicitHeight: gForceColumn.implicitHeight + 10
+          color: Cpp_ThemeManager.colors["widget_base"]
+          border.color: root.currentG > (root.displayMaxG * 0.75)
+                        ? Cpp_ThemeManager.colors["alarm"]
+                        : Cpp_ThemeManager.colors["widget_border"]
+
+          Column {
+            id: gForceColumn
+
+            spacing: 1
+            width: parent.width - 8
+            anchors.centerIn: parent
+
+            Label {
+              opacity: 0.6
+              width: parent.width
+              text: qsTr("G-FORCE")
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
+            }
+
+            Label {
+              width: parent.width
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
+
+              // code-verify off
+              text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
+                    (root.normalize360(root.currentTheta).toFixed(0) + "").padStart(3, ' ') + "°"
+              // code-verify on
+            }
+          }
+        }
+
+        Rectangle {
+          border.width: 1
+          Layout.fillWidth: true
+          ToolTip.delay: 500
+          ToolTip.visible: peakResetArea.containsMouse
+          ToolTip.text: qsTr("Double-click to reset")
+          implicitHeight: maxGColumn.implicitHeight + 10
+          color: Cpp_ThemeManager.colors["widget_base"]
+          border.color: root.peakG > (root.displayMaxG * 0.75)
+                        ? Cpp_ThemeManager.colors["alarm"]
+                        : Cpp_ThemeManager.colors["widget_border"]
+
+          MouseArea {
+            id: peakResetArea
+
+            hoverEnabled: true
+            anchors.fill: parent
+            onDoubleClicked: root.peakG = root.currentG
+          }
+
+          Column {
+            id: maxGColumn
+
+            spacing: 1
+            width: parent.width - 8
+            anchors.centerIn: parent
+
+            Label {
+              opacity: 0.6
+              width: parent.width
+              text: qsTr("MAX G")
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
+            }
+
+            Label {
+              width: parent.width
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
+              text: (root.peakG.toFixed(2) + "").padStart(5, ' ') + "G"
+            }
+          }
+        }
+
+        Rectangle {
+          border.width: 1
+          Layout.fillWidth: true
+          implicitHeight: rollColumn.implicitHeight + 10
+          color: Cpp_ThemeManager.colors["widget_base"]
+          border.color: Cpp_ThemeManager.colors["widget_border"]
+
+          Column {
+            id: rollColumn
+
+            spacing: 1
+            width: parent.width - 8
+            anchors.centerIn: parent
+
+            Label {
+              opacity: 0.6
+              width: parent.width
+              text: qsTr("ROLL ↔")
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
+            }
+
+            Label {
+              width: parent.width
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
+
+              // code-verify off
+              text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
+              // code-verify on
+            }
+          }
+        }
+
+Rectangle {
+          border.width: 1
+          Layout.fillWidth: true
+          implicitHeight: pitchColumn.implicitHeight + 10
+          color: Cpp_ThemeManager.colors["widget_base"]
+          border.color: Cpp_ThemeManager.colors["widget_border"]
+
+          Column {
+            id: pitchColumn
+
+            spacing: 1
+            width: parent.width - 8
+            anchors.centerIn: parent
+
+            Label {
+              opacity: 0.6
+              width: parent.width
+              text: qsTr("PITCH ↕")
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(0.66 * root.uiScale))
+            }
+
+            Label {
+              width: parent.width
+              elide: Text.ElideRight
+              horizontalAlignment: Text.AlignHCenter
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                     Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
+
+              // code-verify off
+              text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
+              // code-verify on
+            }
           }
         }
       }

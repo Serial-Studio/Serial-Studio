@@ -26,6 +26,7 @@
 
 #include "IO/ConnectionManager.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #include "UI/ImageProvider.h"
 #include "UI/Widgets/ImageExport.h"
@@ -70,8 +71,7 @@ Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endS
  */
 void Widgets::ImageFrameReader::processData(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(data != nullptr);
-  Q_ASSERT(m_mode == DetectionMode::Autodetect || m_mode == DetectionMode::Manual);
+  SS_ASSERT(m_mode == DetectionMode::Autodetect || m_mode == DetectionMode::Manual, return);
 
   if (!data || data->data.isEmpty())
     return;
@@ -92,8 +92,8 @@ void Widgets::ImageFrameReader::processData(const IO::CapturedDataPtr& data)
  */
 void Widgets::ImageFrameReader::processAutodetect()
 {
-  Q_ASSERT(m_mode == DetectionMode::Autodetect);
-  Q_ASSERT(!m_accumulator.isEmpty());
+  SS_ASSERT(m_mode == DetectionMode::Autodetect, return);
+  SS_ASSERT(!m_accumulator.isEmpty(), return);
 
   constexpr int kMaxIterations = 10000;
   int iterations               = 0;
@@ -277,8 +277,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractMarkerFr
  */
 void Widgets::ImageFrameReader::processManual()
 {
-  Q_ASSERT(m_mode == DetectionMode::Manual);
-  Q_ASSERT(!m_startSeq.isEmpty() && !m_endSeq.isEmpty());
+  SS_ASSERT(m_mode == DetectionMode::Manual, return);
 
   if (m_startSeq.isEmpty() || m_endSeq.isEmpty())
     return;
@@ -459,8 +458,7 @@ void Widgets::ImageView::setExportEnabled(bool enabled)
  */
 void Widgets::ImageView::onFrameReady(const QByteArray& data)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(m_reader != nullptr);
+  SS_ASSERT(m_reader != nullptr, return);
 
   if (data.isEmpty())
     return;
@@ -515,8 +513,8 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
  */
 void Widgets::ImageView::reconfigureReader()
 {
-  Q_ASSERT(m_index >= 0);
-  Q_ASSERT(!m_providerKey.isEmpty());
+  SS_ASSERT(m_index >= 0, return);
+  SS_ASSERT(!m_providerKey.isEmpty(), return);
 
   if (m_reader) {
     m_reader->deleteLater();

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -29,9 +29,24 @@
 
 #include "DataModel/Scripting/IScriptEngine.h"
 
+class SessionContext;
+
 namespace DataModel {
 
 struct Source;
+
+/**
+ * @brief Runtime health of one source's parser engine, polled once per second by the problem
+ *        center. Never read on the frame path.
+ */
+struct ScriptStat {
+  int sourceId;
+  int language;
+  bool disabled;
+  int consecutiveTimeouts;
+  quint64 errorCount;
+  QString lastError;
+};
 
 /**
  * @brief Per-source script engine manager driving the frame parser pipeline.
@@ -44,6 +59,7 @@ signals:
   void templateNamesChanged();
 
 private:
+  friend class ::SessionContext;
   explicit FrameParser();
   FrameParser(FrameParser&&)                 = delete;
   FrameParser(const FrameParser&)            = delete;
@@ -75,6 +91,7 @@ public:
 
   [[nodiscard]] bool hasTableApiEngines() const noexcept;
   [[nodiscard]] int engineEpoch() const noexcept;
+  [[nodiscard]] QList<ScriptStat> scriptStats() const;
 
   [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 

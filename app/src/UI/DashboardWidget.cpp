@@ -14,20 +14,28 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/DashboardWidget.h"
 
+#include <QHash>
+#include <QQmlComponent>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QUrl>
+
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
+#include "UI/WidgetExtensions.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
 #include "UI/Widgets/Compass.h"
 #include "UI/Widgets/DataGrid.h"
+#include "UI/Widgets/ExtensionData.h"
 #include "UI/Widgets/FFTPlot.h"
 #include "UI/Widgets/Gauge.h"
 #include "UI/Widgets/GPS.h"
@@ -37,6 +45,28 @@
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
 #include "UI/Widgets/WebView.h"
+
+/**
+ * @brief Maps a widget type to the project widget string a bundled package may declare it
+ *        replaces; empty for types no package can ship as (tools, sentinels, output panels).
+ */
+[[nodiscard]] static QString builtinWidgetId(SerialStudio::DashboardWidget type)
+{
+  static const QHash<SerialStudio::DashboardWidget, QString> kIds = {
+    {     SerialStudio::DashboardDataGrid,      QStringLiteral("datagrid")},
+    {    SerialStudio::DashboardMultiPlot,     QStringLiteral("multiplot")},
+    {SerialStudio::DashboardAccelerometer, QStringLiteral("accelerometer")},
+    {    SerialStudio::DashboardGyroscope,          QStringLiteral("gyro")},
+    {          SerialStudio::DashboardGPS,           QStringLiteral("gps")},
+    {      SerialStudio::DashboardWebView,       QStringLiteral("webview")},
+    {          SerialStudio::DashboardLED,     QStringLiteral("led-panel")},
+    {          SerialStudio::DashboardBar,           QStringLiteral("bar")},
+    {        SerialStudio::DashboardGauge,         QStringLiteral("gauge")},
+    {      SerialStudio::DashboardCompass,       QStringLiteral("compass")},
+    {        SerialStudio::DashboardMeter,         QStringLiteral("meter")},
+  };
+  return kIds.value(type);
+}
 
 /**
  * @brief Builds a web-view widget for slot @p index, seeding its URL from the project.
@@ -86,6 +116,8 @@ UI::DashboardWidget::DashboardWidget(QQuickItem* parent)
   , m_relativeIndex(-1)
   , m_widgetType(SerialStudio::DashboardNoWidget)
   , m_qmlPath("")
+  , m_extensionId("")
+  , m_extensionError("")
   , m_dbWidget(nullptr)
 {
   connect(
@@ -141,8 +173,9 @@ int UI::DashboardWidget::relativeIndex() const
 QColor UI::DashboardWidget::widgetColor() const
 {
   if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex)) {
-    if (SerialStudio::isDatasetWidget(m_widgetType)) {
-      const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
+    const auto slot = m_dashboard.widgetSlot(m_widgetType, m_relativeIndex);
+    if (slot.valid && !slot.group) {
+      const auto& dataset = GET_DATASET(m_widgetType, slot.bucketIndex);
       return SerialStudio::getDatasetColor(dataset);
     }
   }
@@ -156,15 +189,12 @@ QColor UI::DashboardWidget::widgetColor() const
 QString UI::DashboardWidget::widgetTitle() const
 {
   if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex)) {
-    if (SerialStudio::isDatasetWidget(m_widgetType)) {
-      const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
-      return dataset.title;
-    }
+    const auto slot = m_dashboard.widgetSlot(m_widgetType, m_relativeIndex);
+    if (slot.valid && slot.group)
+      return GET_GROUP(m_widgetType, slot.bucketIndex).title;
 
-    else if (SerialStudio::isGroupWidget(m_widgetType)) {
-      const auto& group = GET_GROUP(m_widgetType, m_relativeIndex);
-      return group.title;
-    }
+    if (slot.valid)
+      return GET_DATASET(m_widgetType, slot.bucketIndex).title;
   }
 
   return tr("Invalid");
@@ -199,13 +229,14 @@ int UI::DashboardWidget::widgetUniqueId() const
   if (!VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
     return -1;
 
-  if (SerialStudio::isGroupWidget(m_widgetType))
-    return GET_GROUP(m_widgetType, m_relativeIndex).uniqueId;
+  const auto slot = m_dashboard.widgetSlot(m_widgetType, m_relativeIndex);
+  if (!slot.valid)
+    return -1;
 
-  if (SerialStudio::isDatasetWidget(m_widgetType))
-    return GET_DATASET(m_widgetType, m_relativeIndex).uniqueId;
+  if (slot.group)
+    return GET_GROUP(m_widgetType, slot.bucketIndex).uniqueId;
 
-  return -1;
+  return GET_DATASET(m_widgetType, slot.bucketIndex).uniqueId;
 }
 
 /**
@@ -216,17 +247,14 @@ int UI::DashboardWidget::widgetSourceId() const
   if (!VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
     return 0;
 
-  if (SerialStudio::isGroupWidget(m_widgetType)) {
-    const auto& group = GET_GROUP(m_widgetType, m_relativeIndex);
-    return group.sourceId;
-  }
+  const auto slot = m_dashboard.widgetSlot(m_widgetType, m_relativeIndex);
+  if (!slot.valid)
+    return 0;
 
-  if (SerialStudio::isDatasetWidget(m_widgetType)) {
-    const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
-    return dataset.sourceId;
-  }
+  if (slot.group)
+    return GET_GROUP(m_widgetType, slot.bucketIndex).sourceId;
 
-  return 0;
+  return GET_DATASET(m_widgetType, slot.bucketIndex).sourceId;
 }
 
 /**
@@ -235,6 +263,30 @@ int UI::DashboardWidget::widgetSourceId() const
 QString UI::DashboardWidget::widgetQmlPath() const
 {
   return m_qmlPath;
+}
+
+/**
+ * @brief Returns whether this slot is rendered by an installed widget-extension package.
+ */
+bool UI::DashboardWidget::widgetIsExtension() const
+{
+  return !m_extensionId.isEmpty();
+}
+
+/**
+ * @brief Returns the id of the package rendering this slot, empty for a compiled-in widget.
+ */
+const QString& UI::DashboardWidget::widgetExtensionId() const
+{
+  return m_extensionId;
+}
+
+/**
+ * @brief Returns why the package could not be created, empty while nothing has failed.
+ */
+const QString& UI::DashboardWidget::widgetExtensionError() const
+{
+  return m_extensionError;
 }
 
 /**
@@ -262,12 +314,112 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     m_dbWidget = nullptr;
   }
 
-  buildWidgetForType();
+  m_extensionId.clear();
+  m_extensionError.clear();
+
+  if (!buildExtensionModel())
+    buildWidgetForType();
 
   if (m_dbWidget)
     m_dbWidget->setParentItem(this);
 
   Q_EMIT widgetIndexChanged();
+}
+
+/**
+ * @brief Creates the package's root item in its own QML context, with the host's Cpp_* names
+ *        shadowed to undefined for every package the user installed; a bundled package ships
+ *        inside the application and is exempt, exactly as it is exempt from consent. That shadowing
+ *        is a speed bump, not a boundary: the QML engine is shared, so a package that means to
+ *        reach the host still can, and the consent flow is what makes the trust model honest.
+ *        Returns nullptr and records the cause on failure.
+ */
+QQuickItem* UI::DashboardWidget::createExtensionItem(QQuickItem* parent,
+                                                     const QVariantMap& properties)
+{
+  m_extensionError.clear();
+  if (m_extensionId.isEmpty())
+    return nullptr;
+
+  auto* engine = qmlEngine(this);
+  if (!engine || m_qmlPath.isEmpty()) {
+    failExtension(tr("The package is not installed, or has not been allowed to run."));
+    return nullptr;
+  }
+
+  QQmlComponent component(engine, QUrl(m_qmlPath), QQmlComponent::PreferSynchronous);
+  if (component.isError()) {
+    failExtension(component.errorString().trimmed());
+    return nullptr;
+  }
+
+  static auto& catalog = UI::WidgetExtensions::instance();
+
+  auto* context = new QQmlContext(qmlContext(this), this);
+  if (!catalog.descriptor(m_extensionId).bundled) {
+    const auto names = UI::WidgetExtensions::hostContextNames();
+    for (const auto& name : names)
+      context->setContextProperty(name, QVariant());
+  }
+
+  auto* object = component.createWithInitialProperties(properties, context);
+  auto* item   = qobject_cast<QQuickItem*>(object);
+  if (!item) {
+    delete object;
+    failExtension(component.errorString().trimmed());
+    return nullptr;
+  }
+
+  item->setParentItem(parent);
+  QQmlEngine::setObjectOwnership(item, QQmlEngine::JavaScriptOwnership);
+  return item;
+}
+
+/**
+ * @brief Records a package failure for the placeholder tile and the problem center.
+ */
+void UI::DashboardWidget::failExtension(const QString& error)
+{
+  static auto& catalog = UI::WidgetExtensions::instance();
+
+  m_extensionError = error;
+  catalog.reportLoadFailure(m_extensionId, error);
+  Q_EMIT widgetExtensionErrorChanged();
+}
+
+/**
+ * @brief Points this slot at a widget-extension package when one serves it: a third-party widget,
+ *        or a built-in whose implementation now ships bundled. Returns false when the built-in
+ *        keeps its compiled implementation, which is every built-in until a package replaces one.
+ */
+bool UI::DashboardWidget::buildExtensionModel()
+{
+  static auto& catalog = UI::WidgetExtensions::instance();
+
+  if (widgetType() == SerialStudio::DashboardExtension)
+    m_extensionId = m_dashboard.extensionSlot(relativeIndex()).extensionId;
+
+  else
+    m_extensionId = catalog.builtinReplacement(builtinWidgetId(widgetType()));
+
+  if (m_extensionId.isEmpty())
+    return false;
+
+  m_qmlPath = catalog.qmlUrl(m_extensionId);
+  if (m_qmlPath.isEmpty())
+    catalog.requestConsent(m_extensionId);
+
+  m_dbWidget = new Widgets::ExtensionData(m_extensionId, widgetType(), relativeIndex(), this);
+  return true;
+}
+
+/**
+ * @brief Re-resolves this slot after the catalog changed, so a package that was just allowed to
+ *        run (or updated) replaces its placeholder without reloading the project.
+ */
+void UI::DashboardWidget::reloadWidget()
+{
+  setWidgetIndex(m_index);
 }
 
 /**

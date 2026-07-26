@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cmath>
@@ -39,6 +39,7 @@
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
@@ -96,7 +97,7 @@ static QStandardItem* findMappedItem(const Map& map, Pred&& pred)
  */
 static void applyTreeExpansion(QStandardItem* item, int depth, int maxExpandDepth)
 {
-  Q_ASSERT(item != nullptr);
+  SS_ASSERT(item != nullptr, return);
   if (depth > 64)
     return;
 
@@ -266,7 +267,7 @@ QModelIndex DataModel::ProjectEditor::consumePendingSelection()
  */
 void DataModel::ProjectEditor::appendSourceTreeItems(QStandardItem* root)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
   if (!m_treeSearchQuery.trimmed().isEmpty())
     return;
 
@@ -303,7 +304,7 @@ void DataModel::ProjectEditor::appendSourceTreeItems(QStandardItem* root)
  */
 void DataModel::ProjectEditor::appendActionTreeItems(QStandardItem* root)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
@@ -311,7 +312,7 @@ void DataModel::ProjectEditor::appendActionTreeItems(QStandardItem* root)
 
   static auto& registry = Misc::IconRegistry::instance();
   for (const auto& action : actions) {
-    if (filterActive && !action.title.contains(q, Qt::CaseInsensitive))
+    if (filterActive && !SerialStudio::searchMatches(q, action.title))
       continue;
 
     auto* actionItem = new QStandardItem(action.title);
@@ -333,15 +334,15 @@ void DataModel::ProjectEditor::appendActionTreeItems(QStandardItem* root)
 void DataModel::ProjectEditor::appendDatasetChildren(QStandardItem* groupItem,
                                                      const DataModel::Group& group)
 {
-  Q_ASSERT(groupItem != nullptr);
+  SS_ASSERT(groupItem != nullptr, return);
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  const bool groupMatches = !filterActive || group.title.contains(q, Qt::CaseInsensitive);
+  const bool groupMatches = !filterActive || SerialStudio::searchMatches(q, group.title);
 
   static auto& registry = Misc::IconRegistry::instance();
   for (const auto& dataset : group.datasets) {
-    if (filterActive && !groupMatches && !dataset.title.contains(q, Qt::CaseInsensitive))
+    if (filterActive && !groupMatches && !SerialStudio::searchMatches(q, dataset.title))
       continue;
 
     auto* datasetItem = new QStandardItem(dataset.title);
@@ -372,7 +373,7 @@ void DataModel::ProjectEditor::appendDatasetChildren(QStandardItem* groupItem,
 void DataModel::ProjectEditor::appendOutputWidgetChildren(QStandardItem* groupItem,
                                                           const DataModel::Group& group)
 {
-  Q_ASSERT(groupItem != nullptr);
+  SS_ASSERT(groupItem != nullptr, return);
   if (!m_treeSearchQuery.trimmed().isEmpty())
     return;
 
@@ -423,12 +424,12 @@ void DataModel::ProjectEditor::appendOutputWidgetChildren(QStandardItem* groupIt
 void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
                                                     QHash<QString, bool>& expandedStates)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
   const auto matches      = [&q](const QString& s) {
-    return s.contains(q, Qt::CaseInsensitive);
+    return SerialStudio::searchMatches(q, s);
   };
 
   const auto groupFilteredOut = [&](const DataModel::Group& g, bool groupTitleMatches) {
@@ -572,14 +573,14 @@ QHash<int, QStandardItem*> DataModel::ProjectEditor::appendGroupFolderItems(
 void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
                                                            QHash<QString, bool>& expandedStates)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
 #ifdef BUILD_COMMERCIAL
   static auto& registry   = Misc::IconRegistry::instance();
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
   const auto matches      = [&q](const QString& s) {
-    return s.contains(q, Qt::CaseInsensitive);
+    return SerialStudio::searchMatches(q, s);
   };
 
   const auto& userTables = m_projectModelRef.tables();
@@ -718,7 +719,7 @@ void DataModel::ProjectEditor::buildWorkspaceFolderTree(QStandardItem* wsRoot,
                                                         const QString& pathPrefix,
                                                         QHash<QString, bool>& expandedStates)
 {
-  Q_ASSERT(wsRoot != nullptr);
+  SS_ASSERT(wsRoot != nullptr, return);
 
   const auto& folders    = m_projectModelRef.editorWorkspaceFolders();
   const auto& workspaces = m_projectModelRef.editorWorkspaces();
@@ -765,12 +766,12 @@ void DataModel::ProjectEditor::buildWorkspaceFolderTree(QStandardItem* wsRoot,
 void DataModel::ProjectEditor::appendWorkspaceTreeItems(QStandardItem* root,
                                                         QHash<QString, bool>& expandedStates)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
   const auto matches      = [&q](const QString& s) {
-    return s.contains(q, Qt::CaseInsensitive);
+    return SerialStudio::searchMatches(q, s);
   };
 
   const auto& workspaces = m_projectModelRef.editorWorkspaces();
@@ -818,11 +819,11 @@ void DataModel::ProjectEditor::appendWorkspaceTreeItems(QStandardItem* root,
  */
 void DataModel::ProjectEditor::appendMqttPublisherTreeItem(QStandardItem* root)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  if (filterActive && !tr("MQTT Publisher").contains(q, Qt::CaseInsensitive))
+  if (filterActive && !SerialStudio::searchMatches(q, tr("MQTT Publisher")))
     return;
 
   static auto& registry = Misc::IconRegistry::instance();
@@ -844,11 +845,11 @@ void DataModel::ProjectEditor::appendMqttPublisherTreeItem(QStandardItem* root)
  */
 void DataModel::ProjectEditor::appendControlScriptTreeItem(QStandardItem* root)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  if (filterActive && !tr("Control Loop").contains(q, Qt::CaseInsensitive))
+  if (filterActive && !SerialStudio::searchMatches(q, tr("Control Loop")))
     return;
 
   static auto& registry = Misc::IconRegistry::instance();
@@ -871,7 +872,7 @@ void DataModel::ProjectEditor::appendControlScriptTreeItem(QStandardItem* root)
 void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
                                               QHash<QString, bool>& expandedStates)
 {
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
 
   appendControlScriptTreeItem(root);
 #ifdef BUILD_COMMERCIAL
@@ -1123,7 +1124,7 @@ void DataModel::ProjectEditor::expandAllTreeItems()
     return;
 
   auto* root = m_treeModel->invisibleRootItem();
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
   for (int r = 0; r < root->rowCount(); ++r)
     applyTreeExpansion(root->child(r), 0, std::numeric_limits<int>::max());
 
@@ -1140,7 +1141,7 @@ void DataModel::ProjectEditor::collapseTreeToOverview()
     return;
 
   auto* root = m_treeModel->invisibleRootItem();
-  Q_ASSERT(root != nullptr);
+  SS_ASSERT(root != nullptr, return);
   for (int r = 0; r < root->rowCount(); ++r)
     applyTreeExpansion(root->child(r), 0, 2);
 

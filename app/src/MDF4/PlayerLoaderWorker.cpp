@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "MDF4/PlayerLoaderWorker.h"
@@ -29,6 +29,8 @@
 #include <mdf/isampleobserver.h>
 #include <mdf/mdffile.h>
 #include <mdf/mdfreader.h>
+
+#include "SSAssert.h"
 
 static constexpr quint64 kProgressTickRecords = 262144;
 
@@ -583,7 +585,7 @@ static bool readAllGroups(MDF4::PlayerLoaderWorker* worker,
  */
 void MDF4::PlayerLoaderWorker::decodeFile(const QString& filePath, quint64 generation)
 {
-  Q_ASSERT(!filePath.isEmpty());
+  SS_ASSERT_LOG(!filePath.isEmpty());
 
   m_recordsSeen      = 0;
   m_recordsTotal     = 0;

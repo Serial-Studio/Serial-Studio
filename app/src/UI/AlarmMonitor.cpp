@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/AlarmMonitor.h"
@@ -26,6 +26,7 @@
 
 #include "DataModel/Frame.h"
 #include "DataModel/NotificationCenter.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -76,9 +77,8 @@ void UI::AlarmMonitor::setupExternalConnections()
  */
 void UI::AlarmMonitor::rebuildTrackers()
 {
-  Q_ASSERT(m_dashboard);
-
   m_trackers.clear();
+  SS_ASSERT(m_dashboard != nullptr, return);
 
   const auto& datasets = m_dashboard->datasets();
   for (auto it = datasets.cbegin(); it != datasets.cend(); ++it) {
@@ -121,7 +121,7 @@ void UI::AlarmMonitor::rebuildTrackers()
  */
 void UI::AlarmMonitor::evaluateAlarms()
 {
-  Q_ASSERT(m_dashboard);
+  SS_ASSERT(m_dashboard != nullptr, return);
 
   if (m_trackers.empty())
     return;
@@ -167,7 +167,7 @@ int UI::AlarmMonitor::bandIndexFor(const Tracker& tracker, double value) noexcep
  */
 void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 {
-  Q_ASSERT(m_notificationCenter);
+  SS_ASSERT(m_notificationCenter != nullptr, return);
 
   if (tracker.rangeMax > tracker.rangeMin)
     value = qBound(tracker.rangeMin, value, tracker.rangeMax);

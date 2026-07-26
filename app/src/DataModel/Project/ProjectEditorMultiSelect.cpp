@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cmath>
@@ -114,28 +114,20 @@ void DataModel::ProjectEditor::buildMultiSelectionModel()
 }
 
 /**
- * @brief Extracts a ParameterType -> EditableValue map for a dataset via a throwaway form model,
- *        used to decide which aggregate fields agree across the selection.
+ * @brief Extracts a ParameterType -> EditableValue map for a dataset straight from the descriptor
+ *        table, used to decide which aggregate fields agree across the selection.
  */
 QHash<int, QVariant> DataModel::ProjectEditor::datasetEditValues(const DataModel::Dataset& dataset)
 {
-  CustomModel tmp;
-  addGeneralSection(&tmp, dataset);
-  addPlotSection(&tmp, dataset);
-  addFFTSection(&tmp, dataset);
-  addWidgetSection(&tmp, dataset);
-  addLEDSection(&tmp, dataset);
-
   QHash<int, QVariant> out;
-  const int rows = tmp.rowCount();
-  for (int r = 0; r < rows; ++r) {
-    auto* it = tmp.item(r);
-    if (!it)
+  for (int i = 0; i < Registry::kDatasetPropertyCount; ++i) {
+    const auto& property = Registry::kDatasetProperties[i];
+    if (!property.hasFormRow)
       continue;
 
-    const auto pt = it->data(ParameterType);
-    if (pt.isValid())
-      out.insert(pt.toInt(), it->data(EditableValue));
+    const auto value = Registry::datasetFormValue(property.formId, dataset, m_projectModelRef);
+    if (value.isValid())
+      out.insert(property.formId, value);
   }
 
   return out;
@@ -342,6 +334,31 @@ void DataModel::ProjectEditor::buildMultiOutputWidgetModel()
 }
 
 /**
+ * @brief True when a fan-out may keep the live aggregate model: the edit came from a typed field
+ *        (rebuilding would destroy the focused delegate after every keystroke) and no commit hook
+ *        asked for a reshape. Clears the row's stale "Mixed" placeholder in place, since the fan
+ *        just made the selection agree; the caller still holds m_batchApplying.
+ */
+static bool multiSelectionEditKeepsModel(QStandardItem* item,
+                                         DataModel::PropertyHooks::RebuildHint hint)
+{
+  using Editor = DataModel::ProjectEditor;
+  if (hint != DataModel::PropertyHooks::RebuildHint::None)
+    return false;
+
+  const int wt     = item->data(Editor::WidgetType).toInt();
+  const bool typed = wt == Editor::TextField || wt == Editor::IntField || wt == Editor::FloatField
+                  || wt == Editor::HexTextField || wt == Editor::PasswordField;
+  if (!typed)
+    return false;
+
+  if (item->data(Editor::PlaceholderValue).toString() == Editor::tr("Mixed"))
+    item->setData(QString(), Editor::PlaceholderValue);
+
+  return true;
+}
+
+/**
  * @brief Fans a single aggregate-form field edit out across every selected item, as one modified
  *        state and one autosave, then rebuilds the aggregate model to refresh common/mixed.
  */
@@ -365,6 +382,9 @@ void DataModel::ProjectEditor::onMultiSelectionItemChanged(QStandardItem* item)
     return;
 
   if (idInt == kDatasetView_Plot && (vIdx < 0 || vIdx >= m_plotOptions.size()))
+    return;
+
+  if (idInt == kDatasetView_DisplayFormat && (vIdx < 0 || vIdx >= m_displayFormats.size()))
     return;
 
   if (idInt == kDatasetView_FFT_Samples && (vIdx < 0 || vIdx >= m_fftSamples.size()))
@@ -393,16 +413,32 @@ void DataModel::ProjectEditor::onMultiSelectionItemChanged(QStandardItem* item)
     }
   }
 
+  const ProjectUndoFrame undo_frame{pm, tr("Edit Selection")};
+  pm.setNextUndoHint(
+    tr("Edit Selection"),
+    QStringLiteral("multi-dataset:%1:%2")
+      .arg(QString::number(static_cast<int>(idInt)), QString::number(m_batchItems.size())));
   pm.setAutoSaveSuspended(true);
-  m_batchApplying = true;
+  m_batchApplying  = true;
+  const int formId = static_cast<int>(idInt);
+  auto rebuild     = PropertyHooks::RebuildHint::None;
   for (int i = 0; i < sel.size(); ++i) {
     DataModel::Dataset ds = sel[i];
-    onDatasetCommonItemChanged(item, ds);
-    onDatasetWidgetItemChanged(item, ds);
-    onDatasetRangeItemChanged(item, ds);
-    onDatasetFftItemChanged(item, ds);
-    onDatasetFlagItemChanged(item, ds);
+    const auto hint       = Registry::applyDatasetFormEdit(formId, value, ds, pm);
+    if (hint != PropertyHooks::RebuildHint::None)
+      rebuild = hint;
+
+    if (idInt == kDatasetView_Virtual)
+      syncDatasetTreeVirtualFlag(ds);
+
     pm.updateDataset(ids[i].first, ids[i].second, ds, false);
+  }
+
+  if (multiSelectionEditKeepsModel(item, rebuild)) {
+    m_batchApplying = false;
+    pm.setAutoSaveSuspended(false);
+    pm.flushAutoSave();
+    return;
   }
 
   m_batchApplying = false;
@@ -438,12 +474,24 @@ void DataModel::ProjectEditor::fanOutputWidgetSelectionEdit(QStandardItem* item)
     }
   }
 
+  const ProjectUndoFrame undo_frame{pm, tr("Edit Selection")};
+  pm.setNextUndoHint(tr("Edit Selection"),
+                     QStringLiteral("multi-owidget:%1:%2")
+                       .arg(QString::number(item->data(ParameterType).toInt()),
+                            QString::number(m_batchItems.size())));
   pm.setAutoSaveSuspended(true);
   m_batchApplying = true;
   for (int i = 0; i < sel.size(); ++i) {
     DataModel::OutputWidget widget = sel[i];
     applyOutputWidgetField(item, widget);
     pm.updateOutputWidget(ids[i].first, ids[i].second, widget, false);
+  }
+
+  if (multiSelectionEditKeepsModel(item, PropertyHooks::RebuildHint::None)) {
+    m_batchApplying = false;
+    pm.setAutoSaveSuspended(false);
+    pm.flushAutoSave();
+    return;
   }
 
   m_batchApplying = false;
@@ -483,6 +531,7 @@ void DataModel::ProjectEditor::changeDatasetOptionForSelection(int option, bool 
     }
   }
 
+  const ProjectUndoFrame undo_frame{pm, tr("Edit Selection")};
   pm.setAutoSaveSuspended(true);
   for (int i = 0; i < sel.size(); ++i) {
     DataModel::Dataset ds = sel[i];

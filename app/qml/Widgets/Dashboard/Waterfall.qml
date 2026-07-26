@@ -26,7 +26,6 @@ import QtQuick.Controls
 
 import SerialStudio
 
-import "../"
 import "../" as Widgets
 
 Item {
@@ -485,6 +484,27 @@ Item {
         font: (Cpp_Misc_CommonFonts.widgetFontRevision,
                Cpp_Misc_CommonFonts.widgetFont(root.uiScale))
       }
+    }
+  }
+
+  //
+  // Unavailable over a remote attach: an empty spectrum reads as a broken one
+  //
+  Rectangle {
+    z: 1000
+    anchors.fill: parent
+    visible: Cpp_API_Mirror.attached
+    color: Cpp_ThemeManager.colors["widget_base"]
+
+    Label {
+      anchors.centerIn: parent
+      wrapMode: Text.WordWrap
+      horizontalAlignment: Text.AlignHCenter
+      width: Math.min(parent.width - 32, 320)
+      color: Cpp_ThemeManager.colors["widget_text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.9)
+      text: qsTr("Not available over a remote attach. This widget needs the remote's raw sample "
+               + "stream, which the dashboard mirror does not carry.")
     }
   }
 }

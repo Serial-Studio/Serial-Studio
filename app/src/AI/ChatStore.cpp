@@ -23,6 +23,7 @@
 
 #include "AI/Logging.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Path helpers
@@ -148,7 +149,7 @@ QString AI::ChatStore::createChat()
   meta.id        = QUuid::createUuid().toString(QUuid::WithoutBraces);
   meta.createdAt = QDateTime::currentMSecsSinceEpoch();
   meta.updatedAt = meta.createdAt;
-  Q_ASSERT(!meta.id.isEmpty());
+  SS_ASSERT_LOG(!meta.id.isEmpty());
 
   m_chats.prepend(meta);
   writeIndex();

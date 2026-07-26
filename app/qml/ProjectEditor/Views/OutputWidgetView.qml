@@ -83,6 +83,13 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
+      // Search band: above the secondary toolbar, aligned with the tree search
+      //
+      EditorSearchBand {
+        tableDelegate: delegate
+      }
+
+      //
       // Pro notice
       //
       Widgets.ProNotice {
@@ -217,6 +224,7 @@ Widgets.Pane {
       TableDelegate {
         id: delegate
 
+        searchable: true
         spacerVisible: false
         headerVisible: false
         Layout.fillWidth: true

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -38,6 +38,7 @@
 
 #include "Concepts.h"
 #include "HotpathOptimization.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Standard keys for loading/offloading frame structures using JSON files
@@ -933,10 +934,10 @@ SS_FORCE_INLINE void assign_string_in_place(QString& dst, const QString& src) no
  */
 SS_FORCE_INLINE void assign_utf8_in_place(QString& dst, QByteArrayView src)
 {
-  const char* p     = src.data();
-  const qsizetype n = src.size();
+  const char* p = src.data();
+  qsizetype n   = src.size();
 
-  Q_ASSERT(n >= 0);
+  SS_ASSERT(n >= 0, n = 0);
 
   if (!(dst.isDetached() && dst.capacity() >= n)) {
     dst = QString();
@@ -1145,105 +1146,9 @@ void read_io_settings(QByteArray& frameStart,
 
 /**
  * @brief Serializes a Dataset to a QJsonObject.
+ *        Derived from app/rcc/properties/dataset.json (Generated/DatasetSerialization.cpp).
  */
-[[nodiscard]] inline QJsonObject serialize(const Dataset& d)
-{
-  QJsonObject obj;
-  obj.insert(Keys::FFT, d.fft);
-  obj.insert(Keys::LED, d.led);
-  obj.insert(Keys::Log, d.log);
-  obj.insert(Keys::Graph, d.plt);
-  if (d.waterfall)
-    obj.insert(Keys::Waterfall, true);
-
-  if (d.waterfallYAxis != 0)
-    obj.insert(Keys::WaterfallYAxis, d.waterfallYAxis);
-
-  if (d.fftLogX)
-    obj.insert(Keys::FFTLogX, true);
-
-  if (d.fftBallistics) {
-    obj.insert(Keys::FFTBallistics, true);
-    obj.insert(Keys::FFTBallisticsRelease, d.fftBallisticsRelease);
-  }
-
-  if (d.pltLogX)
-    obj.insert(Keys::PltLogX, true);
-
-  if (d.pltLogY)
-    obj.insert(Keys::PltLogY, true);
-
-  obj.insert(Keys::Index, d.index);
-  obj.insert(Keys::XAxis, d.xAxisId);
-  obj.insert(Keys::LedHigh, d.ledHigh);
-  obj.insert(Keys::FFTSamples, d.fftSamples);
-  obj.insert(Keys::Title, d.title.simplified());
-  obj.insert(Keys::Value, d.value.simplified());
-  obj.insert(Keys::Units, d.units.simplified());
-  obj.insert(Keys::Widget, d.widget.simplified());
-  obj.insert(Keys::FFTMin, qMin(d.fftMin, d.fftMax));
-  obj.insert(Keys::FFTMax, qMax(d.fftMin, d.fftMax));
-  obj.insert(Keys::PltMin, qMin(d.pltMin, d.pltMax));
-  obj.insert(Keys::PltMax, qMax(d.pltMin, d.pltMax));
-  obj.insert(Keys::WgtMin, qMin(d.wgtMin, d.wgtMax));
-  obj.insert(Keys::WgtMax, qMax(d.wgtMin, d.wgtMax));
-  obj.insert(Keys::FFTSamplingRate, d.fftSamplingRate);
-  obj.insert(Keys::FFTWindow, d.fftWindow);
-
-  if (!d.alarmBands.empty()) {
-    QJsonArray bands;
-    for (const auto& band : d.alarmBands)
-      bands.append(serialize(band));
-
-    obj.insert(Keys::AlarmBands, bands);
-  }
-
-  if (!d.fftMarkers.empty()) {
-    QJsonArray markers;
-    for (const auto& marker : d.fftMarkers)
-      markers.append(serialize(marker));
-
-    obj.insert(Keys::FFTMarkers, markers);
-  }
-
-  if (d.displayTickCount > 0)
-    obj.insert(Keys::DisplayTickCount, d.displayTickCount);
-
-  if (!d.displayFormat.isEmpty())
-    obj.insert(Keys::DisplayFormat, d.displayFormat);
-
-  if (d.decimalPoints >= 0)
-    obj.insert(Keys::DecimalPoints, d.decimalPoints);
-
-  if (!d.color.isEmpty())
-    obj.insert(Keys::Color, d.color);
-
-  if (!d.alias.isEmpty())
-    obj.insert(Keys::Alias, d.alias);
-
-  obj.insert(Keys::GroupId, d.groupId);
-  obj.insert(Keys::DatasetId, d.datasetId);
-  if (d.uniqueId >= 0)
-    obj.insert(Keys::UniqueId, d.uniqueId);
-
-  obj.insert(Keys::NumericValue, d.numericValue);
-
-  if (!d.transformCode.isEmpty()) {
-    obj.insert(Keys::TransformCode, d.transformCode);
-    obj.insert(Keys::TransformLanguage, d.transformLanguage);
-  }
-
-  if (d.virtual_)
-    obj.insert(Keys::Virtual, true);
-
-  if (d.hideOnDashboard)
-    obj.insert(Keys::HideOnDashboard, true);
-
-  if (!d.enabled)
-    obj.insert(Keys::Disabled, true);
-
-  return obj;
-}
+[[nodiscard]] QJsonObject serialize(const Dataset& d);
 
 /**
  * @brief Serializes a Group to a QJsonObject.
@@ -1437,7 +1342,7 @@ inline void normalizeDatasetRanges(Dataset& d)
 
 /**
  * @brief Deserializes a Dataset from a QJsonObject.
- *        Out-of-line (Frame.cpp): needs SerialStudio::toDouble, which this header cannot include.
+ *        Derived from app/rcc/properties/dataset.json (Generated/DatasetSerialization.cpp).
  */
 [[nodiscard]] bool read(Dataset& d, const QJsonObject& obj);
 

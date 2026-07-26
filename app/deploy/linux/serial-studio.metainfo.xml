@@ -2,7 +2,7 @@
 <component type="desktop-application">
 	<id>com.serial_studio.Serial-Studio</id>
 	<name>Serial Studio</name>
-	<project_license>GPL-3.0-only</project_license>
+	<project_license>GPL-3.0-or-later</project_license>
 	<developer id="com.serial-studio">
 		<name>Serial Studio</name>
 	</developer>

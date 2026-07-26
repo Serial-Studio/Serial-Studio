@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Widgets/PlotAreaFill.h"
@@ -26,6 +26,8 @@
 #include <limits>
 #include <QSGGeometryNode>
 #include <QSGVertexColorMaterial>
+
+#include "SSAssert.h"
 
 // Alpha ramp for the fill gradient (strong at the data extreme, visible at the baseline)
 constexpr double kMinAlpha = 0.12;
@@ -42,10 +44,9 @@ static void setVertexColor(QSGGeometry::ColoredPoint2D& vertex,
                            const float x,
                            const float y,
                            const QColor& color,
-                           const double alpha)
+                           double alpha)
 {
-  Q_ASSERT(alpha >= 0.0);
-  Q_ASSERT(alpha <= 1.0);
+  SS_ASSERT(alpha >= 0.0 && alpha <= 1.0, alpha = std::clamp(alpha, 0.0, 1.0));
 
   vertex.set(x,
              y,
@@ -243,8 +244,8 @@ void Widgets::PlotAreaFill::setYMax(const double value)
  */
 void Widgets::PlotAreaFill::accumulatePoint(const int col, const double y)
 {
-  Q_ASSERT(col >= 0);
-  Q_ASSERT(static_cast<std::size_t>(col) < m_colMin.size());
+  SS_ASSERT(col >= 0, return);
+  SS_ASSERT(static_cast<std::size_t>(col) < m_colMin.size(), return);
 
   const auto c = static_cast<std::size_t>(col);
   m_colMin[c]  = std::min(m_colMin[c], y);
@@ -264,8 +265,8 @@ void Widgets::PlotAreaFill::bridgeSegment(const double px0,
                                           const int cols,
                                           int& budget)
 {
-  Q_ASSERT(cols >= 1);
-  Q_ASSERT(w > 0.0);
+  SS_ASSERT(cols >= 1, return);
+  SS_ASSERT(w > 0.0, return);
 
   double xa = px0;
   double ya = y0;
@@ -319,11 +320,11 @@ void Widgets::PlotAreaFill::bridgeSegment(const double px0,
  *        stay solid); non-finite points break the run and leave a real gap.
  */
 void Widgets::PlotAreaFill::accumulateColumns(const QList<QPointF>& points,
-                                              const int cols,
+                                              int cols,
                                               const double w)
 {
-  Q_ASSERT(cols >= 1);
-  Q_ASSERT(cols <= kMaxColumns);
+  SS_ASSERT(cols >= 1, return);
+  SS_ASSERT(cols <= kMaxColumns, cols = kMaxColumns);
 
   constexpr double kInf = std::numeric_limits<double>::infinity();
   m_colMin.assign(static_cast<std::size_t>(cols), kInf);
@@ -364,8 +365,8 @@ void Widgets::PlotAreaFill::accumulateColumns(const QList<QPointF>& points,
  */
 int Widgets::PlotAreaFill::scanColumns(double& refPositive, double& refNegative) const
 {
-  Q_ASSERT(m_colMin.size() == m_colMax.size());
-  Q_ASSERT(m_colMin.size() <= static_cast<std::size_t>(kMaxColumns));
+  SS_ASSERT(m_colMin.size() == m_colMax.size(), return 0);
+  SS_ASSERT(m_colMin.size() <= static_cast<std::size_t>(kMaxColumns), return 0);
 
   int filled  = 0;
   refPositive = 0.0;
@@ -395,12 +396,12 @@ void Widgets::PlotAreaFill::emitColumns(QSGGeometry::ColoredPoint2D* vertices,
                                         const int vertexCount,
                                         const double w,
                                         const double h,
-                                        const double refPositive,
-                                        const double refNegative) const
+                                        double refPositive,
+                                        double refNegative) const
 {
-  Q_ASSERT(vertices != nullptr);
-  Q_ASSERT(refPositive > 0.0);
-  Q_ASSERT(refNegative > 0.0);
+  SS_ASSERT(vertices != nullptr, return);
+  SS_ASSERT(refPositive > 0.0, refPositive = 1e-12);
+  SS_ASSERT(refNegative > 0.0, refNegative = 1e-12);
 
   const double sy    = h / (m_yMax - m_yMin);
   const float base_y = static_cast<float>((m_yMax - m_baseline) * sy);
@@ -439,7 +440,12 @@ void Widgets::PlotAreaFill::emitColumns(QSGGeometry::ColoredPoint2D* vertices,
     setVertexColor(vertices[j++], x1, y_bot, m_fillColor, a_bot);
   }
 
+  // code-verify off
+  // Post-condition on a buffer already written: a soft assert cannot un-write an overrun, so the
+  // scanColumns()/emitColumns() vertex-budget lockstep stays the real guard and this stays
+  // debug-only.
   Q_ASSERT(j == vertexCount);
+  // code-verify on
   Q_UNUSED(vertexCount)
 }
 
@@ -492,7 +498,7 @@ QSGNode* Widgets::PlotAreaFill::updatePaintNode(QSGNode* oldNode, UpdatePaintNod
 
   const int vertexCount = 8 * filled - 2;
   auto* geometry        = node->geometry();
-  Q_ASSERT(geometry != nullptr);
+  SS_ASSERT(geometry != nullptr, return node);
   if (geometry->vertexCount() != vertexCount)
     geometry->allocate(vertexCount);
 

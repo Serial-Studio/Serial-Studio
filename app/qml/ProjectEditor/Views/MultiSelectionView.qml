@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -120,6 +120,13 @@ Widgets.Pane {
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
+
+      //
+      // Search band: above the secondary toolbar, aligned with the tree search
+      //
+      EditorSearchBand {
+        tableDelegate: delegate
+      }
 
       //
       // Dataset visualization toolbar: toggles fan out to every selected dataset. Datasets only.
@@ -392,6 +399,7 @@ Widgets.Pane {
         TableDelegate {
           id: delegate
 
+          searchable: true
           width: parent.width
           headerVisible: false
 

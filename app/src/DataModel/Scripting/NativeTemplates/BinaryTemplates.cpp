@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <bit>
@@ -24,6 +24,7 @@
 #include <QHash>
 
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
+#include "SSAssert.h"
 
 using DataModel::INativeParser;
 using DataModel::INativeTemplate;
@@ -45,12 +46,14 @@ static constexpr int kMaxBytesPerFrame = 65536;
 }
 
 /**
- * @brief Returns the unsigned byte at index i.
+ * @brief Returns the unsigned byte at index i, or 0 when the index falls outside the frame.
+ *        Every multi-byte reader below funnels through here, so this single unsigned compare
+ *        is what keeps a truncated or hostile frame from reading past the buffer.
  */
 [[nodiscard]] static quint8 u8At(const QByteArray& data, qsizetype i)
 {
-  Q_ASSERT(i >= 0);
-  Q_ASSERT(i < data.size());
+  if (static_cast<size_t>(i) >= static_cast<size_t>(data.size())) [[unlikely]]
+    return 0;
 
   return static_cast<quint8>(data.at(i));
 }
@@ -144,7 +147,7 @@ static constexpr int kMaxBytesPerFrame = 65536;
  */
 [[nodiscard]] static QList<QStringList> byteRowFrame(const QByteArray& bytes)
 {
-  Q_ASSERT(bytes.size() <= kMaxBytesPerFrame);
+  SS_ASSERT_LOG(bytes.size() <= kMaxBytesPerFrame);
 
   QStringList row;
   row.reserve(bytes.size());
@@ -163,9 +166,9 @@ static constexpr int kMaxBytesPerFrame = 65536;
 [[nodiscard]] static QString byteGroupValue(
   const QByteArray& bytes, qsizetype offset, int bytesPerValue, bool bigEndian, bool signedValues)
 {
-  Q_ASSERT(bytesPerValue >= 1);
-  Q_ASSERT(bytesPerValue <= 8);
-  Q_ASSERT(offset + bytesPerValue <= bytes.size());
+  SS_ASSERT(bytesPerValue >= 1, bytesPerValue = 1);
+  SS_ASSERT(bytesPerValue <= 8, bytesPerValue = 8);
+  SS_ASSERT(offset + bytesPerValue <= bytes.size(), return QStringLiteral("0"));
 
   quint64 value = 0;
   for (int b = 0; b < bytesPerValue; ++b) {
@@ -192,7 +195,8 @@ static constexpr int kMaxBytesPerFrame = 65536;
                                                          bool bigEndian,
                                                          bool signedValues)
 {
-  Q_ASSERT(bytesPerValue >= 1);
+  if (bytesPerValue < 1 || bytesPerValue > 8)
+    return {};
 
   QStringList row;
   row.reserve(bytes.size() / bytesPerValue + 1);
@@ -221,8 +225,8 @@ public:
   RawBytesParser(int bytesPerValue, bool bigEndian, bool signedValues)
     : m_bytesPerValue(bytesPerValue), m_bigEndian(bigEndian), m_signedValues(signedValues)
   {
-    Q_ASSERT(m_bytesPerValue >= 1);
-    Q_ASSERT(m_bytesPerValue <= 8);
+    SS_ASSERT(m_bytesPerValue >= 1, m_bytesPerValue = 1);
+    SS_ASSERT(m_bytesPerValue <= 8, m_bytesPerValue = 8);
   }
 
   /**
@@ -246,7 +250,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
-    Q_ASSERT(!frame.isEmpty());
+    SS_ASSERT(!frame.isEmpty(), return {});
 
     return groupedByteFrame(frame, m_bytesPerValue, m_bigEndian, m_signedValues);
   }
@@ -348,8 +352,8 @@ public:
   HexBytesParser(int bytesPerValue, bool bigEndian, bool signedValues)
     : m_bytesPerValue(bytesPerValue), m_bigEndian(bigEndian), m_signedValues(signedValues)
   {
-    Q_ASSERT(m_bytesPerValue >= 1);
-    Q_ASSERT(m_bytesPerValue <= 8);
+    SS_ASSERT(m_bytesPerValue >= 1, m_bytesPerValue = 1);
+    SS_ASSERT(m_bytesPerValue <= 8, m_bytesPerValue = 8);
   }
 
   /**
@@ -357,7 +361,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(m_bytesPerValue >= 1);
+    SS_ASSERT(m_bytesPerValue >= 1, return {});
 
     QString hex = frame;
     hex.remove(QLatin1Char(' '));
@@ -485,7 +489,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!frame.isEmpty());
+    SS_ASSERT(!frame.isEmpty(), return {});
 
     const auto decoded = QByteArray::fromBase64(frame.trimmed().toLatin1());
     if (decoded.isEmpty())
@@ -571,7 +575,7 @@ public:
   BinaryTlvParser(const QHash<int, int>& tagMap, int count)
     : NativeLatchParser(count), m_tagMap(tagMap)
   {
-    Q_ASSERT(!m_tagMap.isEmpty());
+    SS_ASSERT_LOG(!m_tagMap.isEmpty());
   }
 
   /**
@@ -587,7 +591,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
-    Q_ASSERT(!m_tagMap.isEmpty());
+    SS_ASSERT(!m_tagMap.isEmpty(), return latchedFrame());
 
     qsizetype i          = 0;
     const qsizetype size = qMin<qsizetype>(frame.size(), kMaxBytesPerFrame);
@@ -723,7 +727,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
-    Q_ASSERT(!frame.isEmpty());
+    SS_ASSERT(!frame.isEmpty(), return {});
 
     QByteArray decoded;
     decoded.reserve(frame.size());
@@ -817,7 +821,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
-    Q_ASSERT(!frame.isEmpty());
+    SS_ASSERT(!frame.isEmpty(), return {});
 
     QByteArray decoded;
     decoded.reserve(frame.size());
@@ -916,7 +920,7 @@ public:
   explicit UbxParser(bool validateChecksum)
     : NativeLatchParser(kUbxChannels), m_validateChecksum(validateChecksum)
   {
-    Q_ASSERT(latchCount() == kUbxChannels);
+    SS_ASSERT_LOG(latchCount() == kUbxChannels);
   }
 
   /**
@@ -963,7 +967,7 @@ private:
    */
   [[nodiscard]] static bool checksumOk(const QByteArray& frame, int length)
   {
-    Q_ASSERT(frame.size() >= 4 + length + 2);
+    SS_ASSERT(frame.size() >= 4 + length + 2, return false);
 
     quint8 ck_a = 0;
     quint8 ck_b = 0;
@@ -1001,7 +1005,7 @@ private:
    */
   void routeNavPvt(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 68);
+    SS_ASSERT(p.size() >= 68, return);
 
     storeAt(0, QString::number(i32Le(p, 28) * 1e-7));
     storeAt(1, QString::number(i32Le(p, 24) * 1e-7));
@@ -1021,7 +1025,7 @@ private:
    */
   void routeNavSat(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 6);
+    SS_ASSERT(p.size() >= 6, return);
 
     storeAt(11, QString::number(u32Le(p, 0)));
     storeAt(12, QString::number(u8At(p, 4)));
@@ -1033,7 +1037,7 @@ private:
    */
   void routeNavSol(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 48);
+    SS_ASSERT(p.size() >= 48, return);
 
     storeAt(14, QString::number(i32Le(p, 12) * 0.01));
     storeAt(15, QString::number(i32Le(p, 16) * 0.01));
@@ -1047,7 +1051,7 @@ private:
    */
   void routeNavPosLlh(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 20);
+    SS_ASSERT(p.size() >= 20, return);
 
     storeAt(0, QString::number(i32Le(p, 8) * 1e-7));
     storeAt(1, QString::number(i32Le(p, 4) * 1e-7));
@@ -1130,7 +1134,7 @@ public:
   explicit SirfParser(bool validateChecksum)
     : NativeLatchParser(kSirfChannels), m_validateChecksum(validateChecksum)
   {
-    Q_ASSERT(latchCount() == kSirfChannels);
+    SS_ASSERT_LOG(latchCount() == kSirfChannels);
   }
 
   /**
@@ -1176,7 +1180,7 @@ private:
    */
   [[nodiscard]] static bool checksumOk(const QByteArray& frame, int length)
   {
-    Q_ASSERT(frame.size() >= 2 + length + 2);
+    SS_ASSERT(frame.size() >= 2 + length + 2, return false);
 
     quint32 sum = 0;
     for (qsizetype i = 2; i < 2 + length; ++i)
@@ -1209,7 +1213,7 @@ private:
    */
   void routeGeodetic(const QByteArray& d)
   {
-    Q_ASSERT(d.size() >= 90);
+    SS_ASSERT(d.size() >= 90, return);
 
     storeAt(0, QString::number(i32Be(d, 23) * 1e-7));
     storeAt(1, QString::number(i32Be(d, 27) * 1e-7));
@@ -1227,7 +1231,7 @@ private:
    */
   void routeMeasured(const QByteArray& d)
   {
-    Q_ASSERT(d.size() >= 29);
+    SS_ASSERT(d.size() >= 29, return);
 
     storeAt(10, QString::number(i32Be(d, 1)));
     storeAt(11, QString::number(i32Be(d, 5)));
@@ -1240,7 +1244,7 @@ private:
    */
   void routeTracker(const QByteArray& d)
   {
-    Q_ASSERT(d.size() >= 8);
+    SS_ASSERT(d.size() >= 8, return);
 
     storeAt(14, QString::number(u16Be(d, 1)));
     storeAt(15, QString::number(u32Be(d, 3) * 0.01));
@@ -1252,7 +1256,7 @@ private:
    */
   void routeClock(const QByteArray& d)
   {
-    Q_ASSERT(d.size() >= 8);
+    SS_ASSERT(d.size() >= 8, return);
 
     storeAt(17, QString::number(u16Be(d, 1)));
     storeAt(18, QString::number(u32Be(d, 3)));
@@ -1334,7 +1338,7 @@ public:
   explicit MavlinkParser(int version)
     : NativeLatchParser(kMavlinkChannels), m_marker(version == 2 ? 0xFD : 0xFE)
   {
-    Q_ASSERT(version == 1 || version == 2);
+    SS_ASSERT_LOG(version == 1 || version == 2);
   }
 
   /**
@@ -1381,7 +1385,7 @@ private:
    */
   void routeAttitude(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 16);
+    SS_ASSERT(p.size() >= 16, return);
 
     storeAt(0, QString::number(f32Le(p, 4)));
     storeAt(1, QString::number(f32Le(p, 8)));
@@ -1393,7 +1397,7 @@ private:
    */
   void routeVfrHud(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 12);
+    SS_ASSERT(p.size() >= 12, return);
 
     storeAt(3, QString::number(f32Le(p, 0)));
     storeAt(4, QString::number(f32Le(p, 4)));
@@ -1406,7 +1410,7 @@ private:
    */
   void routeGlobalPosition(const QByteArray& p)
   {
-    Q_ASSERT(p.size() >= 16);
+    SS_ASSERT(p.size() >= 16, return);
 
     storeAt(7, QString::number(i32Le(p, 4) * 1e-7));
     storeAt(8, QString::number(i32Le(p, 8) * 1e-7));
@@ -1487,7 +1491,10 @@ public:
   /**
    * @brief Builds the parser with the fixed channel layout.
    */
-  Nmea2000Parser() : NativeLatchParser(kN2kChannels) { Q_ASSERT(latchCount() == kN2kChannels); }
+  Nmea2000Parser() : NativeLatchParser(kN2kChannels)
+  {
+    SS_ASSERT_LOG(latchCount() == kN2kChannels);
+  }
 
   /**
    * @brief Treats text frames as UTF-8 bytes and reuses the binary path.
@@ -1544,7 +1551,7 @@ private:
    */
   void routePgn(quint32 pgn, const QByteArray& d)
   {
-    Q_ASSERT(d.size() <= 8);
+    SS_ASSERT_LOG(d.size() <= 8);
 
     if (pgn == 127257 && d.size() >= 7)
       return routeAttitude(d);
@@ -1701,7 +1708,7 @@ public:
   explicit RtcmParser(bool validateCrc)
     : NativeLatchParser(kRtcmChannels), m_validateCrc(validateCrc)
   {
-    Q_ASSERT(latchCount() == kRtcmChannels);
+    SS_ASSERT_LOG(latchCount() == kRtcmChannels);
   }
 
   /**
@@ -1747,7 +1754,7 @@ private:
    */
   [[nodiscard]] static bool crc24Ok(const QByteArray& frame, int length)
   {
-    Q_ASSERT(frame.size() >= 3 + length + 3);
+    SS_ASSERT(frame.size() >= 3 + length + 3, return false);
 
     quint32 crc = 0;
     for (qsizetype i = 0; i < 3 + length; ++i) {
@@ -1774,8 +1781,8 @@ private:
                                        int numBits,
                                        bool isSigned = false)
   {
-    Q_ASSERT(numBits >= 1);
-    Q_ASSERT(numBits <= 62);
+    if (numBits < 1 || numBits > 62)
+      return 0;
 
     quint64 value = 0;
     for (int i = 0; i < numBits; ++i) {
@@ -1916,7 +1923,7 @@ public:
     , m_registerOffset(registerOffset)
     , m_signedRegisters(signedRegisters)
   {
-    Q_ASSERT(numItems >= 1);
+    SS_ASSERT_LOG(numItems >= 1);
   }
 
   /**
@@ -1963,7 +1970,7 @@ private:
    */
   void routeBits(const QByteArray& frame)
   {
-    Q_ASSERT(frame.size() >= 3);
+    SS_ASSERT(frame.size() >= 3, return);
 
     const int byte_count = u8At(frame, 2);
     int channel          = 0;
@@ -1979,7 +1986,7 @@ private:
    */
   void routeRegisters(const QByteArray& frame)
   {
-    Q_ASSERT(frame.size() >= 3);
+    SS_ASSERT(frame.size() >= 3, return);
 
     const int register_count = u8At(frame, 2) / 2;
     for (int i = 0; i < register_count && i < latchCount(); ++i) {
@@ -1996,7 +2003,7 @@ private:
    */
   void routeSingleWrite(const QByteArray& frame, int function)
   {
-    Q_ASSERT(frame.size() >= 6);
+    SS_ASSERT(frame.size() >= 6, return);
 
     const int address = u16Be(frame, 2);
     const int value   = u16Be(frame, 4);
@@ -2120,7 +2127,7 @@ public:
     , m_mapMode(mapMode)
     , m_keys(keys)
   {
-    Q_ASSERT(!mapMode || !m_keys.isEmpty());
+    SS_ASSERT_LOG(!mapMode || !m_keys.isEmpty());
 
     m_keyIndex.reserve(keys.size());
     for (qsizetype i = 0; i < keys.size(); ++i)
@@ -2148,7 +2155,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
-    Q_ASSERT(!frame.isEmpty());
+    SS_ASSERT(!frame.isEmpty(), return latchedFrame());
 
     qsizetype offset = 0;
     if (m_mapMode) {
@@ -2194,10 +2201,10 @@ private:
    */
   [[nodiscard]] static QString decodeFixStr(const QByteArray& data, qsizetype& offset, int length)
   {
-    Q_ASSERT(length >= 0);
-    Q_ASSERT(length <= 31);
+    SS_ASSERT(length >= 0, length = 0);
+    SS_ASSERT(length <= 31, length = 31);
 
-    const qsizetype take  = qMin<qsizetype>(length, data.size() - offset);
+    const qsizetype take  = qMax<qsizetype>(0, qMin<qsizetype>(length, data.size() - offset));
     const QString text    = QString::fromUtf8(data.constData() + offset, take);
     offset               += take;
     return text;

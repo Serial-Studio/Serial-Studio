@@ -1,0 +1,1792 @@
+{
+  "$schema": "./schema.json",
+  "spec": "0036-property-registry",
+  "entity": "Dataset",
+  "formIdEnum": "DatasetItem",
+  "formIdOrder": [
+    "Title",
+    "Index",
+    "Units",
+    "Widget",
+    "Fft",
+    "Waterfall",
+    "WaterfallYAxis",
+    "Led",
+    "LedHigh",
+    "Plt",
+    "FftMin",
+    "FftMax",
+    "PltMin",
+    "PltMax",
+    "WgtMin",
+    "WgtMax",
+    "FftSamples",
+    "FftSamplingRate",
+    "FftWindow",
+    "XAxis",
+    "OverviewDisplay",
+    "HideOnDashboard",
+    "TransformCode",
+    "Virtual",
+    "DisplayTickCount",
+    "DisplayFormat",
+    "DecimalPoints",
+    "Color",
+    "Alias",
+    "PltLogX",
+    "PltLogY",
+    "FftLogX",
+    "FftBallistics",
+    "FftBallisticsRelease"
+  ],
+  "struct": {
+    "type": "DataModel::Dataset",
+    "header": "DataModel/Frame.h",
+    "variable": "d"
+  },
+  "notes": [
+    "Transcribed from the hand-written surfaces, not re-derived: serialize()/read() in Frame.h/Frame.cpp, the dataset row builders in ProjectEditorForms.cpp, the commit sub-appliers in ProjectEditorCommit.cpp, and applyDataset*Fields in ProjectHandlerEntities.cpp.",
+    "jsonKey names a Keys:: constant identifier; the literal spelling lives only in Frame.h.",
+    "Two declared defect fixes carry a 'defect' marker and describe the TARGET state, not today's behaviour: overviewDisplay is now serialized, and the read-side defaults for fftSamples/fftSamplingRate/ledHigh/index match the struct initializers.",
+    "value and numericValue are runtime values that today's serializer still writes into the document; they stay persist:always so project files round-trip byte-identically."
+  ],
+  "optionSources": {
+    "datasetWidgets": {
+      "kind": "extensibleMap",
+      "valueType": "string",
+      "translate": "ProjectEditor",
+      "notFoundIndex": 0,
+      "hook": "widgetExtensionOptions",
+      "notes": "Order is QMap key order (m_datasetWidgets), not insertion order. Installed dataset-scope widget extension packages (spec 0038) are appended after these rows, so a machine with no package installed sees exactly this domain and no stored index moves.",
+      "entries": [
+        {
+          "value": "",
+          "label": "None",
+          "translated": true
+        },
+        {
+          "value": "bar",
+          "label": "Bar",
+          "translated": true
+        },
+        {
+          "value": "compass",
+          "label": "Compass",
+          "translated": true
+        },
+        {
+          "value": "gauge",
+          "label": "Gauge",
+          "translated": true
+        },
+        {
+          "value": "meter",
+          "label": "Meter",
+          "translated": true
+        }
+      ]
+    },
+    "displayFormats": {
+      "kind": "staticMap",
+      "valueType": "string",
+      "translate": "ProjectEditor",
+      "notFoundIndex": 0,
+      "notes": "Order is QMap key order (m_displayFormats).",
+      "entries": [
+        {
+          "value": "",
+          "label": "Auto",
+          "translated": true
+        },
+        {
+          "value": "0d",
+          "label": "Integer (0 decimals)",
+          "translated": true
+        },
+        {
+          "value": "1d",
+          "label": "1 decimal",
+          "translated": true
+        },
+        {
+          "value": "2d",
+          "label": "2 decimals",
+          "translated": true
+        },
+        {
+          "value": "3d",
+          "label": "3 decimals",
+          "translated": true
+        },
+        {
+          "value": "sci",
+          "label": "Scientific",
+          "translated": true
+        }
+      ]
+    },
+    "plotOptions": {
+      "kind": "tuple",
+      "valueType": "boolPair",
+      "translate": "ProjectEditor",
+      "notFoundIndex": 0,
+      "fields": [
+        "Plt",
+        "Log"
+      ],
+      "notes": "Order is QMap key order (m_plotOptions, keyed by QPair<plt,log>).",
+      "entries": [
+        {
+          "values": [
+            false,
+            false
+          ],
+          "label": "No",
+          "translated": true
+        },
+        {
+          "values": [
+            true,
+            false
+          ],
+          "label": "Yes",
+          "translated": true
+        }
+      ]
+    },
+    "fftSampleCounts": {
+      "kind": "parallelValues",
+      "valueType": "int",
+      "notFoundIndex": 7,
+      "notes": "m_fftSamples; labels are the numbers themselves and are never translated. Not-found falls back to index 7 (1024).",
+      "entries": [
+        {
+          "value": 8,
+          "label": "8"
+        },
+        {
+          "value": 16,
+          "label": "16"
+        },
+        {
+          "value": 32,
+          "label": "32"
+        },
+        {
+          "value": 64,
+          "label": "64"
+        },
+        {
+          "value": 128,
+          "label": "128"
+        },
+        {
+          "value": 256,
+          "label": "256"
+        },
+        {
+          "value": 512,
+          "label": "512"
+        },
+        {
+          "value": 1024,
+          "label": "1024"
+        },
+        {
+          "value": 2048,
+          "label": "2048"
+        },
+        {
+          "value": 4096,
+          "label": "4096"
+        },
+        {
+          "value": 8192,
+          "label": "8192"
+        },
+        {
+          "value": 16384,
+          "label": "16384"
+        },
+        {
+          "value": 32768,
+          "label": "32768"
+        },
+        {
+          "value": 65536,
+          "label": "65536"
+        },
+        {
+          "value": 131072,
+          "label": "131072"
+        },
+        {
+          "value": 262144,
+          "label": "262144"
+        }
+      ]
+    },
+    "fftWindows": {
+      "kind": "parallelValues",
+      "valueType": "int",
+      "translate": "ProjectEditor",
+      "notFoundIndex": 5,
+      "notes": "m_fftWindows / m_fftWindowValues; values are SerialStudio::FFTWindow. Not-found falls back to Blackman-Harris (5).",
+      "entries": [
+        {
+          "value": 0,
+          "label": "Rectangular (None)",
+          "translated": true
+        },
+        {
+          "value": 1,
+          "label": "Bartlett (Triangular)",
+          "translated": true
+        },
+        {
+          "value": 2,
+          "label": "Hann",
+          "translated": true
+        },
+        {
+          "value": 3,
+          "label": "Hamming",
+          "translated": true
+        },
+        {
+          "value": 4,
+          "label": "Blackman",
+          "translated": true
+        },
+        {
+          "value": 5,
+          "label": "Blackman-Harris",
+          "translated": true
+        },
+        {
+          "value": 6,
+          "label": "Nuttall",
+          "translated": true
+        },
+        {
+          "value": 7,
+          "label": "Blackman-Nuttall",
+          "translated": true
+        },
+        {
+          "value": 8,
+          "label": "Flat Top",
+          "translated": true
+        },
+        {
+          "value": 9,
+          "label": "Welch",
+          "translated": true
+        },
+        {
+          "value": 10,
+          "label": "Bartlett-Hann",
+          "translated": true
+        },
+        {
+          "value": 11,
+          "label": "Bohman",
+          "translated": true
+        },
+        {
+          "value": 12,
+          "label": "Cosine (Sine)",
+          "translated": true
+        },
+        {
+          "value": 13,
+          "label": "Lanczos",
+          "translated": true
+        },
+        {
+          "value": 14,
+          "label": "Parzen",
+          "translated": true
+        }
+      ]
+    },
+    "xAxisSources": {
+      "kind": "liveProvider",
+      "valueType": "int",
+      "notFoundIndex": 0,
+      "notFoundValue": -2,
+      "labelProvider": "xDataSources",
+      "valueProvider": "xDataSourceUniqueIds",
+      "notes": "ProjectModel-computed; not-found stores kXAxisTime (-2)."
+    },
+    "waterfallYSources": {
+      "kind": "liveProvider",
+      "valueType": "int",
+      "notFoundIndex": 0,
+      "notFoundValue": 0,
+      "labelProvider": "yWaterfallSources",
+      "valueProvider": "yWaterfallSourceUniqueIds",
+      "notes": "ProjectModel-computed; not-found stores 0 (Time)."
+    }
+  },
+  "hooks": {
+    "widgetExtensionOptions": {
+      "kind": "optionProvider",
+      "signature": "QList<QPair<QString, QString>> widgetExtensionOptions()",
+      "origin": "PropertyHooks.cpp:widgetExtensionOptions",
+      "notes": "Appends the installed dataset-scope widget extension packages to the built-in widget domain (spec 0038 T20 residue); a package that replaces a built-in keeps the built-in row."
+    },
+    "aliasUnique": {
+      "kind": "validator",
+      "signature": "bool aliasInUseByOtherDataset(const DataModel::ProjectModel& pm, const QString& alias, int selfUniqueId)",
+      "origin": "ProjectEditorCommit.cpp:datasetAliasInUse / ProjectHandlerEntities.cpp:aliasInUseByOtherDataset"
+    },
+    "colorValid": {
+      "kind": "validator",
+      "signature": "bool isValidColor(const QString& color)",
+      "origin": "Frame.cpp:read(Dataset) / ProjectHandlerEntities.cpp:applyDatasetTextAndToggleFields"
+    },
+    "indexNonNegative": {
+      "kind": "validator",
+      "signature": "bool isValidDatasetIndex(int index)",
+      "origin": "ProjectHandlerEntities.cpp:applyDatasetNumericFields"
+    },
+    "fftWindowRange": {
+      "kind": "validator",
+      "signature": "bool isValidFftWindow(int window)",
+      "origin": "Frame.cpp:read(Dataset) / ProjectHandlerEntities.cpp:applyDatasetNumericFields"
+    },
+    "transformLanguageDomain": {
+      "kind": "validator",
+      "signature": "bool isValidTransformLanguage(int language)",
+      "origin": "ProjectHandlerEntities.cpp:applyDatasetDisplayAndTransformFields"
+    },
+    "insidePainterGroup": {
+      "kind": "predicate",
+      "signature": "bool insidePainterGroup(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addGeneralSection"
+    },
+    "notVirtual": {
+      "kind": "predicate",
+      "signature": "bool notVirtual(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addGeneralSection (index row)"
+    },
+    "plotEnabled": {
+      "kind": "predicate",
+      "signature": "bool plotEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addPlotSection"
+    },
+    "plotEnabledNonTimeX": {
+      "kind": "predicate",
+      "signature": "bool plotEnabledNonTimeX(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addPlotSection (logarithmic X row)"
+    },
+    "fftEnabled": {
+      "kind": "predicate",
+      "signature": "bool fftEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:buildFftGeneralRows (ballistics rows)"
+    },
+    "fftOrWaterfallEnabled": {
+      "kind": "predicate",
+      "signature": "bool fftOrWaterfallEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:buildFftRangeRows (fftSettingsEditable)"
+    },
+    "waterfallEnabled": {
+      "kind": "predicate",
+      "signature": "bool waterfallEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:buildFftGeneralRows (early return before the Y-axis row)"
+    },
+    "widgetSelectable": {
+      "kind": "predicate",
+      "signature": "bool widgetSelectable(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditor.cpp:datasetWidgetEditable"
+    },
+    "widgetRangeApplicable": {
+      "kind": "predicate",
+      "signature": "bool widgetRangeApplicable(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addWidgetSection (rangeEnabled)"
+    },
+    "ledEnabled": {
+      "kind": "predicate",
+      "signature": "bool ledEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addLEDSection"
+    },
+    "ledBandsAbsent": {
+      "kind": "predicate",
+      "signature": "bool ledBandsAbsent(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addLEDSection (early return once alarm bands exist)"
+    },
+    "datasetIndexPlaceholder": {
+      "kind": "placeholder",
+      "signature": "QVariant datasetIndexPlaceholder(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "ProjectEditorForms.cpp:addGeneralSection (pm.datasetCount() + 1)"
+    },
+    "onTitleChanged": {
+      "kind": "commit",
+      "signature": "RebuildHint (caller-owned: tree item text patch + selectedTextChanged)",
+      "origin": "ProjectEditorCommit.cpp:onDatasetItemChanged",
+      "notes": "Hook reports the hint only; the caller patches the tree and emits."
+    },
+    "onWidgetChanged": {
+      "kind": "commit",
+      "signature": "RebuildHint onWidgetChanged(DataModel::Dataset& d)",
+      "origin": "ProjectEditorCommit.cpp:onDatasetWidgetItemChanged",
+      "notes": "Compass rewrites the widget range to 0-360 and clears alarm bands; rebuild is synchronous."
+    },
+    "onVirtualChanged": {
+      "kind": "commit",
+      "signature": "RebuildHint onVirtualChanged(DataModel::Dataset& d)",
+      "origin": "ProjectEditorCommit.cpp:onDatasetWidgetItemChanged",
+      "notes": "Tree virtual flag patch plus a deferred (zero-timer, uniqueId re-checked) rebuild."
+    },
+    "onXAxisChanged": {
+      "kind": "commit",
+      "signature": "RebuildHint onXAxisChanged(DataModel::Dataset& d)",
+      "origin": "ProjectEditorCommit.cpp:onDatasetRangeItemChanged",
+      "notes": "Deferred rebuild."
+    },
+    "onReshape": {
+      "kind": "commit",
+      "signature": "RebuildHint onReshape(DataModel::Dataset& d)",
+      "origin": "ProjectEditorCommit.cpp:onDatasetFlagItemChanged (reshape flag)",
+      "notes": "Synchronous rebuild for the fft / waterfall / led toggles."
+    },
+    "onAliasRejected": {
+      "kind": "commit",
+      "signature": "void (caller-owned: message box + deferred form snap-back)",
+      "origin": "ProjectEditorCommit.cpp:validateSelectedDatasetAlias",
+      "notes": "Never invoked from generated code; the hand-written slot gates the commit."
+    },
+    "readAlarmBands": {
+      "kind": "subEntity",
+      "signature": "void DataModel::readDatasetAlarmBands(Dataset& d, const QJsonObject& obj)",
+      "origin": "Frame.cpp"
+    },
+    "readFrequencyMarkers": {
+      "kind": "subEntity",
+      "signature": "void DataModel::readDatasetFrequencyMarkers(Dataset& d, const QJsonObject& obj)",
+      "origin": "Frame.cpp"
+    },
+    "writeAlarmBands": {
+      "kind": "subEntity",
+      "signature": "serialize(const AlarmBand&) fan-out over d.alarmBands",
+      "origin": "Frame.h:serialize(const Dataset&)"
+    },
+    "writeFrequencyMarkers": {
+      "kind": "subEntity",
+      "signature": "serialize(const FrequencyMarker&) fan-out over d.fftMarkers",
+      "origin": "Frame.h:serialize(const Dataset&)"
+    },
+    "normalizeRanges": {
+      "kind": "subEntity",
+      "signature": "void DataModel::normalizeDatasetRanges(Dataset& d)",
+      "origin": "Frame.h"
+    }
+  },
+  "postRead": [
+    "validateColor",
+    "deriveNumericValue",
+    "clampFftWindow",
+    "legacyRangePairs",
+    "readAlarmBands",
+    "readFrequencyMarkers",
+    "normalizeRanges"
+  ],
+  "sections": [
+    {
+      "id": "general",
+      "title": "General Information",
+      "iconCategory": "editor",
+      "iconName": "dataset"
+    },
+    {
+      "id": "plot",
+      "title": "Plot Settings",
+      "iconCategory": "widgets",
+      "iconName": "plot"
+    },
+    {
+      "id": "fft",
+      "title": "Frequency Analysis",
+      "iconCategory": "widgets",
+      "iconName": "fft"
+    },
+    {
+      "id": "widget",
+      "title": "Widget Settings",
+      "iconCategory": "editor",
+      "iconName": "widget"
+    },
+    {
+      "id": "led",
+      "title": "LED Display Settings",
+      "iconCategory": "editor",
+      "iconName": "led"
+    }
+  ],
+  "form": {
+    "builders": [
+      {
+        "function": "addGeneralSection",
+        "signature": "model+dataset",
+        "section": "general",
+        "rows": [
+          "Title",
+          "Virtual",
+          "HideOnDashboard",
+          "Index",
+          "Units"
+        ],
+        "calls": [
+          "addDatasetAliasRow",
+          "addGeneralColorRow",
+          "addDatasetRangeRows"
+        ],
+        "notes": "addDatasetAliasRow runs between Units and Color; addDatasetRangeRows closes the section."
+      },
+      {
+        "function": "addDatasetAliasRow",
+        "signature": "model+dataset",
+        "rows": [
+          "Alias"
+        ]
+      },
+      {
+        "function": "addGeneralColorRow",
+        "signature": "model+dataset",
+        "rows": [
+          "Color"
+        ],
+        "notes": "Emitted inline by addGeneralSection today; kept as its own emitter so the call order Units -> Alias -> Color -> ranges is explicit."
+      },
+      {
+        "function": "addDatasetRangeRows",
+        "signature": "model+dataset",
+        "rows": [
+          "PltMin",
+          "PltMax"
+        ]
+      },
+      {
+        "function": "addPlotSection",
+        "signature": "model+dataset",
+        "section": "plot",
+        "rows": [
+          "Plt",
+          "XAxis",
+          "PltLogX",
+          "PltLogY"
+        ]
+      },
+      {
+        "function": "buildFftGeneralRows",
+        "signature": "model+dataset",
+        "section": "fft",
+        "rows": [
+          "Fft",
+          "Waterfall",
+          "FftBallistics",
+          "FftBallisticsRelease",
+          "WaterfallYAxis"
+        ]
+      },
+      {
+        "function": "buildFftRangeRows",
+        "signature": "model+dataset",
+        "rows": [
+          "FftSamples",
+          "FftWindow",
+          "FftSamplingRate",
+          "FftLogX",
+          "FftMin",
+          "FftMax"
+        ]
+      },
+      {
+        "function": "addWidgetSection",
+        "signature": "model+dataset",
+        "section": "widget",
+        "rows": [
+          "Widget"
+        ],
+        "calls": [
+          "buildWidgetFormatRows",
+          "buildWidgetRangeRows"
+        ]
+      },
+      {
+        "function": "buildWidgetFormatRows",
+        "signature": "model+dataset+flag",
+        "flagName": "rangeEnabled",
+        "flagHook": "widgetRangeApplicable",
+        "rows": [
+          "DisplayTickCount",
+          "DisplayFormat",
+          "DecimalPoints"
+        ]
+      },
+      {
+        "function": "buildWidgetRangeRows",
+        "signature": "model+dataset+flag",
+        "flagName": "rangeEnabled",
+        "flagHook": "widgetRangeApplicable",
+        "rows": [
+          "WgtMin",
+          "WgtMax"
+        ]
+      },
+      {
+        "function": "addLEDSection",
+        "signature": "model+dataset",
+        "section": "led",
+        "rows": [
+          "Led",
+          "LedHigh"
+        ]
+      }
+    ]
+  },
+  "properties": [
+    {
+      "id": "Title",
+      "field": "title",
+      "jsonKey": "Title",
+      "formId": "kDatasetView_Title",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "simplified",
+      "readTransform": "simplified",
+      "section": "general",
+      "widget": "TextField",
+      "label": "Dataset Title",
+      "description": "Name of the dataset, used for labeling and identification",
+      "placeholder": "Untitled Dataset",
+      "onCommit": "onTitleChanged",
+      "undo": {
+        "label": "Rename Dataset",
+        "coalesce": true,
+        "coalesceKey": "dataset-title"
+      },
+      "api": {
+        "expose": true,
+        "name": "title",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "Virtual",
+      "field": "virtual_",
+      "jsonKey": "Virtual",
+      "formId": "kDatasetView_Virtual",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "general",
+      "widget": "CheckBox",
+      "label": "Virtual Dataset",
+      "description": "Virtual datasets compute their value from transforms and data tables, they do not require a frame index",
+      "onCommit": "onVirtualChanged",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "virtual"
+      }
+    },
+    {
+      "id": "HideOnDashboard",
+      "field": "hideOnDashboard",
+      "jsonKey": "HideOnDashboard",
+      "formId": "kDatasetView_HideOnDashboard",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "general",
+      "widget": "CheckBox",
+      "label": "Hide on Dashboard",
+      "description": "Suppress this dataset's standalone dashboard tile; the painter widget can still read its values",
+      "visibleWhen": "insidePainterGroup",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "hideOnDashboard",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "Index",
+      "field": "index",
+      "jsonKey": "Index",
+      "formId": "kDatasetView_Index",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "section": "general",
+      "widget": "IntField",
+      "label": "Frame Index",
+      "description": "Frame position used for aligning datasets in time",
+      "placeholderHook": "datasetIndexPlaceholder",
+      "enabledWhen": "notVirtual",
+      "validate": "indexNonNegative",
+      "apiError": "Invalid index: must be >= 0 (0 = unassigned, 1+ = parser slot)",
+      "rebuildTree": true,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "index",
+        "rebuildTree": true
+      },
+      "defect": "read-default was -1 while the struct initializes 0; the manifest default is the struct value"
+    },
+    {
+      "id": "Units",
+      "field": "units",
+      "jsonKey": "Units",
+      "formId": "kDatasetView_Units",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "simplified",
+      "readTransform": "simplified",
+      "section": "general",
+      "widget": "TextField",
+      "label": "Measurement Unit",
+      "description": "Unit of measurement, such as volts or amps (optional)",
+      "placeholder": "Volts, Amps, etc.",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "units"
+      }
+    },
+    {
+      "id": "Alias",
+      "field": "alias",
+      "jsonKey": "Alias",
+      "formId": "kDatasetView_Alias",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "persist": "whenNonEmpty",
+      "readTransform": "simplified",
+      "commitTransform": "simplified",
+      "section": "general",
+      "widget": "TextField",
+      "label": "Script Alias",
+      "description": "Stable name for getDataset-style script/API lookups; must be unique (optional)",
+      "placeholder": "Stable name",
+      "validate": "aliasUnique",
+      "apiError": "Alias '%1' is already used by another dataset; aliases must be unique across the project",
+      "onCommit": "onAliasRejected",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "alias"
+      }
+    },
+    {
+      "id": "Color",
+      "field": "color",
+      "jsonKey": "Color",
+      "formId": "kDatasetView_Color",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "persist": "whenNonEmpty",
+      "readTransform": "simplified",
+      "commitTransform": "simplified",
+      "section": "general",
+      "widget": "ColorPicker",
+      "label": "Widget Color",
+      "description": "Custom display color for this dataset; automatic uses the theme palette",
+      "placeholder": "Automatic",
+      "validate": "colorValid",
+      "apiError": "Invalid color '%1': use '#rrggbb' or a valid color name; empty string restores the automatic theme color",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "color"
+      }
+    },
+    {
+      "id": "PltMin",
+      "field": "pltMin",
+      "jsonKey": "PltMin",
+      "formId": "kDatasetView_PltMin",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "pairMin",
+      "readTransform": "toDouble",
+      "pairWith": "PltMax",
+      "legacyKeys": [
+        "Min",
+        "Max"
+      ],
+      "legacyPair": true,
+      "section": "general",
+      "widget": "FloatField",
+      "label": "Minimum Value",
+      "description": "Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset",
+      "placeholder": 0,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "pltMin",
+        "aliases": [
+          "plotMin"
+        ]
+      }
+    },
+    {
+      "id": "PltMax",
+      "field": "pltMax",
+      "jsonKey": "PltMax",
+      "formId": "kDatasetView_PltMax",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "pairMax",
+      "readTransform": "toDouble",
+      "pairWith": "PltMin",
+      "legacyKeys": [
+        "Min",
+        "Max"
+      ],
+      "legacyPair": true,
+      "section": "general",
+      "widget": "FloatField",
+      "label": "Maximum Value",
+      "description": "Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset",
+      "placeholder": 0,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "pltMax",
+        "aliases": [
+          "plotMax"
+        ]
+      }
+    },
+    {
+      "id": "Plt",
+      "field": "plt",
+      "jsonKey": "Graph",
+      "formId": "kDatasetView_Plot",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "always",
+      "section": "plot",
+      "widget": "ComboBox",
+      "label": "Enable Plot Widget",
+      "description": "Plot data in real-time",
+      "options": "plotOptions",
+      "tupleFields": [
+        "Plt",
+        "Log"
+      ],
+      "onCommit": "onReshape",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "graph",
+        "rebuildTree": true
+      },
+      "notes": "One combo row drives both plt and log; the row's form id is kDatasetView_Plot."
+    },
+    {
+      "id": "Log",
+      "field": "log",
+      "jsonKey": "Log",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "apiDescription": "Include this dataset in CSV/data logging",
+      "persist": "always",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "log"
+      },
+      "notes": "No row of its own: edited through the Plt tuple row."
+    },
+    {
+      "id": "XAxis",
+      "field": "xAxisId",
+      "jsonKey": "XAxis",
+      "formId": "kDatasetView_xAxis",
+      "type": "int",
+      "default": -2,
+      "scope": "document",
+      "persist": "always",
+      "section": "plot",
+      "widget": "ComboBox",
+      "label": "X-Axis Source",
+      "description": "Choose Time or a dataset to drive the X-Axis in plots",
+      "options": "xAxisSources",
+      "enabledWhen": "plotEnabled",
+      "onCommit": "onXAxisChanged",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "xAxisId",
+        "aliases": [
+          "xAxis"
+        ]
+      },
+      "notes": "Default -2 is DataModel::kXAxisTime."
+    },
+    {
+      "id": "PltLogX",
+      "field": "pltLogX",
+      "jsonKey": "PltLogX",
+      "formId": "kDatasetView_Plt_LogX",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "plot",
+      "widget": "CheckBox",
+      "label": "Logarithmic X Axis",
+      "description": "Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)",
+      "placeholder": 0,
+      "enabledWhen": "plotEnabledNonTimeX",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "plotLogX"
+      }
+    },
+    {
+      "id": "PltLogY",
+      "field": "pltLogY",
+      "jsonKey": "PltLogY",
+      "formId": "kDatasetView_Plt_LogY",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "plot",
+      "widget": "CheckBox",
+      "label": "Logarithmic Y Axis",
+      "description": "Scale the Y axis in decades; values at or below zero are clamped",
+      "placeholder": 0,
+      "enabledWhen": "plotEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "plotLogY"
+      }
+    },
+    {
+      "id": "Fft",
+      "field": "fft",
+      "jsonKey": "FFT",
+      "formId": "kDatasetView_FFT",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "always",
+      "section": "fft",
+      "widget": "CheckBox",
+      "label": "Enable FFT Analysis",
+      "description": "Perform frequency-domain analysis of the dataset",
+      "placeholder": 0,
+      "onCommit": "onReshape",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "fft",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "Waterfall",
+      "field": "waterfall",
+      "jsonKey": "Waterfall",
+      "formId": "kDatasetView_Waterfall",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "fft",
+      "widget": "CheckBox",
+      "label": "Enable Waterfall Plot",
+      "description": "Show a scrolling spectrogram of frequency content over time (Pro)",
+      "placeholder": 0,
+      "onCommit": "onReshape",
+      "pro": true,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "waterfall",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "FftBallistics",
+      "field": "fftBallistics",
+      "jsonKey": "FFTBallistics",
+      "formId": "kDatasetView_FFT_Ballistics",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "fft",
+      "widget": "CheckBox",
+      "label": "Peak Ballistics",
+      "description": "Analyzer-style display: peaks rise instantly and decay smoothly over the release time",
+      "placeholder": 0,
+      "enabledWhen": "fftEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "fftBallistics"
+      }
+    },
+    {
+      "id": "FftBallisticsRelease",
+      "field": "fftBallisticsRelease",
+      "jsonKey": "FFTBallisticsRelease",
+      "formId": "kDatasetView_FFT_BallisticsRelease",
+      "type": "int",
+      "default": 300,
+      "scope": "document",
+      "persist": "withProperty",
+      "persistWith": "FftBallistics",
+      "clamp": {
+        "editor": {
+          "min": 50,
+          "max": 5000
+        },
+        "api": {
+          "min": 50,
+          "max": 5000
+        }
+      },
+      "section": "fft",
+      "widget": "IntField",
+      "label": "Ballistics Release (ms)",
+      "description": "Decay time for the ballistics display (50-5000 ms)",
+      "placeholder": 300,
+      "enabledWhen": "fftEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "fftBallisticsRelease"
+      }
+    },
+    {
+      "id": "WaterfallYAxis",
+      "field": "waterfallYAxis",
+      "jsonKey": "WaterfallYAxis",
+      "formId": "kDatasetView_WaterfallYAxis",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "whenNonZero",
+      "section": "fft",
+      "widget": "ComboBox",
+      "label": "Waterfall Y Axis",
+      "description": "Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM",
+      "options": "waterfallYSources",
+      "visibleWhen": "waterfallEnabled",
+      "pro": true,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "waterfallYAxis"
+      }
+    },
+    {
+      "id": "FftSamples",
+      "field": "fftSamples",
+      "jsonKey": "FFTSamples",
+      "formId": "kDatasetView_FFT_Samples",
+      "type": "int",
+      "default": 256,
+      "scope": "document",
+      "persist": "always",
+      "section": "fft",
+      "widget": "ComboBox",
+      "label": "FFT Window Size",
+      "description": "Number of samples used for each FFT calculation window",
+      "options": "fftSampleCounts",
+      "enabledWhen": "fftOrWaterfallEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "fftSamples"
+      },
+      "defect": "read-default was -1 while the struct initializes 256; the manifest default is the struct value"
+    },
+    {
+      "id": "FftWindow",
+      "field": "fftWindow",
+      "jsonKey": "FFTWindow",
+      "formId": "kDatasetView_FFT_Window",
+      "type": "int",
+      "default": 5,
+      "scope": "document",
+      "persist": "always",
+      "section": "fft",
+      "widget": "ComboBox",
+      "label": "FFT Window Function",
+      "description": "Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall",
+      "options": "fftWindows",
+      "enabledWhen": "fftOrWaterfallEnabled",
+      "validate": "fftWindowRange",
+      "apiError": "Invalid fftWindow: must be 0-14 (5 = Blackman-Harris)",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "fftWindow"
+      },
+      "notes": "Read side clamps an out-of-range value back to 5 (Blackman-Harris)."
+    },
+    {
+      "id": "FftSamplingRate",
+      "field": "fftSamplingRate",
+      "jsonKey": "FFTSamplingRate",
+      "formId": "kDatasetView_FFT_SamplingRate",
+      "type": "int",
+      "default": 100,
+      "scope": "document",
+      "persist": "always",
+      "section": "fft",
+      "widget": "IntField",
+      "label": "FFT Sampling Rate (Hz, required)",
+      "description": "Sampling frequency used for FFT (in Hz)",
+      "placeholder": 100,
+      "enabledWhen": "fftOrWaterfallEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "fftSamplingRate"
+      },
+      "defect": "read-default was -1 while the struct initializes 100; the manifest default is the struct value"
+    },
+    {
+      "id": "FftLogX",
+      "field": "fftLogX",
+      "jsonKey": "FFTLogX",
+      "formId": "kDatasetView_FFT_LogX",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "fft",
+      "widget": "CheckBox",
+      "label": "Logarithmic Frequency Axis",
+      "description": "Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall",
+      "placeholder": 0,
+      "enabledWhen": "fftOrWaterfallEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "fftLogX"
+      }
+    },
+    {
+      "id": "FftMin",
+      "field": "fftMin",
+      "jsonKey": "FFTMin",
+      "formId": "kDatasetView_FFTMin",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "pairMin",
+      "readTransform": "toDouble",
+      "pairWith": "FftMax",
+      "legacyKeys": [
+        "Min",
+        "Max"
+      ],
+      "legacyPair": true,
+      "section": "fft",
+      "widget": "FloatField",
+      "label": "Minimum Value (optional)",
+      "description": "Lower bound for data normalization; falls back to the dataset value range when left unset",
+      "placeholder": 0,
+      "enabledWhen": "fftOrWaterfallEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "fftMin"
+      }
+    },
+    {
+      "id": "FftMax",
+      "field": "fftMax",
+      "jsonKey": "FFTMax",
+      "formId": "kDatasetView_FFTMax",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "pairMax",
+      "readTransform": "toDouble",
+      "pairWith": "FftMin",
+      "legacyKeys": [
+        "Min",
+        "Max"
+      ],
+      "legacyPair": true,
+      "section": "fft",
+      "widget": "FloatField",
+      "label": "Maximum Value (optional)",
+      "description": "Upper bound for data normalization; falls back to the dataset value range when left unset",
+      "placeholder": 0,
+      "enabledWhen": "fftOrWaterfallEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "fftMax"
+      }
+    },
+    {
+      "id": "Widget",
+      "field": "widget",
+      "jsonKey": "Widget",
+      "formId": "kDatasetView_Widget",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "simplified",
+      "readTransform": "simplified",
+      "section": "widget",
+      "widget": "ComboBox",
+      "label": "Widget",
+      "description": "Select the visual widget used to display this dataset",
+      "options": "datasetWidgets",
+      "enabledWhen": "widgetSelectable",
+      "onCommit": "onWidgetChanged",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "widget",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "DisplayTickCount",
+      "field": "displayTickCount",
+      "jsonKey": "DisplayTickCount",
+      "formId": "kDatasetView_DisplayTickCount",
+      "type": "int",
+      "default": 5,
+      "scope": "document",
+      "persist": "whenPositive",
+      "clamp": {
+        "editor": {
+          "min": 0
+        },
+        "api": {
+          "min": 0
+        }
+      },
+      "section": "widget",
+      "widget": "AutoIntField",
+      "label": "Tick Count",
+      "description": "Major-tick count on the dial scale (0 = auto-fit to widget size)",
+      "placeholder": "Auto",
+      "enabledWhen": "widgetRangeApplicable",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "displayTickCount"
+      }
+    },
+    {
+      "id": "DisplayFormat",
+      "field": "displayFormat",
+      "jsonKey": "DisplayFormat",
+      "formId": "kDatasetView_DisplayFormat",
+      "type": "string",
+      "default": "0d",
+      "scope": "document",
+      "persist": "whenNonEmpty",
+      "section": "widget",
+      "widget": "ComboBox",
+      "label": "Label Format",
+      "description": "Decimal places or notation used on tick labels and the value display",
+      "options": "displayFormats",
+      "enabledWhen": "widgetRangeApplicable",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "displayFormat"
+      }
+    },
+    {
+      "id": "DecimalPoints",
+      "field": "decimalPoints",
+      "jsonKey": "DecimalPoints",
+      "formId": "kDatasetView_DecimalPoints",
+      "type": "int",
+      "default": -1,
+      "scope": "document",
+      "persist": "whenNonNegative",
+      "clamp": {
+        "editor": {
+          "min": -1
+        },
+        "api": {
+          "min": -1,
+          "max": 15
+        }
+      },
+      "section": "widget",
+      "widget": "AutoIntField",
+      "label": "Decimal Points",
+      "description": "Fixed decimal places for the value display; overrides the format (-1 = auto)",
+      "placeholder": "Auto",
+      "minValue": -1,
+      "maxValue": 15,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "decimalPoints"
+      },
+      "notes": "The editor row is always editable and clamps at -1 only; the API additionally caps at 15."
+    },
+    {
+      "id": "WgtMin",
+      "field": "wgtMin",
+      "jsonKey": "WgtMin",
+      "formId": "kDatasetView_WgtMin",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "pairMin",
+      "readTransform": "toDouble",
+      "pairWith": "WgtMax",
+      "legacyKeys": [
+        "Min",
+        "Max"
+      ],
+      "legacyPair": true,
+      "section": "widget",
+      "widget": "FloatField",
+      "label": "Minimum Value (optional)",
+      "description": "Lower bound of the gauge or bar range; falls back to the dataset value range when left unset",
+      "placeholder": 0,
+      "enabledWhen": "widgetRangeApplicable",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "wgtMin",
+        "aliases": [
+          "widgetMin"
+        ]
+      }
+    },
+    {
+      "id": "WgtMax",
+      "field": "wgtMax",
+      "jsonKey": "WgtMax",
+      "formId": "kDatasetView_WgtMax",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "writeTransform": "pairMax",
+      "readTransform": "toDouble",
+      "pairWith": "WgtMin",
+      "legacyKeys": [
+        "Min",
+        "Max"
+      ],
+      "legacyPair": true,
+      "section": "widget",
+      "widget": "FloatField",
+      "label": "Maximum Value (optional)",
+      "description": "Upper bound of the gauge or bar range; falls back to the dataset value range when left unset",
+      "placeholder": 0,
+      "enabledWhen": "widgetRangeApplicable",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "wgtMax",
+        "aliases": [
+          "widgetMax"
+        ]
+      }
+    },
+    {
+      "id": "Led",
+      "field": "led",
+      "jsonKey": "LED",
+      "formId": "kDatasetView_LED",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "always",
+      "section": "led",
+      "widget": "CheckBox",
+      "label": "Show in LED Panel",
+      "description": "Enable visual status monitoring using an LED display",
+      "placeholder": 0,
+      "onCommit": "onReshape",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "led",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "LedHigh",
+      "field": "ledHigh",
+      "jsonKey": "LedHigh",
+      "formId": "kDatasetView_LED_High",
+      "type": "double",
+      "default": 80,
+      "scope": "document",
+      "persist": "always",
+      "readTransform": "toDouble",
+      "section": "led",
+      "widget": "FloatField",
+      "label": "LED On Threshold (required)",
+      "description": "LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors",
+      "placeholder": 0,
+      "visibleWhen": "ledBandsAbsent",
+      "enabledWhen": "ledEnabled",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "ledHigh"
+      },
+      "defect": "read-default was 0 while the struct initializes 80; the manifest default is the struct value"
+    },
+    {
+      "id": "OverviewDisplay",
+      "field": "overviewDisplay",
+      "jsonKey": "Overview",
+      "formId": "kDatasetView_Overview",
+      "deadFormId": true,
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "apiDescription": "Show this dataset in the project overview panel",
+      "persist": "whenTrue",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "overviewDisplay",
+        "rebuildTree": true
+      },
+      "defect": "the key was read and API-settable but never serialized; the write is restored here",
+      "notes": "kDatasetView_Overview builds no row today. The enumerator is kept so the form-id numbering is unchanged; wiring a row or dropping the id is a separate pass."
+    },
+    {
+      "id": "TransformCode",
+      "field": "transformCode",
+      "jsonKey": "TransformCode",
+      "formId": "kDatasetView_TransformCode",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "apiDescription": "Per-dataset transform script; runs on every parsed value",
+      "persist": "whenNonEmpty",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "transformCode"
+      },
+      "notes": "Edited through the transform script editor, not a form row; the commit switch still handles the id."
+    },
+    {
+      "id": "TransformLanguage",
+      "field": "transformLanguage",
+      "jsonKey": "TransformLanguage",
+      "type": "int",
+      "default": -1,
+      "scope": "document",
+      "apiDescription": "Transform script language: -1 inherit, 0 JavaScript, 1 Lua",
+      "persist": "withProperty",
+      "persistWith": "TransformCode",
+      "validate": "transformLanguageDomain",
+      "apiError": "Invalid transformLanguage: must be -1 (inherit), 0 (JS), or 1 (Lua)",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "transformLanguage"
+      }
+    },
+    {
+      "id": "GroupId",
+      "field": "groupId",
+      "jsonKey": "GroupId",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "api": {
+        "expose": false,
+        "reason": "identity parameter of the verb, not a patchable field"
+      },
+      "notes": "Read side does not restore it: read(Group&) assigns groupId per dataset position.",
+      "readBack": false
+    },
+    {
+      "id": "DatasetId",
+      "field": "datasetId",
+      "jsonKey": "DatasetId",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "always",
+      "api": {
+        "expose": false,
+        "reason": "identity parameter of the verb, not a patchable field"
+      },
+      "notes": "Read side does not restore it: read(Group&) assigns datasetId per dataset position.",
+      "readBack": false
+    },
+    {
+      "id": "UniqueId",
+      "field": "uniqueId",
+      "jsonKey": "UniqueId",
+      "type": "int",
+      "default": -1,
+      "scope": "document",
+      "persist": "whenNonNegative",
+      "api": {
+        "expose": false,
+        "reason": "stable identity assigned by the model; never patched by a client"
+      }
+    },
+    {
+      "id": "SourceId",
+      "field": "sourceId",
+      "jsonKey": "DatasetSourceId",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "apiDescription": "Source (device) this dataset belongs to",
+      "persist": "never",
+      "api": {
+        "expose": true,
+        "name": "sourceId",
+        "aliases": [
+          "datasetSourceId"
+        ]
+      },
+      "notes": "Read from datasetSourceId but never written: finalize_frame re-derives it from the owning group."
+    },
+    {
+      "id": "Enabled",
+      "field": "enabled",
+      "jsonKey": "Disabled",
+      "type": "bool",
+      "default": true,
+      "scope": "document",
+      "persist": "whenFalse",
+      "invert": true,
+      "readTransform": "invertBool",
+      "api": {
+        "expose": false,
+        "reason": "toggled through the editor tree checkbox; no API field exists today"
+      }
+    }
+  ],
+  "runtimeFields": [
+    {
+      "field": "value",
+      "type": "string",
+      "jsonKey": "Value",
+      "persist": "always",
+      "writeTransform": "simplified",
+      "readTransform": "simplified",
+      "default": "",
+      "reason": "Live parsed value. Still written into the document today, so it stays persisted for byte-identical round trips."
+    },
+    {
+      "field": "numericValue",
+      "type": "double",
+      "jsonKey": "NumericValue",
+      "persist": "always",
+      "default": 0,
+      "reason": "Live numeric value. Written today; derived on read from value, never read back from the key.",
+      "readBack": false
+    },
+    {
+      "field": "rawValue",
+      "type": "string",
+      "persist": "never",
+      "default": "",
+      "reason": "Pre-transform live value; never serialized."
+    },
+    {
+      "field": "rawNumericValue",
+      "type": "double",
+      "persist": "never",
+      "default": 0,
+      "reason": "Pre-transform live numeric value; never serialized."
+    },
+    {
+      "field": "isNumeric",
+      "type": "bool",
+      "persist": "never",
+      "default": false,
+      "reason": "Derived on read from value; never serialized."
+    }
+  ],
+  "subEntities": [
+    {
+      "field": "alarmBands",
+      "jsonKey": "AlarmBands",
+      "readHook": "readAlarmBands",
+      "writeHook": "writeAlarmBands",
+      "apiName": "alarmBands",
+      "apiAliases": [
+        "alarmLow",
+        "alarmHigh",
+        "alarmEnabled"
+      ],
+      "notes": "Collection of AlarmBand with its own v3.3 migration; the three legacy names stay API-accepted aliases and route through applySimpleAlarmFields.",
+      "legacy": {
+        "hook": "applySimpleAlarmFields",
+        "args": [
+          {
+            "name": "alarmEnabled",
+            "type": "bool"
+          },
+          {
+            "name": "alarmLow",
+            "type": "double"
+          },
+          {
+            "name": "alarmHigh",
+            "type": "double"
+          }
+        ]
+      }
+    },
+    {
+      "field": "fftMarkers",
+      "jsonKey": "FFTMarkers",
+      "readHook": "readFrequencyMarkers",
+      "writeHook": "writeFrequencyMarkers",
+      "apiName": "fftMarkers",
+      "notes": "Collection of FrequencyMarker; validated by DataModel::read(FrequencyMarker&)."
+    }
+  ]
+}

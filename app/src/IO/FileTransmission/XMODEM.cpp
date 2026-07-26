@@ -14,14 +14,15 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/FileTransmission/XMODEM.h"
 
 #include "IO/FileTransmission/CRC.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -72,8 +73,7 @@ bool IO::Protocols::XMODEM::isActive() const
  */
 void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
 {
-  Q_ASSERT(!filePath.isEmpty());
-  Q_ASSERT(m_maxRetries > 0);
+  SS_ASSERT_LOG(!filePath.isEmpty());
 
   if (isActive())
     cancelTransfer();
@@ -101,9 +101,6 @@ void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
  */
 void IO::Protocols::XMODEM::cancelTransfer()
 {
-  Q_ASSERT(m_maxRetries > 0);
-  Q_ASSERT(m_timeoutMs >= 1000);
-
   if (!isActive())
     return;
 
@@ -193,8 +190,8 @@ void IO::Protocols::XMODEM::handleEotAckByte(quint8 ch)
  */
 void IO::Protocols::XMODEM::processInput(const QByteArray& data)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(isActive());
+  SS_ASSERT(!data.isEmpty(), return);
+  SS_ASSERT(isActive(), return);
 
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
@@ -286,8 +283,12 @@ void IO::Protocols::XMODEM::setTimeoutMs(int ms)
  */
 void IO::Protocols::XMODEM::sendBlock()
 {
-  Q_ASSERT(m_file.isOpen());
-  Q_ASSERT(m_state == State::SendingBlocks);
+  SS_ASSERT(m_file.isOpen(), {
+    resetState();
+    Q_EMIT finished(false, tr("File read error"));
+    return;
+  });
+  SS_ASSERT(m_state == State::SendingBlocks, return);
 
   m_lastBlockStart = m_file.pos();
 
@@ -363,9 +364,6 @@ void IO::Protocols::XMODEM::resetState()
  */
 void IO::Protocols::XMODEM::handleTimeout()
 {
-  Q_ASSERT(m_maxRetries > 0);
-  Q_ASSERT(m_timeoutMs >= 1000);
-
   if (!isActive())
     return;
 
@@ -401,8 +399,8 @@ void IO::Protocols::XMODEM::handleTimeout()
  */
 QByteArray IO::Protocols::XMODEM::buildBlock(const QByteArray& data, quint8 blockNum)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(data.size() == 128 || data.size() == 1024);
+  SS_ASSERT(!data.isEmpty(), return {});
+  SS_ASSERT_LOG(data.size() == 128 || data.size() == 1024);
 
   QByteArray packet;
   packet.reserve(data.size() + 5);

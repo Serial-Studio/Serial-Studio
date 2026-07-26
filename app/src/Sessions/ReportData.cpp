@@ -6,7 +6,7 @@
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
@@ -29,6 +29,7 @@
 
 #  include "DSP.h"
 #  include "SerialStudio.h"
+#  include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -288,7 +289,9 @@ struct ChartMeta {
 using detail::ChartMeta;
 
 /**
- * @brief Reads a query result set into parallel DSP ring buffers.
+ * @brief Reads a query result set into parallel DSP ring buffers. The returned count is clamped to
+ *        the buffers' size because the COUNT(*) reservation can under-count the rows the cursor
+ *        actually yields, and every downstream sampler indexes the rings by that count.
  */
 static std::size_t readAxisData(QSqlQuery& rows,
                                 qint64 originNs,
@@ -324,7 +327,7 @@ static std::size_t readAxisData(QSqlQuery& rows,
     ++count;
   }
 
-  return count;
+  return std::min({count, x.size(), y.size()});
 }
 
 /**
@@ -332,7 +335,7 @@ static std::size_t readAxisData(QSqlQuery& rows,
  */
 static void appendUniqueIndex(std::vector<std::size_t>& indices, std::size_t index)
 {
-  Q_ASSERT(indices.size() <= 8);
+  SS_ASSERT_LOG(indices.size() <= 8);
 
   for (const auto value : indices)
     if (value == index)
@@ -350,9 +353,9 @@ static void appendBucketSamples(const DSP::AxisData& y,
                                 int target,
                                 std::vector<std::size_t>& indices)
 {
-  Q_ASSERT(begin < end);
-  Q_ASSERT(target > 0);
-  Q_ASSERT(end <= y.size());
+  SS_ASSERT(begin < end, return);
+  SS_ASSERT(target > 0, return);
+  SS_ASSERT(end <= y.size(), return);
 
   const std::size_t bucketSize = end - begin;
   const std::size_t goal = std::min<std::size_t>(bucketSize, static_cast<std::size_t>(target));
@@ -409,12 +412,14 @@ static void appendBudgetFillSamples(std::size_t count,
                                     std::size_t budget,
                                     std::vector<std::size_t>& indices)
 {
-  Q_ASSERT(count >= budget);
-  Q_ASSERT(indices.size() <= budget);
+  SS_ASSERT(count >= budget, return);
+  SS_ASSERT(indices.size() <= budget, return);
 
   std::vector<unsigned char> used(count, 0);
   for (const auto index : indices) {
-    Q_ASSERT(index < count);
+    if (index >= count)
+      continue;
+
     used[index] = 1;
   }
 
@@ -445,15 +450,18 @@ static void writeSelectedSamples(const DSP::AxisData& x,
                                  const std::vector<std::size_t>& indices,
                                  Sessions::DatasetSeries& series)
 {
-  Q_ASSERT(!indices.empty());
-  Q_ASSERT(series.timesSec.empty());
-  Q_ASSERT(series.values.empty());
+  SS_ASSERT_LOG(!indices.empty());
+  SS_ASSERT(series.timesSec.empty(), series.timesSec.clear());
+  SS_ASSERT(series.values.empty(), series.values.clear());
 
   series.timesSec.reserve(indices.size());
   series.values.reserve(indices.size());
 
   for (const auto index : indices) {
-    Q_ASSERT(index < x.size() && index < y.size());
+    SS_ASSERT_LOG(index < x.size() && index < y.size());
+    if (index >= x.size() || index >= y.size())
+      continue;
+
     series.timesSec.push_back(x[index]);
     series.values.push_back(y[index]);
   }
@@ -468,9 +476,9 @@ static void writeReportSamples(const DSP::AxisData& x,
                                int maxSamples,
                                Sessions::DatasetSeries& series)
 {
-  Q_ASSERT(count > 0);
-  Q_ASSERT(maxSamples >= 2);
-  Q_ASSERT(count <= x.size() && count <= y.size());
+  SS_ASSERT(count > 0, return);
+  SS_ASSERT(maxSamples >= 2, return);
+  SS_ASSERT(count <= x.size() && count <= y.size(), count = std::min({count, x.size(), y.size()}));
 
   const std::size_t budget = static_cast<std::size_t>(maxSamples);
   if (count <= budget) {
@@ -486,8 +494,7 @@ static void writeReportSamples(const DSP::AxisData& x,
   const std::size_t bucketCount = std::max<std::size_t>(1, budget / 4);
   const std::size_t baseTarget  = budget / bucketCount;
   const std::size_t remainder   = budget % bucketCount;
-  Q_ASSERT(bucketCount > 0);
-  Q_ASSERT(baseTarget > 0);
+  SS_ASSERT(baseTarget > 0, return);
 
   std::vector<std::size_t> indices;
   indices.reserve(budget);
@@ -591,9 +598,6 @@ std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
   if (!db.isOpen() || sessionId < 0 || maxSamples < 2)
     return out;
 
-  Q_ASSERT(maxSamples >= 2);
-  Q_ASSERT(db.isOpen());
-
   const auto metas = loadChartParameters(db, sessionId);
   if (metas.empty())
     return out;
@@ -642,8 +646,11 @@ std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
     series.minValue     = globalMin;
     series.maxValue     = globalMax;
     writeReportSamples(x, y, count, maxSamples, series);
-    Q_ASSERT(series.timesSec.size() == series.values.size());
-    Q_ASSERT(series.values.size() == std::min<std::size_t>(count, maxSamples));
+    SS_ASSERT_LOG(series.timesSec.size() == series.values.size());
+    if (series.timesSec.size() != series.values.size())
+      continue;
+
+    SS_ASSERT_LOG(series.values.size() == std::min<std::size_t>(count, maxSamples));
 
     if (series.values.size() < 2)
       continue;

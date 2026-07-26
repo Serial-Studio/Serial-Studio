@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
@@ -24,6 +24,7 @@
 #include <QCoreApplication>
 
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Latched parser base
@@ -35,8 +36,8 @@
 DataModel::NativeLatchParser::NativeLatchParser(int count)
   : m_count(qMax(1, count)), m_values(QList<QString>(qMax(1, count), QStringLiteral("0")))
 {
-  Q_ASSERT(count >= 1);
-  Q_ASSERT(m_values.size() == m_count);
+  SS_ASSERT_LOG(count >= 1);
+  SS_ASSERT_LOG(m_values.size() == m_count);
 }
 
 /**
@@ -52,7 +53,7 @@ void DataModel::NativeLatchParser::reset()
  */
 void DataModel::NativeLatchParser::storeAt(int index, const QString& value)
 {
-  Q_ASSERT(m_count == m_values.size());
+  SS_ASSERT(m_count == m_values.size(), return);
 
   if (index < 0 || index >= m_count)
     return;
@@ -65,8 +66,8 @@ void DataModel::NativeLatchParser::storeAt(int index, const QString& value)
  */
 QList<QStringList> DataModel::NativeLatchParser::latchedFrame() const
 {
-  Q_ASSERT(!m_values.isEmpty());
-  Q_ASSERT(m_count == m_values.size());
+  SS_ASSERT(!m_values.isEmpty(), return {});
+  SS_ASSERT(m_count == m_values.size(), return {});
 
   QList<QStringList> out;
   out.append(m_values);
@@ -95,7 +96,7 @@ QJsonObject DataModel::nativeTemplateDefaults(const DataModel::INativeTemplate& 
   for (const auto& spec : specs)
     defaults.insert(spec.key, spec.defaultValue);
 
-  Q_ASSERT(defaults.size() == specs.size());
+  SS_ASSERT_LOG(defaults.size() == specs.size());
   return defaults;
 }
 
@@ -112,8 +113,8 @@ DataModel::NativeParamSpec DataModel::nativeParam(const char* key,
                                                   const char* description,
                                                   const QJsonValue& defaultValue)
 {
-  Q_ASSERT(key != nullptr);
-  Q_ASSERT(label != nullptr);
+  SS_ASSERT_LOG(key != nullptr);
+  SS_ASSERT_LOG(label != nullptr);
 
   NativeParamSpec spec;
   spec.key          = QString::fromLatin1(key);
@@ -131,7 +132,7 @@ QStringList DataModel::nativeKeyList(const QJsonObject& params,
                                      const QString& key,
                                      const QString& fallbackCsv)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return {});
 
   const QString csv = nativeParamString(params, key, fallbackCsv);
   QStringList keys;
@@ -150,7 +151,7 @@ QStringList DataModel::nativeKeyList(const QJsonObject& params,
  */
 QJsonArray DataModel::nativeParamArray(const QJsonObject& params, const QString& key)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return QJsonArray());
 
   const auto value = params.value(key);
   if (!value.isArray())
@@ -166,7 +167,7 @@ QString DataModel::nativeParamString(const QJsonObject& params,
                                      const QString& key,
                                      const QString& fallback)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return fallback);
 
   const auto value = params.value(key);
   if (!value.isString())
@@ -180,7 +181,7 @@ QString DataModel::nativeParamString(const QJsonObject& params,
  */
 QChar DataModel::nativeParamChar(const QJsonObject& params, const QString& key, QChar fallback)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return fallback);
 
   const auto value = params.value(key);
   if (!value.isString())
@@ -198,7 +199,7 @@ QChar DataModel::nativeParamChar(const QJsonObject& params, const QString& key, 
  */
 int DataModel::nativeParamInt(const QJsonObject& params, const QString& key, int fallback)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return fallback);
 
   const auto value = params.value(key);
   if (!value.isDouble())
@@ -212,7 +213,7 @@ int DataModel::nativeParamInt(const QJsonObject& params, const QString& key, int
  */
 double DataModel::nativeParamFloat(const QJsonObject& params, const QString& key, double fallback)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return fallback);
 
   const auto value = params.value(key);
   if (!value.isDouble())
@@ -226,7 +227,7 @@ double DataModel::nativeParamFloat(const QJsonObject& params, const QString& key
  */
 bool DataModel::nativeParamBool(const QJsonObject& params, const QString& key, bool fallback)
 {
-  Q_ASSERT(!key.isEmpty());
+  SS_ASSERT(!key.isEmpty(), return fallback);
 
   const auto value = params.value(key);
   if (!value.isBool())

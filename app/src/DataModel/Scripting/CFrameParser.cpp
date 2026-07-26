@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/CFrameParser.h"
@@ -28,6 +28,7 @@
 
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Descriptor keys & helpers
@@ -65,7 +66,7 @@ static QString paramTypeName(DataModel::NativeParamType type)
  */
 static QJsonObject paramSpecToJson(const DataModel::NativeParamSpec& spec)
 {
-  Q_ASSERT(!spec.key.isEmpty());
+  SS_ASSERT_LOG(!spec.key.isEmpty());
 
   QJsonObject entry;
   entry.insert(QStringLiteral("key"), spec.key);
@@ -75,10 +76,11 @@ static QJsonObject paramSpecToJson(const DataModel::NativeParamSpec& spec)
   entry.insert(QStringLiteral("default"), spec.defaultValue);
 
   if (spec.type == DataModel::NativeParamType::Enum) {
-    Q_ASSERT(spec.optionValues.size() == spec.optionLabels.size());
+    SS_ASSERT_LOG(spec.optionValues.size() == spec.optionLabels.size());
 
+    const qsizetype count = qMin(spec.optionValues.size(), spec.optionLabels.size());
     QJsonArray options;
-    for (qsizetype i = 0; i < spec.optionValues.size(); ++i) {
+    for (qsizetype i = 0; i < count; ++i) {
       QJsonObject option;
       option.insert(QStringLiteral("value"), spec.optionValues.at(i));
       option.insert(QStringLiteral("label"), spec.optionLabels.at(i));
@@ -109,7 +111,9 @@ QJsonArray DataModel::CFrameParser::templateCatalog()
   QJsonArray catalog;
   const auto& templates = nativeTemplates();
   for (const auto* tmpl : templates) {
-    Q_ASSERT(tmpl != nullptr);
+    SS_ASSERT_LOG(tmpl != nullptr);
+    if (!tmpl)
+      continue;
 
     QJsonObject entry;
     entry.insert(QStringLiteral("id"), tmpl->id());
@@ -118,7 +122,7 @@ QJsonArray DataModel::CFrameParser::templateCatalog()
     catalog.append(entry);
   }
 
-  Q_ASSERT(!catalog.isEmpty());
+  SS_ASSERT_LOG(!catalog.isEmpty());
   return catalog;
 }
 
@@ -142,7 +146,7 @@ QJsonObject DataModel::CFrameParser::templateSchema(const QString& id)
   schema.insert(QStringLiteral("description"), tmpl->description());
   schema.insert(kParamsKey, params);
 
-  Q_ASSERT(schema.value(QStringLiteral("id")).toString() == id);
+  SS_ASSERT_LOG(schema.value(QStringLiteral("id")).toString() == id);
   return schema;
 }
 
@@ -152,14 +156,14 @@ QJsonObject DataModel::CFrameParser::templateSchema(const QString& id)
 QString DataModel::CFrameParser::buildDescriptor(const QString& templateId,
                                                  const QJsonObject& params)
 {
-  Q_ASSERT(!templateId.isEmpty());
+  SS_ASSERT(!templateId.isEmpty(), return {});
 
   QJsonObject descriptor;
   descriptor.insert(kTemplateKey, templateId);
   descriptor.insert(kParamsKey, params);
 
   const auto json = QJsonDocument(descriptor).toJson(QJsonDocument::Compact);
-  Q_ASSERT(!json.isEmpty());
+  SS_ASSERT(!json.isEmpty(), return {});
   return QString::fromUtf8(json);
 }
 
@@ -177,8 +181,8 @@ DataModel::CFrameParser::CFrameParser() : m_parser(nullptr) {}
  */
 bool DataModel::CFrameParser::loadScript(const QString& script, int sourceId, bool showMessageBoxes)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!script.isEmpty());
+  SS_ASSERT(sourceId >= 0, return false);
+  SS_ASSERT(!script.isEmpty(), return false);
 
   QJsonParseError parse_error;
   const auto doc = QJsonDocument::fromJson(script.toUtf8(), &parse_error);
@@ -217,7 +221,7 @@ bool DataModel::CFrameParser::loadScript(const QString& script, int sourceId, bo
  */
 QList<QStringList> DataModel::CFrameParser::parseString(const QString& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
+  SS_ASSERT(!frame.isEmpty(), return {});
 
   if (!m_parser) [[unlikely]]
     return {};
@@ -230,7 +234,7 @@ QList<QStringList> DataModel::CFrameParser::parseString(const QString& frame)
  */
 QList<QStringList> DataModel::CFrameParser::parseUtf8(const QByteArray& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
+  SS_ASSERT(!frame.isEmpty(), return {});
 
   if (!m_parser) [[unlikely]]
     return {};
@@ -245,8 +249,8 @@ qsizetype DataModel::CFrameParser::parseUtf8Spans(QByteArrayView frame,
                                                   QByteArrayView* out,
                                                   qsizetype maxSpans) noexcept
 {
-  Q_ASSERT(out != nullptr);
-  Q_ASSERT(maxSpans > 0);
+  SS_ASSERT(out != nullptr, return -1);
+  SS_ASSERT(maxSpans > 0, return -1);
 
   if (!m_parser) [[unlikely]]
     return -1;
@@ -259,7 +263,7 @@ qsizetype DataModel::CFrameParser::parseUtf8Spans(QByteArrayView frame,
  */
 QList<QStringList> DataModel::CFrameParser::parseBinary(const QByteArray& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
+  SS_ASSERT(!frame.isEmpty(), return {});
 
   if (!m_parser) [[unlikely]]
     return {};
@@ -321,8 +325,8 @@ void DataModel::CFrameParser::reportLoadError(const QString& error,
                                               int sourceId,
                                               bool showMessageBoxes)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!error.isEmpty());
+  SS_ASSERT_LOG(sourceId >= 0);
+  SS_ASSERT(!error.isEmpty(), return);
 
   m_lastError = error;
   if (showMessageBoxes) {

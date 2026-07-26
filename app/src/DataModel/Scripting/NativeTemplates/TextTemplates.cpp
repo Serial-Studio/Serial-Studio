@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cstring>
@@ -28,6 +28,7 @@
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "DSPSimd.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 using DataModel::INativeParser;
 using DataModel::INativeTemplate;
@@ -73,8 +74,8 @@ public:
     , m_trim(trim)
     , m_skipEmpty(skip_empty)
   {
-    Q_ASSERT(!m_separator.isEmpty());
-    Q_ASSERT(!m_sepUtf8.isEmpty());
+    SS_ASSERT(!m_separator.isEmpty(), m_separator = QStringLiteral(","));
+    SS_ASSERT(!m_sepUtf8.isEmpty(), m_sepUtf8 = m_separator.toUtf8());
   }
 
   /**
@@ -82,7 +83,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_separator.isEmpty());
+    SS_ASSERT(!m_separator.isEmpty(), return {});
 
     QStringList row;
     row.reserve(16);
@@ -117,8 +118,8 @@ public:
                                      QByteArrayView* out,
                                      qsizetype maxSpans) noexcept override
   {
-    Q_ASSERT(out != nullptr);
-    Q_ASSERT(maxSpans > 0);
+    SS_ASSERT(out != nullptr, return -1);
+    SS_ASSERT(maxSpans > 0, return -1);
 
     if (!m_quote.isNull())
       return -1;
@@ -159,8 +160,8 @@ private:
                                                QByteArrayView* out,
                                                qsizetype maxSpans) const noexcept
   {
-    Q_ASSERT(data != nullptr || len == 0);
-    Q_ASSERT(maxSpans > 0);
+    SS_ASSERT(data != nullptr || len == 0, return -1);
+    SS_ASSERT(maxSpans > 0, return -1);
 
     qsizetype count = 0;
     qsizetype start = 0;
@@ -190,8 +191,8 @@ private:
                                               QByteArrayView* out,
                                               qsizetype maxSpans) const noexcept
   {
-    Q_ASSERT(maxSpans > 0);
-    Q_ASSERT(m_sepUtf8.size() > 1);
+    SS_ASSERT(maxSpans > 0, return -1);
+    SS_ASSERT(m_sepUtf8.size() > 1, return -1);
 
     const char sep0        = m_sepUtf8.at(0);
     const qsizetype sepLen = m_sepUtf8.size();
@@ -238,7 +239,7 @@ private:
    */
   [[nodiscard]] QByteArrayView fieldSpan(const char* p, qsizetype n) const noexcept
   {
-    Q_ASSERT(n >= 0);
+    SS_ASSERT(n >= 0, n = 0);
 
     if (!m_trim)
       return QByteArrayView(p, n);
@@ -263,7 +264,7 @@ private:
    */
   void splitPlain(const QString& frame, QStringList& row) const
   {
-    Q_ASSERT(row.isEmpty());
+    SS_ASSERT_LOG(row.isEmpty());
 
     qsizetype start = 0;
     for (int field = 0; field < kMaxFields; ++field) {
@@ -283,8 +284,8 @@ private:
    */
   void splitQuoted(const QString& frame, QStringList& row) const
   {
-    Q_ASSERT(row.isEmpty());
-    Q_ASSERT(!m_quote.isNull());
+    SS_ASSERT_LOG(row.isEmpty());
+    SS_ASSERT_LOG(!m_quote.isNull());
 
     QString field;
     field.reserve(32);
@@ -326,8 +327,8 @@ private:
    */
   [[nodiscard]] bool matchesSeparatorAt(const QString& frame, qsizetype i) const
   {
-    Q_ASSERT(i >= 0);
-    Q_ASSERT(i < frame.length());
+    SS_ASSERT(i >= 0, return false);
+    SS_ASSERT(i < frame.length(), return false);
 
     if (frame.at(i) != m_separator.at(0))
       return false;
@@ -504,9 +505,10 @@ public:
   /**
    * @brief Stores the column widths (empty = whitespace split) and trim flag.
    */
-  FixedWidthParser(const QList<int>& widths, bool trim) : m_widths(widths), m_trim(trim)
+  FixedWidthParser(const QList<int>& widths, bool trim)
+    : m_widths(widths.mid(0, kMaxFields)), m_trim(trim)
   {
-    Q_ASSERT(m_widths.size() <= kMaxFields);
+    SS_ASSERT_LOG(widths.size() <= kMaxFields);
   }
 
   /**
@@ -525,7 +527,10 @@ public:
 
     qsizetype pos = 0;
     for (const int width : m_widths) {
-      Q_ASSERT(width > 0);
+      SS_ASSERT_LOG(width > 0);
+      if (width <= 0)
+        continue;
+
       const QString field = frame.mid(pos, width);
       row.append(m_trim ? field.trimmed() : field);
       pos += width;
@@ -641,7 +646,7 @@ public:
     , m_keyIndex(buildKeyIndex(keys))
     , m_numericOnly(numericOnly)
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT_LOG(!m_keys.isEmpty());
   }
 
   /**
@@ -649,7 +654,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT(!m_keys.isEmpty(), return latchedFrame());
 
     const auto pairs = QStringView(frame).split(m_pairSeparator);
     for (const auto pair : pairs) {
@@ -792,7 +797,7 @@ public:
     , m_keys(keys)
     , m_keyIndex(buildKeyIndex(keys))
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT_LOG(!m_keys.isEmpty());
   }
 
   /**
@@ -800,7 +805,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT(!m_keys.isEmpty(), return latchedFrame());
 
     const auto lines = QStringView(frame).split(QLatin1Char('\n'));
     for (const auto raw : lines) {
@@ -910,7 +915,7 @@ public:
   AtCommandsParser(const QHash<QString, QList<int>>& commands, int count)
     : NativeLatchParser(count), m_commands(commands)
   {
-    Q_ASSERT(!m_commands.isEmpty());
+    SS_ASSERT_LOG(!m_commands.isEmpty());
   }
 
   /**
@@ -918,7 +923,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_commands.isEmpty());
+    SS_ASSERT(!m_commands.isEmpty(), return latchedFrame());
 
     const QString trimmed = frame.trimmed();
     const qsizetype colon = trimmed.indexOf(QLatin1Char(':'));
@@ -1052,7 +1057,7 @@ public:
   Nmea0183Parser(const QString& talker, bool validateChecksum)
     : NativeLatchParser(kNmeaChannels), m_talker(talker), m_validateChecksum(validateChecksum)
   {
-    Q_ASSERT(!m_talker.isEmpty());
+    SS_ASSERT(!m_talker.isEmpty(), m_talker = QStringLiteral("GP"));
   }
 
   /**
@@ -1092,8 +1097,8 @@ private:
    */
   [[nodiscard]] static bool checksumOk(const QString& sentence, qsizetype star)
   {
-    Q_ASSERT(star > 0);
-    Q_ASSERT(sentence.startsWith(QLatin1Char('$')));
+    SS_ASSERT(star > 0, return false);
+    SS_ASSERT(sentence.startsWith(QLatin1Char('$')), return false);
 
     bool ok            = false;
     const int expected = QStringView(sentence).mid(star + 1).toInt(&ok, 16);
@@ -1114,7 +1119,7 @@ private:
                                               const QString& hemisphere,
                                               int degreeDigits)
   {
-    Q_ASSERT(degreeDigits == 2 || degreeDigits == 3);
+    SS_ASSERT(degreeDigits == 2 || degreeDigits == 3, degreeDigits = 2);
 
     if (text.length() < degreeDigits + 2)
       return 0.0;
@@ -1265,7 +1270,7 @@ public:
     , m_keys(keys)
     , m_keyIndex(buildKeyIndex(keys))
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT_LOG(!m_keys.isEmpty());
   }
 
   /**
@@ -1273,7 +1278,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT(!m_keys.isEmpty(), return latchedFrame());
 
     const auto pairs = QStringView(frame).trimmed().split(QLatin1Char('&'), Qt::SkipEmptyParts);
     for (const auto pair : pairs) {
@@ -1377,7 +1382,7 @@ public:
   explicit JsonDataParser(const QStringList& fields)
     : NativeLatchParser(static_cast<int>(fields.size())), m_fields(fields)
   {
-    Q_ASSERT(!m_fields.isEmpty());
+    SS_ASSERT_LOG(!m_fields.isEmpty());
   }
 
   /**
@@ -1410,7 +1415,7 @@ private:
    */
   [[nodiscard]] QList<QStringList> parseJsonBytes(const QByteArray& bytes)
   {
-    Q_ASSERT(!m_fields.isEmpty());
+    SS_ASSERT(!m_fields.isEmpty(), return latchedFrame());
 
     const auto doc = QJsonDocument::fromJson(bytes);
     if (!doc.isObject())
@@ -1515,7 +1520,7 @@ public:
   explicit XmlDataParser(const QStringList& tags)
     : NativeLatchParser(static_cast<int>(tags.size())), m_tags(tags)
   {
-    Q_ASSERT(!m_tags.isEmpty());
+    SS_ASSERT_LOG(!m_tags.isEmpty());
 
     m_openTags.reserve(tags.size());
     m_closeTags.reserve(tags.size());
@@ -1530,7 +1535,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_tags.isEmpty());
+    SS_ASSERT(!m_tags.isEmpty(), return latchedFrame());
 
     for (int i = 0; i < m_tags.size(); ++i) {
       const qsizetype start = frame.indexOf(m_openTags.at(i));
@@ -1639,7 +1644,7 @@ public:
     , m_keys(keys)
     , m_keyIndex(buildKeyIndex(keys))
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT_LOG(!m_keys.isEmpty());
   }
 
   /**
@@ -1647,7 +1652,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
-    Q_ASSERT(!m_keys.isEmpty());
+    SS_ASSERT(!m_keys.isEmpty(), return latchedFrame());
 
     const auto lines = QStringView(frame).split(QLatin1Char('\n'));
     for (const auto raw : lines) {

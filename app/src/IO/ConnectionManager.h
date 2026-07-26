@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QMutex>
 #include <QObject>
+#include <QSet>
 #include <QSettings>
 #include <QTimer>
 #include <unordered_map>
@@ -38,9 +39,15 @@
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
 
+class SessionContext;
+
 namespace DataModel {
 struct Source;
 }  // namespace DataModel
+
+namespace Misc::Diagnostics {
+enum class Bus : int;
+}  // namespace Misc::Diagnostics
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
@@ -53,6 +60,18 @@ struct Source;
 #endif
 
 namespace IO {
+
+/**
+ * @brief Link counters summed across every open device, sampled once per second by the problem
+ *        center. Readers are recreated on connect/reconfigure, so a decrease means a reset.
+ */
+struct LinkStats {
+  quint64 bytesIn;
+  quint64 droppedFrames;
+  quint64 overflowBytes;
+  quint64 checksumErrors;
+  quint64 framesExtracted;
+};
 
 /**
  * @brief Singleton orchestrator that owns all DeviceManager instances and wires
@@ -104,6 +123,7 @@ class ConnectionManager : public QObject {
 signals:
   void driverChanged();
   void pausedChanged();
+  void sessionClosed();
   void busTypeChanged();
   void busListChanged();
   void connectedChanged();
@@ -116,15 +136,16 @@ signals:
   void checksumAlgorithmChanged();
 
 private:
+  friend class ::SessionContext;
   explicit ConnectionManager();
   ConnectionManager(ConnectionManager&&)                 = delete;
   ConnectionManager(const ConnectionManager&)            = delete;
   ConnectionManager& operator=(ConnectionManager&&)      = delete;
   ConnectionManager& operator=(const ConnectionManager&) = delete;
 
+public:
   ~ConnectionManager();
 
-public:
   [[nodiscard]] static ConnectionManager& instance();
 
   [[nodiscard]] bool paused() const noexcept;
@@ -132,7 +153,12 @@ public:
   [[nodiscard]] bool readWrite() const;
   [[nodiscard]] bool isConnected() const;
   [[nodiscard]] bool configurationOk() const;
+  [[nodiscard]] int activeFlowCount() const;
+  [[nodiscard]] int reconnectAttempt() const;
   [[nodiscard]] int connectedDeviceCount() const;
+
+  [[nodiscard]] QString linkState() const;
+  [[nodiscard]] LinkStats linkStats() const;
 
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
@@ -202,20 +228,33 @@ private slots:
   void syncUiDriverFromSource0();
   void wireDevice(DeviceManager* dm);
   void onUiDriverConfigurationChanged();
+  void onDeviceLinkLost(int deviceId, const QString& reason);
+  void onDeviceLinkStateChanged(int deviceId);
   void onFrameReady(int deviceId, const IO::CapturedDataPtr& frame);
   void onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
+  void onDeviceOpenFinished(int deviceId, bool ok, const QString& reason);
 
 private:
+  void endWaitCursor();
+  void beginWaitCursor();
+  void concludeConnectRequest();
   void wireUiDriver(IO::HAL_Driver* driver);
   void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
 
+  [[nodiscard]] bool hasPendingOpen() const;
+  [[nodiscard]] QString deviceDisplayName(int deviceId) const;
   [[nodiscard]] bool projectConfigurationOk() const;
+  [[nodiscard]] bool diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const;
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
 
 private:
   std::atomic<bool> m_paused;
   bool m_writeEnabled;
+  bool m_connectFanOut;
+  bool m_connectPending;
+  bool m_linkLossNotified;
+  bool m_waitCursorActive;
   bool m_syncingFromProject;
   SerialStudio::BusType m_busType;
 
@@ -225,6 +264,7 @@ private:
 
   QSettings m_settings;
   QTimer m_uiDriverSaveTimer;
+  QSet<int> m_droppedDevices;
 
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
 

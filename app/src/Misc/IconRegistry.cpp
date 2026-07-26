@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Misc/IconRegistry.h"
@@ -24,6 +24,8 @@
 #include <QDirIterator>
 #include <QtAlgorithms>
 #include <QtLogging>
+
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -54,8 +56,8 @@ Misc::IconRegistry::IconRegistry()
     std::sort(tiers.begin(), tiers.end());
   }
 
-  Q_ASSERT(!m_catalog.isEmpty());
-  Q_ASSERT(m_catalog.contains(QStringLiteral("system")));
+  SS_ASSERT_LOG(!m_catalog.isEmpty());
+  SS_ASSERT_LOG(m_catalog.contains(QStringLiteral("system")));
 }
 
 /**
@@ -109,8 +111,8 @@ QString Misc::IconRegistry::iconPath(const QString& category, const QString& nam
  */
 QString Misc::IconRegistry::resolve(const QString& category, const QString& name, int px) const
 {
-  Q_ASSERT(!category.isEmpty());
-  Q_ASSERT(!name.isEmpty());
+  SS_ASSERT(!category.isEmpty(), return missingIcon(category, name));
+  SS_ASSERT(!name.isEmpty(), return missingIcon(category, name));
 
   const auto cat = m_catalog.constFind(category);
   if (cat == m_catalog.constEnd())

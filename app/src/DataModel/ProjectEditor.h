@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -459,6 +459,7 @@ public slots:
 
 private slots:
   void scheduleTreeRebuild();
+  void appendExtensionWidgets();
   void generateComboBoxModels();
   void onGroupItemChanged(QStandardItem* item);
   void onSourceItemChanged(QStandardItem* item);
@@ -479,10 +480,12 @@ private:
   void fanOutputWidgetSelectionEdit(QStandardItem* item);
   void openAlarmBandsEditorForMultiSelection();
   void commitAlarmBandsForSelection(const std::vector<DataModel::AlarmBand>& bands);
+
   [[nodiscard]] QHash<int, QVariant> datasetEditValues(const DataModel::Dataset& dataset);
   [[nodiscard]] QHash<int, QVariant> outputWidgetEditValues(const DataModel::OutputWidget& widget);
 
   void addGeneralSection(CustomModel* model, const DataModel::Dataset& dataset);
+  void addGeneralColorRow(CustomModel* model, const DataModel::Dataset& dataset);
   void addDatasetAliasRow(CustomModel* model, const DataModel::Dataset& dataset);
   void addDatasetRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
   void addPlotSection(CustomModel* model, const DataModel::Dataset& dataset);
@@ -600,13 +603,11 @@ private:
                              const DataModel::Dataset& dataset,
                              bool rangeEnabled);
 
-  void onDatasetCommonItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
   [[nodiscard]] bool datasetAliasInUse(const QString& alias, int selfUniqueId) const;
   [[nodiscard]] bool validateSelectedDatasetAlias(const QString& newAlias);
-  void onDatasetWidgetItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
-  void onDatasetRangeItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
-  void onDatasetFftItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
-  void onDatasetFlagItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
+  [[nodiscard]] bool datasetFormEditAccepted(int formId, const QVariant& value);
+  void syncDatasetTreeVirtualFlag(const DataModel::Dataset& dataset);
+  void commitDatasetFormEdit(int formId);
 
   void buildOutputWidgetCommonRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetValueRows(const DataModel::OutputWidget& widget);

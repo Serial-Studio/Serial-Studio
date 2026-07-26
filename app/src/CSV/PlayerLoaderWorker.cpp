@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "CSV/PlayerLoaderWorker.h"
@@ -27,6 +27,7 @@
 
 #include "DSPSimd.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 static constexpr qsizetype kBatchRows = 65536;
 
@@ -40,8 +41,8 @@ static constexpr qsizetype kBatchRows = 65536;
  */
 [[nodiscard]] static bool parseIntField(QByteArrayView cell, qsizetype& i, int digits, int& out)
 {
-  Q_ASSERT(digits > 0);
-  Q_ASSERT(i >= 0);
+  SS_ASSERT(digits > 0, return false);
+  SS_ASSERT(i >= 0, return false);
 
   int parsed = 0;
   int value  = 0;
@@ -151,7 +152,7 @@ void CSV::PlayerLoaderWorker::requestCancel()
 double CSV::PlayerLoaderWorker::secondsForRow(const PlayerIndexRequest& request,
                                               const DataModel::ReplayCellViews& cells) const
 {
-  Q_ASSERT(!cells.isEmpty());
+  SS_ASSERT(!cells.isEmpty(), return -1.0);
 
   switch (request.mode) {
     case PlayerTimestampMode::Interval:
@@ -192,8 +193,7 @@ void CSV::PlayerLoaderWorker::processRow(const PlayerIndexRequest& request,
                                          QByteArray& scratch,
                                          PlayerIndexBatch& batch)
 {
-  Q_ASSERT(begin >= 0);
-  Q_ASSERT(begin <= end);
+  SS_ASSERT(begin >= 0, return);
 
   if (begin >= end)
     return;
@@ -225,9 +225,15 @@ void CSV::PlayerLoaderWorker::processRow(const PlayerIndexRequest& request,
  */
 void CSV::PlayerLoaderWorker::indexFile(const CSV::PlayerIndexRequestPtr& request)
 {
-  Q_ASSERT(request != nullptr);
-  Q_ASSERT(request->data != nullptr || request->size == 0);
-  Q_ASSERT(request->dataOffset >= 0 && request->dataOffset <= request->size);
+  SS_ASSERT(request != nullptr, return);
+  SS_ASSERT(request->data != nullptr || request->size == 0, {
+    Q_EMIT finished(false, request->generation);
+    return;
+  });
+  SS_ASSERT(request->dataOffset >= 0 && request->dataOffset <= request->size, {
+    Q_EMIT finished(false, request->generation);
+    return;
+  });
 
   m_validRows = 0;
 

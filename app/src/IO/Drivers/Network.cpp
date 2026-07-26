@@ -14,21 +14,28 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/Drivers/Network.h"
 
-#include <QThread>
+#include <QDebug>
+#include <QMetaMethod>
 
+#include "IO/ConnectionFlows.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
+#include "SSAssert.h"
 
-static constexpr int kTcpConnectAttempts  = 5;
+//--------------------------------------------------------------------------------------------------
+// Constants: per-attempt windows only. The attempt count and the backoff between attempts are the
+// shared Async::RetryPolicy's, so the whole application retries on one schedule.
+//--------------------------------------------------------------------------------------------------
+
+static constexpr int kLookupTimeoutMs     = 5000;
 static constexpr int kTcpConnectTimeoutMs = 600;
-static constexpr int kTcpConnectBackoffMs = 300;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -38,7 +45,13 @@ static constexpr int kTcpConnectBackoffMs = 300;
  * @brief Constructs the Network driver and restores persisted socket settings.
  */
 IO::Drivers::Network::Network()
-  : m_hostExists(false), m_connecting(false), m_udpMulticast(false), m_lookupActive(false)
+  : m_lookupId(-1)
+  , m_hostExists(false)
+  , m_connecting(false)
+  , m_udpMulticast(false)
+  , m_lookupActive(false)
+  , m_userWantsOpen(false)
+  , m_runner(this)
 {
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
@@ -65,15 +78,13 @@ IO::Drivers::Network::Network()
   connect(
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
-  connect(&m_tcpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
-    Q_EMIT configurationChanged();
-  });
-  connect(&m_udpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
-    Q_EMIT configurationChanged();
-  });
-
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
   connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+
+  connect(
+    &m_tcpSocket, &QTcpSocket::disconnected, this, &IO::Drivers::Network::onSocketDisconnected);
+
+  connect(&m_runner, &Async::TaskRunner::finished, this, &IO::Drivers::Network::onOpenFlowFinished);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,10 +92,15 @@ IO::Drivers::Network::Network()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the current network connection and discards the socket signals/slots.
+ * @brief Closes the current network connection and discards the socket signals/slots. The open
+ *        flow is cancelled first so a pending attempt cannot re-arm the sockets behind the close.
  */
 void IO::Drivers::Network::close()
 {
+  m_connecting    = false;
+  m_userWantsOpen = false;
+  m_runner.cancel();
+
   disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
   disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
 
@@ -110,7 +126,7 @@ bool IO::Drivers::Network::isOpen() const noexcept
   }
 
   else if (socketType() == QAbstractSocket::TcpSocket) {
-    open  = m_tcpSocket.isOpen();
+    open  = m_tcpSocket.isOpen() && m_tcpSocket.peerPort() != 0;
     state = m_tcpSocket.state();
   }
 
@@ -177,83 +193,152 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens a network connection with the specified mode.
+ * @brief Returns true; the driver opens through an orchestrated, non-blocking flow.
  */
-bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
+bool IO::Drivers::Network::supportsAsyncOpen() const noexcept
 {
-  close();
-
-  auto hostAddr = remoteAddress();
-  if (hostAddr.isEmpty())
-    hostAddr = defaultAddress();
-
-  QIODevice* socket = nullptr;
-
-  if (socketType() == QAbstractSocket::TcpSocket) {
-    if (!connectTcp(hostAddr)) {
-      close();
-      return false;
-    }
-
-    socket = static_cast<QIODevice*>(&m_tcpSocket);
-  }
-
-  if (socketType() == QAbstractSocket::UdpSocket) {
-    if (!m_udpSocket.bind(udpLocalPort(),
-                          QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
-      qWarning() << "UDP bind failed on port" << udpLocalPort() << ":" << m_udpSocket.errorString();
-      close();
-      return false;
-    }
-
-    enlargeUdpReceiveBuffer();
-    socket = static_cast<QIODevice*>(&m_udpSocket);
-  }
-
-  if (socketType() == QAbstractSocket::UdpSocket && udpMulticast()) {
-    const QHostAddress group(m_address);
-    if (group.isNull() || !m_udpSocket.joinMulticastGroup(group)) {
-      qWarning() << "UDP multicast join failed for" << m_address << ":"
-                 << m_udpSocket.errorString();
-      close();
-      return false;
-    }
-  }
-
-  if (socket && socket->open(mode)) {
-    connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
-    return true;
-  }
-
-  close();
-  return false;
+  return true;
 }
 
 /**
- * @brief Opens the TCP connection, retrying a few times with a short backoff so a server that a
- *        control-script onConnect() just launched has time to start listening. The premature
- *        per-attempt errors are swallowed via m_connecting; a real failure surfaces only after
- *        every attempt is exhausted.
+ * @brief Starts an open attempt and reports whether one is now in flight. The outcome itself
+ *        arrives through openFinished(), which is what callers of an async driver read.
  */
-bool IO::Drivers::Network::connectTcp(const QString& hostAddr)
+bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
-  m_connecting = true;
+  beginOpen(mode);
+  return isOpen() || m_runner.isRunning();
+}
 
-  bool connected = false;
-  for (int attempt = 0; attempt < kTcpConnectAttempts; ++attempt) {
-    m_tcpSocket.abort();
-    m_tcpSocket.connectToHost(hostAddr, tcpPort());
-    if (m_tcpSocket.waitForConnected(kTcpConnectTimeoutMs)) {
-      connected = true;
-      break;
-    }
+/**
+ * @brief Starts the open sequence and returns immediately. Nothing here waits on the socket, so
+ *        an unreachable address costs the interface nothing and a disconnect lands at once.
+ */
+void IO::Drivers::Network::beginOpen(const QIODevice::OpenMode mode)
+{
+  SS_ASSERT(mode != QIODevice::NotOpen, {
+    Q_EMIT openFinished(false, QStringLiteral("invalid open mode"));
+    return;
+  });
 
-    if (attempt + 1 < kTcpConnectAttempts)
-      QThread::msleep(kTcpConnectBackoffMs);
+  close();
+
+  m_connecting    = true;
+  m_userWantsOpen = true;
+  m_runner.run(buildOpenFlow(mode));
+}
+
+/**
+ * @brief Abandons an attempt in flight, releasing the sockets it half-opened.
+ */
+void IO::Drivers::Network::abortOpen()
+{
+  close();
+}
+
+/**
+ * @brief Composes the open sequence: resolve the host, reach the endpoint, then activate the
+ *        socket. One attempt per run; the attempt count and the wait between attempts belong to
+ *        the shared retry policy that wraps this flow.
+ */
+Async::Task* IO::Drivers::Network::buildOpenFlow(const QIODevice::OpenMode mode)
+{
+  SS_ASSERT_LOG(mode != QIODevice::NotOpen);
+
+  auto* group = Async::sequential(QStringLiteral("network-open"));
+  group->addChild(makeLookupStep());
+
+  if (socketType() == QAbstractSocket::TcpSocket) {
+    auto host = remoteAddress();
+    if (host.isEmpty())
+      host = defaultAddress();
+
+    group->addChild(Flows::makeSocketConnect(
+      &m_tcpSocket, host, tcpPort(), kTcpConnectTimeoutMs, m_runner.clock()));
   }
 
-  m_connecting = false;
-  return connected;
+  else
+    group->addChild(Async::invoke(QStringLiteral("udp-bind"),
+                                  [this](QString& reason) { return bindUdpSocket(reason); }));
+
+  group->addChild(Async::invoke(QStringLiteral("socket-activate"), [this, mode](QString& reason) {
+    return activateSocket(mode, reason);
+  }));
+
+  return group;
+}
+
+/**
+ * @brief Builds the address-resolution step: a wait on the lookup already in flight, whose
+ *        cancellation aborts the real lookup, or an immediate pass when nothing is pending.
+ */
+Async::Task* IO::Drivers::Network::makeLookupStep()
+{
+  if (!m_lookupActive)
+    return Async::invoke(QStringLiteral("dns-lookup"), [](QString& reason) {
+      Q_UNUSED(reason);
+      return true;
+    });
+
+  auto* step = Async::awaitSignal(QStringLiteral("dns-lookup"));
+  step->onSuccess(this, &IO::Drivers::Network::lookupActiveChanged);
+  step->setAbortHandler([this]() { abortLookup(); });
+
+  return Async::timeout(step, kLookupTimeoutMs, m_runner.clock());
+}
+
+/**
+ * @brief Binds the UDP socket, enlarges its receive buffer and joins the multicast group.
+ */
+bool IO::Drivers::Network::bindUdpSocket(QString& reason)
+{
+  if (!m_udpSocket.bind(udpLocalPort(),
+                        QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
+    qWarning() << "UDP bind failed on port" << udpLocalPort() << ":" << m_udpSocket.errorString();
+    reason = m_udpSocket.errorString();
+    return false;
+  }
+
+  enlargeUdpReceiveBuffer();
+  if (!udpMulticast())
+    return true;
+
+  const QHostAddress group(m_address);
+  if (group.isNull() || !m_udpSocket.joinMulticastGroup(group)) {
+    qWarning() << "UDP multicast join failed for" << m_address << ":" << m_udpSocket.errorString();
+    reason = m_udpSocket.errorString();
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Opens the connected socket in the requested mode and wires it to the read path.
+ */
+bool IO::Drivers::Network::activateSocket(const QIODevice::OpenMode mode, QString& reason)
+{
+  SS_ASSERT(mode != QIODevice::NotOpen, {
+    reason = QStringLiteral("invalid open mode");
+    return false;
+  });
+
+  QIODevice* socket = nullptr;
+  if (socketType() == QAbstractSocket::TcpSocket)
+    socket = static_cast<QIODevice*>(&m_tcpSocket);
+
+  else if (socketType() == QAbstractSocket::UdpSocket)
+    socket = static_cast<QIODevice*>(&m_udpSocket);
+
+  if (!socket || !socket->open(mode)) {
+    reason = QStringLiteral("the socket could not be opened");
+    return false;
+  }
+
+  connect(
+    socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead, Qt::UniqueConnection);
+
+  return true;
 }
 
 /**
@@ -435,13 +520,32 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
 }
 
 /**
- * @brief Performs a DNS lookup for the given host name.
+ * @brief Performs a DNS lookup for the given host name, superseding any lookup still in flight so
+ *        an older answer cannot land after a newer address was typed.
  */
 void IO::Drivers::Network::lookup(const QString& host)
 {
+  abortLookup();
+
   m_lookupActive = true;
   Q_EMIT lookupActiveChanged();
-  QHostInfo::lookupHost(host.simplified(), this, &IO::Drivers::Network::lookupFinished);
+  m_lookupId =
+    QHostInfo::lookupHost(host.simplified(), this, &IO::Drivers::Network::lookupFinished);
+}
+
+/**
+ * @brief Aborts the lookup in flight, if any. Stopping the real lookup is what makes a cancelled
+ *        resolution step release its resources instead of merely ignoring the answer.
+ */
+void IO::Drivers::Network::abortLookup()
+{
+  if (m_lookupId < 0)
+    return;
+
+  QHostInfo::abortHostLookup(m_lookupId);
+  m_lookupId     = -1;
+  m_lookupActive = false;
+  Q_EMIT lookupActiveChanged();
 }
 
 /**
@@ -507,10 +611,15 @@ void IO::Drivers::Network::onReadyRead()
 }
 
 /**
- * @brief Sets the host IP address when the lookup finishes.
+ * @brief Sets the host IP address when the lookup finishes. An answer that belongs to a
+ *        superseded lookup is dropped rather than allowed to stomp the current address state.
  */
 void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
+  if (m_lookupId >= 0 && info.lookupId() != m_lookupId)
+    return;
+
+  m_lookupId     = -1;
   m_lookupActive = false;
   Q_EMIT lookupActiveChanged();
 
@@ -524,7 +633,43 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 }
 
 /**
- * @brief Handles socket errors by disconnecting and showing a message box.
+ * @brief Reports a link that went down without the application asking, which is what lets a
+ *        supervised flow bring it back. A disconnect during an attempt is the attempt's own
+ *        business and is not a drop.
+ */
+void IO::Drivers::Network::onSocketDisconnected()
+{
+  if (!m_userWantsOpen || m_connecting)
+    return;
+
+  Q_EMIT linkDropped();
+}
+
+/**
+ * @brief Reports the attempt's outcome. A cancel is a close the owner asked for and says nothing;
+ *        a failure closes the sockets first, which is what the blocking path did on its way out.
+ */
+void IO::Drivers::Network::onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error)
+{
+  if (outcome == Async::Outcome::Cancelled)
+    return;
+
+  m_connecting = false;
+  if (outcome == Async::Outcome::Success) {
+    Q_EMIT openFinished(true, QString());
+    return;
+  }
+
+  const QString reason = error.reason.isEmpty() ? QStringLiteral("open failed") : error.reason;
+  close();
+  Q_EMIT openFinished(false, reason);
+}
+
+/**
+ * @brief Handles socket errors. While a supervised flow holds a TCP link that came up, the error
+ *        is the drop itself: it feeds linkDropped() so the flow retries on the recovery schedule,
+ *        and the teardown below is deferred to the supervisor's final give-up. UDP, and a link no
+ *        flow is watching, keep the immediate teardown and its message box.
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
@@ -534,6 +679,12 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
   if (socketType() == QAbstractSocket::UdpSocket
       && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
     return;
+
+  const auto dropped = QMetaMethod::fromSignal(&IO::HAL_Driver::linkDropped);
+  if (socketType() == QAbstractSocket::TcpSocket && m_userWantsOpen && isSignalConnected(dropped)) {
+    Q_EMIT linkDropped();
+    return;
+  }
 
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)

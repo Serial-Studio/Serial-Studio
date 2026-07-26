@@ -32,6 +32,8 @@
 
 #include "DataModel/Frame.h"
 
+class SessionContext;
+
 namespace DataModel {
 /**
  * @brief Imports CAN Database (DBC) files and generates Serial Studio projects.
@@ -55,8 +57,8 @@ signals:
   void messagesChanged();
   void dbcFileNameChanged();
 
-private:
-  explicit DBCImporter();
+public:
+  explicit DBCImporter(SessionContext& ctx);
   DBCImporter(DBCImporter&&)                 = delete;
   DBCImporter(const DBCImporter&)            = delete;
   DBCImporter& operator=(DBCImporter&&)      = delete;
@@ -68,6 +70,8 @@ public:
   [[nodiscard]] int signalCount() const;
   [[nodiscard]] int messageCount() const;
   [[nodiscard]] QString dbcFileName() const;
+
+  [[nodiscard]] QJsonObject projectFromMessages(const QList<QCanMessageDescription>& messages);
 
   [[nodiscard]] Q_INVOKABLE QString messageInfo(int index) const;
 
@@ -105,8 +109,6 @@ private:
                                  int datasetIndex,
                                  MuxRole role,
                                  qint64 muxValue);
-  QJsonObject generateProject(const QList<QCanMessageDescription>& messages);
-
   void buildTableNames(const QList<QCanMessageDescription>& messages);
   [[nodiscard]] QString tableNameFor(const QCanMessageDescription& message) const;
   [[nodiscard]] QList<OrderedSignal> orderedSignals(const QCanMessageDescription& message) const;
@@ -141,6 +143,7 @@ private:
   [[nodiscard]] int countTotalSignals(const QList<QCanMessageDescription>& messages) const;
 
 private:
+  SessionContext& m_ctx;
   QString m_dbcFilePath;
   QHash<quint32, QString> m_tableNames;
   QList<QCanMessageDescription> m_messages;

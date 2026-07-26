@@ -36,6 +36,7 @@
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/AudioExport.h"
 #include "UI/Widgets/FFTWindow.h"
@@ -44,7 +45,6 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kMaxFftSamples    = 65536;
 static constexpr int kDefaultHistory   = 256;
 static constexpr int kMaxHistorySize   = 4096;
 static constexpr float kFloorDb        = -100.0f;
@@ -63,15 +63,6 @@ static constexpr double kLn10          = 2.302585092994046;
 //--------------------------------------------------------------------------------------------------
 // Static helpers
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the largest power-of-two not exceeding @a value (and >= 8).
- */
-static inline int floorPow2Bounded(int value)
-{
-  const int clamped = qBound(8, value, kMaxFftSamples);
-  return 1 << static_cast<int>(std::log2(clamped));
-}
 
 /**
  * @brief Integer-exponent 10^n via table lookup; falls back to std::pow if out of band.
@@ -234,7 +225,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardWaterfall, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardWaterfall, m_index);
-    m_size              = floorPow2Bounded(dataset.fftSamples);
+    m_size              = Widgets::normalizedFftSize(dataset.fftSamples, kMaxWaterfallFftSize);
     m_samplingRate      = qMax(1, dataset.fftSamplingRate);
     m_windowType        = static_cast<SerialStudio::FFTWindow>(dataset.fftWindow);
     m_logX              = dataset.fftLogX;
@@ -552,8 +543,8 @@ void Widgets::Waterfall::loadMarkers()
 void Widgets::Waterfall::updateMarkerStates(const int spectrumSize)
 {
   constexpr double pointHalfWindow = 2.0;
-  Q_ASSERT(spectrumSize > 0);
-  Q_ASSERT(m_smoothed.size() >= static_cast<std::size_t>(spectrumSize));
+  SS_ASSERT(spectrumSize > 0, return);
+  SS_ASSERT(m_smoothed.size() >= static_cast<std::size_t>(spectrumSize), return);
 
   const double freqStep = static_cast<double>(m_samplingRate) / qMax(1, m_size);
   const double lastBin  = qMax(0, spectrumSize - 1);
@@ -668,7 +659,7 @@ void Widgets::Waterfall::rebuildLogColumnTable()
  */
 const float* Widgets::Waterfall::imageRow(const float* dbValues, int bins)
 {
-  Q_ASSERT(dbValues);
+  SS_ASSERT(dbValues != nullptr, return nullptr);
   if (!m_logActive || m_logColBin.size() != static_cast<std::size_t>(bins)
       || m_logRow.size() != static_cast<std::size_t>(bins))
     return dbValues;
@@ -818,10 +809,12 @@ void Widgets::Waterfall::writeRowAt(int row, const float* dbValues, int bins)
  * @brief Converts the FFT output to smoothed display dB per bin (shared 1/N^2 power norm,
  *        3-bin boxcar) into m_smoothed.
  */
-void Widgets::Waterfall::computeSmoothedRow(const int spectrumSize)
+void Widgets::Waterfall::computeSmoothedRow(int spectrumSize)
 {
-  Q_ASSERT(spectrumSize > 0);
-  Q_ASSERT(m_fftOutput.size() >= static_cast<std::size_t>(spectrumSize));
+  SS_ASSERT(spectrumSize > 0, return);
+  SS_ASSERT(m_fftOutput.size() >= static_cast<std::size_t>(spectrumSize)
+              && m_dbCache.size() >= static_cast<std::size_t>(spectrumSize),
+            spectrumSize = static_cast<int>(std::min(m_fftOutput.size(), m_dbCache.size())));
 
   const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
   const float invNorm    = 1.0f / normFactor;
@@ -918,6 +911,8 @@ void Widgets::Waterfall::updateData()
     updateMarkerStates(spectrumSize);
 
   const float* row_data = imageRow(m_smoothed.data(), spectrumSize);
+  if (!row_data)
+    return;
 
   if (m_campbellMode && m_image.height() > 0) {
     const auto& datasets = m_dashboard.datasets();
@@ -1075,8 +1070,8 @@ QRectF Widgets::Waterfall::computePlotRect(const QFontMetrics& fm) const
  */
 void Widgets::Waterfall::drawHistoryImage(QPainter* painter, const QRectF& plotRect) const
 {
-  Q_ASSERT(painter);
-  Q_ASSERT(!m_image.isNull());
+  SS_ASSERT(painter != nullptr, return);
+  SS_ASSERT(!m_image.isNull(), return);
 
   const QRectF src = computeSourceRect();
   if (src.isEmpty())
@@ -1335,9 +1330,9 @@ void Widgets::Waterfall::drawYAxis(QPainter* painter, const QRectF& plotRect) co
  */
 void Widgets::Waterfall::drawMarkers(QPainter* painter, const QRectF& plotRect) const
 {
-  Q_ASSERT(painter);
-  Q_ASSERT(!m_markers.empty());
   m_chipHitRects.clear();
+  SS_ASSERT(painter != nullptr, return);
+  SS_ASSERT(!m_markers.empty(), return);
   if (plotRect.isEmpty() || m_samplingRate <= 0)
     return;
 
@@ -1417,8 +1412,8 @@ void Widgets::Waterfall::drawMarkerChip(QPainter* painter,
                                         const QString& text,
                                         const QColor& color) const
 {
-  Q_ASSERT(painter);
-  Q_ASSERT(rowEnd);
+  SS_ASSERT(painter != nullptr, return);
+  SS_ASSERT(rowEnd != nullptr, return);
 
   const double w = fm.horizontalAdvance(text) + 8;
   const double h = fm.height() + 4;

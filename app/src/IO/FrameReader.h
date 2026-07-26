@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -65,7 +65,17 @@ public:
 
   inline moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>& queue() { return m_queue; }
 
+  void resetDiagnosticCounters() noexcept;
+
+  [[nodiscard]] inline quint64 bytesReceived() const noexcept { return m_bytesIn; }
+
   [[nodiscard]] inline quint64 droppedFrameCount() const noexcept { return m_droppedFrames; }
+
+  [[nodiscard]] inline quint64 checksumErrorCount() const noexcept { return m_checksumErrors; }
+
+  [[nodiscard]] inline quint64 framesExtracted() const noexcept { return m_framesExtracted; }
+
+  [[nodiscard]] inline quint64 overflowBytes() const noexcept { return m_totalOverflowBytes; }
 
 public slots:
   void processData(const IO::CapturedDataPtr& data);
@@ -124,8 +134,13 @@ private:
   size_t m_capturedPoolHint;
 
   bool m_bufferPinned;
+  quint64 m_bytesIn;
   quint64 m_droppedFrames;
+  quint64 m_checksumErrors;
+  quint64 m_framesExtracted;
+  quint64 m_totalOverflowBytes;
   IO::CapturedData::SteadyTimePoint m_lastDropNotify;
   IO::CapturedData::SteadyTimePoint m_lastOverflowLog;
+  IO::CapturedData::SteadyTimePoint m_lastChecksumLog;
 };
 }  // namespace IO

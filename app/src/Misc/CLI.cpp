@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Misc/CLI.h"
@@ -38,10 +38,15 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
+#include "Misc/ModuleManager.h"
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
 #include "UI/TaskbarSettings.h"
+
+#ifdef SS_INAPP_TESTS
+#  include "SelfTest/SelfTest.h"
+#endif
 
 #ifdef BUILD_COMMERCIAL
 #  include <QAbstractButton>
@@ -88,6 +93,8 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.fullscreenOpt);
   m_parser.addOption(m_opts.headlessOpt);
   m_parser.addOption(m_opts.apiServerOpt);
+  m_parser.addOption(m_opts.apiExternalOpt);
+  m_parser.addOption(m_opts.apiTokenOpt);
   m_parser.addOption(m_opts.dumpApiSchemaOpt);
   m_parser.addOption(m_opts.projectOpt);
   m_parser.addOption(m_opts.quickPlotOpt);
@@ -105,6 +112,10 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.benchmarkSecondsOpt);
   m_parser.addOption(m_opts.benchmarkOutputOpt);
   m_parser.addOption(m_opts.exitAfterOpt);
+#ifdef SS_INAPP_TESTS
+  m_parser.addOption(m_opts.selftestOpt);
+  m_parser.addOption(m_opts.selftestSuiteOpt);
+#endif
 #ifdef BUILD_COMMERCIAL
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
@@ -187,6 +198,11 @@ bool CLI::isCliEarlyExit(int argc, char** argv)
     if (argvHasFlag(argc, argv, flag))
       return true;
 
+#ifdef SS_INAPP_TESTS
+  if (argvHasFlag(argc, argv, "--selftest") || argvHasFlag(argc, argv, "--selftest-suite"))
+    return true;
+#endif
+
   return isBenchmarkRequested(argc, argv);
 }
 
@@ -229,6 +245,11 @@ CLI::ProcessResult CLI::process(QApplication& app)
 
   if (m_parser.isSet(m_opts.dumpApiSchemaOpt))
     return dumpApiSchema(m_parser.value(m_opts.dumpApiSchemaOpt));
+
+#ifdef SS_INAPP_TESTS
+  if (m_parser.isSet(m_opts.selftestOpt) || m_parser.isSet(m_opts.selftestSuiteOpt))
+    return runSelfTests();
+#endif
 
 #ifdef BUILD_COMMERCIAL
   if (m_parser.isSet(m_opts.validateGuardsOpt)) {
@@ -280,6 +301,9 @@ void CLI::scheduleExitAfter(QApplication& app)
 
 /**
  * @brief Runs the frame-extraction throughput benchmark and maps the result to an exit code.
+ *        The benchmark exits before any ModuleManager is built, so it runs the pinned module
+ *        order itself: without it every session subsystem the benchmark reaches would be
+ *        constructed lazily, out of order, and unowned (spec 0039 M2).
  */
 CLI::ProcessResult CLI::runHotpathBenchmark()
 {
@@ -311,6 +335,8 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
   QString output;
   if (m_parser.isSet(m_opts.benchmarkOutputOpt))
     output = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
+
+  Misc::ModuleManager::instantiateCoreModules();
 
   const int rc = Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
@@ -351,6 +377,21 @@ CLI::ProcessResult CLI::dumpApiSchema(const QString& path)
   qDebug() << "Wrote" << array.size() << "commands to" << path;
   return ProcessResult::ExitSuccess;
 }
+
+#ifdef SS_INAPP_TESTS
+
+/**
+ * @brief Runs the in-app self-test suites and maps the aggregate result to an exit code. This runs
+ *        before the composition root is built, so the suites see no application singleton.
+ */
+CLI::ProcessResult CLI::runSelfTests()
+{
+  const QString suite = m_parser.value(m_opts.selftestSuiteOpt).trimmed();
+  const int rc        = SelfTest::Runner::runAndReport(suite);
+  return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
+}
+
+#endif
 
 //---------------------------------------------------------------------------------------------------
 // Accessors
@@ -397,6 +438,14 @@ bool CLI::apiServerEnabled() const
 }
 
 /**
+ * @brief Returns true if --api-external was passed.
+ */
+bool CLI::apiExternalEnabled() const
+{
+  return m_parser.isSet(m_opts.apiExternalOpt);
+}
+
+/**
  * @brief Returns true if --quick-plot was passed.
  */
 bool CLI::quickPlot() const
@@ -425,10 +474,7 @@ QString CLI::projectPath() const
  */
 void CLI::applyProjectAndAutoConnect(QApplication& app)
 {
-  if (apiServerEnabled()) {
-    static auto& apiServer = API::Server::instance();
-    apiServer.setEnabled(true);
-  }
+  applyApiServerOptions();
 
   const QString project = projectPath();
   if (!project.isEmpty()) {
@@ -459,6 +505,30 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
     if (cm.configurationOk() && !cm.isConnected())
       cm.connectDevice();
   });
+}
+
+/**
+ * @brief Applies the API-server flags. The token is pinned before external connections are
+ *        opened so a headless machine is provisioned with the operator's credential rather than
+ *        a freshly generated one; each flag acts only when it was passed, so an omitted flag
+ *        leaves the persisted settings and the bind address exactly as they were.
+ */
+void CLI::applyApiServerOptions()
+{
+  if (!apiServerEnabled() && !apiExternalEnabled() && !m_parser.isSet(m_opts.apiTokenOpt))
+    return;
+
+  static auto& apiServer = API::Server::instance();
+
+  if (m_parser.isSet(m_opts.apiTokenOpt)
+      && !apiServer.setAuthToken(m_parser.value(m_opts.apiTokenOpt)))
+    qWarning() << "[CLI] --api-token ignored: expected at least 32 hexadecimal characters";
+
+  if (apiExternalEnabled())
+    apiServer.allowExternalConnections();
+
+  if (apiServerEnabled())
+    apiServer.setEnabled(true);
 }
 
 /**

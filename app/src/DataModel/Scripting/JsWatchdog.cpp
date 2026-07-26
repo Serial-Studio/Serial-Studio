@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/JsWatchdog.h"
@@ -25,10 +25,17 @@
 #include <QDebug>
 
 #include "DataModel/Scripting/JsWatchdogThread.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Fallback budget for a non-positive request; mirrors the header's default argument, which
+ *        is the only budget the rest of the app relies on.
+ */
+static constexpr int kDefaultBudgetMs = 1000;
 
 /**
  * @brief Returns the steady-clock reading in nanoseconds, matching the watchdog thread.
@@ -53,8 +60,8 @@ DataModel::JsWatchdog::JsWatchdog(QJSEngine* engine, int budgetMs, QString tag)
   , m_tag(std::move(tag))
   , m_lastTimedOut(false)
 {
-  Q_ASSERT(engine != nullptr);
-  Q_ASSERT(budgetMs > 0);
+  SS_ASSERT_LOG(engine != nullptr);
+  SS_ASSERT(budgetMs > 0, m_budgetMs = kDefaultBudgetMs);
   static auto& watchdogThread = JsWatchdogThread::instance();
   watchdogThread.registerWatchdog(this);
 }
@@ -121,8 +128,8 @@ bool DataModel::JsWatchdog::finishCall(qint64 startNs) noexcept
  */
 QJSValue DataModel::JsWatchdog::call(QJSValue& fn, const QJSValueList& args)
 {
-  Q_ASSERT(fn.isCallable());
-  Q_ASSERT(m_engine != nullptr);
+  SS_ASSERT(fn.isCallable(), return QJSValue());
+  SS_ASSERT(m_engine != nullptr, return QJSValue());
 
   m_lastTimedOut       = false;
   const qint64 startNs = steadyNowNs();
@@ -138,8 +145,8 @@ QJSValue DataModel::JsWatchdog::call(QJSValue& fn, const QJSValueList& args)
  */
 QJSValue DataModel::JsWatchdog::call(QJSValue& fn, QJSValue thisObj, const QJSValueList& args)
 {
-  Q_ASSERT(fn.isCallable());
-  Q_ASSERT(m_engine != nullptr);
+  SS_ASSERT(fn.isCallable(), return QJSValue());
+  SS_ASSERT(m_engine != nullptr, return QJSValue());
 
   m_lastTimedOut       = false;
   const qint64 startNs = steadyNowNs();
@@ -167,7 +174,7 @@ int DataModel::JsWatchdog::budgetMs() const noexcept
  */
 void DataModel::JsWatchdog::setBudgetMs(int ms) noexcept
 {
-  Q_ASSERT(ms > 0);
+  SS_ASSERT(ms > 0, ms = kDefaultBudgetMs);
   m_budgetMs = ms;
 }
 

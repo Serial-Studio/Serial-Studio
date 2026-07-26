@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/ControlScriptWorker.h"
@@ -33,6 +33,7 @@
 #include "API/CommandRegistry.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/ConnectionManager.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -332,7 +333,7 @@ DataModel::ControlScriptWorker::ControlScriptWorker(ControlApiMarshaller* marsha
   , m_bridge(nullptr)
   , m_marshaller(marshaller)
 {
-  Q_ASSERT(marshaller);
+  SS_ASSERT_LOG(marshaller != nullptr);
 }
 
 /**

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -91,6 +91,7 @@ int DataModel::ProjectModel::findTableIndexByPath(const QString& tablePath) cons
  */
 QString DataModel::ProjectModel::addTable(const QString& name, int parentFolderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Table")};
   if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
     parentFolderId = -1;
 
@@ -125,6 +126,7 @@ QString DataModel::ProjectModel::addTable(const QString& name, int parentFolderI
  */
 void DataModel::ProjectModel::deleteTable(const QString& name)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Delete Table")};
   const int idx = findTableIndexByPath(name);
   if (idx < 0)
     return;
@@ -139,6 +141,7 @@ void DataModel::ProjectModel::deleteTable(const QString& name)
  */
 void DataModel::ProjectModel::renameTable(const QString& oldName, const QString& newName)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Rename Table")};
   const QString n = newName.simplified().remove(QLatin1Char('/'));
   if (n.isEmpty())
     return;
@@ -208,6 +211,7 @@ void DataModel::ProjectModel::addRegister(const QString& table,
                                           bool computed,
                                           const QVariant& defaultValue)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Register")};
   const int idx = findTableIndexByPath(table);
   if (idx < 0)
     return;
@@ -246,6 +250,7 @@ void DataModel::ProjectModel::addRegister(const QString& table,
  */
 void DataModel::ProjectModel::deleteRegister(const QString& table, const QString& registerName)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Delete Register")};
   const int idx = findTableIndexByPath(table);
   if (idx < 0)
     return;
@@ -276,6 +281,7 @@ bool DataModel::ProjectModel::updateRegister(const QString& table,
                                              bool computed,
                                              const QVariant& defaultValue)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Register")};
   const int idx = findTableIndexByPath(table);
   if (idx < 0)
     return false;
@@ -548,6 +554,8 @@ void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
   QFile file(path);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Import Table CSV")};
 
   QTextStream in(&file);
 

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -81,6 +81,36 @@ Widgets.MiniWindow {
     function onWidgetDisplayChanged() {
       root.refreshFreezeTitleMode()
     }
+  }
+
+  //
+  // Extension identity: set by the embedded DashboardWidget, empty for a compiled-in widget
+  //
+  property string extensionId: ""
+  property string extensionWidgetId: ""
+  readonly property var extensionConfig: root.extensionId.length > 0
+                                         ? Cpp_UI_WidgetExtensions.configProperties(root.extensionId)
+                                         : []
+
+  //
+  // Generic settings form, rendered from the package's declarations only when asked for
+  //
+  function showExtensionSettings() {
+    if (extensionSettingsLoader.item) {
+      extensionSettingsLoader.item.openDialog(root.extensionId,
+                                              root.extensionWidgetId, root.title)
+      return
+    }
+
+    extensionSettingsLoader.active = true
+  }
+
+  Loader {
+    id: extensionSettingsLoader
+
+    active: false
+    source: "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ExtensionWidgetSettings.qml"
+    onLoaded: item.openDialog(root.extensionId, root.extensionWidgetId, root.title)
   }
 
   //
@@ -154,6 +184,18 @@ Widgets.MiniWindow {
         onTriggered: Cpp_JSON_ProjectModel.setFreezeTitleMode(root.entityWidgetType,
                                                               root.entityUniqueId, "hidden")
       }
+    }
+
+    MenuItem {
+      id: extensionSettingsItem
+
+      icon.width: 16
+      icon.height: 16
+      text: qsTr("Widget Settings…")
+      height: visible ? implicitHeight : 0
+      visible: root.extensionConfig.length > 0
+      onTriggered: root.showExtensionSettings()
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 16)
     }
 
     MenuSeparator {
@@ -255,12 +297,101 @@ Widgets.MiniWindow {
             windowRoot.entityWidgetType = widgetType
             windowRoot.entityUniqueId   = widgetUniqueId
           }
+          if (windowRoot.extensionId !== undefined) {
+            windowRoot.extensionId       = dashboardWidget.widgetExtensionId
+            windowRoot.extensionWidgetId = dashboardWidget.widgetId
+          }
           if (windowRoot.icon !== undefined)
-            windowRoot.icon = SerialStudio.dashboardWidgetIcon(widgetType)
+            windowRoot.icon = loader.widgetIcon()
         }
       }
 
-      Component.onCompleted: {
+      //
+      // Mirrors the widget's toolbar state onto the window chrome
+      //
+      function bindToolbar() {
+        if (widgetInstance.hasToolbar === undefined)
+          return
+
+        windowRoot.hasToolbar = widgetInstance.hasToolbar
+        if (widgetInstance.hasToolbarChanged !== undefined) {
+          widgetInstance.hasToolbarChanged.connect(function () {
+            windowRoot.hasToolbar = widgetInstance.hasToolbar
+          })
+        }
+      }
+
+      //
+      // Caption artwork: a package's declared icon, falling back to the built-in table
+      //
+      function widgetIcon() {
+        if (dashboardWidget.widgetIsExtension) {
+          const art = Cpp_UI_WidgetExtensions.iconUrl(dashboardWidget.widgetExtensionId, 16)
+          if (art.length > 0)
+            return art
+        }
+
+        return SerialStudio.dashboardWidgetIcon(dashboardWidget.widgetType)
+      }
+
+      //
+      // A widget that fails to load shows an explained tile, never an empty slot
+      //
+      function showPlaceholder(reason) {
+        const path = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ExtensionPlaceholder.qml"
+        const placeholder = Qt.createComponent(path)
+        if (placeholder.status !== Component.Ready)
+          return
+
+        widgetInstance = placeholder.createObject(loader, {
+                                                    reason: reason,
+                                                    title: dashboardWidget.widgetTitle,
+                                                    extensionId: dashboardWidget.widgetExtensionId
+                                                  })
+        if (widgetInstance)
+          widgetInstance.anchors.fill = loader
+      }
+
+      //
+      // A package allowed to run (or updated) after this slot was built rebuilds in place
+      //
+      Connections {
+        target: Cpp_UI_WidgetExtensions
+
+        function onCatalogChanged() {
+          if (!dashboardWidget.widgetIsExtension)
+            return
+
+          if (widgetInstance) {
+            widgetInstance.destroy()
+            widgetInstance = null
+          }
+
+          dashboardWidget.reloadWidget()
+          loader.buildWidget()
+        }
+      }
+
+      Component.onCompleted: loader.buildWidget()
+
+      function buildWidget() {
+        if (dashboardWidget.widgetIsExtension) {
+          widgetInstance = dashboardWidget.createExtensionItem(loader, {
+                                                                model: dashboardWidget.widgetModel,
+                                                                windowRoot: loader.windowRoot,
+                                                                color: dashboardWidget.widgetColor,
+                                                                widgetId: dashboardWidget.widgetId
+                                                              })
+          if (!widgetInstance) {
+            showPlaceholder(dashboardWidget.widgetExtensionError)
+            return
+          }
+
+          bindToolbar()
+          widgetInstance.anchors.fill = loader
+          return
+        }
+
         const component = Qt.createComponent(dashboardWidget.widgetQmlPath)
         if (component.status === Component.Ready) {
           if (widgetInstance) {
@@ -278,24 +409,16 @@ Widgets.MiniWindow {
                                                   })
 
           if (!widgetInstance) {
-            console.error("Failed to create widget from", dashboardWidget.widgetQmlPath)
+            showPlaceholder(qsTr("The widget could not be created."))
             return
           }
 
-          if (widgetInstance.hasToolbar !== undefined) {
-            windowRoot.hasToolbar = widgetInstance.hasToolbar
-            if (widgetInstance.hasToolbarChanged !== undefined) {
-              widgetInstance.hasToolbarChanged.connect(function () {
-                windowRoot.hasToolbar = widgetInstance.hasToolbar
-              })
-            }
-          }
-
+          bindToolbar()
           widgetInstance.anchors.fill = loader
         }
 
         else if (component.status === Component.Error)
-          console.error("Component load error:", component.errorString())
+          showPlaceholder(component.errorString())
       }
 
       Connections {

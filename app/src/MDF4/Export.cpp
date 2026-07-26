@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Export.h"
@@ -28,6 +28,7 @@
 #include "AppState.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include <mdf/ichannel.h>
@@ -553,8 +554,8 @@ void MDF4::Export::closeFile()
  */
 void MDF4::Export::refreshTemplateFrame()
 {
-  Q_ASSERT(m_appState);
-  Q_ASSERT(m_frameBuilder);
+  SS_ASSERT(m_appState != nullptr, return);
+  SS_ASSERT(m_frameBuilder != nullptr, return);
 
   auto* worker = static_cast<ExportWorker*>(m_worker);
   DataModel::Frame frame;

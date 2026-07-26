@@ -14,13 +14,14 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Dashboard.h"
 
+#include "API/Mirror/MirrorSession.h"
 #include "AppState.h"
 #include "Benchmark/HotpathBenchmark.h"
 #include "CSV/Player.h"
@@ -30,7 +31,11 @@
 #include "MDF4/Player.h"
 #include "Misc/IconEngine.h"
 #include "Misc/TimerEvents.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
+#include "UI/WidgetExtensions.h"
 #include "UI/WidgetRegistry.h"
+#include "UI/Widgets/FFTWindow.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/CommercialToken.h"
@@ -51,7 +56,6 @@
 constexpr int kDefaultPlotPoints      = 1000;
 constexpr int kDefaultPlotBuckets     = 1024;
 constexpr int kMaxTimeRingSamples     = 262144;
-constexpr int kMaxFftRingSamples      = 262144;
 constexpr double kAssumedMaxRateHz    = 1024000.0;
 constexpr double kTimeRingHeadroom    = 1.25;
 constexpr double kSmoothMaxPeriodSec  = 0.002;
@@ -286,12 +290,14 @@ void UI::Dashboard::restorePersistedSettings()
 }
 
 /**
- * @brief Retrieves the singleton instance of the Dashboard.
+ * @brief Returns this session's dashboard. The object is owned by the SessionContext and built
+ *        last by the composition root, so a reach before adoption is a named fatal instead of an
+ *        out-of-order lazy construction. Every widget and helper binds it once into a static or a
+ *        member reference, so the draw path never re-enters this (spec 0039 M2, wave D3).
  */
 UI::Dashboard& UI::Dashboard::instance()
 {
-  static Dashboard instance;
-  return instance;
+  return SessionContext::current().dashboard();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -387,11 +393,17 @@ bool UI::Dashboard::useTimeXAxisGroup(const DataModel::Group& group) const
 }
 
 /**
- * @brief Checks if at least one data source/stream is active.
+ * @brief Checks if at least one data source/stream is active. An attached remote dashboard counts
+ *        as a stream: its snapshots enter through hotpathRxFrame like any local frame, and the
+ *        flag read there is what decides whether they are drawn. The query is a plain flag read
+ *        because this function is reached from the constructor, inside the pinned module order.
  */
 bool UI::Dashboard::streamAvailable() const
 {
   if (Benchmark::HotpathBenchmark::active()) [[unlikely]]
+    return true;
+
+  if (API::MirrorSession::mirroring()) [[unlikely]]
     return true;
 
   static auto& manager   = IO::ConnectionManager::instance();
@@ -422,7 +434,9 @@ void UI::Dashboard::updateStreamAvailable()
 
 /**
  * @brief Wires every streamAvailable() input to the cache refresh. Direct connections keep the
- *        cached flag valid for frames arriving in the same event-loop turn.
+ *        cached flag valid for frames arriving in the same event-loop turn. The mirror-attached
+ *        input is wired from API::MirrorSession's own constructor, also direct: that module is
+ *        built after the pinned order, so reaching it from here would add a constructor edge.
  */
 void UI::Dashboard::connectStreamAvailableInputs()
 {
@@ -585,6 +599,9 @@ SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex) c
  */
 int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
+  if (widget == SerialStudio::DashboardExtension)
+    return m_extensionGroupIds.count() + m_extensionDatasetIds.count();
+
   if (SerialStudio::isGroupWidget(widget)) {
     auto it = m_widgetGroups.constFind(widget);
     return it != m_widgetGroups.cend() ? it->count() : 0;
@@ -596,6 +613,57 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
   }
 
   return 0;
+}
+
+/**
+ * @brief Returns the package id owning one entry of the extension bucket, empty when out of range.
+ */
+QString UI::Dashboard::extensionIdAt(const bool group, const int bucketIndex) const
+{
+  const auto& ids = group ? m_extensionGroupIds : m_extensionDatasetIds;
+  if (bucketIndex < 0 || bucketIndex >= ids.count())
+    return {};
+
+  return ids.at(bucketIndex);
+}
+
+/**
+ * @brief Resolves an extension widget's scope, owning package and bucket position from the
+ *        relative index the widget map carries. Group-scope slots come first, so a caller that
+ *        needs a group or dataset copy reads the scope from here instead of the enum.
+ */
+UI::Dashboard::ExtensionSlot UI::Dashboard::extensionSlot(const int relativeIndex) const
+{
+  ExtensionSlot slot;
+  if (relativeIndex < 0)
+    return slot;
+
+  const int groups = m_extensionGroupIds.count();
+  slot.group       = relativeIndex < groups;
+  slot.bucketIndex = slot.group ? relativeIndex : relativeIndex - groups;
+  slot.extensionId = extensionIdAt(slot.group, slot.bucketIndex);
+  slot.valid       = !slot.extensionId.isEmpty();
+
+  return slot;
+}
+
+/**
+ * @brief Resolves the scope and bucket position of any widget slot: extension widgets answer from
+ *        the package descriptor recorded at layout time, built-ins from the enum. This is the one
+ *        place that discriminates group from dataset, because one enum value serves both extension
+ *        scopes and the enum predicates therefore cannot answer for them.
+ */
+UI::Dashboard::ExtensionSlot UI::Dashboard::widgetSlot(const SerialStudio::DashboardWidget type,
+                                                       const int relativeIndex) const
+{
+  if (type == SerialStudio::DashboardExtension)
+    return extensionSlot(relativeIndex);
+
+  ExtensionSlot slot;
+  slot.group       = SerialStudio::isGroupWidget(type);
+  slot.valid       = slot.group || SerialStudio::isDatasetWidget(type);
+  slot.bucketIndex = relativeIndex;
+  return slot;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -884,7 +952,7 @@ const DSP::LineSeries3D& UI::Dashboard::plotData3D(const int index) const
     return kEmpty;
   }
 
-  Q_ASSERT(index < m_plot3DRings.size());
+  SS_ASSERT(index < m_plot3DRings.size(), return m_plotData3D[index]);
 
   const auto& ring = m_plot3DRings[index];
   auto& snapshot   = m_plotData3D[index];
@@ -1067,6 +1135,8 @@ void UI::Dashboard::resetData(const bool notify)
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
   m_datasetReferences.clear();
+  m_extensionGroupIds.clear();
+  m_extensionDatasetIds.clear();
 
   m_datasets.clear();
 
@@ -1214,8 +1284,8 @@ void UI::Dashboard::fillSeekPlotSingle(int index,
                                        double timeOffset,
                                        QSet<const DSP::AxisData*>& filled)
 {
-  Q_ASSERT(index >= 0);
-  Q_ASSERT(index < widgetCount(SerialStudio::DashboardPlot));
+  SS_ASSERT(index >= 0, return);
+  SS_ASSERT(index < widgetCount(SerialStudio::DashboardPlot), return);
 
   const auto& ds     = getDatasetWidget(SerialStudio::DashboardPlot, index);
   const auto& values = series.value(replaySeekKey(ds.sourceId, ds.uniqueId));
@@ -1266,8 +1336,8 @@ void UI::Dashboard::fillSeekPlotMulti(int index,
                                       const QHash<qint64, QVector<double>>& series,
                                       double timeOffset)
 {
-  Q_ASSERT(index >= 0);
-  Q_ASSERT(index < widgetCount(SerialStudio::DashboardMultiPlot));
+  SS_ASSERT(index >= 0, return);
+  SS_ASSERT(index < widgetCount(SerialStudio::DashboardMultiPlot), return);
 
   const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, index);
 
@@ -1311,7 +1381,11 @@ void UI::Dashboard::fillSeekPlotMulti(int index,
 void UI::Dashboard::bulkLoadPlotWindow(const QVector<double>& timesSec,
                                        const QHash<qint64, QVector<double>>& series)
 {
+  // code-verify off
+  // Debug-only ordering check: is_sorted is O(n) over the whole seek window, so a release
+  // evaluation would walk every sample on every scrub.
   Q_ASSERT(std::is_sorted(timesSec.cbegin(), timesSec.cend()));
+  // code-verify on
 
   if (!m_layoutValid || timesSec.isEmpty()) [[unlikely]]
     return;
@@ -1540,9 +1614,6 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
  */
 void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 {
-  Q_ASSERT(index >= 0);
-  Q_ASSERT(index < m_actions.count());
-
   if (index < 0 || index >= m_actions.count()) {
     qWarning() << "Invalid action index:" << index;
     return;
@@ -1726,9 +1797,8 @@ void UI::Dashboard::armMultiplotSweep(const int index)
  */
 void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  Q_ASSERT(frame);
-  Q_ASSERT(!frame->data.groups.empty());
-  Q_ASSERT(frame->data.sourceId >= 0);
+  SS_ASSERT(frame, return);
+  SS_ASSERT(frame->data.sourceId >= 0, return);
 
   const auto& payload = frame->data;
 
@@ -1814,8 +1884,8 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
-  Q_ASSERT(!frame.groups.empty());
-  Q_ASSERT(frame.sourceId >= 0);
+  SS_ASSERT(!frame.groups.empty(), return);
+  SS_ASSERT(frame.sourceId >= 0, return);
 
   if (m_updateRetryInProgress) {
     qWarning() << "Failed to build dashboard widget model";
@@ -1861,8 +1931,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
  */
 void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 {
-  Q_ASSERT(!frame.groups.empty());
-  Q_ASSERT(!m_datasetReferences.isEmpty());
+  SS_ASSERT(!frame.groups.empty(), return);
+  SS_ASSERT_LOG(!m_datasetReferences.isEmpty());
 
   if (!m_layoutValid) [[unlikely]]
     return;
@@ -1905,8 +1975,8 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
                                                  DataModel::Group& ledPanel)
 {
-  Q_ASSERT(datasetIn.index >= 0);
-  Q_ASSERT(datasetIn.uniqueId >= 0);
+  SS_ASSERT(datasetIn.index >= 0, return);
+  SS_ASSERT(datasetIn.uniqueId >= 0, return);
 
   DataModel::Dataset dataset = datasetIn;
   if (DSP::almostEqual(dataset.wgtMin, dataset.wgtMax)) {
@@ -1941,6 +2011,9 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
       ledPanel.datasets.push_back(dataset);
       continue;
     }
+    if (widgetKey == SerialStudio::DashboardExtension)
+      m_extensionDatasetIds.append(dataset.widget);
+
     if (widgetKey != SerialStudio::DashboardNoWidget)
       m_widgetDatasets[widgetKey].append(dataset);
   }
@@ -1954,7 +2027,7 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
  */
 DataModel::Frame UI::Dashboard::combineSourceFrames(const DataModel::Frame& seed) const
 {
-  Q_ASSERT(seed.sourceId >= 0);
+  SS_ASSERT(seed.sourceId >= 0, return seed);
 
   DataModel::Frame combined;
   combined.title   = seed.title;
@@ -1979,8 +2052,8 @@ DataModel::Frame UI::Dashboard::combineSourceFrames(const DataModel::Frame& seed
  */
 void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
-  Q_ASSERT(!frame.groups.empty());
-  Q_ASSERT(streamAvailable());
+  SS_ASSERT(!frame.groups.empty(), return);
+  SS_ASSERT(streamAvailable(), return);
 
   const bool pro = SerialStudio::activated();
 
@@ -2047,19 +2120,22 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 }
 
 /**
- * @brief Populates m_widgetGroups and m_widgetDatasets from the current frame. A datasetless
- *        data grid materialises as an empty table on purpose: dropping it would shift the
- *        positional relativeIndex of every later widget of the same type and silently orphan
- *        saved workspace references (and diverge from the editor-side widget numbering).
+ * @brief Populates m_widgetGroups and m_widgetDatasets from the current frame. A datasetless data
+ *        grid materialises as an empty table on purpose: dropping it would shift every later
+ *        widget's relativeIndex and orphan saved workspace references. Extension entries bucket
+ *        under DashboardExtension in walk order, ids index-aligned in m_extensionGroupIds.
  */
 void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
 {
-  Q_ASSERT(!m_lastFrame.groups.empty());
-  Q_ASSERT(!frame.groups.empty());
+  SS_ASSERT(!m_lastFrame.groups.empty(), return);
+  SS_ASSERT(!frame.groups.empty(), return);
   (void)frame;
 
   for (const auto& group : m_lastFrame.groups) {
     const auto key = SerialStudio::getDashboardWidget(group);
+
+    if (key == SerialStudio::DashboardExtension)
+      m_extensionGroupIds.append(group.widget);
 
     if (key != SerialStudio::DashboardNoWidget)
       m_widgetGroups[key].append(group);
@@ -2134,8 +2210,8 @@ void UI::Dashboard::relabelGroupAsMultiplotFallback(int groupId, const QString& 
 /**
  * @brief Applies display-title overrides to the widget copies in m_widgetGroups and
  *        m_widgetDatasets: widget-level entries ("type:uid") beat entity-level ones ("uid"),
- *        canonical titles resolve from m_lastFrame so a removed override restores the
- *        original text; m_lastFrame stays canonical (exports and dashboard.getData serialize it).
+ *        canonical titles resolve from m_lastFrame so a removed override restores the original
+ *        text; extension widgets key off "ext:&lt;id&gt;" instead of the numeric type.
  */
 void UI::Dashboard::applyDisplayTitles()
 {
@@ -2144,7 +2220,7 @@ void UI::Dashboard::applyDisplayTitles()
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  Q_ASSERT(!m_lastFrame.groups.empty());
+  SS_ASSERT(!m_lastFrame.groups.empty(), return);
   const auto overrides = projectModel.displayTitles();
 
   QHash<int, QString> canonical;
@@ -2154,9 +2230,8 @@ void UI::Dashboard::applyDisplayTitles()
       canonical.insert(dataset.uniqueId, dataset.title);
   }
 
-  const auto widgetOverride = [&](int type, int uniqueId) {
-    return overrides.value(QString::number(type) + QLatin1Char(':') + QString::number(uniqueId))
-      .toString();
+  const auto widgetOverride = [&](const QString& token, int uniqueId) {
+    return overrides.value(token + QLatin1Char(':') + QString::number(uniqueId)).toString();
   };
 
   const auto entityResolve = [&](int uniqueId, const QString& current) {
@@ -2167,20 +2242,28 @@ void UI::Dashboard::applyDisplayTitles()
     return canonical.value(uniqueId, current);
   };
 
-  const auto resolve = [&](int type, int uniqueId, const QString& current) {
-    const auto scoped = widgetOverride(type, uniqueId);
+  const auto resolve = [&](const QString& token, int uniqueId, const QString& current) {
+    const auto scoped = widgetOverride(token, uniqueId);
     return scoped.isEmpty() ? entityResolve(uniqueId, current) : scoped;
   };
 
+  const auto typeToken = [this](SerialStudio::DashboardWidget key, bool group, int index) {
+    if (key != SerialStudio::DashboardExtension)
+      return QString::number(static_cast<int>(key));
+
+    return UI::WidgetExtensions::persistedTypeToken(extensionIdAt(group, index));
+  };
+
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    const int type = static_cast<int>(i.key());
-    for (auto& group : i.value()) {
+    for (int j = 0; j < i.value().count(); ++j) {
+      auto& group      = i.value()[j];
+      const auto token = typeToken(i.key(), true, j);
       if (group.widget != QLatin1String("led-panel")) {
-        group.title = resolve(type, group.uniqueId, group.title);
+        group.title = resolve(token, group.uniqueId, group.title);
         continue;
       }
 
-      const auto scoped = widgetOverride(type, group.uniqueId);
+      const auto scoped = widgetOverride(token, group.uniqueId);
       group.title       = scoped.isEmpty()
                           ? tr("LED Panel (%1)").arg(entityResolve(group.uniqueId, group.title))
                           : scoped;
@@ -2188,9 +2271,11 @@ void UI::Dashboard::applyDisplayTitles()
   }
 
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    const int type = static_cast<int>(i.key());
-    for (auto& dataset : i.value())
-      dataset.title = resolve(type, dataset.uniqueId, dataset.title);
+    for (int j = 0; j < i.value().count(); ++j) {
+      auto& dataset    = i.value()[j];
+      const auto token = typeToken(i.key(), false, j);
+      dataset.title    = resolve(token, dataset.uniqueId, dataset.title);
+    }
   }
 }
 
@@ -2216,27 +2301,30 @@ void UI::Dashboard::refreshDisplayTitles()
 
   for (auto i = m_widgetDatasets.constBegin(); i != m_widgetDatasets.constEnd(); ++i) {
     const auto key = i.key();
+    const int base = datasetBucketBase(key);
     for (int j = 0; j < i.value().size(); ++j)
-      registry.updateWidget(registry.widgetIdByTypeAndIndex(key, j), i.value().at(j).title);
+      registry.updateWidget(registry.widgetIdByTypeAndIndex(key, base + j), i.value().at(j).title);
   }
 
   Q_EMIT displayTitlesChanged();
 }
 
 /**
- * @brief Registers all group and dataset widgets with the WidgetRegistry.
+ * @brief Registers all group and dataset widgets with the WidgetRegistry. Registry ids are handed
+ *        out in creation order per type, so the dataset pass offsets its relative indices for the
+ *        extension bucket (whose first slots belong to the group-scope packages registered above).
  */
 void UI::Dashboard::registerWidgets()
 {
-  Q_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
-  Q_ASSERT(m_widgetCount == 0);
+  SS_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty(), return);
+  SS_ASSERT(m_widgetCount == 0, m_widgetCount = 0);
 
   static auto& registry = WidgetRegistry::instance();
   registry.beginBatchUpdate();
 
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
     const auto key   = i.key();
-    const auto count = widgetCount(key);
+    const auto count = i.value().count();
     for (int j = 0; j < count; ++j) {
       const auto& group = i.value().at(j);
       (void)registry.createWidget(key, group.title, group.groupId, -1, true);
@@ -2246,11 +2334,12 @@ void UI::Dashboard::registerWidgets()
 
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
     const auto key   = i.key();
-    const auto count = widgetCount(key);
+    const int base   = datasetBucketBase(key);
+    const auto count = i.value().count();
     for (int j = 0; j < count; ++j) {
       const auto& dataset = i.value().at(j);
       (void)registry.createWidget(key, dataset.title, dataset.groupId, dataset.index, false);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
+      m_widgetMap.insert(m_widgetCount++, qMakePair(key, base + j));
     }
   }
 
@@ -2262,8 +2351,8 @@ void UI::Dashboard::registerWidgets()
  */
 void UI::Dashboard::buildDatasetReferences()
 {
-  Q_ASSERT(!m_lastFrame.groups.empty());
-  Q_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
+  SS_ASSERT(!m_lastFrame.groups.empty(), return);
+  SS_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty(), return);
 
   for (auto& groupList : m_widgetGroups) {
     for (auto& group : groupList)
@@ -2311,7 +2400,7 @@ void UI::Dashboard::rebuildDatasetReferences()
 UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
   const DataModel::Dataset& dataset, const QSet<const DataModel::Dataset*>& stringTargets) const
 {
-  Q_ASSERT(!m_datasetReferences.isEmpty());
+  SS_ASSERT_LOG(!m_datasetReferences.isEmpty());
 
   ValuePush push;
   push.uniqueId = dataset.uniqueId;
@@ -2336,8 +2425,8 @@ UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
  */
 void UI::Dashboard::buildValuePushes()
 {
-  Q_ASSERT(!m_datasetReferences.isEmpty());
-  Q_ASSERT(!m_lastFrame.groups.empty());
+  SS_ASSERT(!m_datasetReferences.isEmpty(), return);
+  SS_ASSERT(!m_lastFrame.groups.empty(), return);
 
   m_valuePushes.clear();
 
@@ -2353,12 +2442,53 @@ void UI::Dashboard::buildValuePushes()
         string_targets.insert(&dataset);
   }
 
+  addExtensionStringTargets(string_targets);
+
   for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it) {
     auto& table = m_valuePushes[it.key()];
     for (const auto& group : it.value().groups)
       for (const auto& dataset : group.datasets)
         table.push_back(makeValuePush(dataset, string_targets));
   }
+}
+
+/**
+ * @brief Adds the widget copies of every extension package that declared readsStringValues to the
+ *        string-target set, which is what keeps a package that renders Dataset::value from reading
+ *        a stale string. Reconfigure-time only: the per-frame walk is untouched, and a package
+ *        that never declares the flag contributes no target and therefore no work.
+ */
+void UI::Dashboard::addExtensionStringTargets(QSet<const DataModel::Dataset*>& targets) const
+{
+  static auto& catalog = UI::WidgetExtensions::instance();
+
+  const auto groups = m_widgetGroups.constFind(SerialStudio::DashboardExtension);
+  if (groups != m_widgetGroups.cend()) {
+    for (int i = 0; i < groups->count(); ++i) {
+      if (!catalog.descriptor(extensionIdAt(true, i)).readsStringValues)
+        continue;
+
+      for (const auto& dataset : groups->at(i).datasets)
+        targets.insert(&dataset);
+    }
+  }
+
+  const auto datasets = m_widgetDatasets.constFind(SerialStudio::DashboardExtension);
+  if (datasets != m_widgetDatasets.cend()) {
+    for (int i = 0; i < datasets->count(); ++i)
+      if (catalog.descriptor(extensionIdAt(false, i)).readsStringValues)
+        targets.insert(&datasets->at(i));
+  }
+}
+
+/**
+ * @brief Returns the relative-index offset of one dataset bucket. Extension widgets share a single
+ *        enum value with the group-scope packages that occupy the bucket's first slots, so their
+ *        dataset copies start after them; every built-in type owns its bucket alone.
+ */
+int UI::Dashboard::datasetBucketBase(const SerialStudio::DashboardWidget key) const noexcept
+{
+  return key == SerialStudio::DashboardExtension ? m_extensionGroupIds.count() : 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2370,8 +2500,8 @@ void UI::Dashboard::buildValuePushes()
  */
 void UI::Dashboard::updateDataSeries(int sourceId)
 {
-  Q_ASSERT(m_widgetCount > 0 || m_widgetMap.isEmpty());
-  Q_ASSERT(!m_sourceRawFrames.isEmpty());
+  SS_ASSERT_LOG(m_widgetCount > 0 || m_widgetMap.isEmpty());
+  SS_ASSERT(!m_sourceRawFrames.isEmpty(), return);
 
   const int gpsCount   = widgetCount(SerialStudio::DashboardGPS);
   const int fftCount   = widgetCount(SerialStudio::DashboardFFT);
@@ -2438,7 +2568,7 @@ void UI::Dashboard::updateDataSeries(int sourceId)
       sweep.back[j].appendDecimated(st, *p.timeCurves[j].value);
   };
 
-  Q_ASSERT(static_cast<int>(m_multiplotPushes.size()) == multiCount);
+  SS_ASSERT_LOG(static_cast<int>(m_multiplotPushes.size()) == multiCount);
   for (const auto& p : m_multiplotPushes) {
     if (!*p.activeFlag)
       continue;
@@ -2463,8 +2593,8 @@ void UI::Dashboard::updateDataSeries(int sourceId)
  */
 void UI::Dashboard::updateFftSeries(int sourceId)
 {
-  Q_ASSERT(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
-  Q_ASSERT(m_activeFFTPlots.size() == m_fftValues.size());
+  SS_ASSERT_LOG(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
+  SS_ASSERT_LOG(m_activeFFTPlots.size() == m_fftValues.size());
 
 #ifdef BUILD_COMMERCIAL
   static auto& audioExport = Widgets::AudioExport::instance();
@@ -2493,8 +2623,7 @@ void UI::Dashboard::updateFftSeries(int sourceId)
  */
 void UI::Dashboard::setFftAudioTap(const int index, const bool enabled, const quint32 key)
 {
-  Q_ASSERT(index >= 0);
-  Q_ASSERT(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
+  SS_ASSERT_LOG(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
   if (index < 0 || index >= static_cast<int>(m_fftPushes.size()))
     return;
 
@@ -2508,8 +2637,12 @@ void UI::Dashboard::setFftAudioTap(const int index, const bool enabled, const qu
  */
 void UI::Dashboard::updateGpsSeries(int sourceId)
 {
-  Q_ASSERT(static_cast<int>(m_gpsPushes.size()) == m_gpsValues.size());
+  SS_ASSERT_LOG(static_cast<int>(m_gpsPushes.size()) == m_gpsValues.size());
+
+  // code-verify off
+  // Debug-only layout parity check: contains() hashes into the widget-group map on every frame.
   Q_ASSERT(m_widgetGroups.contains(SerialStudio::DashboardGPS) || m_gpsPushes.empty());
+  // code-verify on
 
   for (const auto& p : m_gpsPushes) {
     if (sourceId >= 0 && p.sourceId != sourceId)
@@ -2531,8 +2664,8 @@ void UI::Dashboard::updateGpsSeries(int sourceId)
 void UI::Dashboard::updatePlot3DSeries(int sourceId)
 {
 #ifdef BUILD_COMMERCIAL
-  Q_ASSERT(static_cast<int>(m_plot3DPushes.size()) == m_plot3DRings.size());
-  Q_ASSERT(m_points > 0);
+  SS_ASSERT_LOG(static_cast<int>(m_plot3DPushes.size()) == m_plot3DRings.size());
+  SS_ASSERT(m_points > 0, return);
 
   const auto maxPoints = static_cast<std::size_t>(points());
   for (const auto& p : m_plot3DPushes) {
@@ -2555,8 +2688,11 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
  */
 void UI::Dashboard::updateLineSeries(int sourceId)
 {
+  // code-verify off
+  // Debug-only layout parity check: widgetCount() runs two map lookups per call, per frame.
   Q_ASSERT(m_pltValues.size() == widgetCount(SerialStudio::DashboardPlot));
   Q_ASSERT(m_activePlots.size() == widgetCount(SerialStudio::DashboardPlot));
+  // code-verify on
 
   auto fire = [sourceId](const LinePush& p) {
     for (const auto& c : p.consumers) {
@@ -2671,10 +2807,10 @@ void UI::Dashboard::configureGpsSeries()
 }
 
 /**
- * @brief Configures the FFT series data structure for the dashboard.
- *        Two passes are deliberate: the push table stores raw pointers into m_fftValues,
- *        and those addresses are stable only after that vector stops growing, so all
- *        buffers are allocated first and the pushes resolved in a second pass.
+ * @brief Configures the FFT series data structure. Ring capacity comes from the shared transform
+ *        size contract, so it matches the plan FFTPlot allocates from the same dataset. Two passes
+ *        are deliberate: the push table stores raw pointers into m_fftValues, stable only after
+ *        that vector stops growing, so buffers are allocated first and pushes resolved second.
  */
 void UI::Dashboard::configureFftSeries()
 {
@@ -2687,7 +2823,7 @@ void UI::Dashboard::configureFftSeries()
   const int fftCount = widgetCount(SerialStudio::DashboardFFT);
   for (int i = 0; i < fftCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    const int capacity  = qBound(1, dataset.fftSamples, kMaxFftRingSamples);
+    const int capacity  = Widgets::normalizedFftSize(dataset.fftSamples);
     m_fftValues.append(DSP::AxisData(capacity));
     m_activeFFTPlots.insert(i, true);
   }
@@ -2715,8 +2851,8 @@ void UI::Dashboard::configureFftSeries()
  */
 void UI::Dashboard::updateWaterfallSeries(int sourceId)
 {
-  Q_ASSERT(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
-  Q_ASSERT(m_activeWaterfalls.size() == m_waterfallValues.size());
+  SS_ASSERT_LOG(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
+  SS_ASSERT_LOG(m_activeWaterfalls.size() == m_waterfallValues.size());
 
   static auto& audioExport = Widgets::AudioExport::instance();
 
@@ -2740,8 +2876,7 @@ void UI::Dashboard::updateWaterfallSeries(int sourceId)
  */
 void UI::Dashboard::setWaterfallAudioTap(const int index, const bool enabled, const quint32 key)
 {
-  Q_ASSERT(index >= 0);
-  Q_ASSERT(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
+  SS_ASSERT_LOG(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
   if (index < 0 || index >= static_cast<int>(m_waterfallPushes.size()))
     return;
 
@@ -2750,10 +2885,10 @@ void UI::Dashboard::setWaterfallAudioTap(const int index, const bool enabled, co
 }
 
 /**
- * @brief Configures the waterfall series data structure for the dashboard.
- *        Two passes are deliberate: the push table stores raw pointers into
- *        m_waterfallValues, and those addresses are stable only after that vector stops
- *        growing, so all buffers are allocated first and the pushes resolved in a second.
+ * @brief Configures the waterfall series buffers. Ring capacity comes from the shared
+ *        transform-size contract under the waterfall's own (lower) ceiling, so it matches the
+ *        plan the widget allocates. Two passes are deliberate: the push table stores raw
+ *        pointers into m_waterfallValues, stable only after that vector stops growing.
  */
 void UI::Dashboard::configureWaterfallSeries()
 {
@@ -2766,7 +2901,9 @@ void UI::Dashboard::configureWaterfallSeries()
   const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
   for (int i = 0; i < waterfallCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
-    m_waterfallValues.append(DSP::AxisData(dataset.fftSamples));
+    const int capacity =
+      Widgets::normalizedFftSize(dataset.fftSamples, Widgets::kMaxWaterfallFftSize);
+    m_waterfallValues.append(DSP::AxisData(capacity));
     m_activeWaterfalls.insert(i, true);
   }
 
@@ -2968,7 +3105,10 @@ void UI::Dashboard::restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine
  */
 void UI::Dashboard::configureLineSeries()
 {
-  Q_ASSERT(m_points > 0);
+  SS_ASSERT(m_points > 0, {
+    m_points = kDefaultPlotPoints;
+    Q_EMIT pointsChanged();
+  });
 
   m_xAxisData.clear();
   m_yAxisData.clear();
@@ -3108,7 +3248,10 @@ void UI::Dashboard::buildLinePushes()
  */
 void UI::Dashboard::configurePlot3DSeries()
 {
-  Q_ASSERT(m_points > 0);
+  SS_ASSERT(m_points > 0, {
+    m_points = kDefaultPlotPoints;
+    Q_EMIT pointsChanged();
+  });
 
   const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
 
@@ -3160,7 +3303,10 @@ void UI::Dashboard::configurePlot3DSeries()
  */
 void UI::Dashboard::configureMultiLineSeries()
 {
-  Q_ASSERT(m_points > 0);
+  SS_ASSERT(m_points > 0, {
+    m_points = kDefaultPlotPoints;
+    Q_EMIT pointsChanged();
+  });
 
   m_multipltValues.clear();
   m_multipltValues.squeeze();

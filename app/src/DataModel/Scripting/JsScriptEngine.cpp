@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/JsScriptEngine.h"
@@ -31,6 +31,7 @@
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Multi-frame parsing helper functions
@@ -230,6 +231,7 @@ DataModel::JsScriptEngine::JsScriptEngine()
   , m_disabled(false)
   , m_sourceId(0)
   , m_consecutiveTimeouts(0)
+  , m_errorCount(0)
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
@@ -243,6 +245,8 @@ DataModel::JsScriptEngine::JsScriptEngine()
 bool DataModel::JsScriptEngine::noteTimeoutAndCheckDisabled(int sourceId)
 {
   ++m_consecutiveTimeouts;
+  noteError(QObject::tr("parse() timed out after %1 ms").arg(kRuntimeWatchdogMs));
+
   if (m_consecutiveTimeouts < kMaxConsecutiveTimeouts)
     return false;
 
@@ -267,6 +271,57 @@ bool DataModel::JsScriptEngine::noteTimeoutAndCheckDisabled(int sourceId)
  */
 void DataModel::JsScriptEngine::resetTimeoutCounter() noexcept
 {
+  m_consecutiveTimeouts = 0;
+}
+
+/**
+ * @brief Records a runtime parse failure for the 1 Hz diagnostics sample.
+ */
+void DataModel::JsScriptEngine::noteError(const QString& message)
+{
+  ++m_errorCount;
+  m_lastError = message;
+}
+
+/**
+ * @brief Returns whether the watchdog cut this parser off after repeated timeouts.
+ */
+bool DataModel::JsScriptEngine::disabled() const noexcept
+{
+  return m_disabled;
+}
+
+/**
+ * @brief Returns the most recent runtime parse error message.
+ */
+QString DataModel::JsScriptEngine::lastError() const
+{
+  return m_lastError;
+}
+
+/**
+ * @brief Returns how many runtime parse failures this engine has seen.
+ */
+quint64 DataModel::JsScriptEngine::errorCount() const noexcept
+{
+  return m_errorCount;
+}
+
+/**
+ * @brief Returns the current run of back-to-back watchdog timeouts.
+ */
+int DataModel::JsScriptEngine::consecutiveTimeouts() const noexcept
+{
+  return m_consecutiveTimeouts;
+}
+
+/**
+ * @brief Clears the runtime error statistics so a repaired script stops being reported.
+ */
+void DataModel::JsScriptEngine::resetErrorStats()
+{
+  m_errorCount = 0;
+  m_lastError.clear();
   m_consecutiveTimeouts = 0;
 }
 
@@ -303,6 +358,8 @@ void DataModel::JsScriptEngine::reset()
   m_hexToArray          = QJSValue();
   m_disabled            = false;
   m_consecutiveTimeouts = 0;
+  m_errorCount          = 0;
+  m_lastError.clear();
 }
 
 /**
@@ -310,8 +367,8 @@ void DataModel::JsScriptEngine::reset()
  */
 QJSValue DataModel::JsScriptEngine::guardedCall(QJSValueList& args)
 {
-  Q_ASSERT(m_parseFunction.isCallable());
-  Q_ASSERT(!args.isEmpty());
+  SS_ASSERT(m_parseFunction.isCallable(), return QJSValue());
+  SS_ASSERT(!args.isEmpty(), return QJSValue());
 
   return m_watchdog.call(m_parseFunction, args);
 }
@@ -321,7 +378,7 @@ QJSValue DataModel::JsScriptEngine::guardedCall(QJSValueList& args)
  */
 QList<QStringList> DataModel::JsScriptEngine::parseString(const QString& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
+  SS_ASSERT(!frame.isEmpty(), return {});
 
   if (!m_parseFunction.isCallable() || m_disabled)
     return {};
@@ -337,7 +394,9 @@ QList<QStringList> DataModel::JsScriptEngine::parseString(const QString& frame)
   }
 
   if (jsResult.isError()) [[unlikely]] {
-    qWarning() << "[JsScriptEngine] JS error:" << jsResult.property("message").toString();
+    const auto message = jsResult.property("message").toString();
+    qWarning() << "[JsScriptEngine] JS error:" << message;
+    noteError(message);
     return {};
   }
 
@@ -350,7 +409,7 @@ QList<QStringList> DataModel::JsScriptEngine::parseString(const QString& frame)
  */
 QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
+  SS_ASSERT(!frame.isEmpty(), return {});
 
   if (!m_parseFunction.isCallable() || m_disabled)
     return {};
@@ -385,7 +444,9 @@ QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& fram
   }
 
   if (jsResult.isError()) [[unlikely]] {
-    qWarning() << "[JsScriptEngine] JS error:" << jsResult.property("message").toString();
+    const auto message = jsResult.property("message").toString();
+    qWarning() << "[JsScriptEngine] JS error:" << message;
+    noteError(message);
     return {};
   }
 
@@ -401,8 +462,8 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
                                                      int sourceId,
                                                      bool showMessageBoxes)
 {
-  Q_ASSERT(!script.isEmpty());
-  Q_ASSERT(sourceId >= 0);
+  SS_ASSERT(!script.isEmpty(), return false);
+  SS_ASSERT(sourceId >= 0, return false);
 
   m_parseFunction = QJSValue();
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
@@ -469,8 +530,8 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
  */
 QJSValue DataModel::JsScriptEngine::validateParseFunction(int sourceId, bool showMessageBoxes)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!m_engine.isInterrupted());
+  SS_ASSERT(sourceId >= 0, return QJSValue());
+  SS_ASSERT(!m_engine.isInterrupted(), m_engine.setInterrupted(false));
 
   auto parseFunction = m_engine.globalObject().property(QStringLiteral("parse"));
   if (parseFunction.isNull() || !parseFunction.isCallable()) {
@@ -497,8 +558,8 @@ bool DataModel::JsScriptEngine::probeParseFunction(const QJSValue& parseFunction
                                                    int sourceId,
                                                    bool showMessageBoxes)
 {
-  Q_ASSERT(parseFunction.isCallable());
-  Q_ASSERT(sourceId >= 0);
+  SS_ASSERT(parseFunction.isCallable(), return false);
+  SS_ASSERT(sourceId >= 0, return false);
 
   bool probeOk = false;
   QJSValue lastError;
@@ -550,8 +611,8 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
                                            int sourceId,
                                            bool showMessageBoxes)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!script.isEmpty());
+  SS_ASSERT(sourceId >= 0, return false);
+  SS_ASSERT(!script.isEmpty(), return false);
 
   QJSValue prevParseFn  = m_parseFunction;
   QJSValue prevHexToArr = m_hexToArray;

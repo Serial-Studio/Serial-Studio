@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/CommandRegistry.h"
@@ -166,6 +166,8 @@ static const QSet<QString>& destructiveCommandSet()
     QStringLiteral("project.workspace.removeWidget"),
     QStringLiteral("project.workspace.reorder"),
     QStringLiteral("project.batch"),
+    QStringLiteral("project.undo"),
+    QStringLiteral("project.redo"),
     QStringLiteral("assistant.project.bulkApply"),
     QStringLiteral("assistant.workspace.addTile"),
     QStringLiteral("assistant.restore"),
@@ -242,13 +244,17 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   const ExecuteDepthGuard depthGuard;
 
   static auto& projectModel = DataModel::ProjectModel::instance();
-  const qint64 epochBefore  = projectModel.mutationEpoch();
+  const DataModel::ProjectUndoFrame undoFrame{projectModel, name};
+  const qint64 epochBefore = projectModel.mutationEpoch();
 
   try {
     auto response = m_commands[name].handler(id, params);
     attachErrorMetadata(name, response);
 
-    if (!isDryRun && response.success && projectModel.mutationEpoch() != epochBefore) {
+    const bool historyVerb =
+      name == QStringLiteral("project.undo") || name == QStringLiteral("project.redo");
+    if (!isDryRun && !historyVerb && response.success
+        && projectModel.mutationEpoch() != epochBefore) {
       projectModel.scheduleAutoSave();
       scheduleProjectApply();
     }

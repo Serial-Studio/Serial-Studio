@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -525,7 +525,7 @@ Widgets.SmartDialog {
                 anchors.rightMargin: root.colScrollSlot
 
                 Widgets.LineField {
-                  text: bandRow.bandMin.toFixed(2)
+                  text: String(bandRow.bandMin)
                   font: Cpp_Misc_CommonFonts.monoFont
                   Layout.preferredWidth: root.colWMin
                   Layout.alignment: Qt.AlignVCenter
@@ -538,7 +538,7 @@ Widgets.SmartDialog {
                 }
 
                 Widgets.LineField {
-                  text: bandRow.bandMax.toFixed(2)
+                  text: String(bandRow.bandMax)
                   font: Cpp_Misc_CommonFonts.monoFont
                   Layout.preferredWidth: root.colWMax
                   Layout.alignment: Qt.AlignVCenter

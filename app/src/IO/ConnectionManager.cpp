@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/ConnectionManager.h"
@@ -29,13 +29,18 @@
 #include "Console/Handler.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ControlScript.h"
 #include "IO/Drivers/BluetoothLE.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/UART.h"
 #include "IO/FileTransmission.h"
+#include "Misc/ConnectionDiagnostics.h"
 #include "Misc/Translator.h"
+#include "Misc/Utilities.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
@@ -48,7 +53,6 @@
 #  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
-#  include "Misc/Utilities.h"
 #  include "MQTT/Publisher.h"
 #  include "Sessions/Export.h"
 #endif
@@ -67,6 +71,10 @@
 IO::ConnectionManager::ConnectionManager()
   : m_paused(false)
   , m_writeEnabled(true)
+  , m_connectFanOut(false)
+  , m_connectPending(false)
+  , m_linkLossNotified(false)
+  , m_waitCursorActive(false)
   , m_syncingFromProject(false)
   , m_busType(SerialStudio::BusType::UART)
   , m_startSequence("/*")
@@ -86,9 +94,6 @@ IO::ConnectionManager::ConnectionManager()
 #endif
 {
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
-
-  connect(
-    this, &ConnectionManager::configurationChanged, this, &ConnectionManager::connectedChanged);
 
   m_uiDriverSaveTimer.setSingleShot(true);
   m_uiDriverSaveTimer.setInterval(750);
@@ -139,12 +144,13 @@ IO::ConnectionManager::~ConnectionManager()
 }
 
 /**
- * @brief Returns the singleton ConnectionManager instance.
+ * @brief Returns this session's connection manager. The object is owned by the SessionContext and
+ *        built by the composition root, so a reach before adoption is a named fatal instead of
+ *        an out-of-order lazy construction (spec 0039 M2, wave D2).
  */
 IO::ConnectionManager& IO::ConnectionManager::instance()
 {
-  static ConnectionManager singleton;
-  return singleton;
+  return SessionContext::current().connectionManager();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,6 +219,77 @@ int IO::ConnectionManager::connectedDeviceCount() const
       ++count;
 
   return count;
+}
+
+/**
+ * @brief Returns how many devices currently have an orchestration flow attached. A supervised
+ *        link keeps its flow for as long as it is up, so this count is steady rather than zero
+ *        while connected; a count that grows across connect/drop/recover cycles is a leak.
+ */
+int IO::ConnectionManager::activeFlowCount() const
+{
+  int count = 0;
+  for (const auto& [id, dm] : m_devices)
+    if (dm && dm->hasActiveFlow())
+      ++count;
+
+  return count;
+}
+
+/**
+ * @brief Returns the highest open-attempt count any device's flow is working through: one while a
+ *        first attempt is in flight, higher while the shared retry policy is re-attempting, and
+ *        zero once every link is either up or idle.
+ */
+int IO::ConnectionManager::reconnectAttempt() const
+{
+  int attempt = 0;
+  for (const auto& [id, dm] : m_devices)
+    if (dm)
+      attempt = qMax(attempt, dm->reconnectAttempt());
+
+  return attempt;
+}
+
+/**
+ * @brief Reports the link as idle, connecting, retrying, or connected, which is what tells a
+ *        caller that a source is coming back on its own instead of merely being down.
+ */
+QString IO::ConnectionManager::linkState() const
+{
+  if (isConnected())
+    return QStringLiteral("connected");
+
+  const int attempt = reconnectAttempt();
+  if (attempt > 1)
+    return QStringLiteral("retrying");
+
+  if (attempt > 0 || hasPendingOpen())
+    return QStringLiteral("connecting");
+
+  return QStringLiteral("idle");
+}
+
+/**
+ * @brief Sums the per-device frame-reader counters for the 1 Hz diagnostics sample. No caching and
+ *        no signal: this is pulled once per second and must never be called on the frame path.
+ */
+IO::LinkStats IO::ConnectionManager::linkStats() const
+{
+  LinkStats stats{};
+  for (const auto& [id, dm] : m_devices) {
+    const auto* reader = dm ? dm->frameReader() : nullptr;
+    if (!reader)
+      continue;
+
+    stats.bytesIn         += reader->bytesReceived();
+    stats.droppedFrames   += reader->droppedFrameCount();
+    stats.overflowBytes   += reader->overflowBytes();
+    stats.checksumErrors  += reader->checksumErrorCount();
+    stats.framesExtracted += reader->framesExtracted();
+  }
+
+  return stats;
 }
 
 /**
@@ -530,8 +607,6 @@ void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVaria
  */
 void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
-  Q_ASSERT(!payload.isEmpty());
-
   if (payload.isEmpty())
     return;
 
@@ -560,8 +635,7 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayload,
                                                       const QMap<int, QByteArray>& sourcePayloads)
 {
-  Q_ASSERT(!fullPayload.isEmpty());
-  Q_ASSERT(!sourcePayloads.isEmpty());
+  SS_ASSERT_LOG(!sourcePayloads.isEmpty());
 
   if (fullPayload.isEmpty())
     return;
@@ -588,8 +662,8 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
  */
 qint64 IO::ConnectionManager::writeData(const QByteArray& data)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(m_devices.find(0) != m_devices.end());
+  SS_ASSERT(!data.isEmpty(), return -1);
+  SS_ASSERT_LOG(m_devices.find(0) != m_devices.end());
 
   return writeDataToDevice(0, data);
 }
@@ -599,8 +673,8 @@ qint64 IO::ConnectionManager::writeData(const QByteArray& data)
  */
 qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& data)
 {
-  Q_ASSERT(deviceId >= 0);
-  Q_ASSERT(!data.isEmpty());
+  SS_ASSERT(deviceId >= 0, return -1);
+  SS_ASSERT(!data.isEmpty(), return -1);
 
   auto it = m_devices.find(deviceId);
   if (it == m_devices.end() || !it->second)
@@ -625,8 +699,8 @@ qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& 
  */
 qint64 IO::ConnectionManager::writeAndArmReply(int deviceId, const QByteArray& data)
 {
-  Q_ASSERT(deviceId >= 0);
-  Q_ASSERT(!data.isEmpty());
+  SS_ASSERT(deviceId >= 0, return -1);
+  SS_ASSERT(!data.isEmpty(), return -1);
 
   {
     QMutexLocker locker(&m_replyMutex);
@@ -642,7 +716,7 @@ qint64 IO::ConnectionManager::writeAndArmReply(int deviceId, const QByteArray& d
  */
 QByteArray IO::ConnectionManager::pollReplyBuffer(int deviceId) const
 {
-  Q_ASSERT(deviceId >= 0);
+  SS_ASSERT(deviceId >= 0, return {});
 
   QMutexLocker locker(&m_replyMutex);
   return m_replyBuffers.value(deviceId);
@@ -654,7 +728,7 @@ QByteArray IO::ConnectionManager::pollReplyBuffer(int deviceId) const
  */
 void IO::ConnectionManager::disarmReplyCapture(int deviceId)
 {
-  Q_ASSERT(deviceId >= 0);
+  SS_ASSERT(deviceId >= 0, return);
 
   QMutexLocker locker(&m_replyMutex);
   m_replyBuffers.remove(deviceId);
@@ -678,7 +752,9 @@ void IO::ConnectionManager::toggleConnection()
 }
 
 /**
- * @brief Connects the primary device (device 0) and, in ProjectFile mode, all other sources.
+ * @brief Connects the primary device (device 0) and, in ProjectFile mode, all other sources. The
+ *        request concludes when the last device stops opening, which for a synchronous driver is
+ *        before the fan-out returns and for an orchestrated one is when its flow reports.
  */
 void IO::ConnectionManager::connectDevice()
 {
@@ -700,23 +776,83 @@ void IO::ConnectionManager::connectDevice()
     controlScript.runOnConnect();
   }
 
-  QApplication::setOverrideCursor(Qt::WaitCursor);
+  m_connectPending = true;
+  m_connectFanOut  = true;
+  beginWaitCursor();
 
   connectDevice(0);
 
   if (appState.operationMode() == SerialStudio::ProjectFile)
     connectAllDevices();
 
-  QApplication::restoreOverrideCursor();
+  m_connectFanOut = false;
+  concludeConnectRequest();
+}
+
+/**
+ * @brief Ends a connect request once no device is still opening: restores the cursor and reports
+ *        the state change exactly once, whether the opens finished inside the fan-out or later.
+ */
+void IO::ConnectionManager::concludeConnectRequest()
+{
+  if (!m_connectPending || m_connectFanOut)
+    return;
+
+  if (hasPendingOpen())
+    return;
+
+  m_connectPending = false;
+  endWaitCursor();
   Q_EMIT connectedChanged();
 }
 
 /**
- * @brief Disconnects the primary device and any other project sources.
+ * @brief Raises the wait cursor at most once, so two overlapping requests cannot stack it.
+ */
+void IO::ConnectionManager::beginWaitCursor()
+{
+  if (m_waitCursorActive)
+    return;
+
+  m_waitCursorActive = true;
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+}
+
+/**
+ * @brief Restores the wait cursor if this object raised it, so neither a late completion nor a
+ *        cancel can leave it up or pop a cursor it does not own.
+ */
+void IO::ConnectionManager::endWaitCursor()
+{
+  if (!m_waitCursorActive)
+    return;
+
+  m_waitCursorActive = false;
+  QApplication::restoreOverrideCursor();
+}
+
+/**
+ * @brief Returns whether any device is still working through an open attempt.
+ */
+bool IO::ConnectionManager::hasPendingOpen() const
+{
+  for (const auto& [id, dm] : m_devices)
+    if (dm && dm->isOpening())
+      return true;
+
+  return false;
+}
+
+/**
+ * @brief Disconnects the primary device and any other project sources. Closing a device cancels
+ *        an open still in flight, so this is also where a connect request the user gave up on is
+ *        settled instead of leaving the wait cursor behind. Settling that request already reports
+ *        the state change, so the fallback emission below runs only when nothing settled.
  */
 void IO::ConnectionManager::disconnectDevice()
 {
-  QApplication::setOverrideCursor(Qt::WaitCursor);
+  const bool had_request = m_connectPending;
+  beginWaitCursor();
 
   disconnectDevice(0);
 
@@ -730,9 +866,16 @@ void IO::ConnectionManager::disconnectDevice()
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.registerQuickPlotHeaders(QStringList());
 
-  QApplication::restoreOverrideCursor();
+  concludeConnectRequest();
+  const bool settled = had_request && !m_connectPending;
+
+  endWaitCursor();
   Q_EMIT driverChanged();
-  Q_EMIT connectedChanged();
+
+  if (!settled)
+    Q_EMIT connectedChanged();
+
+  Q_EMIT sessionClosed();
 }
 
 /**
@@ -751,7 +894,7 @@ void IO::ConnectionManager::resetFrameReader()
  */
 void IO::ConnectionManager::wireUiDriver(IO::HAL_Driver* driver)
 {
-  Q_ASSERT(driver != nullptr);
+  SS_ASSERT(driver != nullptr, return);
 
   connect(driver,
           &IO::HAL_Driver::configurationChanged,
@@ -915,23 +1058,29 @@ void IO::ConnectionManager::connectDevice(int deviceId)
   if (it == m_devices.end() || !it->second)
     return;
 
+  m_linkLossNotified             = false;
   const QIODevice::OpenMode mode = m_writeEnabled ? QIODevice::ReadWrite : QIODevice::ReadOnly;
   it->second->open(mode);
   setPaused(false);
 }
 
 /**
- * @brief Disconnects the device with the given @p deviceId.
+ * @brief Disconnects the device with the given @p deviceId. Closing cancels an open still in
+ *        flight, so the pending request is settled here too: a device closed mid-open would
+ *        otherwise strand the request flag and its wait cursor.
  */
 void IO::ConnectionManager::disconnectDevice(int deviceId)
 {
   auto it = m_devices.find(deviceId);
   if (it != m_devices.end() && it->second)
     it->second->close();
+
+  concludeConnectRequest();
 }
 
 /**
- * @brief Disconnects the source owned by @p driver, keeping other sources alive.
+ * @brief Disconnects the source owned by @p driver, keeping other sources alive. The teardown may
+ *        settle a pending connect request, which reports the state change itself.
  */
 void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
 {
@@ -949,7 +1098,9 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
   if (deviceId < 0)
     return;
 
+  const bool had_request = m_connectPending;
   disconnectDevice(deviceId);
+  const bool settled = had_request && !m_connectPending;
 
   if (!isConnected()) {
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
@@ -957,7 +1108,11 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
     Q_EMIT driverChanged();
   }
 
-  Q_EMIT connectedChanged();
+  if (!settled)
+    Q_EMIT connectedChanged();
+
+  if (!isConnected())
+    Q_EMIT sessionClosed();
 }
 
 /**
@@ -1180,13 +1335,15 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
 }
 
 /**
- * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots; the hops
- * are DirectConnection to avoid per-frame postEvent overhead on the main-thread hotpath hop.
+ * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots; the data
+ * hops are DirectConnection to avoid per-frame postEvent overhead on the main-thread hotpath hop,
+ * while the open-completion hop fires once per attempt and stays on the default. The lost-link hop
+ * is queued so its teardown and modal cannot run inside the finishing flow's own emission.
  */
 void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 {
-  Q_ASSERT(dm);
-  Q_ASSERT(dm->driver());
+  SS_ASSERT(dm != nullptr, return);
+  SS_ASSERT_LOG(dm->driver() != nullptr);
 
   connect(dm,
           &IO::DeviceManager::frameReady,
@@ -1199,6 +1356,151 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
           this,
           &IO::ConnectionManager::onRawDataReceived,
           Qt::DirectConnection);
+
+  connect(dm, &IO::DeviceManager::openFinished, this, &IO::ConnectionManager::onDeviceOpenFinished);
+
+  connect(dm,
+          &IO::DeviceManager::linkStateChanged,
+          this,
+          &IO::ConnectionManager::onDeviceLinkStateChanged);
+
+  connect(dm,
+          &IO::DeviceManager::linkLost,
+          this,
+          &IO::ConnectionManager::onDeviceLinkLost,
+          Qt::QueuedConnection);
+}
+
+/**
+ * @brief Maps the driver behind @p deviceId onto the diagnostics bus that checks it, reporting
+ *        false for a bus that has no checks of its own.
+ */
+bool IO::ConnectionManager::diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const
+{
+  HAL_Driver* halDriver = driver(deviceId);
+  if (halDriver == nullptr)
+    return false;
+
+  if (qobject_cast<IO::Drivers::UART*>(halDriver) != nullptr)
+    bus = Misc::Diagnostics::Bus::Serial;
+  else if (qobject_cast<IO::Drivers::Network*>(halDriver) != nullptr)
+    bus = Misc::Diagnostics::Bus::Network;
+  else if (qobject_cast<IO::Drivers::BluetoothLE*>(halDriver) != nullptr)
+    bus = Misc::Diagnostics::Bus::Bluetooth;
+#ifdef BUILD_COMMERCIAL
+  else if (qobject_cast<IO::Drivers::MQTT*>(halDriver) != nullptr)
+    bus = Misc::Diagnostics::Bus::Broker;
+  else if (qobject_cast<IO::Drivers::Audio*>(halDriver) != nullptr)
+    bus = Misc::Diagnostics::Bus::Audio;
+#endif
+  else
+    return false;
+
+  return true;
+}
+
+/**
+ * @brief Settles the pending connect request when a device finishes opening, and hands the
+ *        outcome to the connection diagnostics: a failure diagnoses that bus only, a success
+ *        clears what the previous failure reported. A failure with no request behind it is a
+ *        supervised link that gave up, which nothing else would report.
+ */
+void IO::ConnectionManager::onDeviceOpenFinished(int deviceId, bool ok, const QString& reason)
+{
+  SS_ASSERT_LOG(deviceId >= 0);
+  SS_ASSERT_LOG(ok || !reason.isEmpty());
+
+  Misc::Diagnostics::Bus bus = Misc::Diagnostics::Bus::Serial;
+  if (diagnosticsBusFor(deviceId, bus)) {
+    static auto& diagnostics = Misc::ConnectionDiagnostics::instance();
+    if (ok)
+      diagnostics.onOpenSucceeded(bus);
+    else
+      diagnostics.onOpenFailed(bus, reason);
+  }
+
+  const bool had_request = m_connectPending;
+  concludeConnectRequest();
+
+  if (!ok && !had_request)
+    Q_EMIT connectedChanged();
+}
+
+/**
+ * @brief Tears a source down once its supervised flow gave up on a dropped link, naming the last
+ *        reason at most once per connect request so a project whose sources drop together cannot
+ *        stack modals. The state change was already reported when the flow failed, so nothing is
+ *        emitted here, and a device a newer request already re-opened is left alone.
+ */
+void IO::ConnectionManager::onDeviceLinkLost(int deviceId, const QString& reason)
+{
+  SS_ASSERT_LOG(deviceId >= 0);
+  SS_ASSERT_LOG(!m_connectFanOut);
+
+  const auto it = m_devices.find(deviceId);
+  if (it == m_devices.end() || !it->second)
+    return;
+
+  if (it->second->isOpen() || it->second->isOpening())
+    return;
+
+  disconnectDevice(deviceId);
+  if (!isConnected()) {
+    static auto& frameBuilder = DataModel::FrameBuilder::instance();
+    frameBuilder.registerQuickPlotHeaders(QStringList());
+    Q_EMIT driverChanged();
+    Q_EMIT sessionClosed();
+  }
+
+  if (m_linkLossNotified)
+    return;
+
+  m_linkLossNotified = true;
+  Misc::Utilities::showMessageBox(
+    tr("Connection Lost"),
+    reason.isEmpty() ? tr("The connection was lost and could not be restored.") : reason,
+    QMessageBox::Critical);
+}
+
+/**
+ * @brief Reflects a supervised link's up/down edge: refreshes the aggregate connection state and
+ *        posts a notification naming the source, so a single-source outage in a multi-source
+ *        project stays visible while the dashboard remains connected through its siblings.
+ */
+void IO::ConnectionManager::onDeviceLinkStateChanged(int deviceId)
+{
+  Q_EMIT connectedChanged();
+
+  static auto& notificationCenter = DataModel::NotificationCenter::instance();
+  const QString name              = deviceDisplayName(deviceId);
+
+  if (!isDeviceConnected(deviceId)) {
+    m_droppedDevices.insert(deviceId);
+    notificationCenter.postWarning(QStringLiteral("ConnectionManager"),
+                                   tr("%1: link lost").arg(name),
+                                   tr("Attempting to reconnect automatically"));
+    return;
+  }
+
+  if (m_droppedDevices.remove(deviceId)) {
+    notificationCenter.postInfo(QStringLiteral("ConnectionManager"),
+                                tr("%1: link restored").arg(name),
+                                tr("The connection recovered automatically"));
+  }
+}
+
+/**
+ * @brief Returns the project source title behind @p deviceId, or a generic fallback for a device
+ *        the project does not name.
+ */
+QString IO::ConnectionManager::deviceDisplayName(int deviceId) const
+{
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  for (const auto& src : projectModel.sources())
+    if (src.sourceId == deviceId && !src.title.isEmpty())
+      return src.title;
+
+  return tr("Device %1").arg(deviceId);
 }
 
 /**
@@ -1269,7 +1571,10 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
 }
 
 /**
- * @brief Rebuilds DeviceManagers for all sources when the project source list changes.
+ * @brief Rebuilds DeviceManagers for all sources when the project source list changes. Closing the
+ *        old devices cancels an open still in flight, so a pending connect request can settle here
+ *        and report the state change itself; the transition emission below then runs only when
+ *        nothing settled.
  */
 void IO::ConnectionManager::rebuildDevices()
 {
@@ -1278,6 +1583,7 @@ void IO::ConnectionManager::rebuildDevices()
 
   const auto opMode       = appState.operationMode();
   const bool wasConnected = isConnected();
+  const bool had_request  = m_connectPending;
 
   bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);
   bool didChangeBusType   = false;
@@ -1301,6 +1607,7 @@ void IO::ConnectionManager::rebuildDevices()
     }
   }
 
+  m_droppedDevices.clear();
   for (auto it = m_devices.begin(); it != m_devices.end();) {
     const bool skipPrimary = (it->first == 0 && !willRebuildDevice0);
     if (skipPrimary) {
@@ -1322,10 +1629,17 @@ void IO::ConnectionManager::rebuildDevices()
       buildDeviceForSource(src, willRebuildDevice0);
   }
 
+  concludeConnectRequest();
+  const bool settled = had_request && !m_connectPending;
+
   Q_EMIT configurationChanged();
   Q_EMIT driverChanged();
-  if (wasConnected != isConnected())
+
+  if (!settled && wasConnected != isConnected())
     Q_EMIT connectedChanged();
+
+  if (wasConnected && !isConnected())
+    Q_EMIT sessionClosed();
 
   Q_EMIT contextsRebuilt();
 
@@ -1393,9 +1707,9 @@ bool IO::ConnectionManager::projectConfigurationOk() const
  */
 void IO::ConnectionManager::onFrameReady(int deviceId, const IO::CapturedDataPtr& frame)
 {
-  Q_ASSERT(deviceId >= 0);
-  Q_ASSERT(frame);
-  Q_ASSERT(!frame->data.isEmpty());
+  SS_ASSERT(frame != nullptr, return);
+  SS_ASSERT_LOG(deviceId >= 0);
+  SS_ASSERT_LOG(!frame->data.isEmpty());
 
   if (m_paused)
     return;
@@ -1419,9 +1733,9 @@ void IO::ConnectionManager::onFrameReady(int deviceId, const IO::CapturedDataPtr
  */
 void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(data);
-  Q_ASSERT(!data->data.isEmpty());
-  Q_ASSERT(deviceId >= 0);
+  SS_ASSERT(data != nullptr, return);
+  SS_ASSERT_LOG(!data->data.isEmpty());
+  SS_ASSERT_LOG(deviceId >= 0);
 
   if (m_paused)
     return;
@@ -1516,8 +1830,8 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
   SerialStudio::BusType type) const
 {
-  Q_ASSERT(static_cast<int>(type) >= 0);
-  Q_ASSERT(static_cast<int>(type) >= static_cast<int>(SerialStudio::BusType::UART));
+  SS_ASSERT(static_cast<int>(type) >= static_cast<int>(SerialStudio::BusType::UART),
+            return nullptr);
 
   switch (type) {
     case SerialStudio::BusType::UART:

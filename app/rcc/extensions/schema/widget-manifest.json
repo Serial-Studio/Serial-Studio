@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://serial-studio.com/schemas/widget-manifest.json",
+  "title": "Serial Studio widget extension manifest",
+  "description": "The info.json contract for extension packages of type \"widget\" (spec 0038). Extension widgets run with the same privileges as the application itself; nothing here isolates them.",
+  "type": "object",
+  "required": ["id", "type", "title", "version", "widget"],
+  "anyOf": [
+    { "properties": { "id": { "not": { "$ref": "#/definitions/reservedId" } } } },
+    { "properties": { "widget": { "required": ["replaces"] } } }
+  ],
+  "description_anyOf": "A package may claim a builtin widget string only by shipping bundled and declaring \"replaces\" for it; the host additionally requires replaces == id and rejects the key outside the application resources.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "Stable package identifier, also the value stored in a project's group/dataset \"widget\" field. Reserved builtin strings are refused unless the package is bundled and declares \"replaces\"."
+    },
+    "type": { "const": "widget" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "description": { "type": "string", "maxLength": 4096 },
+    "author": { "type": "string", "maxLength": 128 },
+    "version": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+){0,3}([+-][0-9A-Za-z.-]+)?$" },
+    "license": { "type": "string", "maxLength": 128 },
+    "category": { "type": "string", "maxLength": 64 },
+    "screenshot": { "type": "string", "maxLength": 512 },
+    "files": { "type": "array", "items": { "type": "string" }, "maxItems": 512 },
+    "platforms": { "type": "object" },
+    "widget": { "$ref": "#/definitions/widgetBlock" }
+  },
+  "definitions": {
+    "reservedId": {
+      "enum": [
+        "datagrid",
+        "map",
+        "gps",
+        "gyro",
+        "gyroscope",
+        "multiplot",
+        "accelerometer",
+        "plot3d",
+        "image",
+        "painter",
+        "webview",
+        "terminal",
+        "clock",
+        "stopwatch",
+        "notification-log",
+        "led-panel",
+        "bar",
+        "gauge",
+        "compass",
+        "meter"
+      ],
+      "description": "Builtin widget strings. A package may not claim one, so no extension id can ever resolve to a builtin (Pro or free) widget type. Bundled packages that declare \"replaces\" for the same string are the only exception, and the host rejects \"replaces\" outside the application resources."
+    },
+    "versionRange": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^(\\*|((>=|<=|>|<|==|=)?\\s*[0-9]+(\\.[0-9]+){0,3})(\\s+(>=|<=|>|<|==|=)?\\s*[0-9]+(\\.[0-9]+){0,3})*)$",
+      "description": "Space-separated comparator clauses, e.g. \">=1.0 <2.0\". \"*\" or an omitted range means any version."
+    },
+    "widgetBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "qml"],
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$",
+          "description": "Manifest grammar the package was written against."
+        },
+        "hostCompat": { "$ref": "#/definitions/versionRange" },
+        "scope": { "enum": ["dataset", "group"] },
+        "qml": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(?!.*\\.\\.)[^/\\\\][^\\\\]*$",
+          "description": "Package-relative QML entry file. Must resolve inside the package directory."
+        },
+        "icon": { "type": "string", "maxLength": 512 },
+        "accepts": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "datasets": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "min": { "type": "integer", "minimum": 0, "maximum": 4096 },
+                "max": { "type": "integer", "minimum": 0, "maximum": 4096 }
+              }
+            },
+            "value": { "enum": ["numeric", "string", "any"] }
+          }
+        },
+        "readsStringValues": { "type": "boolean" },
+        "defaultSize": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "width": { "type": "integer", "minimum": 48, "maximum": 8192 },
+            "height": { "type": "integer", "minimum": 48, "maximum": 8192 }
+          }
+        },
+        "config": {
+          "type": "array",
+          "maxItems": 128,
+          "items": { "$ref": "#/definitions/configProperty" }
+        },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "required": { "type": "array", "maxItems": 32, "items": { "$ref": "#/definitions/dependency" } },
+            "optional": { "type": "array", "maxItems": 32, "items": { "$ref": "#/definitions/dependency" } }
+          }
+        },
+        "experimental": { "type": "boolean" },
+        "replaces": {
+          "$ref": "#/definitions/reservedId",
+          "description": "Bundled packages only: the builtin widget string this package ships as. Rejected by the host on any package loaded from disk, and by registry-verify.py outside app/rcc/extensions/."
+        }
+      }
+    },
+    "configProperty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+        "type": { "enum": ["bool", "int", "double", "string", "choice"] },
+        "label": { "type": "string", "maxLength": 128 },
+        "description": { "type": "string", "maxLength": 512 },
+        "default": {},
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "options": { "type": "array", "maxItems": 128, "items": { "type": "string" } }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "version": { "$ref": "#/definitions/versionRange" }
+      }
+    }
+  }
+}

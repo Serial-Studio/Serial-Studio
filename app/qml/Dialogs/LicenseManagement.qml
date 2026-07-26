@@ -147,11 +147,18 @@ Widgets.SmartDialog {
 
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
-                text: Cpp_Licensing_LemonSqueezy.license
                 placeholderText: qsTr("Paste your license key here…")
-                onTextChanged: {
+                onTextEdited: {
                   if (Cpp_Licensing_LemonSqueezy.license !== text)
                     Cpp_Licensing_LemonSqueezy.license = text
+                }
+
+                property string storedKey: Cpp_Licensing_LemonSqueezy.license
+
+                Component.onCompleted: text = storedKey
+                onStoredKeyChanged: {
+                  if (!activeFocus)
+                    text = storedKey
                 }
 
                 MouseArea {

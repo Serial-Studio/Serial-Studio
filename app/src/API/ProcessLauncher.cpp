@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/ProcessLauncher.h"
@@ -34,6 +34,7 @@
 
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
+#include "SSAssert.h"
 
 static constexpr int kTerminateGraceMs = 2000;
 
@@ -41,11 +42,7 @@ static constexpr int kTerminateGraceMs = 2000;
  * @brief Constructs the launcher with an empty process table.
  */
 API::ProcessLauncher::ProcessLauncher(QObject* parent)
-  : QObject(parent)
-  , m_nextId(1)
-  , m_wasConnected(false)
-  , m_connectionManager(nullptr)
-  , m_projectModel(nullptr)
+  : QObject(parent), m_nextId(1), m_connectionManager(nullptr), m_projectModel(nullptr)
 {}
 
 /**
@@ -69,9 +66,9 @@ void API::ProcessLauncher::setupExternalConnections()
   m_lastProjectPath = DataModel::ProjectModel::instance().jsonFilePath();
 
   connect(&IO::ConnectionManager::instance(),
-          &IO::ConnectionManager::connectedChanged,
+          &IO::ConnectionManager::sessionClosed,
           this,
-          &API::ProcessLauncher::onConnectedChanged);
+          &API::ProcessLauncher::onSessionClosed);
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::jsonFileChanged,
           this,
@@ -287,19 +284,14 @@ QVariantList API::ProcessLauncher::runningProcesses() const
 }
 
 /**
- * @brief Reaps every helper only on a real connected -> disconnected transition. A bare
- *        "not connected" signal must not reap: onConnect() launches a server while still
- *        disconnected, and the in-progress connect emits not-connected signals before it
- *        succeeds; killing then would terminate the server the connection is about to reach.
+ * @brief Reaps every helper when the connection session genuinely ends: an explicit disconnect
+ *        or a supervised link's final give-up. Transient state churn (retry cycles, silent
+ *        recovery, device rebuilds that auto-reconnect) must not reap, or the helper serving
+ *        the very link under recovery dies and the recovery can never succeed.
  */
-void API::ProcessLauncher::onConnectedChanged()
+void API::ProcessLauncher::onSessionClosed()
 {
-  Q_ASSERT(m_connectionManager);
-  const bool connected = m_connectionManager->isConnected();
-  if (m_wasConnected && !connected)
-    killAll();
-
-  m_wasConnected = connected;
+  killAll();
 }
 
 /**
@@ -307,7 +299,7 @@ void API::ProcessLauncher::onConnectedChanged()
  */
 void API::ProcessLauncher::onProjectFileChanged()
 {
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return);
   const auto path = m_projectModel->jsonFilePath();
   if (path == m_lastProjectPath)
     return;

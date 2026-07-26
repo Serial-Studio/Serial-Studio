@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -27,6 +27,8 @@
 #include <QSet>
 #include <QString>
 #include <QVector>
+
+class SessionContext;
 
 namespace DataModel {
 
@@ -96,8 +98,8 @@ signals:
   void messagesChanged();
   void fileNameChanged();
 
-private:
-  explicit ProtoImporter();
+public:
+  explicit ProtoImporter(SessionContext& ctx);
   ProtoImporter(ProtoImporter&&)                 = delete;
   ProtoImporter(const ProtoImporter&)            = delete;
   ProtoImporter& operator=(ProtoImporter&&)      = delete;
@@ -109,6 +111,9 @@ public:
   [[nodiscard]] int fieldCount() const noexcept;
   [[nodiscard]] int messageCount() const noexcept;
   [[nodiscard]] QString protoFileName() const;
+
+  [[nodiscard]] QJsonObject projectFromMessages() const;
+  [[nodiscard]] QJsonObject projectFromProtoFile(const QString& path);
 
   [[nodiscard]] Q_INVOKABLE QString messageInfo(int index) const;
   [[nodiscard]] Q_INVOKABLE QString fieldInfo(int messageIndex, int fieldIndex) const;
@@ -131,7 +136,6 @@ private:
     QVector<int> childRecordIndex;
   };
 
-  [[nodiscard]] QJsonObject generateProject() const;
   [[nodiscard]] QString generateFrameParser(int totalDatasets,
                                             const QVector<DispatchRecord>& records) const;
   [[nodiscard]] QString frameParserDecoder() const;
@@ -171,6 +175,7 @@ private:
   [[nodiscard]] QString selectGroupWidget(const ProtoMessage& message) const;
 
 private:
+  SessionContext& m_ctx;
   QString m_protoFilePath;
   QVector<ProtoMessage> m_messages;
 };

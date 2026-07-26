@@ -84,7 +84,7 @@ Item {
     }
 
     Label {
-      color: "#ff6666"
+      color: Cpp_ThemeManager.colors["error"]
       font: Cpp_Misc_CommonFonts.uiFont
       Layout.alignment: Qt.AlignHCenter
       text: qsTr("No transmit function defined")

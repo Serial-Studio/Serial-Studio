@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Benchmark/BenchmarkRunner.h"
@@ -40,6 +40,7 @@
 #include "Misc/WorkspaceManager.h"
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"
@@ -542,7 +543,10 @@ void BenchmarkRunner::endSession()
  */
 void BenchmarkRunner::announcePhase(int index)
 {
-  Q_ASSERT(index >= 0 && index < static_cast<int>(m_phases.size()));
+  SS_ASSERT(index >= 0 && index < static_cast<int>(m_phases.size()), {
+    finishSession();
+    return;
+  });
 
   m_currentPhase = m_phases[index].label;
   Q_EMIT currentPhaseChanged();
@@ -558,7 +562,10 @@ void BenchmarkRunner::announcePhase(int index)
 void BenchmarkRunner::executePhase(int index)
 {
   const int phaseCount = static_cast<int>(m_phases.size());
-  Q_ASSERT(index >= 0 && index < phaseCount);
+  SS_ASSERT(index >= 0 && index < phaseCount, {
+    finishSession();
+    return;
+  });
 
   const PhaseSpec& spec = m_phases[index];
   const HotpathBenchmark::Result r =

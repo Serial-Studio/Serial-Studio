@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -29,6 +29,7 @@
 #include <QTcpSocket>
 #include <QUdpSocket>
 
+#include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -103,8 +104,11 @@ public:
   Network& operator=(const Network&) = delete;
 
   void close() override;
+  void abortOpen() override;
+  void beginOpen(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -155,12 +159,19 @@ public slots:
 
 private slots:
   void onReadyRead();
+  void onSocketDisconnected();
   void lookupFinished(const QHostInfo& info);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
+  void onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error);
 
 private:
-  [[nodiscard]] bool connectTcp(const QString& hostAddr);
+  void abortLookup();
   void enlargeUdpReceiveBuffer();
+
+  [[nodiscard]] Async::Task* makeLookupStep();
+  [[nodiscard]] bool bindUdpSocket(QString& reason);
+  [[nodiscard]] Async::Task* buildOpenFlow(const QIODevice::OpenMode mode);
+  [[nodiscard]] bool activateSocket(const QIODevice::OpenMode mode, QString& reason);
 
 private:
   QSettings m_settings;
@@ -168,10 +179,12 @@ private:
   QString m_address;
   QHostAddress m_resolvedAddress;
   quint16 m_tcpPort;
+  int m_lookupId;
   bool m_hostExists;
   bool m_connecting;
   bool m_udpMulticast;
   bool m_lookupActive;
+  bool m_userWantsOpen;
   quint16 m_udpLocalPort;
   quint16 m_udpRemotePort;
   QAbstractSocket::SocketType m_socketType;
@@ -179,6 +192,7 @@ private:
   QTcpSocket m_tcpSocket;
   QUdpSocket m_udpSocket;
   QByteArray m_udpBuffer;
+  Async::TaskRunner m_runner;
 };
 }  // namespace Drivers
 }  // namespace IO

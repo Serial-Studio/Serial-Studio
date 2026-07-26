@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -47,6 +47,16 @@ struct CliOptions {
   };
   QCommandLineOption headlessOpt{"headless", "Run without GUI (headless/server mode)"};
   QCommandLineOption apiServerOpt{"api-server", "Enable API server on startup (port 7777)"};
+  QCommandLineOption apiExternalOpt{
+    "api-external",
+    "Allow API connections from other hosts, the non-interactive equivalent of the "
+    "\"Allow External API Connections\" confirmation. Any machine that can reach port 7777 "
+    "may read live data and send commands once it presents the token, and the transport is "
+    "not encrypted: use it on a trusted network or through a tunnel only"};
+  QCommandLineOption apiTokenOpt{
+    "api-token",
+    "Set the API authentication token external clients must present (>= 32 hex characters)",
+    "hex"};
   QCommandLineOption dumpApiSchemaOpt{
     "dump-api-schema",
     "Write the API command registry to a JSON file and exit (SDK generator input)",
@@ -93,6 +103,11 @@ struct CliOptions {
     "exit-after",
     "Quit gracefully after the given number of seconds (CI runs, PGO training)",
     "seconds"};
+#ifdef SS_INAPP_TESTS
+  QCommandLineOption selftestOpt{"selftest", "Run the built-in self-test suites and exit"};
+  QCommandLineOption selftestSuiteOpt{
+    "selftest-suite", "Restrict --selftest to a single suite by name", "suite"};
+#endif
 #ifdef BUILD_COMMERCIAL
   QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};
   QCommandLineOption runtimeOpt{"runtime",
@@ -181,6 +196,7 @@ public:
   [[nodiscard]] bool runtimeMode() const noexcept;
   [[nodiscard]] bool hideToolbar() const noexcept;
   [[nodiscard]] bool apiServerEnabled() const;
+  [[nodiscard]] bool apiExternalEnabled() const;
   [[nodiscard]] bool quickPlot() const;
   [[nodiscard]] QString projectPath() const;
 
@@ -198,10 +214,15 @@ public:
 
 private:
   void registerOptions();
+  void applyApiServerOptions();
   void scheduleExitAfter(QApplication& app);
 
   ProcessResult runHotpathBenchmark();
   ProcessResult dumpApiSchema(const QString& path);
+
+#ifdef SS_INAPP_TESTS
+  ProcessResult runSelfTests();
+#endif
 
   void setupUartConnection();
   void setupTcpConnection(const QString& tcpAddress);

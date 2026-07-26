@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -61,6 +61,19 @@ Item {
   }
 
   //
+  // An in-place model swap builds a fresh model with paused=false; resync so the button and
+  // the rows agree. A hidden toolbar resumes: a paused grid with no affordance looks stuck.
+  //
+  onModelChanged: {
+    if (model)
+      model.paused = !root.running
+  }
+  onHasToolbarChanged: {
+    if (!hasToolbar)
+      root.running = true
+  }
+
+  //
   // Row sizing tracks the widget font so large custom scales grow rows instead of clipping
   //
   TextMetrics {
@@ -92,7 +105,6 @@ Item {
       icon.source: root.running ? Cpp_Misc_IconRegistry.icon("commands", "pause", 16)
                                 : Cpp_Misc_IconRegistry.icon("commands", "resume", 16)
       onClicked: root.running = !root.running
-      text: root.running ? qsTr("Pause") : qsTr("Resume")
       ToolTip.text: root.running ? qsTr("Pause") : qsTr("Resume")
     }
 

@@ -32,6 +32,8 @@
 #include <QScopeGuard>
 #include <QVariant>
 
+#include "SSAssert.h"
+
 //--------------------------------------------------------------------------------------------------
 // gs_usb wire protocol (candleLight firmware / Linux kernel gs_usb driver)
 //--------------------------------------------------------------------------------------------------
@@ -155,7 +157,7 @@ static_assert(sizeof(GsHostFrame) == kClassicFrameSize, "gs_host_frame must be 2
 [[nodiscard]] static QString deviceLabel(libusb_device* device,
                                          const libusb_device_descriptor& desc)
 {
-  Q_ASSERT(device != nullptr);
+  SS_ASSERT(device != nullptr, return {});
 
   QString serial;
   libusb_device_handle* handle = nullptr;
@@ -387,7 +389,7 @@ IO::Drivers::GsUsbCanBackend::~GsUsbCanBackend()
  */
 bool IO::Drivers::GsUsbCanBackend::open()
 {
-  Q_ASSERT(m_handle == nullptr);
+  SS_ASSERT(m_handle == nullptr, return false);
 
   m_ctx = sharedUsbContext();
   if (!m_ctx) {
@@ -716,7 +718,7 @@ void IO::Drivers::GsUsbCanBackend::stopReadThread()
  */
 bool IO::Drivers::GsUsbCanBackend::configureDevice(quint32 bitrate)
 {
-  Q_ASSERT(m_handle != nullptr);
+  SS_ASSERT(m_handle != nullptr, return false);
 
   GsHostConfig config{kHostFormatLE};
   if (controlOut(kBreqHostFormat, 1, &config, sizeof(config)) < 0) {
@@ -765,7 +767,7 @@ bool IO::Drivers::GsUsbCanBackend::configureDevice(quint32 bitrate)
  */
 bool IO::Drivers::GsUsbCanBackend::claimGsUsbInterface()
 {
-  Q_ASSERT(m_handle != nullptr);
+  SS_ASSERT(m_handle != nullptr, return false);
 
   libusb_device* device         = libusb_get_device(m_handle);
   libusb_config_descriptor* cfg = nullptr;
@@ -813,8 +815,8 @@ int IO::Drivers::GsUsbCanBackend::controlOut(std::uint8_t request,
                                              void* data,
                                              std::uint16_t length)
 {
-  Q_ASSERT(m_handle != nullptr);
-  Q_ASSERT(m_interfaceNumber >= 0);
+  SS_ASSERT(m_handle != nullptr, return LIBUSB_ERROR_NO_DEVICE);
+  SS_ASSERT(m_interfaceNumber >= 0, return LIBUSB_ERROR_NOT_FOUND);
 
   const std::uint8_t type =
     static_cast<std::uint8_t>(static_cast<unsigned>(LIBUSB_REQUEST_TYPE_VENDOR)
@@ -838,8 +840,8 @@ int IO::Drivers::GsUsbCanBackend::controlIn(std::uint8_t request,
                                             void* data,
                                             std::uint16_t length)
 {
-  Q_ASSERT(m_handle != nullptr);
-  Q_ASSERT(m_interfaceNumber >= 0);
+  SS_ASSERT(m_handle != nullptr, return LIBUSB_ERROR_NO_DEVICE);
+  SS_ASSERT(m_interfaceNumber >= 0, return LIBUSB_ERROR_NOT_FOUND);
 
   const std::uint8_t type =
     static_cast<std::uint8_t>(static_cast<unsigned>(LIBUSB_REQUEST_TYPE_VENDOR)

@@ -14,14 +14,16 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+
+import SerialStudio
 
 import "../../Widgets" as Widgets
 
@@ -38,6 +40,13 @@ Widgets.Pane {
   readonly property bool rtl: Cpp_Misc_Translator.rtl
 
   property var summary: []
+  readonly property var filteredSummary: {
+    const q = searchBand.query.trim()
+    if (q.length === 0)
+      return summary
+
+    return summary.filter((r) => SerialStudio.searchMatches(q, String(r.title)))
+  }
   property int unresolvedCount: 0
 
   function refresh() {
@@ -88,6 +97,15 @@ Widgets.Pane {
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
+
+      //
+      // Search band: above the secondary toolbar, aligned with the tree search
+      //
+      EditorSearchBand {
+        id: searchBand
+
+        resultCount: list.count
+      }
 
       //
       // Secondary toolbar
@@ -197,9 +215,9 @@ Widgets.Pane {
 
         clip: true
         spacing: 0
-        model: root.summary
         Layout.fillWidth: true
         Layout.fillHeight: true
+        model: root.filteredSummary
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -272,7 +290,7 @@ Widgets.Pane {
         ColumnLayout {
           spacing: 8
           anchors.centerIn: parent
-          visible: list.count === 0
+          visible: list.count === 0 && searchBand.query.trim().length === 0
 
           Label {
             opacity: 0.5

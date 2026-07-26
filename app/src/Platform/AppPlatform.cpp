@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 // clang-format off
@@ -57,9 +57,10 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QCryptographicHash>
-#include <QFileOpenEvent>
 #include <QSettings>
 #include <QWheelEvent>
+
+#include "SSAssert.h"
 
 #ifdef Q_OS_LINUX
 #  include <QDBusConnection>
@@ -74,35 +75,7 @@
 #  include <QtWebEngineQuick>
 #endif
 
-#include "AppState.h"
-#include "DataModel/ProjectModel.h"
-#include "SerialStudio.h"
-
 namespace Platform {
-
-//---------------------------------------------------------------------------------------------------
-// FileOpenEventFilter
-//---------------------------------------------------------------------------------------------------
-
-/**
- * @brief Intercepts QFileOpenEvent and loads the referenced .ssproj into the project model.
- */
-bool FileOpenEventFilter::eventFilter(QObject* obj, QEvent* event)
-{
-  if (event->type() == QEvent::FileOpen) {
-    auto* fileEvent    = static_cast<QFileOpenEvent*>(event);
-    const QString path = fileEvent->file();
-    if (path.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive)) {
-      static auto& appState     = AppState::instance();
-      static auto& projectModel = DataModel::ProjectModel::instance();
-      appState.setOperationMode(SerialStudio::ProjectFile);
-      projectModel.openJsonFile(path);
-      return true;
-    }
-  }
-
-  return QObject::eventFilter(obj, event);
-}
 
 //---------------------------------------------------------------------------------------------------
 // TrackpadScrollFilter
@@ -200,7 +173,7 @@ static bool handleIsRedirected(DWORD stdHandle)
  */
 static void bindStreamToStdHandle(DWORD stdHandle, FILE* stream)
 {
-  Q_ASSERT(stream != nullptr);
+  SS_ASSERT(stream != nullptr, return);
 
   const HANDLE src = GetStdHandle(stdHandle);
   if (src == nullptr || src == INVALID_HANDLE_VALUE)
@@ -579,9 +552,6 @@ void releaseAdjustedArgv(int argc, char** argv)
  */
 bool lockMemoryResident(const void* ptr, size_t len)
 {
-  Q_ASSERT(ptr != nullptr);
-  Q_ASSERT(len > 0);
-
   if (!ptr || len == 0) [[unlikely]]
     return false;
 
@@ -651,9 +621,6 @@ void registerIngestThreadWithMmcss()
  */
 void unlockMemoryResident(const void* ptr, size_t len)
 {
-  Q_ASSERT(ptr != nullptr);
-  Q_ASSERT(len > 0);
-
   if (!ptr || len == 0) [[unlikely]]
     return;
 

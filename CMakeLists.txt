@@ -14,9 +14,9 @@
 # on your use case.
 #
 # For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
-# For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+# For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
 #
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -84,6 +84,8 @@ option(ENABLE_PGO              "Enable Profile-Guided Optimization"    OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 option(ENABLE_GRPC             "Enable gRPC server support"            OFF)
 option(SS_USE_MIMALLOC         "Use the mimalloc allocator override (FetchContent from GitHub)" ON)
+option(SS_BUILD_TESTS          "Build the C++ unit-test tier"          OFF)
+option(SS_INAPP_TESTS          "Expose the in-app --selftest suites"   OFF)
 
 option(WITH_WEBENGINE          "Build against Qt WebEngine (markdown viewers, PDF reports)" ON)
 
@@ -151,7 +153,7 @@ set(SERIAL_STUDIO_INSTANCE_ID
 #   GPL build:
 #     - Display name: "Serial Studio GPLv3"
 #     - Executable: Serial-Studio-GPL3 (or serial-studio-gpl3 on Linux)
-#     - License: GPL-3.0-only.txt
+#     - License: GPL-3.0-or-later.txt
 #
 # Other metadata:
 #   - PROJECT_VENDOR: Author/copyright holder
@@ -177,7 +179,7 @@ if(BUILD_COMMERCIAL)
    endif()
 else()
    set(PROJECT_DISPNAME "Serial Studio GPLv3")
-   set(PROJECT_FILE_LICENSE "${PROJECT_ROOT_DIR}/LICENSES/GPL-3.0-only.txt")
+   set(PROJECT_FILE_LICENSE "${PROJECT_ROOT_DIR}/LICENSES/GPL-3.0-or-later.txt")
    if (UNIX AND NOT APPLE)
       set(PROJECT_EXECUTABLE "serial-studio-gpl3")
    else()
@@ -474,6 +476,10 @@ include(${CMAKE_SOURCE_DIR}/cmake/Signing.cmake)
 
 add_subdirectory(lib)
 add_subdirectory(app)
+
+if(SS_BUILD_TESTS)
+   enable_testing()
+endif()
 
 #---------------------------------------------------------------------------------------------------
 # Build configuration summary

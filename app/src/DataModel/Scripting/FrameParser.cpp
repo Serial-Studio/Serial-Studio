@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/FrameParser.h"
@@ -36,6 +36,8 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -61,7 +63,7 @@ DataModel::FrameParser::FrameParser()
 
   if (auto* app = qApp) {
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() {
-      Q_ASSERT(QThread::currentThread() == this->thread());
+      SS_ASSERT_LOG(QThread::currentThread() == this->thread());
       m_engines.clear();
       refreshEngineCaches();
     });
@@ -71,12 +73,13 @@ DataModel::FrameParser::FrameParser()
 }
 
 /**
- * @brief Returns the singleton FrameParser instance.
+ * @brief Returns this session's frame parser. The object is owned by the SessionContext and
+ *        built by the composition root, so a reach before adoption is a named fatal instead of
+ *        an out-of-order lazy construction (spec 0039 M2, wave B2).
  */
 DataModel::FrameParser& DataModel::FrameParser::instance()
 {
-  static FrameParser singleton;
-  return singleton;
+  return SessionContext::current().frameParser();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -117,7 +120,7 @@ QString DataModel::FrameParser::defaultTemplateCode(int language)
 {
   if (language == SerialStudio::Native) {
     const auto* tmpl = nativeTemplateById(defaultNativeTemplateId());
-    Q_ASSERT(tmpl != nullptr);
+    SS_ASSERT(tmpl != nullptr, return {});
     return CFrameParser::buildDescriptor(tmpl->id(), nativeTemplateDefaults(*tmpl));
   }
 
@@ -173,9 +176,7 @@ bool DataModel::FrameParser::nativeEquivalentForFile(const QString& file,
       continue;
 
     const auto* tmpl = nativeTemplateById(QStringLiteral("delimited"));
-    Q_ASSERT(tmpl != nullptr);
-    if (!tmpl)
-      return false;
+    SS_ASSERT(tmpl != nullptr, return false);
 
     templateId = tmpl->id();
     params     = nativeTemplateDefaults(*tmpl);
@@ -204,7 +205,7 @@ bool DataModel::FrameParser::nativeEquivalentForFile(const QString& file,
 QString DataModel::FrameParser::fileForNativeTemplate(const QString& templateId,
                                                       const QJsonObject& params)
 {
-  Q_ASSERT(!nativeTemplates().isEmpty());
+  SS_ASSERT(!nativeTemplates().isEmpty(), return {});
 
   if (templateId == QStringLiteral("delimited")) {
     const QString separator = SerialStudio::resolveEscapeSequences(
@@ -295,7 +296,7 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
  */
 int DataModel::FrameParser::detectNativeTemplate(const QString& code) const
 {
-  Q_ASSERT(!code.isEmpty());
+  SS_ASSERT(!code.isEmpty(), return -1);
 
   const auto doc = QJsonDocument::fromJson(code.toUtf8());
   if (!doc.isObject())
@@ -363,7 +364,7 @@ int DataModel::FrameParser::languageForSource(int sourceId) const
  */
 DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
 {
-  Q_ASSERT(sourceId >= 0);
+  SS_ASSERT(sourceId >= 0, sourceId = 0);
 
   auto it = m_engines.find(sourceId);
   if (it != m_engines.end())
@@ -380,7 +381,7 @@ DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
 
   auto& ref           = *engine;
   m_engines[sourceId] = std::move(engine);
-  Q_ASSERT(m_engines.count(sourceId));
+  SS_ASSERT_LOG(m_engines.count(sourceId) > 0);
   refreshEngineCaches();
   return ref;
 }
@@ -423,12 +424,37 @@ int DataModel::FrameParser::engineEpoch() const noexcept
 }
 
 /**
+ * @brief Snapshots every live parser engine's error statistics for the 1 Hz diagnostics sample.
+ */
+QList<DataModel::ScriptStat> DataModel::FrameParser::scriptStats() const
+{
+  QList<ScriptStat> stats;
+  stats.reserve(static_cast<qsizetype>(m_engines.size()));
+
+  for (const auto& [sourceId, engine] : m_engines) {
+    if (!engine)
+      continue;
+
+    ScriptStat stat{};
+    stat.sourceId            = sourceId;
+    stat.language            = engine->language();
+    stat.disabled            = engine->disabled();
+    stat.consecutiveTimeouts = engine->consecutiveTimeouts();
+    stat.errorCount          = engine->errorCount();
+    stat.lastError           = engine->lastError();
+    stats.append(stat);
+  }
+
+  return stats;
+}
+
+/**
  * @brief Loads per-source code into the source engine.
  */
 void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(m_engines.count(0));
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT_LOG(m_engines.count(0) > 0);
 
   if (code.isEmpty()) {
     clearSourceEngine(sourceId);
@@ -466,9 +492,6 @@ void DataModel::FrameParser::clearSourceEngine(int sourceId)
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame, int sourceId)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!frame.isEmpty());
-
   if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
     return {};
 
@@ -488,9 +511,6 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& frame, int sourceId)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!frame.isEmpty());
-
   if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
     return {};
 
@@ -511,9 +531,6 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 QList<QStringList> DataModel::FrameParser::parseMultiFrameUtf8(const QByteArray& frame,
                                                                int sourceId)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!frame.isEmpty());
-
   if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
     return {};
 
@@ -544,8 +561,8 @@ qsizetype DataModel::FrameParser::parseSpansUtf8(const QByteArray& frame,
                                                  QByteArrayView* out,
                                                  qsizetype maxSpans)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(out != nullptr);
+  SS_ASSERT(sourceId >= 0, return -1);
+  SS_ASSERT(out != nullptr, return -1);
 
   if (sourceId == 0) [[likely]] {
     if (!m_engine0Cache || !m_engine0Cache->isLoaded()) [[unlikely]]
@@ -574,8 +591,8 @@ qsizetype DataModel::FrameParser::parseSpansUtf8(const QByteArray& frame,
  */
 bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, bool showMessageBoxes)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!script.isEmpty());
+  SS_ASSERT(sourceId >= 0, return false);
+  SS_ASSERT(!script.isEmpty(), return false);
 
   auto it = m_engines.find(sourceId);
   if (it != m_engines.end() && it->second->language() != languageForSource(sourceId)) {
@@ -795,14 +812,14 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
  */
 void DataModel::FrameParser::setNativeTemplateIdx(int sourceId, int idx)
 {
-  Q_ASSERT(sourceId >= 0);
+  SS_ASSERT(sourceId >= 0, return);
 
   const auto& templates = nativeTemplates();
   if (idx < 0 || idx >= templates.size())
     return;
 
   const auto* tmpl = templates.at(idx);
-  Q_ASSERT(tmpl != nullptr);
+  SS_ASSERT(tmpl != nullptr, return);
 
   engineForSource(sourceId).templateIdx = idx;
 

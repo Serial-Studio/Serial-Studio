@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/Server.h"
@@ -32,8 +32,10 @@
 #include "API/CommandProtocol.h"
 #include "API/MCPHandler.h"
 #include "API/MCPProtocol.h"
+#include "API/Mirror/MirrorPublisher.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
+#include "SSAssert.h"
 
 // Monotonic counter for session IDs, since socket addresses can be reused.
 static QAtomicInteger<quintptr> s_nextSessionId{1};
@@ -52,6 +54,7 @@ constexpr int kMaxApiBufferBytes       = 4 * 1024 * 1024;
 constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
 constexpr int kMaxAuthAttempts         = 3;
 constexpr int kAuthTokenBytes          = 32;
+constexpr int kMinAuthTokenChars       = 32;
 
 //--------------------------------------------------------------------------------------------------
 // Static functions
@@ -79,8 +82,8 @@ static QString generateApiToken()
  */
 bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(maxDepth > 0);
+  SS_ASSERT(!data.isEmpty(), return false);
+  SS_ASSERT(maxDepth > 0, return true);
 
   int depth     = 0;
   bool inString = false;
@@ -148,7 +151,7 @@ bool API::ServerWorker::isResourceOpen() const
  */
 void API::ServerWorker::closeResources()
 {
-  Q_ASSERT(QThread::currentThread() == thread());
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
 
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
@@ -159,7 +162,7 @@ void API::ServerWorker::closeResources()
   }
 
   m_sockets.clear();
-  Q_ASSERT(m_sockets.isEmpty());
+  m_mutedSockets.clear();
 
   Q_EMIT clientCountChanged(0);
 }
@@ -171,14 +174,12 @@ void API::ServerWorker::closeResources()
  */
 void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!sessionId.isEmpty());
-  Q_ASSERT(socket->state() != QAbstractSocket::UnconnectedState);
-
-  if (!socket)
-    return;
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!sessionId.isEmpty());
+  SS_ASSERT_LOG(socket->state() != QAbstractSocket::UnconnectedState);
 
   m_sockets.insert(socket, sessionId);
+  m_mutedSockets.remove(socket);
   connect(socket, &QTcpSocket::readyRead, this, &ServerWorker::onSocketReadyRead);
   connect(socket, &QTcpSocket::disconnected, this, &ServerWorker::onSocketDisconnected);
 
@@ -192,11 +193,15 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
  */
 void API::ServerWorker::removeSocket(QTcpSocket* socket)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(m_sockets.contains(socket));
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(m_sockets.contains(socket), {
+    socket->deleteLater();
+    return;
+  });
 
   const QString sessionId = m_sockets.value(socket);
   m_sockets.remove(socket);
+  m_mutedSockets.remove(socket);
 
   Q_EMIT socketRemoved(socket, sessionId);
   Q_EMIT clientCountChanged(m_sockets.count());
@@ -230,7 +235,7 @@ void API::ServerWorker::writeRawData(const QByteArray& data)
  */
 void API::ServerWorker::broadcastEvent(const QJsonObject& event)
 {
-  Q_ASSERT(!event.isEmpty());
+  SS_ASSERT_LOG(!event.isEmpty());
 
   if (m_sockets.isEmpty())
     return;
@@ -264,8 +269,7 @@ void API::ServerWorker::writeToSocket(QTcpSocket* socket,
                                       const QString& sessionId,
                                       const QByteArray& data)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!data.isEmpty());
+  SS_ASSERT(!data.isEmpty(), return);
 
   if (socket && m_sockets.value(socket) == sessionId && socket->isWritable())
     socket->write(data);
@@ -277,12 +281,31 @@ void API::ServerWorker::writeToSocket(QTcpSocket* socket,
  */
 void API::ServerWorker::disconnectSocket(QTcpSocket* socket, const QString& sessionId)
 {
-  Q_ASSERT(socket);
-
   if (socket && m_sockets.value(socket) == sessionId) {
     socket->flush();
     socket->disconnectFromHost();
   }
+}
+
+/**
+ * @brief Turns the per-frame broadcast off (or back on) for one socket, dropped when the session
+ *        id no longer matches so a reused pointer can never mute an unrelated client. Mirror
+ *        viewers are the only callers: a client that never subscribes stays on the stream.
+ */
+void API::ServerWorker::setSocketStreamFrames(QTcpSocket* socket,
+                                              const QString& sessionId,
+                                              const bool enabled)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!sessionId.isEmpty());
+
+  if (m_sockets.value(socket) != sessionId)
+    return;
+
+  if (enabled)
+    m_mutedSockets.remove(socket);
+  else
+    m_mutedSockets.insert(socket);
 }
 
 /**
@@ -295,13 +318,13 @@ void API::ServerWorker::onSocketDisconnected()
 }
 
 /**
- * @brief Processes frames by serializing them to JSON and writing to sockets
+ * @brief Processes frames by serializing them to JSON and writing to sockets. Sockets whose
+ *        client opted out of the stream (mirror viewers) are skipped, and the serialization is
+ *        skipped entirely when every connected client has opted out.
  */
 void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
-  Q_ASSERT(!items.empty());
-
-  if (items.empty() || m_sockets.isEmpty())
+  if (items.empty() || m_sockets.isEmpty() || m_sockets.count() == m_mutedSockets.count())
     return;
 
   QJsonArray array;
@@ -318,7 +341,7 @@ void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFra
 
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
-    if (socket && socket->isWritable())
+    if (socket && socket->isWritable() && !m_mutedSockets.contains(socket))
       socket->write(json);
   }
 }
@@ -335,6 +358,7 @@ API::Server::Server()
       {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
   , m_clientCount(0)
   , m_enabled(false)
+  , m_mirrorLinked(false)
   , m_externalConnections(false)
   , m_deviceWriteConsent(DeviceWriteConsent::Unset)
 {
@@ -398,6 +422,14 @@ API::Server& API::Server::instance()
 }
 
 /**
+ * @brief Maximum simultaneous API connections; also the ceiling on mirror viewers.
+ */
+int API::Server::maxClients() noexcept
+{
+  return kMaxApiClients;
+}
+
+/**
  * @brief Checks whether the API server is currently enabled.
  */
 bool API::Server::enabled() const noexcept
@@ -439,7 +471,7 @@ void API::Server::removeConnection()
  */
 void API::Server::setEnabled(const bool enabled)
 {
-  Q_ASSERT(m_worker);
+  SS_ASSERT(m_worker != nullptr, return);
 
   bool effectiveEnabled = enabled;
   bool closeResources   = false;
@@ -471,6 +503,9 @@ void API::Server::setEnabled(const bool enabled)
 
   if (closeResources) {
     m_connections.clear();
+    if (m_mirrorLinked)
+      mirrorPublisher().clearSubscribers();
+
     auto* worker = static_cast<ServerWorker*>(m_worker);
     QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
   }
@@ -512,6 +547,31 @@ void API::Server::setExternalConnections(const bool enabled)
     }
   }
 
+  applyExternalConnections(enabled);
+}
+
+/**
+ * @brief Opens the server to non-loopback peers without the confirmation dialog, for the
+ *        --api-external flag: a windowless process cannot answer a modal, so a headless-only
+ *        machine would otherwise have no way to be made attachable (spec 0040, R16). The flag
+ *        is the explicit act the dialog stands in for; nothing here runs unless it was passed.
+ */
+void API::Server::allowExternalConnections()
+{
+  if (m_externalConnections) {
+    ensureAuthToken();
+    return;
+  }
+
+  applyExternalConnections(true);
+}
+
+/**
+ * @brief Persists the external-connections decision, provisions the token, and rebinds a running
+ *        server to the matching address.
+ */
+void API::Server::applyExternalConnections(const bool enabled)
+{
   m_externalConnections = enabled;
   m_settings.setValue("API/ExternalConnections", m_externalConnections);
   Q_EMIT externalConnectionsChanged();
@@ -519,21 +579,25 @@ void API::Server::setExternalConnections(const bool enabled)
   if (m_externalConnections)
     ensureAuthToken();
 
-  if (m_enabled) {
-    m_server.close();
-    m_connections.clear();
-    auto* worker = static_cast<ServerWorker*>(m_worker);
-    QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
+  if (!m_enabled)
+    return;
 
-    const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
-    m_server.setMaxPendingConnections(kMaxApiClients);
-    if (!m_server.listen(address, API_TCP_PORT)) {
-      Misc::Utilities::showMessageBox(
-        tr("Unable to restart API TCP server"), m_server.errorString(), QMessageBox::Warning);
-      m_server.close();
-      m_enabled = false;
-      Q_EMIT enabledChanged();
-    }
+  m_server.close();
+  m_connections.clear();
+  if (m_mirrorLinked)
+    mirrorPublisher().clearSubscribers();
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
+
+  const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
+  m_server.setMaxPendingConnections(kMaxApiClients);
+  if (!m_server.listen(address, API_TCP_PORT)) {
+    Misc::Utilities::showMessageBox(
+      tr("Unable to restart API TCP server"), m_server.errorString(), QMessageBox::Warning);
+    m_server.close();
+    m_enabled = false;
+    Q_EMIT enabledChanged();
   }
 }
 
@@ -560,6 +624,30 @@ void API::Server::ensureAuthToken()
   m_authToken = generateApiToken();
   m_settings.setValue("API/AuthToken", m_authToken);
   Q_EMIT authTokenChanged();
+}
+
+/**
+ * @brief Pins a caller-supplied auth token, for provisioning a headless machine from the command
+ *        line. Refuses anything shorter than 32 hex characters rather than quietly weakening the
+ *        credential that guards every non-loopback connection.
+ */
+bool API::Server::setAuthToken(const QString& token)
+{
+  const auto trimmed = token.trimmed().toLower();
+  if (trimmed.size() < kMinAuthTokenChars)
+    return false;
+
+  for (const QChar character : trimmed)
+    if (!character.isDigit() && (character < QLatin1Char('a') || character > QLatin1Char('f')))
+      return false;
+
+  if (m_authToken == trimmed)
+    return true;
+
+  m_authToken = trimmed;
+  m_settings.setValue("API/AuthToken", m_authToken);
+  Q_EMIT authTokenChanged();
+  return true;
 }
 
 /**
@@ -669,7 +757,7 @@ void API::Server::handleAuthHandshake(QTcpSocket* socket,
                                       ConnectionState& state,
                                       const QByteArray& data)
 {
-  Q_ASSERT(socket);
+  SS_ASSERT(socket != nullptr, return);
 
   state.buffer.append(data);
   if (state.buffer.size() > kMaxApiMessageBytes) {
@@ -732,7 +820,7 @@ void API::Server::handleAuthHandshake(QTcpSocket* socket,
  */
 void API::Server::hotpathTxData(const QByteArray& data)
 {
-  Q_ASSERT(m_worker);
+  SS_ASSERT(m_worker != nullptr, return);
 
   if (!enabled())
     return;
@@ -755,8 +843,8 @@ void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
  */
 void API::Server::broadcastLifecycleEvent(const QString& eventName)
 {
-  Q_ASSERT(!eventName.isEmpty());
-  Q_ASSERT(m_worker);
+  SS_ASSERT(!eventName.isEmpty(), return);
+  SS_ASSERT(m_worker != nullptr, return);
 
   if (!enabled())
     return;
@@ -779,8 +867,8 @@ void API::Server::broadcastLifecycleEvent(const QString& eventName)
  */
 void API::Server::sendResponseToSocket(QTcpSocket* socket, const QByteArray& response)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!response.isEmpty());
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(!response.isEmpty(), return);
 
   const auto it = m_connections.constFind(socket);
   if (it == m_connections.constEnd())
@@ -803,8 +891,8 @@ void API::Server::disconnectClient(QTcpSocket* socket,
                                    const QString& errorCode,
                                    const QString& errorMessage)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!errorCode.isEmpty());
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!errorCode.isEmpty());
 
   const QByteArray response =
     CommandResponse::makeError(QString(), errorCode, errorMessage).toJsonBytes();
@@ -826,8 +914,8 @@ bool API::Server::validateRateLimits(QTcpSocket* socket,
                                      ConnectionState& state,
                                      const QByteArray& data)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!data.isEmpty());
+  SS_ASSERT(socket != nullptr, return false);
+  SS_ASSERT(!data.isEmpty(), return false);
 
   if (!state.window.isValid())
     state.window.start();
@@ -869,8 +957,8 @@ bool API::Server::validateJsonMessage(QTcpSocket* socket,
                                       ConnectionState& state,
                                       const QByteArray& jsonBytes)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!jsonBytes.isEmpty());
+  SS_ASSERT(socket != nullptr, return false);
+  SS_ASSERT(!jsonBytes.isEmpty(), return false);
 
   if (jsonBytes.size() > kMaxApiMessageBytes) {
     qWarning() << "[API] Message size limit exceeded:" << state.peerAddress << ":" << state.peerPort
@@ -917,8 +1005,8 @@ void API::Server::handleJsonMessage(QTcpSocket* socket,
                                     ConnectionState& state,
                                     const QByteArray& jsonBytes)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!jsonBytes.isEmpty());
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(!jsonBytes.isEmpty(), return);
 
   if (!validateJsonMessage(socket, state, jsonBytes))
     return;
@@ -961,6 +1049,12 @@ void API::Server::handleJsonMessage(QTcpSocket* socket,
     return;
   }
 
+  if (type == MessageType::Command
+      && isMirrorCommand(json.value(QStringLiteral("command")).toString())) {
+    handleMirrorCommand(socket, state, json);
+    return;
+  }
+
   static auto& cmdHandler = API::CommandHandler::instance();
   sendResponseToSocket(socket, cmdHandler.processMessage(jsonBytes, CommandOrigin::Remote));
 }
@@ -972,7 +1066,7 @@ void API::Server::processRawJsonCommand(QTcpSocket* socket,
                                         ConnectionState& state,
                                         const QJsonObject& json)
 {
-  Q_ASSERT(socket);
+  SS_ASSERT(socket != nullptr, return);
 
   const QString id = json.value(QStringLiteral("id")).toString();
 
@@ -1039,7 +1133,7 @@ void API::Server::processRawJsonCommand(QTcpSocket* socket,
  */
 void API::Server::processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& state)
 {
-  Q_ASSERT(socket);
+  SS_ASSERT(socket != nullptr, return);
 
   auto& buffer       = state.buffer;
   const auto trimmed = buffer.trimmed();
@@ -1081,8 +1175,8 @@ void API::Server::processBufferedJson(QTcpSocket* socket,
                                       ConnectionState& state,
                                       const QByteArray& trimmed)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!trimmed.isEmpty());
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(!trimmed.isEmpty(), return);
 
   auto& buffer = state.buffer;
 
@@ -1150,8 +1244,8 @@ void API::Server::processJsonLine(QTcpSocket* socket,
                                   ConnectionState& state,
                                   const QByteArray& trimmedLine)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!trimmedLine.isEmpty());
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(!trimmedLine.isEmpty(), return);
 
   handleJsonMessage(socket, state, trimmedLine);
 }
@@ -1161,8 +1255,8 @@ void API::Server::processJsonLine(QTcpSocket* socket,
  */
 void API::Server::processRawLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& line)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!line.isEmpty());
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(!line.isEmpty(), return);
 
   if (line.size() > kMaxApiRawBytes) {
     qWarning() << "[API] Raw line size limit exceeded:" << state.peerAddress << ":"
@@ -1201,6 +1295,227 @@ void API::Server::processRawLine(QTcpSocket* socket, ConnectionState& state, con
 }
 
 //--------------------------------------------------------------------------------------------------
+// Server: mirror control (connection-scoped)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether a command name is one of the connection-scoped mirror commands. They are handled
+ *        here rather than in CommandRegistry because they mutate per-socket state the registry has
+ *        no access to, the same reason the MCP branch sits at this level.
+ */
+bool API::Server::isMirrorCommand(const QString& command)
+{
+  return command == QLatin1String(Mirror::Command::Subscribe)
+      || command == QLatin1String(Mirror::Command::SetRate)
+      || command == QLatin1String(Mirror::Command::Unsubscribe);
+}
+
+/**
+ * @brief Resolves the mirror publisher on first use and wires its outgoing pushes into this
+ *        server's session-id-tagged write. Lazy on purpose: the publisher is built after the
+ *        pinned singleton order, never from this constructor.
+ */
+API::MirrorPublisher& API::Server::mirrorPublisher()
+{
+  static auto& publisher = MirrorPublisher::instance();
+  if (!m_mirrorLinked) {
+    m_mirrorLinked = true;
+    connect(&publisher, &MirrorPublisher::payloadReady, this, &Server::sendMirrorPayload);
+  }
+
+  return publisher;
+}
+
+/**
+ * @brief Turns this connection's per-frame broadcast on or off, mirroring the decision into the
+ *        worker thread with the session id carried and verified.
+ */
+void API::Server::setStreamFrames(QTcpSocket* socket, ConnectionState& state, const bool enabled)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!state.sessionId.isEmpty());
+
+  if (state.streamFrames == enabled)
+    return;
+
+  state.streamFrames = enabled;
+  auto* worker       = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker,
+                            "setSocketStreamFrames",
+                            Qt::QueuedConnection,
+                            Q_ARG(QTcpSocket*, socket),
+                            Q_ARG(QString, state.sessionId),
+                            Q_ARG(bool, enabled));
+}
+
+/**
+ * @brief Delivers one mirror push to a subscribed connection; a session id mismatch or a dropped
+ *        subscription discards it instead of writing to whatever now owns the socket address.
+ */
+void API::Server::sendMirrorPayload(QTcpSocket* socket,
+                                    const QString& sessionId,
+                                    const QByteArray& payload)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(!payload.isEmpty(), return);
+
+  const auto it = m_connections.constFind(socket);
+  if (it == m_connections.constEnd() || it->sessionId != sessionId || !it->mirrorSubscribed)
+    return;
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker,
+                            "writeToSocket",
+                            Qt::QueuedConnection,
+                            Q_ARG(QTcpSocket*, socket),
+                            Q_ARG(QString, sessionId),
+                            Q_ARG(QByteArray, payload));
+}
+
+/**
+ * @brief Dispatches one connection-scoped mirror command and answers on the same socket.
+ */
+void API::Server::handleMirrorCommand(QTcpSocket* socket,
+                                      ConnectionState& state,
+                                      const QJsonObject& json)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!state.sessionId.isEmpty());
+
+  const auto request = CommandRequest::fromJson(json);
+
+  if (request.command == QLatin1String(Mirror::Command::Subscribe))
+    sendResponseToSocket(socket, mirrorSubscribe(socket, state, request).toJsonBytes());
+  else if (request.command == QLatin1String(Mirror::Command::SetRate))
+    sendResponseToSocket(socket, mirrorSetRate(state, request).toJsonBytes());
+  else
+    sendResponseToSocket(socket, mirrorUnsubscribe(state, request).toJsonBytes());
+}
+
+/**
+ * @brief Subscribes this connection to the mirror and, by default, opts it out of the per-frame
+ *        broadcast: at capture rates that stream would disconnect the viewer on the byte cap long
+ *        before the network noticed, which is why subscribe is the first request a viewer sends.
+ */
+API::CommandResponse API::Server::mirrorSubscribe(QTcpSocket* socket,
+                                                  ConnectionState& state,
+                                                  const CommandRequest& request)
+{
+  SS_ASSERT(socket != nullptr,
+            return CommandResponse::makeError(
+              request.id, ErrorCode::ExecutionError, QStringLiteral("No connection")));
+  SS_ASSERT_LOG(state.authenticated);
+
+  const int version = request.params.value(QStringLiteral("wireVersion")).toInt(0);
+  if (version != Mirror::kWireVersion) {
+    return CommandResponse::makeError(
+      request.id,
+      QLatin1String(Mirror::ErrorCode::VersionMismatch),
+      QStringLiteral("This instance speaks mirror wire version %1, the client asked for %2")
+        .arg(QString::number(Mirror::kWireVersion), QString::number(version)));
+  }
+
+  const auto hzValue = request.params.value(QStringLiteral("hz"));
+  const int hz       = hzValue.isUndefined() ? Mirror::kHzDefault : hzValue.toInt(0);
+  if (hz < Mirror::kHzMin || hz > Mirror::kHzMax) {
+    return CommandResponse::makeError(
+      request.id,
+      QLatin1String(Mirror::ErrorCode::RateOutOfRange),
+      QStringLiteral("Mirror rate %1 Hz is outside the supported range").arg(QString::number(hz)));
+  }
+
+  const int precision = request.params.value(QStringLiteral("precision")).toInt(0);
+  if (precision < Mirror::kPrecisionMin || precision > Mirror::kPrecisionMax) {
+    return CommandResponse::makeError(
+      request.id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Value precision %1 is outside 0 (full) to 17 significant digits")
+        .arg(QString::number(precision)));
+  }
+
+  auto& publisher = mirrorPublisher();
+  if (!publisher.subscribe(socket, state.sessionId, hz, precision)) {
+    return CommandResponse::makeError(
+      request.id,
+      QLatin1String(Mirror::ErrorCode::ViewerLimit),
+      QStringLiteral("This instance is not accepting more mirror viewers"));
+  }
+
+  state.mirrorSubscribed = true;
+  state.mirrorHz         = hz;
+  state.mirrorPrecision  = precision;
+  setStreamFrames(socket, state, request.params.value(QStringLiteral("frames")).toBool(false));
+
+  auto result = publisher.info();
+  result.insert(QStringLiteral("connectionId"), state.sessionId);
+  result.insert(QStringLiteral("hz"), hz);
+  result.insert(QStringLiteral("effectiveHz"), publisher.effectiveHz(hz));
+  result.insert(QStringLiteral("frames"), state.streamFrames);
+  result.insert(QStringLiteral("precision"), precision);
+  return CommandResponse::makeSuccess(request.id, result);
+}
+
+/**
+ * @brief Renegotiates this connection's mirror cadence. An out-of-range rate is refused rather
+ *        than clamped: a silent clamp hides a misconfigured viewer.
+ */
+API::CommandResponse API::Server::mirrorSetRate(ConnectionState& state,
+                                                const CommandRequest& request)
+{
+  if (!state.mirrorSubscribed) {
+    return CommandResponse::makeError(request.id,
+                                      QLatin1String(Mirror::ErrorCode::NotSubscribed),
+                                      QStringLiteral("This connection holds no mirror "
+                                                     "subscription"));
+  }
+
+  const int hz = request.params.value(QStringLiteral("hz")).toInt(0);
+  if (hz < Mirror::kHzMin || hz > Mirror::kHzMax) {
+    return CommandResponse::makeError(
+      request.id,
+      QLatin1String(Mirror::ErrorCode::RateOutOfRange),
+      QStringLiteral("Mirror rate %1 Hz is outside the supported range").arg(QString::number(hz)));
+  }
+
+  auto& publisher = mirrorPublisher();
+  if (!publisher.setRate(state.sessionId, hz)) {
+    return CommandResponse::makeError(request.id,
+                                      QLatin1String(Mirror::ErrorCode::NotSubscribed),
+                                      QStringLiteral("This connection holds no mirror "
+                                                     "subscription"));
+  }
+
+  state.mirrorHz = hz;
+
+  QJsonObject result;
+  result.insert(QStringLiteral("hz"), hz);
+  result.insert(QStringLiteral("effectiveHz"), publisher.effectiveHz(hz));
+  return CommandResponse::makeSuccess(request.id, result);
+}
+
+/**
+ * @brief Stops this connection's mirror. The frame stream stays off: only mirror.subscribe ever
+ *        changes that flag, so unsubscribing cannot reopen the firehose on a slow reader.
+ */
+API::CommandResponse API::Server::mirrorUnsubscribe(ConnectionState& state,
+                                                    const CommandRequest& request)
+{
+  if (!state.mirrorSubscribed) {
+    return CommandResponse::makeError(request.id,
+                                      QLatin1String(Mirror::ErrorCode::NotSubscribed),
+                                      QStringLiteral("This connection holds no mirror "
+                                                     "subscription"));
+  }
+
+  mirrorPublisher().unsubscribe(state.sessionId);
+  state.mirrorSubscribed = false;
+
+  QJsonObject result;
+  result.insert(QStringLiteral("mirrorSubscribed"), false);
+  return CommandResponse::makeSuccess(request.id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Server: data reception & dispatch
 //--------------------------------------------------------------------------------------------------
 
@@ -1213,9 +1528,6 @@ void API::Server::onDataReceived(QTcpSocket* socket,
                                  const QString& sessionId,
                                  const QByteArray& data)
 {
-  Q_ASSERT(socket);
-  Q_ASSERT(!data.isEmpty());
-
   if (!enabled() || data.isEmpty() || !socket)
     return;
 
@@ -1279,9 +1591,6 @@ void API::Server::onDataReceived(QTcpSocket* socket,
  */
 void API::Server::acceptConnection()
 {
-  Q_ASSERT(m_server.isListening());
-  Q_ASSERT(m_enabled);
-
   auto* socket = m_server.nextPendingConnection();
   if (!socket) {
     if (enabled())
@@ -1360,6 +1669,9 @@ void API::Server::onSocketDisconnected(QTcpSocket* socket, const QString& sessio
   if (it != m_connections.constEnd() && it->sessionId == sessionId) {
     static auto& mcpHandler = MCPHandler::instance();
     mcpHandler.clearSession(sessionId);
+    if (it->mirrorSubscribed)
+      mirrorPublisher().unsubscribe(sessionId);
+
     qInfo() << "[API] Client disconnected (via worker):"
             << "- Remaining clients:" << (m_connections.size() - 1);
 

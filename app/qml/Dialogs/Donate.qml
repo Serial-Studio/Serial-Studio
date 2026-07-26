@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtCore
@@ -60,12 +60,18 @@ Widgets.SmartDialog {
           source: "qrc:/images/buy-qr.svg"
           Layout.alignment: Qt.AlignVCenter
 
+          //
+          // Frame matches the QR code's own black modules; the SVG has opaque white backing.
+          //
+
+          // code-verify off
           Rectangle {
             border.width: 2
             color: "transparent"
             border.color: "#000"
             anchors.fill: parent
           }
+          // code-verify on
         }
 
         ColumnLayout {

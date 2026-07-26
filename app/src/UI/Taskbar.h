@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -232,6 +232,7 @@ private:
                               int groupId,
                               const QString& groupName,
                               SerialStudio::DashboardWidget groupType,
+                              const QString& extensionId,
                               int mainWindowId,
                               bool alreadyRegistered);
   [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,

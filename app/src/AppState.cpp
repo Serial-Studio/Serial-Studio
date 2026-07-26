@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "AppState.h"
@@ -27,6 +27,8 @@
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "SessionContext.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -50,12 +52,13 @@ AppState::AppState()
 }
 
 /**
- * @brief Returns the singleton instance of AppState.
+ * @brief Returns this session's application state. The object is owned by the SessionContext and
+ *        built by the composition root, so a reach before adoption is a named fatal instead of
+ *        an out-of-order lazy construction (spec 0039 M2, wave C1).
  */
 AppState& AppState::instance()
 {
-  static AppState singleton;
-  return singleton;
+  return SessionContext::current().appState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -206,8 +209,9 @@ void AppState::onProjectLoaded()
     Q_EMIT projectFileChanged();
   }
 
-  Q_ASSERT(m_frameBuilder);
-  m_frameBuilder->syncFromProjectModel();
+  SS_ASSERT_LOG(m_frameBuilder != nullptr);
+  if (m_frameBuilder)
+    m_frameBuilder->syncFromProjectModel();
 
   m_frameConfig = deriveFrameConfig();
   Q_EMIT frameConfigChanged(m_frameConfig);

@@ -151,6 +151,7 @@
         <file>ai/skill_triggers.json</file>
         <file>api/api-schema.json</file>
         <file>api/prelude.js</file>
+        <file>api/proto-fields.json</file>
         <file>api/prelude.lua</file>
         <file>api/sdk-symbols.json</file>
         <file>api/SerialStudio.js</file>
@@ -158,6 +159,11 @@
         <file>chartjs/chart.umd.min.js</file>
         <file>chartjs/LICENSE.md</file>
         <file>demo/RocketLaunch.ssproj</file>
+        <file>extensions/schema/widget-manifest.json</file>
+        <file>extensions/widget/compass/Compass.qml</file>
+        <file>extensions/widget/compass/info.json</file>
+        <file>extensions/widget/datagrid/DataGrid.qml</file>
+        <file>extensions/widget/datagrid/info.json</file>
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
@@ -206,6 +212,7 @@
         <file>icons/buttons/play.svg</file>
         <file>icons/buttons/plus.svg</file>
         <file>icons/buttons/print.svg</file>
+        <file>icons/buttons/problems.svg</file>
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/rename.svg</file>
         <file>icons/buttons/report.svg</file>
@@ -285,6 +292,7 @@
         <file>icons/commands/16/pause.svg</file>
         <file>icons/commands/16/pictures-folder.svg</file>
         <file>icons/commands/16/poliline.svg</file>
+        <file>icons/commands/16/remote-attach.svg</file>
         <file>icons/commands/16/resume.svg</file>
         <file>icons/commands/16/return.svg</file>
         <file>icons/commands/16/save-as.svg</file>
@@ -324,6 +332,7 @@
         <file>icons/commands/24/orthogonal-view.svg</file>
         <file>icons/commands/24/poliline.svg</file>
         <file>icons/commands/24/quit.svg</file>
+        <file>icons/commands/24/remote-attach.svg</file>
         <file>icons/commands/24/reset.svg</file>
         <file>icons/commands/24/settings.svg</file>
         <file>icons/commands/24/tools.svg</file>
@@ -366,6 +375,7 @@
         <file>icons/commands/32/pause.svg</file>
         <file>icons/commands/32/project-setup.svg</file>
         <file>icons/commands/32/quit.svg</file>
+        <file>icons/commands/32/remote-attach.svg</file>
         <file>icons/commands/32/reset.svg</file>
         <file>icons/commands/32/resume.svg</file>
         <file>icons/commands/32/sessions.svg</file>
@@ -1134,5 +1144,7 @@
         <file>vendor/showdown.min.js</file>
         <file>chat-viewer.html</file>
         <file>markdown-viewer.html</file>
+        <file>properties/dataset.json</file>
+        <file>properties/schema.json</file>
     </qresource>
 </RCC>

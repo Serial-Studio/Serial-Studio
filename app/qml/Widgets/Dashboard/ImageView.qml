@@ -27,7 +27,6 @@ import QtQuick.Effects
 
 import SerialStudio
 
-import "../"
 import "../" as Widgets
 
 Item {
@@ -272,7 +271,13 @@ Item {
       clip: true
       Layout.fillWidth: true
       Layout.fillHeight: true
+      //
+      // Media viewport letterbox; overlays are authored white against this fixed black.
+      //
+
+      // code-verify off
       color: model && model.frameCount > 0 ? model.primaryColor : "#000"
+      // code-verify on
 
       Behavior on color { ColorAnimation { duration: 600; easing.type: Easing.OutCubic } }
 
@@ -478,6 +483,12 @@ Item {
         readonly property real cx: lpX + (root.cursorImgX + 0.5) / (model ? model.imageWidth  : 1) * root.paintedW
         readonly property real cy: lpY + (root.cursorImgY + 0.5) / (model ? model.imageHeight : 1) * root.paintedH
 
+        //
+        // Crosshair sits over arbitrary image pixels, so it needs fixed high contrast.
+        //
+
+        // code-verify off
+
         Rectangle {
           width: 1
           opacity: 0.7
@@ -525,11 +536,15 @@ Item {
             font.pixelSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
           }
         }
+
+        // code-verify on
       }
 
       //
-      // "Waiting for image..." placeholder
+      // "Waiting for image..." placeholder: white over the fixed black viewport.
       //
+
+      // code-verify off
       ColumnLayout {
         spacing: 8
         anchors.centerIn: parent
@@ -553,6 +568,7 @@ Item {
           font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
         }
       }
+      // code-verify on
 
     }
   }

@@ -1,0 +1,26 @@
+{
+  "id": "datagrid",
+  "type": "widget",
+  "title": "Data Grid",
+  "description": "Two-column table of every dataset in a group, with jump buttons to the other widgets showing the same dataset.",
+  "author": "Serial Studio",
+  "version": "1.0.0",
+  "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial",
+  "category": "Tables",
+  "files": ["info.json", "DataGrid.qml"],
+  "widget": {
+    "apiVersion": "1.0",
+    "hostCompat": ">=1.0 <2.0",
+    "scope": "group",
+    "qml": "DataGrid.qml",
+    "icon": "widgets/datagrid",
+    "replaces": "datagrid",
+    "readsStringValues": true,
+    "accepts": {
+      "datasets": { "min": 1 },
+      "value": "any"
+    },
+    "defaultSize": { "width": 480, "height": 320 },
+    "experimental": false
+  }
+}

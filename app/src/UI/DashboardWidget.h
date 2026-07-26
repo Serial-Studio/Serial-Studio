@@ -14,14 +14,15 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
 
 #include <QQuickItem>
+#include <QVariantMap>
 
 #include "SerialStudio.h"
 
@@ -71,12 +72,22 @@ class DashboardWidget : public QQuickItem {
   Q_PROPERTY(int widgetUniqueId
              READ widgetUniqueId
              NOTIFY widgetIndexChanged)
+  Q_PROPERTY(bool widgetIsExtension
+             READ widgetIsExtension
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(QString widgetExtensionId
+             READ widgetExtensionId
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(QString widgetExtensionError
+             READ widgetExtensionError
+             NOTIFY widgetExtensionErrorChanged)
   // clang-format on
 
 signals:
   void widgetIndexChanged();
   void widgetColorChanged();
   void widgetTitleChanged();
+  void widgetExtensionErrorChanged();
 
 public:
   DashboardWidget(QQuickItem* parent = 0);
@@ -88,17 +99,27 @@ public:
   [[nodiscard]] QString widgetTitle() const;
   [[nodiscard]] SerialStudio::DashboardWidget widgetType() const;
 
+  [[nodiscard]] bool widgetIsExtension() const;
   [[nodiscard]] int widgetSourceId() const;
   [[nodiscard]] int widgetUniqueId() const;
   [[nodiscard]] QString widgetId() const;
   [[nodiscard]] QString widgetQmlPath() const;
   [[nodiscard]] QQuickItem* widgetModel() const;
+  [[nodiscard]] const QString& widgetExtensionId() const;
+  [[nodiscard]] const QString& widgetExtensionError() const;
+
+  // clang-format off
+  Q_INVOKABLE [[nodiscard]] QQuickItem* createExtensionItem(QQuickItem* parent, const QVariantMap& properties);
+  // clang-format on
 
 public slots:
+  void reloadWidget();
   void setWidgetIndex(const int index);
 
 private:
   void buildWidgetForType();
+  [[nodiscard]] bool buildExtensionModel();
+  void failExtension(const QString& error);
 
   UI::Dashboard& m_dashboard;
   Misc::ThemeManager& m_themeManager;
@@ -109,6 +130,8 @@ private:
   SerialStudio::DashboardWidget m_widgetType;
 
   QString m_qmlPath;
+  QString m_extensionId;
+  QString m_extensionError;
   QQuickItem* m_dbWidget;
 };
 }  // namespace UI

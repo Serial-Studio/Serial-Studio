@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 // AUTO-GENERATED lupdate stub ("Commands" context) from app/rcc/commands/; regenerate, never edit.
@@ -94,6 +94,7 @@
   QT_TRANSLATE_NOOP("Commands", "CAN Bus"),
   QT_TRANSLATE_NOOP("Commands", "CSV File"),
   QT_TRANSLATE_NOOP("Commands", "Chat with an AI to build and edit your project"),
+  QT_TRANSLATE_NOOP("Commands", "Check device permissions, adapters, and host reachability"),
   QT_TRANSLATE_NOOP("Commands", "Clear Console"),
   QT_TRANSLATE_NOOP("Commands", "Clear Window"),
   QT_TRANSLATE_NOOP("Commands", "Clear the console output"),
@@ -109,6 +110,7 @@
   QT_TRANSLATE_NOOP("Commands", "Compass"),
   QT_TRANSLATE_NOOP("Commands", "Connect"),
   QT_TRANSLATE_NOOP("Commands", "Connect or disconnect from the configured device"),
+  QT_TRANSLATE_NOOP("Commands", "Connection Diagnostics"),
   QT_TRANSLATE_NOOP("Commands", "Console"),
   QT_TRANSLATE_NOOP("Commands", "Console Echo"),
   QT_TRANSLATE_NOOP("Commands", "Console Only Mode"),
@@ -181,13 +183,16 @@
   QT_TRANSLATE_NOOP("Commands", "Plot"),
   QT_TRANSLATE_NOOP("Commands", "Preferences"),
   QT_TRANSLATE_NOOP("Commands", "Previous Workspace"),
+  QT_TRANSLATE_NOOP("Commands", "Problem Center"),
   QT_TRANSLATE_NOOP("Commands", "Process"),
   QT_TRANSLATE_NOOP("Commands", "Project Editor"),
   QT_TRANSLATE_NOOP("Commands", "Project File Mode"),
   QT_TRANSLATE_NOOP("Commands", "Protobuf"),
   QT_TRANSLATE_NOOP("Commands", "Quick Plot Mode"),
   QT_TRANSLATE_NOOP("Commands", "Quit"),
-  QT_TRANSLATE_NOOP("Commands", "Recover"),
+  QT_TRANSLATE_NOOP("Commands", "Redo"),
+  QT_TRANSLATE_NOOP("Commands", "Redo the last undone project edit"),
+  QT_TRANSLATE_NOOP("Commands", "Remote Dashboard"),
   QT_TRANSLATE_NOOP("Commands", "Replay"),
   QT_TRANSLATE_NOOP("Commands", "Replay selected session on the dashboard"),
   QT_TRANSLATE_NOOP("Commands", "Reset"),
@@ -197,6 +202,7 @@
   QT_TRANSLATE_NOOP("Commands", "Restore a recent automatic snapshot of the current project"),
   QT_TRANSLATE_NOOP("Commands", "Restore the project file from this session file"),
   QT_TRANSLATE_NOOP("Commands", "Resume"),
+  QT_TRANSLATE_NOOP("Commands", "Review project, link, and script diagnostics"),
   QT_TRANSLATE_NOOP("Commands", "Save"),
   QT_TRANSLATE_NOOP("Commands", "Save As"),
   QT_TRANSLATE_NOOP("Commands", "Save Project"),
@@ -230,8 +236,11 @@
   QT_TRANSLATE_NOOP("Commands", "Tools"),
   QT_TRANSLATE_NOOP("Commands", "UART"),
   QT_TRANSLATE_NOOP("Commands", "USB"),
+  QT_TRANSLATE_NOOP("Commands", "Undo"),
+  QT_TRANSLATE_NOOP("Commands", "Undo the last project edit"),
   QT_TRANSLATE_NOOP("Commands", "Unlock"),
   QT_TRANSLATE_NOOP("Commands", "View detailed documentation and ask questions on DeepWiki"),
+  QT_TRANSLATE_NOOP("Commands", "Watch another Serial Studio instance's dashboard over the network"),
   QT_TRANSLATE_NOOP("Commands", "Web View"),
 };
 // clang-format on

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -573,7 +573,7 @@ Widgets.SmartDialog {
 
                     Label {
                       opacity: 0.6
-                      color: "#ffffff"
+                      color: Cpp_ThemeManager.colors["bright_text"]
                       anchors.centerIn: parent
                       text: (modelData.title || "?").charAt(0)
                       visible: (modelData.screenshot || "") === ""
@@ -592,7 +592,7 @@ Widgets.SmartDialog {
 
                     Rectangle {
                       radius: 3
-                      color: "#2ecc71"
+                      color: Cpp_ThemeManager.colors["alarm_ok"]
                       width: runLabel.implicitWidth + 8
                       height: runLabel.implicitHeight + 4
                       visible: modelData.pluginRunning || false
@@ -600,7 +600,7 @@ Widgets.SmartDialog {
                       Label {
                         id: runLabel
 
-                        color: "#ffffff"
+                        color: Cpp_ThemeManager.colors["highlighted_text"]
                         text: qsTr("Running")
                         anchors.centerIn: parent
                         font: Cpp_Misc_CommonFonts.customUiFont(0.7, true)
@@ -620,7 +620,7 @@ Widgets.SmartDialog {
                       Label {
                         id: installedLabel
 
-                        color: "#ffffff"
+                        color: Cpp_ThemeManager.colors["highlighted_text"]
                         anchors.centerIn: parent
                         font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
                         text: modelData.updateAvailable ? qsTr("Update") : qsTr("Installed")
@@ -638,7 +638,7 @@ Widgets.SmartDialog {
                       Label {
                         id: unavailLabel
 
-                        color: "#ffffff"
+                        color: Cpp_ThemeManager.colors["highlighted_text"]
                         anchors.centerIn: parent
                         text: qsTr("Unavailable")
                         font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)

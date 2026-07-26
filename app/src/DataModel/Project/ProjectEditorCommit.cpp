@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cmath>
@@ -38,6 +38,7 @@
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "UI/WidgetExtensions.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
@@ -83,6 +84,8 @@ void DataModel::ProjectEditor::handleSourceTitleChange(QStandardItem* item)
     return;
 
   m_selectedSource.title = newTitle;
+  m_projectModelRef.setNextUndoHint(
+    tr("Rename Device"), QStringLiteral("source-title:%1").arg(m_selectedSource.sourceId));
   m_projectModelRef.updateSourceTitle(m_selectedSource.sourceId, newTitle, false);
 
   for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
@@ -223,6 +226,9 @@ void DataModel::ProjectEditor::handleSourceFrameStartEndChange(QStandardItem* it
   else
     updated.frameEnd = item->data(EditableValue).toString();
 
+  m_projectModelRef.setNextUndoHint(
+    tr("Edit Device"),
+    QStringLiteral("source-frame:%1:%2").arg(QString::number(sid), QString::number(id)));
   m_projectModelRef.updateSource(sid, updated, false);
   m_selectedSource = updated;
 }
@@ -330,6 +336,7 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 
   if (id == kGroupView_WebUrl) {
     m_selectedGroup.webViewUrl = value.toString();
+    pm.setNextUndoHint(tr("Edit Group"), QStringLiteral("group-weburl:%1").arg(groupId));
     pm.updateGroup(groupId, m_selectedGroup, false);
     Q_EMIT editableOptionsChanged();
     return;
@@ -346,11 +353,13 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 
   if (id == kGroupView_ImgStart) {
     m_selectedGroup.imgStartSequence = value.toString();
+    pm.setNextUndoHint(tr("Edit Group"), QStringLiteral("group-imgstart:%1").arg(groupId));
     pm.updateGroup(groupId, m_selectedGroup, false);
   }
 
   if (id == kGroupView_ImgEnd) {
     m_selectedGroup.imgEndSequence = value.toString();
+    pm.setNextUndoHint(tr("Edit Group"), QStringLiteral("group-imgend:%1").arg(groupId));
     pm.updateGroup(groupId, m_selectedGroup, false);
   }
 #endif
@@ -367,6 +376,8 @@ bool DataModel::ProjectEditor::applyGroupTitleEdit(const QString& newTitle, int 
     return false;
 
   m_selectedGroup.title = newTitle;
+  m_projectModelRef.setNextUndoHint(tr("Rename Group"),
+                                    QStringLiteral("group-title:%1").arg(groupId));
   m_projectModelRef.updateGroup(groupId, m_selectedGroup, false);
 
   for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
@@ -410,6 +421,14 @@ bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
     return false;
 
   const auto widgetStr = keys.at(widgetIdx);
+
+  static auto& catalog = UI::WidgetExtensions::instance();
+  if (catalog.contains(widgetStr)
+      && catalog.descriptor(widgetStr).scope == UI::WidgetExtensions::GroupScope) {
+    m_selectedGroup.widget = widgetStr;
+    m_projectModelRef.updateGroup(groupId, m_selectedGroup, true);
+    return true;
+  }
 
   static const QMap<QString, SerialStudio::GroupWidget> kWidgetEnumMap = {
     {"accelerometer", SerialStudio::Accelerometer},
@@ -533,6 +552,9 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
   auto& pm            = m_projectModelRef;
   const auto actionId = m_selectedAction.actionId;
   pm.setSelectedAction(m_selectedAction);
+  pm.setNextUndoHint(
+    tr("Edit Action"),
+    QStringLiteral("action:%1:%2").arg(QString::number(actionId), QString::number(id.toInt())));
   pm.updateAction(actionId, m_selectedAction, false);
 
   if (static_cast<ActionItem>(id.toInt()) == kActionView_Title) {
@@ -573,6 +595,7 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
 
   switch (static_cast<ProjectItem>(id.toInt())) {
     case kProjectView_Title:
+      pm.setNextUndoHint(tr("Rename Project"), QStringLiteral("project-title"));
       pm.setTitle(value.toString());
       break;
     default:
@@ -580,39 +603,6 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
   }
 
   pm.setModified(true);
-}
-
-/**
- * @brief Applies edits to dataset identity rows (title, index, units, transform code).
- */
-void DataModel::ProjectEditor::onDatasetCommonItemChanged(QStandardItem* item,
-                                                          DataModel::Dataset& dataset)
-{
-  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
-  const auto value = item->data(EditableValue);
-
-  switch (id) {
-    case kDatasetView_Title:
-      dataset.title = value.toString();
-      break;
-    case kDatasetView_Index:
-      dataset.index = value.toInt();
-      break;
-    case kDatasetView_Units:
-      dataset.units = value.toString();
-      break;
-    case kDatasetView_Color:
-      dataset.color = value.toString().simplified();
-      break;
-    case kDatasetView_Alias:
-      dataset.alias = value.toString().simplified();
-      break;
-    case kDatasetView_TransformCode:
-      dataset.transformCode = value.toString();
-      break;
-    default:
-      break;
-  }
 }
 
 /**
@@ -630,274 +620,51 @@ bool DataModel::ProjectEditor::datasetAliasInUse(const QString& alias, int selfU
 }
 
 /**
- * @brief Validates a proposed alias for the selected dataset: rejects a duplicate (message box +
- *        deferred form snap-back) and warns on an all-digit alias. False means do not apply.
+ * @brief Debounced alias validation: the value always applies so typing is never interrupted.
+ *        The alias field commits per keystroke, so a synchronous modal would fire mid-word
+ *        ("temp" while typing "temp2"). Once the alias settles for a moment, a duplicate is
+ *        reported and cleared, and an all-digit alias gets the scripting warning.
  */
 bool DataModel::ProjectEditor::validateSelectedDatasetAlias(const QString& newAlias)
 {
   if (newAlias.isEmpty())
     return true;
 
-  if (datasetAliasInUse(newAlias, m_selectedDataset.uniqueId)) {
-    Misc::Utilities::showMessageBox(
-      tr("Alias \"%1\" is already in use").arg(newAlias),
-      tr("Dataset aliases must be unique across the project. The change was not applied."),
-      QMessageBox::Warning,
-      tr("Duplicate Alias"));
+  const int uid           = m_selectedDataset.uniqueId;
+  const QString candidate = newAlias;
+  QTimer::singleShot(800, this, [this, uid, candidate] {
+    if (m_selectedDataset.uniqueId != uid || m_selectedDataset.alias != candidate)
+      return;
 
-    const int uid = m_selectedDataset.uniqueId;
-    QTimer::singleShot(0, this, [this, uid] {
-      if (m_selectedDataset.uniqueId == uid)
-        buildDatasetModel(m_selectedDataset);
-    });
-    return false;
-  }
+    if (datasetAliasInUse(candidate, uid)) {
+      m_selectedDataset.alias.clear();
+      m_projectModelRef.updateDataset(
+        m_selectedDataset.groupId, m_selectedDataset.datasetId, m_selectedDataset, false);
+      buildDatasetModel(m_selectedDataset);
+      Misc::Utilities::showMessageBox(
+        tr("Alias \"%1\" is already in use").arg(candidate),
+        tr("Dataset aliases must be unique across the project. The change was not applied."),
+        QMessageBox::Warning,
+        tr("Duplicate Alias"));
+      return;
+    }
 
-  bool allDigits = true;
-  for (const QChar c : newAlias)
-    if (!c.isDigit())
-      allDigits = false;
+    bool allDigits = true;
+    for (const QChar c : candidate)
+      if (!c.isDigit())
+        allDigits = false;
 
-  if (allDigits)
-    Misc::Utilities::showMessageBox(
-      tr("Alias \"%1\" contains only digits").arg(newAlias),
-      tr("Scripts must quote it as a string, e.g. getDataset(\"%1\"); a numeric argument is read "
-         "as a uniqueId, not this alias.")
-        .arg(newAlias),
-      QMessageBox::Information,
-      tr("Numeric Alias"));
+    if (allDigits)
+      Misc::Utilities::showMessageBox(
+        tr("Alias \"%1\" contains only digits").arg(candidate),
+        tr("Scripts must quote it as a string, e.g. getDataset(\"%1\"); a numeric argument is "
+           "read as a uniqueId, not this alias.")
+          .arg(candidate),
+        QMessageBox::Information,
+        tr("Numeric Alias"));
+  });
 
   return true;
-}
-
-/**
- * @brief Applies widget/plot/virtual selector edits and triggers a form rebuild.
- */
-void DataModel::ProjectEditor::onDatasetWidgetItemChanged(QStandardItem* item,
-                                                          DataModel::Dataset& dataset)
-{
-  static QStringList datasetWidgetKeys;
-  static QList<QPair<bool, bool>> plotOptionKeys;
-
-  if (datasetWidgetKeys.isEmpty())
-    for (auto i = m_datasetWidgets.begin(); i != m_datasetWidgets.end(); ++i)
-      datasetWidgetKeys.append(i.key());
-
-  if (plotOptionKeys.isEmpty())
-    for (auto i = m_plotOptions.begin(); i != m_plotOptions.end(); ++i)
-      plotOptionKeys.append(i.key());
-
-  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
-  const auto value = item->data(EditableValue);
-
-  if (id == kDatasetView_Widget) {
-    const int widgetIdx = value.toInt();
-    if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())
-      return;
-
-    dataset.widget = datasetWidgetKeys.at(widgetIdx);
-    if (dataset.widget == "compass") {
-      dataset.wgtMin = 0;
-      dataset.wgtMax = 360;
-      dataset.alarmBands.clear();
-    }
-
-    if (!m_batchApplying)
-      buildDatasetModel(dataset);
-
-    return;
-  }
-
-  if (id == kDatasetView_Plot) {
-    const int plotIdx = value.toInt();
-    if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())
-      return;
-
-    dataset.plt = plotOptionKeys.at(plotIdx).first;
-    dataset.log = plotOptionKeys.at(plotIdx).second;
-    if (!m_batchApplying)
-      buildDatasetModel(dataset);
-
-    return;
-  }
-
-  if (id == kDatasetView_DisplayFormat) {
-    static QStringList formatKeys;
-    if (formatKeys.isEmpty())
-      for (auto i = m_displayFormats.begin(); i != m_displayFormats.end(); ++i)
-        formatKeys.append(i.key());
-
-    const int formatIdx = value.toInt();
-    if (formatIdx < 0 || formatIdx >= formatKeys.size())
-      return;
-
-    dataset.displayFormat = formatKeys.at(formatIdx);
-    return;
-  }
-
-  if (id == kDatasetView_Virtual) {
-    dataset.virtual_ = value.toBool();
-
-    for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
-      if (it.value().groupId == dataset.groupId && it.value().datasetId == dataset.datasetId) {
-        it.key()->setData(dataset.virtual_, TreeViewVirtual);
-        break;
-      }
-    }
-
-    if (m_batchApplying)
-      return;
-
-    const int uid = dataset.uniqueId;
-    QTimer::singleShot(0, this, [this, uid] {
-      if (m_selectedDataset.uniqueId == uid)
-        buildDatasetModel(m_selectedDataset);
-    });
-  }
-}
-
-/**
- * @brief Applies edits to dataset numeric range/limit fields (plot, widget, alarm, x-axis).
- */
-void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
-                                                         DataModel::Dataset& dataset)
-{
-  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
-  const auto value = item->data(EditableValue);
-
-  switch (id) {
-    case kDatasetView_xAxis: {
-      const auto xUids = m_projectModelRef.xDataSourceUniqueIds();
-      const int pos    = value.toInt();
-      dataset.xAxisId  = (pos >= 0 && pos < xUids.size()) ? xUids.at(pos) : kXAxisTime;
-      if (!m_batchApplying) {
-        const int uid = dataset.uniqueId;
-        QTimer::singleShot(0, this, [this, uid] {
-          if (m_selectedDataset.uniqueId == uid)
-            buildDatasetModel(m_selectedDataset);
-        });
-      }
-      break;
-    }
-    case kDatasetView_PltMin:
-      dataset.pltMin = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_PltMax:
-      dataset.pltMax = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_WgtMin:
-      dataset.wgtMin = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_WgtMax:
-      dataset.wgtMax = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_DisplayTickCount:
-      dataset.displayTickCount = qMax(0, value.toInt());
-      break;
-    case kDatasetView_DecimalPoints:
-      dataset.decimalPoints = qMax(-1, value.toInt());
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * @brief Applies edits to FFT-related dataset fields (samples, sampling rate, min/max, axis).
- */
-void DataModel::ProjectEditor::onDatasetFftItemChanged(QStandardItem* item,
-                                                       DataModel::Dataset& dataset)
-{
-  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
-  const auto value = item->data(EditableValue);
-
-  switch (id) {
-    case kDatasetView_FFTMin:
-      dataset.fftMin = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_FFTMax:
-      dataset.fftMax = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_WaterfallYAxis: {
-      const auto yUids       = m_projectModelRef.yWaterfallSourceUniqueIds();
-      const int pos          = value.toInt();
-      dataset.waterfallYAxis = (pos >= 0 && pos < yUids.size()) ? yUids.at(pos) : 0;
-      break;
-    }
-    case kDatasetView_FFT_Samples: {
-      const int sampleIdx = value.toInt();
-      if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())
-        return;
-
-      dataset.fftSamples = m_fftSamples.at(sampleIdx).toInt();
-      break;
-    }
-    case kDatasetView_FFT_Window: {
-      const int windowIdx = value.toInt();
-      if (windowIdx < 0 || windowIdx >= m_fftWindowValues.size())
-        return;
-
-      dataset.fftWindow = m_fftWindowValues.at(windowIdx);
-      break;
-    }
-    case kDatasetView_FFT_SamplingRate:
-      dataset.fftSamplingRate = value.toInt();
-      break;
-    case kDatasetView_FFT_BallisticsRelease:
-      dataset.fftBallisticsRelease = qBound(50, value.toInt(), 5000);
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * @brief Applies dataset boolean flag edits (FFT, waterfall, LED, alarm-enabled, ledHigh).
- */
-void DataModel::ProjectEditor::onDatasetFlagItemChanged(QStandardItem* item,
-                                                        DataModel::Dataset& dataset)
-{
-  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
-  const auto value = item->data(EditableValue);
-
-  bool reshape = false;
-  switch (id) {
-    case kDatasetView_FFT:
-      dataset.fft = value.toBool();
-      reshape     = true;
-      break;
-    case kDatasetView_Waterfall:
-      dataset.waterfall = value.toBool();
-      reshape           = true;
-      break;
-    case kDatasetView_LED:
-      dataset.led = value.toBool();
-      reshape     = true;
-      break;
-    case kDatasetView_LED_High:
-      dataset.ledHigh = SerialStudio::toDouble(value);
-      break;
-    case kDatasetView_HideOnDashboard:
-      dataset.hideOnDashboard = value.toBool();
-      break;
-    case kDatasetView_Plt_LogX:
-      dataset.pltLogX = value.toBool();
-      break;
-    case kDatasetView_Plt_LogY:
-      dataset.pltLogY = value.toBool();
-      break;
-    case kDatasetView_FFT_LogX:
-      dataset.fftLogX = value.toBool();
-      break;
-    case kDatasetView_FFT_Ballistics:
-      dataset.fftBallistics = value.toBool();
-      break;
-    default:
-      break;
-  }
-
-  if (reshape && !m_batchApplying)
-    buildDatasetModel(dataset);
 }
 
 /**
@@ -945,6 +712,7 @@ void DataModel::ProjectEditor::commitAlarmBandsForSelection(
     }
   }
 
+  const ProjectUndoFrame undo_frame{pm, tr("Edit Alarms")};
   pm.setAutoSaveSuspended(true);
   for (int i = 0; i < sel.size(); ++i) {
     DataModel::Dataset ds = sel[i];
@@ -1004,51 +772,69 @@ void DataModel::ProjectEditor::commitFrequencyMarkers(const QVariantList& marker
 }
 
 /**
- * @brief Dispatches dataset form edits to ProjectModel, rebuilding only on tree-visible changes.
+ * @brief Rejects a dataset form edit before it reaches the registry: an out-of-range combo index
+ *        (which would otherwise fall back to the domain's first entry) or a duplicate alias.
  */
-void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
+bool DataModel::ProjectEditor::datasetFormEditAccepted(int formId, const QVariant& value)
 {
-  if (!item)
-    return;
+  const int index = value.toInt();
+  if (formId == kDatasetView_Widget)
+    return index >= 0 && index < m_datasetWidgets.size();
 
-  const auto idInt = static_cast<DatasetItem>(item->data(ParameterType).toInt());
-  const auto value = item->data(EditableValue);
+  if (formId == kDatasetView_Plot)
+    return index >= 0 && index < m_plotOptions.size();
 
-  if (idInt == kDatasetView_Widget) {
-    const int widgetIdx = value.toInt();
-    if (widgetIdx < 0 || widgetIdx >= m_datasetWidgets.size())
-      return;
-  }
-  if (idInt == kDatasetView_Plot) {
-    const int plotIdx = value.toInt();
-    if (plotIdx < 0 || plotIdx >= m_plotOptions.size())
-      return;
-  }
-  if (idInt == kDatasetView_FFT_Samples) {
-    const int sampleIdx = value.toInt();
-    if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())
-      return;
-  }
-  if (idInt == kDatasetView_FFT_Window) {
-    const int windowIdx = value.toInt();
-    if (windowIdx < 0 || windowIdx >= m_fftWindowValues.size())
-      return;
-  }
-  if (idInt == kDatasetView_Alias && !validateSelectedDatasetAlias(value.toString().simplified()))
-    return;
+  if (formId == kDatasetView_DisplayFormat)
+    return index >= 0 && index < m_displayFormats.size();
 
-  onDatasetCommonItemChanged(item, m_selectedDataset);
-  onDatasetWidgetItemChanged(item, m_selectedDataset);
-  onDatasetRangeItemChanged(item, m_selectedDataset);
-  onDatasetFftItemChanged(item, m_selectedDataset);
-  onDatasetFlagItemChanged(item, m_selectedDataset);
+  if (formId == kDatasetView_FFT_Samples)
+    return index >= 0 && index < m_fftSamples.size();
 
+  if (formId == kDatasetView_FFT_Window)
+    return index >= 0 && index < m_fftWindowValues.size();
+
+  if (formId == kDatasetView_Alias)
+    return validateSelectedDatasetAlias(value.toString().simplified());
+
+  return true;
+}
+
+/**
+ * @brief Mirrors a dataset's virtual flag onto its tree item, which paints a different badge.
+ */
+void DataModel::ProjectEditor::syncDatasetTreeVirtualFlag(const DataModel::Dataset& dataset)
+{
+  for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+    if (it.value().groupId != dataset.groupId || it.value().datasetId != dataset.datasetId)
+      continue;
+
+    it.key()->setData(dataset.virtual_, TreeViewVirtual);
+    break;
+  }
+}
+
+/**
+ * @brief Routes one applied dataset edit through the undo choke point, taking the coalesce key
+ *        and the tree-rebuild flag from the registry descriptor of the edited property.
+ */
+void DataModel::ProjectEditor::commitDatasetFormEdit(int formId)
+{
   auto& pm             = m_projectModelRef;
+  const auto* prop     = Registry::datasetPropertyForFormId(formId);
   const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
+  const bool coalesces = prop && prop->coalesce;
+  const QString prefix = coalesces ? QString::fromLatin1(prop->coalesceKey) : QString();
+  const QString key =
+    coalesces
+      ? QStringLiteral("%1:%2:%3:%4")
+          .arg(
+            prefix, QString::number(groupId), QString::number(datasetId), QString::number(formId))
+      : QString();
 
-  if (idInt == kDatasetView_Title) {
+  if (formId == kDatasetView_Title) {
     const auto newTitle = m_selectedDataset.title;
+    pm.setNextUndoHint(tr("Rename Dataset"), key);
     pm.updateDataset(groupId, datasetId, m_selectedDataset, false);
 
     for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
@@ -1068,13 +854,49 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     return;
   }
 
-  const bool rebuildTree = (idInt == kDatasetView_Index);
+  const bool rebuildTree = prop && prop->rebuildTree;
+  pm.setNextUndoHint(tr("Edit Dataset"), key);
   pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
   if (!rebuildTree)
     syncDatasetItemCache(groupId, datasetId);
 
   Q_EMIT datasetOptionsChanged();
   Q_EMIT editableOptionsChanged();
+}
+
+/**
+ * @brief Dispatches dataset form edits to ProjectModel, rebuilding only on tree-visible changes.
+ */
+void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
+{
+  if (!item)
+    return;
+
+  const auto idInt = static_cast<DatasetItem>(item->data(ParameterType).toInt());
+  const auto value = item->data(EditableValue);
+  const int formId = static_cast<int>(idInt);
+  if (!datasetFormEditAccepted(formId, value))
+    return;
+
+  const auto hint =
+    Registry::applyDatasetFormEdit(formId, value, m_selectedDataset, m_projectModelRef);
+  if (idInt == kDatasetView_Virtual)
+    syncDatasetTreeVirtualFlag(m_selectedDataset);
+
+  const bool rebuildNow   = !m_batchApplying && hint == PropertyHooks::RebuildHint::Sync;
+  const bool rebuildLater = !m_batchApplying && hint == PropertyHooks::RebuildHint::Deferred;
+  if (rebuildNow)
+    buildDatasetModel(m_selectedDataset);
+
+  if (rebuildLater) {
+    const int uid = m_selectedDataset.uniqueId;
+    QTimer::singleShot(0, this, [this, uid] {
+      if (m_selectedDataset.uniqueId == uid)
+        buildDatasetModel(m_selectedDataset);
+    });
+  }
+
+  commitDatasetFormEdit(formId);
 }
 
 /**
@@ -1178,6 +1000,11 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
     }
   }
 
+  m_projectModelRef.setNextUndoHint(tr("Edit Output Widget"),
+                                    QStringLiteral("owidget:%1:%2:%3")
+                                      .arg(QString::number(m_selectedOutputWidget.groupId),
+                                           QString::number(m_selectedOutputWidget.widgetId),
+                                           QString::number(id.toInt())));
   m_projectModelRef.updateOutputWidget(
     m_selectedOutputWidget.groupId, m_selectedOutputWidget.widgetId, m_selectedOutputWidget, false);
 }

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -59,6 +59,7 @@
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "ProjectModelShared.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 namespace DataModel {
@@ -357,6 +358,7 @@ void DataModel::ProjectModel::autoSave()
   }
 
   setModified(false);
+  m_history.markSaved();
 
   if (m_runtimeDirty)
     syncRuntime();
@@ -418,7 +420,7 @@ void DataModel::ProjectModel::setAutoSaveSuspended(bool suspend)
  */
 bool DataModel::ProjectModel::writeProjectFile(const QString& path)
 {
-  Q_ASSERT(!path.isEmpty());
+  SS_ASSERT(!path.isEmpty(), return false);
 
   QSaveFile file(path);
   if (!file.open(QFile::WriteOnly)) {
@@ -572,6 +574,7 @@ bool DataModel::ProjectModel::finalizeProjectSave()
   static auto& appState = AppState::instance();
   appState.setOperationMode(SerialStudio::ProjectFile);
   setModified(false);
+  m_history.markSaved();
   Q_EMIT jsonFileChanged();
   return true;
 }

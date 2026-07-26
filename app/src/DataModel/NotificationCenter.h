@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -30,6 +30,7 @@
 
 class QSystemTrayIcon;
 class QJSEngine;
+class SessionContext;
 struct lua_State;
 
 namespace DataModel {
@@ -75,14 +76,16 @@ signals:
   void routeWarningsToNotificationsChanged();
 
 private:
+  friend class ::SessionContext;
   explicit NotificationCenter();
-  ~NotificationCenter();
   NotificationCenter(NotificationCenter&&)                 = delete;
   NotificationCenter(const NotificationCenter&)            = delete;
   NotificationCenter& operator=(NotificationCenter&&)      = delete;
   NotificationCenter& operator=(const NotificationCenter&) = delete;
 
 public:
+  ~NotificationCenter();
+
   [[nodiscard]] static NotificationCenter& instance();
 
   static void installScriptApi(lua_State* L);

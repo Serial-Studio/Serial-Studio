@@ -31,8 +31,16 @@
 
 #include "Licensing/CommercialToken.h"
 #include "Misc/Utilities.h"
+#include "SSAssert.h"
 
 Q_LOGGING_CATEGORY(lcMqttSub, "serialstudio.mqtt.subscriber", QtCriticalMsg)
+
+//--------------------------------------------------------------------------------------------------
+// Constants: per-step deadlines. Attempts and backoff belong to the shared Async::RetryPolicy.
+//--------------------------------------------------------------------------------------------------
+
+static constexpr int kBrokerConnectTimeoutMs    = 15000;
+static constexpr int kBrokerDisconnectTimeoutMs = 5000;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -46,11 +54,14 @@ IO::Drivers::MQTT::MQTT()
   , m_cleanSession(true)
   , m_autoKeepAlive(true)
   , m_userWantsOpen(false)
-  , m_reconnectPending(false)
+  , m_connecting(false)
+  , m_failureNotified(false)
+  , m_sessionEstablished(false)
   , m_port(1883)
   , m_keepAlive(60)
   , m_protocolVersion(QMqttClient::MQTT_5_0)
   , m_hostname(QStringLiteral("127.0.0.1"))
+  , m_runner(this)
 {
   m_mqttVersions.insert(tr("MQTT 3.1"), QMqttClient::MQTT_3_1);
   m_mqttVersions.insert(tr("MQTT 3.1.1"), QMqttClient::MQTT_3_1_1);
@@ -75,6 +86,7 @@ IO::Drivers::MQTT::MQTT()
   connect(&m_client, &QMqttClient::stateChanged, this, &MQTT::onStateChanged);
   connect(&m_client, &QMqttClient::errorChanged, this, &MQTT::onErrorChanged);
   connect(&m_client, &QMqttClient::messageReceived, this, &MQTT::onMessageReceived);
+  connect(&m_runner, &Async::TaskRunner::finished, this, &MQTT::onOpenFlowFinished);
 
   loadPersistedSettings();
   if (m_clientId.isEmpty())
@@ -102,11 +114,16 @@ IO::Drivers::MQTT::~MQTT()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Disconnects from the MQTT broker.
+ * @brief Disconnects from the MQTT broker. The flow is cancelled first so a pending attempt
+ *        cannot re-open the session behind the close.
  */
 void IO::Drivers::MQTT::close()
 {
-  m_userWantsOpen = false;
+  m_userWantsOpen      = false;
+  m_connecting         = false;
+  m_failureNotified    = false;
+  m_sessionEstablished = false;
+  m_runner.cancel();
 
   if (m_client.state() != QMqttClient::Disconnected)
     m_client.disconnectFromHost();
@@ -154,42 +171,175 @@ qint64 IO::Drivers::MQTT::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the broker connection. Subscription is issued once Connected.
+ * @brief Returns true; the driver opens through an orchestrated, non-blocking flow.
+ */
+bool IO::Drivers::MQTT::supportsAsyncOpen() const noexcept
+{
+  return true;
+}
+
+/**
+ * @brief Starts an open attempt and reports whether the request was accepted, which is what this
+ *        driver always reported: the broker session itself has never been established on return.
  */
 bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
 {
+  beginOpen(mode);
+  return m_userWantsOpen;
+}
+
+/**
+ * @brief Starts the broker session: dial, wait, subscribe (a rejected filter fails the open).
+ *        The notification latch clears only on a request's first attempt: retries re-enter with
+ *        m_userWantsOpen already set, keeping the error box at one per open request.
+ */
+void IO::Drivers::MQTT::beginOpen(const QIODevice::OpenMode mode)
+{
   Q_UNUSED(mode);
 
-  const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD()) {
-    Misc::Utilities::showMessageBox(
-      tr("MQTT Feature Requires a Commercial License"),
-      tr("Subscribing to an MQTT broker is only available with a valid Serial Studio license "
-         "or an active trial."),
-      QMessageBox::Warning);
-    return false;
+  if (!m_userWantsOpen)
+    m_failureNotified = false;
+
+  QString reason;
+  if (!openRequestAccepted(reason)) {
+    Q_EMIT openFinished(false, reason);
+    return;
   }
 
-  if (m_hostname.isEmpty() || m_port == 0) {
-    qCWarning(lcMqttSub) << "open() rejected: missing hostname or port" << m_hostname << m_port;
-    return false;
-  }
-
-  if (m_topicFilter.isEmpty()) {
-    qCWarning(lcMqttSub) << "open() rejected: empty topic filter";
-    return false;
-  }
-
-  if (m_client.state() != QMqttClient::Disconnected) {
+  if (m_client.state() == QMqttClient::Connected) {
     qCInfo(lcMqttSub) << "open() no-op; state already" << m_client.state();
-    return true;
+    m_userWantsOpen = true;
+    Q_EMIT openFinished(true, QString());
+    return;
   }
 
   if (m_clientId.isEmpty())
     regenerateClientId();
 
-  applyPendingToClient();
+  m_connecting    = true;
   m_userWantsOpen = true;
+  m_runner.run(buildOpenFlow());
+}
+
+/**
+ * @brief Latches the driver's one failure box and answers whether the caller may show it: the
+ *        driver boxes only a failure of a session that was never up (license, configuration, a
+ *        refused first connect), verbatim; once a session existed the give-up is reported by the
+ *        connection manager as a lost link, so a box here would be the second for one event.
+ */
+bool IO::Drivers::MQTT::claimFailureReport()
+{
+  if (m_failureNotified || m_sessionEstablished)
+    return false;
+
+  m_failureNotified = true;
+  return true;
+}
+
+/**
+ * @brief Validates the open request, reporting the license warning at most once per request so a
+ *        retried attempt cannot stack message boxes.
+ */
+bool IO::Drivers::MQTT::openRequestAccepted(QString& reason)
+{
+  const auto& token = Licensing::CommercialToken::current();
+  if (!token.isValid() || !SS_LICENSE_GUARD()) {
+    if (claimFailureReport())
+      Misc::Utilities::showMessageBox(
+        tr("MQTT Feature Requires a Commercial License"),
+        tr("Subscribing to an MQTT broker is only available with a valid Serial Studio license "
+           "or an active trial."),
+        QMessageBox::Warning);
+
+    reason = QStringLiteral("a commercial license is required");
+    return false;
+  }
+
+  if (m_hostname.isEmpty() || m_port == 0) {
+    qCWarning(lcMqttSub) << "open() rejected: missing hostname or port" << m_hostname << m_port;
+    reason = QStringLiteral("the broker hostname or port is missing");
+    return false;
+  }
+
+  if (m_topicFilter.isEmpty()) {
+    qCWarning(lcMqttSub) << "open() rejected: empty topic filter";
+    reason = QStringLiteral("the topic filter is empty");
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Composes the open sequence against the client's current state, so an attempt that finds
+ *        a session already on its way waits for it instead of dialing a second one.
+ */
+Async::Task* IO::Drivers::MQTT::buildOpenFlow()
+{
+  auto* group = Async::sequential(QStringLiteral("mqtt-open"));
+
+  if (m_client.state() == QMqttClient::Disconnected)
+    group->addChild(Async::invoke(QStringLiteral("broker-dial"),
+                                  [this](QString& reason) { return dialBroker(reason); }));
+
+  group->addChild(makeConnectStep());
+  group->addChild(Async::invoke(QStringLiteral("broker-subscribe"),
+                                [this](QString& reason) { return subscribeToTopic(reason); }));
+
+  return group;
+}
+
+/**
+ * @brief Composes the reconnect a broker-setting change needs. The disconnect is requested before
+ *        composing so the wait step is only added when the session is genuinely still up.
+ */
+Async::Task* IO::Drivers::MQTT::buildReconnectFlow()
+{
+  auto* group = Async::sequential(QStringLiteral("mqtt-reconnect"));
+
+  if (m_client.state() != QMqttClient::Disconnected) {
+    auto* wait = Async::awaitSignal(QStringLiteral("broker-disconnect"));
+    wait->onSuccess(&m_client, &QMqttClient::disconnected);
+    group->addChild(Async::timeout(wait, kBrokerDisconnectTimeoutMs, m_runner.clock()));
+  }
+
+  if (!m_userWantsOpen)
+    return group;
+
+  group->addChild(Async::invoke(QStringLiteral("broker-dial"),
+                                [this](QString& reason) { return dialBroker(reason); }));
+  group->addChild(makeConnectStep());
+  group->addChild(Async::invoke(QStringLiteral("broker-subscribe"),
+                                [this](QString& reason) { return subscribeToTopic(reason); }));
+
+  return group;
+}
+
+/**
+ * @brief Builds the bounded wait for the broker to accept the session.
+ */
+Async::Task* IO::Drivers::MQTT::makeConnectStep()
+{
+  auto* step = Async::awaitSignal(QStringLiteral("broker-connect"));
+  step->onSuccess(&m_client, &QMqttClient::connected);
+  step->onFailure(
+    &m_client, &QMqttClient::disconnected, QStringLiteral("the broker closed the connection"));
+  step->setAbortHandler([this]() { m_client.disconnectFromHost(); });
+
+  return Async::timeout(step, kBrokerConnectTimeoutMs, m_runner.clock());
+}
+
+/**
+ * @brief Pushes the staged settings into the client and dials the broker.
+ */
+bool IO::Drivers::MQTT::dialBroker(QString& reason)
+{
+  if (m_client.state() != QMqttClient::Disconnected) {
+    reason = QStringLiteral("the client is already busy");
+    return false;
+  }
+
+  applyPendingToClient();
 
   qCInfo(lcMqttSub).nospace() << "Connecting to " << (m_sslEnabled ? "mqtts://" : "mqtt://")
                               << m_hostname << ":" << m_port << " clientId=" << m_clientId
@@ -201,6 +351,60 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
     m_client.connectToHost();
 
   return true;
+}
+
+/**
+ * @brief Subscribes to the configured filter, dropping the session when the broker refuses it so
+ *        the next attempt starts from a clean state instead of a connected but silent source.
+ */
+bool IO::Drivers::MQTT::subscribeToTopic(QString& reason)
+{
+  if (m_topicFilter.isEmpty())
+    return true;
+
+  QMqttTopicFilter filter;
+  filter.setFilter(m_topicFilter);
+
+  auto* sub = m_client.subscribe(filter, 0);
+  if (!sub || sub->state() == QMqttSubscription::Error) {
+    qCCritical(lcMqttSub) << "subscribe failed for filter" << m_topicFilter;
+    m_client.disconnectFromHost();
+    reason = tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter);
+    return false;
+  }
+
+  qCInfo(lcMqttSub) << "subscribed to" << m_topicFilter << "initial state:" << sub->state();
+  connect(
+    sub, &QMqttSubscription::stateChanged, this, [this](QMqttSubscription::SubscriptionState s) {
+      qCInfo(lcMqttSub) << "subscription state for" << m_topicFilter << "->" << s;
+    });
+
+  return true;
+}
+
+/**
+ * @brief Reports the attempt's outcome. A cancel is a close the owner asked for and says nothing,
+ *        and neither does a flow that only tore a session down for a settings change. A flow that
+ *        succeeds without a live session lost the broker between subscribe and completion, and
+ *        must still report, or the owner waits on an open that will never finish.
+ */
+void IO::Drivers::MQTT::onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error)
+{
+  if (outcome == Async::Outcome::Cancelled)
+    return;
+
+  m_connecting = false;
+  if (outcome == Async::Outcome::Success) {
+    if (isOpen())
+      Q_EMIT openFinished(true, QString());
+    else if (m_userWantsOpen)
+      Q_EMIT openFinished(false, tr("The broker closed the connection."));
+
+    return;
+  }
+
+  const QString reason = error.reason.isEmpty() ? QStringLiteral("open failed") : error.reason;
+  Q_EMIT openFinished(false, reason);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -876,47 +1080,41 @@ void IO::Drivers::MQTT::setDriverProperty(const QString& key, const QVariant& va
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles broker state transitions; subscribes once Connected.
+ * @brief Handles broker state transitions. A session that goes down while the user still wants it
+ *        open, and outside an attempt of our own, is the drop a supervised flow recovers from.
  */
 void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
 {
   qCInfo(lcMqttSub) << "state changed:" << state;
   Q_EMIT connectedChanged();
 
-  if (state == QMqttClient::Connected && !m_topicFilter.isEmpty()) {
-    QMqttTopicFilter filter;
-    filter.setFilter(m_topicFilter);
-
-    auto* sub = m_client.subscribe(filter, 0);
-    if (!sub || sub->state() == QMqttSubscription::Error) {
-      qCCritical(lcMqttSub) << "subscribe failed for filter" << m_topicFilter;
-      Misc::Utilities::showMessageBox(tr("MQTT Subscription Error"),
-                                      tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
-                                      QMessageBox::Critical);
-      return;
-    }
-
-    qCInfo(lcMqttSub) << "subscribed to" << m_topicFilter << "initial state:" << sub->state();
-    connect(
-      sub, &QMqttSubscription::stateChanged, this, [this](QMqttSubscription::SubscriptionState s) {
-        qCInfo(lcMqttSub) << "subscription state for" << m_topicFilter << "->" << s;
-      });
+  if (state == QMqttClient::Connected) {
+    m_failureNotified    = false;
+    m_sessionEstablished = true;
+    return;
   }
+
+  if (state == QMqttClient::Disconnected && m_userWantsOpen && !m_connecting)
+    Q_EMIT linkDropped();
 }
 
 /**
- * @brief Surfaces broker errors to the user.
+ * @brief Surfaces broker errors to the user, subject to claimFailureReport(): a retried connect
+ *        reports the same failure on every attempt, and a session that had been up hands its
+ *        failure to the shared give-up report instead of boxing here as well.
  */
 void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
 {
-  if (error != QMqttClient::NoError)
-    qCWarning(lcMqttSub) << "client error" << error;
+  if (error == QMqttClient::NoError)
+    return;
+
+  qCWarning(lcMqttSub) << "client error" << error;
+  if (!claimFailureReport())
+    return;
 
   QString title;
   QString message;
   switch (error) {
-    case QMqttClient::NoError:
-      return;
     case QMqttClient::InvalidProtocolVersion:
       title   = tr("Invalid MQTT Protocol Version");
       message = tr("The broker rejected the configured MQTT protocol version.");
@@ -963,7 +1161,7 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
  */
 void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
-  Q_ASSERT(topic.isValid());
+  SS_ASSERT(topic.isValid(), return);
 
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()) {
@@ -1057,7 +1255,7 @@ QString IO::Drivers::MQTT::settingsKey(const char* leaf) const
  */
 void IO::Drivers::MQTT::applyPendingToClient()
 {
-  Q_ASSERT(m_client.state() == QMqttClient::Disconnected);
+  SS_ASSERT(m_client.state() == QMqttClient::Disconnected, return);
 
   m_client.setHostname(m_hostname);
   m_client.setPort(m_port);
@@ -1071,38 +1269,19 @@ void IO::Drivers::MQTT::applyPendingToClient()
 }
 
 /**
- * @brief If the live connection is active, disconnect now and reopen once Disconnected.
+ * @brief If the live connection is active, drop it now and reopen through the flow. Running it on
+ *        the driver's runner is what supersedes an earlier reconnect instead of stacking one-shot
+ *        connections, and the drop itself is not reported as a link failure.
  */
 void IO::Drivers::MQTT::scheduleReconnectIfActive()
 {
   if (m_client.state() == QMqttClient::Disconnected)
     return;
 
-  if (m_reconnectPending) {
-    if (m_client.state() != QMqttClient::Disconnected)
-      m_client.disconnectFromHost();
-
-    return;
-  }
-
   qCInfo(lcMqttSub) << "broker setting changed while connected -- scheduling reconnect";
-  m_reconnectPending = true;
 
-  auto* conn = new QMetaObject::Connection;
-  *conn =
-    connect(&m_client, &QMqttClient::stateChanged, this, [this, conn](QMqttClient::ClientState s) {
-      if (s != QMqttClient::Disconnected)
-        return;
-
-      disconnect(*conn);
-      delete conn;
-      m_reconnectPending = false;
-
-      if (!m_userWantsOpen)
-        return;
-
-      (void)open(QIODevice::ReadOnly);
-    });
-
+  m_connecting = true;
+  m_runner.cancel();
   m_client.disconnectFromHost();
+  m_runner.run(buildReconnectFlow());
 }

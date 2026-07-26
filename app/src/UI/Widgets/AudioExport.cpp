@@ -36,6 +36,7 @@
 #include "MDF4/Player.h"
 #include "Misc/WorkspaceManager.h"
 #include "Sessions/Player.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -89,7 +90,7 @@ static void appendFloatLE(QByteArray& buffer, float value)
  */
 static QString audioKindSlug(SerialStudio::DashboardWidget kind)
 {
-  Q_ASSERT(kind != SerialStudio::DashboardNoWidget);
+  SS_ASSERT(kind != SerialStudio::DashboardNoWidget, return QStringLiteral("widget"));
   switch (kind) {
     case SerialStudio::DashboardFFT:
       return QStringLiteral("fft");
@@ -139,8 +140,14 @@ void Widgets::AudioExportWorker::closeResources()
  */
 void Widgets::AudioExportWorker::openSession(quint32 key, AudioSessionConfig config)
 {
-  Q_ASSERT(config.sampleRate > 0);
-  Q_ASSERT(!config.outputPath.isEmpty());
+  SS_ASSERT(config.sampleRate > 0, {
+    Q_EMIT sessionOpenFailed(key);
+    return;
+  });
+  SS_ASSERT(!config.outputPath.isEmpty(), {
+    Q_EMIT sessionOpenFailed(key);
+    return;
+  });
 
   auto existing = m_sessions.find(key);
   if (existing != m_sessions.end()) {
@@ -170,7 +177,6 @@ void Widgets::AudioExportWorker::closeSession(quint32 key)
   if (it == m_sessions.end())
     return;
 
-  Q_ASSERT(it->first == key);
   finalizeSession(it->second);
   m_sessions.erase(it);
   Q_EMIT resourceOpenChanged();
@@ -197,13 +203,13 @@ void Widgets::AudioExportWorker::closeAllSessions()
  */
 void Widgets::AudioExportWorker::processItems(const std::vector<AudioExportItem>& items)
 {
-  Q_ASSERT(items.size() <= 10000);
-  Q_ASSERT(kBytesPerSample == 4);
+  static_assert(kBytesPerSample == 4);
   if (m_sessions.empty())
     return;
 
   std::unordered_map<quint32, QByteArray> pending;
-  const size_t count = items.size();
+  size_t count = items.size();
+  SS_ASSERT(count <= 10000, count = 10000);
   for (size_t i = 0; i < count; ++i) {
     const auto& item = items[i];
     auto it          = m_sessions.find(item.sessionKey);
@@ -234,7 +240,10 @@ void Widgets::AudioExportWorker::processItems(const std::vector<AudioExportItem>
     auto& session      = it->second;
     const qint64 wrote = session.file->write(buffer);
     const qint64 good  = std::max<qint64>(0, wrote);
-    Q_ASSERT(session.bytesOnDisk >= 0);
+    SS_ASSERT_LOG(session.bytesOnDisk >= 0);
+    if (session.bytesOnDisk < 0)
+      continue;
+
     session.bytesOnDisk += good;
     if (wrote != buffer.size())
       session.droppedSamples += (buffer.size() - good) / kBytesPerSample;
@@ -248,8 +257,8 @@ void Widgets::AudioExportWorker::processItems(const std::vector<AudioExportItem>
  */
 bool Widgets::AudioExportWorker::openWavFile(AudioSession& session)
 {
-  Q_ASSERT(session.config.sampleRate > 0);
-  Q_ASSERT(!session.config.outputPath.isEmpty());
+  SS_ASSERT(session.config.sampleRate > 0, return false);
+  SS_ASSERT(!session.config.outputPath.isEmpty(), return false);
 
   const QFileInfo info(session.config.outputPath);
   if (!QDir().mkpath(info.absolutePath())) {
@@ -273,8 +282,8 @@ bool Widgets::AudioExportWorker::openWavFile(AudioSession& session)
  */
 void Widgets::AudioExportWorker::writeWavHeader(QFile& file, int sampleRate)
 {
-  Q_ASSERT(file.isOpen());
-  Q_ASSERT(sampleRate > 0);
+  SS_ASSERT(file.isOpen(), return);
+  SS_ASSERT(sampleRate > 0, return);
 
   const quint16 channels   = 1;
   const quint16 bits       = 32;
@@ -298,8 +307,7 @@ void Widgets::AudioExportWorker::writeWavHeader(QFile& file, int sampleRate)
   appendLE32(header, 0);
 
   const qint64 wrote = file.write(header);
-  Q_ASSERT(wrote == kWavHeaderBytes);
-  Q_UNUSED(wrote);
+  SS_ASSERT_LOG(wrote == kWavHeaderBytes);
 }
 
 /**
@@ -307,8 +315,8 @@ void Widgets::AudioExportWorker::writeWavHeader(QFile& file, int sampleRate)
  */
 void Widgets::AudioExportWorker::patchWavSizes(QFile& file, qint64 dataBytes)
 {
-  Q_ASSERT(file.isOpen());
-  Q_ASSERT(dataBytes >= 0);
+  SS_ASSERT(file.isOpen(), return);
+  SS_ASSERT(dataBytes >= 0, return);
 
   QByteArray riffSize;
   QByteArray dataSize;
@@ -327,8 +335,8 @@ void Widgets::AudioExportWorker::patchWavSizes(QFile& file, qint64 dataBytes)
  */
 void Widgets::AudioExportWorker::rescaleDataChunk(AudioSession& session, float gain)
 {
-  Q_ASSERT(session.file != nullptr);
-  Q_ASSERT(gain > 0.0f);
+  SS_ASSERT(session.file != nullptr, return);
+  SS_ASSERT(gain > 0.0f, return);
 
   const qint64 dataBytes = session.bytesOnDisk;
   const qint64 chunks    = (dataBytes + kRescaleChunk - 1) / kRescaleChunk;
@@ -366,8 +374,8 @@ void Widgets::AudioExportWorker::rescaleDataChunk(AudioSession& session, float g
  */
 void Widgets::AudioExportWorker::writeAudibleCompanion(AudioSession& session, int factor)
 {
-  Q_ASSERT(session.file != nullptr);
-  Q_ASSERT(factor >= 1);
+  SS_ASSERT(session.file != nullptr, return);
+  SS_ASSERT(factor >= 1, factor = 1);
 
   QString base = session.config.outputPath;
   if (base.endsWith(QStringLiteral(".wav"), Qt::CaseInsensitive))
@@ -413,7 +421,7 @@ void Widgets::AudioExportWorker::writeAudibleCompanion(AudioSession& session, in
  */
 void Widgets::AudioExportWorker::finalizeSession(AudioSession& session)
 {
-  Q_ASSERT(session.config.sampleRate > 0);
+  SS_ASSERT(session.config.sampleRate > 0, return);
   if (!session.file)
     return;
 
@@ -424,7 +432,7 @@ void Widgets::AudioExportWorker::finalizeSession(AudioSession& session)
     return;
   }
 
-  Q_ASSERT(session.runningPeak >= 0.0f);
+  SS_ASSERT(session.runningPeak >= 0.0f, session.runningPeak = 0.0f);
   if (!session.config.useScale && session.runningPeak > 0.0f)
     rescaleDataChunk(session, kHeadroomFullScale / session.runningPeak);
 
@@ -482,7 +490,7 @@ Widgets::AudioExport& Widgets::AudioExport::instance()
  */
 quint32 Widgets::AudioExport::sessionKey(SerialStudio::DashboardWidget kind, int index)
 {
-  Q_ASSERT(index >= 0);
+  SS_ASSERT(index >= 0, index = 0);
   return (static_cast<quint32>(kind) << 16) | (static_cast<quint32>(index) & 0xFFFFu);
 }
 
@@ -515,8 +523,8 @@ void Widgets::AudioExport::openSession(SerialStudio::DashboardWidget kind,
                                        int index,
                                        AudioSessionConfig config)
 {
-  Q_ASSERT(m_worker != nullptr);
-  Q_ASSERT(config.sampleRate > 0);
+  SS_ASSERT(m_worker != nullptr, return);
+  SS_ASSERT(config.sampleRate > 0, return);
 
   const quint32 key = sessionKey(kind, index);
   const auto dir    = audioPath(config.datasetTitle, config.projectTitle);
@@ -537,7 +545,7 @@ void Widgets::AudioExport::openSession(SerialStudio::DashboardWidget kind,
  */
 void Widgets::AudioExport::closeSession(SerialStudio::DashboardWidget kind, int index)
 {
-  Q_ASSERT(m_worker != nullptr);
+  SS_ASSERT(m_worker != nullptr, return);
   const quint32 key = sessionKey(kind, index);
   m_activeSessions.remove(key);
 
@@ -551,7 +559,7 @@ void Widgets::AudioExport::closeSession(SerialStudio::DashboardWidget kind, int 
  */
 void Widgets::AudioExport::closeAllSessions()
 {
-  Q_ASSERT(m_worker != nullptr);
+  SS_ASSERT(m_worker != nullptr, return);
   m_activeSessions.clear();
 
   auto* worker = static_cast<AudioExportWorker*>(m_worker);
@@ -565,8 +573,8 @@ void Widgets::AudioExport::closeAllSessions()
  */
 void Widgets::AudioExport::onSessionOpenFailed(quint32 key)
 {
-  Q_ASSERT(m_worker != nullptr);
-  Q_ASSERT(thread() == QThread::currentThread());
+  SS_ASSERT(m_worker != nullptr, return);
+  SS_ASSERT_LOG(thread() == QThread::currentThread());
 
   m_activeSessions.remove(key);
   Q_EMIT sessionClosed(key);

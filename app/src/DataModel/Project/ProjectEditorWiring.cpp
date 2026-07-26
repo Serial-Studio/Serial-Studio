@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cmath>
@@ -37,6 +37,7 @@
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "UI/WidgetExtensions.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
@@ -438,6 +439,13 @@ void DataModel::ProjectEditor::wireExternalSignals()
       default:
         break;
     }
+  });
+
+  static auto& widgetCatalog = UI::WidgetExtensions::instance();
+  connect(&widgetCatalog, &UI::WidgetExtensions::catalogChanged, this, [this] {
+    generateComboBoxModels();
+    if (m_currentView == GroupView)
+      buildGroupModel(m_selectedGroup);
   });
 
   connect(&m_connectionManager, &IO::ConnectionManager::driverChanged, this, [this] {

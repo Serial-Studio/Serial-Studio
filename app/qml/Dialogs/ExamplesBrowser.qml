@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -147,7 +147,7 @@ Widgets.SmartDialog {
         }
 
         Label {
-          color: "#f39c12"
+          color: Cpp_ThemeManager.colors["alarm_warning"]
           text: qsTr("Pro")
           font: Cpp_Misc_CommonFonts.boldUiFont
           visible: Cpp_Examples.selectedExample.requiresPro || false
@@ -382,7 +382,7 @@ Widgets.SmartDialog {
 
                     Label {
                       opacity: 0.6
-                      color: "#ffffff"
+                      color: Cpp_ThemeManager.colors["bright_text"]
                       anchors.centerIn: parent
                       text: modelData.title.charAt(0)
                       visible: !modelData.hasScreenshot

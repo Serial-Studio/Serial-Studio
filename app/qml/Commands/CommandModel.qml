@@ -14,12 +14,14 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
+
+import SerialStudio
 
 QtObject {
   id: root
@@ -80,7 +82,7 @@ QtObject {
       if (entry === null || !entry.visible)
         continue
 
-      if (f.length > 0 && entry.name.toLowerCase().indexOf(f) === -1)
+      if (f.length > 0 && !SerialStudio.searchMatches(f, entry.name))
         continue
 
       out.push(entry)

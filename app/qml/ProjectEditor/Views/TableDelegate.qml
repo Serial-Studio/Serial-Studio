@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -37,9 +37,21 @@ ColumnLayout {
   // Custom properties
   //
   property var modelPointer: null
+  property bool searchable: false
   property bool headerVisible: true
   property bool spacerVisible: true
   property Component footerItem: null
+  property alias searchQuery: filterProxy.query
+
+  //
+  // Optional row filter, interposed only when searchable; every setData below goes through
+  // view.model so filtered row indices stay mapped (search UI lives in EditorSearchBand)
+  //
+  RowFilterProxy {
+    id: filterProxy
+
+    sourceModel: root.searchable ? root.modelPointer : null
+  }
 
   //
   // Set width & height for column cells
@@ -170,8 +182,8 @@ ColumnLayout {
     reuseItems: false
     interactive: false
     Layout.fillWidth: true
-    model: root.modelPointer
     implicitHeight: view.rows * root.rowHeight
+    model: root.searchable ? filterProxy : root.modelPointer
 
     //
     // Table row delegate
@@ -440,13 +452,20 @@ ColumnLayout {
           property var modelPlaceholder: model.placeholderValue
 
           sourceComponent: TextField {
-            text: textFieldLoader.editableValue
             enabled: textFieldLoader.modelActive
             opacity: textFieldLoader.modelActive ? 1 : 0.5
             placeholderText: textFieldLoader.modelPlaceholder ?? ""
 
+            property var modelValue: textFieldLoader.editableValue
+
+            Component.onCompleted: text = String(textFieldLoader.editableValue ?? "")
+            onModelValueChanged: {
+              if (!activeFocus)
+                text = String(modelValue ?? "")
+            }
+
             onTextEdited: {
-              root.modelPointer.setData(
+              view.model.setData(
                     view.index(textFieldLoader.modelRow, textFieldLoader.modelColumn),
                     text,
                     ProjectEditor.EditableValue)
@@ -478,13 +497,20 @@ ColumnLayout {
 
           sourceComponent: TextField {
             echoMode: TextInput.Password
-            text: passwordFieldLoader.editableValue
             enabled: passwordFieldLoader.modelActive
             opacity: passwordFieldLoader.modelActive ? 1 : 0.5
             placeholderText: passwordFieldLoader.modelPlaceholder ?? ""
 
+            property var modelValue: passwordFieldLoader.editableValue
+
+            Component.onCompleted: text = String(passwordFieldLoader.editableValue ?? "")
+            onModelValueChanged: {
+              if (!activeFocus)
+                text = String(modelValue ?? "")
+            }
+
             onTextEdited: {
-              root.modelPointer.setData(
+              view.model.setData(
                     view.index(passwordFieldLoader.modelRow, passwordFieldLoader.modelColumn),
                     text,
                     ProjectEditor.EditableValue)
@@ -525,7 +551,7 @@ ColumnLayout {
 
               function onIconSelected(icon) {
                 if (iconPickerRow.visible) {
-                  root.modelPointer.setData(
+                  view.model.setData(
                         view.index(iconPickerLoader.modelRow, iconPickerLoader.modelColumn),
                         icon,
                         ProjectEditor.EditableValue)
@@ -611,7 +637,7 @@ ColumnLayout {
             }
 
             function commit(value) {
-              root.modelPointer.setData(
+              view.model.setData(
                     view.index(colorPickerLoader.modelRow, colorPickerLoader.modelColumn),
                     value,
                     ProjectEditor.EditableValue)
@@ -710,15 +736,14 @@ ColumnLayout {
           property int modelRow: row
           property int modelColumn: column
           property var modelActive: model.active
-          property int modelMin: model.minValue ?? 0
           property var editableValue: model.editableValue
           property int modelMax: model.maxValue ?? 1000000
+          property int modelMin: model.minValue ?? -1000000
           property var modelPlaceholder: model.placeholderValue
 
           sourceComponent: TextField {
             leftPadding: 6
             rightPadding: 6
-            text: intFieldLoader.editableValue
             enabled: intFieldLoader.modelActive
             opacity: intFieldLoader.modelActive ? 1 : 0.5
             placeholderText: intFieldLoader.modelPlaceholder ?? ""
@@ -727,19 +752,38 @@ ColumnLayout {
             color: Cpp_ThemeManager.colors["table_text"]
             horizontalAlignment: TextInput.AlignLeft
 
+            //
+            // Sync from the model only while unfocused (HexTextEdit pattern): a live binding
+            // echoes the last commit back and refills the field the moment the user clears it
+            //
+            property var modelValue: intFieldLoader.editableValue
+
+            Component.onCompleted: text = String(modelValue ?? "")
+            onModelValueChanged: {
+              if (!activeFocus)
+                text = String(modelValue ?? "")
+            }
+
+            //
+            // Bounds are enforced at commit, not per keystroke: a hard validator swallows the
+            // leading "-" of a negative number, so only the shape is validated while typing
+            //
             onTextEdited: {
               const num = parseInt(text, 10);
               if (!isNaN(num)) {
-                root.modelPointer.setData(
+                const clamped = Math.max(intFieldLoader.modelMin,
+                                         Math.min(intFieldLoader.modelMax, num));
+                view.model.setData(
                       view.index(intFieldLoader.modelRow, intFieldLoader.modelColumn),
-                      num,
+                      clamped,
                       ProjectEditor.EditableValue)
               }
             }
 
-            validator: IntValidator {
-              top: intFieldLoader.modelMax
-              bottom: intFieldLoader.modelMin
+            onEditingFinished: text = String(intFieldLoader.editableValue ?? "")
+
+            validator: RegularExpressionValidator {
+              regularExpression: /^-?\d*$/
             }
 
             background: Item {}
@@ -773,7 +817,14 @@ ColumnLayout {
             from: autoIntFieldLoader.modelMin
             font: Cpp_Misc_CommonFonts.monoFont
             enabled: autoIntFieldLoader.modelActive
-            value: autoIntFieldLoader.editableValue ?? 0
+
+            property var modelValue: autoIntFieldLoader.editableValue
+
+            Component.onCompleted: value = Number(autoIntFieldLoader.editableValue ?? 0)
+            onModelValueChanged: {
+              if (!activeFocus)
+                value = Number(modelValue ?? 0)
+            }
             opacity: autoIntFieldLoader.modelActive ? 1 : 0.5
 
             textFromValue: function(value, locale) {
@@ -790,15 +841,15 @@ ColumnLayout {
 
               try {
                 const n = Number.fromLocaleString(locale, text)
-                return isNaN(n) ? 0 : Math.round(n)
+                return isNaN(n) ? _autoIntSpin.value : Math.round(n)
               } catch (e) {
                 const n = parseInt(text, 10)
-                return isNaN(n) ? 0 : n
+                return isNaN(n) ? _autoIntSpin.value : n
               }
             }
 
             onValueModified: {
-              root.modelPointer.setData(
+              view.model.setData(
                     view.index(autoIntFieldLoader.modelRow, autoIntFieldLoader.modelColumn),
                     value,
                     ProjectEditor.EditableValue)
@@ -843,7 +894,6 @@ ColumnLayout {
           sourceComponent: TextField {
             leftPadding: 6
             rightPadding: 6
-            text: floatFieldLoader.editableValue
             enabled: floatFieldLoader.modelActive
             opacity: floatFieldLoader.modelActive ? 1 : 0.5
             placeholderText: floatFieldLoader.modelPlaceholder ?? ""
@@ -852,22 +902,40 @@ ColumnLayout {
             color: Cpp_ThemeManager.colors["table_text"]
             horizontalAlignment: TextInput.AlignLeft
 
+            //
+            // Sync from the model only while unfocused, so clearing the field to retype a
+            // number is never fought by the previous keystroke's commit echoing back
+            //
+            property var modelValue: floatFieldLoader.editableValue
+
+            Component.onCompleted: text = String(floatFieldLoader.editableValue ?? "")
+            onModelValueChanged: {
+              if (!activeFocus)
+                text = String(modelValue ?? "")
+            }
+
+            //
+            // Same commit-time bounds policy as the int field: never key-block the minus sign
+            //
             onTextEdited: {
               if (text === "-" || text === "." || text === "-.")
                 return;
 
               const num = Number(text);
               if (!isNaN(num)) {
-                root.modelPointer.setData(
+                const clamped = Math.max(floatFieldLoader.modelMin,
+                                         Math.min(floatFieldLoader.modelMax, num));
+                view.model.setData(
                       view.index(floatFieldLoader.modelRow, floatFieldLoader.modelColumn),
-                      num,
+                      clamped,
                       ProjectEditor.EditableValue)
               }
             }
 
-            validator: DoubleValidator {
-              top: floatFieldLoader.modelMax
-              bottom: floatFieldLoader.modelMin
+            onEditingFinished: text = String(floatFieldLoader.editableValue ?? "")
+
+            validator: RegularExpressionValidator {
+              regularExpression: /^-?\d*\.?\d*([eE][-+]?\d*)?$/
             }
 
             background: Item {}
@@ -899,7 +967,7 @@ ColumnLayout {
             enabled: comboBoxLoader.modelActive
             onActivated: {
               if (currentIndex !== comboBoxLoader.editableValue) {
-                root.modelPointer.setData(
+                view.model.setData(
                       view.index(comboBoxLoader.modelRow, comboBoxLoader.modelColumn),
                       currentIndex,
                       ProjectEditor.EditableValue)
@@ -944,8 +1012,9 @@ ColumnLayout {
             flat: true
             enabled: checkBoxLoader.modelActive
             onActivated: {
-              if ((currentIndex === 1) !== Boolean(checkBoxLoader.editableValue)) {
-                root.modelPointer.setData(
+              if (checkBoxLoader.editableValue === -1
+                  || (currentIndex === 1) !== Boolean(checkBoxLoader.editableValue)) {
+                view.model.setData(
                       view.index(checkBoxLoader.modelRow, checkBoxLoader.modelColumn),
                       currentIndex === 1,
                       ProjectEditor.EditableValue)
@@ -953,7 +1022,8 @@ ColumnLayout {
             }
             opacity: checkBoxLoader.modelActive ? 1 : 0.5
             model: [qsTr("No"), qsTr("Yes")]
-            currentIndex: checkBoxLoader.editableValue ? 1 : 0
+            currentIndex: checkBoxLoader.editableValue === -1
+                          ? -1 : (checkBoxLoader.editableValue ? 1 : 0)
             font: Cpp_Misc_CommonFonts.monoFont
 
             contentItem: Text {
@@ -995,7 +1065,7 @@ ColumnLayout {
 
             onClicked: {
               // Monotonic stamp forces the dispatcher to fire even on repeat presses.
-              root.modelPointer.setData(
+              view.model.setData(
                     view.index(buttonLoader.modelRow, buttonLoader.modelColumn),
                     Date.now(),
                     ProjectEditor.EditableValue)
@@ -1105,7 +1175,7 @@ ColumnLayout {
                     : Cpp_ThemeManager.colors["alarm"]
 
                 // Set model data
-                root.modelPointer.setData(
+                view.model.setData(
                       view.index(hexFieldLoader.modelRow, hexFieldLoader.modelColumn),
                       formattedText,
                       ProjectEditor.EditableValue)
@@ -1134,13 +1204,27 @@ ColumnLayout {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-          root.modelPointer.setData(
+          view.model.setData(
                 view.index(item.row, item.column),
                 Date.now(),
                 ProjectEditor.EditableValue)
         }
       }
     }
+  }
+
+  //
+  // Filtered-empty state: without it a zero-match search leaves a blank pane
+  //
+  Label {
+    opacity: 0.5
+    Layout.topMargin: 16
+    Layout.fillWidth: true
+    wrapMode: Text.WordWrap
+    horizontalAlignment: Text.AlignHCenter
+    color: Cpp_ThemeManager.colors["text"]
+    text: qsTr("No options match your search.")
+    visible: root.searchable && view.rows === 0 && filterProxy.query.trim().length > 0
   }
 
   //

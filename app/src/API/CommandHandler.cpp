@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/CommandHandler.h"
@@ -30,9 +30,12 @@
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/Handlers/DashboardHandler.h"
 #include "API/Handlers/DataTablesHandler.h"
+#include "API/Handlers/DiagnosticsHandler.h"
 #include "API/Handlers/ExtensionHandler.h"
 #include "API/Handlers/IOManagerHandler.h"
+#include "API/Handlers/MirrorHandler.h"
 #include "API/Handlers/NetworkHandler.h"
+#include "API/Handlers/ProblemsHandler.h"
 #include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/ScriptsHandler.h"
 #include "API/Handlers/SourceHandler.h"
@@ -250,6 +253,9 @@ void API::CommandHandler::initializeHandlers()
   Handlers::ControlScriptHandler::registerCommands();
   Handlers::SystemHandler::registerCommands();
   Handlers::AssistantHandler::registerCommands();
+  Handlers::ProblemsHandler::registerCommands();
+  Handlers::DiagnosticsHandler::registerCommands();
+  Handlers::MirrorHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <QCoreApplication>
@@ -25,6 +25,7 @@
 
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 using DataModel::INativeParser;
 using DataModel::INativeTemplate;
@@ -77,7 +78,7 @@ public:
   BatchedSensorParser(const QStringList& scalarFields, const QString& vectorField)
     : m_scalarFields(scalarFields), m_vectorField(vectorField)
   {
-    Q_ASSERT(!m_vectorField.isEmpty());
+    SS_ASSERT_LOG(!m_vectorField.isEmpty());
   }
 
   /**
@@ -110,7 +111,7 @@ private:
    */
   [[nodiscard]] QList<QStringList> parseJsonBytes(const QByteArray& bytes)
   {
-    Q_ASSERT(!m_vectorField.isEmpty());
+    SS_ASSERT(!m_vectorField.isEmpty(), return {});
 
     const auto doc = QJsonDocument::fromJson(bytes);
     if (!doc.isObject())
@@ -232,8 +233,8 @@ public:
   TimeSeries2dParser(const QString& recordsField, const QStringList& fields)
     : m_recordsField(recordsField), m_fields(fields)
   {
-    Q_ASSERT(!m_recordsField.isEmpty());
-    Q_ASSERT(!m_fields.isEmpty());
+    SS_ASSERT_LOG(!m_recordsField.isEmpty());
+    SS_ASSERT_LOG(!m_fields.isEmpty());
   }
 
   /**
@@ -266,7 +267,7 @@ private:
    */
   [[nodiscard]] QList<QStringList> parseJsonBytes(const QByteArray& bytes)
   {
-    Q_ASSERT(!m_fields.isEmpty());
+    SS_ASSERT(!m_fields.isEmpty(), return {});
 
     const auto doc = QJsonDocument::fromJson(bytes);
     if (!doc.isObject())

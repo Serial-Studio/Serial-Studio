@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/ProjectModel.h"
@@ -60,7 +60,9 @@
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "Project/ProjectModelShared.h"
+#include "SessionContext.h"
 #include "UI/Dashboard.h"
+#include "UI/WidgetExtensions.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/LemonSqueezy.h"
@@ -188,15 +190,17 @@ DataModel::ProjectModel::ProjectModel()
   });
 
   m_initialized = true;
+  m_history.setEnabled(true);
 }
 
 /**
- * @brief Returns the singleton ProjectModel instance.
+ * @brief Returns this session's project document. The object is owned by the SessionContext and
+ *        built by the composition root, so a reach before adoption is a named fatal instead of
+ *        an out-of-order lazy construction (spec 0039 M2, wave C2).
  */
 DataModel::ProjectModel& DataModel::ProjectModel::instance()
 {
-  static ProjectModel singleton;
-  return singleton;
+  return SessionContext::current().projectModel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -357,6 +361,101 @@ qint64 DataModel::ProjectModel::mutationEpoch() const noexcept
   return m_mutationEpoch;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Undo/redo history
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns true when a project-document step can be undone.
+ */
+bool DataModel::ProjectModel::canUndo() const noexcept
+{
+  return m_history.canUndo();
+}
+
+/**
+ * @brief Returns true when an undone project-document step can be replayed.
+ */
+bool DataModel::ProjectModel::canRedo() const noexcept
+{
+  return m_history.canRedo();
+}
+
+/**
+ * @brief Returns the label of the operation undo would revert.
+ */
+QString DataModel::ProjectModel::undoText() const
+{
+  return m_history.undoText();
+}
+
+/**
+ * @brief Returns the label of the operation redo would replay.
+ */
+QString DataModel::ProjectModel::redoText() const
+{
+  return m_history.redoText();
+}
+
+/**
+ * @brief Returns the undo history for scope/frame plumbing (API layer, editor bulk ops).
+ */
+DataModel::ProjectHistory& DataModel::ProjectModel::history() noexcept
+{
+  return m_history;
+}
+
+/**
+ * @brief Reverts the most recent project-document step; the position moves only after the
+ *        snapshot applied cleanly, so a failed apply leaves history consistent.
+ */
+bool DataModel::ProjectModel::undo()
+{
+  if (!m_history.canUndo() || m_history.applying())
+    return false;
+
+  const auto current = QJsonDocument(serializeToJson()).toJson(QJsonDocument::Compact);
+  const auto state   = m_history.peekUndoState();
+  if (!applyHistorySnapshot(state)) {
+    qWarning() << "[ProjectModel] Undo failed to apply the stored snapshot";
+    return false;
+  }
+
+  m_history.confirmUndo(current);
+  setModified(!m_history.isAtSavePoint());
+  Q_EMIT projectHistoryChanged();
+  return true;
+}
+
+/**
+ * @brief Replays the most recently undone project-document step; position moves only on a
+ *        clean apply.
+ */
+bool DataModel::ProjectModel::redo()
+{
+  if (!m_history.canRedo() || m_history.applying())
+    return false;
+
+  const auto state = m_history.peekRedoState();
+  if (!applyHistorySnapshot(state)) {
+    qWarning() << "[ProjectModel] Redo failed to apply the stored snapshot";
+    return false;
+  }
+
+  m_history.confirmRedo();
+  setModified(!m_history.isAtSavePoint());
+  Q_EMIT projectHistoryChanged();
+  return true;
+}
+
+/**
+ * @brief Stores the label/coalesce hint the editor sets right before a keystroke commit.
+ */
+void DataModel::ProjectModel::setNextUndoHint(const QString& label, const QString& coalesceKey)
+{
+  m_history.setNextHint(label, coalesceKey);
+}
+
 /**
  * @brief Prompts for a password, hashes it, and locks the editor.
  */
@@ -391,6 +490,9 @@ void DataModel::ProjectModel::lockProject()
     m_locked = true;
     Q_EMIT lockedChanged();
   }
+
+  m_history.clear();
+  Q_EMIT projectHistoryChanged();
 
   if (validateProject(true)) {
     setModified(true);
@@ -437,6 +539,9 @@ void DataModel::ProjectModel::unlockProject()
     m_locked = false;
     Q_EMIT lockedChanged();
   }
+
+  m_history.clear();
+  Q_EMIT projectHistoryChanged();
 
   if (validateProject(true)) {
     setModified(true);
@@ -769,6 +874,36 @@ static QString widget_scope_key(int widgetType, int uniqueId)
 }
 
 /**
+ * @brief Builds the widget-scoped subkey for a widget-extension slot
+ * ("ext:&lt;id&gt;:&lt;uid&gt;"). Extension widgets share one enum value, so the numeric key cannot
+ * address one; the package id comes from the entity's own widget string (the dashboard's
+ * title-resolution key), falling back to the numeric key when the entity names no package.
+ */
+static QString extension_scope_key(int widgetType,
+                                   int uniqueId,
+                                   const std::vector<DataModel::Group>& groups)
+{
+  if (widgetType != static_cast<int>(SerialStudio::DashboardExtension))
+    return widget_scope_key(widgetType, uniqueId);
+
+  QString package;
+  for (const auto& group : groups) {
+    if (group.uniqueId == uniqueId)
+      package = group.widget;
+
+    for (const auto& dataset : group.datasets)
+      if (dataset.uniqueId == uniqueId)
+        package = dataset.widget;
+  }
+
+  if (package.isEmpty())
+    return widget_scope_key(widgetType, uniqueId);
+
+  return UI::WidgetExtensions::persistedTypeToken(package) + QLatin1Char(':')
+       + QString::number(uniqueId);
+}
+
+/**
  * @brief Returns the entity-level display-title override for the given unique ID (empty =
  *        no entity-level override; widget-level entries may still exist).
  */
@@ -785,7 +920,7 @@ QString DataModel::ProjectModel::displayTitle(int uniqueId) const
 QString DataModel::ProjectModel::widgetDisplayTitle(int widgetType, int uniqueId) const
 {
   const auto titles = m_widgetDisplay.value(Keys::Titles).toObject();
-  return titles.value(widget_scope_key(widgetType, uniqueId)).toString();
+  return titles.value(extension_scope_key(widgetType, uniqueId, m_groups)).toString();
 }
 
 /**
@@ -795,7 +930,7 @@ QString DataModel::ProjectModel::widgetDisplayTitle(int widgetType, int uniqueId
 QString DataModel::ProjectModel::freezeTitleMode(int widgetType, int uniqueId) const
 {
   const auto modes = m_widgetDisplay.value(Keys::FreezeTitle).toObject();
-  const auto mode  = modes.value(widget_scope_key(widgetType, uniqueId)).toString();
+  const auto mode  = modes.value(extension_scope_key(widgetType, uniqueId, m_groups)).toString();
   if (!mode.isEmpty())
     return mode;
 
@@ -1008,6 +1143,8 @@ void DataModel::ProjectModel::setMqttPublisher(const QJsonObject& config)
   if (m_mqttPublisher == config)
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Change MQTT Publisher")};
+
   m_mqttPublisher = config;
   setModified(true);
   Q_EMIT mqttPublisherChanged();
@@ -1088,7 +1225,7 @@ void DataModel::ProjectModel::setWidgetDisplayTitle(int widgetType,
                                                     int uniqueId,
                                                     const QString& title)
 {
-  stageDisplayTitle(widget_scope_key(widgetType, uniqueId), title);
+  stageDisplayTitle(extension_scope_key(widgetType, uniqueId, m_groups), title);
 }
 
 /**
@@ -1113,7 +1250,7 @@ void DataModel::ProjectModel::promptRenameWidget(int widgetType,
   if (!ok || name.trimmed() == currentTitle)
     return;
 
-  setWidgetDisplayTitle(widgetType, uniqueId, name.trimmed());
+  stageDisplayTitle(extension_scope_key(widgetType, uniqueId, m_groups), name.trimmed());
 }
 
 /**
@@ -1134,7 +1271,7 @@ void DataModel::ProjectModel::setFreezeTitleMode(int widgetType, int uniqueId, c
     return;
 
   const auto fallback = paints ? QLatin1String("painted") : QLatin1String("bar");
-  const auto key      = widget_scope_key(widgetType, uniqueId);
+  const auto key      = extension_scope_key(widgetType, uniqueId, m_groups);
   auto modes          = m_widgetDisplay.value(Keys::FreezeTitle).toObject();
   const auto old      = modes.value(key).toString();
   const auto now      = (mode == fallback) ? QString() : mode;
@@ -1428,6 +1565,8 @@ void DataModel::ProjectModel::newJsonFile()
   if (!m_silentReload)
     Q_EMIT sourceStructureChanged();
 
+  m_history.clear();
+  Q_EMIT projectHistoryChanged();
   setModified(false);
 }
 
@@ -1437,6 +1576,7 @@ void DataModel::ProjectModel::newJsonFile()
 void DataModel::ProjectModel::setTitle(const QString& title)
 {
   if (m_title != title) {
+    const ProjectUndoScope undo_scope{*this, tr("Change Project Title")};
     m_title = title;
     setModified(true);
     Q_EMIT titleChanged();
@@ -1459,6 +1599,9 @@ void DataModel::ProjectModel::setControlScriptCode(const QString& code)
   if (m_controlScriptCode == code)
     return;
 
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit Control Script"), QStringLiteral("control-script")};
+
   m_controlScriptCode        = code;
   static auto& controlScript = DataModel::ControlScript::instance();
   controlScript.setCode(code);
@@ -1473,6 +1616,8 @@ void DataModel::ProjectModel::setPointCount(const int points)
 {
   if (m_pointCount == points)
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change Point Count")};
 
   m_pointCount = points;
 
@@ -1494,6 +1639,8 @@ void DataModel::ProjectModel::setPlotTimeRange(const double seconds)
   const double clamped = qMax(0.001, seconds);
   if (qFuzzyCompare(m_plotTimeRange, clamped))
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change Plot Time Range")};
 
   m_plotTimeRange = clamped;
 
@@ -1519,6 +1666,8 @@ void DataModel::ProjectModel::setFrozen(const bool frozen)
   if (frozen && !SerialStudio::activated())
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Freeze")};
+
   m_frozen = frozen;
   setModified(true);
   Q_EMIT frozenChanged();
@@ -1531,6 +1680,8 @@ void DataModel::ProjectModel::setChangeDrivenTransforms(const bool enabled)
 {
   if (m_changeDrivenTransforms == enabled)
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Change-Driven Transforms")};
 
   m_changeDrivenTransforms = enabled;
   setModified(true);
@@ -1556,6 +1707,8 @@ void DataModel::ProjectModel::setFrameStartSequence(const QString& sequence)
   if (m_frameStartSequence == sequence)
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Change Frame Start Sequence")};
+
   m_frameStartSequence = sequence;
 
   if (!m_sources.empty())
@@ -1572,6 +1725,8 @@ void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 {
   if (m_frameEndSequence == sequence)
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change Frame End Sequence")};
 
   m_frameEndSequence = sequence;
 
@@ -1590,6 +1745,8 @@ void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
   if (m_checksumAlgorithm == algorithm)
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Change Checksum")};
+
   m_checksumAlgorithm = algorithm;
 
   if (!m_sources.empty())
@@ -1606,6 +1763,8 @@ void DataModel::ProjectModel::setFrameDetection(const SerialStudio::FrameDetecti
 {
   if (m_frameDetection == detection)
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change Frame Detection")};
 
   m_frameDetection = detection;
 
@@ -1652,6 +1811,8 @@ void DataModel::ProjectModel::setDecoderMethod(const SerialStudio::DecoderMethod
   if (m_frameDecoder == method)
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Change Decoder")};
+
   m_frameDecoder = method;
 
   if (!m_sources.empty())
@@ -1668,6 +1829,8 @@ void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
 {
   if (m_hexadecimalDelimiters == hexadecimal)
     return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Hex Delimiters")};
 
   m_hexadecimalDelimiters = hexadecimal;
 
@@ -1690,6 +1853,9 @@ void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
  */
 void DataModel::ProjectModel::setModified(const bool modified)
 {
+  if (modified)
+    m_history.commitPending();
+
   if (modified && m_groups.empty() && m_actions.empty() && m_tables.empty() && m_workspaces.empty()
       && !m_customizeWorkspaces && !m_locked && m_hiddenGroupIds.isEmpty()) {
     Q_EMIT contentTouched();

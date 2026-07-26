@@ -189,7 +189,6 @@ void AI::SentinelProbe::restoreLatch(bool degraded, Outcome failure, const QStri
  */
 AI::SentinelProbe::Outcome AI::SentinelProbe::evaluateReply(const QString& completedText)
 {
-  Q_ASSERT(!m_key.isEmpty());
   if (m_key.isEmpty())
     return Outcome::Muted;
 

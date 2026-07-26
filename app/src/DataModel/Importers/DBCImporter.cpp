@@ -38,22 +38,25 @@
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the DBCImporter singleton.
+ * @brief Constructs a DBC importer bound to one session.
  */
-DataModel::DBCImporter::DBCImporter() : m_skippedExtendedMuxSignals(0) {}
+DataModel::DBCImporter::DBCImporter(SessionContext& ctx)
+  : m_ctx(ctx), m_skippedExtendedMuxSignals(0)
+{}
 
 /**
  * @brief Returns the singleton DBCImporter instance.
  */
 DataModel::DBCImporter& DataModel::DBCImporter::instance()
 {
-  static DBCImporter instance;
+  static DBCImporter instance(SessionContext::current());
   return instance;
 }
 
@@ -199,14 +202,14 @@ void DataModel::DBCImporter::confirmImport()
   if (m_messages.isEmpty())
     return;
 
-  const auto project       = generateProject(m_messages);
+  const auto project       = projectFromMessages(m_messages);
   const QString suggestion = QFileInfo(m_dbcFilePath).baseName();
 
   const int messageCount  = m_messages.count();
   const int signalCount   = countTotalSignals(m_messages);
   const int skippedExtMux = m_skippedExtendedMuxSignals;
 
-  static auto& pm = ProjectModel::instance();
+  auto& pm = m_ctx.projectModel();
   QObject::connect(
     &pm,
     &ProjectModel::importCompleted,
@@ -235,9 +238,11 @@ void DataModel::DBCImporter::confirmImport()
 }
 
 /**
- * @brief Builds a complete .ssproj QJsonObject from the DBC messages.
+ * @brief Builds a complete .ssproj QJsonObject from the DBC messages. Reaches no session
+ *        state, so the decode-shape regressions this class has had are reachable from a test.
  */
-QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescription>& messages)
+QJsonObject DataModel::DBCImporter::projectFromMessages(
+  const QList<QCanMessageDescription>& messages)
 {
   QJsonObject project;
 

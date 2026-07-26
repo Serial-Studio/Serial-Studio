@@ -33,6 +33,7 @@
 
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -155,8 +156,6 @@ IO::Drivers::USB::~USB()
 bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
 {
   Q_UNUSED(mode)
-  Q_ASSERT(configurationOk());
-  Q_ASSERT(m_ctx != nullptr);
 
   if (!m_ctx) {
     Misc::Utilities::showMessageBox(tr("USB Error"),
@@ -235,8 +234,8 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
  */
 void IO::Drivers::USB::close()
 {
-  Q_ASSERT(m_ctx != nullptr);
-  Q_ASSERT(m_activeInEp != 0 || m_handle == nullptr);
+  SS_ASSERT_LOG(m_ctx != nullptr);
+  SS_ASSERT_LOG(m_activeInEp != 0 || m_handle == nullptr);
 
   stopReadThread();
   cancelAndDrainTransfers();
@@ -298,8 +297,8 @@ bool IO::Drivers::USB::configurationOk() const noexcept
  */
 qint64 IO::Drivers::USB::write(const QByteArray& data)
 {
-  Q_ASSERT(!data.isEmpty());
-  Q_ASSERT(m_handle != nullptr);
+  SS_ASSERT(!data.isEmpty(), return -1);
+  SS_ASSERT(m_handle != nullptr, return -1);
 
   if (!isWritable())
     return -1;
@@ -696,8 +695,8 @@ QString IO::Drivers::USB::enrichDeviceLabel(libusb_device* dev,
                                             const libusb_device_descriptor& desc,
                                             const QString& base) const
 {
-  Q_ASSERT(dev != nullptr);
-  Q_ASSERT(m_ctx != nullptr);
+  SS_ASSERT(dev != nullptr, return base);
+  SS_ASSERT(m_ctx != nullptr, return base);
 
   QString label             = base;
   libusb_device_handle* tmp = nullptr;
@@ -1066,7 +1065,7 @@ void IO::Drivers::USB::clearEndpointLists()
  */
 bool IO::Drivers::USB::claimInterface(int ifaceNum)
 {
-  Q_ASSERT(m_handle != nullptr);
+  SS_ASSERT(m_handle != nullptr, return false);
 
   if (m_claimedInterfaces.contains(ifaceNum))
     return true;
@@ -1097,8 +1096,8 @@ void IO::Drivers::USB::releaseInterfaces()
  */
 bool IO::Drivers::USB::activateSelectedEndpoints()
 {
-  Q_ASSERT(m_handle != nullptr);
-  Q_ASSERT(m_inEndpointIndex > 0 && (m_inEndpointIndex - 1) < m_inEndpoints.size());
+  SS_ASSERT(m_handle != nullptr, return false);
+  SS_ASSERT(m_inEndpointIndex > 0 && (m_inEndpointIndex - 1) < m_inEndpoints.size(), return false);
 
   const EndpointInfo in = m_inEndpoints.at(m_inEndpointIndex - 1);
   if (!claimInterface(in.interfaceNumber)) {
@@ -1414,9 +1413,6 @@ void IO::Drivers::USB::sendControlRequest(const QString& bmRequestType,
     return;
   }
 
-  Q_ASSERT(m_handle != nullptr);
-  Q_ASSERT(wLength >= 0 && wLength <= kMaxControlLength);
-
   if (m_controlTransfer) {
     delete[] m_controlTransfer->buffer;
     libusb_free_transfer(m_controlTransfer);
@@ -1472,8 +1468,11 @@ void IO::Drivers::USB::sendControlRequest(const QString& bmRequestType,
 void LIBUSB_CALL IO::Drivers::USB::controlTransferCallback(libusb_transfer* transfer)
 {
   auto* self = static_cast<USB*>(transfer->user_data);
-  Q_ASSERT(self != nullptr);
-  Q_ASSERT(transfer->buffer != nullptr);
+  SS_ASSERT(self != nullptr, return);
+  SS_ASSERT(transfer->buffer != nullptr, {
+    self->m_controlInFlight.store(false, std::memory_order_release);
+    return;
+  });
 
   const bool ok   = (transfer->status == LIBUSB_TRANSFER_COMPLETED);
   const int bytes = transfer->actual_length;

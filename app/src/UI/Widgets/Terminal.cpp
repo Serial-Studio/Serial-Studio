@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Widgets/Terminal.h"
@@ -33,6 +33,7 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/LemonSqueezy.h"
@@ -364,8 +365,8 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
 void Widgets::Terminal::drawRepeatBadge(
   QPainter* painter, int count, int segmentWidth, int y, bool rtlMode)
 {
-  Q_ASSERT(painter);
-  Q_ASSERT(count > 1);
+  SS_ASSERT(painter != nullptr, return);
+  SS_ASSERT(count > 1, return);
 
   const QString label   = QStringLiteral("\u00D7 %1").arg(count);
   const int padX        = qMax(2, m_cWidth / 2);
@@ -1379,8 +1380,9 @@ void Widgets::Terminal::refreshSearchMatches()
   else
     m_searchCurrent = qBound(0, m_searchCurrent, static_cast<int>(m_searchMatches.size()) - 1);
 
-  Q_ASSERT(m_searchCurrent >= -1);
-  Q_ASSERT(m_searchCurrent < m_searchMatches.size());
+  SS_ASSERT(m_searchCurrent >= -1, m_searchCurrent = -1);
+  SS_ASSERT(m_searchCurrent < m_searchMatches.size(),
+            m_searchCurrent = static_cast<int>(m_searchMatches.size()) - 1);
 
   m_stateChanged = true;
   Q_EMIT searchResultsChanged();
@@ -1396,9 +1398,9 @@ void Widgets::Terminal::scrollToCurrentMatch()
 
   setAutoscroll(false);
 
-  const int row = m_searchMatches[m_searchCurrent].y();
-  Q_ASSERT(row >= 0);
-  Q_ASSERT(row < lineCount());
+  int row = m_searchMatches[m_searchCurrent].y();
+  SS_ASSERT(row >= 0, return);
+  SS_ASSERT(row < lineCount(), row = lineCount() - 1);
 
   int offset = m_scrollOffsetY;
   if (row < offset)
@@ -1711,8 +1713,8 @@ void Widgets::Terminal::append(const QString& data)
 void Widgets::Terminal::applyScrollbackLimit()
 {
   m_maxLines = m_consoleHandler.scrollbackLines();
-  Q_ASSERT(m_maxLines >= 100);
-  Q_ASSERT(m_maxLines <= 100000);
+  SS_ASSERT(m_maxLines >= 100 && m_maxLines <= 100000,
+            m_maxLines = qBound(100, m_maxLines, 100000));
 
   const int excess = static_cast<int>(m_data.size()) - m_maxLines;
   if (excess > 0) {
@@ -1730,10 +1732,10 @@ void Widgets::Terminal::applyScrollbackLimit()
  * @brief Drops @p linesToDrop rows from the front of the buffer, keeping the color rows,
  *        repeat counts, cursor, scroll offset, selection, and search state in lockstep.
  */
-void Widgets::Terminal::trimExcessLines(const int linesToDrop)
+void Widgets::Terminal::trimExcessLines(int linesToDrop)
 {
-  Q_ASSERT(linesToDrop > 0);
-  Q_ASSERT(linesToDrop <= m_data.size());
+  SS_ASSERT(linesToDrop > 0, return);
+  SS_ASSERT(linesToDrop <= m_data.size(), linesToDrop = static_cast<int>(m_data.size()));
 
   m_data.erase(m_data.begin(), m_data.begin() + linesToDrop);
 
@@ -1885,7 +1887,6 @@ bool Widgets::Terminal::collapseCompletedLine()
   if (m_repeatCounts.size() > m_data.size())
     m_repeatCounts.resize(m_data.size());
 
-  Q_ASSERT(y - 1 < m_repeatCounts.size());
   if (y - 1 < m_repeatCounts.size() && m_repeatCounts[y - 1] < INT_MAX)
     ++m_repeatCounts[y - 1];
 

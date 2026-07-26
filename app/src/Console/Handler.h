@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -33,6 +33,7 @@
 #include "SerialStudio.h"
 
 class AppState;
+class SessionContext;
 
 namespace Misc {
 class CommonFonts;
@@ -192,6 +193,7 @@ signals:
   void deviceDataReady(int deviceId, const QString& text);
 
 private:
+  friend class ::SessionContext;
   explicit Handler();
   Handler(Handler&&)                 = delete;
   Handler(const Handler&)            = delete;

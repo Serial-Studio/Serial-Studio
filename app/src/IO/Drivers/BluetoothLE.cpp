@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/Drivers/BluetoothLE.h"
@@ -26,6 +26,16 @@
 #include <QOperatingSystemVersion>
 
 #include "Misc/Utilities.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants: per-phase windows only. The attempt count and the wait between attempts are the
+// shared Async::RetryPolicy's, so BLE retries on the same schedule as every other driver.
+//--------------------------------------------------------------------------------------------------
+
+static constexpr int kBleScanWindowMs       = 15000;
+static constexpr int kBleConnectTimeoutMs   = 15000;
+static constexpr int kBleServicesTimeoutMs  = 15000;
+static constexpr int kBleSubscribeTimeoutMs = 15000;
 
 //--------------------------------------------------------------------------------------------------
 // Well-known BLE UUID name resolution
@@ -434,12 +444,15 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
   , m_deviceConnected(false)
   , m_gattReady(false)
+  , m_connecting(false)
+  , m_userWantsOpen(false)
+  , m_openEpoch(0)
   , m_selectedCharacteristic(-1)
-  , m_pendingServiceIndex(-1)
   , m_pendingCharacteristicIndex(-1)
   , m_probeServiceIndex(-1)
   , m_service(nullptr)
   , m_controller(nullptr)
+  , m_runner(this)
 {
   s_instances.append(this);
 
@@ -459,6 +472,9 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   connect(this, &IO::Drivers::BluetoothLE::error, this, [=](const QString& message) {
     Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message, QMessageBox::Critical);
   });
+
+  connect(
+    &m_runner, &Async::TaskRunner::finished, this, &IO::Drivers::BluetoothLE::onOpenFlowFinished);
 }
 
 /**
@@ -475,10 +491,10 @@ IO::Drivers::BluetoothLE::~BluetoothLE()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the Bluetooth LE connection. The resolved service + notify UUIDs are
- *        re-staged as pendings so the GATT configuration survives a disconnect. Controller
- *        and service go through deleteLater(): close() can run inside the controller's own
- *        disconnected emission, and deleting the sender mid-emission crashes the backend.
+ * @brief Closes the connection, re-staging the resolved service + notify UUIDs so the GATT
+ *        configuration survives a disconnect; controller and service go through deleteLater()
+ *        because close() can run inside the controller's own disconnected emission. Doubles as
+ *        the internal reset; ending the open intent is abortOpen()'s job.
  */
 void IO::Drivers::BluetoothLE::close()
 {
@@ -639,58 +655,102 @@ qint64 IO::Drivers::BluetoothLE::writeCharacteristic(const QString& uuid, const 
 }
 
 /**
- * @brief Opens a connection to a Bluetooth LE device.
+ * @brief Returns true; the driver opens through an orchestrated, non-blocking flow.
+ */
+bool IO::Drivers::BluetoothLE::supportsAsyncOpen() const noexcept
+{
+  return true;
+}
+
+/**
+ * @brief Returns the ceiling on one BLE open attempt: the scan window, the connect window and the
+ *        GATT window back to back. A peripheral that is merely slow to pair must not be cut off by
+ *        the shared default, which is sized for a socket dial.
+ */
+int IO::Drivers::BluetoothLE::openTimeoutMsec() const noexcept
+{
+  return discoveryWindowMs() + kBleConnectTimeoutMs + kBleSubscribeTimeoutMs;
+}
+
+/**
+ * @brief Starts an open attempt and reports whether one is now in flight. The outcome itself
+ *        arrives through openFinished(), which is what callers of an async driver read.
  */
 bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
 {
+  beginOpen(mode);
+  return isOpen() || m_runner.isRunning();
+}
+
+/**
+ * @brief Starts the BLE open sequence and returns immediately. Both early exits are the refusals
+ *        the synchronous open already made, kept ahead of close() so a refused attempt leaves the
+ *        driver's state exactly as it found it.
+ */
+void IO::Drivers::BluetoothLE::beginOpen(const QIODevice::OpenMode mode)
+{
   (void)mode;
 
-  if (!operatingSystemSupported())
-    return false;
-
-  if (m_deviceIndex < 0 || m_deviceIndex >= s_devices.count())
-    return false;
-
-  if (m_pendingServiceUuid.isEmpty() && m_pendingServiceIndex < 0) {
-    for (auto* inst : std::as_const(s_instances)) {
-      if (inst == this || inst->m_deviceIndex != m_deviceIndex)
-        continue;
-
-      if (inst->m_service) {
-        m_pendingServiceUuid         = inst->m_service->serviceUuid().toString();
-        m_pendingCharacteristicIndex = inst->m_selectedCharacteristic + 1;
-        break;
-      }
-
-      if (!inst->m_pendingServiceUuid.isEmpty()) {
-        m_pendingServiceUuid         = inst->m_pendingServiceUuid;
-        m_pendingCharacteristicIndex = inst->m_pendingCharacteristicIndex;
-        break;
-      }
-    }
+  if (!operatingSystemSupported()) {
+    Q_EMIT openFinished(false, QStringLiteral("BLE is unsupported on this operating system"));
+    return;
   }
 
+  const bool selected = (m_deviceIndex >= 0 && m_deviceIndex < s_devices.count());
+  if (!selected && m_pendingIdentifier.isEmpty()) {
+    Q_EMIT openFinished(false, QStringLiteral("no BLE device selected"));
+    return;
+  }
+
+  inheritSiblingGatt();
   close();
 
-  auto device  = s_devices.at(m_deviceIndex);
-  m_controller = QLowEnergyController::createCentral(device, this);
+  ++m_openEpoch;
+  m_connecting    = true;
+  m_userWantsOpen = true;
+  m_openFailure.clear();
+  m_runner.run(buildOpenFlow());
+}
 
-  connect(m_controller,
-          &QLowEnergyController::discoveryFinished,
-          this,
-          &IO::Drivers::BluetoothLE::onServiceDiscoveryFinished);
+/**
+ * @brief Abandons an attempt in flight and releases the half-open link. Bumping the epoch is what
+ *        keeps a dial already queued from reaching a controller this call is about to destroy.
+ */
+void IO::Drivers::BluetoothLE::abortOpen()
+{
+  ++m_openEpoch;
+  m_connecting    = false;
+  m_userWantsOpen = false;
 
-  connect(m_controller, &QLowEnergyController::connected, this, [this]() {
-    m_deviceConnected = true;
-    m_controller->discoverServices();
-    Q_EMIT deviceConnectedChanged();
-  });
+  m_runner.cancel();
+  close();
+}
 
-  connect(
-    m_controller, &QLowEnergyController::disconnected, this, &IO::Drivers::BluetoothLE::close);
+/**
+ * @brief Adopts the GATT configuration another instance already resolved for the same peripheral,
+ *        so two sources sharing one device land on the same service and characteristic.
+ */
+void IO::Drivers::BluetoothLE::inheritSiblingGatt()
+{
+  if (!m_pendingServiceUuid.isEmpty())
+    return;
 
-  m_controller->connectToDevice();
-  return true;
+  for (auto* inst : std::as_const(s_instances)) {
+    if (inst == this || inst->m_deviceIndex != m_deviceIndex)
+      continue;
+
+    if (inst->m_service) {
+      m_pendingServiceUuid         = inst->m_service->serviceUuid().toString();
+      m_pendingCharacteristicIndex = inst->m_selectedCharacteristic + 1;
+      break;
+    }
+
+    if (!inst->m_pendingServiceUuid.isEmpty()) {
+      m_pendingServiceUuid         = inst->m_pendingServiceUuid;
+      m_pendingCharacteristicIndex = inst->m_pendingCharacteristicIndex;
+      break;
+    }
+  }
 }
 
 /**
@@ -714,6 +774,168 @@ bool IO::Drivers::BluetoothLE::operatingSystemSupported() const
 bool IO::Drivers::BluetoothLE::adapterAvailable() const
 {
   return s_adapterAvailable;
+}
+
+/**
+ * @brief Returns whether a powered-on adapter exists, initializing the shared local-device state
+ *        first so a caller that runs before any discovery does not read a stale false. The shared
+ *        discovery agent is untouched: this path never starts, stops, or duplicates a scan.
+ */
+bool IO::Drivers::BluetoothLE::adapterPoweredOn()
+{
+  initializeSharedState();
+  return s_adapterAvailable;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Open flow composition
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Composes the open sequence: find the device, dial it, then resolve GATT. The GATT phase
+ *        is one parallel group because the driver announces gattReady() from inside the
+ *        service-discovery handler: a step armed after that handler returned would wait forever
+ *        on an edge that already passed.
+ */
+Async::Task* IO::Drivers::BluetoothLE::buildOpenFlow()
+{
+  auto* group = Async::sequential(QStringLiteral("ble-open"));
+  group->addChild(makeDiscoveryStep());
+  group->addChild(Async::invoke(QStringLiteral("ble-dial"),
+                                [this](QString& reason) { return dialSelectedDevice(reason); }));
+  group->addChild(makeConnectStep());
+  group->addChild(makeGattStep());
+
+  return group;
+}
+
+/**
+ * @brief Builds the device-resolution step: an immediate pass when a device is already selected,
+ *        otherwise a wait bounded by the scan window for the saved identifier to be matched. The
+ *        shared discovery agent is asked to scan but never restarted or stopped from here.
+ */
+Async::Task* IO::Drivers::BluetoothLE::makeDiscoveryStep()
+{
+  if (m_deviceIndex >= 0 && m_deviceIndex < s_devices.count())
+    return Async::invoke(QStringLiteral("ble-discovery"), [](QString& reason) {
+      Q_UNUSED(reason);
+      return true;
+    });
+
+  startDiscovery();
+  if (!s_adapterAvailable)
+    return Async::invoke(QStringLiteral("ble-discovery"), [](QString& reason) {
+      reason = QStringLiteral("the Bluetooth adapter is off");
+      return false;
+    });
+
+  auto* step = Async::awaitSignal(QStringLiteral("ble-discovery"));
+  step->onSuccess(this, &IO::Drivers::BluetoothLE::deviceIndexChanged);
+
+  return Async::timeout(step, discoveryWindowMs(), m_runner.clock());
+}
+
+/**
+ * @brief Builds the link step: the controller reports either the connection or the error that
+ *        prevented it. Wiring that error at all is what turns a failed connect from a link that
+ *        silently never comes up into a named failure.
+ */
+Async::Task* IO::Drivers::BluetoothLE::makeConnectStep()
+{
+  auto* step = Async::awaitSignal(QStringLiteral("ble-connect"));
+  step->onSuccess(this, &IO::Drivers::BluetoothLE::linkEstablished);
+  step->onFailure(
+    this, &IO::Drivers::BluetoothLE::linkFailed, QStringLiteral("BLE controller error"));
+
+  return Async::timeout(step, kBleConnectTimeoutMs, m_runner.clock());
+}
+
+/**
+ * @brief Builds the GATT phase: service discovery and the notify subscription, armed together so
+ *        neither can fire before the step that waits for it exists. Both deadlines start when the
+ *        link comes up, which is the phase boundary that matters to a user watching a spinner.
+ */
+Async::Task* IO::Drivers::BluetoothLE::makeGattStep()
+{
+  auto* services = Async::awaitSignal(QStringLiteral("ble-services"));
+  services->onSuccess(this, &IO::Drivers::BluetoothLE::servicesResolved);
+  services->onFailure(
+    this, &IO::Drivers::BluetoothLE::linkFailed, QStringLiteral("BLE controller error"));
+
+  auto* subscribe = Async::awaitSignal(QStringLiteral("ble-subscribe"));
+  subscribe->onSuccess(this, &IO::Drivers::BluetoothLE::gattReady);
+  subscribe->onFailure(
+    this, &IO::Drivers::BluetoothLE::linkFailed, QStringLiteral("BLE controller error"));
+
+  auto* group = Async::parallel(QStringLiteral("ble-gatt"));
+  group->addChild(Async::timeout(services, kBleServicesTimeoutMs, m_runner.clock()));
+  group->addChild(Async::timeout(subscribe, kBleSubscribeTimeoutMs, m_runner.clock()));
+
+  return group;
+}
+
+/**
+ * @brief Creates the controller for the selected device and queues the dial. The dial is queued
+ *        because the steps that wait on its outcome are armed after this one returns.
+ */
+bool IO::Drivers::BluetoothLE::dialSelectedDevice(QString& reason)
+{
+  if (m_deviceIndex < 0 || m_deviceIndex >= s_devices.count()) {
+    reason = QStringLiteral("no BLE device selected");
+    return false;
+  }
+
+  const auto device = s_devices.at(m_deviceIndex);
+  m_controller      = QLowEnergyController::createCentral(device, this);
+  if (!m_controller) {
+    reason = QStringLiteral("could not create a BLE controller for the selected device");
+    return false;
+  }
+
+  connect(m_controller,
+          &QLowEnergyController::discoveryFinished,
+          this,
+          &IO::Drivers::BluetoothLE::onServiceDiscoveryFinished);
+  connect(m_controller,
+          &QLowEnergyController::connected,
+          this,
+          &IO::Drivers::BluetoothLE::onControllerConnected);
+  connect(m_controller,
+          &QLowEnergyController::disconnected,
+          this,
+          &IO::Drivers::BluetoothLE::onControllerDisconnected);
+  connect(m_controller,
+          &QLowEnergyController::errorOccurred,
+          this,
+          &IO::Drivers::BluetoothLE::onControllerError);
+
+  const quint64 epoch = m_openEpoch;
+  QMetaObject::invokeMethod(this, [this, epoch]() { dialController(epoch); }, Qt::QueuedConnection);
+
+  return true;
+}
+
+/**
+ * @brief Issues the queued connect request unless a newer attempt, or a close, superseded it.
+ */
+void IO::Drivers::BluetoothLE::dialController(const quint64 epoch)
+{
+  if (epoch != m_openEpoch || !m_controller)
+    return;
+
+  m_controller->connectToDevice();
+}
+
+/**
+ * @brief Returns the window the device-resolution step waits in: the shared agent's own scan
+ *        window when it declares one, so the step never outlives the scan that would satisfy it.
+ */
+int IO::Drivers::BluetoothLE::discoveryWindowMs() const
+{
+  if (s_discoveryAgent && s_discoveryAgent->lowEnergyDiscoveryTimeout() > 0)
+    return s_discoveryAgent->lowEnergyDiscoveryTimeout();
+
+  return kBleScanWindowMs;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1084,6 +1306,83 @@ bool IO::Drivers::BluetoothLE::setNotifyCharacteristicByUuid(const QString& uuid
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Marks the link up and starts service discovery, then reports the phase to the open flow.
+ *        This slot is connected before the flow arms its own wait, so the discovery request is
+ *        always issued before the step that waits for its result exists.
+ */
+void IO::Drivers::BluetoothLE::onControllerConnected()
+{
+  if (!m_controller)
+    return;
+
+  m_deviceConnected = true;
+  m_controller->discoverServices();
+  Q_EMIT deviceConnectedChanged();
+  Q_EMIT linkEstablished();
+}
+
+/**
+ * @brief Reacts to a link that went down. close() severs the controller's signals before asking it
+ *        to disconnect, so reaching this slot at all means the drop was not ours: it fails an
+ *        attempt in flight, and reports a live link as dropped for the supervisor to recover.
+ */
+void IO::Drivers::BluetoothLE::onControllerDisconnected()
+{
+  const bool attempting = m_connecting;
+  const bool dropped    = m_userWantsOpen && !attempting;
+  close();
+
+  if (attempting) {
+    m_openFailure = QStringLiteral("the peripheral closed the connection");
+    Q_EMIT linkFailed();
+    return;
+  }
+
+  if (dropped)
+    Q_EMIT linkDropped();
+}
+
+/**
+ * @brief Reports a controller error to the open flow, carrying the stack's own message. Nothing is
+ *        shown to the user from here: a retried attempt would otherwise stack modal dialogs.
+ */
+void IO::Drivers::BluetoothLE::onControllerError(QLowEnergyController::Error controllerError)
+{
+  if (controllerError == QLowEnergyController::NoError)
+    return;
+
+  m_openFailure = m_controller ? m_controller->errorString() : QString();
+  if (m_openFailure.isEmpty())
+    m_openFailure = QStringLiteral("BLE controller error");
+
+  Q_EMIT linkFailed();
+}
+
+/**
+ * @brief Reports the attempt's outcome. A cancel is a close the owner asked for and says nothing;
+ *        a failure releases the half-open link first, which is what the synchronous path did.
+ */
+void IO::Drivers::BluetoothLE::onOpenFlowFinished(Async::Outcome outcome,
+                                                  const Async::StepError& error)
+{
+  m_connecting = false;
+  if (outcome == Async::Outcome::Cancelled)
+    return;
+
+  if (outcome == Async::Outcome::Success) {
+    Q_EMIT openFinished(true, QString());
+    return;
+  }
+
+  QString reason = m_openFailure.isEmpty() ? error.reason : m_openFailure;
+  if (reason.isEmpty())
+    reason = QStringLiteral("BLE open failed");
+
+  close();
+  Q_EMIT openFinished(false, reason);
+}
+
+/**
  * @brief Queries and registers available characteristics for the selected service.
  */
 void IO::Drivers::BluetoothLE::configureCharacteristics()
@@ -1163,13 +1462,7 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
   }
 
   bool serviceSelected = false;
-  if (m_pendingServiceIndex > 0) {
-    selectService(m_pendingServiceIndex);
-    m_pendingServiceIndex = -1;
-    serviceSelected       = true;
-  }
-
-  else if (!m_pendingServiceUuid.isEmpty() && selectServiceByUuid(m_pendingServiceUuid)) {
+  if (!m_pendingServiceUuid.isEmpty() && selectServiceByUuid(m_pendingServiceUuid)) {
     m_pendingServiceUuid.clear();
     serviceSelected = true;
   }
@@ -1198,6 +1491,8 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
 
   if (!serviceSelected)
     announceGattReady();
+
+  Q_EMIT servicesResolved();
 }
 
 /**

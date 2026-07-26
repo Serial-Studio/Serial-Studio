@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -32,6 +32,15 @@ class SerialStudio : public QObject {
   Q_OBJECT
 
 public:
+  /**
+   * @brief Widget extension API version (spec 0038), published independently of the application
+   *        version: a package declares the host range it supports and is refused outside it.
+   *        Bump the minor for additive manifest keys, the major for anything a v1 package cannot
+   *        survive.
+   */
+  static constexpr int kWidgetApiVersionMajor = 1;
+  static constexpr int kWidgetApiVersionMinor = 0;
+
   /**
    * @brief Decoding strategy for a continuous data stream.
    */
@@ -218,7 +227,12 @@ public:
   Q_ENUM(OutputWidgetType)
 
   /**
-   * @brief Visualization widget types available on the dashboard.
+   * @brief Visualization widget types available on the dashboard. Ordinals are persisted state
+   *        (workspaces, freeze title modes, display titles, per-widget settings key off them), so
+   *        this list is append-only in both build configurations. DashboardExtension carries an
+   *        explicit high value so no existing ordinal moves and extension widgets always sort last
+   *        in the widget maps; every third-party package shares it, and its entity scope, title,
+   *        and icon come from the UI::WidgetExtensions descriptor, never from the enum.
    */
   enum DashboardWidget {
     DashboardTerminal,
@@ -246,6 +260,7 @@ public:
     DashboardWaterfall,
     DashboardPainter,
 #endif
+    DashboardExtension = 100,
   };
   Q_ENUM(DashboardWidget)
 
@@ -308,6 +323,7 @@ public:
   // clang-format on
 
   // clang-format off
+  [[nodiscard]] static int extensionGroupWidgetCount(const std::vector<DataModel::Group>& groups);
   Q_INVOKABLE [[nodiscard]] static bool groupEligibleForWorkspace(const DataModel::Group& g);
   Q_INVOKABLE [[nodiscard]] static bool groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w);
   Q_INVOKABLE [[nodiscard]] static bool datasetWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w);
@@ -319,6 +335,8 @@ public:
   Q_INVOKABLE [[nodiscard]] static QString datasetWidgetId(const SerialStudio::DatasetWidget widget);
   Q_INVOKABLE [[nodiscard]] static SerialStudio::DatasetWidget datasetWidgetFromId(const QString& id);
   // clang-format on
+
+  Q_INVOKABLE [[nodiscard]] static bool searchMatches(const QString& query, const QString& text);
 
   Q_INVOKABLE [[nodiscard]] static bool isAnyPlayerOpen();
   Q_INVOKABLE [[nodiscard]] static bool isFinalValuePlayerOpen();

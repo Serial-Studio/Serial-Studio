@@ -32,6 +32,7 @@
 #include <QString>
 #include <QTimer>
 
+#include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -126,7 +127,9 @@ class Modbus : public HAL_Driver {
 signals:
   void portChanged();
   void hostChanged();
+  void deviceConnected();
   void baudRateChanged();
+  void deviceDisconnected();
   void parityIndexChanged();
   void dataBitsIndexChanged();
   void stopBitsIndexChanged();
@@ -149,11 +152,13 @@ public:
   Modbus& operator=(const Modbus&) = delete;
 
   void close() override;
+  void beginOpen(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
+  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
   [[nodiscard]] QJsonObject deviceIdentifier() const override;
@@ -215,8 +220,11 @@ private:
   [[nodiscard]] QString buildFrameParser() const;
   [[nodiscard]] bool configureTcpClient(QString& target);
   [[nodiscard]] bool configureRtuClient(QString& target);
-  [[nodiscard]] bool finalizeAndConnect(const QString& target);
-  [[nodiscard]] bool connectWithRetry();
+  [[nodiscard]] bool prepareDevice(QString& reason);
+  [[nodiscard]] Async::Task* makeConnectStep();
+  void showConnectionFailure(const QString& detail);
+  void finishOpen(const bool ok, const QString& reason);
+  void onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error);
   [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
   void appendTcpProperties(QList<IO::DriverProperty>& props) const;
   void appendRtuProperties(QList<IO::DriverProperty>& props) const;
@@ -237,10 +245,12 @@ private:
   quint8 m_protocolIndex;
   int m_currentGroupIndex;
   quint8 m_serialPortIndex;
+  QString m_connectionTarget;
   QStringList m_serialPortNames;
   QStringList m_serialPortLocations;
   QVector<ModbusRegisterGroup> m_registerGroups;
 
+  Async::TaskRunner m_runner;
   QSettings m_settings;
 };
 }  // namespace Drivers

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -150,6 +150,76 @@ API::CommandResponse API::Handlers::ProjectHandler::fileNew(const QString& id,
   QJsonObject result;
   result[QStringLiteral("created")] = true;
   result[QStringLiteral("title")]   = projectModel.title();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Undo the most recent project-document step (shared UI/API history).
+ */
+API::CommandResponse API::Handlers::ProjectHandler::projectUndo(const QString& id,
+                                                                const QJsonObject& params)
+{
+  Q_UNUSED(params);
+  static auto& projectModel = DataModel::ProjectModel::instance();
+
+  QJsonObject result;
+  if (!projectModel.canUndo()) {
+    result[QStringLiteral("performed")] = false;
+    result[QStringLiteral("reason")]    = QStringLiteral("nothing to undo");
+    attachProjectEpoch(result);
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  const QString label = projectModel.undoText();
+  projectModel.setSuppressMessageBoxes(true);
+  const bool performed = projectModel.undo();
+  projectModel.setSuppressMessageBoxes(false);
+
+  if (!performed) {
+    result[QStringLiteral("performed")] = false;
+    result[QStringLiteral("reason")]    = QStringLiteral("snapshot apply failed");
+    attachProjectEpoch(result);
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  result[QStringLiteral("performed")] = true;
+  result[QStringLiteral("undone")]    = label;
+  attachProjectEpoch(result);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Redo the most recently undone project-document step.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::projectRedo(const QString& id,
+                                                                const QJsonObject& params)
+{
+  Q_UNUSED(params);
+  static auto& projectModel = DataModel::ProjectModel::instance();
+
+  QJsonObject result;
+  if (!projectModel.canRedo()) {
+    result[QStringLiteral("performed")] = false;
+    result[QStringLiteral("reason")]    = QStringLiteral("nothing to redo");
+    attachProjectEpoch(result);
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  const QString label = projectModel.redoText();
+  projectModel.setSuppressMessageBoxes(true);
+  const bool performed = projectModel.redo();
+  projectModel.setSuppressMessageBoxes(false);
+
+  if (!performed) {
+    result[QStringLiteral("performed")] = false;
+    result[QStringLiteral("reason")]    = QStringLiteral("snapshot apply failed");
+    attachProjectEpoch(result);
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  result[QStringLiteral("performed")] = true;
+  result[QStringLiteral("redone")]    = label;
+  attachProjectEpoch(result);
   return CommandResponse::makeSuccess(id, result);
 }
 

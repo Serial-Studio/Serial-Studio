@@ -14,16 +14,19 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Widgets/MultiPlot.h"
 
+#include <utility>
+
 #include "DSP.h"
 #include "DSPSimd.h"
 #include "Misc/ThemeManager.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/PlotLogScale.h"
 
@@ -442,7 +445,7 @@ void Widgets::MultiPlot::setVisibleXWindow(const double lo, const double hi)
  */
 void Widgets::MultiPlot::clampToVisibleX(double& lo, double& hi) const
 {
-  Q_ASSERT(lo <= hi);
+  SS_ASSERT(lo <= hi, std::swap(lo, hi));
 
   if (!std::isfinite(m_visLoX) || !std::isfinite(m_visHiX) || !(m_visLoX < m_visHiX))
     return;
@@ -720,8 +723,8 @@ void Widgets::MultiPlot::buildLogXScratch(const DSP::AxisData& x, const double f
   if (m_logXScratch.capacity() != x.capacity())
     m_logXScratch.resize(x.capacity());
 
-  Q_ASSERT(x.raw() != nullptr);
-  Q_ASSERT(x.size() <= m_logXScratch.capacity());
+  SS_ASSERT(x.raw() != nullptr, return);
+  SS_ASSERT(x.size() <= m_logXScratch.capacity(), return);
 
   m_logXScratch.clear();
 
@@ -905,12 +908,12 @@ void Widgets::MultiPlot::applyDerivedYBounds()
  */
 void Widgets::MultiPlot::syncStringCurves()
 {
-  Q_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index));
-  Q_ASSERT(m_stringCurves.size() == m_visibleCurves.size());
+  SS_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index), return);
+  SS_ASSERT_LOG(m_stringCurves.size() == m_visibleCurves.size());
 
-  const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-  const qsizetype count =
-    qMin(static_cast<qsizetype>(group.datasets.size()), m_stringCurves.size());
+  const auto& group     = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  const qsizetype count = qMin(static_cast<qsizetype>(group.datasets.size()),
+                               qMin(m_stringCurves.size(), m_visibleCurves.size()));
 
   bool changed = false;
   for (qsizetype i = 0; i < count; ++i) {

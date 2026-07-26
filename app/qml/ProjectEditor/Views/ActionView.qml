@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -71,6 +71,20 @@ Widgets.Pane {
     }
 
     //
+    // Search band: above the secondary toolbar, aligned with the tree search
+    //
+    EditorSearchBand {
+      id: searchBand
+
+      tableDelegate: delegate
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+    }
+
+    //
     // Actions panel
     //
     Rectangle {
@@ -78,9 +92,9 @@ Widgets.Pane {
 
       z: 2
       anchors {
-        top: parent.top
         left: parent.left
         right: parent.right
+        top: searchBand.bottom
       }
       height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
@@ -249,13 +263,14 @@ Widgets.Pane {
 
       contentWidth: width
       anchors.fill: parent
-      anchors.topMargin: header.height
       contentHeight: delegate.implicitHeight
+      anchors.topMargin: searchBand.height + header.height
       ScrollBar.vertical.policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
 
       TableDelegate {
         id: delegate
 
+        searchable: true
         width: parent.width
         headerVisible: false
         parameterWidth: Math.min(delegate.width * 0.3, 256)

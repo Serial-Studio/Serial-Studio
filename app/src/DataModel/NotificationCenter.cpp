@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/NotificationCenter.h"
@@ -32,6 +32,9 @@
 #include <QSettings>
 #include <QSystemTrayIcon>
 #include <QThread>
+
+#include "SessionContext.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/CommercialToken.h"
@@ -74,12 +77,13 @@ DataModel::NotificationCenter::NotificationCenter()
 DataModel::NotificationCenter::~NotificationCenter() = default;
 
 /**
- * @brief Returns the global instance; created on first access.
+ * @brief Returns this session's notification center. The object is owned by the SessionContext
+ *        and built by the composition root, so a reach before adoption is a named fatal instead
+ *        of an out-of-order lazy construction (spec 0039 M2, wave A).
  */
 DataModel::NotificationCenter& DataModel::NotificationCenter::instance()
 {
-  static NotificationCenter self;
-  return self;
+  return SessionContext::current().notifications();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -140,7 +144,7 @@ void DataModel::NotificationCenter::post(int level,
                                          const QString& title,
                                          const QString& subtitle)
 {
-  Q_ASSERT(thread() == QThread::currentThread());
+  SS_ASSERT_LOG(thread() == QThread::currentThread());
 
   const int clamped = qBound(static_cast<int>(Info), level, static_cast<int>(Critical));
 
@@ -577,7 +581,7 @@ static int luaNotifyStub(lua_State* L)
  */
 void DataModel::NotificationCenter::installScriptApi(lua_State* L)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L != nullptr, return);
 
   lua_pushinteger(L, 0);
   lua_setglobal(L, "Info");
@@ -615,7 +619,7 @@ void DataModel::NotificationCenter::installScriptApi(lua_State* L)
  */
 void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   if (isProTierActive()) {
     auto* nc = &instance();

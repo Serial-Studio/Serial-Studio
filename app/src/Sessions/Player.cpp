@@ -6,7 +6,7 @@
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
@@ -39,6 +39,7 @@
 #  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
 #  include "Misc/WorkspaceManager.h"
+#  include "SSAssert.h"
 #  include "UI/Dashboard.h"
 
 static constexpr int kMaxSeekWindowRows = 262144;
@@ -343,7 +344,7 @@ void Sessions::Player::closeFile()
  */
 void Sessions::Player::openFile(const QString& filePath)
 {
-  Q_ASSERT(!filePath.isEmpty());
+  SS_ASSERT_LOG(!filePath.isEmpty());
 
   openFile(filePath, -1);
 }
@@ -353,8 +354,6 @@ void Sessions::Player::openFile(const QString& filePath)
  */
 void Sessions::Player::openFile(const QString& filePath, int sessionId)
 {
-  Q_ASSERT(!filePath.isEmpty());
-
   if (filePath.isEmpty())
     return;
 
@@ -520,7 +519,7 @@ bool Sessions::Player::openLocalDb(const QString& filePath)
  */
 void Sessions::Player::detectFinalValueColumns()
 {
-  Q_ASSERT(m_db && m_db->isOpen());
+  SS_ASSERT(m_db && m_db->isOpen(), return);
 
   m_hasFinalValues = false;
 
@@ -689,8 +688,9 @@ void Sessions::Player::setProgress(const double progress)
  */
 int Sessions::Player::seekWindowStartRow(int target) const
 {
-  Q_ASSERT(target >= 0);
-  Q_ASSERT(target < static_cast<int>(m_timestampsNs.size()));
+  SS_ASSERT(target >= 0, return 0);
+  SS_ASSERT(target < static_cast<int>(m_timestampsNs.size()),
+            return qMax(0, static_cast<int>(m_timestampsNs.size()) - 1));
 
   static auto& dashboard = UI::Dashboard::instance();
   const double range     = dashboard.plotTimeRange();
@@ -722,8 +722,8 @@ void Sessions::Player::performSeekTick()
   if (!isOpen() || isPlaying())
     return;
 
-  Q_ASSERT(m_framePos >= 0);
-  Q_ASSERT(m_framePos < frameCount());
+  SS_ASSERT(m_framePos >= 0, return);
+  SS_ASSERT(m_framePos < frameCount(), return);
 
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile || m_uidToColumn.isEmpty()) {
@@ -755,8 +755,8 @@ void Sessions::Player::performSeekSettle()
   if (!isOpen() || isPlaying())
     return;
 
-  Q_ASSERT(m_framePos >= 0);
-  Q_ASSERT(m_framePos < frameCount());
+  SS_ASSERT(m_framePos >= 0, return);
+  SS_ASSERT(m_framePos < frameCount(), return);
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.clearPlotData();
@@ -805,9 +805,9 @@ void Sessions::Player::buildSeekWindow(int startRow,
                                        QVector<double>& times,
                                        QHash<qint64, QVector<double>>& series)
 {
-  Q_ASSERT(startRow >= 0);
-  Q_ASSERT(startRow <= endRow);
-  Q_ASSERT(endRow < frameCount());
+  SS_ASSERT(startRow >= 0, return);
+  SS_ASSERT(startRow <= endRow, return);
+  SS_ASSERT(endRow < frameCount(), return);
 
   const int n = endRow - startRow + 1;
   times.resize(n);
@@ -1007,8 +1007,8 @@ void Sessions::Player::processFrameBatch(int startFrame, int endFrame)
   if (!isOpen())
     return;
 
-  Q_ASSERT(startFrame >= 0);
-  Q_ASSERT(endFrame < frameCount());
+  SS_ASSERT(startFrame >= 0, return);
+  SS_ASSERT(endFrame < frameCount(), return);
 
   anchorSteadyBase(startFrame);
   for (int i = startFrame; i <= endFrame; ++i)
@@ -1181,7 +1181,7 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
  */
 void Sessions::Player::anchorSteadyBase(int frameIndex)
 {
-  Q_ASSERT(frameIndex >= 0);
+  SS_ASSERT(frameIndex >= 0, frameIndex = 0);
 
   m_steadyBase = std::chrono::steady_clock::now();
   m_steadyBaseRowSeconds =

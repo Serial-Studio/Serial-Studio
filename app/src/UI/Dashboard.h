@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -32,6 +32,8 @@
 #include "DSP.h"
 #include "SerialStudio.h"
 #include "UI/WidgetRegistry.h"
+
+class SessionContext;
 
 namespace UI {
 /**
@@ -131,6 +133,7 @@ signals:
   void containsCommercialFeaturesChanged();
 
 private:
+  friend class ::SessionContext;
   explicit Dashboard();
   Dashboard(Dashboard&&)                 = delete;
   Dashboard(const Dashboard&)            = delete;
@@ -138,6 +141,20 @@ private:
   Dashboard& operator=(const Dashboard&) = delete;
 
 public:
+  /**
+   * @brief Resolved identity of one slot in the DashboardExtension bucket. Every third-party
+   *        package shares that single enum value, so the scope that tells a group widget from a
+   *        dataset widget comes from the package descriptor, never from the enum: group-scope
+   *        slots occupy the first positions, dataset-scope slots follow, and @c bucketIndex
+   *        addresses the matching m_widgetGroups / m_widgetDatasets entry.
+   */
+  struct ExtensionSlot {
+    bool valid      = false;
+    bool group      = false;
+    int bucketIndex = -1;
+    QString extensionId;
+  };
+
   [[nodiscard]] static Dashboard& instance();
 
   [[nodiscard]] bool available() const;
@@ -165,6 +182,10 @@ public:
   [[nodiscard]] Q_INVOKABLE QString formatValue(double val, double min, double max) const;
   [[nodiscard]] Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const;
   [[nodiscard]] Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
+  [[nodiscard]] Q_INVOKABLE QString extensionIdAt(const bool group, const int bucketIndex) const;
+  [[nodiscard]] ExtensionSlot extensionSlot(const int relativeIndex) const;
+  [[nodiscard]] ExtensionSlot widgetSlot(const SerialStudio::DashboardWidget type,
+                                         const int relativeIndex) const;
 
   [[nodiscard]] const QString& title() const;
   [[nodiscard]] QVariantList actions() const;
@@ -315,6 +336,8 @@ private:
   void buildDatasetReferences();
   void rebuildDatasetReferences();
   void buildValuePushes();
+  void addExtensionStringTargets(QSet<const DataModel::Dataset*>& targets) const;
+  [[nodiscard]] int datasetBucketBase(const SerialStudio::DashboardWidget key) const noexcept;
   void clearPushTables();
   void relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle);
 
@@ -511,6 +534,10 @@ private:
   QHash<int, std::vector<ValuePush>> m_valuePushes;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
+
+  // Owning package ids, index-aligned with the DashboardExtension entries of the two maps above
+  QVector<QString> m_extensionGroupIds;
+  QVector<QString> m_extensionDatasetIds;
 
   DataModel::Frame m_lastFrame;
   QMap<int, DataModel::Frame> m_sourceRawFrames;

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "UI/Widgets/FFTPlot.h"
@@ -25,6 +25,7 @@
 #include <cmath>
 
 #include "DSPSimd.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/FFTWindow.h"
 #include "UI/Widgets/PlotLogScale.h"
@@ -37,7 +38,6 @@
 // Log-axis display constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kMaxFftSamples     = 262144;
 static constexpr int kLogRenderPoints   = 2048;
 static constexpr float kSpectrumFloorDb = -100.0f;
 static constexpr float kSpectrumEpsSq   = 1e-24f;
@@ -77,18 +77,17 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
 #endif
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
-    const auto& dataset      = GET_DATASET(SerialStudio::DashboardFFT, m_index);
-    const int clampedSamples = qBound(8, dataset.fftSamples, kMaxFftSamples);
-    m_size                   = 1 << static_cast<int>(std::log2(clampedSamples));
-    m_samplingRate           = qMax(1, dataset.fftSamplingRate);
-    m_windowType             = static_cast<SerialStudio::FFTWindow>(dataset.fftWindow);
-    m_minX                   = 0;
-    m_maxY                   = 0;
-    m_minY                   = -100;
-    m_maxX                   = m_samplingRate / 2;
-    m_logX                   = dataset.fftLogX;
-    m_ballistics             = dataset.fftBallistics;
-    m_releaseMs              = qBound(50, dataset.fftBallisticsRelease, 5000);
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
+    m_size              = Widgets::normalizedFftSize(dataset.fftSamples);
+    m_samplingRate      = qMax(1, dataset.fftSamplingRate);
+    m_windowType        = static_cast<SerialStudio::FFTWindow>(dataset.fftWindow);
+    m_minX              = 0;
+    m_maxY              = 0;
+    m_minY              = -100;
+    m_maxX              = m_samplingRate / 2;
+    m_logX              = dataset.fftLogX;
+    m_ballistics        = dataset.fftBallistics;
+    m_releaseMs         = qBound(50, dataset.fftBallisticsRelease, 5000);
     if (m_logX) {
       rebuildLogBinTable();
       applyLogFrequencyBounds();
@@ -326,8 +325,8 @@ void Widgets::FFTPlot::loadMarkers()
 void Widgets::FFTPlot::rebuildMarkerBins()
 {
   constexpr double pointHalfWindow = 2.0;
-  Q_ASSERT(m_size > 0);
-  Q_ASSERT(m_samplingRate > 0);
+  SS_ASSERT(m_size > 0, return);
+  SS_ASSERT(m_samplingRate > 0, return);
 
   const int spectrumSize = m_size / 2;
   const double freqStep  = static_cast<double>(m_samplingRate) / qMax(1, m_size);
@@ -355,8 +354,8 @@ void Widgets::FFTPlot::rebuildMarkerBins()
  */
 void Widgets::FFTPlot::updateMarkerValues(const int spectrumSize)
 {
-  Q_ASSERT(spectrumSize > 0);
-  Q_ASSERT(m_binDb.size() >= static_cast<std::size_t>(spectrumSize));
+  SS_ASSERT(spectrumSize > 0, return);
+  SS_ASSERT(m_binDb.size() >= static_cast<std::size_t>(spectrumSize), return);
 
   for (auto& rt : m_markerRt) {
     const int hi = qMin(rt.binHi, spectrumSize - 1);
@@ -565,8 +564,8 @@ bool Widgets::FFTPlot::rebuildFftPlan(int newSize)
  */
 void Widgets::FFTPlot::applyLogFrequencyBounds()
 {
-  Q_ASSERT(m_size > 0);
-  Q_ASSERT(m_samplingRate > 0);
+  SS_ASSERT(m_size > 0, return);
+  SS_ASSERT(m_samplingRate > 0, return);
 
   const double freqStep = static_cast<double>(m_samplingRate) / qMax(1, m_size);
   m_minX                = LogScale::clampedLog10(freqStep);
@@ -580,8 +579,8 @@ void Widgets::FFTPlot::applyLogFrequencyBounds()
  */
 void Widgets::FFTPlot::rebuildLogBinTable()
 {
-  Q_ASSERT(m_size > 0);
-  Q_ASSERT(m_samplingRate > 0);
+  SS_ASSERT(m_size > 0, return);
+  SS_ASSERT(m_samplingRate > 0, return);
 
   const int spectrumSize = m_size / 2;
   const double freqStep  = static_cast<double>(m_samplingRate) / m_size;
@@ -605,11 +604,12 @@ void Widgets::FFTPlot::rebuildLogBinTable()
  * @brief Converts the FFT output to smoothed display dB per bin (shared 1/N^2 power
  *        norm, 3-bin boxcar, then the optional ballistics envelope) into m_binDb.
  */
-void Widgets::FFTPlot::computeBinSpectrum(const int spectrumSize)
+void Widgets::FFTPlot::computeBinSpectrum(int spectrumSize)
 {
   constexpr int halfWindow = 1;
-  Q_ASSERT(spectrumSize > 0);
-  Q_ASSERT(m_fftOutput.size() >= static_cast<std::size_t>(spectrumSize));
+  SS_ASSERT(spectrumSize > 0, return);
+  SS_ASSERT(m_fftOutput.size() >= static_cast<std::size_t>(spectrumSize),
+            spectrumSize = static_cast<int>(m_fftOutput.size()));
 
   static thread_local std::vector<float> dbCache;
   if (dbCache.size() < static_cast<size_t>(spectrumSize))
@@ -649,10 +649,11 @@ void Widgets::FFTPlot::computeBinSpectrum(const int spectrumSize)
  * @brief Pushes the per-bin display spectrum on the linear frequency axis (the
  *        pre-existing rendering, unchanged in shape).
  */
-void Widgets::FFTPlot::emitLinearSpectrum(const int spectrumSize)
+void Widgets::FFTPlot::emitLinearSpectrum(int spectrumSize)
 {
-  Q_ASSERT(spectrumSize > 0);
-  Q_ASSERT(m_binDb.size() == static_cast<std::size_t>(spectrumSize));
+  SS_ASSERT(spectrumSize > 0, return);
+  SS_ASSERT(m_binDb.size() == static_cast<std::size_t>(spectrumSize),
+            spectrumSize = static_cast<int>(m_binDb.size()));
 
   if (m_xData.size() != static_cast<size_t>(spectrumSize)) {
     m_xData.resize(spectrumSize);
@@ -678,8 +679,11 @@ void Widgets::FFTPlot::buildLogRenderCurve(const int spectrumSize)
 {
   const int first = 1;
   const int last  = spectrumSize - 1;
-  Q_ASSERT(spectrumSize >= 4);
-  Q_ASSERT(m_logBinX.size() == static_cast<std::size_t>(spectrumSize));
+  SS_ASSERT(spectrumSize >= 4, return);
+  SS_ASSERT(m_logBinX.size() == static_cast<std::size_t>(spectrumSize)
+              && m_pchipSlope.size() == static_cast<std::size_t>(spectrumSize)
+              && m_binDb.size() >= static_cast<std::size_t>(spectrumSize),
+            return);
 
   const float* xs = m_logBinX.data();
   const float* ys = m_binDb.data();
@@ -758,7 +762,7 @@ void Widgets::FFTPlot::updateBallisticsAlpha()
  */
 void Widgets::FFTPlot::resetBallistics(const int bins)
 {
-  Q_ASSERT(bins > 0);
+  SS_ASSERT(bins > 0, return);
   m_displayDb.assign(static_cast<std::size_t>(bins), kSpectrumFloorDb);
   m_ballisticsClock.invalidate();
 }
@@ -772,7 +776,7 @@ float Widgets::FFTPlot::applyBallistics(const std::size_t idx, const float fresh
   if (!m_ballistics)
     return freshDb;
 
-  Q_ASSERT(idx < m_displayDb.size());
+  SS_ASSERT(idx < m_displayDb.size(), return freshDb);
   float& shown = m_displayDb[idx];
   shown        = freshDb >= shown ? freshDb : shown + (freshDb - shown) * m_releaseAlpha;
   return shown;
@@ -831,7 +835,7 @@ void Widgets::FFTPlot::updateData()
   kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
   const int spectrumSize = m_size / 2;
   computeBinSpectrum(spectrumSize);
-  if (m_logX)
+  if (m_logX && spectrumSize >= 4)
     buildLogRenderCurve(spectrumSize);
   else
     emitLinearSpectrum(spectrumSize);

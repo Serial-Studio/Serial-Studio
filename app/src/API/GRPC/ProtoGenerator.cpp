@@ -4,18 +4,21 @@
  *
  * Copyright (C) 2020-2025 Alex Spataru
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #ifdef ENABLE_GRPC
 
 #  include "API/GRPC/ProtoGenerator.h"
 
+#  include <cmath>
 #  include <QFile>
 #  include <QJsonArray>
+#  include <QJsonDocument>
 #  include <QTextStream>
 
 #  include "API/CommandRegistry.h"
+#  include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Public methods
@@ -113,32 +116,13 @@ void API::GRPC::ProtoGenerator::buildCommandMessages(QStringList& message_defs,
 
   for (auto it = commands.begin(); it != commands.end(); ++it) {
     const auto& def     = it.value();
-    const auto msg_name = sanitizeName(def.name) + "Request";
-
-    QString msg;
-    QTextStream msg_out(&msg);
-    msg_out << "message " << msg_name << " {\n"
-            << "  string id = 1;\n";
-
-    if (!def.inputSchema.isEmpty()) {
-      const auto props = def.inputSchema.value("properties").toObject();
-      int field_num    = 2;
-
-      for (auto pit = props.begin(); pit != props.end(); ++pit) {
-        const auto field_schema = pit.value().toObject();
-        const auto field_type   = jsonTypeToProtoType(field_schema.value("type").toString());
-        const auto field_name   = pit.key();
-
-        msg_out << "  " << field_type << " " << field_name << " = " << field_num++ << ";\n";
-      }
-    }
-
-    msg_out << "}\n";
-    message_defs.append(msg);
-
     const auto rpc_name = sanitizeName(def.name);
-    rpc_lines.append(QStringLiteral("  // %1\n  rpc %2(%3) returns (CommandResponse);")
-                       .arg(def.description, rpc_name, msg_name));
+    const auto msg_name = rpc_name + "Request";
+    const auto entry    = ledger().value(def.name).toObject();
+
+    message_defs.append(buildMessage(msg_name, def.inputSchema, entry));
+    rpc_lines.append(QStringLiteral("%1\n  rpc %2(%3) returns (CommandResponse);")
+                       .arg(commentBlock(def.description), rpc_name, msg_name));
   }
 }
 
@@ -187,6 +171,172 @@ bool API::GRPC::ProtoGenerator::exportToFile(const QString& filePath)
 //--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the bundled gRPC field-number ledger, parsed once. Numbering is append-only
+ *        released state: reading it here is what keeps a published field number from moving
+ *        when a schema property is inserted ahead of it alphabetically.
+ */
+const QJsonObject& API::GRPC::ProtoGenerator::ledger()
+{
+  static const QJsonObject entries = [] {
+    QFile file(QStringLiteral(":/api/proto-fields.json"));
+    if (!file.open(QIODevice::ReadOnly))
+      return QJsonObject();
+
+    const auto document = QJsonDocument::fromJson(file.readAll());
+    return document.object().value(QStringLiteral("commands")).toObject();
+  }();
+
+  return entries;
+}
+
+/**
+ * @brief Renders a JSON scalar exactly as the generator script's proto_scalar() does -- backslash
+ *        and quote escaped in that order -- so the enum comments of both emitters stay
+ *        byte-identical for every input, not just for quote-free vocabularies.
+ */
+QString API::GRPC::ProtoGenerator::jsonScalar(const QJsonValue& value)
+{
+  if (value.isString()) {
+    auto text = value.toString();
+    text.replace(QStringLiteral("\\"), QStringLiteral("\\\\"));
+    text.replace(QStringLiteral("\""), QStringLiteral("\\\""));
+    return QStringLiteral("\"%1\"").arg(text);
+  }
+
+  if (value.isBool())
+    return value.toBool() ? QStringLiteral("true") : QStringLiteral("false");
+
+  if (value.isDouble()) {
+    const double number = SerialStudio::toDouble(value);
+    if (number == std::trunc(number))
+      return QString::number(static_cast<qint64>(number));
+
+    return QString::number(number);
+  }
+
+  return QStringLiteral("null");
+}
+
+/**
+ * @brief Folds a multi-line command description into a comment block protoc can parse; an
+ *        unprefixed continuation line makes the whole file invalid.
+ */
+QString API::GRPC::ProtoGenerator::commentBlock(const QString& text)
+{
+  QString folded = text;
+  folded.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
+  folded.replace(QStringLiteral("\n"), QStringLiteral("\n  // "));
+  return QStringLiteral("  // ") + folded;
+}
+
+/**
+ * @brief Renames a parameter that would collide with the fixed 'string id = 1' request field;
+ *        the ledger still keys the number by the JSON name.
+ */
+QString API::GRPC::ProtoGenerator::protoFieldName(const QString& param)
+{
+  if (param == QStringLiteral("id"))
+    return QStringLiteral("id_param");
+
+  return param;
+}
+
+/**
+ * @brief Builds the trailing comment of one field: its JSON name when renamed, and its enum
+ *        domain when the schema declares one.
+ */
+QString API::GRPC::ProtoGenerator::fieldComment(const QString& param, const QJsonObject& schema)
+{
+  QStringList parts;
+  if (protoFieldName(param) != param)
+    parts.append(QStringLiteral("JSON name: %1").arg(param));
+
+  const auto domain = schema.value(QStringLiteral("enum")).toArray();
+  if (!domain.isEmpty()) {
+    QStringList values;
+    for (const auto& value : domain)
+      values.append(jsonScalar(value));
+
+    parts.append(QStringLiteral("enum: ") + values.join(QStringLiteral(", ")));
+  }
+
+  if (parts.isEmpty())
+    return QString();
+
+  return QStringLiteral("  // ") + parts.join(QStringLiteral("; "));
+}
+
+/**
+ * @brief Maps every schema property to its ledger number, appending fresh numbers after the
+ *        message's current maximum for parameters the bundled ledger predates, so a number
+ *        already published can never move.
+ */
+QMap<int, QString> API::GRPC::ProtoGenerator::numberedFields(const QJsonObject& props,
+                                                             const QJsonObject& entry)
+{
+  const auto numbers  = entry.value(QStringLiteral("fields")).toObject();
+  const auto reserved = entry.value(QStringLiteral("reserved")).toArray();
+
+  int next = 1;
+  for (const auto& value : reserved)
+    next = qMax(next, value.toInt());
+
+  for (auto it = numbers.begin(); it != numbers.end(); ++it)
+    next = qMax(next, it.value().toInt());
+
+  QMap<int, QString> assigned;
+  QStringList pending;
+  for (auto it = props.begin(); it != props.end(); ++it) {
+    const int number = numbers.value(it.key()).toInt(0);
+    if (number > 1)
+      assigned.insert(number, it.key());
+    else
+      pending.append(it.key());
+  }
+
+  for (const auto& param : std::as_const(pending))
+    assigned.insert(++next, param);
+
+  return assigned;
+}
+
+/**
+ * @brief Builds one per-command request message: retired numbers as a proto reserved statement,
+ *        the fixed request id, then every parameter at its ledger number in ascending order.
+ */
+QString API::GRPC::ProtoGenerator::buildMessage(const QString& name,
+                                                const QJsonObject& schema,
+                                                const QJsonObject& entry)
+{
+  QString msg;
+  QTextStream out(&msg);
+  out << "message " << name << " {\n";
+
+  const auto reserved = entry.value(QStringLiteral("reserved")).toArray();
+  if (!reserved.isEmpty()) {
+    QStringList numbers;
+    for (const auto& value : reserved)
+      numbers.append(QString::number(value.toInt()));
+
+    out << "  reserved " << numbers.join(QStringLiteral(", ")) << ";\n";
+  }
+
+  out << "  string id = 1;\n";
+
+  const auto props  = schema.value(QStringLiteral("properties")).toObject();
+  const auto fields = numberedFields(props, entry);
+  for (auto it = fields.begin(); it != fields.end(); ++it) {
+    const auto field_schema = props.value(it.value()).toObject();
+    const auto field_type   = jsonTypeToProtoType(field_schema.value("type").toString());
+    out << "  " << field_type << " " << protoFieldName(it.value()) << " = " << it.key() << ";"
+        << fieldComment(it.value(), field_schema) << "\n";
+  }
+
+  out << "}\n";
+  return msg;
+}
 
 /**
  * @brief Converts a JSON Schema type string to a protobuf type.

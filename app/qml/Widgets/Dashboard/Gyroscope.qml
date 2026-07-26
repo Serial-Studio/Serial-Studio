@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 pragma ComponentBehavior: Bound
@@ -115,7 +115,7 @@ Item {
     // Dark background fills the entire widget
     //
     Rectangle {
-      color: "#0e1117"
+      color: Cpp_ThemeManager.colors["widget_window"]
       anchors.fill: parent
     }
 
@@ -143,6 +143,12 @@ Item {
           y: (instrument.instrumentHeight - height) / 2
           width: Math.max(instrument.width, instrument.height) * 3
           height: Math.max(instrument.width, instrument.height) * 3
+
+          //
+          // Artificial-horizon sky/ground/ladder is physical-metaphor content; never themed.
+          //
+
+          // code-verify off
 
           //
           // Sky gradient (Garmin-style blue)
@@ -251,6 +257,8 @@ Item {
               }
             }
           }
+
+          // code-verify on
 
           transform: [
             Translate {
@@ -372,8 +380,11 @@ Item {
       }
 
     //
-    // Angles indicator strip
+    // Angles indicator strip: fixed EFIS palette (dark boxes, white text),
+    // deliberately theme-blind like the horizon face above
     //
+
+    // code-verify off
     Item {
       id: angles
 
@@ -484,5 +495,6 @@ Item {
         }
       }
     }
+    // code-verify on
   }
 }

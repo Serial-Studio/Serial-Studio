@@ -14,12 +14,14 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
+
+#include "DataModel/Generated/DatasetRegistry.h"
 
 //--------------------------------------------------------------------------------------------------
 // Private enums to track which item the user selected/modified
@@ -38,46 +40,6 @@ typedef enum { kRootItem } TopLevelItem;
 typedef enum {
   kProjectView_Title
 } ProjectItem;
-
-/**
- * @brief Form-field identifiers for the dataset view.
- */
-typedef enum {
-  kDatasetView_Title,
-  kDatasetView_Index,
-  kDatasetView_Units,
-  kDatasetView_Widget,
-  kDatasetView_FFT,
-  kDatasetView_Waterfall,
-  kDatasetView_WaterfallYAxis,
-  kDatasetView_LED,
-  kDatasetView_LED_High,
-  kDatasetView_Plot,
-  kDatasetView_FFTMin,
-  kDatasetView_FFTMax,
-  kDatasetView_PltMin,
-  kDatasetView_PltMax,
-  kDatasetView_WgtMin,
-  kDatasetView_WgtMax,
-  kDatasetView_FFT_Samples,
-  kDatasetView_FFT_SamplingRate,
-  kDatasetView_FFT_Window,
-  kDatasetView_xAxis,
-  kDatasetView_Overview,
-  kDatasetView_HideOnDashboard,
-  kDatasetView_TransformCode,
-  kDatasetView_Virtual,
-  kDatasetView_DisplayTickCount,
-  kDatasetView_DisplayFormat,
-  kDatasetView_DecimalPoints,
-  kDatasetView_Color,
-  kDatasetView_Alias,
-  kDatasetView_Plt_LogX,
-  kDatasetView_Plt_LogY,
-  kDatasetView_FFT_LogX,
-  kDatasetView_FFT_Ballistics,
-  kDatasetView_FFT_BallisticsRelease,
-} DatasetItem;
 
 /**
  * @brief Form-field identifiers for the action view.

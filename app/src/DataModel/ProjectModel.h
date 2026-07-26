@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -28,10 +28,12 @@
 #include <QVariantList>
 
 #include "DataModel/Frame.h"
+#include "DataModel/Project/ProjectHistory.h"
 #include "SerialStudio.h"
 
 class QTimer;
 class QFileSystemWatcher;
+class SessionContext;
 
 namespace DataModel {
 
@@ -123,6 +125,18 @@ class ProjectModel : public QObject {
   Q_PROPERTY(QJsonObject diagramCollapse
              READ diagramCollapse
              NOTIFY diagramCollapseChanged)
+  Q_PROPERTY(bool canUndo
+             READ canUndo
+             NOTIFY projectHistoryChanged)
+  Q_PROPERTY(bool canRedo
+             READ canRedo
+             NOTIFY projectHistoryChanged)
+  Q_PROPERTY(QString undoText
+             READ undoText
+             NOTIFY projectHistoryChanged)
+  Q_PROPERTY(QString redoText
+             READ redoText
+             NOTIFY projectHistoryChanged)
   // clang-format on
 
 signals:
@@ -163,6 +177,7 @@ signals:
   void diagramCollapseChanged();
   void saveDialogCompleted(bool accepted);
   void importCompleted(bool accepted, const QString& savedPath);
+  void projectHistoryChanged();
 
   void groupAdded(int groupId);
   void groupDeleted();
@@ -189,6 +204,7 @@ private:
 
   [[nodiscard]] SaveBlocker saveBlockerCode() const;
 
+  friend class ::SessionContext;
   explicit ProjectModel();
   ProjectModel(ProjectModel&&)                 = delete;
   ProjectModel(const ProjectModel&)            = delete;
@@ -258,6 +274,12 @@ public:
 
   [[nodiscard]] qint64 mutationEpoch() const noexcept;
 
+  [[nodiscard]] bool canUndo() const noexcept;
+  [[nodiscard]] bool canRedo() const noexcept;
+  [[nodiscard]] QString undoText() const;
+  [[nodiscard]] QString redoText() const;
+  [[nodiscard]] ProjectHistory& history() noexcept;
+
   [[nodiscard]] bool locked() const noexcept;
   [[nodiscard]] bool validateProject(const bool silent);
 
@@ -286,6 +308,10 @@ public:
   [[nodiscard]] const QJsonObject& diagramCollapse() const noexcept;
 
 public slots:
+  bool undo();
+  bool redo();
+  void setNextUndoHint(const QString& label, const QString& coalesceKey);
+
   void lockProject();
   void unlockProject();
 
@@ -554,6 +580,15 @@ private:
   bool applyGroupWidget(DataModel::Group& grp, SerialStudio::GroupWidget widget);
   bool populateFixedLayoutGroup(DataModel::Group& grp, SerialStudio::GroupWidget widget);
 
+  struct DocumentLoadFlags {
+    int loadedSchema;
+    bool olderSchema;
+    bool legacyUniqueIds;
+  };
+
+  bool applyHistorySnapshot(const QByteArray& state);
+  DocumentLoadFlags applyJsonDocumentCore(const QJsonObject& json);
+
   void loadProjectRootScalars(const QJsonObject& json);
   void loadProjectArrays(const QJsonObject& json, const QString& legacyParserCode);
   void seedDefaultSourceFromUi(const QString& legacyParserCode);
@@ -569,7 +604,7 @@ private:
   void migrateLegacyLayoutKeys();
   void migrateLegacyDashboardLayout(const QJsonObject& json);
   bool migrateLegacySeparator(const QJsonObject& json);
-  void emitProjectLoadedSignals();
+  void emitProjectLoadedSignals(const bool includeJsonFileChanged = true);
   void persistLegacyMigration();
 
   [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
@@ -653,6 +688,7 @@ private:
   bool m_autoSaveSuspended;
   bool m_runtimeDirty;
   qint64 m_mutationEpoch;
+  ProjectHistory m_history;
 
   QFileSystemWatcher* m_fileWatcher;
   bool m_diskCheckPending;

@@ -2214,6 +2214,13 @@ static const QHash<QString, QString>& scopeDescriptions()
      QStringLiteral("License activation, validation, trial mode.")},
     {QStringLiteral("notifications"),
      QStringLiteral("In-app notification center: post, list, channels, mark read.")},
+    {QStringLiteral("problems"),
+     QStringLiteral("Standing diagnostics: project-schema mistakes, link problems and script "
+                    "failures, with the cause, a remedy and the entity to fix.")},
+    {QStringLiteral("diagnostics"),
+     QStringLiteral("Connection self-checks: serial-port permissions and the exact command that "
+                    "fixes them, Bluetooth adapter and permission state, audio inputs, and host "
+                    "or broker reachability. Findings are read through problems.list.")},
     {QStringLiteral("extensions"),
      QStringLiteral("Plugin/extension lifecycle.")},
     {QStringLiteral("meta"),

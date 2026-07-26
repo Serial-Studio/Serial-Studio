@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2020-2025 Alex Spataru
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/EnumLabels.h"
@@ -443,6 +443,8 @@ QString API::EnumLabels::dashboardWidgetSlug(int value)
     case SerialStudio::DashboardPainter:
       return QStringLiteral("painter");
 #endif
+    case SerialStudio::DashboardExtension:
+      return QStringLiteral("extension");
   }
   return QStringLiteral("unknown");
 }
@@ -522,6 +524,9 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
   if (s == QLatin1String("painter"))
     return SerialStudio::DashboardPainter;
 #endif
+  if (s == QLatin1String("extension"))
+    return SerialStudio::DashboardExtension;
+
   return -1;
 }
 

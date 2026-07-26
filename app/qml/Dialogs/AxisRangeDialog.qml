@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -127,8 +127,11 @@ Widgets.SmartDialog {
         customXMax = newXMax
         hasCustomRanges = true
       } else {
-        xMinField.text = formatValue(plotWidget.xMin, root.logX)
-        xMaxField.text = formatValue(plotWidget.xMax, root.logX)
+        if (!xMinField.activeFocus)
+          xMinField.text = formatValue(plotWidget.xMin, root.logX)
+
+        if (!xMaxField.activeFocus)
+          xMaxField.text = formatValue(plotWidget.xMax, root.logX)
       }
     }
 
@@ -141,8 +144,11 @@ Widgets.SmartDialog {
       customYMax = newYMax
       hasCustomRanges = true
     } else {
-      yMinField.text = formatValue(plotWidget.yMin, root.logY)
-      yMaxField.text = formatValue(plotWidget.yMax, root.logY)
+      if (!yMinField.activeFocus)
+        yMinField.text = formatValue(plotWidget.yMin, root.logY)
+
+      if (!yMaxField.activeFocus)
+        yMaxField.text = formatValue(plotWidget.yMax, root.logY)
     }
   }
 

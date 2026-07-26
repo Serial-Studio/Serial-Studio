@@ -21,7 +21,7 @@
 //   (defense in depth even though Showdown's openLinksInNewWindow is false).
 // - data: URLs are rejected except for known-safe image types (none enabled).
 //
-// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+// SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 (function (global) {
   "use strict";
 

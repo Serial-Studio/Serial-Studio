@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -29,6 +29,8 @@
 #include <limits>
 #include <QPointF>
 #include <QtGlobal>
+
+#include "SSAssert.h"
 
 /**
  * @file DSPSimd.h
@@ -46,15 +48,21 @@
  * when -0.0 and +0.0 compare equal, which no caller observes.
  */
 
-#if defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64)
-#  define SS_SIMD_X86 1
-#  include <immintrin.h>
-#elif defined(__aarch64__) || defined(_M_ARM64)
-#  define SS_SIMD_NEON 1
-#  include <arm_neon.h>
+#if !defined(SS_SIMD_DISABLE)
+#  if defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64)
+#    define SS_SIMD_X86 1
+#    include <immintrin.h>
+#  elif defined(__aarch64__) || defined(_M_ARM64)
+#    define SS_SIMD_NEON 1
+#    include <arm_neon.h>
+#  endif
 #endif
 
-namespace DSP {
+#ifndef SS_DSP_NAMESPACE
+#  define SS_DSP_NAMESPACE DSP
+#endif
+
+namespace SS_DSP_NAMESPACE {
 
 //--------------------------------------------------------------------------------------------------
 // Internal contiguous-span kernels
@@ -70,8 +78,8 @@ namespace SimdDetail {
 inline void windowedComplexSpan(
   const double* src, const float* win, float* out, std::size_t n, double offset, double scale)
 {
-  Q_ASSERT(src != nullptr || n == 0);
-  Q_ASSERT(win != nullptr || n == 0);
+  SS_ASSERT(src != nullptr || n == 0, return);
+  SS_ASSERT(win != nullptr || n == 0, return);
 
   std::size_t i = 0;
 
@@ -121,8 +129,8 @@ inline void windowedComplexSpan(
  */
 inline void interleaveSpan(const double* xs, const double* ys, double* out, qsizetype n)
 {
-  Q_ASSERT(xs != nullptr || n == 0);
-  Q_ASSERT(ys != nullptr || n == 0);
+  SS_ASSERT(xs != nullptr || n == 0, return);
+  SS_ASSERT(ys != nullptr || n == 0, return);
 
   qsizetype i = 0;
 
@@ -165,8 +173,8 @@ template<typename OnMatch>
                                                char needle,
                                                OnMatch&& onMatch)
 {
-  Q_ASSERT(data != nullptr || len == 0);
-  Q_ASSERT(len >= 0);
+  SS_ASSERT(data != nullptr || len == 0, return true);
+  SS_ASSERT(len >= 0, return true);
 
   qsizetype i = 0;
 
@@ -217,9 +225,9 @@ template<typename OnMatch>
                                                int count)
 {
   constexpr int kMaxNeedles = 8;
-  Q_ASSERT(data != nullptr || len == 0);
-  Q_ASSERT(needles != nullptr);
-  Q_ASSERT(count >= 1 && count <= kMaxNeedles);
+  SS_ASSERT(data != nullptr || len == 0, return len);
+  SS_ASSERT(needles != nullptr, return len);
+  SS_ASSERT(count >= 1 && count <= kMaxNeedles, return len);
 
   qsizetype i = 0;
 
@@ -277,8 +285,8 @@ template<typename OnMatch>
  */
 [[nodiscard]] inline double simdMinF64(const double* p, std::size_t n)
 {
-  Q_ASSERT(p != nullptr);
-  Q_ASSERT(n > 0);
+  SS_ASSERT(p != nullptr, return std::numeric_limits<double>::infinity());
+  SS_ASSERT(n > 0, return std::numeric_limits<double>::infinity());
 
   std::size_t i = 1;
   double lo     = p[0];
@@ -319,8 +327,8 @@ template<typename OnMatch>
  */
 [[nodiscard]] inline double simdMaxF64(const double* p, std::size_t n)
 {
-  Q_ASSERT(p != nullptr);
-  Q_ASSERT(n > 0);
+  SS_ASSERT(p != nullptr, return -std::numeric_limits<double>::infinity());
+  SS_ASSERT(n > 0, return -std::numeric_limits<double>::infinity());
 
   std::size_t i = 1;
   double hi     = p[0];
@@ -361,8 +369,16 @@ template<typename OnMatch>
  */
 inline void simdMinMaxF64(const double* p, std::size_t n, double& lo, double& hi)
 {
-  Q_ASSERT(p != nullptr);
-  Q_ASSERT(n > 0);
+  SS_ASSERT(p != nullptr, {
+    lo = std::numeric_limits<double>::infinity();
+    hi = -lo;
+    return;
+  });
+  SS_ASSERT(n > 0, {
+    lo = std::numeric_limits<double>::infinity();
+    hi = -lo;
+    return;
+  });
 
   std::size_t i = 1;
   lo            = p[0];
@@ -424,8 +440,8 @@ inline void simdFiniteMinMaxPointF(const QPointF* pts, qsizetype n, double& lo, 
 {
   static_assert(kLane == 0 || kLane == 1, "QPointF has exactly two lanes");
   static_assert(sizeof(QPointF) == 2 * sizeof(double), "QPointF must pack two doubles");
-  Q_ASSERT(pts != nullptr || n == 0);
-  Q_ASSERT(n >= 0);
+  SS_ASSERT(pts != nullptr || n == 0, return);
+  SS_ASSERT(n >= 0, return);
 
   const double* base = reinterpret_cast<const double*>(pts);
   qsizetype i        = 0;
@@ -502,11 +518,11 @@ inline void simdWindowedComplexFill(const double* ring,
                                     const float* window,
                                     float* out)
 {
-  Q_ASSERT(ring != nullptr || n == 0);
-  Q_ASSERT(out != nullptr || n == 0);
-  Q_ASSERT(((mask + 1) & mask) == 0);
-  Q_ASSERT(n <= mask + 1);
-  Q_ASSERT(front <= mask);
+  SS_ASSERT(ring != nullptr || n == 0, return);
+  SS_ASSERT(out != nullptr || n == 0, return);
+  SS_ASSERT(((mask + 1) & mask) == 0, return);
+  SS_ASSERT(n <= mask + 1, return);
+  SS_ASSERT(front <= mask, return);
 
   const std::size_t n0 = std::min(n, mask + 1 - front);
   SimdDetail::windowedComplexSpan(ring + front, window, out, n0, offset, scale);
@@ -528,11 +544,11 @@ inline void simdRingsToPoints(const double* xs,
                               QPointF* out)
 {
   static_assert(sizeof(QPointF) == 2 * sizeof(double), "QPointF must pack two doubles");
-  Q_ASSERT(xs != nullptr || n == 0);
-  Q_ASSERT(ys != nullptr || n == 0);
-  Q_ASSERT(out != nullptr || n == 0);
-  Q_ASSERT(((xmask + 1) & xmask) == 0);
-  Q_ASSERT(((ymask + 1) & ymask) == 0);
+  SS_ASSERT(xs != nullptr || n == 0, return);
+  SS_ASSERT(ys != nullptr || n == 0, return);
+  SS_ASSERT(out != nullptr || n == 0, return);
+  SS_ASSERT(((xmask + 1) & xmask) == 0, return);
+  SS_ASSERT(((ymask + 1) & ymask) == 0, return);
 
   double* dst    = reinterpret_cast<double*>(out);
   std::size_t xi = xfront;
@@ -541,7 +557,7 @@ inline void simdRingsToPoints(const double* xs,
     const auto x_run      = static_cast<qsizetype>(xmask + 1 - xi);
     const auto y_run      = static_cast<qsizetype>(ymask + 1 - yi);
     const qsizetype chunk = std::min({n - done, x_run, y_run});
-    Q_ASSERT(chunk > 0);
+    SS_ASSERT(chunk > 0, return);
     SimdDetail::interleaveSpan(xs + xi, ys + yi, dst + 2 * done, chunk);
     xi    = (xi + static_cast<std::size_t>(chunk)) & xmask;
     yi    = (yi + static_cast<std::size_t>(chunk)) & ymask;
@@ -560,8 +576,8 @@ inline void simdRingsToPoints(const double* xs,
  */
 inline void simdAsciiDots16(const quint8* src, char16_t* out)
 {
-  Q_ASSERT(src != nullptr);
-  Q_ASSERT(out != nullptr);
+  SS_ASSERT(src != nullptr, return);
+  SS_ASSERT(out != nullptr, return);
 
 #if defined(SS_SIMD_X86)
   const __m128i block     = _mm_loadu_si128(reinterpret_cast<const __m128i*>(src));
@@ -589,4 +605,4 @@ inline void simdAsciiDots16(const quint8* src, char16_t* out)
 #endif
 }
 
-}  // namespace DSP
+}  // namespace SS_DSP_NAMESPACE

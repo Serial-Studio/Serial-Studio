@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtCore
@@ -24,6 +24,8 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
+
+import SerialStudio
 
 import "../../Widgets" as Widgets
 
@@ -161,7 +163,7 @@ Window {
   //
   readonly property var filteredWidgets: {
     const q = String(searchText || "").toLowerCase().trim()
-    const match = (s) => String(s || "").toLowerCase().indexOf(q) !== -1
+    const match = (s) => SerialStudio.searchMatches(q, String(s || ""))
     if (!q)
       return allWidgets
 

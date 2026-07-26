@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -26,6 +26,7 @@
 #include <QVariantList>
 
 class QTimer;
+class SessionContext;
 
 namespace DataModel {
 class ProjectModel;
@@ -44,8 +45,8 @@ signals:
   void snapshotTaken(const QString& path);
   void restored(const QString& path);
 
-private:
-  BackupManager();
+public:
+  explicit BackupManager(SessionContext& ctx);
   BackupManager(BackupManager&&)                 = delete;
   BackupManager(const BackupManager&)            = delete;
   BackupManager& operator=(BackupManager&&)      = delete;
@@ -80,6 +81,7 @@ private:
   void enforceRetention(const QString& dir);
   void seedDedupFromNewest(const QString& dir);
 
+  SessionContext& m_ctx;
   bool m_enabled;
   QString m_lastSnapshotPath;
   QByteArray m_lastContentHash;

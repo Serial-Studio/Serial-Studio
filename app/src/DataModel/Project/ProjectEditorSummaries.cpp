@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <cmath>
@@ -593,6 +593,9 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
   QHash<int, int> groupRunning;
   QHash<int, int> datasetRunning;
 
+  datasetRunning.insert(static_cast<int>(SerialStudio::DashboardExtension),
+                        SerialStudio::extensionGroupWidgetCount(groups));
+
   for (const auto& g : groups) {
     if (!SerialStudio::groupEligibleForWorkspace(g))
       continue;
@@ -828,6 +831,9 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
 
   const auto& groups = m_projectModelRef.groups();
   const bool pro     = SerialStudio::activated();
+  datasetIdx.insert(SerialStudio::DashboardExtension,
+                    SerialStudio::extensionGroupWidgetCount(groups));
+
   for (const auto& group : groups) {
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;

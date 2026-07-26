@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Player.h"
@@ -38,6 +38,7 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -349,8 +350,8 @@ void MDF4::Player::closeFile()
  */
 void MDF4::Player::startDecoding(const QString& filePath)
 {
-  Q_ASSERT(!filePath.isEmpty());
-  Q_ASSERT(m_loaderThread == nullptr);
+  SS_ASSERT(!filePath.isEmpty(), return);
+  SS_ASSERT(m_loaderThread == nullptr, return);
 
   ++m_decodeGeneration;
   m_loaderThread = new QThread(this);
@@ -433,7 +434,7 @@ void MDF4::Player::onDecodeProgress(double fraction, quint64 generation)
  */
 void MDF4::Player::onDecodeFinished(const MDF4::PlayerDecodePayloadPtr& payload)
 {
-  Q_ASSERT(payload != nullptr);
+  SS_ASSERT(payload != nullptr, return);
 
   if (payload->generation != m_decodeGeneration)
     return;
@@ -576,8 +577,8 @@ void MDF4::Player::setProgress(const double progress)
  */
 int MDF4::Player::seekWindowStartRow(int target) const
 {
-  Q_ASSERT(target >= 0);
-  Q_ASSERT(target < frameCount());
+  SS_ASSERT(target >= 0, return 0);
+  SS_ASSERT(target < frameCount(), return qMax(0, frameCount() - 1));
 
   static auto& dashboard = UI::Dashboard::instance();
   const double range     = dashboard.plotTimeRange();
@@ -609,8 +610,8 @@ void MDF4::Player::performSeekTick()
   if (!isOpen() || isPlaying())
     return;
 
-  Q_ASSERT(m_framePos >= 0);
-  Q_ASSERT(m_framePos < frameCount());
+  SS_ASSERT(m_framePos >= 0, return);
+  SS_ASSERT(m_framePos < frameCount(), return);
 
   if (m_seekColumnByKey.isEmpty()) {
     performSeekSettle();
@@ -640,8 +641,8 @@ void MDF4::Player::performSeekSettle()
   if (!isOpen() || isPlaying())
     return;
 
-  Q_ASSERT(m_framePos >= 0);
-  Q_ASSERT(m_framePos < frameCount());
+  SS_ASSERT(m_framePos >= 0, return);
+  SS_ASSERT(m_framePos < frameCount(), return);
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.clearPlotData();
@@ -691,9 +692,9 @@ void MDF4::Player::buildSeekWindow(int startRow,
                                    QVector<double>& times,
                                    QHash<qint64, QVector<double>>& series)
 {
-  Q_ASSERT(startRow >= 0);
-  Q_ASSERT(startRow <= endRow);
-  Q_ASSERT(endRow < frameCount());
+  SS_ASSERT(startRow >= 0, return);
+  SS_ASSERT(startRow <= endRow, return);
+  SS_ASSERT(endRow < frameCount(), return);
 
   const int n = endRow - startRow + 1;
   times.resize(n);
@@ -995,8 +996,8 @@ bool MDF4::Player::buildRowCells(int index, QStringList& cells) const
 qsizetype MDF4::Player::buildRowCellsTyped(
   int index, QVarLengthArray<DataModel::FrameBuilder::ReplayCell, 128>& cells) const
 {
-  Q_ASSERT(index >= 0);
-  Q_ASSERT(index < frameCount());
+  SS_ASSERT(index >= 0, return 0);
+  SS_ASSERT(index < frameCount(), return 0);
 
   const auto row            = static_cast<size_t>(index);
   const size_t channelCount = m_channelIsString.size();
@@ -1037,7 +1038,7 @@ QByteArray MDF4::Player::getFrame(const int index)
  */
 void MDF4::Player::anchorSteadyBase(int frameIndex)
 {
-  Q_ASSERT(frameIndex >= 0);
+  SS_ASSERT(frameIndex >= 0, frameIndex = 0);
 
   m_steadyBase = std::chrono::steady_clock::now();
   m_steadyBaseRowSeconds =
@@ -1050,8 +1051,8 @@ void MDF4::Player::anchorSteadyBase(int frameIndex)
  */
 std::chrono::steady_clock::time_point MDF4::Player::rowSteadyTimestamp(int frameIndex) const
 {
-  Q_ASSERT(frameIndex >= 0);
-  Q_ASSERT(frameIndex < frameCount());
+  if (frameIndex < 0 || frameIndex >= frameCount())
+    return m_steadyBase;
 
   const auto delta = std::chrono::duration<double>(m_timestamps[static_cast<size_t>(frameIndex)]
                                                    - m_steadyBaseRowSeconds);
@@ -1065,8 +1066,8 @@ std::chrono::steady_clock::time_point MDF4::Player::rowSteadyTimestamp(int frame
  */
 void MDF4::Player::injectRow(int frameIndex)
 {
-  Q_ASSERT(frameIndex >= 0);
-  Q_ASSERT(frameIndex < frameCount());
+  SS_ASSERT(frameIndex >= 0, return);
+  SS_ASSERT(frameIndex < frameCount(), return);
 
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile) {

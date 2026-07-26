@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Taskbar.h"
@@ -32,8 +32,44 @@
 #include "Misc/IconRegistry.h"
 #include "UI/Dashboard.h"
 #include "UI/UISessionRegistry.h"
+#include "UI/WidgetExtensions.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/WindowManager.h"
+
+/**
+ * @brief Returns the taskbar artwork for a widget: an extension widget takes the icon its package
+ *        declared, everything else keeps the built-in table.
+ */
+[[nodiscard]] static QString taskbarIcon(SerialStudio::DashboardWidget type,
+                                         const QString& extensionId,
+                                         const bool large)
+{
+  if (type == SerialStudio::DashboardExtension) {
+    static auto& catalog = UI::WidgetExtensions::instance();
+    const auto art       = catalog.iconUrl(extensionId, large ? 32 : 16);
+    if (!art.isEmpty())
+      return art;
+  }
+
+  return SerialStudio::dashboardWidgetIcon(type, large);
+}
+
+/**
+ * @brief Returns the icon-registry id a taskbar row re-resolves its own artwork tier from. A
+ *        package that ships its icon as a file has none, so the row keeps the resolved path only.
+ */
+[[nodiscard]] static QString taskbarIconId(SerialStudio::DashboardWidget type,
+                                           const QString& extensionId)
+{
+  if (type == SerialStudio::DashboardExtension) {
+    static auto& catalog = UI::WidgetExtensions::instance();
+    const auto& package  = catalog.descriptor(extensionId);
+    if (!package.iconId.isEmpty() && !package.iconId.contains(QStringLiteral(".")))
+      return package.iconId;
+  }
+
+  return SerialStudio::dashboardWidgetIconId(type);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Taskbar model implementation
@@ -979,7 +1015,7 @@ void UI::Taskbar::rebuildModel()
     auto* groupItem              = new QStandardItem();
     const bool alreadyRegistered = groupIds.contains(groupId);
     buildOverviewGroupItem(
-      groupItem, groupId, groupName, groupType, mainWindowId, alreadyRegistered);
+      groupItem, groupId, groupName, groupType, group.widget, mainWindowId, alreadyRegistered);
     mapMainGroupWidgetId(groupType, groupId, mainWindowId);
 
     for (int i = 0; i < windowIds.count(); ++i)
@@ -1000,22 +1036,24 @@ void UI::Taskbar::rebuildModel()
 }
 
 /**
- * @brief Populates the role data of an overview group item from group/main-widget info.
+ * @brief Populates the role data of an overview group item from group/main-widget info; a group
+ *        rendered by an extension package takes its artwork from that package's descriptor.
  */
 void UI::Taskbar::buildOverviewGroupItem(QStandardItem* groupItem,
                                          int groupId,
                                          const QString& groupName,
                                          SerialStudio::DashboardWidget groupType,
+                                         const QString& extensionId,
                                          int mainWindowId,
                                          bool alreadyRegistered)
 {
-  const auto groupIcon = SerialStudio::dashboardWidgetIcon(groupType, true);
+  const auto groupIcon = taskbarIcon(groupType, extensionId, true);
   groupItem->setData(groupId, TaskbarModel::GroupIdRole);
   groupItem->setData(groupName, TaskbarModel::GroupNameRole);
   groupItem->setData(groupName, TaskbarModel::WidgetNameRole);
   groupItem->setData(groupType, TaskbarModel::WidgetTypeRole);
   groupItem->setData(groupIcon, TaskbarModel::WidgetIconRole);
-  groupItem->setData(SerialStudio::dashboardWidgetIconId(groupType), TaskbarModel::IconIdRole);
+  groupItem->setData(taskbarIconId(groupType, extensionId), TaskbarModel::IconIdRole);
   groupItem->setData(mainWindowId, TaskbarModel::WindowIdRole);
   groupItem->setData(!alreadyRegistered, TaskbarModel::IsGroupRole);
   groupItem->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
@@ -1058,15 +1096,13 @@ void UI::Taskbar::collectGroupWidgetIds(int groupId,
     const auto widgetType    = it.value().first;
     const auto relativeIndex = it.value().second;
 
-    int candidateGroup = -1;
-    if (SerialStudio::isGroupWidget(widgetType))
-      candidateGroup = db->getGroupWidget(widgetType, relativeIndex).groupId;
-
-    else if (SerialStudio::isDatasetWidget(widgetType))
-      candidateGroup = db->getDatasetWidget(widgetType, relativeIndex).groupId;
-
-    else
+    const auto slot = db->widgetSlot(widgetType, relativeIndex);
+    if (!slot.valid)
       continue;
+
+    const int candidateGroup = slot.group
+                               ? db->getGroupWidget(widgetType, slot.bucketIndex).groupId
+                               : db->getDatasetWidget(widgetType, slot.bucketIndex).groupId;
 
     if (candidateGroup != groupId)
       continue;
@@ -1078,7 +1114,8 @@ void UI::Taskbar::collectGroupWidgetIds(int groupId,
 }
 
 /**
- * @brief Builds and appends a single child QStandardItem under the given group item.
+ * @brief Builds and appends a single child QStandardItem under the given group item; a widget
+ *        rendered by an extension package takes its artwork from that package's descriptor.
  */
 void UI::Taskbar::appendGroupChildItem(QStandardItem* groupItem,
                                        int groupId,
@@ -1089,26 +1126,22 @@ void UI::Taskbar::appendGroupChildItem(QStandardItem* groupItem,
 {
   auto* db = &m_dashboard;
 
-  const auto icon = SerialStudio::dashboardWidgetIcon(widgetType, true);
+  const auto slot = db->widgetSlot(widgetType, relativeIndex);
+  const auto icon = taskbarIcon(widgetType, slot.extensionId, true);
   auto* child     = new QStandardItem();
   child->setData(false, TaskbarModel::IsGroupRole);
   child->setData(icon, TaskbarModel::WidgetIconRole);
-  child->setData(SerialStudio::dashboardWidgetIconId(widgetType), TaskbarModel::IconIdRole);
+  child->setData(taskbarIconId(widgetType, slot.extensionId), TaskbarModel::IconIdRole);
   child->setData(groupId, TaskbarModel::GroupIdRole);
   child->setData(groupName, TaskbarModel::GroupNameRole);
   child->setData(windowId, TaskbarModel::WindowIdRole);
   child->setData(widgetType, TaskbarModel::WidgetTypeRole);
   child->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
 
-  if (SerialStudio::isGroupWidget(widgetType)) {
-    const auto& dbGroup = db->getGroupWidget(widgetType, relativeIndex);
-    child->setData(dbGroup.title, TaskbarModel::WidgetNameRole);
-    mapWidgetToWindow(m_widgetRegistry.widgetIdByTypeAndIndex(widgetType, relativeIndex), windowId);
-  }
-
-  else if (SerialStudio::isDatasetWidget(widgetType)) {
-    const auto& dbDataset = db->getDatasetWidget(widgetType, relativeIndex);
-    child->setData(dbDataset.title, TaskbarModel::WidgetNameRole);
+  if (slot.valid) {
+    const auto& title = slot.group ? db->getGroupWidget(widgetType, slot.bucketIndex).title
+                                   : db->getDatasetWidget(widgetType, slot.bucketIndex).title;
+    child->setData(title, TaskbarModel::WidgetNameRole);
     mapWidgetToWindow(m_widgetRegistry.widgetIdByTypeAndIndex(widgetType, relativeIndex), windowId);
   }
 
@@ -1202,7 +1235,6 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId,
                                                int depth) const
 {
   static constexpr int kMaxDepth = 4;
-  Q_ASSERT(depth <= kMaxDepth);
   if (depth > kMaxDepth) [[unlikely]]
     return nullptr;
 
@@ -1369,8 +1401,8 @@ QVariantList UI::Taskbar::searchResults() const
     const auto groupWidgetName = groupItem->data(TaskbarModel::WidgetNameRole).toString();
     const auto groupType       = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
     if (groupType != SerialStudio::DashboardNoWidget
-        && (noFilter || groupWidgetName.contains(filter, Qt::CaseInsensitive)
-            || groupName.contains(filter, Qt::CaseInsensitive))) {
+        && (noFilter || SerialStudio::searchMatches(filter, groupWidgetName)
+            || SerialStudio::searchMatches(filter, groupName))) {
       QVariantMap entry;
       entry[QStringLiteral("windowId")]      = groupItem->data(TaskbarModel::WindowIdRole);
       entry[QStringLiteral("widgetName")]    = groupWidgetName;
@@ -1393,8 +1425,8 @@ QVariantList UI::Taskbar::searchResults() const
         continue;
 
       const auto name = child->data(TaskbarModel::WidgetNameRole).toString();
-      if (noFilter || name.contains(filter, Qt::CaseInsensitive)
-          || groupName.contains(filter, Qt::CaseInsensitive)) {
+      if (noFilter || SerialStudio::searchMatches(filter, name)
+          || SerialStudio::searchMatches(filter, groupName)) {
         QVariantMap entry;
         entry[QStringLiteral("windowId")]      = child->data(TaskbarModel::WindowIdRole);
         entry[QStringLiteral("widgetName")]    = name;

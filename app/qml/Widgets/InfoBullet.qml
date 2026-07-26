@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -36,7 +36,7 @@ RowLayout {
   Label {
     id: bullet
 
-    color: "#27AE60"
+    color: Cpp_ThemeManager.colors["alarm_ok"]
     font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
 
     // code-verify off

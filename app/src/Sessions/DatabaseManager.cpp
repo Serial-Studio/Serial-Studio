@@ -6,7 +6,7 @@
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
@@ -42,6 +42,7 @@
 #  include "Sessions/HtmlReport.h"
 #  include "Sessions/Player.h"
 #  include "Sessions/ReportData.h"
+#  include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -434,7 +435,7 @@ QString Sessions::DatabaseManager::canonicalDbPath(const QString& projectTitle)
  */
 void Sessions::DatabaseManager::openDatabase()
 {
-  Q_ASSERT(m_workspaceManager);
+  SS_ASSERT(m_workspaceManager != nullptr, return);
 
   auto* dialog = new QFileDialog(qApp->activeWindow(),
                                  tr("Open Session File"),
@@ -629,7 +630,7 @@ void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
  */
 void Sessions::DatabaseManager::deleteSession(int sessionId)
 {
-  Q_ASSERT(sessionId >= 0);
+  SS_ASSERT(sessionId >= 0, return);
 
   if (!isOpen() || m_locked)
     return;
@@ -683,7 +684,7 @@ void Sessions::DatabaseManager::replaySelectedSession()
   if (m_selectedSessionId < 0 || m_filePath.isEmpty())
     return;
 
-  Q_ASSERT(m_player);
+  SS_ASSERT(m_player != nullptr, return);
   m_player->openFile(m_filePath, m_selectedSessionId);
 }
 
@@ -797,7 +798,7 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
   if (!isOpen() || m_csvExportBusy)
     return;
 
-  Q_ASSERT(m_workspaceManager);
+  SS_ASSERT(m_workspaceManager != nullptr, return);
 
   const auto meta         = sessionMetadata(sessionId);
   const QString projTitle = meta.value("project_title").toString();
@@ -929,7 +930,7 @@ void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOp
   const QString title  = wantsPdf ? tr("Save PDF Report") : tr("Save HTML Report");
   const QString filter = wantsPdf ? tr("PDF files (*.pdf)") : tr("HTML files (*.html)");
 
-  Q_ASSERT(m_workspaceManager);
+  SS_ASSERT(m_workspaceManager != nullptr, return);
 
   const auto meta         = sessionMetadata(sessionId);
   const QString projTitle = meta.value("project_title").toString();
@@ -1083,7 +1084,7 @@ void Sessions::DatabaseManager::storeProjectMetadata()
   if (!isOpen())
     return;
 
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_projectModel != nullptr, return);
 
   const auto json = QJsonDocument(m_projectModel->serializeToJson()).toJson(QJsonDocument::Compact);
 
@@ -1113,8 +1114,8 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
  */
 void Sessions::DatabaseManager::runRestoreProjectFromJson(const QString& json)
 {
-  Q_ASSERT(m_projectModel);
-  Q_ASSERT(m_appState);
+  SS_ASSERT(m_projectModel != nullptr, return);
+  SS_ASSERT(m_appState != nullptr, return);
 
   if (json.isEmpty()) {
     Misc::Utilities::showMessageBox(tr("No project data"),

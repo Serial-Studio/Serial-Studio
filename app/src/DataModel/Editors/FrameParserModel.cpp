@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Editors/FrameParserModel.h"
@@ -36,6 +36,7 @@
 #include "Misc/IconRegistry.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Internal helpers
@@ -336,7 +337,7 @@ void DataModel::FrameParserModel::setTemplateIndex(int index)
     return;
 
   const auto* tmpl = templates.at(index);
-  Q_ASSERT(tmpl != nullptr);
+  SS_ASSERT(tmpl != nullptr, return);
 
   m_applying = true;
   m_projectModel.updateSourceFrameParserParams(m_sourceId, nativeTemplateDefaults(*tmpl));
@@ -468,7 +469,7 @@ bool DataModel::FrameParserModel::inputContainsDelimiters(const QString& input, 
                         || detection == SerialStudio::StartDelimiterOnly;
   const bool needs_end =
     detection == SerialStudio::EndDelimiterOnly || detection == SerialStudio::StartAndEndDelimiter;
-  Q_ASSERT(needs_start || needs_end);
+  SS_ASSERT(needs_start || needs_end, return true);
 
   const auto start = delimiterBytes(src.frameStart, src.hexadecimalDelimiters);
   const auto end   = delimiterBytes(src.frameEnd, src.hexadecimalDelimiters);
@@ -709,7 +710,7 @@ void DataModel::FrameParserModel::rebuildTemplateNames()
   for (const auto* tmpl : templates)
     m_templateNames.append(tmpl->name());
 
-  Q_ASSERT(!m_templateNames.isEmpty());
+  SS_ASSERT_LOG(!m_templateNames.isEmpty());
   Q_EMIT templatesChanged();
 }
 

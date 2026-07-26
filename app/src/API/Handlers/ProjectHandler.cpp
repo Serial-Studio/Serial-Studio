@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/Handlers/ProjectHandler.h"
@@ -83,6 +83,35 @@ void API::Handlers::ProjectHandler::registerFileCommands()
 {
   registerFileLifecycleCommands();
   registerFileMetadataCommands();
+  registerHistoryCommands();
+}
+
+/**
+ * @brief Register project.undo / project.redo commands.
+ */
+void API::Handlers::ProjectHandler::registerHistoryCommands()
+{
+  static auto& registry = CommandRegistry::instance();
+  const auto empty      = emptySchema();
+
+  registry.registerCommand(
+    QStringLiteral("project.undo"),
+    QStringLiteral("Undo the most recent project-document mutation (from any surface: "
+                   "editor UI, API, or batch -- one shared history). A batch or cascade "
+                   "reverts atomically as one step. Returns {performed:false, reason} "
+                   "when history is empty; never an error. History clears on project "
+                   "load/new. Not for workspace or widget-layout edits (those are "
+                   "outside undo history)."),
+    empty,
+    &projectUndo);
+
+  registry.registerCommand(
+    QStringLiteral("project.redo"),
+    QStringLiteral("Replay the most recently undone project-document step. Returns "
+                   "{performed:false, reason} when there is nothing to redo. Any new "
+                   "mutation after an undo discards the redo tail."),
+    empty,
+    &projectRedo);
 }
 
 /**
@@ -1330,6 +1359,26 @@ void API::Handlers::ProjectHandler::registerPainterCodeCommands()
 }
 
 /**
+ * @brief Builds the project.dataset.update schema: the two identity params plus every typed field
+ *        the property registry declares, so callers read the field list instead of parsing prose.
+ */
+[[nodiscard]] static QJsonObject datasetUpdateSchema()
+{
+  auto schema = API::makeSchema({
+    {QStringLiteral("groupId"), QStringLiteral("integer"),   QStringLiteral("Target group id")},
+    {          Keys::DatasetId, QStringLiteral("integer"), QStringLiteral("Target dataset id")}
+  });
+
+  auto properties   = schema.value(QStringLiteral("properties")).toObject();
+  const auto fields = API::Handlers::datasetFieldSchema();
+  for (auto it = fields.constBegin(); it != fields.constEnd(); ++it)
+    properties.insert(it.key(), it.value());
+
+  schema.insert(QStringLiteral("properties"), properties);
+  return schema;
+}
+
+/**
  * @brief Register patching update commands for groups/datasets/actions/outputs.
  */
 /**
@@ -1352,34 +1401,25 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
 
   registry.registerCommand(
     QStringLiteral("project.dataset.update"),
-    QStringLiteral("Patch dataset fields by id (params: groupId, datasetId, plus any of "
-                   "title, units, widget, index, sourceId, graph, fft, led, waterfall, "
-                   "color ('#rrggbb' or any Qt color name; empty = automatic theme color), "
-                   "alias (stable script/API name; must be unique, empty clears it), "
-                   "log, overviewDisplay, hideOnDashboard, xAxisId, "
-                   "plotLogX (log10 X axis; plot widget, non-time X sources only), "
-                   "plotLogY (log10 Y axis; plot widget), "
-                   "fftLogX (log10 frequency axis; FFT widget); multiplot groups follow "
-                   "the group's FIRST dataset for plotLogX/plotLogY -- set the flags on "
-                   "every member to keep the group coherent, "
-                   "fftBallistics (analyzer-style display: instant attack, timed decay), "
-                   "fftBallisticsRelease (decay time in ms, 50-5000, default 300), "
-                   "waterfallYAxis, fftSamples, fftSamplingRate, "
-                   "fftWindow (0=Rectangular, 1=Bartlett, 2=Hann, 3=Hamming, 4=Blackman, "
-                   "5=Blackman-Harris (default), 6=Nuttall, 7=Blackman-Nuttall, 8=Flat Top, "
-                   "9=Welch, 10=Bartlett-Hann, 11=Bohman, 12=Cosine, 13=Lanczos, 14=Parzen), "
-                   "fftMin, fftMax, "
-                   "pltMin, pltMax, wgtMin, wgtMax, ledHigh, "
-                   "alarmBands (array of {min,max,severity,color,label,blink} objects, "
-                   "severity=0..3 for Info/Ok/Warning/Critical), "
-                   "or legacy alarmLow/alarmHigh/alarmEnabled for 2-band simple mode, "
-                   "fftMarkers (array of {freq,endFreq,label,color,warningDb,alarmDb} "
-                   "objects; see project.dataset.setFFTMarkers for field semantics), "
-                   "displayTickCount, displayFormat, decimalPoints, "
-                   "transformCode, transformLanguage, virtual). The boolean fields "
-                   "graph/fft/led/waterfall toggle the same flags as "
+    QStringLiteral("Patch dataset fields by id: params are groupId, datasetId, plus any of "
+                   "the writable fields declared in this command's schema -- read the typed "
+                   "'properties' block for each field's type, description and enum domain "
+                   "instead of guessing from prose.\n"
+                   "Fields whose project-file spelling differs from the API name (plotMin, "
+                   "plotMax, widgetMin, widgetMax, xAxis, datasetSourceId) are accepted as "
+                   "aliases, so an object read back from the API can be written straight "
+                   "through without loss.\n"
+                   "Nested collections: alarmBands takes an array of "
+                   "{min,max,severity,color,label,blink} objects (severity=0..3 for "
+                   "Info/Ok/Warning/Critical), and legacy alarmLow/alarmHigh/alarmEnabled "
+                   "still drive the 2-band simple mode; fftMarkers takes an array of "
+                   "{freq,endFreq,label,color,warningDb,alarmDb} objects (see "
+                   "project.dataset.setFFTMarkers for field semantics).\n"
+                   "The boolean fields graph/fft/led/waterfall toggle the same flags as "
                    "project.dataset.setOption -- use them here when patching multiple "
-                   "fields at once.\n"
+                   "fields at once. Multiplot groups follow the group's FIRST dataset for "
+                   "plotLogX/plotLogY, so set those flags on every member to keep the group "
+                   "coherent.\n"
                    "Unknown fields are accepted but ignored, and surfaced in "
                    "result.warnings[].fields with code 'unknown_field' so the caller "
                    "can self-correct on the next turn instead of silently mis-applying "
@@ -1396,10 +1436,7 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
                    "-1=inherit from source). Mismatched language vs code = silent "
                    "compile failure. Lua is the recommended default; it's faster "
                    "on the hotpath."),
-    makeSchema({
-      {QStringLiteral("groupId"), QStringLiteral("integer"),   QStringLiteral("Target group id")},
-      {          Keys::DatasetId, QStringLiteral("integer"), QStringLiteral("Target dataset id")}
-  }),
+    datasetUpdateSchema(),
     &datasetUpdate);
 
   registry.registerCommand(

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/FileTransmission.h"
@@ -31,6 +31,7 @@
 #include "IO/FileTransmission/YMODEM.h"
 #include "IO/FileTransmission/ZMODEM.h"
 #include "Misc/Translator.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton access
@@ -117,7 +118,7 @@ bool IO::FileTransmission::active() const
  */
 bool IO::FileTransmission::fileOpen() const
 {
-  Q_ASSERT(m_connectionManager);
+  SS_ASSERT(m_connectionManager != nullptr, return false);
   return m_file.isOpen() && m_connectionManager->isConnected();
 }
 
@@ -365,7 +366,7 @@ void IO::FileTransmission::stopTransmission()
  */
 void IO::FileTransmission::beginTransmission()
 {
-  Q_ASSERT(m_connectionManager);
+  SS_ASSERT(m_connectionManager != nullptr, return);
 
   if (!m_connectionManager->isConnected()) {
     stopTransmission();
@@ -592,7 +593,7 @@ void IO::FileTransmission::setRuntimeAccessAllowed(bool allowed)
  */
 void IO::FileTransmission::sendLine()
 {
-  Q_ASSERT(m_connectionManager);
+  SS_ASSERT(m_connectionManager != nullptr, return);
 
   if (!active())
     return;
@@ -628,7 +629,7 @@ void IO::FileTransmission::sendLine()
  */
 void IO::FileTransmission::sendRawBlock()
 {
-  Q_ASSERT(m_connectionManager);
+  SS_ASSERT(m_connectionManager != nullptr, return);
 
   if (!m_connectionManager->isConnected())
     return;
@@ -703,7 +704,7 @@ void IO::FileTransmission::onProtocolStatus(const QString& message)
  */
 void IO::FileTransmission::onProtocolWriteRequested(const QByteArray& data)
 {
-  Q_ASSERT(m_connectionManager);
+  SS_ASSERT(m_connectionManager != nullptr, return);
   (void)m_connectionManager->writeData(data);
 }
 

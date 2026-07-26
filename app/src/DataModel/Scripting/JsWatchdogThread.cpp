@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/JsWatchdogThread.h"
@@ -29,6 +29,7 @@
 #include <QTimer>
 
 #include "DataModel/Scripting/JsWatchdog.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -60,7 +61,7 @@ DataModel::JsWatchdogWorker::JsWatchdogWorker(QObject* parent) : QObject(parent)
  */
 void DataModel::JsWatchdogWorker::begin()
 {
-  Q_ASSERT(QThread::currentThread() == thread());
+  SS_ASSERT(QThread::currentThread() == thread(), return);
   if (m_timer)
     return;
 
@@ -75,7 +76,7 @@ void DataModel::JsWatchdogWorker::begin()
  */
 void DataModel::JsWatchdogWorker::finish()
 {
-  Q_ASSERT(QThread::currentThread() == thread());
+  SS_ASSERT(QThread::currentThread() == thread(), return);
   if (!m_timer)
     return;
 
@@ -130,7 +131,7 @@ DataModel::JsWatchdogThread::~JsWatchdogThread()
  */
 void DataModel::JsWatchdogThread::registerWatchdog(JsWatchdog* watchdog)
 {
-  Q_ASSERT(watchdog != nullptr);
+  SS_ASSERT(watchdog != nullptr, return);
 
   QMutexLocker locker(&m_mutex);
   ensureStarted();
@@ -142,7 +143,7 @@ void DataModel::JsWatchdogThread::registerWatchdog(JsWatchdog* watchdog)
  */
 void DataModel::JsWatchdogThread::unregisterWatchdog(JsWatchdog* watchdog)
 {
-  Q_ASSERT(watchdog != nullptr);
+  SS_ASSERT(watchdog != nullptr, return);
 
   QMutexLocker locker(&m_mutex);
   const auto it = std::find(m_watchdogs.begin(), m_watchdogs.end(), watchdog);

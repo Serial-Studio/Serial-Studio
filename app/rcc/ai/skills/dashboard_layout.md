@@ -154,13 +154,15 @@ freshly-pinned Gauge / Bar / FFT looks empty or maxed out.
 | `widgetMin` / `widgetMax`        | `wgtMin` / `wgtMax`            | Gauge dial, Bar fill, Compass dial, Meter arc                                       |
 | `fftMin` / `fftMax`              | `fftMin` / `fftMax`            | Expected raw input range, used to normalize the time-domain signal to [-1, +1] before windowing + FFT (FFT and Waterfall). The dB Y-axis itself is hardcoded. |
 
-**The naming asymmetry is real and silent.** `project.dataset.getByPath`,
+**The naming asymmetry is read-side only.** `project.dataset.getByPath`,
 `project.snapshot`, and the `.ssproj` file all use the full form
-(`plotMin`, `widgetMin`). `project.dataset.update` accepts only the
-abbreviated form (`pltMin`, `wgtMin`). Round-tripping a response field name
-into an update call writes nothing and returns success. **Always use
-`pltMin`/`wgtMin`/`fftMin` when WRITING; read back the full names when
-verifying.** `fftMin`/`fftMax` happen to be the same in both directions.
+(`plotMin`, `widgetMin`). `project.dataset.update` takes the abbreviated
+form (`pltMin`, `wgtMin`) *and* accepts the full form as a declared alias,
+so a response object can be written straight back without renaming keys.
+**Prefer `pltMin`/`wgtMin`/`fftMin` when WRITING** (they are the
+canonical names in the command's typed schema) **and read back the full
+names when verifying.** `fftMin`/`fftMax` are the same in both directions.
+See `api_semantics` for the full alias list.
 
 ### Which pair goes with which widget
 
@@ -426,19 +428,19 @@ Mutations that affect `compatibleWidgetTypes`:
 
 Mutations that **must also be verified by reading back the response**:
 - `project.dataset.update{pltMin/pltMax/wgtMin/wgtMax/fftMin/fftMax}`:
-  the API silently drops unknown keys, so a typo (`plotMin` vs `pltMin`)
-  returns `success: true` and writes nothing. After updating, call
-  `project.dataset.getByPath` and confirm the response carries the new
-  values under `plotMin`/`plotMax`/`widgetMin`/`widgetMax`/`fftMin`/
-  `fftMax` (responses use the FULL form). 0/0 in the response = your
-  write didn't land.
+  the API drops keys it does not recognize, so a real typo returns
+  `success: true` with an `unknown_field` warning and no value change.
+  After updating, call `project.dataset.getByPath` and confirm the
+  response carries the new values under `plotMin`/`plotMax`/`widgetMin`/
+  `widgetMax`/`fftMin`/`fftMax` (responses use the FULL form). 0/0 in the
+  response = your write didn't land.
 
 What does NOT affect `compatibleWidgetTypes` (silent no-op when used wrongly):
 - `project.group.update{widgetType: ...}`: `update` does not accept
   `widgetType`. Use `widget` (string) instead.
-- `project.dataset.update{plotMin/widgetMin/...}`: `update` does not
-  accept the full-name min/max form. Use the abbreviated `pltMin`/
-  `wgtMin`/`fftMin` write-params.
+- `project.dataset.update{...}` never changes a group's widget list on
+  its own; only the option flags above do. The min/max params (either
+  spelling) set scales, not compatibility.
 
 ## Customize mode
 
@@ -620,9 +622,9 @@ project.group.list
   -> compatibleWidgetTypeSlugs: ["plot", "gauge"]  -- good
 
 // 4. Set BOTH min/max pairs -- pltMin/pltMax for the existing Plot AND
-//    wgtMin/wgtMax for the new Gauge. They don't cascade. Use the
-//    abbreviated write-form names; the full plotMin/widgetMin form is
-//    silently dropped by the API.
+//    wgtMin/wgtMax for the new Gauge. They don't cascade. These are the
+//    canonical write-form names (the full plotMin/widgetMin spelling is
+//    accepted too, as a declared alias).
 project.dataset.update {
   groupId: 0, datasetId: 0,
   pltMin: 0, pltMax: 100,
@@ -649,8 +651,9 @@ If step 6 returns "widgetType=gauge not compatible with group 0", step
 3 didn't pass: re-read the group and check what
 `compatibleWidgetTypeSlugs` contains, instead of issuing
 addWidget again. If step 5 shows `widgetMin: 0, widgetMax: 0` after you
-"set" them, you used `widgetMin`/`widgetMax` instead of the abbreviated
-`wgtMin`/`wgtMax` write-form. Re-issue the update with the right names.
+"set" them, the values went onto a different pair (`pltMin`/`fftMin`) or
+onto a different dataset; re-issue the update against the dataset the
+Gauge is bound to, using `wgtMin`/`wgtMax`.
 
 ## Troubleshooting: what the API errors mean
 
@@ -661,7 +664,7 @@ addWidget again. If step 5 shows `widgetMin: 0, widgetMax: 0` after you
 | Group widget didn't change after `project.group.update {widgetType: ...}` | `group.update` doesn't have a `widgetType` field. The param was silently ignored. | Use `project.group.update {widget: "multiplot"}` (string), or accept that the shape is locked at `add` time and `delete + add` if you need to change it. |
 | `addWidget` succeeded but no tile appears on the dashboard | `customizeWorkspaces` mode is off, OR you pinned to the wrong workspaceId, OR the workspace title bar is filtered. | Confirm `setCustomizeMode {enabled: true}` ran successfully and the user is looking at the correct workspace tab. |
 | Same call keeps failing | The state hasn't changed between calls. | Read the error, read `project.group.list`, find the actual cause. Do NOT issue the same call a third time hoping for a different result. |
-| `dataset.update` returned success but Gauge/Bar/Plot/FFT scale is still 0..0 | You wrote `plotMin`/`widgetMin`/`plotMax`/`widgetMax` (the response/file form) instead of `pltMin`/`wgtMin`/`pltMax`/`wgtMax` (the API write-form). The API silently ignores unknown keys. | Re-issue with the abbreviated names. `fftMin`/`fftMax` are the same in both directions. |
+| `dataset.update` returned success but Gauge/Bar/Plot/FFT scale is still 0..0 | You set the wrong pair for the widget family, or a key the API did not recognize (check `result.warnings` for `unknown_field`). The response/file spelling `plotMin`/`widgetMin` is NOT the problem: it is an accepted alias of `pltMin`/`wgtMin`. | Re-issue with the pair that drives that widget. `fftMin`/`fftMax` are the same in both directions. |
 | Gauge / Bar / FFT mounts but the needle / fill / spectrum looks wrong | Min/max for that widget family was never set, or set on the wrong pair (e.g. `pltMin` for a Gauge). | Set the correct pair: `wgtMin`/`wgtMax` for Gauge/Bar, `pltMin`/`pltMax` for Plot, `fftMin`/`fftMax` for FFT/Waterfall. The pairs do NOT cascade; a dataset with Plot AND Gauge needs both. |
 
 ## Common gotchas

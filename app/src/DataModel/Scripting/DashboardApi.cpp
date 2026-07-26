@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/DashboardApi.h"
@@ -31,6 +31,7 @@
 
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -359,7 +360,7 @@ QVariantMap DataModel::DashboardBridge::setActiveWorkspace(const QJSValue& targe
  */
 void DataModel::DashboardApi::installLua(lua_State* L)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L != nullptr, return);
 
   lua_pushcfunction(L, luaClearPlots);
   lua_setglobal(L, "clearPlots");
@@ -388,7 +389,7 @@ void DataModel::DashboardApi::installLua(lua_State* L)
  */
 void DataModel::DashboardApi::installJS(QJSEngine* js)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   auto global       = js->globalObject();
   auto existingProp = global.property(QStringLiteral("__ss_db"));

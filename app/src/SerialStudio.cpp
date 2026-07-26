@@ -14,21 +14,20 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "SerialStudio.h"
 
 #include <QHash>
-#include <QStringConverter>
-#include <QtCore5Compat/QTextCodec>
 
 #include "CSV/Player.h"
 #include "MDF4/Player.h"
 #include "Misc/IconRegistry.h"
 #include "Misc/ThemeManager.h"
+#include "UI/WidgetExtensions.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/CommercialToken.h"
@@ -88,77 +87,6 @@ SerialStudio::XAxisPolicy SerialStudio::resolveXAxisPolicy(
     return {XAxisMode::Dataset, d.xAxisId};
 
   return {XAxisMode::Samples, -1};
-}
-
-/**
- * @brief Returns true if a transform script references the notify() API family.
- */
-static bool transformUsesNotifications(const QString& code)
-{
-  return code.contains(QStringLiteral("notify(")) || code.contains(QStringLiteral("notifyInfo("))
-      || code.contains(QStringLiteral("notifyWarning("))
-      || code.contains(QStringLiteral("notifyCritical("))
-      || code.contains(QStringLiteral("notifyClear("));
-}
-
-/**
- * @brief Checks if a project configuration (QVector form) requires commercial features.
- */
-bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
-{
-  for (const auto& group : std::as_const(g)) {
-    if (group.groupType == DataModel::GroupType::Output)
-      return true;
-
-    if (group.widget == QStringLiteral("plot3d"))
-      return true;
-
-    if (group.widget == QStringLiteral("image"))
-      return true;
-
-    if (group.widget == QStringLiteral("painter"))
-      return true;
-
-    for (const auto& dataset : std::as_const((group.datasets))) {
-      if (dataset.waterfall)
-        return true;
-
-      if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
-        return true;
-    }
-  }
-
-  return false;
-}
-
-/**
- * @brief Checks if a project configuration requires commercial features.
- */
-bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
-{
-  for (const auto& group : std::as_const(g)) {
-    if (group.groupType == DataModel::GroupType::Output)
-      return true;
-
-    if (group.widget == QStringLiteral("plot3d"))
-      return true;
-
-    if (group.widget == QStringLiteral("image"))
-      return true;
-
-    if (group.widget == QStringLiteral("painter"))
-      return true;
-
-    for (const auto& dataset : std::as_const((group.datasets))) {
-      if (dataset.waterfall)
-        return true;
-
-      if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
-        return true;
-    }
-  }
-
-  return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -306,6 +234,22 @@ bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
 }
 
 /**
+ * @brief Counts the group-scope extension widgets a project contributes. Both extension scopes
+ *        share one enum value, so the dashboard bucket lists the group-scope widgets first and
+ *        offsets the dataset-scope ones by this count; every site that mirrors that numbering for
+ *        workspace references needs the same offset.
+ */
+int SerialStudio::extensionGroupWidgetCount(const std::vector<DataModel::Group>& groups)
+{
+  int count = 0;
+  for (const auto& group : groups)
+    if (getDashboardWidget(group) == DashboardExtension)
+      ++count;
+
+  return count;
+}
+
+/**
  * @brief Returns whether a group-level widget key should appear on workspaces.
  */
 bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
@@ -413,6 +357,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
       return tr("Painter Widgets");
       break;
 #endif
+    case DashboardExtension:
+      return tr("Extension Widgets");
+      break;
     case DashboardNoWidget:
       return "";
       break;
@@ -420,6 +367,21 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
       return "";
       break;
   }
+}
+
+/**
+ * @brief Returns whether @p id names an installed package attaching to @p scope. Consulted only
+ *        after every built-in comparison misses, and it can only ever answer DashboardExtension:
+ *        the manifest validator refuses a package id equal to a built-in widget string, so no
+ *        catalog data resolves to a Pro widget type on any build.
+ */
+[[nodiscard]] static bool isWidgetExtension(const QString& id, UI::WidgetExtensions::Scope scope)
+{
+  if (id.isEmpty())
+    return false;
+
+  static auto& catalog = UI::WidgetExtensions::instance();
+  return catalog.contains(id) && catalog.descriptor(id).scope == scope;
 }
 
 /**
@@ -481,6 +443,9 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
     return DashboardDataGrid;
 #endif
 
+  if (isWidgetExtension(widget, UI::WidgetExtensions::GroupScope))
+    return DashboardExtension;
+
   return DashboardNoWidget;
 }
 
@@ -525,6 +490,9 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
   if (it != kDatasetWidgetMap.constEnd())
     list.append(it.value());
 
+  else if (isWidgetExtension(dataset.widget, UI::WidgetExtensions::DatasetScope))
+    list.append(DashboardExtension);
+
   if (dataset.plt)
     list.append(DashboardPlot);
 
@@ -540,6 +508,52 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
 #endif
 
   return list;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Search matching
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Lowercases @p text and folds the separators users type inconsistently (dash, underscore,
+ *        dot, slash) into single spaces, so "X-Axis" and "x axis" normalize identically.
+ */
+static QString normalizedSearchText(const QString& text)
+{
+  const QString composed = text.normalized(QString::NormalizationForm_C);
+  QString out;
+  out.reserve(composed.size());
+  for (const QChar& c : composed)
+    if (c == QChar('-') || c == QChar('_') || c == QChar('.') || c == QChar('/'))
+      out.append(QChar(' '));
+    else
+      out.append(c.toLower());
+
+  return out.simplified();
+}
+
+/**
+ * @brief Separator- and case-insensitive search predicate shared by every search box: each query
+ *        token must appear in the normalized text, either as a substring or with the spaces
+ *        squashed out (so "x axis", "X-Axis" and "xaxis" all match "X-Axis Selection"). An empty
+ *        query matches everything.
+ */
+bool SerialStudio::searchMatches(const QString& query, const QString& text)
+{
+  const QString needle = normalizedSearchText(query);
+  if (needle.isEmpty())
+    return true;
+
+  const QString hay = normalizedSearchText(text);
+  QString squashed  = hay;
+  squashed.remove(QChar(' '));
+
+  const auto tokens = needle.split(QChar(' '), Qt::SkipEmptyParts);
+  for (const auto& token : tokens)
+    if (!hay.contains(token) && !squashed.contains(token))
+      return false;
+
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -847,88 +861,6 @@ QString SerialStudio::stringToHex(const QString& str)
 }
 
 /**
- * @brief Converts a hexadecimal string into a raw QByteArray.
- */
-QByteArray SerialStudio::hexToBytes(const QString& data)
-{
-  QString withoutSpaces = data;
-  withoutSpaces.replace(QStringLiteral(" "), "");
-  if (withoutSpaces.length() % 2 != 0) {
-    qWarning() << data << "is not a valid hexadecimal array";
-    return QByteArray();
-  }
-
-  bool ok;
-  QByteArray array;
-  for (int i = 0; i < withoutSpaces.length(); i += 2) {
-    auto chr1       = withoutSpaces.at(i);
-    auto chr2       = withoutSpaces.at(i + 1);
-    QString byteStr = QStringLiteral("%1%2").arg(chr1, chr2);
-
-    int byte = byteStr.toInt(&ok, 16);
-    if (!ok) {
-      qWarning() << data << "is not a valid hexadecimal array";
-      return QByteArray();
-    }
-
-    array.append(static_cast<char>(byte));
-  }
-
-  return array;
-}
-
-/**
- * @brief Resolves C-style escape sequences in a string into their corresponding control characters.
- */
-QString SerialStudio::resolveEscapeSequences(const QString& str)
-{
-  QString escapedStr;
-  escapedStr.reserve(str.size());
-
-  for (int i = 0; i < str.size(); ++i) {
-    const QChar current = str.at(i);
-    if (current != u'\\' || i + 1 >= str.size()) {
-      escapedStr.append(current);
-      continue;
-    }
-
-    const QChar next = str.at(i + 1);
-    ++i;
-    switch (next.unicode()) {
-      case u'a':
-        escapedStr.append(QChar(u'\a'));
-        break;
-      case u'b':
-        escapedStr.append(QChar(u'\b'));
-        break;
-      case u'f':
-        escapedStr.append(QChar(u'\f'));
-        break;
-      case u'n':
-        escapedStr.append(QChar(u'\n'));
-        break;
-      case u'r':
-        escapedStr.append(QChar(u'\r'));
-        break;
-      case u't':
-        escapedStr.append(QChar(u'\t'));
-        break;
-      case u'v':
-        escapedStr.append(QChar(u'\v'));
-        break;
-      case u'\\':
-        escapedStr.append(QChar(u'\\'));
-        break;
-      default:
-        escapedStr.append(current).append(next);
-        break;
-    }
-  }
-
-  return escapedStr;
-}
-
-/**
  * @brief Escapes control characters in a string using C-style escape sequences.
  */
 QString SerialStudio::escapeControlCharacters(const QString& str)
@@ -968,64 +900,6 @@ QString SerialStudio::normalizeIconPath(const QString& path)
 //--------------------------------------------------------------------------------------------------
 // Text encoding helpers
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the QStringConverter encoding for natively-supported entries.
- */
-static std::optional<QStringConverter::Encoding> nativeEncoding(SerialStudio::TextEncoding enc)
-{
-  switch (enc) {
-    case SerialStudio::EncUtf8:
-      return QStringConverter::Utf8;
-    case SerialStudio::EncUtf16LE:
-      return QStringConverter::Utf16LE;
-    case SerialStudio::EncUtf16BE:
-      return QStringConverter::Utf16BE;
-    case SerialStudio::EncLatin1:
-      return QStringConverter::Latin1;
-    case SerialStudio::EncSystem:
-      return QStringConverter::System;
-    default:
-      return std::nullopt;
-  }
-}
-
-/**
- * @brief Returns the `QTextCodec` for multi-byte East-Asian encodings.
- */
-static QTextCodec* legacyCodec(SerialStudio::TextEncoding enc)
-{
-  const char* name = nullptr;
-  switch (enc) {
-    case SerialStudio::EncGbk:
-      name = "GBK";
-      break;
-    case SerialStudio::EncGb18030:
-      name = "GB18030";
-      break;
-    case SerialStudio::EncBig5:
-      name = "Big5";
-      break;
-    case SerialStudio::EncShiftJis:
-      name = "Shift_JIS";
-      break;
-    case SerialStudio::EncEucJp:
-      name = "EUC-JP";
-      break;
-    case SerialStudio::EncEucKr:
-      name = "EUC-KR";
-      break;
-    default:
-      break;
-  }
-
-  QTextCodec* codec = name ? QTextCodec::codecForName(name) : nullptr;
-  if (!codec)
-    codec = QTextCodec::codecForName("UTF-8");
-
-  Q_ASSERT(codec != nullptr);
-  return codec;
-}
 
 /**
  * @brief Returns the display labels for all supported text encodings.
@@ -1124,40 +998,4 @@ SerialStudio::TextEncoding SerialStudio::textEncodingFromName(const QString& nam
     return EncEucKr;
 
   return EncUtf8;
-}
-
-/**
- * @brief Encodes a QString to raw bytes using the given text encoding.
- */
-QByteArray SerialStudio::encodeText(const QString& text, SerialStudio::TextEncoding enc)
-{
-  if (text.isEmpty())
-    return {};
-
-  if (const auto native = nativeEncoding(enc); native.has_value()) {
-    QStringEncoder encoder(*native);
-    return QByteArray(encoder.encode(text));
-  }
-
-  auto* codec = legacyCodec(enc);
-  Q_ASSERT(codec != nullptr);
-  return codec->fromUnicode(text);
-}
-
-/**
- * @brief Decodes raw bytes to a QString using the given text encoding.
- */
-QString SerialStudio::decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc)
-{
-  if (bytes.isEmpty())
-    return {};
-
-  if (const auto native = nativeEncoding(enc); native.has_value()) {
-    QStringDecoder decoder(*native);
-    return decoder.decode(bytes);
-  }
-
-  auto* codec = legacyCodec(enc);
-  Q_ASSERT(codec != nullptr);
-  return codec->toUnicode(bytes.constData(), static_cast<int>(bytes.size()));
 }

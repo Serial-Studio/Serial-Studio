@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -207,11 +207,11 @@ QtObject {
 
       let ws = []
       root.flattenWorkspaces(tree, "", ws)
-      ws = ws.filter(n => n.text.toLowerCase().indexOf(q) >= 0)
+      ws = ws.filter(n => SerialStudio.searchMatches(q, n.text))
 
       let folders = []
       root.flattenFolders(tree, "", folders)
-      folders = folders.filter(n => n.text.toLowerCase().indexOf(q) >= 0)
+      folders = folders.filter(n => SerialStudio.searchMatches(q, n.text))
 
       let groups = []
       let widgets = []

@@ -29,6 +29,7 @@
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
 #include "Licensing/CommercialToken.h"
+#include "SSAssert.h"
 
 /**
  * @brief Neutralizes any forged <untrusted> delimiter inside untrusted payload text.
@@ -1292,8 +1293,6 @@ void AI::Conversation::scheduleTransientRetry(const QString& message)
  */
 void AI::Conversation::issueRequest()
 {
-  Q_ASSERT(m_provider);
-  Q_ASSERT(m_dispatcher);
   if (!m_provider || !m_dispatcher) {
     setLastError(tr("AI subsystem not initialized"));
     Q_EMIT errorOccurred(m_lastError);
@@ -1543,7 +1542,7 @@ bool AI::Conversation::reconcileHistoryToolPairsAt(int& i)
   static const QString kRoleAssistant = QStringLiteral("assistant");
   static const QString kRoleUser      = QStringLiteral("user");
 
-  Q_ASSERT(i >= 0 && i < m_history.size());
+  SS_ASSERT(i >= 0 && i < m_history.size(), return false);
   const auto msg = m_history.at(i).toObject();
   if (msg.value(kKeyRole).toString() != kRoleAssistant)
     return false;
@@ -1591,7 +1590,7 @@ bool AI::Conversation::reconcileHistoryToolPairsAt(int& i)
     userMsg[kKeyContent] = newContent;
     m_history.insert(nextIdx, userMsg);
     ++i;
-    Q_ASSERT(i < m_history.size());
+    SS_ASSERT_LOG(i < m_history.size());
     return true;
   }
   return false;
@@ -1732,8 +1731,8 @@ void AI::Conversation::pruneHistory()
     if (m_assistantIndex >= 0)
       m_assistantIndex -= drop;
 
-    Q_ASSERT(m_uiMessages.size() == kMaxUiMessageRows);
-    Q_ASSERT(m_assistantIndex < m_uiMessages.size());
+    SS_ASSERT_LOG(m_uiMessages.size() == kMaxUiMessageRows);
+    SS_ASSERT(m_assistantIndex < m_uiMessages.size(), m_assistantIndex = -1);
     Q_EMIT messagesChanged();
     Q_EMIT messageCountChanged();
   }
@@ -2241,7 +2240,6 @@ QJsonObject AI::Conversation::runAutoVerify(const QString& name,
 
   static auto& registry = AI::CommandRegistry::instance();
   const bool safe       = registry.safetyOf(cmd) == Safety::Safe;
-  Q_ASSERT(safe);
   if (!safe) {
     qCWarning(serialStudioAI) << "AutoVerify: refusing non-Safe read-back" << cmd;
     return {};
@@ -3239,7 +3237,6 @@ int AI::Conversation::estimateTokens(const QJsonArray& blocks)
  */
 QJsonArray AI::Conversation::budgetedHistory(const QJsonArray& tools) const
 {
-  Q_ASSERT(m_provider);
   if (!m_provider)
     return m_history;
 
@@ -3282,6 +3279,7 @@ QJsonArray AI::Conversation::budgetedHistory(const QJsonArray& tools) const
       break;
     }
 
-  Q_ASSERT(chosen >= 0 && chosen <= m_history.size());
+  SS_ASSERT(chosen >= 0 && chosen <= m_history.size(),
+            chosen = qBound(0, chosen, static_cast<int>(m_history.size())));
   return suffixFrom(chosen);
 }

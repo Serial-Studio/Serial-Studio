@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/FrameParserPipeline.h"
@@ -30,6 +30,7 @@
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "IO/FrameReader.h"
 #include "IO/HAL_Driver.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Internal helpers
@@ -358,8 +359,8 @@ static void appendRewrittenCell(QByteArrayView row,
                                 qsizetype end,
                                 QByteArray& scratch)
 {
-  Q_ASSERT(begin <= end);
-  Q_ASSERT(end <= row.size());
+  SS_ASSERT(begin <= end, return);
+  SS_ASSERT(end <= row.size(), return);
 
   bool in_quotes            = false;
   bool was_quoted           = false;
@@ -395,11 +396,34 @@ static void appendRewrittenCell(QByteArrayView row,
   }
 }
 
+namespace detail {
+
 /**
- * @brief Byte-level twin of splitReplayRow: identical quote/trim/guard semantics with cells
- *        returned as views into @p row, or into @p scratch for cells needing RFC-4180
- *        unescaping. Scratch is reserved to the row length up front, so appended cells never
- *        reallocate under earlier views.
+ * @brief A cell whose bytes had to be rewritten into the scratch buffer: the slot it occupies
+ *        in the output array plus the scratch byte range it owns.
+ */
+struct RewrittenCell {
+  qsizetype slot = 0;
+  qsizetype base = 0;
+  qsizetype size = 0;
+};
+
+/**
+ * @brief Scratch-backed cells awaiting resolution. Stack storage covers the rows that carry
+ *        escaped quotes at all; plain numeric rows never touch it.
+ */
+using RewrittenCells = QVarLengthArray<RewrittenCell, 8>;
+
+}  // namespace detail
+
+using detail::RewrittenCell;
+using detail::RewrittenCells;
+
+/**
+ * @brief Byte-level twin of splitReplayRow: identical quote/trim/guard semantics, cells
+ *        returned as views into @p row or @p scratch. Scratch-backed cells stay offsets until
+ *        after the final append, so a reallocation cannot strand an emitted view; the reserve
+ *        only keeps the append loop allocation-free.
  */
 void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QByteArray& scratch)
 {
@@ -411,7 +435,7 @@ void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QB
   if (scratch.capacity() < row.size())
     scratch.reserve(row.size());
 
-  Q_ASSERT(scratch.capacity() >= row.size());
+  SS_ASSERT_LOG(scratch.capacity() >= row.size());
 
   const qsizetype length  = row.size();
   qsizetype cell_start    = 0;
@@ -420,6 +444,7 @@ void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QB
   bool in_quotes          = false;
   bool was_quoted         = false;
   bool needs_rewrite      = false;
+  RewrittenCells rewritten;
 
   const auto finalize = [&](qsizetype end) {
     QByteArrayView value;
@@ -431,8 +456,8 @@ void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QB
     } else {
       const qsizetype base = scratch.size();
       appendRewrittenCell(row, cell_start, end, scratch);
-      Q_ASSERT(scratch.size() <= row.size());
-      value = QByteArrayView(scratch).sliced(base);
+      SS_ASSERT_LOG(scratch.size() <= row.size());
+      rewritten.append(RewrittenCell{out.size(), base, scratch.size() - base});
     }
 
     out.append(stripGuardView(value));
@@ -479,6 +504,9 @@ void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QB
   }
 
   finalize(length);
+
+  for (const auto& cell : rewritten)
+    out[cell.slot] = stripGuardView(QByteArrayView(scratch).sliced(cell.base, cell.size));
 }
 
 /**
@@ -565,7 +593,7 @@ DataModel::PipelineResult DataModel::runFrameParserPipeline(const QByteArray& in
                                                             const DataModel::PipelineSpec& spec,
                                                             int sourceId)
 {
-  Q_ASSERT(sourceId >= 0);
+  SS_ASSERT(sourceId >= 0, return {});
 
   IO::FrameReader reader;
   configureAndFeed(reader, input, spec);
@@ -627,7 +655,7 @@ DataModel::PipelineResult DataModel::runNativeTemplatePipeline(const QByteArray&
                                                                const QString& templateId,
                                                                const QJsonObject& params)
 {
-  Q_ASSERT(!templateId.isEmpty());
+  SS_ASSERT(!templateId.isEmpty(), return {});
 
   const auto descriptor = CFrameParser::buildDescriptor(templateId, params);
   return runFrameParserPipelineWithCode(input, spec, descriptor, SerialStudio::Native);

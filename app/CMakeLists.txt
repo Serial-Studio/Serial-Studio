@@ -14,9 +14,9 @@
 # on your use case.
 #
 # For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
-# For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+# For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
 #
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 
 #---------------------------------------------------------------------------------------------------
 # Application module setup
@@ -204,6 +204,15 @@ set(SOURCES
   src/Misc/Translator.cpp
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
+  src/Misc/ProblemCenter.cpp
+  src/Misc/ConnectionDiagnostics.cpp
+  src/Misc/Diagnostics/DeviceAccess.cpp
+  src/Misc/Diagnostics/SerialChecks.cpp
+  src/Misc/Diagnostics/BluetoothChecks.cpp
+  src/Misc/Diagnostics/NetworkChecks.cpp
+  src/Misc/Problems/ProjectCheckers.cpp
+  src/Misc/Problems/LinkCheckers.cpp
+  src/Misc/Problems/ScriptCheckers.cpp
   src/Misc/WorkspaceManager.cpp
   src/Misc/ExtensionManager.cpp
   src/Misc/Examples.cpp
@@ -219,9 +228,12 @@ set(SOURCES
   src/Misc/CrashTracker.cpp
   src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
+  src/SelfTest/SelfTest.cpp
+  src/SSAssert.cpp
   src/Benchmark/HotpathBenchmark.cpp
   src/Benchmark/BenchmarkRunner.cpp
   src/Platform/AppPlatform.cpp
+  src/Platform/FileOpenEventFilter.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/AlarmMonitor.cpp
@@ -231,6 +243,10 @@ set(SOURCES
   src/UI/SnapGuides.cpp
   src/UI/UISessionRegistry.cpp
   src/UI/WidgetRegistry.cpp
+  src/UI/WidgetExtensions.cpp
+  src/UI/WidgetExtensionManifest.cpp
+  src/Misc/Problems/ExtensionCheckers.cpp
+  src/UI/Widgets/ExtensionData.cpp
   src/UI/Widgets/LEDPanel.cpp
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
@@ -259,6 +275,12 @@ set(SOURCES
   src/API/Handlers/NetworkHandler.cpp
   src/API/Handlers/BluetoothLEHandler.cpp
   src/API/Handlers/CSVExportHandler.cpp
+  src/API/Handlers/ProblemsHandler.cpp
+  src/API/Handlers/DiagnosticsHandler.cpp
+  src/API/Handlers/MirrorHandler.cpp
+  src/API/Mirror/MirrorPublisher.cpp
+  src/API/Mirror/MirrorClient.cpp
+  src/API/Mirror/MirrorSession.cpp
   src/API/Handlers/ProjectHandler.cpp
   src/API/Handlers/ProjectHandlerFile.cpp
   src/API/Handlers/ProjectHandlerEntities.cpp
@@ -285,6 +307,9 @@ set(SOURCES
   src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
   src/IO/ConnectionManager.cpp
+  src/IO/ConnectionFlows.cpp
+  src/Async/TaskTree.cpp
+  src/Async/RetryPolicy.cpp
   src/Console/Export.cpp
   src/IO/FileTransmission.cpp
   src/IO/FileTransmission/XMODEM.cpp
@@ -317,6 +342,12 @@ set(SOURCES
   src/DataModel/Editors/CodeFormatter.cpp
   src/DataModel/Editors/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
+  src/DataModel/Project/ProjectHistory.cpp
+  src/DataModel/Project/PropertyHooks.cpp
+  src/DataModel/Project/PropertyValidators.cpp
+  src/DataModel/Generated/DatasetSerialization.cpp
+  src/DataModel/Generated/DatasetForm.cpp
+  src/API/Generated/DatasetApiFields.cpp
   src/DataModel/Project/ProjectModelPersistence.cpp
   src/DataModel/Project/ProjectModelLoading.cpp
   src/DataModel/Project/ProjectModelSources.cpp
@@ -338,6 +369,7 @@ set(SOURCES
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
   src/DataModel/DataTable.cpp
+  src/DataModel/RowFilterProxy.cpp
   src/DataModel/Editors/DatasetTransformEditor.cpp
   src/DataModel/NotificationCenter.cpp
   src/DataModel/Dialogs/TransmitTestDialog.cpp
@@ -349,7 +381,9 @@ set(SOURCES
   src/MDF4/Export.cpp
   src/main.cpp
   src/AppState.cpp
+  src/SessionContext.cpp
   src/SerialStudio.cpp
+  src/SerialStudioFrameSupport.cpp
 )
 
 set(HEADERS
@@ -360,6 +394,17 @@ set(HEADERS
   src/Misc/JsonValidator.h
   src/Misc/ThemeManager.h
   src/Misc/TimerEvents.h
+  src/Misc/ProblemCenter.h
+  src/Misc/ConnectionDiagnostics.h
+  src/Misc/Diagnostics/DiagnosticsShared.h
+  src/Misc/Diagnostics/DeviceAccess.h
+  src/Misc/Diagnostics/SerialChecks.h
+  src/Misc/Diagnostics/BluetoothChecks.h
+  src/Misc/Diagnostics/NetworkChecks.h
+  src/Misc/Problems/ProjectCheckers.h
+  src/Misc/Problems/LinkCheckers.h
+  src/Misc/Problems/ScriptCheckers.h
+  src/Misc/Problems/ExtensionCheckers.h
   src/Misc/Translator.h
   src/Misc/WorkspaceManager.h
   src/Misc/ExtensionManager.h
@@ -381,6 +426,7 @@ set(HEADERS
   src/UI/TaskbarSettings.h
   src/UI/WindowManager.h
   src/UI/WidgetRegistry.h
+  src/UI/WidgetExtensions.h
   src/UI/Widgets/GPS.h
   src/UI/Widgets/MultiPlot.h
   src/UI/Widgets/WebView.h
@@ -396,6 +442,7 @@ set(HEADERS
   src/UI/Widgets/Bar.h
   src/UI/Widgets/Meter.h
   src/UI/Widgets/Accelerometer.h
+  src/UI/Widgets/ExtensionData.h
   src/UI/Widgets/LEDPanel.h
   src/UI/Widgets/Compass.h
   src/UI/Widgets/Terminal.h
@@ -414,6 +461,13 @@ set(HEADERS
   src/API/Handlers/BluetoothLEHandler.h
   src/API/Handlers/CSVExportHandler.h
   src/API/Handlers/ProjectApiSupport.h
+  src/API/Handlers/ProblemsHandler.h
+  src/API/Handlers/DiagnosticsHandler.h
+  src/API/Handlers/MirrorHandler.h
+  src/API/Mirror/MirrorProtocol.h
+  src/API/Mirror/MirrorPublisher.h
+  src/API/Mirror/MirrorClient.h
+  src/API/Mirror/MirrorSession.h
   src/API/Handlers/ProjectHandler.h
   src/API/Handlers/ConsoleHandler.h
   src/API/Handlers/ControlScriptHandler.h
@@ -429,6 +483,8 @@ set(HEADERS
   src/API/Handlers/AssistantHandler.h
   src/UI/UISessionRegistry.h
   src/Misc/CLI.h
+  src/SelfTest/SelfTest.h
+  src/SSAssert.h
   src/Platform/AppPlatform.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
@@ -439,6 +495,10 @@ set(HEADERS
   src/IO/FrameConfig.h
   src/IO/DeviceManager.h
   src/IO/ConnectionManager.h
+  src/IO/ConnectionFlows.h
+  src/Async/TaskTree.h
+  src/Async/RetryPolicy.h
+  src/Async/AsyncClock.h
   src/IO/HAL_Driver.h
   src/IO/Checksum.h
   src/IO/CircularBuffer.h
@@ -472,6 +532,9 @@ set(HEADERS
   src/DataModel/Editors/CodeFormatter.h
   src/DataModel/Editors/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
+  src/DataModel/Project/ProjectHistory.h
+  src/DataModel/Project/PropertyHooks.h
+  src/DataModel/Generated/DatasetRegistry.h
   src/DataModel/Project/ProjectModelShared.h
   src/DataModel/ProjectEditor.h
   src/DataModel/Project/ProjectEditorItemIds.h
@@ -481,6 +544,7 @@ set(HEADERS
   src/DataModel/FrameBuilder.h
   src/DataModel/FrameConsumer.h
   src/DataModel/DataTable.h
+  src/DataModel/RowFilterProxy.h
   src/DataModel/ExportSchema.h
   src/DataModel/Editors/DatasetTransformEditor.h
   src/DataModel/NotificationCenter.h
@@ -499,6 +563,7 @@ set(HEADERS
   src/DSP.h
   src/DSPSimd.h
   src/AppState.h
+  src/SessionContext.h
   src/Concepts.h
   src/SerialStudio.h
 )
@@ -538,6 +603,9 @@ set(QML_SOURCES
   qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExamplesBrowser.qml
   qml/Dialogs/HelpCenter.qml
+  qml/Dialogs/ProblemCenter.qml
+  qml/Dialogs/ExtensionConsent.qml
+  qml/Dialogs/RemoteAttach.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
   qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml
@@ -576,6 +644,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/SourceFrameParserView.qml
   qml/ProjectEditor/Views/ControlScriptView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
+  qml/ProjectEditor/Views/EditorSearchBand.qml
   qml/ProjectEditor/Views/WorkspaceFolderView.qml
   qml/ProjectEditor/Views/GroupsView.qml
   qml/ProjectEditor/Views/GroupFolderView.qml
@@ -591,6 +660,8 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Compass.qml
   qml/Widgets/Dashboard/DashboardToolButton.qml
   qml/Widgets/Dashboard/DataGrid.qml
+  qml/Widgets/Dashboard/ExtensionPlaceholder.qml
+  qml/Widgets/Dashboard/ExtensionWidgetSettings.qml
   qml/Widgets/Dashboard/FFTPlot.qml
   qml/Widgets/Dashboard/Gauge.qml
   qml/Widgets/Dashboard/Meter.qml
@@ -665,6 +736,7 @@ if(BUILD_COMMERCIAL)
     src/MQTT/PublisherScript.h
     src/MQTT/PublisherScriptEditor.h
     src/IO/Drivers/Audio.h
+    src/Misc/Diagnostics/AudioChecks.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/CANBus/CanBackends.h
     src/IO/Drivers/CANBus/GsUsbCanBackend.h
@@ -766,6 +838,7 @@ if(BUILD_COMMERCIAL)
     src/MQTT/PublisherScript.cpp
     src/MQTT/PublisherScriptEditor.cpp
     src/IO/Drivers/Audio.cpp
+    src/Misc/Diagnostics/AudioChecks.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/CANBus/CanBackends.cpp
     src/IO/Drivers/CANBus/GsUsbCanBackend.cpp
@@ -1164,6 +1237,10 @@ if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC QuaZip::QuaZip)
+endif()
+
+if(SS_INAPP_TESTS)
+  target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE SS_INAPP_TESTS)
 endif()
 
 if(ENABLE_GRPC)
@@ -1599,7 +1676,7 @@ install(SCRIPT ${deploy_script})
 #   CPACK_PACKAGE_VENDOR        - "Alex Spataru"
 #   CPACK_PACKAGE_VERSION       - Semantic version (e.g., 4.0.3)
 #   CPACK_PACKAGE_DESCRIPTION   - README.md content
-#   CPACK_RESOURCE_FILE_LICENSE - GPL-3.0-only.txt or Commercial license
+#   CPACK_RESOURCE_FILE_LICENSE - GPL-3.0-or-later.txt or Commercial license
 #   CPACK_PACKAGE_HOMEPAGE_URL  - Website for support/downloads
 #
 # Platform-specific package generators:
@@ -1676,3 +1753,7 @@ if(NOT CPACK_GENERATOR)
 endif()
 
 include(CPack)
+
+if(SS_BUILD_TESTS)
+  add_subdirectory(tests)
+endif()

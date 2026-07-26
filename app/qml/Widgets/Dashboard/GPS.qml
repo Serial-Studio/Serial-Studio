@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -25,7 +25,6 @@ import QtQuick.Controls
 
 import SerialStudio
 
-import "../"
 import "../" as Widgets
 
 Item {
@@ -92,14 +91,6 @@ Item {
       top: parent.top
       left: parent.left
       right: parent.right
-    }
-
-    ToolButton {
-      icon.width: 24
-      enabled: false
-      icon.height: 24
-      icon.color: "transparent"
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "map", 24)
     }
 
     Widgets.Combo {

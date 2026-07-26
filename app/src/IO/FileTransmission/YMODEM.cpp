@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "IO/FileTransmission/YMODEM.h"
@@ -355,9 +355,6 @@ void IO::Protocols::YMODEM::sendDataBlock()
  */
 void IO::Protocols::YMODEM::handleTimeout()
 {
-  Q_ASSERT(m_maxRetries > 0);
-  Q_ASSERT(m_timeoutMs >= 1000);
-
   if (!isActive())
     return;
 

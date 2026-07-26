@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Editors/JsCodeEditor.h"
@@ -49,6 +49,7 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 /**
  * @brief Constructs the QML-side frame parser code editor.
@@ -250,7 +251,7 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
  */
 void DataModel::JsCodeEditor::switchNativeLanguage(const int language)
 {
-  Q_ASSERT(language == SerialStudio::Native || m_language == SerialStudio::Native);
+  SS_ASSERT(language == SerialStudio::Native || m_language == SerialStudio::Native, return);
 
   if (language == SerialStudio::Native) {
     const int tmplIdx = m_frameParser.detectTemplate(text());

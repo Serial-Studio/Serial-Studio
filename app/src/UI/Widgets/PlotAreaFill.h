@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -103,7 +103,7 @@ private:
 
   void accumulatePoint(const int col, const double y);
   [[nodiscard]] int scanColumns(double& refPositive, double& refNegative) const;
-  void accumulateColumns(const QList<QPointF>& points, const int cols, const double w);
+  void accumulateColumns(const QList<QPointF>& points, int cols, const double w);
   void bridgeSegment(const double px0,
                      const double y0,
                      const double px1,
@@ -115,8 +115,8 @@ private:
                    const int vertexCount,
                    const double w,
                    const double h,
-                   const double refPositive,
-                   const double refNegative) const;
+                   double refPositive,
+                   double refNegative) const;
 
 private:
   QColor m_color;

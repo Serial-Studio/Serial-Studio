@@ -32,6 +32,7 @@
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 static constexpr float kNearPlane = 0.1f;
@@ -728,7 +729,7 @@ void Widgets::Plot3D::updateTargetScale()
  */
 void Widgets::Plot3D::updateCamera(const DSP::LineSeries3D& data)
 {
-  Q_ASSERT(!data.empty());
+  SS_ASSERT(!data.empty(), return);
 
   QVector3D min = data.front();
   QVector3D max = data.front();

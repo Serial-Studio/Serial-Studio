@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -60,6 +60,7 @@ signals:
 
 public:
   ModuleManager();
+  static void instantiateCoreModules();
   [[nodiscard]] bool performanceMode() const noexcept;
   [[nodiscard]] bool inhibitIdleSleep() const noexcept;
   [[nodiscard]] bool autoUpdaterEnabled() const noexcept;
@@ -75,9 +76,9 @@ public slots:
   void setPerformanceMode(const bool enabled);
   void setInhibitIdleSleep(const bool enabled);
   void setAutomaticUpdates(const bool enabled);
+  void setEphemeralSession(const bool ephemeral);
 
 private:
-  void instantiateCoreModules();
   void setupCrossModuleConnections();
   void registerCoreContextProperties(QQmlContext* ctx);
   void registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable);
@@ -90,6 +91,7 @@ private:
   bool m_headless;
   bool m_quitHandled;
   QSettings m_settings;
+  bool m_ephemeralSession;
   bool m_automaticUpdates;
   bool m_performanceMode;
   bool m_inhibitIdleSleep;

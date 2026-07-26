@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Player.h"
@@ -42,6 +42,7 @@
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 static constexpr double kInvMs          = 1.0 / 1000.0;
@@ -95,8 +96,8 @@ static void fillSeekGaps(QVector<double>& values)
  */
 [[nodiscard]] static double seekCellValue(const QByteArrayView* spans, qsizetype count, int column)
 {
-  Q_ASSERT(spans != nullptr || count == 0);
-  Q_ASSERT(column >= 0);
+  SS_ASSERT(spans != nullptr || count == 0, return std::numeric_limits<double>::quiet_NaN());
+  SS_ASSERT(column >= 0, return std::numeric_limits<double>::quiet_NaN());
 
   if (column >= count || spans[column].isEmpty())
     return std::numeric_limits<double>::quiet_NaN();
@@ -311,7 +312,7 @@ const QString& CSV::Player::timestamp() const
  */
 void CSV::Player::play()
 {
-  Q_ASSERT(isOpen());
+  SS_ASSERT(isOpen(), return);
 
   if (frameCount() <= 0) {
     m_pausedAtFrontier = m_indexing;
@@ -340,7 +341,7 @@ void CSV::Player::play()
  */
 void CSV::Player::pause()
 {
-  Q_ASSERT(isOpen());
+  SS_ASSERT(isOpen(), return);
 
   ++m_playbackEpoch;
   m_playing = false;
@@ -494,8 +495,6 @@ void CSV::Player::previousFrame()
  */
 void CSV::Player::openFile(const QString& filePath)
 {
-  Q_ASSERT(!filePath.isEmpty());
-
   if (filePath.isEmpty())
     return;
 
@@ -564,8 +563,8 @@ void CSV::Player::openFile(const QString& filePath)
  */
 bool CSV::Player::runQuickPass()
 {
-  Q_ASSERT(m_mapped != nullptr);
-  Q_ASSERT(m_mappedSize > 0);
+  SS_ASSERT(m_mapped != nullptr, return false);
+  SS_ASSERT(m_mappedSize > 0, return false);
 
   qint64 pos = 0;
   if (m_mappedSize >= 3 && std::memcmp(m_mapped, "\xEF\xBB\xBF", 3) == 0)
@@ -618,7 +617,7 @@ bool CSV::Player::runQuickPass()
   m_dataOffset = header_end;
 
   DataModel::splitReplayRowSpans(first_data_row, m_cells, m_splitScratch);
-  Q_ASSERT(!m_cells.isEmpty());
+  SS_ASSERT(!m_cells.isEmpty(), return false);
   const QByteArrayView first_cell = m_cells.first();
 
   bool is_number     = false;
@@ -643,8 +642,8 @@ bool CSV::Player::runQuickPass()
  */
 void CSV::Player::startIndexing()
 {
-  Q_ASSERT(m_mapped != nullptr);
-  Q_ASSERT(m_loaderThread == nullptr);
+  SS_ASSERT(m_mapped != nullptr, return);
+  SS_ASSERT(m_loaderThread == nullptr, return);
 
   ++m_indexGeneration;
   m_loaderThread = new QThread(this);
@@ -724,7 +723,7 @@ bool CSV::Player::stopIndexing()
  */
 void CSV::Player::onIndexBatch(const CSV::PlayerIndexBatchPtr& batch)
 {
-  Q_ASSERT(batch != nullptr);
+  SS_ASSERT(batch != nullptr, return);
 
   if (!isOpen() || batch->generation != m_indexGeneration)
     return;
@@ -803,8 +802,7 @@ void CSV::Player::onIndexFinished(bool ok, quint64 generation)
  */
 void CSV::Player::setProgress(const double progress)
 {
-  Q_ASSERT(progress >= 0.0 && progress <= 1.0);
-  Q_ASSERT(isOpen());
+  SS_ASSERT_LOG(isOpen());
 
   const auto validProgress = std::clamp(progress, 0.0, 1.0);
 
@@ -834,8 +832,8 @@ void CSV::Player::setProgress(const double progress)
  */
 int CSV::Player::seekWindowStartRow(int target)
 {
-  Q_ASSERT(target >= 0);
-  Q_ASSERT(target < frameCount());
+  SS_ASSERT(target >= 0, return 0);
+  SS_ASSERT(target < frameCount(), return qMax(0, frameCount() - 1));
 
   static auto& dashboard = UI::Dashboard::instance();
   const double range     = dashboard.plotTimeRange();
@@ -867,8 +865,8 @@ void CSV::Player::performSeekTick()
   if (!isOpen() || isPlaying() || frameCount() <= 0)
     return;
 
-  Q_ASSERT(m_framePos >= 0);
-  Q_ASSERT(m_framePos < frameCount());
+  SS_ASSERT(m_framePos >= 0, return);
+  SS_ASSERT(m_framePos < frameCount(), m_framePos = frameCount() - 1);
 
   if (m_seekColumnByKey.isEmpty()) {
     performSeekSettle();
@@ -898,8 +896,8 @@ void CSV::Player::performSeekSettle()
   if (!isOpen() || isPlaying() || frameCount() <= 0)
     return;
 
-  Q_ASSERT(m_framePos >= 0);
-  Q_ASSERT(m_framePos < frameCount());
+  SS_ASSERT(m_framePos >= 0, return);
+  SS_ASSERT(m_framePos < frameCount(), m_framePos = frameCount() - 1);
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.clearPlotData();
@@ -929,9 +927,9 @@ void CSV::Player::buildSeekWindow(int startRow,
                                   QVector<double>& times,
                                   QHash<qint64, QVector<double>>& series)
 {
-  Q_ASSERT(startRow >= 0);
-  Q_ASSERT(startRow <= endRow);
-  Q_ASSERT(endRow < frameCount());
+  SS_ASSERT(startRow >= 0, return);
+  SS_ASSERT(startRow <= endRow, return);
+  SS_ASSERT(endRow < frameCount(), return);
 
   const int n = endRow - startRow + 1;
   times.resize(n);
@@ -1083,7 +1081,7 @@ bool CSV::Player::recomputeMsUntilNext(qint64& msUntilNext)
  */
 void CSV::Player::updateData()
 {
-  Q_ASSERT(m_framePos >= 0);
+  SS_ASSERT(m_framePos >= 0, return);
 
   if (!isOpen())
     return;
@@ -1170,8 +1168,8 @@ void CSV::Player::updateData()
  */
 void CSV::Player::processFrameBatch(int startFrame, int endFrame)
 {
-  Q_ASSERT(startFrame <= endFrame);
-  Q_ASSERT(startFrame >= 0);
+  SS_ASSERT(startFrame >= 0, return);
+  SS_ASSERT(startFrame <= endFrame, return);
 
   if (!isOpen() || endFrame >= frameCount())
     return;
@@ -1307,8 +1305,8 @@ bool CSV::Player::promptUserForDateTimeOrInterval(QByteArrayView firstDataRow)
  */
 QByteArrayView CSV::Player::rawRow(int row) const
 {
-  Q_ASSERT(row >= 0);
-  Q_ASSERT(row < frameCount());
+  if (row < 0 || row >= frameCount())
+    return {};
 
   const qint64 begin = static_cast<qint64>(m_rowOffsets[row]);
   const char* nl     = static_cast<const char*>(
@@ -1360,8 +1358,8 @@ qsizetype CSV::Player::splitDataCells(int row)
  */
 QByteArray CSV::Player::quickPlotPayload(int row)
 {
-  Q_ASSERT(row >= 0);
-  Q_ASSERT(row < frameCount());
+  SS_ASSERT(row >= 0, return {});
+  SS_ASSERT(row < frameCount(), return {});
 
   auto view = rawRow(row);
   if (view.endsWith('\r'))
@@ -1449,7 +1447,7 @@ void CSV::Player::buildReplayLayout()
  */
 double CSV::Player::rowSecondsSinceStart(int row) const
 {
-  Q_ASSERT(row >= 0);
+  SS_ASSERT(row >= 0, return -1.0);
 
   if (row < m_rowSeconds.size())
     return m_rowSeconds[row];
@@ -1462,7 +1460,7 @@ double CSV::Player::rowSecondsSinceStart(int row) const
  */
 void CSV::Player::anchorSteadyBase(int row)
 {
-  Q_ASSERT(row >= 0);
+  SS_ASSERT_LOG(row >= 0);
 
   m_steadyBase           = std::chrono::steady_clock::now();
   const double seconds   = rowSecondsSinceStart(row);
@@ -1476,7 +1474,7 @@ void CSV::Player::anchorSteadyBase(int row)
  */
 std::chrono::steady_clock::time_point CSV::Player::rowSteadyTimestamp(int row)
 {
-  Q_ASSERT(row >= 0);
+  SS_ASSERT_LOG(row >= 0);
 
   const double seconds = rowSecondsSinceStart(row);
   if (seconds < 0.0) [[unlikely]]
@@ -1493,8 +1491,8 @@ std::chrono::steady_clock::time_point CSV::Player::rowSteadyTimestamp(int row)
  */
 void CSV::Player::injectRow(int row)
 {
-  Q_ASSERT(row >= 0);
-  Q_ASSERT(row < frameCount());
+  SS_ASSERT(row >= 0, return);
+  SS_ASSERT(row < frameCount(), return);
 
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile) {

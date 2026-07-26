@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Misc/CommonFonts.h"
@@ -25,6 +25,7 @@
 #include <QFontDatabase>
 
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -227,17 +228,15 @@ QFont Misc::CommonFonts::widgetFont(const double fraction, const bool bold) cons
 /**
  * @brief Returns the size-aware fraction for widgetFont(): 1.0 while the widget's driving
  *        dimension is at or above reference, shrinking linearly to a 0.7 readability floor
- *        below it. Shared by dashboard widgets so small windows tighten uniformly.
+ *        below it. Shared by dashboard widgets so small windows tighten uniformly. A negative
+ *        size is a normal QML layout transient (pre-polish geometry) and clamps to the floor.
  */
 double Misc::CommonFonts::autoScale(const double size, const double reference) const
 {
-  Q_ASSERT(reference > 0);
-  Q_ASSERT(size >= 0);
-
   if (reference <= 0)
     return 1.0;
 
-  return qBound(0.7, size / reference, 1.0);
+  return qBound(0.7, qMax(0.0, size) / reference, 1.0);
 }
 
 //--------------------------------------------------------------------------------------------------

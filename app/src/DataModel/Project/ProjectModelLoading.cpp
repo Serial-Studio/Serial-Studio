@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -300,54 +300,16 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   if (m_autoSaveTimer)
     m_autoSaveTimer->stop();
 
-  m_groups.clear();
-  m_actions.clear();
-  m_sources.clear();
-  m_workspaces.clear();
-  m_widgetSettings  = QJsonObject();
-  m_treeExpansion   = QJsonObject();
-  m_diagramCollapse = QJsonObject();
-
   m_filePath = sourcePath;
 
-  const auto json                = document.object();
-  const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
-  const bool legacyUniqueIds     = !json.contains(Keys::NextUniqueId);
+  const auto json            = document.object();
+  const auto flags           = applyJsonDocumentCore(json);
+  const int loadedSchema     = flags.loadedSchema;
+  const bool olderSchema     = flags.olderSchema;
+  const bool legacyUniqueIds = flags.legacyUniqueIds;
 
-  const int loadedSchema = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
-  const bool olderSchema = loadedSchema < DataModel::kSchemaVersion;
-
-  m_controlScriptCode        = ss_jsr(json, Keys::ControlScriptCode, "").toString();
-  static auto& controlScript = DataModel::ControlScript::instance();
-  controlScript.setCode(m_controlScriptCode);
-
-  loadProjectRootScalars(json);
-  loadProjectArrays(json, legacyParserCode);
-  enforceGplSingleSource();
-  resolveDatasetTransformLanguages();
-  resolveDatasetVirtualFlags();
-
-  seedNextUniqueIdFromGroups();
-  loadWidgetSettingsAndWorkspaces(json);
-
-  if (olderSchema) {
-    m_customizeWorkspaces = false;
-    m_workspaces.clear();
-  }
-
-  if (legacyUniqueIds) {
-    migrateLegacyWorkspaceRefs();
-    migrateLegacyXAxisIds();
-  }
-
-  migrateLegacyWaterfallYAxisIds();
-
-  loadPointCount(json);
-  loadPlotTimeRange(json);
-  loadFrozen(json);
-  loadChangeDrivenTransforms(json);
-  migrateLegacyLayoutKeys();
-  migrateLegacyDashboardLayout(json);
+  m_history.clear();
+  Q_EMIT projectHistoryChanged();
 
   setModified(false);
   watchProjectFile();
@@ -376,6 +338,96 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     });
   }
 
+  return true;
+}
+
+/**
+ * @brief Replaces the in-memory document from a parsed project JSON object: clears the
+ *        replaced containers, loads scalars/arrays, runs the sanitizers and legacy
+ *        migrations, and returns the schema flags the caller needs for follow-up work.
+ */
+DataModel::ProjectModel::DocumentLoadFlags DataModel::ProjectModel::applyJsonDocumentCore(
+  const QJsonObject& json)
+{
+  m_groups.clear();
+  m_actions.clear();
+  m_sources.clear();
+  m_workspaces.clear();
+  m_widgetSettings  = QJsonObject();
+  m_treeExpansion   = QJsonObject();
+  m_diagramCollapse = QJsonObject();
+
+  const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
+
+  DocumentLoadFlags flags;
+  flags.legacyUniqueIds = !json.contains(Keys::NextUniqueId);
+  flags.loadedSchema    = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
+  flags.olderSchema     = flags.loadedSchema < DataModel::kSchemaVersion;
+
+  m_controlScriptCode        = ss_jsr(json, Keys::ControlScriptCode, "").toString();
+  static auto& controlScript = DataModel::ControlScript::instance();
+  controlScript.setCode(m_controlScriptCode);
+
+  loadProjectRootScalars(json);
+  loadProjectArrays(json, legacyParserCode);
+  enforceGplSingleSource();
+  resolveDatasetTransformLanguages();
+  resolveDatasetVirtualFlags();
+
+  seedNextUniqueIdFromGroups();
+  loadWidgetSettingsAndWorkspaces(json);
+
+  if (flags.olderSchema) {
+    m_customizeWorkspaces = false;
+    m_workspaces.clear();
+  }
+
+  if (flags.legacyUniqueIds) {
+    migrateLegacyWorkspaceRefs();
+    migrateLegacyXAxisIds();
+  }
+
+  migrateLegacyWaterfallYAxisIds();
+
+  loadPointCount(json);
+  loadPlotTimeRange(json);
+  loadFrozen(json);
+  loadChangeDrivenTransforms(json);
+  migrateLegacyLayoutKeys();
+  migrateLegacyDashboardLayout(json);
+
+  return flags;
+}
+
+/**
+ * @brief Restores an undo/redo snapshot in place: same document rebuild as a load, but the
+ *        file path, watcher, and history survive, and jsonFileChanged never fires (the
+ *        frameDetectionChanged hop drives the AppState/FrameBuilder resync instead).
+ */
+bool DataModel::ProjectModel::applyHistorySnapshot(const QByteArray& state)
+{
+  const auto document = QJsonDocument::fromJson(state);
+  if (document.isEmpty() || !document.isObject())
+    return false;
+
+  m_history.setApplying(true);
+  m_autoSaveSuspended = true;
+  if (m_autoSaveTimer)
+    m_autoSaveTimer->stop();
+
+  (void)applyJsonDocumentCore(document.object());
+
+  m_autoSnapshot = buildAutoWorkspaces();
+  emitProjectLoadedSignals(false);
+
+  m_autoSaveSuspended = false;
+  m_runtimeDirty      = false;
+  scheduleAutoSave();
+
+  if (m_widgetSettings.isEmpty())
+    Q_EMIT widgetSettingsChanged();
+
+  m_history.setApplying(false);
   return true;
 }
 
@@ -1060,15 +1112,19 @@ bool DataModel::ProjectModel::migrateLegacySeparator(const QJsonObject& json)
 }
 
 /**
- * @brief Emits the standard burst of "project loaded" signals for downstream views.
+ * @brief Emits the standard burst of "project loaded" signals for downstream views; history
+ *        restores skip jsonFileChanged so backups and file-path handlers stay quiet.
  */
-void DataModel::ProjectModel::emitProjectLoadedSignals()
+void DataModel::ProjectModel::emitProjectLoadedSignals(const bool includeJsonFileChanged)
 {
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
-  Q_EMIT jsonFileChanged();
+
+  if (includeJsonFileChanged)
+    Q_EMIT jsonFileChanged();
+
   Q_EMIT tablesChanged();
   Q_EMIT editorWorkspacesChanged();
   Q_EMIT activeWorkspacesChanged();

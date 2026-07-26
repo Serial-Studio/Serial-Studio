@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -120,6 +120,7 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
+  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
   [[nodiscard]] QJsonObject deviceIdentifier() const override;
@@ -172,6 +173,7 @@ private slots:
 
 private:
   [[nodiscard]] QVector<QSerialPortInfo> validPorts() const;
+  [[nodiscard]] bool applyErrorPolicy(QSerialPort::SerialPortError error);
   void applyDeviceProperty(const QVariant& value);
   void applyBaudRateProperty(const QVariant& value);
   bool relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports);
@@ -183,7 +185,6 @@ private:
 
   bool m_dtrEnabled;
   bool m_autoReconnect;
-  bool m_pendingReconnect;
   bool m_usingCustomSerialPort;
 
   int m_lastSerialDeviceIndex;

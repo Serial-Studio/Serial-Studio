@@ -365,6 +365,7 @@ var controlScript = (typeof controlScript !== 'undefined') ? controlScript : {};
 var csvExport = (typeof csvExport !== 'undefined') ? csvExport : {};
 var csvPlayer = (typeof csvPlayer !== 'undefined') ? csvPlayer : {};
 var dashboard = (typeof dashboard !== 'undefined') ? dashboard : {};
+var diagnostics = (typeof diagnostics !== 'undefined') ? diagnostics : {};
 var extensions = (typeof extensions !== 'undefined') ? extensions : {};
 var io = (typeof io !== 'undefined') ? io : {};
 io.audio = io.audio || {};
@@ -379,7 +380,9 @@ io.usb = io.usb || {};
 var licensing = (typeof licensing !== 'undefined') ? licensing : {};
 var mdf4Export = (typeof mdf4Export !== 'undefined') ? mdf4Export : {};
 var mdf4Player = (typeof mdf4Player !== 'undefined') ? mdf4Player : {};
+var mirror = (typeof mirror !== 'undefined') ? mirror : {};
 var notifications = (typeof notifications !== 'undefined') ? notifications : {};
+var problems = (typeof problems !== 'undefined') ? problems : {};
 var project = (typeof project !== 'undefined') ? project : {};
 project.action = project.action || {};
 project.dashboard = project.dashboard || {};
@@ -644,6 +647,12 @@ csvExport.setEnabled = function(enabled) {
   return apiCall('csvExport.setEnabled', p);
 };
 
+csvExport.setInterval = function(intervalMs) {
+  var p = {};
+  p['intervalMs'] = intervalMs;
+  return apiCall('csvExport.setInterval', p);
+};
+
 csvPlayer.close = function() {
   var p = {};
   return apiCall('csvPlayer.close', p);
@@ -735,6 +744,17 @@ dashboard.tailFrames = function(options) {
 dashboard.tick = function() {
   var p = {};
   return apiCall('dashboard.tick', p);
+};
+
+diagnostics.run = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('diagnostics.run', p);
+};
+
+diagnostics.status = function() {
+  var p = {};
+  return apiCall('diagnostics.status', p);
 };
 
 extensions.addRepository = function(url) {
@@ -994,6 +1014,7 @@ io.disconnect = function() {
   return apiCall('io.disconnect', p);
 };
 
+// options.encoding: "text" | "base64" | "both"
 io.getLatestFrame = function(options) {
   var p = {};
   if (options) for (var k in options) p[k] = options[k];
@@ -1466,6 +1487,17 @@ mdf4Player.step = function(options) {
   return apiCall('mdf4Player.step', p);
 };
 
+mirror.getInfo = function() {
+  var p = {};
+  return apiCall('mirror.getInfo', p);
+};
+
+mirror.getStructure = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('mirror.getStructure', p);
+};
+
 notifications.clearAll = function() {
   var p = {};
   return apiCall('notifications.clearAll', p);
@@ -1509,6 +1541,22 @@ notifications.resolve = function(options) {
   var p = {};
   if (options) for (var k in options) p[k] = options[k];
   return apiCall('notifications.resolve', p);
+};
+
+problems.list = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('problems.list', p);
+};
+
+problems.listCheckers = function() {
+  var p = {};
+  return apiCall('problems.listCheckers', p);
+};
+
+problems.run = function() {
+  var p = {};
+  return apiCall('problems.run', p);
 };
 
 project.action.add = function() {
@@ -1733,6 +1781,13 @@ project.dataset.getExecutionOrder = function(options) {
   return apiCall('project.dataset.getExecutionOrder', p);
 };
 
+project.dataset.getFFTMarkers = function(groupId, datasetId) {
+  var p = {};
+  p['groupId'] = groupId;
+  p['datasetId'] = datasetId;
+  return apiCall('project.dataset.getFFTMarkers', p);
+};
+
 project.dataset.list = function(options) {
   var p = {};
   if (options) for (var k in options) p[k] = options[k];
@@ -1753,6 +1808,14 @@ project.dataset.setAlarmBands = function(groupId, datasetId, alarmBands) {
   p['datasetId'] = datasetId;
   p['alarmBands'] = alarmBands;
   return apiCall('project.dataset.setAlarmBands', p);
+};
+
+project.dataset.setFFTMarkers = function(groupId, datasetId, fftMarkers) {
+  var p = {};
+  p['groupId'] = groupId;
+  p['datasetId'] = datasetId;
+  p['fftMarkers'] = fftMarkers;
+  return apiCall('project.dataset.setFFTMarkers', p);
 };
 
 project.dataset.setOption = function(groupId, datasetId, option, enabled) {
@@ -1797,10 +1860,15 @@ project.dataset.transform.dryRun = function(code, language, values) {
   return apiCall('project.dataset.transform.dryRun', p);
 };
 
-project.dataset.update = function(groupId, datasetId) {
+// options.displayFormat: "" | "0d" | "1d" | "2d" | "3d" | "sci"
+// options.fftSamples: 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384 | 32768 | 65536 | 131072 | 262144
+// options.fftWindow: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14
+// options.widget: "" | "bar" | "compass" | "gauge" | "meter"
+project.dataset.update = function(groupId, datasetId, options) {
   var p = {};
   p['groupId'] = groupId;
   p['datasetId'] = datasetId;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.dataset.update', p);
 };
 
@@ -2055,6 +2123,11 @@ project.painter.setCode = function(groupId, code) {
   return apiCall('project.painter.setCode', p);
 };
 
+project.redo = function() {
+  var p = {};
+  return apiCall('project.redo', p);
+};
+
 project.save = function(options) {
   var p = {};
   if (options) for (var k in options) p[k] = options[k];
@@ -2147,6 +2220,11 @@ project.template.apply = function(templateId, options) {
 project.template.list = function() {
   var p = {};
   return apiCall('project.template.list', p);
+};
+
+project.undo = function() {
+  var p = {};
+  return apiCall('project.undo', p);
 };
 
 project.validate = function() {

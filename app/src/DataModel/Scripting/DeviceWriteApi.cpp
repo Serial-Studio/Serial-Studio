@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/DeviceWriteApi.h"
@@ -31,6 +31,7 @@
 #include <stdexcept>
 
 #include "IO/ConnectionManager.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -193,7 +194,7 @@ QVariantMap DataModel::DeviceWriteBridge::write(const QJSValue& data, const QJSV
  */
 void DataModel::DeviceWriteApi::installLua(lua_State* L, int defaultSourceId)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L != nullptr, return);
 
   lua_pushinteger(L, defaultSourceId);
   lua_pushcclosure(L, luaDeviceWrite, 1);
@@ -205,7 +206,7 @@ void DataModel::DeviceWriteApi::installLua(lua_State* L, int defaultSourceId)
  */
 void DataModel::DeviceWriteApi::installJS(QJSEngine* js, int defaultSourceId)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   auto global       = js->globalObject();
   auto existingProp = global.property(QStringLiteral("__ss_dw"));
@@ -236,7 +237,7 @@ void DataModel::DeviceWriteApi::setLuaDefaultSourceId(lua_State* L, int defaultS
  */
 void DataModel::DeviceWriteApi::setJSDefaultSourceId(QJSEngine* js, int defaultSourceId)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   auto existingProp = js->globalObject().property(QStringLiteral("__ss_dw"));
   if (!existingProp.isQObject())
@@ -301,7 +302,7 @@ static int luaActionFire(lua_State* L)
  */
 void DataModel::ActionFireApi::installLua(lua_State* L)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L != nullptr, return);
 
   lua_pushcfunction(L, luaActionFire);
   lua_setglobal(L, "actionFire");
@@ -344,7 +345,7 @@ QVariantMap DataModel::ActionFireBridge::fire(const QJSValue& actionIdVal)
  */
 void DataModel::ActionFireApi::installJS(QJSEngine* js)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   auto global       = js->globalObject();
   auto existingProp = global.property(QStringLiteral("__ss_af"));

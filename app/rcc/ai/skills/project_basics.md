@@ -288,18 +288,19 @@ a default 0/0 range and looks empty / collapsed / max'd out.
 | `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax`               | Gauge dial, Bar fill, Compass dial, Meter arc (Compass is fixed 0–360 and ignores these). Bar/Gauge/Meter also use these to size the digital-page value box on the two-page swipe view. |
 | `fftMin` / `fftMax`            | `fftMin` / `fftMax`               | Expected raw input range, used to normalize the time-domain signal to [-1, +1] before windowing + FFT. NOT a dB axis (the dB Y-axis on FFT/Waterfall widgets is fixed). |
 
-**Naming asymmetry (almost-silent footgun).** Project files (`.ssproj`)
-and API responses (`project.dataset.getByPath`, `project.snapshot`) use
-the FULL form `plotMin` / `widgetMin`. The `project.dataset.update` API
-accepts ONLY the abbreviated form `pltMin` / `wgtMin`. Round-tripping a
-response field name into an update call writes nothing and returns
-success, but the response now carries `result.warnings` with a
-`code: "unknown_field"` entry listing the dropped keys. **Read it.**
-A success without warnings means the update applied; a success WITH an
-`unknown_field` warning means the misnamed parts were skipped. After
-any write, also verify via `dataset.getByPath` that the response shows
-the new values under the full key names. `fftMin` / `fftMax` are the
-same in both directions.
+**Naming asymmetry (read side only).** Project files (`.ssproj`) and API
+responses (`project.dataset.getByPath`, `project.snapshot`) use the FULL
+form `plotMin` / `widgetMin`. `project.dataset.update` takes the
+abbreviated `pltMin` / `wgtMin` form and also accepts the full form as a
+declared alias, so a response object round-trips back through `update`
+unchanged. Prefer the abbreviated names (they are the canonical ones in
+the command's typed schema) and still read `result.warnings`: a
+`code: "unknown_field"` entry lists keys the API did not recognize (a
+genuine typo, not one of the aliases). A success without warnings means
+the update applied. After any write, verify via `dataset.getByPath` that
+the response shows the new values under the full key names.
+`fftMin` / `fftMax` are the same in both directions. `api_semantics`
+carries the full alias list.
 
 A gauge that runs 0–360 (`wgtMin`/`wgtMax`) might still want the
 underlying plot Y-axis at −50…+50 (`pltMin`/`pltMax`): set both. See

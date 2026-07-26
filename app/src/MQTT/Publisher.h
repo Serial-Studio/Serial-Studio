@@ -36,6 +36,7 @@
 #include <QVariantMap>
 // clang-format on
 
+#  include "Async/TaskTree.h"
 #  include "DataModel/ExportSchema.h"
 #  include "DataModel/Frame.h"
 #  include "DataModel/FrameConsumer.h"
@@ -127,9 +128,9 @@ protected:
 private slots:
   void onClientStateChanged(QMqttClient::ClientState state);
   void onClientErrorChanged(QMqttClient::ClientError error);
-  void finishPendingReconnect();
 
 private:
+  [[nodiscard]] Async::Task* buildReconnectFlow();
   void publishBatchAsJson(const std::vector<DataModel::TimestampedFramePtr>& items);
   void publishBatchAsCsv(const std::vector<DataModel::TimestampedFramePtr>& items);
   void rebuildCsvSchema(const DataModel::Frame& frame);
@@ -153,8 +154,7 @@ private:
 
   PublisherScript* m_script;
   QString m_compiledScriptCode;
-  bool m_reconnectPending;
-  QMetaObject::Connection m_reconnectConn;
+  std::unique_ptr<Async::TaskRunner> m_runner;
 
   QString m_csvFrameTitle;
   QByteArray m_csvHeaderPayload;

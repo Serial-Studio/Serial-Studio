@@ -14,14 +14,16 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+
+import SerialStudio
 
 import "../../Widgets" as Widgets
 
@@ -42,6 +44,13 @@ Widgets.Pane {
   // visible so user-defined tables and system dataset counts stay in sync.
   //
   property var summary: []
+  readonly property var filteredSummary: {
+    const q = searchBand.query.trim()
+    if (q.length === 0)
+      return summary
+
+    return summary.filter((r) => SerialStudio.searchMatches(q, String(r.title)))
+  }
 
   //
   // Refresh the summary whenever the project structure changes, or when the
@@ -115,6 +124,15 @@ Widgets.Pane {
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
+
+      //
+      // Search band: above the secondary toolbar, aligned with the tree search
+      //
+      EditorSearchBand {
+        id: searchBand
+
+        resultCount: tablesList.count
+      }
 
       Rectangle {
         id: toolbar
@@ -212,9 +230,9 @@ Widgets.Pane {
         clip: true
         spacing: 0
         interactive: true
-        model: root.summary
         Layout.fillWidth: true
         Layout.fillHeight: true
+        model: root.filteredSummary
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -295,7 +313,7 @@ Widgets.Pane {
             anchors.centerIn: parent
             opacity: 0.5
             color: Cpp_ThemeManager.colors["text"]
-            visible: root.summary.length <= 1
+            visible: root.summary.length <= 1 && searchBand.query.trim().length === 0
             text: qsTr("No shared tables.")
           }
         }

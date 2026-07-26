@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -60,6 +60,7 @@
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "ProjectModelShared.h"
+#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 namespace DataModel {
@@ -651,6 +652,8 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
 
   QMap<SerialStudio::DashboardWidget, int> groupIdx;
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;
+  datasetIdx.insert(SerialStudio::DashboardExtension,
+                    SerialStudio::extensionGroupWidgetCount(groups));
 
   const bool pro = SerialStudio::activated();
 
@@ -905,8 +908,8 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
   const bool flagChanged = !m_customizeWorkspaces;
   m_customizeWorkspaces  = true;
 
-  Q_ASSERT(!m_workspaces.empty());
-  Q_ASSERT(m_workspaces.front().workspaceId >= WorkspaceIds::AutoStart);
+  SS_ASSERT(!m_workspaces.empty(), return -1);
+  SS_ASSERT(m_workspaces.front().workspaceId >= WorkspaceIds::AutoStart, return -1);
 
   setModified(true);
   if (flagChanged)
@@ -1021,8 +1024,8 @@ QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g)
 void DataModel::ProjectModel::shiftWorkspaceRefsAfterGroupDelete(
   int deletedGid, const QMap<int, int>& deletedTypeCounts)
 {
-  Q_ASSERT(deletedGid >= 0);
-  Q_ASSERT(m_customizeWorkspaces);
+  SS_ASSERT(deletedGid >= 0, return);
+  SS_ASSERT(m_customizeWorkspaces, return);
 
   const int deletedAutoId = WorkspaceIds::PerGroupStart + deletedGid;
 
@@ -1123,8 +1126,8 @@ void DataModel::ProjectModel::shiftLayoutKeysAfterGroupDelete(int deletedGid)
 void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
   int groupId, const QMap<int, int>& datasetTypeCounts)
 {
-  Q_ASSERT(groupId >= 0);
-  Q_ASSERT(m_customizeWorkspaces);
+  SS_ASSERT(groupId >= 0, return);
+  SS_ASSERT(m_customizeWorkspaces, return);
 
   if (datasetTypeCounts.isEmpty())
     return;
@@ -1175,7 +1178,7 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
         continue;
 
       r.relativeIndex -= lost;
-      Q_ASSERT(r.relativeIndex >= 0);
+      SS_ASSERT(r.relativeIndex >= 0, r.relativeIndex = 0);
     }
   }
 }

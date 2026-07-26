@@ -225,15 +225,21 @@ and avoid the string-key arithmetic.
 `dataset.add` accept **string slugs** (preferred) or integer bitflags
 (back-compat).
 
-| Slug          | Bit | JSON key (`.ssproj`)            |
-|---------------|-----|---------------------------------|
-| `"plot"`      | 1   | `graph: true`                   |
-| `"fft"`       | 2   | `fft: true`                     |
-| `"bar"`       | 4   | `widget: "bar"`     ┐           |
-| `"gauge"`     | 8   | `widget: "gauge"`   ├ mutually  |
-| `"compass"`   | 16  | `widget: "compass"` ┘ exclusive |
-| `"led"`       | 32  | `led: true`                     |
-| `"waterfall"` | 64  | `waterfall: true`  (Pro)        |
+| Slug          | Bit | JSON key (`.ssproj`)               |
+|---------------|-----|------------------------------------|
+| `"plot"`      | 1   | `graph: true`                      |
+| `"fft"`       | 2   | `fft: true`                        |
+| `"bar"`       | 4   | `widget: "bar"` (one-of)           |
+| `"gauge"`     | 8   | `widget: "gauge"` (one-of)         |
+| `"compass"`   | 16  | `widget: "compass"` (one-of)       |
+| `"led"`       | 32  | `led: true`                        |
+| `"waterfall"` | 64  | `waterfall: true` (Pro)            |
+| `"meter"`     | 128 | `widget: "meter"` (one-of)         |
+
+The four `(one-of)` rows all write the single `widget` key, so they are
+mutually exclusive; when several are set the highest bit wins
+(meter > compass > gauge > bar). `dashboard_layout` joins this table to
+the `addWidget` enum.
 
 ```
 project.dataset.setOptions { groupId, datasetId, options: ["plot","fft"] }
@@ -245,33 +251,37 @@ enum integers used by `project.workspace.addWidget`, which is
 exactly why slugs exist. Use slugs and the collision disappears. See
 `dashboard_layout` for the full table.
 
-## Dataset min/max: abbreviated on write, full-name on read
+## Dataset min/max: two spellings, both accepted on write
 
-Three independent pairs per dataset (Plot, Widget, FFT/Waterfall). The
-API parameter names you write are NOT the keys you read back:
+Three independent pairs per dataset (Plot, Widget, FFT/Waterfall). Reads
+always come back in the full form; writes take either spelling, because
+the property registry declares the full form as an alias of the
+abbreviated one:
 
-| Read (responses, `.ssproj`)    | Write (`project.dataset.update`) | Drives                                                                              |
-|--------------------------------|----------------------------------|-------------------------------------------------------------------------------------|
-| `plotMin` / `plotMax`          | `pltMin` / `pltMax`              | Plot, MultiPlot Y-axis                                                              |
-| `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax`              | Gauge dial, Bar fill, Meter arc                                                     |
-| `fftMin` / `fftMax`            | `fftMin` / `fftMax`              | Expected raw input range used to normalize the FFT/Waterfall input to [-1, +1]. NOT a dB axis. |
+| Read (responses, `.ssproj`)    | Write (`project.dataset.update`)     | Drives                                                                              |
+|--------------------------------|--------------------------------------|-------------------------------------------------------------------------------------|
+| `plotMin` / `plotMax`          | `pltMin` / `pltMax` or `plotMin` / `plotMax`   | Plot, MultiPlot Y-axis                                                     |
+| `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax` or `widgetMin` / `widgetMax` | Gauge dial, Bar fill, Meter arc                                          |
+| `fftMin` / `fftMax`            | `fftMin` / `fftMax`                  | Expected raw input range used to normalize the FFT/Waterfall input to [-1, +1]. NOT a dB axis. |
 
-Writing `{"plotMin": 100}` to `dataset.update` returns `success: true`
-and writes nothing, because the field name doesn't match the param check.
-The response now carries `result.warnings` with a `code: "unknown_field"`
-entry listing every dropped key, so the trap is no longer fully silent,
-**but you have to read the warnings array.** Always:
+The same aliasing covers `xAxis` (alias of `xAxisId`) and
+`datasetSourceId` (alias of `sourceId`), so an object read back from
+`project.dataset.getByPath` can be written straight back through
+`dataset.update` without renaming a single key. Still:
 
-1. Use `pltMin`/`wgtMin` (etc.) on the WRITE side.
+1. Prefer the abbreviated `pltMin`/`wgtMin` form on the WRITE side --
+   it is the canonical name in the command's typed schema.
 2. Inspect `result.warnings` after the call. Any
    `{code: "unknown_field", fields: [...]}` entry means those keys were
-   dropped. Fix and re-issue; do not assume success means applied.
+   dropped (a real typo, not one of the aliases above). Fix and re-issue;
+   do not assume success means applied.
 3. After writing, call `project.dataset.getByPath` and confirm the
-   response shows your values under `plotMin`/`widgetMin`/`fftMin`. If
-   they're still 0, the write was silently dropped.
+   response shows your values under `plotMin`/`widgetMin`/`fftMin`.
 
-`fftMin`/`fftMax` are identical in both directions, so they don't trip
-this trap.
+Read the typed `properties` block of `project.dataset.update` (via
+`meta.describeCommand`) for the full field list, each field's type, and
+its enum domain: it is generated from the same declaration, so it can
+never disagree with the code.
 
 ## Update commands: unknown-field warnings
 

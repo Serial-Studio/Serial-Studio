@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -723,6 +723,27 @@ Item {
           }
         }
       }
+    }
+  }
+
+  //
+  // Unavailable over a remote attach: an empty spectrum reads as a broken one
+  //
+  Rectangle {
+    z: 1000
+    anchors.fill: parent
+    visible: Cpp_API_Mirror.attached
+    color: Cpp_ThemeManager.colors["widget_base"]
+
+    Label {
+      anchors.centerIn: parent
+      wrapMode: Text.WordWrap
+      horizontalAlignment: Text.AlignHCenter
+      width: Math.min(parent.width - 32, 320)
+      color: Cpp_ThemeManager.colors["widget_text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.9)
+      text: qsTr("Not available over a remote attach. This widget needs the remote's raw sample "
+               + "stream, which the dashboard mirror does not carry.")
     }
   }
 }

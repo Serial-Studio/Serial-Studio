@@ -14,12 +14,13 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Registry
@@ -38,8 +39,8 @@ const QList<const DataModel::INativeTemplate*>& DataModel::nativeTemplates()
     return list;
   }();
 
-  Q_ASSERT(!s_templates.isEmpty());
-  Q_ASSERT(s_templates.constFirst() != nullptr);
+  SS_ASSERT_LOG(!s_templates.isEmpty());
+  SS_ASSERT_LOG(!s_templates.isEmpty() && s_templates.constFirst() != nullptr);
   return s_templates;
 }
 
@@ -53,7 +54,10 @@ const DataModel::INativeTemplate* DataModel::nativeTemplateById(const QString& i
 
   const auto& templates = nativeTemplates();
   for (const auto* tmpl : templates) {
-    Q_ASSERT(tmpl != nullptr);
+    SS_ASSERT_LOG(tmpl != nullptr);
+    if (!tmpl)
+      continue;
+
     if (tmpl->id() == id)
       return tmpl;
   }
@@ -67,7 +71,7 @@ const DataModel::INativeTemplate* DataModel::nativeTemplateById(const QString& i
 QString DataModel::defaultNativeTemplateId()
 {
   const auto& templates = nativeTemplates();
-  Q_ASSERT(!templates.isEmpty());
+  SS_ASSERT(!templates.isEmpty(), return {});
 
   return templates.constFirst()->id();
 }

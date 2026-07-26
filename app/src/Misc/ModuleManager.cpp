@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "Misc/ModuleManager.h"
@@ -25,6 +25,7 @@
 
 // code-verify off
 #include <iostream>
+#include <memory>
 // code-verify on
 
 #include <QCoreApplication>
@@ -42,6 +43,8 @@
 // clang-format on
 #endif
 
+#include "API/Mirror/MirrorPublisher.h"
+#include "API/Mirror/MirrorSession.h"
 #include "API/ProcessLauncher.h"
 #include "API/Server.h"
 #include "AppInfo.h"
@@ -60,6 +63,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/RowFilterProxy.h"
 #include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "IO/ConnectionManager.h"
@@ -68,6 +72,7 @@
 #include "MDF4/Player.h"
 #include "Misc/BackupManager.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/ConnectionDiagnostics.h"
 #include "Misc/CrashTracker.h"
 #include "Misc/DemoLauncher.h"
 #include "Misc/Examples.h"
@@ -77,6 +82,7 @@
 #include "Misc/HighDpiScaling.h"
 #include "Misc/IconEngine.h"
 #include "Misc/IconRegistry.h"
+#include "Misc/ProblemCenter.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -84,16 +90,19 @@
 #include "Misc/WorkspaceManager.h"
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
 #include "UI/AlarmMonitor.h"
 #include "UI/CommandRegistry.h"
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
 #include "UI/Taskbar.h"
 #include "UI/TaskbarSettings.h"
+#include "UI/WidgetExtensions.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
 #include "UI/Widgets/Compass.h"
 #include "UI/Widgets/DataGrid.h"
+#include "UI/Widgets/ExtensionData.h"
 #include "UI/Widgets/FFTPlot.h"
 #include "UI/Widgets/Gauge.h"
 #include "UI/Widgets/GPS.h"
@@ -231,6 +240,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
 Misc::ModuleManager::ModuleManager()
   : m_headless(false)
   , m_quitHandled(false)
+  , m_ephemeralSession(false)
   , m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
   , m_performanceMode(m_settings.value("App/PerformanceMode", true).toBool())
   , m_inhibitIdleSleep(m_settings.value("App/InhibitIdleSleep", true).toBool())
@@ -278,6 +288,16 @@ bool Misc::ModuleManager::inhibitIdleSleep() const noexcept
 void Misc::ModuleManager::setHeadless(const bool headless)
 {
   m_headless = headless;
+}
+
+/**
+ * @brief Marks the session ephemeral (operator runtime) before the pinned order runs, so the
+ *        flag reaches AppState ahead of restoreLastProject() without main.cpp reaching a
+ *        session singleton before the composition root exists (spec 0039 M2).
+ */
+void Misc::ModuleManager::setEphemeralSession(const bool ephemeral)
+{
+  m_ephemeralSession = ephemeral;
 }
 
 /**
@@ -520,6 +540,7 @@ void Misc::ModuleManager::configureUpdater()
  */
 void Misc::ModuleManager::registerQmlTypes()
 {
+  qmlRegisterType<DataModel::RowFilterProxy>("SerialStudio", 1, 0, "RowFilterProxy");
   qmlRegisterType<Widgets::Bar>("SerialStudio", 1, 0, "BarModel");
   qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");
   qmlRegisterType<Widgets::Plot>("SerialStudio", 1, 0, "PlotModel");
@@ -536,6 +557,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0, "AccelerometerModel");
   qmlRegisterType<Widgets::Meter>("SerialStudio", 1, 0, "MeterModel");
   qmlRegisterType<Widgets::WebView>("SerialStudio", 1, 0, "WebViewWidget");
+  qmlRegisterType<Widgets::ExtensionData>("SerialStudio", 1, 0, "ExtensionDataModel");
 
 #ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
@@ -618,25 +640,29 @@ void Misc::ModuleManager::initializeQmlInterface()
  */
 void Misc::ModuleManager::instantiateCoreModules()
 {
+  auto& ctx = SessionContext::current();
+
   (void)Misc::Translator::instance();
   (void)Misc::TimerEvents::instance();
   (void)Misc::CommonFonts::instance();
   (void)Misc::WorkspaceManager::instance();
-  (void)DataModel::NotificationCenter::instance();
+  ctx.adoptNotifications(SessionContext::create<DataModel::NotificationCenter>());
+  (void)Misc::ProblemCenter::instance();
+  (void)Misc::ConnectionDiagnostics::instance();
   (void)Misc::ThemeManager::instance();
   (void)Misc::ExtensionManager::instance();
   (void)DataModel::ControlScript::instance();
-  (void)DataModel::ProjectModel::instance();
-  (void)AppState::instance();
+  ctx.adoptProjectModel(SessionContext::create<DataModel::ProjectModel>());
+  ctx.adoptAppState(SessionContext::create<AppState>());
 #ifdef BUILD_COMMERCIAL
   (void)Licensing::MachineID::instance();
   (void)Licensing::LemonSqueezy::instance();
   (void)Licensing::OfflineLicense::instance();
   (void)Licensing::Trial::instance();
 #endif
-  (void)DataModel::FrameBuilder::instance();
-  (void)IO::ConnectionManager::instance();
-  (void)Console::Handler::instance();
+  ctx.adoptFrameBuilder(SessionContext::create<DataModel::FrameBuilder>());
+  ctx.adoptConnectionManager(SessionContext::create<IO::ConnectionManager>());
+  ctx.adoptConsole(SessionContext::create<Console::Handler>());
   (void)API::Server::instance();
   (void)CSV::Player::instance();
   (void)MDF4::Player::instance();
@@ -649,16 +675,44 @@ void Misc::ModuleManager::instantiateCoreModules()
   (void)CSV::Export::instance();
   (void)MDF4::Export::instance();
   (void)Console::Export::instance();
-  (void)DataModel::FrameParser::instance();
-  (void)UI::Dashboard::instance();
+  ctx.adoptFrameParser(SessionContext::create<DataModel::FrameParser>());
+  (void)UI::WidgetExtensions::instance();
+  ctx.adoptDashboard(SessionContext::create<UI::Dashboard>());
 }
 
 /**
- * @brief Wires inter-module signals and runs each module's setupExternalConnections.
+ * @brief Wires the per-session problem reset on the false-to-true connection edge only
+ *        (connectedChanged is also forwarded from config edits). A full run replaces every
+ *        checker's findings wholesale, so no separate clear is needed and the dedup keys
+ *        survive: unchanged standing findings do not re-notify on every connect.
+ */
+static void wireProblemCenterSessionReset(IO::ConnectionManager* manager,
+                                          Misc::ProblemCenter& problemCenter)
+{
+  auto wasConnected = std::make_shared<bool>(manager->isConnected());
+  QObject::connect(manager,
+                   &IO::ConnectionManager::connectedChanged,
+                   &problemCenter,
+                   [&problemCenter, manager, wasConnected] {
+                     const bool connected = manager->isConnected();
+                     const bool rising    = connected && !*wasConnected;
+                     *wasConnected        = connected;
+                     if (!rising)
+                       return;
+
+                     problemCenter.runNow();
+                   });
+}
+
+/**
+ * @brief Wires inter-module signals and runs each module's setupExternalConnections. The
+ *        session context is published right after the pinned order and before any wiring,
+ *        so an injected class can never be constructed before it exists (spec 0039).
  */
 void Misc::ModuleManager::setupCrossModuleConnections()
 {
   instantiateCoreModules();
+  (void)SessionContext::current();
 
   auto* appState             = &AppState::instance();
   auto* ioManager            = &IO::ConnectionManager::instance();
@@ -668,6 +722,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   auto* miscExtensionManager = &Misc::ExtensionManager::instance();
   auto* miscThemeManager     = &Misc::ThemeManager::instance();
 
+  appState->setEphemeralSession(m_ephemeralSession);
   appState->setupExternalConnections();
   CSV::Export::instance().setupExternalConnections();
   ioManager->setupExternalConnections();
@@ -682,6 +737,10 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   Console::Handler::instance().setupExternalConnections();
   IO::FileTransmission::instance().setupExternalConnections();
   UI::AlarmMonitor::instance().setupExternalConnections();
+  auto& problemCenter = Misc::ProblemCenter::instance();
+  problemCenter.setupExternalConnections();
+  wireProblemCenterSessionReset(ioManager, problemCenter);
+  Misc::ConnectionDiagnostics::instance().setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().setupExternalConnections();
   Sessions::DatabaseManager::instance().setupExternalConnections();
@@ -707,6 +766,21 @@ void Misc::ModuleManager::setupCrossModuleConnections()
           miscThemeManager,
           &Misc::ThemeManager::onWorkspacePathChanged);
 
+  auto* widgetExtensions = &UI::WidgetExtensions::instance();
+  connect(miscExtensionManager,
+          &Misc::ExtensionManager::extensionInstalled,
+          widgetExtensions,
+          &UI::WidgetExtensions::rescan);
+  connect(miscExtensionManager,
+          &Misc::ExtensionManager::extensionUninstalled,
+          widgetExtensions,
+          &UI::WidgetExtensions::rescan);
+  connect(workspaceManager,
+          &Misc::WorkspaceManager::pathChanged,
+          widgetExtensions,
+          &UI::WidgetExtensions::rescan);
+  widgetExtensions->rescan();
+
   connect(ioManager,
           &IO::ConnectionManager::connectedChanged,
           pluginsBridge,
@@ -728,6 +802,9 @@ void Misc::ModuleManager::setupCrossModuleConnections()
           &UI::Dashboard::dataReset,
           notificationCenter,
           &DataModel::NotificationCenter::clearAll);
+
+  (void)API::MirrorPublisher::instance();
+  (void)API::MirrorSession::instance();
 }
 
 /**
@@ -752,6 +829,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_Console_Export", &Console::Export::instance());
   ctx->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
   ctx->setContextProperty("Cpp_API_Server", &API::Server::instance());
+  ctx->setContextProperty("Cpp_API_Mirror", &API::MirrorSession::instance());
   ctx->setContextProperty("Cpp_Misc_Utilities", &Misc::Utilities::instance());
   ctx->setContextProperty("Cpp_IO_Bluetooth_LE", ioManager->bluetoothLE());
   ctx->setContextProperty("Cpp_ThemeManager", &Misc::ThemeManager::instance());
@@ -773,7 +851,11 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
   ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
   ctx->setContextProperty("Cpp_Misc_IconRegistry", &Misc::IconRegistry::instance());
+  ctx->setContextProperty("Cpp_Misc_ProblemCenter", &Misc::ProblemCenter::instance());
+  ctx->setContextProperty("Cpp_Misc_ConnectionDiagnostics",
+                          &Misc::ConnectionDiagnostics::instance());
   ctx->setContextProperty("Cpp_UI_CommandRegistry", &UI::CommandRegistry::instance());
+  ctx->setContextProperty("Cpp_UI_WidgetExtensions", &UI::WidgetExtensions::instance());
   ctx->setContextProperty("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
   ctx->setContextProperty("Cpp_Misc_HighDpiScaling", &Misc::HighDpiScaling::instance());
   ctx->setContextProperty("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());

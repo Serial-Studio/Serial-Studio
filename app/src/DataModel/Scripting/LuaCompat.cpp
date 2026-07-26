@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/LuaCompat.h"
@@ -27,6 +27,8 @@
 
 #include <cstring>
 #include <QDebug>
+
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Compatibility shim for Lua 5.1 / 5.2 names removed in 5.3 / 5.4
@@ -188,13 +190,16 @@ end
  */
 static int luaStringSplit(lua_State* L)
 {
-  Q_ASSERT(L != nullptr);
+  SS_ASSERT_LOG(L != nullptr);
 
   size_t slen     = 0;
   const char* s   = luaL_checklstring(L, 1, &slen);
   size_t seplen   = 0;
   const char* sep = luaL_optlstring(L, 2, "", &seplen);
-  Q_ASSERT(s != nullptr);
+  SS_ASSERT(s != nullptr, {
+    lua_pushnil(L);
+    return 1;
+  });
 
   lua_newtable(L);
 
@@ -230,7 +235,7 @@ static int luaStringSplit(lua_State* L)
  */
 void DataModel::installLuaCompat(lua_State* L)
 {
-  Q_ASSERT(L != nullptr);
+  SS_ASSERT(L != nullptr, return);
 
   if (luaL_dostring(L, kLuaCompat) != LUA_OK) [[unlikely]] {
     qWarning() << "[LuaCompat] Failed to install compatibility shim:" << lua_tostring(L, -1);
@@ -258,14 +263,19 @@ void DataModel::installLuaCompat(lua_State* L)
  */
 static int luaConsoleLog(lua_State* L)
 {
-  Q_ASSERT(L != nullptr);
+  SS_ASSERT_LOG(L != nullptr);
 
   const int argc = lua_gettop(L);
   QByteArray message;
   for (int i = 1; i <= argc; ++i) {
     size_t length    = 0;
     const char* text = luaL_tolstring(L, i, &length);
-    Q_ASSERT(text != nullptr);
+    SS_ASSERT_LOG(text != nullptr);
+    if (!text) {
+      lua_pop(L, 1);
+      continue;
+    }
+
     if (i > 1)
       message.append('\t');
 
@@ -297,7 +307,7 @@ static int luaConsoleLog(lua_State* L)
  */
 void DataModel::installLuaConsole(lua_State* L)
 {
-  Q_ASSERT(L != nullptr);
+  SS_ASSERT(L != nullptr, return);
 
   static constexpr struct {
     const char* name;
@@ -337,12 +347,15 @@ void DataModel::installLuaConsole(lua_State* L)
  */
 void DataModel::installLuaRestrictedOs(lua_State* L)
 {
-  Q_ASSERT(L != nullptr);
+  SS_ASSERT(L != nullptr, return);
 
   static const char* const kSafeOsFields[] = {"time", "date", "clock", "difftime"};
 
   luaL_requiref(L, "os", luaopen_os, 0);
-  Q_ASSERT(lua_istable(L, -1));
+  SS_ASSERT(lua_istable(L, -1), {
+    lua_pop(L, 1);
+    return;
+  });
 
   lua_createtable(L, 0, 4);
   for (const char* name : kSafeOsFields) {

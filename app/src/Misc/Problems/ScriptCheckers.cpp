@@ -1,0 +1,240 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020-2026 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+ */
+
+#include "Misc/Problems/ScriptCheckers.h"
+
+#include <QCoreApplication>
+#include <QString>
+
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/FrameParser.h"
+#include "Misc/ProblemCenter.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants & local aliases
+//--------------------------------------------------------------------------------------------------
+
+using Finding  = Misc::ProblemCenter::Finding;
+using Severity = Misc::ProblemCenter::Severity;
+
+static const QString kJumpDataset = QStringLiteral("dataset");
+
+//--------------------------------------------------------------------------------------------------
+// Shared helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the translated text for the shared "Problems" translation context.
+ */
+[[nodiscard]] static QString trProblem(const char* text)
+{
+  return QCoreApplication::translate("Problems", text);
+}
+
+/**
+ * @brief Assembles one finding; the checker id is stamped by the problem center after the run.
+ */
+[[nodiscard]] static Finding makeFinding(Severity severity,
+                                         const char* code,
+                                         const QString& title,
+                                         const QString& explanation,
+                                         const QString& remedy,
+                                         int entityUniqueId,
+                                         const QString& jump)
+{
+  Finding finding;
+  finding.severity       = severity;
+  finding.entityUniqueId = entityUniqueId;
+  finding.code           = QString::fromLatin1(code);
+  finding.jump           = jump;
+  finding.title          = title;
+  finding.remedy         = remedy;
+  finding.explanation    = explanation;
+  return finding;
+}
+
+/**
+ * @brief Maps a live error counter onto a decade bucket, so the finding text stays identical while
+ *        the failure keeps repeating and the panel is not reset once per second.
+ */
+[[nodiscard]] static QString bucketLabel(quint64 value)
+{
+  if (value >= 1000000)
+    return trProblem("more than a million times");
+
+  if (value >= 100000)
+    return trProblem("more than 100,000 times");
+
+  if (value >= 10000)
+    return trProblem("more than 10,000 times");
+
+  if (value >= 1000)
+    return trProblem("more than 1,000 times");
+
+  if (value >= 100)
+    return trProblem("more than 100 times");
+
+  if (value >= 10)
+    return trProblem("more than 10 times");
+
+  if (value > 1)
+    return trProblem("a few times");
+
+  return trProblem("once");
+}
+
+/**
+ * @brief Returns a printable name for a source, falling back to its identity when untitled.
+ */
+[[nodiscard]] static QString sourceLabel(int sourceId)
+{
+  static auto& project = DataModel::ProjectModel::instance();
+
+  const auto& sources = project.sources();
+  for (const auto& source : sources)
+    if (source.sourceId == sourceId && !source.title.isEmpty())
+      return source.title;
+
+  return trProblem("Source %1").arg(sourceId);
+}
+
+/**
+ * @brief Returns a printable name for the dataset that owns a failing transform, falling back to
+ *        its identity when the dataset is untitled or already gone.
+ */
+[[nodiscard]] static QString datasetLabel(int uniqueId)
+{
+  static auto& project = DataModel::ProjectModel::instance();
+
+  const auto& groups = project.groups();
+  for (const auto& group : groups) {
+    for (const auto& dataset : group.datasets)
+      if (dataset.uniqueId == uniqueId && !dataset.title.isEmpty())
+        return dataset.title;
+  }
+
+  return trProblem("Dataset %1").arg(uniqueId);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Parser checks
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reports a parser engine the watchdog switched off after repeated frame-budget overruns;
+ *        the source then produces no data at all until the script is fixed and reloaded.
+ */
+static void reportDisabledEngine(const DataModel::ScriptStat& stat, QList<Finding>& out)
+{
+  out.append(makeFinding(Misc::ProblemCenter::Error,
+                         "parser-disabled",
+                         trProblem("Frame parser was switched off"),
+                         trProblem("The frame parser of \"%1\" exceeded its time budget on too "
+                                   "many consecutive frames and was switched off. Last error: %2")
+                           .arg(sourceLabel(stat.sourceId), stat.lastError),
+                         trProblem("Simplify the parser so it returns within the frame budget, "
+                                   "then reload the script to re-enable it."),
+                         -1,
+                         QString()));
+}
+
+/**
+ * @brief Reports a parser that keeps throwing, carrying the retained message and a bucketed count.
+ */
+static void reportParserErrors(const DataModel::ScriptStat& stat, QList<Finding>& out)
+{
+  out.append(
+    makeFinding(Misc::ProblemCenter::Warning,
+                "parser-errors",
+                trProblem("Frame parser is failing"),
+                trProblem("The frame parser of \"%1\" has failed %2. Last error: %3")
+                  .arg(sourceLabel(stat.sourceId), bucketLabel(stat.errorCount), stat.lastError),
+                trProblem("Open the frame parser and fix the reported error; frames that "
+                          "fail to parse produce no dataset values."),
+                -1,
+                QString()));
+}
+
+/**
+ * @brief Walks the per-source parser engines and reports the ones that are disabled or failing.
+ */
+static void checkParserErrors(QList<Finding>& out)
+{
+  static auto& parser = DataModel::FrameParser::instance();
+
+  const auto stats = parser.scriptStats();
+  for (const auto& stat : stats) {
+    if (stat.disabled) {
+      reportDisabledEngine(stat, out);
+      continue;
+    }
+
+    if (stat.errorCount > 0)
+      reportParserErrors(stat, out);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Transform checks
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reports per-dataset value transforms that keep throwing; the dataset silently falls back
+ *        to its raw value, which looks like a wrong reading rather than a broken script.
+ */
+static void checkTransformErrors(QList<Finding>& out)
+{
+  static auto& builder = DataModel::FrameBuilder::instance();
+
+  const quint64 fails = builder.transformErrorCount();
+  if (fails == 0)
+    return;
+
+  const int uniqueId = builder.lastTransformDataset();
+  out.append(
+    makeFinding(Misc::ProblemCenter::Warning,
+                "transform-errors",
+                trProblem("A value transform is failing"),
+                trProblem("The transform of \"%1\" has failed %2, so the dataset shows "
+                          "its untransformed value. Last error: %3")
+                  .arg(datasetLabel(uniqueId), bucketLabel(fails), builder.lastTransformError()),
+                trProblem("Open the dataset's transform and fix the reported error."),
+                uniqueId,
+                kJumpDataset));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Registration
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Registers the script checkers, which poll the engine counters on the shared 1 Hz sample
+ *        tick and on an explicit re-run request.
+ */
+void Misc::ScriptCheckers::registerAll()
+{
+  static auto& center   = Misc::ProblemCenter::instance();
+  const quint8 triggers = Misc::ProblemCenter::LinkSample | Misc::ProblemCenter::OnDemand;
+
+  center.registerChecker(QStringLiteral("script.parser"), triggers, checkParserErrors);
+  center.registerChecker(QStringLiteral("script.transform"), triggers, checkTransformErrors);
+}

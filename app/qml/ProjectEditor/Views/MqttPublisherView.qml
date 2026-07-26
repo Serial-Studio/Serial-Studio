@@ -71,6 +71,13 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
+      // Search band: above the secondary toolbar, aligned with the tree search
+      //
+      EditorSearchBand {
+        tableDelegate: delegate
+      }
+
+      //
       // Action header: connection status + test/connect/CA-cert buttons
       //
       Rectangle {
@@ -101,7 +108,7 @@ Widgets.Pane {
             Layout.rightMargin: 4
             Layout.alignment: Qt.AlignVCenter
             on: Cpp_MQTT_Publisher.isConnected
-            onColor: "#15803d"
+            onColor: Cpp_ThemeManager.colors["alarm_ok"]
             offColor: Cpp_ThemeManager.colors["alarm"]
           }
 
@@ -195,6 +202,7 @@ Widgets.Pane {
         TableDelegate {
           id: delegate
 
+          searchable: true
           width: parent.width
           headerVisible: false
           parameterWidth: Math.min(delegate.width * 0.3, 256)

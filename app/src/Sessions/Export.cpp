@@ -6,7 +6,7 @@
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
@@ -35,6 +35,7 @@
 #  include "Misc/TimerEvents.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "Sessions/DatabaseManager.h"
+#  include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
@@ -62,11 +63,11 @@ Sessions::ExportWorker::ExportWorker(
   , m_projectSnapshotMutex(projectSnapshotMutex)
   , m_projectSnapshot(projectSnapshot)
 {
-  Q_ASSERT(rawQueue);
-  Q_ASSERT(snapshotQueue);
-  Q_ASSERT(operationMode);
-  Q_ASSERT(projectSnapshotMutex);
-  Q_ASSERT(projectSnapshot);
+  SS_ASSERT_LOG(rawQueue != nullptr);
+  SS_ASSERT_LOG(snapshotQueue != nullptr);
+  SS_ASSERT_LOG(operationMode != nullptr);
+  SS_ASSERT_LOG(projectSnapshotMutex != nullptr);
+  SS_ASSERT_LOG(projectSnapshot != nullptr);
 }
 
 /**
@@ -214,7 +215,7 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::Timestamp
  */
 void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
 {
-  Q_ASSERT(!m_dbOpen);
+  SS_ASSERT(!m_dbOpen, return);
 
   const auto dbPath  = Sessions::DatabaseManager::canonicalDbPath(frame.title);
   const auto dirPath = QFileInfo(dbPath).absolutePath();
@@ -488,7 +489,7 @@ void Sessions::ExportWorker::prepareHotpathQueries()
  */
 void Sessions::ExportWorker::writeRawBytes()
 {
-  Q_ASSERT(m_dbOpen);
+  SS_ASSERT_LOG(m_dbOpen);
 
   if (!m_db || !m_rawBytesQuery) [[unlikely]]
     return;
@@ -527,7 +528,7 @@ void Sessions::ExportWorker::writeRawBytes()
  */
 void Sessions::ExportWorker::writeTableSnapshots()
 {
-  Q_ASSERT(m_dbOpen);
+  SS_ASSERT_LOG(m_dbOpen);
 
   if (!m_db || !m_tableSnapshotQuery) [[unlikely]]
     return;
@@ -759,8 +760,8 @@ void Sessions::Export::setupExternalConnections()
  */
 void Sessions::Export::refreshProjectSnapshot()
 {
-  Q_ASSERT(m_appState);
-  Q_ASSERT(m_projectModel);
+  SS_ASSERT(m_appState != nullptr, return);
+  SS_ASSERT(m_projectModel != nullptr, return);
 
   QByteArray payload;
   if (m_appState->operationMode() == SerialStudio::ProjectFile) {
@@ -779,7 +780,7 @@ void Sessions::Export::refreshProjectSnapshot()
  */
 void Sessions::Export::setExportEnabled(const bool enabled)
 {
-  Q_ASSERT(m_appState);
+  SS_ASSERT(m_appState != nullptr, return);
 
   const auto& tk      = Licensing::CommercialToken::current();
   const bool licensed = tk.isValid() && SS_LICENSE_GUARD();
@@ -815,7 +816,7 @@ void Sessions::Export::setSettingsPersistent(const bool persistent)
  */
 void Sessions::Export::captureTableSnapshots()
 {
-  Q_ASSERT(m_frameBuilder);
+  SS_ASSERT(m_frameBuilder != nullptr, return);
 
   if (!exportEnabled() || !isOpen() || SerialStudio::isAnyPlayerOpen()) {
     m_lastTableSnapshot.clear();

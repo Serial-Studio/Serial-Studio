@@ -131,6 +131,8 @@ public:
 
   [[nodiscard]] inline const ma_device_config& config() const { return m_config; }
 
+  [[nodiscard]] inline bool backendReady() const noexcept { return m_init; }
+
   [[nodiscard]] int selectedSampleRate() const;
   [[nodiscard]] QStringList sampleRates() const;
 

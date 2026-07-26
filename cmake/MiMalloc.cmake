@@ -10,7 +10,7 @@
 # - Under the Serial Studio Commercial License for builds that include
 #   any Pro functionality.
 #
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 
 include_guard(GLOBAL)
 

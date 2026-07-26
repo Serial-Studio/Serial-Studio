@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -41,6 +41,7 @@
 #include "Concepts.h"
 #include "DSPSimd.h"
 #include "Platform/AppPlatform.h"
+#include "SSAssert.h"
 
 namespace DSP {
 //--------------------------------------------------------------------------------------------------
@@ -110,7 +111,7 @@ public:
    */
   [[nodiscard]] const T& operator[](std::size_t index) const
   {
-    Q_ASSERT(index < m_size);
+    SS_ASSERT_LOG(index < m_size);
     return m_data[wrappedIndex(index < m_size ? index : 0)];
   }
 
@@ -119,7 +120,7 @@ public:
    */
   [[nodiscard]] T& operator[](std::size_t index)
   {
-    Q_ASSERT(index < m_size);
+    SS_ASSERT_LOG(index < m_size);
     return m_data[wrappedIndex(index < m_size ? index : 0)];
   }
 
@@ -175,7 +176,7 @@ public:
    */
   [[nodiscard]] const T& at(std::size_t index) const
   {
-    Q_ASSERT(index < m_capacity);
+    SS_ASSERT_LOG(index < m_capacity);
     return m_data[wrappedIndex(index < m_capacity ? index : 0)];
   }
 
@@ -298,7 +299,7 @@ private:
    */
   [[nodiscard]] static std::shared_ptr<T[]> makeStorage(std::size_t n)
   {
-    Q_ASSERT(n > 0);
+    SS_ASSERT_LOG(n > 0);
 
     T* data                 = new T[n];
     const std::size_t bytes = n * sizeof(T);
@@ -433,8 +434,8 @@ struct TimeRing {
    */
   void appendDecimated(double t, double v)
   {
-    Q_ASSERT(interval > 0.0);
-    Q_ASSERT(time.capacity() == value.capacity());
+    SS_ASSERT(interval > 0.0, return);
+    SS_ASSERT(time.capacity() == value.capacity(), return);
 
     if (time.raw() == nullptr || value.raw() == nullptr) [[unlikely]]
       return;
@@ -934,10 +935,10 @@ template<typename XAt, typename YAt>
                                           ssfp_t& ymin,
                                           ssfp_t& ymax)
 {
-  Q_ASSERT(ws != nullptr);
-  Q_ASSERT(C > 0);
-  Q_ASSERT(ws->minY.size() >= C);
-  Q_ASSERT(ws->maxY.size() >= C);
+  SS_ASSERT(ws != nullptr, return false);
+  SS_ASSERT(C > 0, return false);
+  SS_ASSERT(ws->minY.size() >= C, return false);
+  SS_ASSERT(ws->maxY.size() >= C, return false);
 
   ymin = simdMinF64(ws->minY.data(), C);
   ymax = simdMaxF64(ws->maxY.data(), C);

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -41,6 +41,8 @@ QtObject {
     "editor.open": root.cmdEditorOpen,
     "editor.save": root.cmdEditorSave,
     "editor.saveAs": root.cmdEditorSaveAs,
+    "editor.undo": root.cmdEditorUndo,
+    "editor.redo": root.cmdEditorRedo,
     "editor.importProto": root.cmdEditorImportProto,
     "editor.restoreBackup": root.cmdEditorRestoreBackup,
     "editor.lock": root.cmdEditorLock,
@@ -76,6 +78,8 @@ QtObject {
     "editor.collapseTree": root.cmdEditorCollapseTree,
     "app.ai": root.cmdAppAi,
     "app.helpCenter": root.cmdAppHelpCenter,
+    "app.problems": root.cmdAppProblems,
+    "app.connectionDiagnostics": root.cmdAppConnectionDiagnostics,
     "app.preferences": root.cmdAppPreferences,
     "palette.open": root.cmdPaletteOpen,
     "app.quit": root.cmdAppQuit
@@ -107,6 +111,22 @@ QtObject {
         ? qsTr("Save the current project under a new name")
         : Cpp_JSON_ProjectModel.saveBlockerTitle
     function run() { Cpp_JSON_ProjectModel.saveJsonFile(true) }
+  }
+
+  readonly property QtObject cmdEditorUndo: QtObject {
+    readonly property bool enabled: Cpp_JSON_ProjectModel.canUndo
+    readonly property string tooltip: Cpp_JSON_ProjectModel.canUndo
+        ? qsTr("Undo: %1").arg(Cpp_JSON_ProjectModel.undoText)
+        : qsTr("Nothing to undo")
+    function run() { Cpp_JSON_ProjectModel.undo() }
+  }
+
+  readonly property QtObject cmdEditorRedo: QtObject {
+    readonly property bool enabled: Cpp_JSON_ProjectModel.canRedo
+    readonly property string tooltip: Cpp_JSON_ProjectModel.canRedo
+        ? qsTr("Redo: %1").arg(Cpp_JSON_ProjectModel.redoText)
+        : qsTr("Nothing to redo")
+    function run() { Cpp_JSON_ProjectModel.redo() }
   }
 
   readonly property QtObject cmdEditorImportProto: QtObject {
@@ -252,6 +272,15 @@ QtObject {
 
   readonly property QtObject cmdAppHelpCenter: QtObject {
     function run() { app.showHelpCenter() }
+  }
+
+  readonly property QtObject cmdAppProblems: QtObject {
+    function run() { app.showProblemCenter() }
+  }
+
+  readonly property QtObject cmdAppConnectionDiagnostics: QtObject {
+    readonly property bool enabled: !Cpp_Misc_ConnectionDiagnostics.running
+    function run() { app.runConnectionDiagnostics() }
   }
 
   readonly property QtObject cmdAppPreferences: QtObject {

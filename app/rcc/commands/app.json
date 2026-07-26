@@ -171,6 +171,47 @@
       "category": "tools"
     },
     {
+      "id": "app.problems",
+      "title": "Problem Center",
+      "icon": "notifications/warning",
+      "tooltip": "Review project, link, and script diagnostics",
+      "kind": "action",
+      "contexts": [
+        "app",
+        "dashboard",
+        "editor"
+      ],
+      "order": 10,
+      "category": "tools"
+    },
+    {
+      "id": "app.connectionDiagnostics",
+      "title": "Connection Diagnostics",
+      "icon": "commands/tools",
+      "tooltip": "Check device permissions, adapters, and host reachability",
+      "kind": "action",
+      "contexts": [
+        "app",
+        "dashboard",
+        "editor"
+      ],
+      "order": 11,
+      "category": "tools"
+    },
+    {
+      "id": "app.remoteAttach",
+      "title": "Remote Dashboard",
+      "icon": "commands/remote-attach",
+      "tooltip": "Watch another Serial Studio instance's dashboard over the network",
+      "kind": "action",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "order": 12,
+      "category": "tools"
+    },
+    {
       "id": "app.helpCenter",
       "title": "Help Center",
       "icon": "commands/help",

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -134,11 +134,89 @@ Widgets.SmartWindow {
           windowRoot.title       = Qt.binding(function() { return dashboardWidget.widgetTitle })
           windowRoot.deviceIndex = widgetSourceId
           if (windowRoot.icon !== undefined)
-            windowRoot.icon = SerialStudio.dashboardWidgetIcon(widgetType)
+            windowRoot.icon = loader.widgetIcon()
+        }
+      }
+
+      //
+      // Mirrors the widget's toolbar state onto the window chrome
+      //
+      function bindToolbar() {
+        if (widgetInstance.hasToolbar === undefined)
+          return
+
+        windowRoot.hasToolbar = widgetInstance.hasToolbar
+        if (widgetInstance.hasToolbarChanged !== undefined) {
+          widgetInstance.hasToolbarChanged.connect(function () {
+            windowRoot.hasToolbar = widgetInstance.hasToolbar
+          })
+        }
+      }
+
+      //
+      // Caption artwork: a package's declared icon, falling back to the built-in table
+      //
+      function widgetIcon() {
+        if (dashboardWidget.widgetIsExtension) {
+          const art = Cpp_UI_WidgetExtensions.iconUrl(dashboardWidget.widgetExtensionId, 16)
+          if (art.length > 0)
+            return art
+        }
+
+        return SerialStudio.dashboardWidgetIcon(dashboardWidget.widgetType)
+      }
+
+      //
+      // A widget that fails to load shows an explained tile, never an empty window
+      //
+      function showPlaceholder(reason) {
+        const path = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ExtensionPlaceholder.qml"
+        const placeholder = Qt.createComponent(path)
+        if (placeholder.status !== Component.Ready)
+          return
+
+        widgetInstance = placeholder.createObject(loader, {
+                                                    reason: reason,
+                                                    title: dashboardWidget.widgetTitle,
+                                                    extensionId: dashboardWidget.widgetExtensionId
+                                                  })
+        if (widgetInstance)
+          widgetInstance.anchors.fill = loader
+      }
+
+      //
+      // Extension windows open at the size the package declared
+      //
+      function applyExtensionSize() {
+        const info = Cpp_UI_WidgetExtensions.packageInfo(dashboardWidget.widgetExtensionId)
+        if (info.width > 0 && info.height > 0) {
+          window.width = info.width
+          window.height = info.height
         }
       }
 
       Component.onCompleted: {
+        if (dashboardWidget.widgetIsExtension) {
+          widgetInstance = dashboardWidget.createExtensionItem(loader, {
+                                                                model: dashboardWidget.widgetModel,
+                                                                windowRoot: loader.windowRoot,
+                                                                color: dashboardWidget.widgetColor,
+                                                                widgetId: dashboardWidget.widgetId
+                                                              })
+          if (widgetInstance) {
+            bindToolbar()
+            widgetInstance.anchors.fill = loader
+          }
+
+          else
+            showPlaceholder(dashboardWidget.widgetExtensionError)
+
+          if (window.width === window.minimumWidth && window.height === window.minimumHeight)
+            applyExtensionSize()
+
+          return
+        }
+
         const component = Qt.createComponent(dashboardWidget.widgetQmlPath)
         if (component.status === Component.Ready) {
           if (widgetInstance) {
@@ -156,24 +234,16 @@ Widgets.SmartWindow {
                                                   })
 
           if (!widgetInstance) {
-            console.error("Failed to create widget from", dashboardWidget.widgetQmlPath)
+            showPlaceholder(qsTr("The widget could not be created."))
             return
           }
 
-          if (widgetInstance.hasToolbar !== undefined) {
-            windowRoot.hasToolbar = widgetInstance.hasToolbar
-            if (widgetInstance.hasToolbarChanged !== undefined) {
-              widgetInstance.hasToolbarChanged.connect(function () {
-                windowRoot.hasToolbar = widgetInstance.hasToolbar
-              })
-            }
-          }
-
+          bindToolbar()
           widgetInstance.anchors.fill = loader
         }
 
         else if (component.status === Component.Error)
-          console.error("Component load error:", component.errorString())
+          showPlaceholder(component.errorString())
 
         if (window.width === window.minimumWidth && window.height === window.minimumHeight) {
           const gpsPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/GPS.qml"

@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/ProjectEditor.h"
@@ -38,6 +38,7 @@
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "UI/WidgetExtensions.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
@@ -449,6 +450,8 @@ void DataModel::ProjectEditor::setCurrentGroupPainterCode(const QString& code)
     return;
 
   m_selectedGroup.painterCode = code;
+  m_projectModelRef.setNextUndoHint(tr("Edit Painter Code"),
+                                    QStringLiteral("painter-code:%1").arg(m_selectedGroup.groupId));
   m_projectModelRef.updateGroup(m_selectedGroup.groupId, m_selectedGroup, false);
   Q_EMIT currentGroupPainterCodeChanged();
 }
@@ -471,6 +474,10 @@ void DataModel::ProjectEditor::setSelectedOutputWidgetTransmitFunction(const QSt
     }
   }
 
+  m_projectModelRef.setNextUndoHint(tr("Edit Transmit Function"),
+                                    QStringLiteral("owidget-tx:%1:%2")
+                                      .arg(QString::number(m_selectedOutputWidget.groupId),
+                                           QString::number(m_selectedOutputWidget.widgetId)));
   m_projectModelRef.updateOutputWidget(
     m_selectedOutputWidget.groupId, m_selectedOutputWidget.widgetId, m_selectedOutputWidget, false);
 }
@@ -715,6 +722,8 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
   m_datasetWidgets.insert(QStringLiteral("meter"), tr("Meter"));
 
+  appendExtensionWidgets();
+
   m_displayFormats.clear();
   m_displayFormats.insert(QLatin1String(""), tr("Auto"));
   m_displayFormats.insert(QStringLiteral("0d"), tr("Integer (0 decimals)"));
@@ -732,4 +741,27 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_plotOptions.clear();
   m_plotOptions.insert(qMakePair(false, false), tr("No"));
   m_plotOptions.insert(qMakePair(true, false), tr("Yes"));
+}
+
+/**
+ * @brief Adds one widget-picker entry per installed extension package, in the picker matching the
+ *        scope it declared. A bundled package that ships as a built-in implementation is skipped:
+ *        its built-in entry already exists and keeps its own label.
+ */
+void DataModel::ProjectEditor::appendExtensionWidgets()
+{
+  static auto& catalog = UI::WidgetExtensions::instance();
+
+  const auto packages = catalog.ids();
+  for (const auto& id : packages) {
+    const auto& package = catalog.descriptor(id);
+    if (!package.replaces.isEmpty() || package.title.isEmpty())
+      continue;
+
+    if (package.scope == UI::WidgetExtensions::GroupScope)
+      m_groupWidgets.insert(id, package.title);
+
+    else
+      m_datasetWidgets.insert(id, package.title);
+  }
 }

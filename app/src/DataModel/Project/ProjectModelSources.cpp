@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -66,6 +66,7 @@
  */
 void DataModel::ProjectModel::addSource()
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Device")};
 #ifndef BUILD_COMMERCIAL
   if (!m_sources.empty()) {
     if (!m_suppressMessageBoxes)
@@ -125,6 +126,7 @@ void DataModel::ProjectModel::deleteSource(int sourceId, bool confirm)
       return;
   }
 
+  const ProjectUndoScope undo_scope{*this, tr("Delete Device")};
   m_sources.erase(m_sources.begin() + sourceId);
 
   const auto remapSourceId = [sourceId](int& id) {
@@ -159,6 +161,7 @@ void DataModel::ProjectModel::deleteSource(int sourceId, bool confirm)
  */
 void DataModel::ProjectModel::duplicateSource(int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Duplicate Device")};
 #ifndef BUILD_COMMERCIAL
   (void)sourceId;
   return;
@@ -192,6 +195,7 @@ void DataModel::ProjectModel::updateSource(int sourceId,
                                            const DataModel::Source& source,
                                            const bool rebuildTree)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
@@ -222,6 +226,7 @@ void DataModel::ProjectModel::updateSourceTitle(int sourceId,
                                                 const QString& title,
                                                 const bool rebuildTree)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Rename Device")};
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
@@ -236,6 +241,7 @@ void DataModel::ProjectModel::updateSourceTitle(int sourceId,
  */
 void DataModel::ProjectModel::updateSourceBusType(int sourceId, int busType)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Bus Type")};
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
@@ -253,6 +259,11 @@ void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QStrin
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
+  if (m_sources[sourceId].frameParserCode == code)
+    return;
+
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit Frame Parser"), QStringLiteral("parser-code:%1").arg(sourceId)};
   m_sources[sourceId].frameParserCode = code;
   static auto& parser                 = DataModel::FrameParser::instance();
   parser.setSourceCode(sourceId, code);
@@ -267,6 +278,7 @@ void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QStrin
  */
 void DataModel::ProjectModel::captureSourceSettings(int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
@@ -293,6 +305,7 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
  */
 void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
@@ -313,6 +326,7 @@ void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
  */
 void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& settings)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
   if (m_sources.empty())
     return;
 
@@ -325,6 +339,7 @@ void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& se
  */
 void DataModel::ProjectModel::setSource0BusType(int busType)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Bus Type")};
   if (m_sources.empty())
     return;
 
@@ -340,6 +355,8 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
   if (m_sources.empty() || code == m_sources[0].frameParserCode)
     return;
 
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit Frame Parser"), QStringLiteral("parser-code:0")};
   m_sources[0].frameParserCode = code;
   setModified(true);
   Q_EMIT frameParserCodeChanged();
@@ -351,6 +368,7 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
  */
 void DataModel::ProjectModel::setFrameParserLanguage(int language)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Parser Language")};
   if (m_sources.empty() || language == m_sources[0].frameParserLanguage)
     return;
 
@@ -365,6 +383,7 @@ void DataModel::ProjectModel::setFrameParserLanguage(int language)
  */
 void DataModel::ProjectModel::updateSourceFrameParserLanguage(int sourceId, int language)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Parser Language")};
   auto it =
     std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
       return src.sourceId == sourceId;
@@ -390,6 +409,7 @@ void DataModel::ProjectModel::updateSourceFrameParserLanguage(int sourceId, int 
  */
 void DataModel::ProjectModel::setFrameParserTemplate(const QString& templateId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Parser Template")};
   if (m_sources.empty())
     return;
 
@@ -401,6 +421,7 @@ void DataModel::ProjectModel::setFrameParserTemplate(const QString& templateId)
  */
 void DataModel::ProjectModel::setFrameParserParams(const QJsonObject& params)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Parser Parameters")};
   if (m_sources.empty())
     return;
 
@@ -413,6 +434,7 @@ void DataModel::ProjectModel::setFrameParserParams(const QJsonObject& params)
 void DataModel::ProjectModel::updateSourceFrameParserTemplate(int sourceId,
                                                               const QString& templateId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Parser Template")};
   auto it =
     std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
       return src.sourceId == sourceId;
@@ -435,6 +457,7 @@ void DataModel::ProjectModel::updateSourceFrameParserTemplate(int sourceId,
  */
 void DataModel::ProjectModel::updateSourceFrameParserParams(int sourceId, const QJsonObject& params)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Change Parser Parameters")};
   auto it =
     std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
       return src.sourceId == sourceId;
@@ -463,6 +486,8 @@ void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& 
   if (m_sources[sourceId].frameParserCode == code)
     return;
 
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit Frame Parser"), QStringLiteral("parser-code:%1").arg(sourceId)};
   m_sources[sourceId].frameParserCode = code;
   setModified(true);
 }

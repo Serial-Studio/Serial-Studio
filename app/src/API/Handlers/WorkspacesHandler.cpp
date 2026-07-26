@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "API/Handlers/WorkspacesHandler.h"
@@ -389,6 +389,20 @@ struct ParsedWidgetId {
 }
 
 /**
+ * @brief Returns whether the named group carries a group-scope extension widget; extension
+ *        widgets share one enum value, so their scope comes from the entity, not from the type.
+ */
+[[nodiscard]] static bool groupHasExtensionWidget(const std::vector<DataModel::Group>& groups,
+                                                  int targetGroupUniqueId)
+{
+  for (const auto& group : groups)
+    if (group.uniqueId == targetGroupUniqueId)
+      return SerialStudio::getDashboardWidget(group) == SerialStudio::DashboardExtension;
+
+  return false;
+}
+
+/**
  * @brief Computes the dashboard-level relativeIndex for (widgetType, groupId).
  */
 [[nodiscard]] static int dashboardRelativeIndexFor(const std::vector<DataModel::Group>& groups,
@@ -396,12 +410,18 @@ struct ParsedWidgetId {
                                                    SerialStudio::DashboardWidget wtype,
                                                    int targetDatasetId = -1)
 {
-  const bool pro            = SerialStudio::activated();
-  const bool isLed          = (wtype == SerialStudio::DashboardLED);
-  const bool isGroupShape   = SerialStudio::isGroupWidget(wtype) && !isLed;
-  const bool isDatasetShape = SerialStudio::isDatasetWidget(wtype);
+  const bool pro      = SerialStudio::activated();
+  const bool isLed    = (wtype == SerialStudio::DashboardLED);
+  const bool isExt    = (wtype == SerialStudio::DashboardExtension);
+  bool isGroupShape   = SerialStudio::isGroupWidget(wtype) && !isLed;
+  bool isDatasetShape = SerialStudio::isDatasetWidget(wtype);
 
   int counter = 0;
+  if (isExt) {
+    isGroupShape   = groupHasExtensionWidget(groups, targetGroupUniqueId);
+    isDatasetShape = !isGroupShape;
+    counter        = isDatasetShape ? SerialStudio::extensionGroupWidgetCount(groups) : 0;
+  }
   for (const auto& group : groups) {
     if (group.uniqueId != targetGroupUniqueId) {
       counter += groupContribution(group, wtype, isLed, isGroupShape, isDatasetShape, pro);

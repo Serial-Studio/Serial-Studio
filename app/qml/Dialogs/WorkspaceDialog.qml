@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -70,8 +70,11 @@ Widgets.SmartDialog {
     _searchField.text = ""
     _nameField.text = ""
     _nameField.forceActiveFocus()
-    root.show()
+    if (!root.visible)
+      root.show()
+
     root.raise()
+    root.requestActivate()
   }
 
   //
@@ -94,8 +97,11 @@ Widgets.SmartDialog {
     root.checkedWidgets = map
     _nameField.selectAll()
     _nameField.forceActiveFocus()
-    root.show()
+    if (!root.visible)
+      root.show()
+
     root.raise()
+    root.requestActivate()
   }
 
   //

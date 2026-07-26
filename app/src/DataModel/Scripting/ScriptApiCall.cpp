@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -43,6 +43,7 @@
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -511,7 +512,7 @@ static QByteArray loadSdk(const QString& path)
  */
 void DataModel::ScriptApiCall::installLua(lua_State* L, int sourceId)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L != nullptr, return);
 
   lua_pushinteger(L, sourceId);
   lua_pushcclosure(L, luaApiCall, 1);
@@ -530,7 +531,7 @@ void DataModel::ScriptApiCall::installLua(lua_State* L, int sourceId)
  */
 void DataModel::ScriptApiCall::installJS(QJSEngine* js, int sourceId)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   auto global       = js->globalObject();
   auto existingProp = global.property(QStringLiteral("__ss_bridge"));
@@ -553,7 +554,7 @@ void DataModel::ScriptApiCall::installJS(QJSEngine* js, int sourceId)
  */
 void DataModel::ScriptApiCall::bindSourceIdJS(QJSEngine* js, const int* sourceId)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   auto global    = js->globalObject();
   auto bridgeVal = global.property(QStringLiteral("__ss_bridge"));
@@ -569,7 +570,7 @@ void DataModel::ScriptApiCall::bindSourceIdJS(QJSEngine* js, const int* sourceId
  */
 void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js, int sourceId)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
@@ -585,7 +586,7 @@ void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js, int sourceI
  */
 void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
 {
-  Q_ASSERT(js);
+  SS_ASSERT(js != nullptr, return);
 
   installHelperBridgesJS(js, sourceId);
   installJS(js, sourceId);
@@ -596,7 +597,7 @@ void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
  */
 void DataModel::ScriptApiCall::installAll(lua_State* L, int sourceId)
 {
-  Q_ASSERT(L);
+  SS_ASSERT(L != nullptr, return);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 

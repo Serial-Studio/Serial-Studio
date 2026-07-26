@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/DataTable.h"
@@ -24,6 +24,7 @@
 #include <QDebug>
 
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
@@ -192,7 +193,7 @@ void DataModel::DataTableStore::clearLookupCache() const
 const DataModel::RegisterValue* DataModel::DataTableStore::getByInternedKey(const char* table,
                                                                             const char* reg) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   for (const auto& entry : m_internedKeyCache) {
     if (entry.tablePtr == table && entry.regPtr == reg) {
@@ -228,8 +229,8 @@ bool DataModel::DataTableStore::setByInternedKey(const char* table,
                                                  const char* reg,
                                                  const RegisterValue& val)
 {
-  Q_ASSERT(m_initialized);
-  Q_ASSERT(m_isComputed.size() == m_storage.size());
+  SS_ASSERT(m_initialized, return false);
+  SS_ASSERT(m_isComputed.size() == m_storage.size(), return false);
 
   int idx = -1;
   for (const auto& entry : m_internedKeyCache) {
@@ -332,7 +333,7 @@ void DataModel::DataTableStore::captureRead(int slot) const
 const DataModel::RegisterValue* DataModel::DataTableStore::get(const QString& table,
                                                                const QString& reg) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   const int idx = indexOf(table, reg);
   if (idx < 0) [[unlikely]] {
@@ -352,8 +353,8 @@ bool DataModel::DataTableStore::set(const QString& table,
                                     const QString& reg,
                                     const RegisterValue& val)
 {
-  Q_ASSERT(m_initialized);
-  Q_ASSERT(m_isComputed.size() == m_storage.size());
+  SS_ASSERT(m_initialized, return false);
+  SS_ASSERT(m_isComputed.size() == m_storage.size(), return false);
 
   const int idx = indexOf(table, reg);
   if (idx < 0) [[unlikely]]
@@ -384,7 +385,7 @@ bool DataModel::DataTableStore::set(const QString& table,
  */
 qint64 DataModel::DataTableStore::handleOf(const QString& table, const QString& reg) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return -1);
 
   const int idx = indexOf(table, reg);
   if (idx < 0) [[unlikely]]
@@ -398,7 +399,7 @@ qint64 DataModel::DataTableStore::handleOf(const QString& table, const QString& 
  */
 const DataModel::RegisterValue* DataModel::DataTableStore::getByHandle(qint64 handle) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   if (handle < 0) [[unlikely]]
     return nullptr;
@@ -419,8 +420,8 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByHandle(qint64 ha
  */
 bool DataModel::DataTableStore::setByHandle(qint64 handle, const RegisterValue& val)
 {
-  Q_ASSERT(m_initialized);
-  Q_ASSERT(m_isComputed.size() == m_storage.size());
+  SS_ASSERT(m_initialized, return false);
+  SS_ASSERT(m_isComputed.size() == m_storage.size(), return false);
 
   if (handle < 0) [[unlikely]]
     return false;
@@ -454,7 +455,7 @@ void DataModel::DataTableStore::setDatasetRaw(int uniqueId,
                                               const QString& str,
                                               bool isNum)
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return);
 
   const auto it = m_datasetIndex.constFind(uniqueId);
   if (it == m_datasetIndex.constEnd()) [[unlikely]]
@@ -479,7 +480,7 @@ void DataModel::DataTableStore::setDatasetFinal(int uniqueId,
                                                 const QString& str,
                                                 bool isNum)
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return);
 
   const auto it = m_datasetIndex.constFind(uniqueId);
   if (it == m_datasetIndex.constEnd()) [[unlikely]]
@@ -500,7 +501,7 @@ void DataModel::DataTableStore::setDatasetFinal(int uniqueId,
  */
 const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetRaw(int uniqueId) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   const auto it = m_datasetIndex.constFind(uniqueId);
   if (it == m_datasetIndex.constEnd()) [[unlikely]] {
@@ -517,7 +518,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetRaw(int uni
  */
 const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinal(int uniqueId) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   const auto it = m_datasetIndex.constFind(uniqueId);
   if (it == m_datasetIndex.constEnd()) [[unlikely]] {
@@ -535,7 +536,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinal(int u
 const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetRawByAlias(
   const QString& alias) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   const auto it = m_aliasIndex.constFind(alias);
   if (it == m_aliasIndex.constEnd()) [[unlikely]] {
@@ -553,7 +554,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetRawByAlias(
 const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinalByAlias(
   const QString& alias) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return nullptr);
 
   const auto it = m_aliasIndex.constFind(alias);
   if (it == m_aliasIndex.constEnd()) [[unlikely]] {
@@ -573,7 +574,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinalByAlia
 std::pair<int, int> DataModel::DataTableStore::resolveAliasSlotsInterned(const char* alias,
                                                                          const char* kind) const
 {
-  Q_ASSERT(m_initialized);
+  SS_ASSERT(m_initialized, return std::make_pair(-1, -1));
 
   for (const auto& entry : m_internedAliasCache)
     if (entry.aliasPtr == alias)
@@ -756,7 +757,7 @@ void DataModel::DataTableStore::noteMissingAlias(const QString& alias, const cha
  */
 QVariant DataModel::TableApiBridge::tableGet(const QString& t, const QString& r)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return {});
 
   const auto* val = store->get(t, r);
   if (!val)
@@ -774,7 +775,7 @@ QVariant DataModel::TableApiBridge::tableGet(const QString& t, const QString& r)
  */
 void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, const QVariant& v)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return);
 
   if (!v.isValid() || v.typeId() == QMetaType::Nullptr)
     return;
@@ -792,7 +793,7 @@ void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, con
  */
 qint64 DataModel::TableApiBridge::tableHandle(const QString& t, const QString& r)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return -1);
   return store->handleOf(t, r);
 }
 
@@ -801,7 +802,7 @@ qint64 DataModel::TableApiBridge::tableHandle(const QString& t, const QString& r
  */
 QVariantList DataModel::TableApiBridge::tableHandleMany(const QString& t, const QVariantList& regs)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return {});
 
   QVariantList handles;
   handles.reserve(regs.size());
@@ -816,7 +817,7 @@ QVariantList DataModel::TableApiBridge::tableHandleMany(const QString& t, const 
  */
 QVariant DataModel::TableApiBridge::tableGetH(qint64 h)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return {});
 
   const auto* val = store->getByHandle(h);
   if (!val)
@@ -831,7 +832,7 @@ QVariant DataModel::TableApiBridge::tableGetH(qint64 h)
  */
 void DataModel::TableApiBridge::tableSetH(qint64 h, const QVariant& v)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return);
 
   if (!v.isValid() || v.typeId() == QMetaType::Nullptr)
     return;
@@ -850,7 +851,7 @@ void DataModel::TableApiBridge::tableSetH(qint64 h, const QVariant& v)
  */
 QVariant DataModel::TableApiBridge::datasetGetRaw(const QJSValue& sel)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return {});
 
   const RegisterValue* val = nullptr;
   if (sel.isString())
@@ -870,7 +871,7 @@ QVariant DataModel::TableApiBridge::datasetGetRaw(const QJSValue& sel)
  */
 QVariant DataModel::TableApiBridge::datasetGetFinal(const QJSValue& sel)
 {
-  Q_ASSERT(store);
+  SS_ASSERT(store != nullptr, return {});
 
   const RegisterValue* val = nullptr;
   if (sel.isString())

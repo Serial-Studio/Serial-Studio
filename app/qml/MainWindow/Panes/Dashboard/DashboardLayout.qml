@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -175,13 +175,18 @@ Widgets.Pane {
   }
 
   //
-  // API Server status indicator
+  // API server / remote attach status indicator
   //
   actionComponent: Component {
     Item {
-      opacity: Cpp_API_Server.enabled ?
-                 (Cpp_API_Server.clientCount > 0 ? 1 : 0.5) :
-                 0.0
+      id: indicator
+
+      readonly property bool mirrored: Cpp_API_Mirror.attached
+      readonly property bool serving: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+      readonly property bool pulsing: indicator.mirrored ? Cpp_API_Mirror.live : indicator.serving
+
+      opacity: indicator.mirrored ? 1.0 :
+                 (Cpp_API_Server.enabled ? (indicator.serving ? 1 : 0.5) : 0.0)
       implicitWidth: label.implicitWidth
       implicitHeight: label.implicitHeight
       Behavior on opacity { NumberAnimation { duration: 200 } }
@@ -196,14 +201,14 @@ Widgets.Pane {
         shadowVerticalOffset: 0
         shadowHorizontalOffset: 0
         enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
-        visible: Cpp_Misc_GraphicsBackend.effectsEnabled
-                 && Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
-        shadowColor: Cpp_API_Server.enabled ? Cpp_ThemeManager.colors["highlight"] :
-                                              Cpp_ThemeManager.colors["pane_caption_border"]
+        visible: Cpp_Misc_GraphicsBackend.effectsEnabled && indicator.pulsing
+        shadowColor: (indicator.mirrored || Cpp_API_Server.enabled) ?
+                       Cpp_ThemeManager.colors["highlight"] :
+                       Cpp_ThemeManager.colors["pane_caption_border"]
 
         SequentialAnimation on opacity {
           loops: Animation.Infinite
-          running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+          running: indicator.pulsing
 
           NumberAnimation {
             to: 1.00
@@ -221,7 +226,7 @@ Widgets.Pane {
 
         SequentialAnimation on brightness {
           loops: Animation.Infinite
-          running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+          running: indicator.pulsing
 
           NumberAnimation {
             to: 0.6
@@ -242,10 +247,25 @@ Widgets.Pane {
         id: label
 
         visible: opacity > 0
-        text: Cpp_API_Server.enabled ?
-                (Cpp_API_Server.clientCount > 0 ? qsTr("API Server Active (%1)").arg(Cpp_API_Server.clientCount) :
-                                                  qsTr("API Server Ready")) :
-                qsTr("API Server Off")
+        text: {
+          if (indicator.mirrored) {
+            if (Cpp_API_Mirror.stale)
+              return qsTr("Remote %1 - Stale").arg(Cpp_API_Mirror.endpoint)
+
+            if (Cpp_API_Mirror.live)
+              return qsTr("Remote %1 - Live").arg(Cpp_API_Mirror.endpoint)
+
+            return qsTr("Remote %1 - No Data").arg(Cpp_API_Mirror.endpoint)
+          }
+
+          if (!Cpp_API_Server.enabled)
+            return qsTr("API Server Off")
+
+          if (Cpp_API_Server.clientCount > 0)
+            return qsTr("API Server Active (%1)").arg(Cpp_API_Server.clientCount)
+
+          return qsTr("API Server Ready")
+        }
         font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
         color: Cpp_ThemeManager.colors["pane_caption_foreground"]
       }

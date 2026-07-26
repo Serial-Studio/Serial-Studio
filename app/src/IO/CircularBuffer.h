@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "Concepts.h"
+#include "SSAssert.h"
 
 namespace IO {
 
@@ -166,7 +167,6 @@ template<typename T, Concepts::ByteLike StorageType>
 StorageType& IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
 {
   const qsizetype current_size = size();
-  Q_ASSERT(index >= 0 && index < current_size);
   if (index < 0 || index >= current_size)
     return m_buffer[0];
 
@@ -272,7 +272,6 @@ template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
 {
   const qsizetype current_size = this->size();
-  Q_ASSERT(size <= current_size);
   if (size > current_size) [[unlikely]]
     return T{};
 
@@ -340,8 +339,10 @@ void IO::CircularBuffer<T, StorageType>::peekRangeInto(qsizetype offset,
                                                        qsizetype size,
                                                        T& out) const
 {
-  Q_ASSERT(offset >= 0);
-  Q_ASSERT(size >= 0);
+  SS_ASSERT(offset >= 0, {
+    out = T();
+    return;
+  });
 
   const qsizetype current_size = this->size();
   if (offset >= current_size || size <= 0) [[unlikely]] {
@@ -418,8 +419,8 @@ int IO::CircularBuffer<T, StorageType>::byteScanLinear(const StorageType* base,
                                                        int pos,
                                                        typename T::value_type byte)
 {
-  Q_ASSERT(base != nullptr);
-  Q_ASSERT(pos >= 0);
+  SS_ASSERT(base != nullptr, return -1);
+  SS_ASSERT(pos >= 0, return -1);
 
   if (pos >= current_size) [[unlikely]]
     return -1;
@@ -442,8 +443,8 @@ int IO::CircularBuffer<T, StorageType>::byteScanWrap(qsizetype current_size,
                                                      qsizetype head,
                                                      typename T::value_type byte) const
 {
-  Q_ASSERT(pos >= 0);
-  Q_ASSERT(head >= 0 && head < m_capacity);
+  SS_ASSERT(pos >= 0, return -1);
+  SS_ASSERT(head >= 0 && head < m_capacity, return -1);
 
   const qsizetype firstLen = m_capacity - head;
   const auto c             = static_cast<unsigned char>(byte);
@@ -477,8 +478,8 @@ int IO::CircularBuffer<T, StorageType>::shortPatternScanLinear(const StorageType
                                                                const typename T::value_type* pData,
                                                                qsizetype pSize)
 {
-  Q_ASSERT(base != nullptr);
-  Q_ASSERT(pSize >= 2 && pSize <= kShortPatternMax);
+  SS_ASSERT(base != nullptr, return -1);
+  SS_ASSERT(pSize >= 2 && pSize <= kShortPatternMax, return -1);
 
   const auto first     = static_cast<unsigned char>(pData[0]);
   const qsizetype last = current_size - pSize;
@@ -594,14 +595,12 @@ template<typename T, Concepts::ByteLike StorageType>
 typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer<T, StorageType>::
   findFirstOfPatterns(const QVector<T>& patterns) const
 {
-  Q_ASSERT(!patterns.isEmpty());
-
   const qsizetype bufSize = size();
   if (patterns.isEmpty() || bufSize <= 0) [[unlikely]]
     return {};
 
   static constexpr int kMaxPatterns = 8;
-  Q_ASSERT(patterns.size() <= kMaxPatterns);
+  SS_ASSERT_LOG(patterns.size() <= kMaxPatterns);
 
   struct PatInfo {
     const StorageType* data;

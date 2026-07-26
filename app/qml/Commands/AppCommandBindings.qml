@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtQuick
@@ -54,6 +54,9 @@ QtObject {
     "app.extensions": root.cmdAppExtensions,
     "app.examples": root.cmdAppExamples,
     "app.about": root.cmdAppAbout,
+    "app.problems": root.cmdAppProblems,
+    "app.connectionDiagnostics": root.cmdAppConnectionDiagnostics,
+    "app.remoteAttach": root.cmdAppRemoteAttach,
     "app.deepwiki": root.cmdAppDeepwiki,
     "app.quit": root.cmdAppQuit,
     "license.activate": root.cmdLicenseActivate,
@@ -128,6 +131,25 @@ QtObject {
 
   readonly property QtObject cmdAppAbout: QtObject {
     function run() { app.showAboutDialog() }
+  }
+
+  readonly property QtObject cmdAppProblems: QtObject {
+    readonly property bool visible: !app.runtimeMode
+    function run() { app.showProblemCenter() }
+  }
+
+  readonly property QtObject cmdAppConnectionDiagnostics: QtObject {
+    readonly property bool enabled: !Cpp_Misc_ConnectionDiagnostics.running
+    function run() { app.runConnectionDiagnostics() }
+  }
+
+  //
+  // Remote attach stays reachable while attached: the same entry is how a
+  // viewer gets back to the dialog to detach.
+  //
+  readonly property QtObject cmdAppRemoteAttach: QtObject {
+    readonly property bool visible: !app.runtimeMode
+    function run() { app.showRemoteAttach() }
   }
 
   readonly property QtObject cmdAppDeepwiki: QtObject {

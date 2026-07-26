@@ -39,8 +39,16 @@
 #  include "Licensing/CommercialToken.h"
 #  include "Misc/Utilities.h"
 #  include "MQTT/PublisherScript.h"
+#  include "SSAssert.h"
 
 Q_LOGGING_CATEGORY(lcMqttPub, "serialstudio.mqtt.publisher", QtCriticalMsg)
+
+//--------------------------------------------------------------------------------------------------
+// Constants: per-step deadlines. Attempts and backoff belong to the shared Async::RetryPolicy.
+//--------------------------------------------------------------------------------------------------
+
+static constexpr int kBrokerConnectTimeoutMs    = 15000;
+static constexpr int kBrokerDisconnectTimeoutMs = 5000;
 
 //==================================================================================================
 // PublisherWorker
@@ -123,7 +131,6 @@ MQTT::PublisherWorker::PublisherWorker(
   , m_messagesSent(messagesSent)
   , m_bytesSent(bytesSent)
   , m_script(nullptr)
-  , m_reconnectPending(false)
   , m_csvHeaderDirty(true)
 {
   m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
@@ -135,15 +142,12 @@ MQTT::PublisherWorker::PublisherWorker(
 }
 
 /**
- * @brief Destructor closes the broker session and tears down the script engine.
+ * @brief Destructor closes the broker session and tears down the script engine. Dropping the
+ *        runner first cancels whatever the reconnect flow still holds, silently.
  */
 MQTT::PublisherWorker::~PublisherWorker()
 {
-  if (m_reconnectConn) {
-    QObject::disconnect(m_reconnectConn);
-    m_reconnectConn = {};
-  }
-  m_reconnectPending = false;
+  m_runner.reset();
 
   if (m_client && m_client->state() != QMqttClient::Disconnected)
     m_client->disconnectFromHost();
@@ -153,7 +157,9 @@ MQTT::PublisherWorker::~PublisherWorker()
 }
 
 /**
- * @brief Worker-thread bootstrap: creates the QMqttClient and the script engine on this thread.
+ * @brief Worker-thread bootstrap: creates the QMqttClient, the task runner and the script engine
+ *        on this thread. The runner is built here and not in the constructor because a task tree
+ *        is thread-affine: its timers and connections must belong to the thread driving the client.
  */
 void MQTT::PublisherWorker::bootstrap()
 {
@@ -164,6 +170,7 @@ void MQTT::PublisherWorker::bootstrap()
   connect(m_client, &QMqttClient::stateChanged, this, &PublisherWorker::onClientStateChanged);
   connect(m_client, &QMqttClient::errorChanged, this, &PublisherWorker::onClientErrorChanged);
 
+  m_runner = std::make_unique<Async::TaskRunner>(this);
   m_script = new PublisherScript();
 }
 
@@ -184,10 +191,14 @@ QString MQTT::PublisherWorker::errorString(QMqttClient::ClientError error) const
 }
 
 /**
- * @brief Disconnects from the broker.
+ * @brief Disconnects from the broker, cancelling a reconnect still in flight so it cannot bring
+ *        the session back after the caller asked for it to end.
  */
 void MQTT::PublisherWorker::closeResources()
 {
+  if (m_runner)
+    m_runner->cancel();
+
   if (m_client && m_client->state() != QMqttClient::Disconnected)
     m_client->disconnectFromHost();
 }
@@ -533,49 +544,57 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
   if (!brokerChanged)
     return;
 
-  if (m_reconnectPending) {
-    if (m_client->state() != QMqttClient::Disconnected)
-      m_client->disconnectFromHost();
-
+  if (!m_runner)
     return;
-  }
 
-  m_reconnectPending = true;
-
-  m_reconnectConn =
-    connect(m_client, &QMqttClient::stateChanged, this, [this](QMqttClient::ClientState s) {
-      if (s != QMqttClient::Disconnected)
-        return;
-
-      if (m_reconnectConn) {
-        QObject::disconnect(m_reconnectConn);
-        m_reconnectConn = {};
-      }
-
-      QMetaObject::invokeMethod(
-        this, &PublisherWorker::finishPendingReconnect, Qt::QueuedConnection);
-    });
-
+  m_runner->cancel();
   m_client->disconnectFromHost();
+  m_runner->run(buildReconnectFlow());
 }
 
 /**
- * @brief Pushes the staged mirror to the client and reopens if still enabled.
+ * @brief Composes the reconnect a broker-setting change needs: wait out the disconnect, push the
+ *        staged mirror, then reopen under the shared retry policy. Running it as one tree is what
+ *        makes a second settings change supersede the first instead of racing it.
  */
-void MQTT::PublisherWorker::finishPendingReconnect()
+Async::Task* MQTT::PublisherWorker::buildReconnectFlow()
 {
-  m_reconnectPending = false;
+  SS_ASSERT_LOG(m_client != nullptr);
+  SS_ASSERT_LOG(m_runner != nullptr);
 
-  if (!m_client)
-    return;
+  auto* group = Async::sequential(QStringLiteral("mqtt-publisher-reconnect"));
 
-  if (m_client->state() != QMqttClient::Disconnected)
-    return;
+  if (m_client->state() != QMqttClient::Disconnected) {
+    auto* wait = Async::awaitSignal(QStringLiteral("broker-disconnect"));
+    wait->onSuccess(m_client, &QMqttClient::disconnected);
+    group->addChild(Async::timeout(wait, kBrokerDisconnectTimeoutMs, m_runner->clock()));
+  }
 
-  applyClientPropertiesUnsafe();
+  group->addChild(Async::invoke(QStringLiteral("broker-apply"), [this](QString& reason) {
+    Q_UNUSED(reason);
+    applyClientPropertiesUnsafe();
+    return true;
+  }));
 
-  if (m_cfg.enabled)
+  if (!m_cfg.enabled)
+    return group;
+
+  auto* attempt = Async::sequential(QStringLiteral("broker-open"));
+  attempt->addChild(Async::invoke(QStringLiteral("broker-dial"), [this](QString& reason) {
+    Q_UNUSED(reason);
     openBroker();
+    return true;
+  }));
+
+  auto* connected = Async::awaitSignal(QStringLiteral("broker-connect"));
+  connected->onSuccess(m_client, &QMqttClient::connected);
+  connected->onFailure(
+    m_client, &QMqttClient::disconnected, QStringLiteral("the broker closed the connection"));
+  connected->setAbortHandler([this]() { m_client->disconnectFromHost(); });
+  attempt->addChild(Async::timeout(connected, kBrokerConnectTimeoutMs, m_runner->clock()));
+
+  group->addChild(Async::retry(attempt, Async::RetryPolicy::autoReconnect(), m_runner->clock()));
+  return group;
 }
 
 /**
@@ -615,10 +634,13 @@ void MQTT::PublisherWorker::openBroker()
 }
 
 /**
- * @brief Closes the broker connection.
+ * @brief Closes the broker connection and cancels any reconnect still in flight.
  */
 void MQTT::PublisherWorker::closeBroker()
 {
+  if (m_runner)
+    m_runner->cancel();
+
   if (m_client && m_client->state() != QMqttClient::Disconnected)
     m_client->disconnectFromHost();
 }

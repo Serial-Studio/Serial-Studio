@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
@@ -25,6 +25,7 @@
 #include <QtGlobal>
 
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 // Frame.h defaults Dataset::fftWindow to the literal 5 (it cannot name the enumerator).
 static_assert(static_cast<int>(SerialStudio::FFTWindowBlackmanHarris) == 5,
@@ -49,7 +50,7 @@ inline constexpr float kFftWindowTwoPi = 2.0f * kFftWindowPi;
   if (N <= 1)
     return 1.0f;
 
-  Q_ASSERT(i < N);
+  SS_ASSERT(i < N, return 1.0f);
   const float d    = static_cast<float>(N - 1);
   const float x    = kFftWindowTwoPi * static_cast<float>(i) / d;
   const float t    = static_cast<float>(i) / d;
@@ -118,8 +119,43 @@ inline constexpr float kFftWindowTwoPi = 2.0f * kFftWindowPi;
  */
 inline void fillFftWindow(SerialStudio::FFTWindow type, float* out, unsigned int N)
 {
-  Q_ASSERT(out != nullptr || N == 0);
+  SS_ASSERT(out != nullptr || N == 0, return);
   for (unsigned int i = 0; i < N; ++i)
     out[i] = fftWindowValue(type, i, N);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Transform size contract
+//--------------------------------------------------------------------------------------------------
+
+inline constexpr int kMaxFftTransformSize = 262144;
+
+/**
+ * @brief Transform ceiling for the waterfall, deliberately below kMaxFftTransformSize: the
+ *        spectrogram materializes a QImage of (size / 2) x historySize 32-bit pixels, so the
+ *        full 262144 would ask for a 131072-column image (gigabytes at the 4096-row history
+ *        limit). FFTPlot has no such backing image and keeps the higher ceiling.
+ */
+inline constexpr int kMaxWaterfallFftSize = 65536;
+
+/**
+ * @brief Normalizes a dataset's sample count to the size the transform runs at: the largest
+ *        power of two not exceeding it, >= 8 bins, capped at @a maxSize. Ring capacity and
+ *        widget plan must derive from this under the same cap, or a hand-written fftSamples
+ *        leaves the widget re-planning against a size it never validated.
+ */
+[[nodiscard]] inline int normalizedFftSize(int samples, int maxSize)
+{
+  SS_ASSERT(maxSize >= 8, return 8);
+  const int clamped = qBound(8, samples, qMin(maxSize, kMaxFftTransformSize));
+  return 1 << static_cast<int>(std::log2(clamped));
+}
+
+/**
+ * @brief Normalizes a dataset's configured sample count against the global transform ceiling.
+ */
+[[nodiscard]] inline int normalizedFftSize(int samples)
+{
+  return normalizedFftSize(samples, kMaxFftTransformSize);
 }
 }  // namespace Widgets

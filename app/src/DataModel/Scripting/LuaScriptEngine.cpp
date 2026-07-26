@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include "DataModel/Scripting/LuaScriptEngine.h"
@@ -37,6 +37,7 @@
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Sandboxed library loader
@@ -89,7 +90,7 @@ static int luaPanicHandler(lua_State* L)
  */
 static void openSafeLibs(lua_State* L)
 {
-  Q_ASSERT(L != nullptr);
+  SS_ASSERT(L != nullptr, return);
 
   for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
     luaL_requiref(L, lib->name, lib->func, 1);
@@ -140,6 +141,8 @@ DataModel::LuaScriptEngine::LuaScriptEngine()
   , m_sourceId(0)
   , m_parseRef(LUA_NOREF)
   , m_consecutiveTimeouts(0)
+  , m_errorCount(0)
+  , m_lastError()
   , m_deadline(QDeadlineTimer::Forever)
 {
   createState();
@@ -162,10 +165,13 @@ DataModel::LuaScriptEngine::~LuaScriptEngine()
  */
 void DataModel::LuaScriptEngine::createState()
 {
-  Q_ASSERT(m_state == nullptr);
+  SS_ASSERT(m_state == nullptr, return);
 
   m_state = luaL_newstate();
-  Q_ASSERT(m_state != nullptr);
+  SS_ASSERT(m_state != nullptr, {
+    m_loaded = false;
+    return;
+  });
 
   lua_atpanic(m_state, luaPanicHandler);
 
@@ -243,6 +249,7 @@ void DataModel::LuaScriptEngine::reset()
 {
   destroyState();
   createState();
+  resetErrorStats();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,6 +307,57 @@ void DataModel::LuaScriptEngine::resetTimeoutCounter() noexcept
   m_consecutiveTimeouts = 0;
 }
 
+/**
+ * @brief Records a runtime parse failure for the 1 Hz diagnostics sample.
+ */
+void DataModel::LuaScriptEngine::noteError(const QString& message)
+{
+  ++m_errorCount;
+  m_lastError = message;
+}
+
+/**
+ * @brief Returns whether the watchdog cut this parser off after repeated timeouts.
+ */
+bool DataModel::LuaScriptEngine::disabled() const noexcept
+{
+  return m_disabled;
+}
+
+/**
+ * @brief Returns the most recent runtime parse error message.
+ */
+QString DataModel::LuaScriptEngine::lastError() const
+{
+  return m_lastError;
+}
+
+/**
+ * @brief Returns how many runtime parse failures this engine has seen.
+ */
+quint64 DataModel::LuaScriptEngine::errorCount() const noexcept
+{
+  return m_errorCount;
+}
+
+/**
+ * @brief Returns the current run of back-to-back watchdog timeouts.
+ */
+int DataModel::LuaScriptEngine::consecutiveTimeouts() const noexcept
+{
+  return m_consecutiveTimeouts;
+}
+
+/**
+ * @brief Clears the runtime error statistics so a repaired script stops being reported.
+ */
+void DataModel::LuaScriptEngine::resetErrorStats()
+{
+  m_errorCount = 0;
+  m_lastError.clear();
+  m_consecutiveTimeouts = 0;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Script loading
 //--------------------------------------------------------------------------------------------------
@@ -312,8 +370,8 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
                                             int sourceId,
                                             bool showMessageBoxes)
 {
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!script.isEmpty());
+  SS_ASSERT(sourceId >= 0, return false);
+  SS_ASSERT(!script.isEmpty(), return false);
 
   lua_State* const prevState        = m_state;
   const bool prevLoaded             = m_loaded;
@@ -509,8 +567,8 @@ bool DataModel::LuaScriptEngine::probeParseFunction(int sourceId, bool showMessa
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qsizetype len)
 {
-  Q_ASSERT(m_state != nullptr);
-  Q_ASSERT(data != nullptr);
+  SS_ASSERT(m_state != nullptr, return {});
+  SS_ASSERT(data != nullptr, return {});
 
   if (!m_loaded || m_disabled)
     return {};
@@ -527,6 +585,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qs
       const QString err = QString::fromUtf8(lua_tostring(m_state, -1));
       lua_pop(m_state, 1);
       qWarning() << "[LuaScriptEngine] Parse error:" << err;
+      noteError(err);
       if (err.contains(QLatin1String("timed out")))
         (void)noteTimeoutAndCheckDisabled(m_sourceId);
 
@@ -551,8 +610,8 @@ QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qs
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
-  Q_ASSERT(m_state != nullptr);
+  SS_ASSERT(!frame.isEmpty(), return {});
+  SS_ASSERT(m_state != nullptr, return {});
 
   const QByteArray utf8 = frame.toUtf8();
   return parseLuaText(utf8.constData(), utf8.size());
@@ -563,8 +622,8 @@ QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseUtf8(const QByteArray& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
-  Q_ASSERT(m_state != nullptr);
+  SS_ASSERT(!frame.isEmpty(), return {});
+  SS_ASSERT(m_state != nullptr, return {});
 
   return parseLuaText(frame.constData(), frame.size());
 }
@@ -574,8 +633,8 @@ QList<QStringList> DataModel::LuaScriptEngine::parseUtf8(const QByteArray& frame
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& frame)
 {
-  Q_ASSERT(!frame.isEmpty());
-  Q_ASSERT(m_state != nullptr);
+  SS_ASSERT(!frame.isEmpty(), return {});
+  SS_ASSERT(m_state != nullptr, return {});
 
   if (!m_loaded || m_disabled)
     return {};
@@ -598,6 +657,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
       const QString err = QString::fromUtf8(lua_tostring(m_state, -1));
       lua_pop(m_state, 1);
       qWarning() << "[LuaScriptEngine] Parse error:" << err;
+      noteError(err);
       if (err.contains(QLatin1String("timed out")))
         (void)noteTimeoutAndCheckDisabled(m_sourceId);
 
@@ -628,7 +688,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
  */
 QString DataModel::LuaScriptEngine::luaValueToString()
 {
-  Q_ASSERT(m_state != nullptr);
+  SS_ASSERT(m_state != nullptr, return {});
 
   switch (lua_type(m_state, -1)) {
     case LUA_TSTRING:
@@ -651,7 +711,7 @@ QString DataModel::LuaScriptEngine::luaValueToString()
  */
 QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
 {
-  Q_ASSERT(lua_istable(m_state, tableIndex));
+  SS_ASSERT(m_state != nullptr && lua_istable(m_state, tableIndex), return {});
 
   QStringList result;
   const int len = static_cast<int>(lua_rawlen(m_state, tableIndex));
@@ -671,7 +731,7 @@ QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
  */
 QStringList DataModel::LuaScriptEngine::scalarToStringList()
 {
-  Q_ASSERT(m_state != nullptr);
+  SS_ASSERT(m_state != nullptr, return {});
 
   QStringList frame;
   const int type = lua_type(m_state, -1);

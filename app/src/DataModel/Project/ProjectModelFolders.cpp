@@ -14,9 +14,9 @@
  * on your use case.
  *
  * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
- * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
  *
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <algorithm>
@@ -511,6 +511,7 @@ QString DataModel::ProjectModel::groupFolderTitle(int folderId) const
  */
 int DataModel::ProjectModel::addGroupFolder(int parentFolderId, const QString& title)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Folder")};
   if (parentFolderId != -1 && !folderExists(m_groupFolders, parentFolderId))
     parentFolderId = -1;
 
@@ -535,6 +536,7 @@ int DataModel::ProjectModel::addGroupFolder(int parentFolderId, const QString& t
  */
 void DataModel::ProjectModel::renameGroupFolder(int folderId, const QString& title)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Rename Folder")};
   if (title.simplified().isEmpty())
     return;
 
@@ -554,6 +556,7 @@ void DataModel::ProjectModel::renameGroupFolder(int folderId, const QString& tit
  */
 void DataModel::ProjectModel::deleteGroupFolder(int folderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Delete Folder")};
   auto it = std::find_if(m_groupFolders.begin(), m_groupFolders.end(), [folderId](const auto& f) {
     return f.folderId == folderId;
   });
@@ -580,6 +583,7 @@ void DataModel::ProjectModel::deleteGroupFolder(int folderId)
  */
 void DataModel::ProjectModel::moveGroupToFolder(int groupId, int parentFolderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Group")};
   if (parentFolderId != -1 && !folderExists(m_groupFolders, parentFolderId))
     return;
 
@@ -600,6 +604,7 @@ void DataModel::ProjectModel::moveGroupToFolder(int groupId, int parentFolderId)
  */
 void DataModel::ProjectModel::moveGroupFolderToFolder(int folderId, int parentFolderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Folder")};
   if (parentFolderId != -1 && !folderExists(m_groupFolders, parentFolderId))
     return;
 
@@ -625,6 +630,7 @@ void DataModel::ProjectModel::moveGroupFolderToFolder(int folderId, int parentFo
  */
 void DataModel::ProjectModel::moveGroupFolderInParent(int folderId, int direction)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Folder")};
   const int n = static_cast<int>(m_groupFolders.size());
   int from    = -1;
   for (int i = 0; i < n; ++i)
@@ -729,6 +735,7 @@ QString DataModel::ProjectModel::tableFolderTitle(int folderId) const
  */
 int DataModel::ProjectModel::addTableFolder(int parentFolderId, const QString& title)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Add Folder")};
   if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
     parentFolderId = -1;
 
@@ -755,6 +762,7 @@ int DataModel::ProjectModel::addTableFolder(int parentFolderId, const QString& t
  */
 void DataModel::ProjectModel::renameTableFolder(int folderId, const QString& title)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Rename Folder")};
   const QString clean = title.simplified().remove(QLatin1Char('/'));
   if (clean.isEmpty())
     return;
@@ -775,6 +783,7 @@ void DataModel::ProjectModel::renameTableFolder(int folderId, const QString& tit
  */
 void DataModel::ProjectModel::deleteTableFolder(int folderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Delete Folder")};
   auto it = std::find_if(m_tableFolders.begin(), m_tableFolders.end(), [folderId](const auto& f) {
     return f.folderId == folderId;
   });
@@ -801,6 +810,7 @@ void DataModel::ProjectModel::deleteTableFolder(int folderId)
  */
 void DataModel::ProjectModel::moveTableToFolder(const QString& tablePath, int parentFolderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Table")};
   if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
     return;
 
@@ -827,6 +837,7 @@ void DataModel::ProjectModel::moveTableToFolder(const QString& tablePath, int pa
  */
 void DataModel::ProjectModel::moveTableFolderToFolder(int folderId, int parentFolderId)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Folder")};
   if (parentFolderId != -1 && !folderExists(m_tableFolders, parentFolderId))
     return;
 
@@ -852,6 +863,7 @@ void DataModel::ProjectModel::moveTableFolderToFolder(int folderId, int parentFo
  */
 void DataModel::ProjectModel::moveTableFolderInParent(int folderId, int direction)
 {
+  const ProjectUndoScope undo_scope{*this, tr("Move Folder")};
   const int n = static_cast<int>(m_tableFolders.size());
   int from    = -1;
   for (int i = 0; i < n; ++i)
