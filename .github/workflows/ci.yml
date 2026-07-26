@@ -14,9 +14,9 @@
 # on your use case.
 #
 # For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
-# For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+# For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
 #
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 #
 
 #-------------------------------------------------------------------------------
@@ -1861,6 +1861,11 @@ jobs:
     - name: '🐍 Install Python dependencies'
       run: pip install -r tests/requirements.txt
 
+    - name: '⚖️ Verify REUSE licensing compliance'
+      run: |
+        pip install reuse
+        reuse lint
+
     - name: '🔬 Verify code conventions'
       run: python3 scripts/code-verify.py --check
 
@@ -1871,6 +1876,120 @@ jobs:
         name: code-verify-report
         path: .code-report
         if-no-files-found: ignore
+
+    # Spec 0037: every drift gate the repo owns has a caller. The snapshot
+    # projection is --strict here (locally it warns, because only a build can
+    # refresh api-schema.json); its failure message names the ordered fix.
+    - name: '🧬 Verify generated API surfaces'
+      run: |
+        python3 scripts/registry-verify.py
+        python3 scripts/generate-command-strings.py --check
+        python3 scripts/generate-property-registry.py --check
+        python3 scripts/generate-property-registry.py --check-snapshot --strict
+        python3 scripts/generate-sdk.py --check
+
+#-------------------------------------------------------------------------------
+# C++ unit tests (fast tier, runs beside lint, gates nothing downstream)
+#
+# Both architectures are required: DSPSimd.h picks its lane from the target
+# architecture, so an x86-only leg would leave every NEON kernel unverified.
+# The 15-minute timeout is slack; the job is budgeted at ~5 minutes and that
+# budget assumes a Qt cache hit. On a cache miss the install-qt.sh fallback
+# runs and the job takes considerably longer -- that is expected, not a
+# regression.
+#-------------------------------------------------------------------------------
+
+  unit:
+    name: '🧪 Unit Tests (${{ matrix.label }})'
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: x86_64
+            runs-on: ubuntu-24.04
+            qt_arch: x64
+            qt_host: gcc_64
+          - label: arm64
+            runs-on: ubuntu-24.04-arm
+            qt_arch: arm64
+            qt_host: gcc_arm64
+    runs-on: ${{ matrix.runs-on }}
+    timeout-minutes: 15
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v5
+      with:
+        submodules: 'recursive'
+
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          ninja-build \
+          libgl1-mesa-dev \
+          libegl1 \
+          libudev-dev \
+          libxkbcommon-dev \
+          libxkbcommon-x11-dev \
+          libxcb-cursor-dev \
+          libxcb-xkb-dev \
+          zlib1g-dev \
+          libexpat1-dev
+
+    - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
+      uses: actions/cache/restore@v5
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-${{matrix.qt_arch}}
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-${{matrix.qt_arch}}
+
+    - name: '⚙️ Install Qt (cache miss fallback)'
+      shell: bash
+      if: steps.qt_cache.outputs.cache-hit != 'true'
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: ${{matrix.qt_arch}}
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-${{matrix.qt_arch}}
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_HOST: ${{matrix.qt_host}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-${{matrix.qt_arch}}
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${QT_HOST}/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${QT_HOST}/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${QT_HOST}/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@latest
+      with:
+        useLocalCache: true
+
+    - name: '🚧 Configure with CMake'
+      run: cmake --preset unit-ci
+
+    - name: '🚧 Build unit-test tier'
+      run: cmake --build --preset unit-ci --target ss_unit_tests
+
+    - name: '🧪 Run ctest'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: ctest --preset unit-ci --output-on-failure
 
 #-------------------------------------------------------------------------------
 # Integration tests
