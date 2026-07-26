@@ -176,13 +176,21 @@ ss_add_unit_test(tst_async_engine
 # FileOpenEventFilter, the one class there that reached AppState and the project model, lives in its
 # own TU that this suite deliberately does not link.
 #
+# Two link-only additions keep the carve-out honest: SerialStudio.h rides along so AUTOMOC defines
+# SerialStudio::staticMetaObject (FrameReader's moc references the Q_ENUM metaobjects; the class has
+# no signals, so its moc TU is self-contained), and session_context_stub.cpp satisfies the
+# SessionContext::current() reference inside NotificationCenter::instance() without dragging the
+# real SessionContext.cpp dtor closure described below.
+#
 ss_add_unit_test(tst_frame_delimiters
   SOURCES tst_frame_delimiters.cpp
+          session_context_stub.cpp
           ${SS_APP_SRC}/IO/FrameReader.cpp
           ${SS_APP_SRC}/IO/Checksum.cpp
           ${SS_APP_SRC}/DataModel/NotificationCenter.cpp
           ${SS_APP_SRC}/Platform/AppPlatform.cpp
           ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_APP_SRC}/SerialStudio.h
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
