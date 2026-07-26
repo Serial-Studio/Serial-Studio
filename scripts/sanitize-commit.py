@@ -9,10 +9,18 @@
 #  - code-verify.py --fix     -> rules clang-format can't express
 #  - clang-format pass 2      -> reflow after code-verify's edits
 #  - code-verify.py --check   -> regenerate .code-report
+#  - code-verify.py --singleton-census --check -> spec-0039 global-state ratchet (blocking)
 #  - black                    -> format Python under app/, examples/, tests/, scripts/
 #  - documentation-verify.py  -> Markdown AI-narration scan
 #  - generate-sdk.py          -> regenerate SerialStudio.js / .lua from api-schema.json
-#  - registry-verify.py       -> spec-0028 icon/command registry + icon render-size lint
+#  - generate-property-registry.py -> spec-0036 dataset registry + spec-0037 gRPC field-number
+#                                     ledger and typed proto (all six generated artifacts)
+#  - generate-property-registry.py --check -> drift gate over those six artifacts
+#  - generate-property-registry.py --check-snapshot -> spec-0037 buildless projection of the
+#                                     dataset schema onto api-schema.json (warns locally,
+#                                     fails in CI, where only a build can refresh the snapshot)
+#  - registry-verify.py       -> spec-0028 icon/command registry + icon render-size lint,
+#                                spec-0037 assistant-corpus field/enum reference lint
 #  - build_search_index.py    -> refresh AI assistant BM25 index
 #
 # Sanitize only: committing and pushing are left to the developer.
@@ -147,6 +155,15 @@ def run_python_step_quiet(label: str, script: Path, *args: str) -> None:
         print(f"{script.name} found issues")
 
 
+def run_gate_step(label: str, script: Path, *args: str) -> bool:
+    """Run a step whose failure stops the pipeline instead of being reported."""
+    if not script.is_file():
+        return True
+
+    print(f"{label}...")
+    return run([sys.executable, str(script), *args]).returncode == 0
+
+
 def main() -> int:
     root = repo_root()
     os.chdir(root)
@@ -169,6 +186,14 @@ def main() -> int:
         "Regenerating .code-report", root / "scripts" / "code-verify.py", "--check"
     )
 
+    if not run_gate_step(
+        "Checking the singleton census",
+        root / "scripts" / "code-verify.py",
+        "--singleton-census",
+        "--check",
+    ):
+        return 1
+
     run_black(root)
 
     run_python_step(
@@ -185,6 +210,23 @@ def main() -> int:
     run_python_step(
         "Regenerating command translation strings",
         root / "scripts" / "generate-command-strings.py",
+    )
+
+    run_python_step(
+        "Regenerating the property registry, gRPC ledger and typed proto",
+        root / "scripts" / "generate-property-registry.py",
+    )
+
+    run_python_step(
+        "Checking generated property registry",
+        root / "scripts" / "generate-property-registry.py",
+        "--check",
+    )
+
+    run_python_step(
+        "Projecting the dataset schema onto api-schema.json",
+        root / "scripts" / "generate-property-registry.py",
+        "--check-snapshot",
     )
 
     run_python_step(

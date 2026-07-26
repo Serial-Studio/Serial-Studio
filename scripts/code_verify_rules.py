@@ -3110,6 +3110,106 @@ _FONT_PIXEL_OK_FILES = frozenset(
     }
 )
 
+# Color tokens live in `Cpp_ThemeManager.colors[...]` (113 keys, loaded from
+# app/rcc/themes/*.json). A literal color in a `color:`-family binding bypasses
+# them and inverts under fluent-dark -- `border.color: "white"` is correct in
+# the light theme and wrong in the dark one. Matching is scoped to binding
+# position (`color:`, `border.color:`, `*Color:`) so JS swatch arrays,
+# `property color` defaults, and model data stay out without an allow-list.
+_COLOR_BINDING_RE = re.compile(
+    r"(?:^|[\s{;(,])(?:[A-Za-z_][\w.]*\.)?"
+    r"(?P<prop>color|[A-Za-z_]\w*Color)\s*:\s*(?P<rhs>.+)$"
+)
+
+# MultiEffect cast-shadow ink: `shadowColor:` bound to pure black or white with
+# the opacity carried by `shadowOpacity` is not themeable chrome -- the light
+# theme's `shadow` token at 0.15 alpha would erase the shadow entirely.
+_SHADOW_INK_LITERALS = frozenset(
+    {'"#000000"', '"#000"', '"black"', '"#ffffff"', '"#fff"', '"white"'}
+)
+
+# A `color:` key inside an inline JS object literal (`{ label: ..., color: "#x" },`)
+# is data, not a QML binding: filter descriptors, categorical palettes, marker
+# swatches. Two flat-scan signals separate it from a real binding: the key is
+# preceded by a comma (JS separator; QML one-liners separate with `;`), or the
+# quoted value carries a trailing comma (QML bindings never do).
+_JS_OBJECT_COLOR_VALUE_RE = re.compile(r'^"[^"]*"\s*,\s*$')
+
+# "#RGB", "#ARGB", "#RRGGBB", "#AARRGGBB".
+_HEX_COLOR_RE = re.compile(r'"#(?:[0-9A-Fa-f]{3,4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})"')
+
+# Quoted SVG/CSS color name. "transparent" is deliberately absent from the set
+# below: it is the absence of a color rather than a color choice, and it is the
+# null branch of ~96 theme ternaries
+# (`selected ? colors["highlight"] : "transparent"`).
+_NAMED_COLOR_RE = re.compile(r'"([a-z]{3,20})"')
+_NAMED_COLORS = frozenset(
+    {
+        "aqua",
+        "beige",
+        "black",
+        "blue",
+        "brown",
+        "coral",
+        "crimson",
+        "cyan",
+        "darkblue",
+        "darkgray",
+        "darkgreen",
+        "darkgrey",
+        "darkred",
+        "fuchsia",
+        "gold",
+        "gray",
+        "green",
+        "grey",
+        "indigo",
+        "ivory",
+        "khaki",
+        "lavender",
+        "lightblue",
+        "lightgray",
+        "lightgreen",
+        "lightgrey",
+        "lime",
+        "magenta",
+        "maroon",
+        "navy",
+        "olive",
+        "orange",
+        "orchid",
+        "pink",
+        "plum",
+        "purple",
+        "red",
+        "salmon",
+        "silver",
+        "skyblue",
+        "steelblue",
+        "tan",
+        "teal",
+        "tomato",
+        "turquoise",
+        "violet",
+        "wheat",
+        "white",
+        "whitesmoke",
+        "yellow",
+    }
+)
+
+
+def _qml_color_literal(rhs: str) -> str | None:
+    """First hardcoded color literal on a binding's right-hand side, or None.
+    Hex is preferred over a name so a mixed line reports the hex."""
+    m = _HEX_COLOR_RE.search(rhs)
+    if m:
+        return m.group(0)
+    for m in _NAMED_COLOR_RE.finditer(rhs):
+        if m.group(1) in _NAMED_COLORS:
+            return m.group(0)
+    return None
+
 
 def _qml_rules(src: str, path: Path, fence_mask: list[bool]) -> list[Finding]:
     """QML semantic rules. Line-based: tree-sitter doesn't have a published
@@ -3160,6 +3260,41 @@ def _qml_rules(src: str, path: Path, fence_mask: list[bool]) -> list[Finding]:
                 )
             )
 
+        # qml-hardcoded-color: a hex or named color literal as the value of a
+        # `color:`-family binding. A right-hand side mentioning
+        # `Cpp_ThemeManager` is token-respecting and skipped, which covers
+        # `Qt.darker(Cpp_ThemeManager.colors["text"], 1.5)` and every ternary
+        # carrying a theme branch. A `color:` key inside an inline JS object
+        # literal (comma before the key, or trailing comma after the quoted
+        # value) is data, not a binding; QML one-liners separate with `;` and
+        # never trail a comma, so they still match. `shadowColor:` bound to
+        # pure black/white is cast-shadow ink, not themeable chrome.
+        m = _COLOR_BINDING_RE.search(line)
+        if m and "Cpp_ThemeManager" not in m.group("rhs"):
+            rhs = m.group("rhs")
+            is_js_object_key = line[: m.start("prop")].rstrip().endswith(",") or bool(
+                _JS_OBJECT_COLOR_VALUE_RE.match(rhs.strip())
+            )
+            literal = None if is_js_object_key else _qml_color_literal(rhs)
+            if (
+                literal
+                and m.group("prop") == "shadowColor"
+                and literal.lower() in _SHADOW_INK_LITERALS
+            ):
+                literal = None
+            if literal:
+                out.append(
+                    Finding(
+                        i,
+                        "qml-hardcoded-color",
+                        f"hardcoded color {literal} in a color binding -- bind "
+                        f'`Cpp_ThemeManager.colors["<token>"]` instead (the '
+                        f"theme exposes error, alarm, alarm_ok, alarm_warning, "
+                        f"alarm_critical, accent, highlight) so the value "
+                        f"tracks fluent-dark",
+                    )
+                )
+
     return out
 
 
@@ -3180,6 +3315,11 @@ def _qml_rules(src: str, path: Path, fence_mask: list[bool]) -> list[Finding]:
 # Qualified accessor call: `X::instance()`, `A::B::instance()`, etc.
 _SINGLETON_INSTANCE_RE = re.compile(r"\b[A-Za-z_][\w:]*::instance\(\)")
 
+# Qt's own static accessors (QCoreApplication::instance() and friends) are not
+# Serial Studio singletons: no unpinned construction order, nothing to capture.
+# Scrubbed from the line before the rules above run.
+_QT_INSTANCE_RE = re.compile(r"\bQ[A-Z]\w*::instance\(\)")
+
 # Interim hotpath cache of a singleton reference/pointer -- not a fresh edge.
 _SINGLETON_CACHE_RE = re.compile(
     r"^\s*static\s+(?:const\s+)?auto\s*[&*]\s*\w+\s*=\s*&?\s*"
@@ -3191,8 +3331,14 @@ _SINGLETON_CACHE_RE = re.compile(
 _SINGLETON_ASSERT_RE = re.compile(r"^\s*Q_ASSERT(?:_X)?\s*\(")
 
 # Files that ARE the composition root / process entry: instance() here is
-# intentional wiring, matched on the repo-relative path tail.
-_SINGLETON_ROOT_FILES = ("/app/src/main.cpp", "/app/src/Misc/ModuleManager.cpp")
+# intentional wiring, matched on the repo-relative path tail. SessionContext.cpp
+# joins them as the forwarding bridge of spec 0039: its accessor bodies are the
+# single place where a session subsystem is reached by name.
+_SINGLETON_ROOT_FILES = (
+    "/app/src/main.cpp",
+    "/app/src/Misc/ModuleManager.cpp",
+    "/app/src/SessionContext.cpp",
+)
 
 # Enclosing functions where instance() is sanctioned: the Meyers accessor's
 # own definition and each module's setupExternalConnections() wiring body.
@@ -3254,7 +3400,7 @@ def _singleton_instance_findings(
     for i, raw in enumerate(src_text.split("\n"), start=1):
         if i - 1 < len(fence_mask) and fence_mask[i - 1]:
             continue
-        scrubbed = _strip_strings_and_line_comments(raw)
+        scrubbed = _QT_INSTANCE_RE.sub("", _strip_strings_and_line_comments(raw))
         if not _SINGLETON_INSTANCE_RE.search(scrubbed):
             continue
         if _SINGLETON_CACHE_RE.search(scrubbed):
@@ -3274,6 +3420,283 @@ def _singleton_instance_findings(
             )
         )
     return out
+
+
+# ---------------------------------------------------------------------------
+# arch-session-context-bypass (spec 0039)
+# ---------------------------------------------------------------------------
+#
+# A class that took a SessionContext& already declares its session dependencies
+# in its constructor. Every remaining `X::instance()` in that file is a relapse,
+# including the two forms `arch-singleton-instance` sanctions repo-wide (the
+# `static auto&` cache and the ctor init-list capture) -- those are exactly what
+# a converted class falls back into. The one exception is the class's own
+# `instance()` accessor, which is where SessionContext::current() is legitimately
+# passed to the constructor.
+
+# Marker that a file is a converted class: it takes the context by reference.
+_SESSION_CONTEXT_MARKER = "SessionContext&"
+
+# Enclosing function where instance() stays sanctioned in a converted class.
+_SESSION_CONTEXT_SANCTIONED_FUNCS = frozenset({"instance"})
+
+
+def _session_context_bypass_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag any singleton reach left in a class that takes a SessionContext&."""
+    if path.suffix not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp", ".hxx"):
+        return []
+    if _is_vendored_path(path):
+        return []
+    if _SESSION_CONTEXT_MARKER not in src_text:
+        return []
+    posix = path.resolve().as_posix()
+    if any(posix.endswith(tail) for tail in _SINGLETON_ROOT_FILES):
+        return []
+    if not HAS_TREE_SITTER:
+        return []
+
+    src = src_text.encode("utf-8")
+    tree = _CPP_PARSER.parse(src)
+    sanctioned_spans: list[tuple[int, int]] = []
+    for n in _walk(tree.root_node):
+        if n.type != "function_definition":
+            continue
+        if _enclosing_def_name(n, src) in _SESSION_CONTEXT_SANCTIONED_FUNCS:
+            sanctioned_spans.append((n.start_point[0] + 1, n.end_point[0] + 1))
+
+    def sanctioned(line: int) -> bool:
+        return any(lo <= line <= hi for lo, hi in sanctioned_spans)
+
+    out: list[Finding] = []
+    for i, raw in enumerate(src_text.split("\n"), start=1):
+        if i - 1 < len(fence_mask) and fence_mask[i - 1]:
+            continue
+        scrubbed = _QT_INSTANCE_RE.sub("", _strip_strings_and_line_comments(raw))
+        if not _SINGLETON_INSTANCE_RE.search(scrubbed):
+            continue
+        if sanctioned(i):
+            continue
+        out.append(
+            Finding(
+                i,
+                "arch-session-context-bypass",
+                "singleton reach inside a class that takes a SessionContext& -- "
+                "acquire the dependency through the injected context "
+                "(`m_ctx.projectModel()`), not through ::instance(); the static "
+                "cache and ctor-capture forms count too. Only the class's own "
+                "instance() accessor may pass SessionContext::current(); see "
+                "doc/claude/specs/0039-session-context/",
+            )
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
+# arch-context-ctor-nonempty (spec 0039 M2)
+# ---------------------------------------------------------------------------
+#
+# `SessionContext::current()` is a function-local static. A context whose
+# constructor built the session modules would re-enter that Meyers guard from
+# every module constructor that reaches a singleton (FrameBuilder -> LemonSqueezy,
+# FrameParser -> FrameBuilder, AppState -> ProjectModel) and abort at startup
+# with `__cxa_guard_acquire detected recursive initialization` -- the same crash
+# that shipped from ProjectModel's ctor closure on 2026-07-07. Ownership is
+# installed by adopt*() after current() has returned and released by shutdown(),
+# so both bodies must stay empty. Blocking, because the failure is a startup
+# abort on every machine.
+
+# The two files that may define SessionContext's ctor / dtor.
+_CONTEXT_CTOR_FILES = (
+    "/app/src/SessionContext.cpp",
+    "/app/src/SessionContext.h",
+)
+
+# Special member functions whose bodies must stay empty.
+_CONTEXT_CTOR_FUNCS = frozenset({"SessionContext", "~SessionContext"})
+
+
+def _context_ctor_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag any statement inside SessionContext's constructor or destructor."""
+    posix = path.resolve().as_posix()
+    if not any(posix.endswith(tail) for tail in _CONTEXT_CTOR_FILES):
+        return []
+    if not HAS_TREE_SITTER:
+        return []
+
+    src = src_text.encode("utf-8")
+    tree = _CPP_PARSER.parse(src)
+
+    out: list[Finding] = []
+    for n in _walk(tree.root_node):
+        if n.type != "function_definition":
+            continue
+        name = _enclosing_def_name(n, src)
+        if name not in _CONTEXT_CTOR_FUNCS:
+            continue
+        body = n.child_by_field_name("body")
+        if body is None:
+            continue
+        statements = [
+            c for c in body.named_children if c.type not in ("comment", "ERROR")
+        ]
+        if not statements:
+            continue
+        line = statements[0].start_point[0] + 1
+        if line - 1 < len(fence_mask) and fence_mask[line - 1]:
+            continue
+        out.append(
+            Finding(
+                line,
+                "arch-context-ctor-nonempty",
+                f"statement inside `{name}` -- SessionContext's constructor and "
+                f"destructor must stay empty, or a module ctor that reaches a "
+                f"singleton re-enters the current() Meyers guard and aborts at "
+                f"startup. Install ownership with adopt*() from the composition "
+                f"root and release it in shutdown(); see "
+                f"doc/claude/specs/0039-session-context/m2-plan.md",
+            )
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
+# arch-session-adopt-site (spec 0039 M2)
+# ---------------------------------------------------------------------------
+#
+# The pinned construction order is only pinned while it lives in one readable
+# sequence. An adopt*() call anywhere else either builds a session subsystem
+# outside that sequence or hands a second object to a slot that INV-5 says is
+# assigned exactly once. Blocking for the same reason as the rule above: both
+# failures are startup-time and neither is visible in review of the call site.
+
+# `ctx.adoptX(...)` / `SessionContext::current().adoptX(...)` -- the call form.
+_ADOPT_CALL_RE = re.compile(r"(?:\.|->)\s*adopt[A-Z]\w*\s*\(")
+
+# The composition root is the one sanctioned adoption site.
+_ADOPT_ROOT_FILES = ("/app/src/Misc/ModuleManager.cpp",)
+
+
+def _session_adopt_site_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag SessionContext adopt*() calls outside the composition root."""
+    if path.suffix not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp", ".hxx"):
+        return []
+    if _is_vendored_path(path):
+        return []
+    posix = path.resolve().as_posix()
+    if any(posix.endswith(tail) for tail in _ADOPT_ROOT_FILES):
+        return []
+
+    out: list[Finding] = []
+    for i, raw in enumerate(src_text.split("\n"), start=1):
+        if i - 1 < len(fence_mask) and fence_mask[i - 1]:
+            continue
+        scrubbed = _strip_strings_and_line_comments(raw)
+        if not _ADOPT_CALL_RE.search(scrubbed):
+            continue
+        out.append(
+            Finding(
+                i,
+                "arch-session-adopt-site",
+                "SessionContext adopt*() call outside the composition root -- "
+                "the pinned construction order lives in "
+                "Misc::ModuleManager::instantiateCoreModules() and nowhere else, "
+                "and a slot is assigned exactly once (INV-5); see "
+                "doc/claude/specs/0039-session-context/m2-plan.md",
+            )
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Singleton census (spec 0039)
+# ---------------------------------------------------------------------------
+#
+# `arch-singleton-instance` reports what is left after every sanctioned form is
+# subtracted, which is why it can read near zero while the global-state surface
+# is untouched. The census counts every occurrence and says which form it takes,
+# so the surface has a number that can be baselined and trended down.
+
+# Deferred pointer assignment: `m_x = &X::instance();` in a wiring body.
+_SINGLETON_DEFERRED_RE = re.compile(
+    r"^\s*[\w.>-]*\w\s*=\s*&\s*[A-Za-z_][\w:]*::instance\(\)"
+)
+
+# The class being reached: the `X` of `X::instance()`.
+_SINGLETON_CLASS_RE = re.compile(r"\b([A-Za-z_][\w:]*)::instance\(\)")
+
+SINGLETON_CENSUS_BUCKETS = (
+    "root",
+    "accessor",
+    "ctor-capture",
+    "deferred",
+    "static-cache",
+    "loose",
+)
+
+
+def singleton_census(path: Path, src_text: str) -> dict:
+    """Classify every `X::instance()` occurrence in one file into the six
+    spec-0039 buckets. Returns {"total", "buckets", "classes"}; the caller
+    aggregates. Needs tree-sitter for the accessor / ctor-capture spans and
+    reports everything as `loose` without it, so a census taken on a machine
+    with no parser is refused by the driver rather than silently wrong."""
+    buckets = {name: 0 for name in SINGLETON_CENSUS_BUCKETS}
+    classes: dict[str, int] = {}
+    if not _SINGLETON_INSTANCE_RE.search(src_text):
+        return {"total": 0, "buckets": buckets, "classes": classes}
+
+    posix = path.resolve().as_posix()
+    is_root = any(posix.endswith(tail) for tail in _SINGLETON_ROOT_FILES)
+
+    accessor_spans: list[tuple[int, int]] = []
+    capture_spans: list[tuple[int, int]] = []
+    if HAS_TREE_SITTER:
+        src = src_text.encode("utf-8")
+        tree = _CPP_PARSER.parse(src)
+        for n in _walk(tree.root_node):
+            if n.type == "field_initializer_list":
+                capture_spans.append((n.start_point[0] + 1, n.end_point[0] + 1))
+                continue
+            if n.type != "function_definition":
+                continue
+            if _enclosing_def_name(n, src) == "instance":
+                accessor_spans.append((n.start_point[0] + 1, n.end_point[0] + 1))
+
+    def within(spans: list[tuple[int, int]], line: int) -> bool:
+        return any(lo <= line <= hi for lo, hi in spans)
+
+    total = 0
+    for i, raw in enumerate(src_text.split("\n"), start=1):
+        scrubbed = _strip_strings_and_line_comments(raw)
+        hits = _SINGLETON_CLASS_RE.findall(scrubbed)
+        if not hits:
+            continue
+
+        if is_root:
+            bucket = "root"
+        elif within(accessor_spans, i):
+            bucket = "accessor"
+        elif within(capture_spans, i):
+            bucket = "ctor-capture"
+        elif _SINGLETON_DEFERRED_RE.search(scrubbed):
+            bucket = "deferred"
+        elif _SINGLETON_CACHE_RE.search(scrubbed):
+            bucket = "static-cache"
+        else:
+            bucket = "loose"
+
+        total += len(hits)
+        buckets[bucket] += len(hits)
+        for name in hits:
+            classes[name] = classes.get(name, 0) + 1
+
+    return {"total": total, "buckets": buckets, "classes": classes}
 
 
 # ---------------------------------------------------------------------------
@@ -3298,6 +3721,9 @@ def analyze(path: Path, src_text: str, fence_mask: list[bool]) -> list[Finding]:
         out.extend(_stdio_findings(src_text, path, fence_mask))
         out.extend(_api_scope_naming_findings(src_text, path, fenced))
         out.extend(_singleton_instance_findings(src_text, path, fence_mask))
+        out.extend(_session_context_bypass_findings(src_text, path, fence_mask))
+        out.extend(_context_ctor_findings(src_text, path, fence_mask))
+        out.extend(_session_adopt_site_findings(src_text, path, fence_mask))
         return out
     if suffix == ".qml":
         out.extend(_qml_rules(src_text, path, fence_mask))

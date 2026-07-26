@@ -26,6 +26,7 @@ every script engine right after apiCall is installed (see ScriptApiCall).
 This script is CWD-independent and writes LF line endings on every platform.
 """
 
+import argparse
 import json
 import re
 import sys
@@ -69,6 +70,23 @@ def ordered_params(cmd):
 def js_ident(name):
     """A JS-safe local variable name for a parameter."""
     return name
+
+
+def enum_doc_lines(cmd, optional, comment):
+    """Document each enum-valued optional parameter's legal values above the wrapper.
+
+    An SDK reader picking values out of the options bag otherwise has to open the schema
+    to learn that fftWindow is 0..14 and widget is a fixed vocabulary.
+    """
+    props = cmd.get("properties", {})
+    lines = []
+    for name in optional:
+        domain = props.get(name, {}).get("enum")
+        if not isinstance(domain, list) or not domain:
+            continue
+        values = " | ".join(json.dumps(v) for v in domain)
+        lines.append("%s options.%s: %s" % (comment, name, values))
+    return lines
 
 
 # --------------------------------------------------------------------------
@@ -208,6 +226,7 @@ def emit_js(commands):
             args.append(opt_arg)
 
         sig = ", ".join(args)
+        lines += enum_doc_lines(cmd, optional, "//")
         lines.append("%s = function(%s) {" % (cmd["name"], sig))
         lines.append("  var p = {};")
         for name, enc in body_params:
@@ -328,6 +347,7 @@ def emit_lua(commands):
             args.append(opt_arg)
 
         sig = ", ".join(args)
+        lines += enum_doc_lines(cmd, optional, "--")
         lines.append("function %s(%s)" % (cmd["name"], sig))
         lines.append("  local p = {}")
         for name, enc in body_params:
@@ -420,7 +440,27 @@ def collect_symbols(commands):
     return sorted(s for s in symbols if not s.startswith("__"))
 
 
+def render_all(commands):
+    """Return every generated artifact as {path: bytes}, so writing and checking share one render."""
+    symbols = collect_symbols(commands)
+    return {
+        OUT_JS: emit_js(commands).encode("utf-8"),
+        OUT_LUA: emit_lua(commands).encode("utf-8"),
+        OUT_SYMBOLS: (json.dumps(symbols, indent=2) + "\n").encode("utf-8"),
+    }, symbols
+
+
 def main():
+    parser = argparse.ArgumentParser(
+        description="Generate the SerialStudio JS/Lua SDK."
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="render in memory and byte-compare against the committed SDK; exit 1 on drift",
+    )
+    args = parser.parse_args()
+
     if not SCHEMA.exists():
         print(
             "[sdk] %s not found; run --dump-api-schema first" % SCHEMA, file=sys.stderr
@@ -431,12 +471,28 @@ def main():
     commands = drop_namespace_collisions(commands)
     commands.sort(key=lambda c: c["name"])
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    OUT_JS.write_bytes(emit_js(commands).encode("utf-8"))
-    OUT_LUA.write_bytes(emit_lua(commands).encode("utf-8"))
+    rendered, symbols = render_all(commands)
 
-    symbols = collect_symbols(commands)
-    OUT_SYMBOLS.write_bytes((json.dumps(symbols, indent=2) + "\n").encode("utf-8"))
+    if args.check:
+        stale = [
+            path.name
+            for path, content in rendered.items()
+            if (path.read_bytes() if path.exists() else b"") != content
+        ]
+        if stale:
+            print(
+                "[sdk] stale: %s -- regenerate with python3 scripts/generate-sdk.py"
+                % ", ".join(sorted(stale)),
+                file=sys.stderr,
+            )
+            return 1
+
+        print("[sdk] up to date (%d commands)" % len(commands), file=sys.stderr)
+        return 0
+
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    for path, content in rendered.items():
+        path.write_bytes(content)
 
     print(
         "[sdk] wrote %s, %s, %s (%d commands, %d symbols)"

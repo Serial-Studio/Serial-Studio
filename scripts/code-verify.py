@@ -69,6 +69,7 @@ import importlib.util
 import json
 import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -1633,6 +1634,124 @@ def find_interrupt_guard_violations(
     return violations
 
 
+# Every ProjectModel slot that dirties the project document (calls
+# setModified(true)) must open a ProjectUndoScope so the mutation lands in the
+# undo history (spec 0031) -- a mutation path that bypasses history is a
+# defect. Whitelisted names are the intentional exceptions: the history
+# machinery itself, history boundaries (lock/load), and the presentation /
+# workspace surfaces the spec keeps outside undo history.
+_UNDO_SCOPE_FILES = re.compile(r"ProjectModel(\.cpp$|[A-Z]\w*\.cpp$)")
+_UNDO_FUNC_RE = re.compile(r"^[A-Za-z_][\w:<>&*\s]*DataModel::ProjectModel::(\w+)\s*\(")
+_UNDO_SET_MODIFIED_RE = re.compile(r"\bsetModified\s*\(\s*true\s*\)")
+_UNDO_SCOPE_RE = re.compile(
+    r"\bProjectUndoScope\b|\bProjectUndoFrame\b|\bcommitPending\b"
+)
+_UNDO_SCOPE_WHITELIST = frozenset(
+    {
+        # History machinery + boundaries
+        "setModified",
+        "applyHistorySnapshot",
+        "lockProject",
+        "unlockProject",
+        # Presentation-state setters (outside undo history by spec 0031)
+        "saveWidgetSetting",
+        "stageDisplayTitle",
+        "setDisplayTitle",
+        "setWidgetDisplayTitle",
+        "setFreezeTitleMode",
+        "setExternalWindows",
+        "setTreeExpansion",
+        "setDiagramCollapse",
+        "savePluginState",
+        "setActiveGroupId",
+        "setGroupLayout",
+        # Workspace surface (outside undo history by spec 0031)
+        "addWorkspace",
+        "deleteWorkspace",
+        "clearAllWorkspaces",
+        "renameWorkspace",
+        "updateWorkspace",
+        "setWorkspaceIcon",
+        "reorderWorkspaces",
+        "addWidgetToWorkspace",
+        "removeWidgetFromWorkspace",
+        "cleanupWorkspaceWidgetRefs",
+        "setCustomizeWorkspaces",
+        "autoGenerateWorkspaces",
+        "resetWorkspacesToAuto",
+        "mergeAutoWorkspaceUpdates",
+        "moveWorkspace",
+        "hideGroup",
+        "showGroup",
+        "showAllHiddenGroups",
+        "addWorkspaceFolder",
+        "renameWorkspaceFolder",
+        "deleteWorkspaceFolder",
+        "moveWorkspaceToFolder",
+        "moveFolderToFolder",
+        "moveWorkspaceInFolder",
+        "moveWorkspaceFolderInParent",
+        # Nested private helpers (always run under a scoped public slot)
+        "duplicateTableByPath",
+        "appendTableCopyToFolder",
+        "setGroupsInFolderEnabled",
+        "duplicateGroupFolderSubtree",
+        "duplicateTableFolderSubtree",
+    }
+)
+
+
+def find_undo_scope_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag ProjectModel functions that call setModified(true) without opening
+    a ProjectUndoScope/ProjectUndoFrame (and are not whitelisted): the edit
+    would mutate the document while bypassing the undo history."""
+    if not _UNDO_SCOPE_FILES.search(path.name) or "Editor" in path.name:
+        return []
+
+    violations: list[Violation] = []
+    func_name = None
+    func_line = 0
+    body: list[str] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+
+        m = _UNDO_FUNC_RE.match(line)
+        if m is not None:
+            func_name = m.group(1)
+            func_line = i + 1
+            body = []
+            continue
+
+        if func_name is None:
+            continue
+
+        body.append(line)
+        if line.startswith("}"):
+            joined = "\n".join(body)
+            if (
+                _UNDO_SET_MODIFIED_RE.search(joined)
+                and not _UNDO_SCOPE_RE.search(joined)
+                and func_name not in _UNDO_SCOPE_WHITELIST
+            ):
+                violations.append(
+                    Violation(
+                        path,
+                        func_line,
+                        "undo-scope-missing",
+                        f"{func_name}() calls setModified(true) without a "
+                        "ProjectUndoScope -- the mutation bypasses undo history "
+                        "(spec 0031); open a scope or whitelist it in "
+                        "code-verify.py",
+                    )
+                )
+            func_name = None
+
+    return violations
+
+
 # Every string-to-number parse goes through the SerialStudio::toDouble()
 # overload set (fast_float-backed). Qt's QString/QVariant toDouble() walks the
 # full locale + double-conversion pipeline even for plainly non-numeric text
@@ -1669,6 +1788,48 @@ def find_todouble_violations(
                     "QJsonValue; fast_float-backed, parses string payloads, never "
                     "fails). Deliberate locale-aware parsing belongs behind a "
                     "`// code-verify off` fence.",
+                )
+            )
+    return violations
+
+
+# Q_ASSERT is compiled out under QT_NO_DEBUG, so every precondition it guards
+# is unchecked in the shipped binary — the assert reads as a guard while release
+# performs the unchecked subscript / shift / divide anyway. SS_ASSERT (from
+# app/src/SSAssert.h) keeps the debug abort and adds a release path that reports
+# once per site and runs a caller-supplied recovery action. SSAssert.h defines
+# the wrapper; HotpathOptimization.h holds SS_ASSUME's debug fallback.
+_QASSERT_RE = re.compile(r"\bQ_ASSERT(?:_X)?\s*\(")
+_QASSERT_ALLOWED = frozenset({"SSAssert.h", "HotpathOptimization.h"})
+_QASSERT_SUFFIXES = (".cpp", ".h", ".c", ".mm")
+
+
+def find_qassert_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag direct `Q_ASSERT` / `Q_ASSERT_X` calls. Advisory while the ~980-site
+    migration lands; promote to error in the commit that clears the report."""
+    if path.name in _QASSERT_ALLOWED or path.suffix not in _QASSERT_SUFFIXES:
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _QASSERT_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "qt-qassert-direct",
+                    "`Q_ASSERT` is compiled out of release builds -- the "
+                    "precondition is unchecked in the shipped binary. Use "
+                    "`SS_ASSERT(cond, <recovery>)` from SSAssert.h, "
+                    "`SS_ASSERT_LOG(cond)` when no recovery is meaningful, or "
+                    "`SS_ASSUME(cond)` for a guard that provably already ran in "
+                    "a zero-branch hot kernel. An assert whose condition is too "
+                    "expensive to evaluate in release belongs behind a "
+                    "`// code-verify off` fence with a one-line why.",
                 )
             )
     return violations
@@ -1715,6 +1876,8 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         )
         violations.extend(find_interrupt_guard_violations(raw_lines, path, fence_mask))
         violations.extend(find_todouble_violations(raw_lines, path, fence_mask))
+        violations.extend(find_qassert_violations(raw_lines, path, fence_mask))
+        violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).
         # The rules module degrades gracefully when tree-sitter is missing.
@@ -2004,6 +2167,16 @@ _ADVISORY_KINDS = frozenset(
         # the report a migration ratchet, not a gate; promotion to blocking is
         # per-class at the ratchet stage.
         "arch-singleton-instance",
+        # Singleton reach left inside a class that already takes a
+        # SessionContext& (spec 0039). Advisory for the same reason as the rule
+        # above: it is the regression guard on the converted pilots, and the
+        # census -- not CI -- is what makes the surface ratchet down.
+        "arch-session-context-bypass",
+        # Spacing deliberately has no rule: the repo has no spacing token
+        # source, and negative/odd values are legitimate layout tools
+        # (overlap offsets, optical alignment). qml-hardcoded-color and
+        # qt-qassert-direct graduated to errors when the 2026-07 sweep
+        # cleared their last report entries.
     }
 )
 
@@ -2099,6 +2272,14 @@ the *why* survives.
   (`//\n// Label\n//`) above the declaration, or delete the comment.
   This rule does not apply to JS function bodies (`function f() { }`,
   `onClicked: { }`, `() => { }`) — those follow C++ comment rules.
+- **No bare `Q_ASSERT`.** It compiles out under `QT_NO_DEBUG`, so the
+  precondition is unchecked in the shipped binary while the code reads
+  as if it were guarded. Use `SS_ASSERT(cond, <recovery>)` from
+  `app/src/SSAssert.h` (debug abort kept, release reports once per site
+  then runs the recovery), `SS_ASSERT_LOG(cond)` when no recovery is
+  meaningful, or `SS_ASSUME(cond)` for a guard that provably already ran
+  in a zero-branch hot kernel. `continue` / `break` are not valid
+  recovery actions — the macro's do/while(0) would swallow them.
 
 ## Static-analysis rules (semantic)
 
@@ -2129,6 +2310,32 @@ the kinds below are short labels.
   (or another helper).
 - `qml-bus-type-int` — `busType: 0` literal int; use
   `SerialStudio.BusType.<NAME>`.
+- `qt-qassert-direct` — bare `Q_ASSERT` / `Q_ASSERT_X` outside a
+  `// code-verify off` fence. It compiles out under `QT_NO_DEBUG`, so the
+  shipped binary runs the guarded code unchecked. Use `SS_ASSERT(cond,
+  <recovery>)` / `SS_ASSERT_LOG(cond)` from `app/src/SSAssert.h`; an
+  expensive predicate (walks a container, allocates) stays a fenced
+  `Q_ASSERT`. Error since the 2026-07 sweep converted the last bare site.
+- `qml-hardcoded-color` — a hex (`"#2ecc71"`) or named (`"white"`) color
+  literal as the value of a `color:`-family binding (`color:`,
+  `border.color:`, `*Color:`). The theme layer already exposes 113 tokens via
+  `Cpp_ThemeManager.colors["<key>"]`, including `error`, `alarm`, `alarm_ok`,
+  `alarm_warning`, `alarm_critical`, `accent`, and `highlight`; a literal
+  bypasses them and inverts under fluent-dark (`border.color: "white"` reads
+  correctly in the light theme and wrong in the dark one). Never flagged:
+  `"transparent"` (the absence of a color, and the null branch of ~96 theme
+  ternaries), any right-hand side mentioning `Cpp_ThemeManager` (so
+  `Qt.darker(Cpp_ThemeManager.colors["text"], 1.5)` and theme ternaries pass),
+  literal-channel `Qt.rgba(0, 0, 0, 0.15)` shadow overlays (theme-blind but
+  visually intentional on the skeuomorphic gauges), a `color:` key inside an
+  inline JS object literal (comma-separated data rows -- filter descriptors,
+  categorical palettes; a QML one-liner separates with `;` and still matches),
+  and `shadowColor:` bound to pure black/white (MultiEffect cast-shadow ink
+  whose opacity lives in `shadowOpacity`; the light theme's `shadow` token at
+  0.15 alpha would erase the shadow). Intentional content colors that survive
+  those filters (an artificial horizon's sky/ground, crosshairs over arbitrary
+  image pixels) are fenced per region with `// code-verify off`. Error since the
+  2026-07 sweep cleared the backlog.
 
 **Advisories (don't block CI):**
 - `cxx-function-too-long` — function body > 100 lines (NASA P10 rule 4).
@@ -2249,9 +2456,39 @@ the kinds below are short labels.
   interim `static auto& x = X::instance();` hotpath cache, constructor
   member-initializer captures (`m_x(X::instance())` — the prescribed fix;
   which classes may ctor-capture what is governed by the spec's capture-safety
-  table, not the linter), and single-line `Q_ASSERT(...)` expressions
-  (debug-only, no release-build construction edge). Advisory: the report is
+  table, not the linter), single-line `Q_ASSERT(...)` expressions
+  (debug-only, no release-build construction edge), and Qt's own static
+  accessors (`QCoreApplication::instance()` and friends -- not Serial Studio
+  singletons, nothing to capture). Advisory: the report is
   the migration ratchet; the 2026-07 sweep converted the ~1,540-site backlog.
+- `arch-session-context-bypass` — an `::instance()` reach inside a file that
+  takes a `SessionContext&`, i.e. a class already converted to constructor
+  injection (spec 0039). Unlike the rule above, the `static auto& x =
+  X::instance();` cache and the ctor init-list capture are flagged too: they
+  are the two forms a converted class relapses into, and the whole point of
+  the conversion is that the class asks its context. The only sanctioned site
+  is the class's own `instance()` accessor, where `SessionContext::current()`
+  is passed to the constructor. Fix: `m_ctx.projectModel()` (or the matching
+  accessor) instead of the singleton. Advisory; the census mode
+  (`--singleton-census`) is the gate that blocks growth.
+- `arch-context-ctor-nonempty` — a statement in the body of
+  `SessionContext::SessionContext` or `SessionContext::~SessionContext`
+  (spec 0039 M2). `SessionContext::current()` is a function-local static, so a
+  context that constructed its modules would re-enter that Meyers guard from
+  every module constructor that reaches a singleton (`FrameBuilder` →
+  `LemonSqueezy`, `FrameParser` → `FrameBuilder`, `AppState` → `ProjectModel`)
+  and abort at startup with `__cxa_guard_acquire detected recursive
+  initialization` — the crash that shipped from `ProjectModel`'s ctor closure on
+  2026-07-07. Ownership is installed by `adopt*()` from the composition root,
+  after `current()` has fully returned, and released by `shutdown()`. **Blocking**:
+  the failure is a startup abort on every machine, not a style nit.
+- `arch-session-adopt-site` — a `SessionContext` `adopt*()` call outside
+  `app/src/Misc/ModuleManager.cpp` (spec 0039 M2). The pinned construction order
+  is only pinned while it lives in one readable sequence
+  (`instantiateCoreModules()`); an adoption anywhere else either builds a session
+  subsystem outside that sequence or hands a second object to a slot that INV-5
+  says is assigned exactly once. **Blocking**, same reasoning: both failure modes
+  are startup-time and neither is visible when reviewing the call site alone.
 
 ## Performance / CPU-microarchitecture rules
 
@@ -2694,6 +2931,373 @@ def _sdk_staleness_violations(repo_root: Path) -> list[Violation]:
     return out
 
 
+# ---------------------------------------------------------------------------
+# Generated API surfaces (spec 0037, whole-repo)
+# ---------------------------------------------------------------------------
+#
+# The gRPC field-number ledger and the typed proto are generated by
+# scripts/generate-property-registry.py. The ledger is RELEASED WIRE STATE: a
+# number that moves does not break a build, it makes a shipped client read one
+# field out of another field's bytes. Two guards: the artifacts keep their
+# do-not-edit marker, and no number assigned at HEAD ever changes meaning.
+
+_API_GENERATED = {
+    "app/rcc/api/proto-fields.json": "never edit by hand",
+    "doc/grpc/serialstudio-typed.proto": "Auto-generated by Serial Studio ProtoGenerator",
+    "app/src/DataModel/Generated/DatasetRegistry.h": "never edit by hand",
+    "app/src/DataModel/Generated/DatasetSerialization.cpp": "never edit by hand",
+    "app/src/DataModel/Generated/DatasetForm.cpp": "never edit by hand",
+    "app/src/API/Generated/DatasetApiFields.cpp": "never edit by hand",
+}
+
+_LEDGER_REL = "app/rcc/api/proto-fields.json"
+
+
+def _api_surface_violations(repo_root: Path) -> list[Violation]:
+    """Marker + append-only guards over the spec-0037 generated API artifacts."""
+    out: list[Violation] = []
+
+    for rel, marker in _API_GENERATED.items():
+        f = repo_root / rel
+        if not f.exists():
+            continue
+        # The C++ artifacts carry the dual-license header first, so the marker sits
+        # ~800 characters in; the window covers both shapes.
+        if marker not in f.read_text(encoding="utf-8")[:1200]:
+            out.append(
+                Violation(
+                    f,
+                    1,
+                    "api-generated-edited",
+                    "generated API artifact lost its do-not-edit marker; regenerate "
+                    "with scripts/generate-property-registry.py instead of editing "
+                    "it by hand",
+                )
+            )
+
+    out.extend(_proto_renumber_violations(repo_root))
+    out.extend(_registry_field_map_violations(repo_root))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Dataset property registry (spec 0036, whole-repo)
+# ---------------------------------------------------------------------------
+#
+# Dataset property plumbing is DERIVED from app/rcc/properties/dataset.json:
+# the serializer, the editor rows, the commit dispatcher and the API appliers
+# are generated. The failure mode the registry exists to end is a second,
+# hand-written field map growing beside the generated one -- a reader, an
+# applier or a form builder that spells out a cluster of dataset property keys
+# in a file the generator does not own. Identity keys are excluded: groupId /
+# datasetId / uniqueId / title address an entity in every payload and say
+# nothing about dataset property plumbing.
+
+_REGISTRY_MANIFEST = "app/rcc/properties/dataset.json"
+_REGISTRY_IDENTITY_KEYS = frozenset({"GroupId", "DatasetId", "UniqueId", "Title"})
+_REGISTRY_KEY_CLUSTER = 4
+_REGISTRY_GENERATED_DIRS = (
+    "app/src/DataModel/Generated/",
+    "app/src/API/Generated/",
+)
+
+# Non-generated files that legitimately name several dataset keys, each with the
+# reason it is not a parallel field map.
+_REGISTRY_KEY_ALLOWED = {
+    # Home of the Keys:: constants and of the group/action/source serializers.
+    "app/src/DataModel/Frame.h": "Keys:: declarations + sibling-entity serializers",
+    # Alarm bands and FFT markers are nested entities the manifest routes to
+    # hand-written readers through declared subEntity hooks.
+    "app/src/DataModel/Frame.cpp": "hand-written sub-entity readers declared as manifest hooks",
+    # Builds synthetic projects for the throughput gate; not a document surface.
+    "app/src/Benchmark/HotpathBenchmark.cpp": "synthetic benchmark project fixtures",
+    # The manifest's named escape hatches, split across two TUs so the unit
+    # tier can link the ProjectModel-free validators alone.
+    "app/src/DataModel/Project/PropertyHooks.cpp": "the manifest's named escape hatches",
+    "app/src/DataModel/Project/PropertyValidators.cpp": "the ProjectModel-free validators",
+}
+
+
+def _dataset_registry_keys(repo_root: Path) -> set[str]:
+    """Return the dataset property Keys:: constants declared by the manifest."""
+    manifest = repo_root / _REGISTRY_MANIFEST
+    if not manifest.exists():
+        return set()
+
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(
+            f"[code-verify] registry-parallel-field-map check skipped: {exc}",
+            file=sys.stderr,
+        )
+        return set()
+
+    keys: set[str] = set()
+    for prop in data.get("properties", []):
+        if prop.get("jsonKey"):
+            keys.add(prop["jsonKey"])
+        keys.update(prop.get("legacyKeys", []))
+    for sub in data.get("subEntities", []):
+        if sub.get("jsonKey"):
+            keys.add(sub["jsonKey"])
+
+    return keys - _REGISTRY_IDENTITY_KEYS
+
+
+def _registry_field_map_violations(repo_root: Path) -> list[Violation]:
+    """Flag a hand-written file that spells out a cluster of dataset property keys."""
+    keys = _dataset_registry_keys(repo_root)
+    if not keys:
+        return []
+
+    pattern = re.compile(r"\bKeys::(" + "|".join(sorted(keys)) + r")\b")
+    out: list[Violation] = []
+    for path in sorted((repo_root / "app" / "src").rglob("*")):
+        if path.suffix not in (".cpp", ".h"):
+            continue
+
+        rel = path.resolve().relative_to(repo_root).as_posix()
+        if rel in _REGISTRY_KEY_ALLOWED or rel.startswith(_REGISTRY_GENERATED_DIRS):
+            continue
+
+        text = path.read_text(encoding="utf-8", errors="replace")
+        found: dict[str, int] = {}
+        for match in pattern.finditer(text):
+            found.setdefault(match.group(1), text.count("\n", 0, match.start()) + 1)
+
+        if len(found) < _REGISTRY_KEY_CLUSTER:
+            continue
+
+        out.append(
+            Violation(
+                path,
+                min(found.values()),
+                "registry-parallel-field-map",
+                f"names {len(found)} dataset property keys ({', '.join(sorted(found))}) "
+                "outside the generated surfaces; dataset property plumbing is derived "
+                f"from {_REGISTRY_MANIFEST} -- declare the property there and regenerate, "
+                "or add this file to _REGISTRY_KEY_ALLOWED with the reason it is not a "
+                "parallel field map",
+            )
+        )
+
+    return out
+
+
+def _proto_renumber_violations(repo_root: Path) -> list[Violation]:
+    """Compare the committed ledger against HEAD's: a number may be retired, never moved."""
+    out: list[Violation] = []
+    ledger = repo_root / _LEDGER_REL
+    if not ledger.exists():
+        return out
+
+    try:
+        current = json.loads(ledger.read_text(encoding="utf-8")).get("commands", {})
+        blob = subprocess.run(
+            ["git", "show", f"HEAD:{_LEDGER_REL}"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+        )
+        if blob.returncode != 0:
+            return out
+        previous = json.loads(blob.stdout).get("commands", {})
+    except Exception as exc:
+        print(
+            f"[code-verify] proto-field-renumbered check skipped: {exc}",
+            file=sys.stderr,
+        )
+        return out
+
+    for name, was in previous.items():
+        now = current.get(name)
+        if not isinstance(now, dict):
+            out.append(
+                Violation(
+                    ledger,
+                    1,
+                    "proto-field-renumbered",
+                    f"command '{name}' was dropped from the ledger; entries are "
+                    "retained forever so a GPL dump cannot delete commercial numbers",
+                )
+            )
+            continue
+
+        retired = set(now.get("reserved", []))
+        for param, number in was.get("fields", {}).items():
+            assigned = now.get("fields", {}).get(param)
+            if assigned is None and number not in retired:
+                out.append(
+                    Violation(
+                        ledger,
+                        1,
+                        "proto-field-renumbered",
+                        f"{name}.{param} lost number {number} without retiring it; "
+                        "a removed parameter's number must move to 'reserved'",
+                    )
+                )
+            elif assigned is not None and assigned != number:
+                out.append(
+                    Violation(
+                        ledger,
+                        1,
+                        "proto-field-renumbered",
+                        f"{name}.{param} moved from field number {number} to "
+                        f"{assigned}; gRPC numbers are append-only released state",
+                    )
+                )
+
+        if now.get("next", 0) < was.get("next", 0):
+            out.append(
+                Violation(
+                    ledger,
+                    1,
+                    "proto-field-renumbered",
+                    f"{name}: 'next' went backwards, which would reissue a number",
+                )
+            )
+
+    return out
+
+
+_CENSUS_BASELINE = Path(__file__).with_name("singleton-census.json")
+_CENSUS_SUFFIXES = (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp", ".hxx")
+
+
+def _collect_singleton_census(repo_root: Path) -> dict:
+    """Walk app/src and aggregate the per-file singleton census."""
+    tree = repo_root / "app" / "src"
+    buckets = {name: 0 for name in _SEMANTIC_RULES.SINGLETON_CENSUS_BUCKETS}
+    per_file: dict[str, dict] = {}
+    per_class: dict[str, int] = {}
+    total = 0
+
+    for path in sorted(iter_source_files([tree])):
+        if path.suffix not in _CENSUS_SUFFIXES:
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+
+        stats = _SEMANTIC_RULES.singleton_census(path, text)
+        if stats["total"] == 0:
+            continue
+
+        rel = path.resolve().relative_to(repo_root).as_posix()
+        per_file[rel] = {"total": stats["total"], "buckets": stats["buckets"]}
+        total += stats["total"]
+        for name, count in stats["buckets"].items():
+            buckets[name] += count
+        for name, count in stats["classes"].items():
+            per_class[name] = per_class.get(name, 0) + count
+
+    return {
+        "spec": "0039-session-context",
+        "regenerate": "python scripts/code-verify.py --singleton-census --accept",
+        "total": total,
+        "files": len(per_file),
+        "buckets": buckets,
+        "per_class": dict(sorted(per_class.items(), key=lambda kv: -kv[1])),
+        "per_file": per_file,
+    }
+
+
+def _print_singleton_census(census: dict) -> None:
+    print(f"singleton census: {census['total']} occurrences in {census['files']} files")
+    for name, count in census["buckets"].items():
+        print(f"  {name:<13} {count}")
+
+    print("\ntop reached singletons:")
+    for name, count in list(census["per_class"].items())[:15]:
+        print(f"  {count:>5}  {name}")
+
+
+def _run_singleton_census(repo_root: Path, check: bool, accept: bool) -> int:
+    """Report the census, gate it against the checked-in baseline, or
+    re-baseline it. The gate blocks growth of the total and of the
+    static-cache bucket; a decrease is accepted and asks for a re-baseline."""
+    if _SEMANTIC_RULES is None or not getattr(
+        _SEMANTIC_RULES, "HAS_TREE_SITTER", False
+    ):
+        print(
+            "singleton census needs tree-sitter (pip install tree_sitter "
+            "tree_sitter_cpp); refusing to report numbers it cannot classify",
+            file=sys.stderr,
+        )
+        return 2
+
+    census = _collect_singleton_census(repo_root)
+
+    if accept:
+        _CENSUS_BASELINE.write_text(
+            json.dumps(census, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        _print_singleton_census(census)
+        print(f"\nbaseline written to {_CENSUS_BASELINE}")
+        return 0
+
+    if not check:
+        _print_singleton_census(census)
+        return 0
+
+    if not _CENSUS_BASELINE.is_file():
+        print(
+            f"no baseline at {_CENSUS_BASELINE}; seed it with "
+            "--singleton-census --accept",
+            file=sys.stderr,
+        )
+        return 2
+
+    base = json.loads(_CENSUS_BASELINE.read_text(encoding="utf-8"))
+    grown = [
+        (rel, stats["total"], base.get("per_file", {}).get(rel, {}).get("total", 0))
+        for rel, stats in census["per_file"].items()
+        if stats["total"] > base.get("per_file", {}).get(rel, {}).get("total", 0)
+    ]
+
+    total_delta = census["total"] - base.get("total", 0)
+    cache_delta = census["buckets"]["static-cache"] - base.get("buckets", {}).get(
+        "static-cache", 0
+    )
+
+    if total_delta > 0 or cache_delta > 0:
+        print(
+            f"singleton census grew: total {base.get('total', 0)} -> "
+            f"{census['total']}, static-cache "
+            f"{base.get('buckets', {}).get('static-cache', 0)} -> "
+            f"{census['buckets']['static-cache']}",
+            file=sys.stderr,
+        )
+        for rel, now, before in grown:
+            print(f"  {rel}: {before} -> {now}", file=sys.stderr)
+
+        print(
+            "\nTake the dependency through SessionContext (constructor "
+            "injection, spec 0039) instead of reaching for the singleton. If "
+            "the growth is deliberate, re-baseline with "
+            "python scripts/code-verify.py --singleton-census --accept",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(
+        f"singleton census: {census['total']} occurrences "
+        f"(baseline {base.get('total', 0)}), static-cache "
+        f"{census['buckets']['static-cache']} "
+        f"(baseline {base.get('buckets', {}).get('static-cache', 0)})"
+    )
+    if total_delta < 0 or cache_delta < 0:
+        print(
+            "the surface shrank; re-baseline with "
+            "python scripts/code-verify.py --singleton-census --accept"
+        )
+    return 0
+
+
 def main(argv: list[str]) -> int:
     # Windows defaults stdout/stderr to cp1252; violation messages can carry
     # non-ASCII (em-dashes, smart quotes, U+2713) lifted from user source and
@@ -2721,6 +3325,16 @@ def main(argv: list[str]) -> int:
         help="skip writing .code-report at the repo root",
     )
     parser.add_argument(
+        "--singleton-census",
+        action="store_true",
+        help="classify every X::instance() under app/src (spec 0039)",
+    )
+    parser.add_argument(
+        "--accept",
+        action="store_true",
+        help="re-baseline scripts/singleton-census.json (with --singleton-census)",
+    )
+    parser.add_argument(
         "paths",
         nargs="*",
         type=Path,
@@ -2728,6 +3342,10 @@ def main(argv: list[str]) -> int:
     )
 
     args = parser.parse_args(argv)
+
+    if args.singleton_census:
+        root = Path(__file__).resolve().parent.parent
+        return _run_singleton_census(root, check=args.check, accept=args.accept)
 
     # Default to --fix when neither mode was explicitly requested
     if not args.check and not args.fix:
@@ -2786,7 +3404,9 @@ def main(argv: list[str]) -> int:
     # an SDK-relevant path (skip it for a single unrelated file lint).
     repo_root = Path(__file__).resolve().parent.parent
     if _should_check_sdk(args.paths, repo_root):
-        for v in _sdk_consistency_violations(repo_root):
+        for v in _sdk_consistency_violations(repo_root) + _api_surface_violations(
+            repo_root
+        ):
             severity = "advisory" if v.kind in _ADVISORY_KINDS else "error"
             print(f"{v.path}:{v.line}: {severity}: {v.kind}: {v.message}")
             if v.kind in _ADVISORY_KINDS:
