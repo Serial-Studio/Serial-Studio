@@ -7,7 +7,7 @@ Unlike test_csv_delimiter_resilience() which only checks connection stability,
 these tests actually verify that values are extracted correctly from CSV frames.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json

@@ -12,7 +12,7 @@ so these tests drive the flag through the project-file path: build a project, ex
 items `disabled` in the JSON, reload, then feed frames and read dashboard.getData back.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import time

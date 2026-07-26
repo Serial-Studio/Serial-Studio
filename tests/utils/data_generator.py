@@ -4,7 +4,7 @@ Telemetry Data Generator
 Generates realistic telemetry data with proper checksums for testing.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json

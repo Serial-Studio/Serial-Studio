@@ -17,7 +17,7 @@ wired up, so it is safe in the default suite. CI sets it up explicitly:
     pytest tests/integration/test_audio_loopback.py -m audio
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import os

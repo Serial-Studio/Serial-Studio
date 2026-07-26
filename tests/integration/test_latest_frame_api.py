@@ -11,7 +11,7 @@ Capture is gated on an active consumer; the network API server used by these
 tests is one, so the gate is open for the whole session.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import base64

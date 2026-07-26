@@ -9,7 +9,7 @@ These tests require Serial Studio Pro (BUILD_COMMERCIAL) to be running.
 If the licensing.getStatus command is absent the tests are skipped.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import pytest

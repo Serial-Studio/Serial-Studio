@@ -15,7 +15,7 @@ device simulator on port 9000 → FrameReader → FrameBuilder → publisher)
 because Serial Studio has no direct "inject a frame" API.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json

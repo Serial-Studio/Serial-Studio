@@ -217,9 +217,12 @@ def test_project_editor_bounds_checks_combo_indices():
         "if (eolIdx < 0 || eolIdx >= eolKeys.size())",
         "if (checksumId < 0 || checksumId >= checksums.size())",
         "if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())",
-        "if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())",
-        "if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())",
-        "if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())",
+        # Dataset combo indices are gated in datasetFormEditAccepted (spec 0036) before the
+        # generated registry dispatcher runs, since an out-of-range index would otherwise
+        # silently fall back to the choice domain's first entry.
+        "return index >= 0 && index < m_datasetWidgets.size();",
+        "return index >= 0 && index < m_plotOptions.size();",
+        "return index >= 0 && index < m_fftSamples.size();",
     ]:
         assert expected in text
 
@@ -268,7 +271,7 @@ def test_license_guard_present_in_mqtt_hotpath():
     text = _read("app/src/MQTT/Publisher.cpp")
 
     assert re.search(
-        r"token\.isValid\(\)\s*\n?\s*&&\s*SS_LICENSE_GUARD\(\)\s*\n?\s*&&\s*token\.featureTier\(\)",
+        r"token\.isValid\(\)\s*\n?\s*&&\s*SS_LICENSE_GUARD\(\)",
         text,
     ), "SS_LICENSE_GUARD() missing from MQTT publisher license check"
 

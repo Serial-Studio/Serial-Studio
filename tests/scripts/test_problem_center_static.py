@@ -1,0 +1,120 @@
+"""
+Static consistency checks for the problem center (spec 0033).
+
+Runs without Qt and without a live app: every assertion reads a repository
+file, so the suite catches registration drift (a command registered in C++ but
+missing from the assistant safety manifest, or a new API scope with no
+description) at lint time instead of at runtime.
+"""
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+
+COMMANDS = ("problems.list", "problems.run", "problems.listCheckers")
+OTHER_TIERS = ("confirm", "blocked", "deviceGated", "alwaysConfirm")
+
+
+def read_text(path: str) -> str:
+    return (ROOT / path).read_text(encoding="utf-8")
+
+
+def safety_manifest() -> dict:
+    return json.loads(read_text("app/rcc/ai/command_safety.json"))
+
+
+def test_problem_commands_are_safe_tier():
+    safety = safety_manifest()
+    safe = set(safety["safe"])
+
+    for name in COMMANDS:
+        assert name in safe, f"{name} missing from the 'safe' tier"
+
+
+def test_problem_commands_are_in_exactly_one_tier():
+    safety = safety_manifest()
+
+    for name in COMMANDS:
+        for tier in OTHER_TIERS:
+            assert name not in set(safety[tier]), f"{name} also listed in '{tier}'"
+
+
+def test_problem_commands_are_registered_in_cpp():
+    handler = read_text("app/src/API/Handlers/ProblemsHandler.cpp")
+
+    for name in COMMANDS:
+        assert f'QStringLiteral("{name}")' in handler
+
+
+def test_problems_handler_is_registered_in_the_gpl_block():
+    source = read_text("app/src/API/CommandHandler.cpp")
+
+    assert "API/Handlers/ProblemsHandler.h" in source
+    assert "Handlers::ProblemsHandler::registerCommands();" in source
+
+    call = source.index("Handlers::ProblemsHandler::registerCommands();")
+    commercial = source.index(
+        "#ifdef BUILD_COMMERCIAL", source.index("initializeHandlers")
+    )
+    assert call < commercial, "the handler must register outside the commercial block"
+
+
+def test_problems_handler_carries_no_commercial_guard():
+    for path in (
+        "app/src/API/Handlers/ProblemsHandler.h",
+        "app/src/API/Handlers/ProblemsHandler.cpp",
+    ):
+        assert "BUILD_COMMERCIAL" not in read_text(path), f"{path} must stay GPL-clean"
+
+
+def test_problems_scope_has_a_description():
+    dispatcher = read_text("app/src/AI/ToolDispatcher.cpp")
+    marker = 'QStringLiteral("problems")'
+
+    assert marker in dispatcher
+    assert dispatcher.index("scopeDescriptions") < dispatcher.index(marker)
+
+
+def test_problem_center_command_manifest_entry():
+    manifest = json.loads(read_text("app/rcc/commands/app.json"))
+    entries = [c for c in manifest["commands"] if c["id"] == "app.problems"]
+
+    assert len(entries) == 1, "app.problems must be declared exactly once"
+    entry = entries[0]
+    assert entry["kind"] == "action"
+    assert entry["category"] == "tools"
+    assert entry["icon"] == "notifications/warning"
+    assert sorted(entry["contexts"]) == ["app", "dashboard", "editor"]
+
+
+def test_problem_center_command_is_bound_in_both_contexts():
+    for path in (
+        "app/qml/Commands/AppCommandBindings.qml",
+        "app/qml/Commands/ProjectEditorCommandBindings.qml",
+    ):
+        source = read_text(path)
+        assert (
+            '"app.problems": root.cmdAppProblems' in source
+        ), f"{path} misses the map entry"
+        assert (
+            "readonly property QtObject cmdAppProblems" in source
+        ), f"{path} misses the binding"
+        assert "app.showProblemCenter()" in source, f"{path} misses the panel call"
+
+
+def test_problem_center_panel_is_hosted_by_main_qml():
+    source = read_text("app/qml/main.qml")
+
+    assert "Dialogs/ProblemCenter.qml" in source
+    assert "function showProblemCenter()" in source
+    assert "function onJumpRequested(kind, uniqueId)" in source
+
+
+def test_problem_commands_are_not_destructive():
+    registry = read_text("app/src/API/CommandRegistry.cpp")
+    start = registry.index("destructiveCommandSet")
+    window = registry[start : start + 20000]
+
+    for name in COMMANDS:
+        assert name not in window, f"{name} must not be a destructive command"

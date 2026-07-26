@@ -15,7 +15,7 @@ that drains bytes from the simulator's accepted client socket so we can
 assert what Serial Studio wrote back.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import sys

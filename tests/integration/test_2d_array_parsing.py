@@ -14,7 +14,7 @@ Example BLE use case:
   [humidity, temp, [accel1...accel120]] → 120 frames of [humidity, temp, accelN]
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json

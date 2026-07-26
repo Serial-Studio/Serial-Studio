@@ -9,7 +9,7 @@ Drives the bundled rocket-launch demo over the TCP API and asserts:
 Requires a running Serial Studio instance with the API server enabled.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import time

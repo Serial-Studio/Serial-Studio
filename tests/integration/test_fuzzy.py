@@ -5,7 +5,7 @@ Comprehensive fuzzy tests designed to stress-test Serial Studio and identify bug
 Tests malformed data, edge cases, buffer overflows, race conditions, and more.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json

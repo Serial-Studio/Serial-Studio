@@ -19,7 +19,7 @@ These tests require Serial Studio Pro (BUILD_COMMERCIAL) to be running with the
 API server enabled. If licensing.activateOffline is absent they are skipped.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import os

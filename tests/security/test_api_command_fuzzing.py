@@ -14,7 +14,7 @@ main thread hung -- propagates and fails the test. After each barrage a known-go
 command must still succeed, proving the server is still alive.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import random

@@ -1,0 +1,45 @@
+{
+  "multisource": {
+    "datasetCount": 48,
+    "groups": 16,
+    "hz": 20,
+    "layoutHash": "8dc889a382eb074b",
+    "project": "examples/Dual Drone Telemetry/Dual Drone Telemetry.ssproj",
+    "snapshotBytesMean": 968.9,
+    "snapshots": 60,
+    "sourceIds": [
+      0,
+      1
+    ],
+    "structureBytes": 113549,
+    "title": "Dual Drone Telemetry"
+  },
+  "small": {
+    "datasetCount": 6,
+    "groups": 2,
+    "hz": 20,
+    "layoutHash": "3af81b130b65f883",
+    "project": "examples/LorenzAttractor/LorenzAttractor.ssproj",
+    "snapshotBytesMean": 191.6,
+    "snapshots": 60,
+    "sourceIds": [
+      0
+    ],
+    "structureBytes": 11983,
+    "title": "Lorenz Attractor"
+  },
+  "wide": {
+    "datasetCount": 59,
+    "groups": 8,
+    "hz": 20,
+    "layoutHash": "640661713f3eadcd",
+    "project": "examples/System Monitor/system-monitor.ssproj",
+    "snapshotBytesMean": 1135.6,
+    "snapshots": 60,
+    "sourceIds": [
+      0
+    ],
+    "structureBytes": 28869,
+    "title": "System Monitor"
+  }
+}

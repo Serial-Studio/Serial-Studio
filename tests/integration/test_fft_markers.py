@@ -13,7 +13,7 @@ Studio (API server on localhost:7777):
 Requires the app up with Settings -> Miscellaneous -> Enable API Server.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json

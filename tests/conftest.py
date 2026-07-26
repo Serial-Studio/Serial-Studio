@@ -6,7 +6,7 @@ Suite-specific conftests may shadow these with stricter behaviour where
 needed (e.g. integration/conftest.py adds per-test cleanup).
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import sys

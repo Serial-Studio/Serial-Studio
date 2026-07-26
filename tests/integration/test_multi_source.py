@@ -6,7 +6,7 @@ Covers GPL vs. Commercial behavior, source CRUD, per-source configuration,
 frame parser round-trips, and export/import fidelity.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import time

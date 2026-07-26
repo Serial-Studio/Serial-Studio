@@ -9,7 +9,7 @@ All tests require Serial Studio running with API Server enabled on port 7777,
 connected to a TCP device simulator on port 9000.
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import time

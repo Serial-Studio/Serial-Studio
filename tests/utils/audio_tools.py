@@ -7,7 +7,7 @@ round-trip tests. NumPy is pulled in transitively by pandas, which is
 already a test dependency.
 
 Copyright (C) 2020-2026 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import wave

@@ -39,6 +39,7 @@ pytest tests/integration/test_csv_export.py::test_csv_export_basic -v
 | Security    | `tests/security/`     | Yes                    | Penetration and adversarial tests            |
 | Performance | `tests/performance/`  | Yes                    | Throughput benchmarks                        |
 | Scripts     | `tests/scripts/`      | No (Node.js only)      | Unit tests for JS frame-parser scripts       |
+| C++ units   | `app/tests/`          | No (ctest, not pytest) | Qt Test suites over selected production TUs  |
 
 ## Integration tests (`tests/integration/`)
 
@@ -53,7 +54,14 @@ Each test connects to Serial Studio over TCP, configures it through the API, str
 | `test_project_configuration.py`      | Operation modes, JS parsers, project creation, actions |
 | `test_project_editor.py`             | Add, delete, and duplicate groups, datasets, and actions via the API |
 | `test_project_import_export.py`      | `project.exportJson`, `project.loadFromJSON`, round-trip fidelity |
+| `test_project_undo.py`               | Undo/redo history: randomized round-trips, atomic batch/cascade undo, save-point modified flag, multi-field dataset patch as one step |
+| `test_property_registry.py`          | Spec 0036 property registry: corpus round-trip against checked-in baselines (capture with `SS_CAPTURE_BASELINES=1` on the pre-change build), the two declared defect fixes, lossless read-then-write-back, every enum domain set by value |
 | `test_project_save.py`               | File save and reload, widget settings persistence, layout storage |
+| `test_api_surfaces.py`               | Spec 0037 generated surfaces: MCP `tools/list` typed properties + enum domains on `project.dataset.update`, `tools/list` payload size, SDK options-bag field sweep, typed-proto parity (set `SS_EXPORTED_PROTO`; needs a commercial build with `ENABLE_GRPC=ON`) |
+| `test_problem_center.py`             | `problems.*` diagnostics: project findings, link counters, failing transforms |
+| `test_widget_extensions.py`          | Spec 0038 widget extensions: `extension.widget` findings for uninstalled, malformed, incompatible, dependency-less and reserved-id packages, scope acceptance, no Pro bypass. Two tiers -- the seeded tier writes packages under `<workspace>/Extensions/widget` and skips until Serial Studio is restarted once (set `SS_WORKSPACE` for a non-default workspace, `SS_CLEAN_TEST_PACKAGES=1` to remove them) |
+| `test_connection_diagnostics.py`     | `diagnostics.*` connection self-checks: the three reachability verdicts, byte-free probe, ack-and-poll, bus scoping |
+| `test_link_recovery.py`              | Automatic reconnect (spec 0034): 100 TCP severances in 10 chunks, steady-state `activeFlows`, immediate cancel, MQTT recovery |
 | `test_console_configuration.py`      | Echo, timestamps, display and data modes, font, send, line endings |
 | `test_console_ansi_vt100.py`         | ANSI SGR colors (standard, bright, 256, RGB), VT100 cursor, edge cases |
 | `test_dashboard_configuration.py`    | FPS, data points, operation mode, status and data query fields |
@@ -147,6 +155,9 @@ Each test calls `run_parser(script_name, frame)`, which spawns a fresh Node.js s
 |-----------------------------|----------------|
 | `test_frame_parsers.py`     | 28 parser classes: AT commands, Base64, binary TLV, COBS, CSV, fixed-width, hex bytes, INI, JSON, key-value, MAVLink, MessagePack, Modbus, NMEA 0183, NMEA 2000, pipe-delimited, raw bytes, RTCM, semicolon CSV, SiRF binary, SLIP, tab CSV, UBX/u-blox, URL-encoded, XML, YAML, batched sensor data, time-series 2D |
 | `test_cpp_regressions.py`   | Logic-only regressions for C++ bugs that don't require a running app (bounds checks, null guards, API schema consistency) |
+| `test_diagnostics_static.py`| Spec-0035 registration drift: safety tiers, GPL-block handler, bus slugs and checker ids, command manifest and bindings, no blocking primitive in the diagnostics sources |
+| `test_widget_manifests.py`  | Spec-0038 widget extension packages: bundled manifests validate against `widget-manifest.json`, the reserved-id + `replaces` pairing (positive and negative seeds), reserved ids agree across schema/C++ catalog/widget-string mappers, `rcc.qrc` sync, `hostContextNames()` mirrors ModuleManager, and no spec-0038 file describes extensions as contained |
+| `test_proto_ledger_static.py`| Spec-0037 gRPC field-number ledger: numbers unique per command, `fields`/`reserved` disjoint, `1` never assigned, `next` monotonic, typed proto agrees with the ledger, simulated insertion/removal stays append-only |
 
 ```bash
 # Run all script tests (Node.js required)
@@ -158,6 +169,57 @@ pytest tests/scripts/test_frame_parsers.py::TestNmea0183 -v
 # Run C++ regression checks
 pytest tests/scripts/test_cpp_regressions.py -v
 ```
+
+## C++ unit tests (`app/tests/`)
+
+A separate tier from everything above: Qt Test suites compiled into small binaries and run by
+`ctest`, not by pytest. No Python, no Node.js, and no running Serial Studio. Each suite links only
+the production translation units it exercises, never the application target, so the tier configures
+and links in seconds.
+
+The targets exist only when the build is configured with `-DSS_BUILD_TESTS=ON`. `CMakePresets.json`
+at the repo root wraps that (plus the sanitizer and lean-CI configurations) into named presets:
+
+| Preset | Configuration |
+|--------|---------------|
+| `dev` | The developer configuration: builds the app and the unit-test tier |
+| `asan` / `tsan` | Mutually exclusive sanitizers; both force `SS_USE_MIMALLOC=OFF` |
+| `analysis` | Compile-commands only, for static analysis tooling |
+| `unit-ci` | What the CI `unit` job runs, x86_64 + arm64 for the `DSPSimd` lanes; GRPC/WebEngine off, never builds the app |
+
+Presets are additive — nothing in the CMake sources reads them.
+
+```bash
+# Configure, build, and run the whole tier
+cmake --preset dev
+cmake --build --preset dev --target ss_unit_tests
+ctest --preset dev
+
+# One suite
+ctest --preset dev -R dsp_kernels --output-on-failure
+```
+
+| Suite | What it covers |
+|-------|----------------|
+| `tst_circular_buffer` | `roundUpToPowerOfTwo`, append/read/peek/discard accounting, `setCapacity` reconfigure, overflow counting, and the KMP / short-pattern scan lanes in the linear and wrap-straddling cases |
+| `tst_checksums`       | All ten `IO::checksum()` algorithms against published `"123456789"` vectors, output byte order, empty and single-byte inputs, registry consistency, unknown names |
+| `tst_frame_serialization` | `toJson`/`fromJson` round-trips for `Dataset`, `Group`, `Action`, `Source`, `Frame`, `AlarmBand`, `FrequencyMarker`, `OutputWidget`, `RegisterDef`, `TableDef`, and the workspace/folder structs |
+| `tst_dsp_kernels`     | Every `DSPSimd.h` kernel compared bit-for-bit against a scalar build of the same header, over edge lengths, source offsets, and NaN / ±0.0 / ±inf / denormal payloads |
+| `tst_frame_delimiters`| `IO::FrameReader` extraction: start / end / start+end delimiters, delimiters split across chunks, multi-byte delimiters at the scan-lane boundary, validation outcomes, dropped-frame and overflow accounting |
+| `tst_async_engine`    | The spec-0034 task-tree engine against a virtual clock: sequential and parallel outcomes, timeouts, the retry backoff schedule, cancel mid-step and mid-backoff |
+
+**Linter coverage.** `sanitize-commit.py` clang-formats `app/tests/` like the rest of `app/`, so the
+100-column, 2-space, pointer-binds-to-type formatting applies. `code-verify.py`'s structural,
+comment-style, and semantic rules do **not**: its first-party check matches `app/src` and `app/qml`
+only. Test code is held to the formatting contract, not the structural one — do not add
+`// code-verify off` fences there on the assumption that the rules fire.
+
+## In-app self-tests (`--selftest`)
+
+A separate in-app tier (`app/src/SelfTest/`), exposed only when the build is configured with
+`-DSS_INAPP_TESTS=ON`: suites run inside `CLI::process()` **before** the composition root, so a
+suite must never touch an application singleton. Distinct from the licensing self-tests
+(`--selftest-offline-license`, `--validate-guards`).
 
 ## Running across multiple categories
 
@@ -218,6 +280,10 @@ tests/
 │   ├── test_project_editor.py          # Add, delete, and duplicate groups, datasets, actions
 │   ├── test_project_import_export.py   # project.exportJson, project.loadFromJSON, roundtrip
 │   ├── test_project_save.py            # File save/reload, widget settings, layout persistence
+│   ├── test_problem_center.py          # problems.* diagnostics: project, link, script findings
+│   ├── test_widget_extensions.py       # Widget extension findings, scope rules, no Pro bypass
+│   ├── test_connection_diagnostics.py  # diagnostics.* self-checks: reachability, ack-and-poll
+│   ├── test_link_recovery.py           # 100 TCP severances, steady state, cancel, MQTT recovery
 │   ├── test_console_configuration.py   # Console settings: echo, timestamps, modes, font, send
 │   ├── test_console_ansi_vt100.py      # ANSI/VT100 color codes, cursor sequences, edge cases
 │   ├── test_dashboard_configuration.py # FPS, data points, operation mode, status/data queries
@@ -251,6 +317,7 @@ tests/
 ├── scripts/                            # Unit tests for JS frame-parser scripts
 │   ├── conftest.py                     # run_parser() helper + parse_script fixture
 │   ├── test_frame_parsers.py           # 28 parser classes (AT, Base64, NMEA, MAVLink …)
+│   ├── test_widget_manifests.py        # Spec-0038 widget packages: schema, reserved ids, qrc
 │   └── test_cpp_regressions.py         # Logic-only C++ regression checks
 │
 └── utils/                              # Shared test utilities
