@@ -532,7 +532,7 @@ client.call_tool("io.connect")
 ## License
 
 This example follows Serial Studio's dual-licensing:
-- GPL-3.0-only for open source builds
+- GPL-3.0-or-later for open source builds
 - Commercial license for Pro builds
 
 See main project LICENSE for details.

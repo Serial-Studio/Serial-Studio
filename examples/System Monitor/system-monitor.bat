@@ -10,7 +10,7 @@ rem Usage (from Command Prompt, optional):
 rem   system-monitor.bat [--interval SECONDS]
 rem
 rem Copyright (C) 2020-2025 Alex Spataru
-rem SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+rem SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 rem -------------------------------------------------------------------------
 
 setlocal

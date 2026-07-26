@@ -154,4 +154,4 @@ Dataset index `N` in the `.ssproj` maps to `_vals[N - 1]` (Serial Studio uses 1-
 ## License
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial

@@ -7,6 +7,7 @@ Extensions are add-ons that extend Serial Studio. Supported types:
 - **Themes.** Customize the whole look and feel, including code editor syntax colors.
 - **Frame parsers.** JavaScript functions that decode custom binary or text protocols into structured data.
 - **Project templates.** Ready-to-use `.ssproj` project files for common sensor configurations.
+- **Widgets.** Dashboard visualizations written in QML that render live data on the canvas like a built-in widget. Unlike plugins, they run inside Serial Studio, with the same privileges as the application itself — see [Widget Extension Development](Widget-Extension-Development.md).
 - **Plugins.** External programs (Python, native binaries, and so on) that connect to Serial Studio's API server to provide custom real-time data processing, visualization, and analysis.
 
 Extensions are downloaded from online repositories and installed locally. You can browse, install, update, and uninstall them from the **Extension Manager** dialog.
@@ -34,6 +35,8 @@ Click the **Extensions** button in the toolbar. The Extension Manager has three 
      script file) to load one into your project.
    - **Project templates** are copied into your workspace's Extensions folder as `.ssproj`
      files; use **Open Project** in the toolbar to load one.
+   - **Widgets** appear in the project editor's Widget list after a restart, for the entity kind
+     they declare. The first time one renders, Serial Studio asks whether to allow it to run.
 
 ## Uninstalling an extension
 
@@ -119,6 +122,9 @@ my-repo/
   frame-parser/my-parser/
     info.json
     my-parser.js
+  widget/com.example.level-bar/
+    info.json
+    LevelBar.qml
 ```
 
 ### `manifest.json`
@@ -163,12 +169,16 @@ Each extension has an `info.json` with metadata:
 
 Plugins add `entry`, `runtime`, and optionally `platforms` and `grpc` fields. See the [Plugin Development](Plugin-Development.md) guide for the full reference and examples.
 
+#### Widget `info.json`
+
+Widgets add a `widget` block declaring the entity scope, the QML entry file, what data the widget accepts, and its settings. See the [Widget Extension Development](Widget-Extension-Development.md) guide for the full reference, the data model, and the trust model.
+
 #### Field reference
 
 | Field         | Required | Description |
 |---------------|----------|-------------|
 | `id`          | Yes      | Unique identifier (lowercase, hyphens). |
-| `type`        | Yes      | `theme`, `frame-parser`, `project-template`, or `plugin`. |
+| `type`        | Yes      | `theme`, `frame-parser`, `project-template`, `widget`, or `plugin`. |
 | `title`       | Yes      | Display name in the Extension Manager. |
 | `description` | Yes      | Short description shown on the card. |
 | `author`      | Yes      | Author name or organization. |

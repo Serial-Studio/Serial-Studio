@@ -14,7 +14,7 @@ The GPLv3 covers the open source portions of the Serial Studio codebase. It appl
 
 Under GPLv3 you can use, study, modify, and redistribute Serial Studio freely, but any derivative work has to be released under GPLv3 as well. There is no warranty.
 
-Full text: `LICENSES/GPL-3.0-only.txt`
+Full text: `LICENSES/GPL-3.0-or-later.txt`
 Reference: <https://www.gnu.org/licenses/gpl-3.0.html>
 
 ### Serial Studio Commercial License
@@ -71,7 +71,7 @@ For a breakdown of features available under each license tier, see [Pro vs Free 
 ## License files
 
 - `LICENSE.md`: full dual-license agreement.
-- `LICENSES/GPL-3.0-only.txt`: GPLv3 license text.
+- `LICENSES/GPL-3.0-or-later.txt`: GPLv3 license text.
 - `LICENSES/LicenseRef-SerialStudio-Commercial.txt`: Commercial License terms.
 
 For commercial licensing or legal questions, email alex@serial-studio.com.

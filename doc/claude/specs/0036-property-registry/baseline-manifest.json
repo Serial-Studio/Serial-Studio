@@ -1,0 +1,162 @@
+{
+  "spec": "0036-property-registry",
+  "kind": "provisional-static-baseline",
+  "capturedOn": "2026-07-25",
+  "note": "sha256 of the on-disk project corpus before any registry change. Not a substitute for the live project.open + project.exportJson baseline (T1); it only proves the input files were unchanged when the maintainer runs the capture.",
+  "projects": [
+    {
+      "path": "app/rcc/demo/RocketLaunch.ssproj",
+      "sha256": "df792f6bc79c652f6841997c29567ecff7a4cb6d31427c1973731123f3e80462",
+      "bytes": 58659,
+      "groups": 4,
+      "datasets": 14
+    },
+    {
+      "path": "examples/BLE Battery/BLE Battery Level.ssproj",
+      "sha256": "0e580a26de770a240145be5ac94f6a6f54b47e47cba1e2bde129dc2d9fd260bb",
+      "bytes": 6112,
+      "groups": 1,
+      "datasets": 1
+    },
+    {
+      "path": "examples/CAN Bus Example/ecu_simulator.ssproj",
+      "sha256": "89359a5046b2ea6deb2df60c0fc3cfefd4b1a65ed763fed8505ec14720519b5d",
+      "bytes": 103347,
+      "groups": 14,
+      "datasets": 42
+    },
+    {
+      "path": "examples/Camera Telemetry/Camera Telemetry.ssproj",
+      "sha256": "79a5d73ed763bf0869267acc50073d9bbb72fe94ce619a986105cfc11b7d261e",
+      "bytes": 6869,
+      "groups": 2,
+      "datasets": 2
+    },
+    {
+      "path": "examples/Dual Drone Telemetry/Dual Drone Telemetry.ssproj",
+      "sha256": "7637d46db97982afca5361d936446bed0e6dfdc0b00fd8de3218f61cacfc5006",
+      "bytes": 201733,
+      "groups": 16,
+      "datasets": 48
+    },
+    {
+      "path": "examples/EM Wave Simulator/EMWaveSimulator.ssproj",
+      "sha256": "6694172db32af7e28bd9278ef8635f5d148618c4e0cc98bcb81941093f7f5cf4",
+      "bytes": 17281,
+      "groups": 2,
+      "datasets": 6
+    },
+    {
+      "path": "examples/HexadecimalADC/HexadecimalADC.ssproj",
+      "sha256": "8c41ea7a2ad5877f92cbb59b96bb14ff55b75ee21a0e13860523f57cfd4f414f",
+      "bytes": 13016,
+      "groups": 2,
+      "datasets": 12
+    },
+    {
+      "path": "examples/Hydrogen/Hydrogen.ssproj",
+      "sha256": "5312969e73e9dfe94382a828bbdfc4707f176eca4f0db3fa952b31a46943679e",
+      "bytes": 12361,
+      "groups": 2,
+      "datasets": 4
+    },
+    {
+      "path": "examples/IMU Simulator/imu_batched.ssproj",
+      "sha256": "5f8891b84c8250777829321c971e548b2df6a8168275b314283c0f42d6c91e87",
+      "bytes": 13076,
+      "groups": 2,
+      "datasets": 5
+    },
+    {
+      "path": "examples/ISS Tracker/iss-tracker.ssproj",
+      "sha256": "68e9363729051e2e1b74ccf0104f47a8fe6b9df2e341547eebcd7e1d0b645919",
+      "bytes": 7386,
+      "groups": 2,
+      "datasets": 3
+    },
+    {
+      "path": "examples/LTE modem/LTE Modem.ssproj",
+      "sha256": "c703a85f323d82a56fba875202807ab7376bad29cc2bfb896f1438aa91a8c97c",
+      "bytes": 3276,
+      "groups": 1,
+      "datasets": 5
+    },
+    {
+      "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
+      "sha256": "38d9a8c909289acd3aec49ebe623aa26634d831c674898ead9c29313082da4eb",
+      "bytes": 22394,
+      "groups": 2,
+      "datasets": 6
+    },
+    {
+      "path": "examples/MPU6050/MPU6050.ssproj",
+      "sha256": "532da500bfd1fce594867dd6081faecadf132f0e93560d897e84247af224153f",
+      "bytes": 5271,
+      "groups": 3,
+      "datasets": 7
+    },
+    {
+      "path": "examples/MQTT Subscriber Example/HSL Helsinki Public Transit.ssproj",
+      "sha256": "685d6319f3059786d795014ebfc9261aa58b137fda26ba00cfa8644f57cfba7b",
+      "bytes": 25678,
+      "groups": 2,
+      "datasets": 9
+    },
+    {
+      "path": "examples/Modbus PLC Simulator/Modbus PLC Simulator.ssproj",
+      "sha256": "a4db53e7e3b3d762feb2d53f81b788ec527211d314b1f74de137a4266441e15d",
+      "bytes": 20203,
+      "groups": 1,
+      "datasets": 9
+    },
+    {
+      "path": "examples/OBD-II/OBD-II.ssproj",
+      "sha256": "4f16bbdda5f8632297030c61ca869b3eaf8221238d82234968f6628d701f0341",
+      "bytes": 27337,
+      "groups": 1,
+      "datasets": 7
+    },
+    {
+      "path": "examples/Protobuf Example/Protobuf Example.ssproj",
+      "sha256": "7e93077e44aa104a4317e064bef0e16262e1c873f3f7aff53f58e5213fe732e8",
+      "bytes": 23856,
+      "groups": 4,
+      "datasets": 13
+    },
+    {
+      "path": "examples/RC Plane Simulator/RC Plane Simulator.ssproj",
+      "sha256": "d847f4e50578c124b35c2f05fad35fdf433ae0bee7a2223f608c8accb6aa3da1",
+      "bytes": 19913,
+      "groups": 6,
+      "datasets": 15
+    },
+    {
+      "path": "examples/System Monitor/system-monitor.ssproj",
+      "sha256": "e6ea37eadb666823dec341f150276434a8f9a26a54aa07667ab2149234fb81a9",
+      "bytes": 69219,
+      "groups": 8,
+      "datasets": 59
+    },
+    {
+      "path": "examples/Testo T549i/Testo T549i.ssproj",
+      "sha256": "f0222814d3f88b7b2506f95c983eee904a7fbdf1c853375b2842a322d53a7bbd",
+      "bytes": 8645,
+      "groups": 1,
+      "datasets": 2
+    },
+    {
+      "path": "examples/TinyGPS/TinyGPS.ssproj",
+      "sha256": "5392d62413fd0b7df6ce7dfcc1f847ad5873c2e1e1a4a20e4cdfedb6a14d1112",
+      "bytes": 4124,
+      "groups": 1,
+      "datasets": 3
+    },
+    {
+      "path": "examples/Vibration Test Rig/VibrationTestRig.ssproj",
+      "sha256": "2ec16d0ed1ab41deca73052e82bae5f3988ba36cd6ec0598f8f4ad95c890a73e",
+      "bytes": 63337,
+      "groups": 5,
+      "datasets": 9
+    }
+  ]
+}

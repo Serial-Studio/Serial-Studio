@@ -98,7 +98,7 @@ or a region is suppressed:
 - **SS-STY-7**: Control flow: max 3 nesting levels (guard clauses / early return); functions
   40-80 lines, hard limit 100.
 - **SS-STY-8**: SPDX banner is the dual-license block
-  (`SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial`).
+  (`SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial`).
   Commercial-only files (Pro modules and the Pro-feature API handlers, e.g.
   `CANBusHandler`/`ModbusHandler`/`MDF4ExportHandler`) use
   `LicenseRef-SerialStudio-Commercial` and are gated behind `#ifdef BUILD_COMMERCIAL`;

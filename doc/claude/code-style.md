@@ -133,7 +133,7 @@ Font helpers: `uiFont`, `boldUiFont`, `monoFont`, `customUiFont(fraction, bold)`
 
 ### Licensing
 
-SPDX headers required: `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
+SPDX headers required: `GPL-3.0-or-later`, `LicenseRef-SerialStudio-Commercial`, or both.
 Validate at system boundaries only (API input, file I/O, network). Trust internal data.
 
 ## Safety-Critical Code — NASA Power of Ten

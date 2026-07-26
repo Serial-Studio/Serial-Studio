@@ -151,5 +151,5 @@ Both drones have low-battery (0-20%) and low-voltage (18-21 V) alarm bands that 
 - Serial Studio Pro (multi-source, Image View, Output Panel, and Painter).
 
 <!--
-  SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+  SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 -->

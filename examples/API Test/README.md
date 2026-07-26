@@ -610,7 +610,7 @@ The complete API command reference lives at [doc/help/API-Reference.md](../../do
 ## License
 
 This example is dual-licensed:
-- **GPL-3.0-only**: For use with Serial Studio GPL builds
+- **GPL-3.0-or-later**: For use with Serial Studio GPL builds
 - **LicenseRef-SerialStudio-Commercial**: For use with Serial Studio Pro
 
 See the main LICENSE file in the repository root for details.

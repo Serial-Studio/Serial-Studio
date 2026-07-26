@@ -264,10 +264,10 @@ Commercial licenses directly fund development, bug fixes, and new features.
 Serial Studio uses a dual-license model that separates open source usage from commercial distribution:
 
 - [LICENSE.md](LICENSE.md): summary of the dual-license structure and usage terms.
-- [LICENSES/GPL-3.0-only.txt](LICENSES/GPL-3.0-only.txt): full GNU GPLv3 text for open source source code.
+- [LICENSES/GPL-3.0-or-later.txt](LICENSES/GPL-3.0-or-later.txt): full GNU GPLv3 text for open source source code.
 - [LICENSES/LicenseRef-SerialStudio-Commercial.txt](LICENSES/LicenseRef-SerialStudio-Commercial.txt): full terms for proprietary features and official binaries.
 
-Source files are individually marked with SPDX headers, either `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both. This lets developers build and distribute GPL-compliant versions while keeping commercial features protected.
+Source files are individually marked with SPDX headers, either `GPL-3.0-or-later`, `LicenseRef-SerialStudio-Commercial`, or both. This lets developers build and distribute GPL-compliant versions while keeping commercial features protected.
 
 ## Picking the right version
 

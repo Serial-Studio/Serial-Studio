@@ -1,0 +1,41 @@
+{
+  "id": "com.example.level-bar",
+  "type": "widget",
+  "title": "Level Bar",
+  "description": "A horizontal level bar for a single numeric dataset, with a configurable colour and an optional numeric readout.",
+  "author": "Your Name",
+  "version": "1.0.0",
+  "license": "MIT",
+  "category": "Instruments",
+  "files": ["info.json", "LevelBar.qml"],
+  "widget": {
+    "apiVersion": "1.0",
+    "hostCompat": ">=1.0 <2.0",
+    "scope": "dataset",
+    "qml": "LevelBar.qml",
+    "icon": "widgets/bar",
+    "readsStringValues": false,
+    "accepts": {
+      "datasets": { "min": 1, "max": 1 },
+      "value": "numeric"
+    },
+    "defaultSize": { "width": 360, "height": 120 },
+    "config": [
+      {
+        "id": "barColor",
+        "type": "choice",
+        "label": "Bar colour",
+        "description": "Fill colour of the level bar.",
+        "default": "green",
+        "options": ["green", "amber", "red"]
+      },
+      {
+        "id": "showValue",
+        "type": "bool",
+        "label": "Show numeric value",
+        "default": true
+      }
+    ],
+    "experimental": false
+  }
+}

@@ -103,7 +103,11 @@ The hotpath reads **cached** flags, never live getters: `m_operationMode`, `m_pl
 `m_streamAvailable`. A new input to any of them must wire its change signal to the matching
 cache refresh (`updateStreamAvailable` / `refreshAnyAsyncSink` / the player lambdas) or
 frames/exports silently stop. Wire the refresh with `Qt::DirectConnection` — a queued
-refresh lags a full event-loop turn behind frames already flowing.
+refresh lags a full event-loop turn behind frames already flowing. `streamAvailable()` also
+carries the spec-0040 mirror input: a leading `[[unlikely]]` read of
+`API::MirrorSession::mirroring()`, deliberately a plain module-static bool (never a
+`MirrorSession` construction — the getter runs inside Dashboard's ctor); see
+[mirror.md](mirror.md).
 
 - `m_changeDriven` (project property `changeDrivenTransforms`, opt-in/off by default) skips a
   virtual dataset's transform when none of its captured read-set slots changed since its last
@@ -115,6 +119,39 @@ refresh lags a full event-loop turn behind frames already flowing.
   capture behind `io.getLatestFrame`: it retains one `CapturedDataPtr` per source (the
   FrameReader pool probe skips pinned slots) plus the channel tokens — keep it gated and
   allocation-free.
+
+## Diagnostic Counters — Pulled at 1 Hz (spec 0033)
+
+The problem center reads link and script health from **plain counters polled on
+`Misc::TimerEvents::timeout1Hz`**, never from a per-frame signal. The frame path only
+increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemCenter`.
+
+- **`FrameReader`** (main-thread, SPSC — plain `quint64`, no atomics): `m_bytesIn` (chunk size
+  in `processData`), `m_framesExtracted` (next to the existing `noteDroppedFrame` accounting in
+  `enqueueCaptured` and the `NoDelimiters` branch), `m_checksumErrors` (inside the existing
+  `ValidationStatus::ChecksumError` branch), and `m_totalOverflowBytes`, accumulated inside the
+  existing `if (overflow > 0)` guard immediately before `resetOverflowCount()` — which
+  previously destroyed the number. `resetDiagnosticCounters()` clears all four. The per-failure
+  checksum hex dump is throttled to the same 5 s pattern `noteDroppedFrame` uses.
+- **`FrameBuilder`**: `m_transformErrors` increments in the existing transform-error branches;
+  `m_lastTransformError` / `m_lastTransformDatasetUniqueId` are assigned **only when the failing
+  dataset differs from the last recorded one**, so a dataset that throws every frame allocates
+  the message once rather than per frame (`noteTransformError`, `SS_COLD`).
+- **Reading them.** `DeviceManager::frameReader()` exposes the reader; `ConnectionManager::
+  linkStats()` sums the per-device counters into an `IO::LinkStats` POD. It is called from the
+  1 Hz tick only — no caching, no signal, no call site on the frame path. Script health comes
+  from `FrameParser::scriptStats()` (per-source engine counters) and `FrameBuilder::
+  parsedFrameCount()`.
+
+**A `FrameReader` is recreated, not reused** (`resetFrameReader()` / `DeviceManager::
+reconfigure()`), so the counters restart at zero on every connect and config change. The link
+checkers therefore work on **deltas against the previous sample and treat any decrease as a
+reset**, never on absolute totals. Finding text is bucketed ("more than 1,000") so it stays
+stable while the condition is stable — a live count in the string would reset the panel's model
+once per second.
+
+None of these counters is an input to a cached hotpath flag, and none of them gates frame
+processing.
 
 ## Replay Ingestion (spec 0020)
 

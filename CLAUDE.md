@@ -29,13 +29,10 @@ from memory:
 
 `canary: qt 6.11.1 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`
 
-It is a context-health probe, written in plain ASCII so no toolchain, terminal, or
-encoding step can corrupt it. A magic word would only signal *that* the context window
-degraded; each value here is a fact the repo's rules depend on, so a wrong or missing
-value shows *which* fact was lost — and while the context is healthy, retyping the line
-re-anchors those constants every turn (see the J-Space discipline below). Keep it
-unobtrusive: one plain-text line at the very end, no decoration, nothing before or
-after it on the line.
+It is a context-health probe in plain ASCII. Each value is a fact the repo's rules
+depend on, so a wrong or missing value shows *which* fact was lost — and retyping the
+line re-anchors those constants every turn (see the J-Space discipline below). Keep it
+unobtrusive: one plain-text line at the very end, nothing else on the line.
 
 - **From memory only.** Never Read/Grep this file or anything else to reconstruct the
   line — a looked-up canary defeats the measurement. If you cannot reproduce it
@@ -53,21 +50,19 @@ These rules are about predictability, not productivity — the difference
 between a tool the user re-audits every time and a collaborator they rely
 on. Capability without predictability gets disabled.
 
-- **Never touch, revert, or restore files outside your own edits — this is
-  the one rule whose violation loses real work.** A file modified in the
-  working tree that *you* did not edit this session is the user's
-  in-progress work. NEVER `git checkout`/`restore`/`reset`/`stash`/`clean`
-  it, overwrite it, or "clean it up" — not even when it looks like
-  unrelated noise, a generated artifact, or stray subagent output, and not
-  even to make your own diff readable. The `git status` at session start is
-  a snapshot, not a baseline you may restore to. If such a file is in your
-  way or seems wrong, *stop and say so in chat* — quote the path, say you
-  did not touch it, and ask. Restoring even derived artifacts (`.ts`/`.qm`,
-  build output) requires explicit per-file permission, because you cannot
-  prove the user wasn't mid-edit. When unsure whether a file is yours: it
-  is not. This has bitten before — a subagent regenerating translation
-  files, and a reflexive restore nearly discarding hours of uncommitted
-  work — so the rule is absolute, not advisory.
+- **Never touch, revert, or restore files outside your own edits — the one
+  rule whose violation loses real work.** A working-tree file *you* did not
+  edit this session is the user's in-progress work. NEVER
+  `git checkout`/`restore`/`reset`/`stash`/`clean` it, overwrite it, or
+  "clean it up" — not even when it looks like noise, a generated artifact,
+  or stray subagent output. Session-start `git status` is a snapshot, not a
+  baseline to restore to. If such a file is in your way or seems wrong,
+  *stop and say so in chat* — quote the path, say you did not touch it,
+  ask. Restoring even derived artifacts (`.ts`/`.qm`, build output) needs
+  explicit per-file permission — you cannot prove the user wasn't mid-edit.
+  When unsure whether a file is yours: it is not. This has bitten before (a
+  subagent regenerating translation files; a reflexive restore nearly
+  discarding hours of uncommitted work) — absolute, not advisory.
 - **Stay in your lane.** Every file touched outside the explicit ask costs
   the reviewer an audit pass. Spot an adjacent fix? *Name it in chat*
   ("noticed X — want it in this pass?") rather than slipping it into the
@@ -76,13 +71,12 @@ on. Capability without predictability gets disabled.
   or commit message shows *why* — but only when the choice was non-obvious
   (one of two reasonable approaches, a workaround, a hidden invariant). One
   sentence. When the choice was obvious, say nothing.
-- **State the plan before non-trivial work.** Not just multi-file: any
-  change where a reasonable reviewer could prefer a different approach. Plan
-  visible *before* execution is the contract — a summary after is not. This
-  is operationalized as spec-driven development: non-trivial or multi-file
-  work MUST start with `/ss-spec`, and no implementation lands before an
-  approved `plan.md`. Trivial one-liners stay exempt. See
-  [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
+- **State the plan before non-trivial work.** Any change where a reasonable
+  reviewer could prefer a different approach: plan visible *before*
+  execution is the contract — a summary after is not. Operationalized as
+  spec-driven development: non-trivial or multi-file work MUST start with
+  `/ss-spec`; no implementation lands before an approved `plan.md`. Trivial
+  one-liners exempt. See [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
 - **Self-review before handoff.** Before declaring a non-trivial change
   done, re-read the diff: is this *what was asked, and only that*? If you
   can't answer yes, say so before claiming completion.
@@ -94,12 +88,12 @@ to run from any directory.
 
 | Script | Role |
 |--------|------|
-| `sanitize-commit.py` | Top-level driver: chmod (POSIX) → expand-doxygen → clang-format → code-verify --fix → clang-format → code-verify --check → black → documentation-verify → generate-sdk → generate-command-strings → registry-verify → search-index rebuild → changed-file summary. Sanitize only — it never commits or pushes. **Run before every commit.** |
+| `sanitize-commit.py` | Top-level driver: chmod (POSIX) → expand-doxygen → clang-format → code-verify --fix → clang-format → code-verify --check → singleton-census gate (blocking) → black → documentation-verify → generate-sdk → generate-command-strings → generate-property-registry (regen + --check + --check-snapshot) → registry-verify → search-index rebuild → changed-file summary. Sanitize only — it never commits or pushes. **Run before every commit.** |
 | `code-verify.py` | Structural + tone linter for C++/QML/H. `--fix` rewrites in place; `--check` regenerates `.code-report`. Errors block CI; advisories are baseline-debt cleanup. |
 | `documentation-verify.py` | Markdown linter for AI-narration / marketing copy. Read-only; writes `.doc-report`. Targets `README.md`, `AGENTS.md`, `doc/help/**`, `examples/**/README.md` (CLAUDE.md is exempt). |
 | `expand-doxygen.py` | Rewrites single-line `/** text */` into the canonical 3-line block. |
-| `tu-cutter.py` | Deterministic TU splitter for god-class .cpp files: key-based manifest drives verbatim block moves into per-concern TUs + shared headers; refuses to cut unless the block parse reconstructs the original exactly. Used for the 2026-07 ProjectModel/ProjectEditor/ProjectHandler split (spec 0002). |
-| `registry-verify.py` | Spec-0028 registry lint: icon-tree layout/dup/qrc sync + command-manifest schema/ids/icons/shortcuts + commercial-guard scan of `app/qml/Commands/` + QML icon render-size lint (flags `IconRegistry.icon(...)` requests that resolve to a larger tier than the object's render size). Run after touching icons, manifests, or bindings; now gated in `sanitize-commit.py`. |
+| `tu-cutter.py` | Deterministic TU splitter for god-class .cpp files; refuses to cut unless the block parse reconstructs the original exactly (spec 0002 holds the manifests + plan). |
+| `registry-verify.py` | Spec-0028/0036 registry lint: icon tree + command manifests + commercial-guard scan of `app/qml/Commands/` + QML icon render-size + property-manifest rules. Run after touching icons, manifests, or bindings; gated in `sanitize-commit.py`. |
 | `generate-command-strings.py` | Manifests -> `app/src/UI/CommandStrings.cpp` (lupdate stub, "Commands" context). Hooked into sanitize-commit; `--check` gates drift. |
 | `generate-legacy-icons.py` | icon-map.csv -> `Misc::legacyIconPath()` table mapping pre-0028 icon URLs persisted in user project files. Rerun only if the migration manifest changes. |
 
@@ -112,30 +106,28 @@ that means the existing codebase has baseline debt — new code should still cle
 
 ## Tests
 
-Python/pytest suite under `tests/`. Full catalog (per-file coverage, fixtures, markers, the
-delay/operation-mode tables, and a worked example) lives in [tests/README.md](tests/README.md)
-— read it before writing a test. The shape that matters before you reach for it:
+Python/pytest suite under `tests/`. Full catalog — per-file coverage, fixtures, markers, the
+delay/operation-mode tables, the C++ ctest tier + presets, the `--selftest` in-app tier —
+lives in [tests/README.md](tests/README.md); read it before writing a test. What binds you:
 
 - **You don't build or run the app, so you can't run the live-API tests.** Integration,
-  security, and performance tests drive a running Serial Studio over TCP and assert on parsed
-  frames / exports / dashboards — they need the app up with **Settings → Miscellaneous →
-  Enable API Server** (`localhost:7777`). The user runs those.
-- **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests that
-  spawn a fresh Node.js subprocess per case (no Qt, no app). Verify parser-script logic here.
-- **`pip install -r tests/requirements.txt`** once; `pytest.ini` registers all markers and a
-  30 s per-test timeout.
+  security, and performance tests drive a running Serial Studio over TCP — they need the app
+  up with **Settings → Miscellaneous → Enable API Server** (`localhost:7777`). The user runs
+  those.
+- **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh
+  Node.js subprocess per case, no Qt, no app. `pip install -r tests/requirements.txt` once;
+  `pytest.ini` registers all markers and a 30 s per-test timeout.
+- **C++ units under `app/tests/`** (spec 0032) run via `ctest` and the `CMakePresets.json`
+  presets — the maintainer's step, not yours. **`--selftest`** suites run inside
+  `CLI::process()` **before** the composition root: never touch an application singleton there.
+- The C++ hotpath has no pytest path — throughput is the user-run `--benchmark-hotpath` gate
+  (see Threading & Hotpath), piece correctness the ctest tier; `ci.yml` runs both.
 
 ```bash
-pytest tests/integration/ -v                                          # all integration (needs app)
-pytest tests/integration/test_frame_parsing.py -v                     # one file
-pytest tests/integration/test_frame_parsing.py::test_checksum_validation -v -s   # one test
-pytest tests/scripts/ -v                                              # JS-parser units (Node.js only)
-pytest tests/ -m "not destructive" -v                                # skip server-crashing tests
-pytest tests/integration/ -n 4                                        # parallel (pytest-xdist)
+pytest tests/scripts/ -v                  # JS-parser units (Node.js only) — safe for you
+pytest tests/integration/ -v              # all integration (needs running app)
+pytest tests/ -m "not destructive" -v     # skip server-crashing tests
 ```
-
-The C++ hotpath has no pytest path — it's gated by the in-binary `--benchmark-hotpath` flag
-(see Threading & Hotpath) that the user runs, plus `ci.yml` in CI.
 
 ## Project Overview
 
@@ -168,25 +160,21 @@ not a substitute.
 
 ## J-Space Discipline — Verbalize the Binding Constraints
 
-LLM workspace research ([doc/claude/j-space.md](doc/claude/j-space.md)) shows deliberate
-reasoning runs on a small set of concepts the model is poised to verbalize; familiar-shaped
-work runs on autopilot and bypasses it. The repo's rules only steer an edit if they are
-*named at the point of action*, so:
+Deliberate reasoning runs on a small set of verbalized concepts; familiar-shaped work runs
+on autopilot and bypasses it ([doc/claude/j-space.md](doc/claude/j-space.md)). The repo's
+rules only steer an edit if *named at the point of action*, so:
 
 - **Name before acting.** Before any edit on a protected path (hotpath, ctor closure,
   signal wiring, cmake flag modules), state in chat the 3-5 invariants that bind *this*
-  change — in your own words, not a doc citation. Skills re-state this where it applies.
-- **Few, late, specific.** Select the constraints that bind the change at hand; never recite
-  whole rule files. The sub-doc/skill architecture exists to load rules close to the edit.
-- **Counterfactual check at handoff.** Before claiming done: which rule does this diff most
-  risk violating, and what is the concrete evidence it doesn't? Name both.
-- **Diverge by naming.** For design and review work, distinct named lenses/candidates load
-  distinct thinking — sketch named alternatives before recommending (the human still gets
-  one recommendation, per working-relationship.md).
-- **Externalize long state.** Multi-step work writes intermediate state into durable
-  artifacts (spec/plan/tasks files, a chat checklist) instead of holding it — written state
-  stops competing for the capacity-limited workspace; re-name only what binds the current
-  edit.
+  change — in your own words, not a doc citation.
+- **Few, late, specific.** Only the constraints that bind the change at hand; never recite
+  whole rule files.
+- **Counterfactual check at handoff.** Which rule does this diff most risk violating, and
+  what concrete evidence says it doesn't? Name both.
+- **Diverge by naming.** Design/review work sketches named alternatives before recommending
+  (the human still gets one recommendation, per working-relationship.md).
+- **Externalize long state.** Write intermediate state into durable artifacts (spec/plan/
+  tasks files, a chat checklist); re-name only what binds the current edit.
 
 ## Threading & Hotpath — Non-Negotiable
 
@@ -200,42 +188,49 @@ cached flags, benchmark mechanics) in
 - **Hotpath signal hops must be `Qt::DirectConnection`.** Queued between two main-thread
   objects fills the 65536-slot queue at 10+ kHz and drops frames.
 - **No allocation, no Frame copy on the dashboard path.** Draw the Dashboard frame from
-  `FrameBuilder::acquireFrame()` (slot pool, aliasing shared_ptr — no per-frame control
-  block), never a direct `make_shared<TimestampedFrame>`. The async-sink fan-out in
-  `hotpathTxFrame` makes one detached copy on purpose (slow export path, gated on a sink
-  being on) so a backlog can't pin the pool.
+  `FrameBuilder::acquireFrame()` (slot pool, aliasing shared_ptr), never a direct
+  `make_shared<TimestampedFrame>`. The `hotpathTxFrame` async-sink fan-out makes one detached
+  copy on purpose (slow export path, gated on a sink being on) so a backlog can't pin the pool.
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` →
-  `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes
-  (`assign_utf8_in_place`), zero steady-state allocation. The hotpath reads **cached**
-  flags (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`, `m_captureLatestFrame`,
-  `m_changeDriven`, Dashboard `m_streamAvailable`) — a new input to any of them must wire its
-  change signal to the cache refresh or frames/exports silently stop. Each flag's mechanics
-  (what `m_changeDriven` skips, what `m_captureLatestFrame` retains) live in
-  [doc/claude/architecture/dataflow.md](doc/claude/architecture/dataflow.md)
-  "Cached Hotpath Flags" — read it before touching any of them.
+  `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes,
+  zero steady-state allocation. The hotpath reads **cached** flags (`m_operationMode`,
+  `m_playerOpen`, `m_anyAsyncSink`, `m_captureLatestFrame`, `m_changeDriven`, Dashboard
+  `m_streamAvailable`) — a new input to any of them must wire its change signal to the cache
+  refresh or frames/exports silently stop. Flag mechanics: dataflow.md "Cached Hotpath
+  Flags", read before touching any of them. `streamAvailable()` also reads the spec-0040
+  mirror flag (`API::MirrorSession::mirroring()`, a plain module-static bool — never a
+  construction; see [doc/claude/architecture/mirror.md](doc/claude/architecture/mirror.md)).
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
+- **Connection orchestration is task trees, not per-driver flags (spec 0034).** `app/src/Async/`
+  + `IO::ConnectionFlows`; `DeviceManager` owns one thread-affine `TaskRunner` per device;
+  drivers opt in via `HAL_Driver`'s `supportsAsyncOpen()`/`beginOpen()`/`abortOpen()`/
+  `linkDropped()` (defaults keep unmigrated drivers synchronous). Retry/backoff declared
+  **once** (`RetryPolicy::initialConnect()` / `autoReconnect()`) — never per-driver. Trees run
+  at connection boundaries only: nothing per frame, no mutex, no new thread, no
+  connection-state signal per retry. See [doc/claude/architecture/io.md](doc/claude/architecture/io.md).
+- **Diagnostics are pulled, never pushed (specs 0033/0035).** `FrameReader` / `FrameBuilder`
+  counters are plain `quint64` increments polled on the 1 Hz tick — never signal, allocate,
+  or lock per frame. A recreated `FrameReader` zeroes them: consumers work on deltas, treat a
+  decrease as a reset. `Misc::ConnectionDiagnostics` reports through `Misc::ProblemCenter`
+  under the same rule: checkers return synchronously, nothing per frame.
 - **JS scripts**: always `JsScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
-- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`)
-  drives the real parse pipeline with nine gates tiered off `--min-fps` (default 256000): seven
-  parser gates from data pipeline + Native numeric at 4x (1.024 MHz) down to JS mixed at 64 kHz,
-  plus 0.5x floors on the Lua exporter/dashboard reference rows so a consumer-path collapse
-  can't ship silently (full tier table in the `ss-hotpath` skill); `ci.yml` (the only
-  workflow) runs it per push/PR as a hard gate on the PGO-optimized binary. Don't regress it.
-- **Portable SIMD kernels live in `app/src/DSPSimd.h`** (`namespace DSP`, `SS_SIMD_X86` /
-  `SS_SIMD_NEON` detection, spec 0021): every kernel ships an x86-64-v2 (SSE2..SSE4.2) lane, an
-  aarch64 NEON lane, and a reference scalar fallback, and must stay per-lane bit-exact versus its
-  scalar loop (byte/int ops, IEEE min/max compares, per-lane converts only — no reassociation, no
-  approximate transcendentals). New bulk loops (delimiter scans, min/max sweeps, ring gathers)
-  reuse these instead of inlining intrinsics at call sites.
-- **Hotpath optimization macros live in `app/src/DataModel/HotpathOptimization.h`** (`SS_FORCE_INLINE`,
-  `SS_FLATTEN`, `SS_HOT`/`SS_COLD`, `SS_RESTRICT`, `SS_ASSUME`, `SS_NO_UNROLL`, ...): cross-toolchain
-  spellings with a `__clang__`-first cascade (clang-cl/IntelLLVM take the GNU branch). Annotate the
-  `.h` declaration and `.cpp` definition in lockstep. Never add a fast-math / no-unwind / GCC
-  `optimize("...")` macro (breaks the IEEE-stable + Lua-unwind invariants). `SS_ASSUME` must restate
-  a guard that already ran, never a precondition on a parsed frame. The `datasets+publish` stage is
-  ~70-80% of per-frame time — gate any change here with `--benchmark-hotpath`.
+- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` drives the real parse pipeline
+  with nine gates tiered off `--min-fps` (default 256000), from Native numeric at 4x
+  (1.024 MHz) down to JS mixed at 64 kHz, plus 0.5x consumer-path floors (full tier table in
+  the `ss-hotpath` skill); `ci.yml` runs it per push/PR as a hard gate on the PGO-optimized
+  binary. Don't regress it.
+- **Portable SIMD kernels live in `app/src/DSPSimd.h`** (`namespace DSP`, spec 0021): x86-64-v2
+  + NEON lanes + reference scalar fallback, per-lane bit-exact versus the scalar loop (full
+  contract in the header). New bulk loops reuse these — never inline intrinsics at call sites.
+- **Hotpath optimization macros live in `app/src/DataModel/HotpathOptimization.h`**
+  (`SS_FORCE_INLINE`, `SS_FLATTEN`, `SS_HOT`/`SS_COLD`, `SS_RESTRICT`, `SS_ASSUME`, ...); the
+  header documents the toolchain cascade. Annotate `.h` declaration and `.cpp` definition in
+  lockstep. Never add a fast-math / no-unwind / GCC `optimize("...")` macro (breaks the
+  IEEE-stable + Lua-unwind invariants). `SS_ASSUME` must restate a guard that already ran,
+  never a precondition on a parsed frame. `datasets+publish` is ~70-80% of per-frame time —
+  gate any change with `--benchmark-hotpath`.
 
 ## Startup & Composition Root — Non-Negotiable
 
@@ -243,28 +238,67 @@ cached flags, benchmark mechanics) in
   before AppState, Dashboard last). Never reorder or add entries without re-running the ctor-edge
   proof in [doc/claude/specs/0001-composition-root/](doc/claude/specs/0001-composition-root/).
 - **ProjectModel's ctor closure is a protected surface** (`newJsonFile`, `watchProjectFile`,
-  `scheduleAutoSave`, the `ControlScript::setCode` chain): it runs before AppState/Dashboard exist.
-  Calling `AppState::instance()` / `UI::Dashboard::instance()` there recurses the Meyers guard and
-  aborts at startup — this shipped and crashed once (2026-07-07). Gate new code on `m_initialized`
+  `scheduleAutoSave`, the `ControlScript::setCode` chain): it runs before AppState/Dashboard
+  exist; calling their `instance()` there recurses the Meyers guard and aborts — shipped and
+  crashed once (2026-07-07). Gate new code on `m_initialized`
   (see [doc/claude/architecture/startup.md](doc/claude/architecture/startup.md)).
 - **A ctor-edge proof dies when ctor-reachable code changes.** Any edit inside that closure
   re-triggers the check, no matter how unrelated the edit looks.
+- **`SessionContext` (spec 0039) owns the eight core modules** as `unique_ptr` slots adopted
+  inside `instantiateCoreModules()`. Ctor/dtor stay empty (a constructing ctor re-enters the
+  Meyers guard and aborts); adopted addresses never change; `shutdown()` (from `main.cpp`
+  while `qApp` is alive) releases in exact reverse pinned order. **Never call
+  `SessionContext::current()` from a method body** — composition root and `instance()`
+  forwarders only; the singleton census (`code-verify.py --singleton-census --check`) fails
+  on any increase. Full contract:
+  [doc/claude/architecture/startup.md](doc/claude/architecture/startup.md).
 - **License-gated state must exist before `restoreLastProject()` or re-derive on
-  `activatedChanged`.** OfflineLicense/Trial are pinned in `instantiateCoreModules()` because
-  their ctors install the CommercialToken; anything that bakes `proWidgetsEnabled()` into
-  derived state at load time (auto workspaces, driver lists, dashboard layout) also needs a
-  `LemonSqueezy::activatedChanged` hook, or a late/async activation ships fallback widgets
-  (2026-07-09: Plot3D degraded to MultiPlot on offline-activated machines).
+  `activatedChanged`.** OfflineLicense/Trial are pinned in `instantiateCoreModules()` (their
+  ctors install the CommercialToken); anything baking `proWidgetsEnabled()` into derived
+  state at load time also needs a `LemonSqueezy::activatedChanged` hook, or late/async
+  activation ships fallback widgets (2026-07-09: Plot3D degraded to MultiPlot).
 
 ## Project Layout — the god files are split
 
 `ProjectModel` / `ProjectEditor` implementations live across per-concern TUs in
-`app/src/DataModel/Project/` (+ `ProjectModelShared.h`, `ProjectEditorItemIds.h`,
-`ProjectEditorShared.h`); `ProjectHandler` across `API/Handlers/ProjectHandler{File,Entities,
-Parser,Batch}.cpp` + `ProjectApiSupport.h`, with registration staying in `ProjectHandler.cpp`.
-Facade headers are unchanged — QML/API contracts intact. Map in
-[doc/claude/directory-map.md](doc/claude/directory-map.md); splitter: `scripts/tu-cutter.py`
-(spec 0002 holds the manifests' logic and the collaborator-extraction plan).
+`app/src/DataModel/Project/`; `ProjectHandler` across `API/Handlers/ProjectHandler{File,
+Entities,Parser,Batch}.cpp` (registration stays in `ProjectHandler.cpp`). Facade headers
+unchanged — QML/API contracts intact. Map in
+[doc/claude/directory-map.md](doc/claude/directory-map.md); splitter: `scripts/tu-cutter.py`.
+
+## Project Undo History (spec 0031)
+
+Full detail: [doc/claude/architecture/project.md](doc/claude/architecture/project.md)
+"Undo History" (read before touching any `ProjectModel` mutator).
+
+- **`DataModel::ProjectHistory`**: scoped whole-document mementos, two-phase —
+  `ProjectUndoScope` **stages** a snapshot, the first `setModified(true)` **commits** it. A
+  guard-returning slot or a mutator that never calls `setModified(true)` silently records
+  nothing.
+- **Every new document-mutating `ProjectModel` slot opens a `ProjectUndoScope`**
+  (`undo-scope-missing` lint; Editor TUs excluded, workspace CRUD + presentation setters
+  whitelisted). Composites wrap in one `ProjectUndoFrame`; dialog-showing slots open their
+  scope *after* the dialog.
+- **The apply path never emits `jsonFileChanged`**; `project.undo`/`project.redo` never error
+  on empty history.
+
+## Dataset Property Registry & Generated API Surfaces (specs 0036, 0037)
+
+Full detail: [doc/claude/architecture/project.md](doc/claude/architecture/project.md)
+(read before adding a dataset property or touching any API-surface generator).
+
+- **One declaration**: `app/rcc/properties/dataset.json`. `generate-property-registry.py`
+  emits six checked-in artifacts from it (C++ TUs under `*/Generated/`, the gRPC field-number
+  ledger `proto-fields.json`, the typed `.proto`). **Never hand-edit a generated file**; edit
+  the manifest and rerun.
+- **`schema_props_for()` is the only definition of a property's API schema.** Never re-derive
+  it anywhere else.
+- **gRPC field numbers are append-only released state.** Removing a parameter retires its
+  number to `reserved`; moving one is `code-verify`'s `proto-field-renumbered` error.
+  `api-schema.json` is maintainer-dumped; `--check-snapshot` warns locally, **fails in CI**.
+- **Gates** (`generate-property-registry.py --check`/`--check-snapshot`, `generate-sdk.py
+  --check`, `generate-command-strings.py --check`, `registry-verify.py`, `code-verify.py`)
+  all run in `sanitize-commit.py` and the CI `lint` job.
 
 ## Icon & Command Registry (spec 0028)
 
@@ -285,13 +319,31 @@ Full detail + recipes: [doc/claude/architecture/commands-icons.md](doc/claude/ar
   for it (binding-set order `[app,dashboard]` main / `[dashboard,app]` dashboard). Commercial
   bindings need a `Cpp_CommercialBuild` guard; run `scripts/registry-verify.py`.
 
+## Widget Extensions (spec 0038)
+
+Installable dashboard widgets (`UI::WidgetExtensions`): third-party packages resolve to
+`DashboardExtension = 100` and persist under `"ext:<id>"`, bundled conversions keep their builtin
+enum via `replaces`, `readsStringValues` is what registers a package in `string_targets`, and the
+trust model is consent, not containment — never call an extension sandboxed. Read
+[doc/claude/architecture/dashboard.md](doc/claude/architecture/dashboard.md) before touching it.
+
+## Remote Dashboard Mirror (spec 0040)
+
+One instance streams its dashboard to another over the API socket (NDJSON, top-level
+`"mirror"` key; FNV-1a-64 layout hash guards positional snapshots — any change to dataset
+ordering or `wireUniqueId` is a wire break: bump `kWireVersion`, regenerate
+`tests/fixtures/mirror/`). Publisher wakes on the display tick only while subscribed (never
+the frame path); viewer injects via `Dashboard::hotpathRxFrame` with
+`structureGeneration >= 1<<48`, never reaches the export fan-out.
+`ConnectionState::streamFrames` defaults `true`; only `mirror.subscribe` may flip it. Read
+[doc/claude/architecture/mirror.md](doc/claude/architecture/mirror.md) before touching
+`app/src/API/Mirror/` or `streamAvailable()`.
+
 ## Code Style — Essentials
 
 `scripts/code-verify.py` is the contract — read its `--check` output, don't re-derive the
-rules. Full spec (formatting, header order, comments/Doxygen, QML, performance, licensing,
-naming table) and the NASA Power of Ten live in
-[doc/claude/code-style.md](doc/claude/code-style.md). The handful you need *before* typing,
-because they shape the code you write (not just how the linter rewrites it):
+rules. Full spec and the NASA Power of Ten live in
+[doc/claude/code-style.md](doc/claude/code-style.md). The handful you need *before* typing:
 
 - **Format**: 100-col, 2-space indent, LF, pointer/ref binds to type (`int* p`). No braces on
   single-statement bodies; blank line after a brace-free body. Max 3 nesting levels (guard
@@ -313,4 +365,12 @@ because they shape the code you write (not just how the linter rewrites it):
 - **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers. The ones that
   bite: no alloc/Frame-copy on the dashboard path; fixed loop bounds + capped recursion;
   assertion density ≥2/function; `[[nodiscard]]` + return checks at every system boundary;
-  zero warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header per file.
+  zero warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header per file —
+  first-party is `GPL-3.0-or-later` (relicensed from `-only`, 2026-07). The repo is
+  REUSE-compliant: `REUSE.toml` + `LICENSES/`, `reuse lint` gates in CI.
+- **Assertions are `SS_ASSERT(cond, action)`** (`app/src/SSAssert.h`), not `Q_ASSERT`: the
+  condition evaluates in **every** build; debug aborts, release reports once per site and
+  runs the recovery `action` instead of the guarded code. Condition side-effect-free and
+  cheap; action side-effect-complete, single statement, no top-level comma, never
+  `continue`/`break` (use `SS_ASSERT_LOG(cond); if (!(cond)) continue;`). Pass path is one
+  not-taken branch — hotpath-safe. `SS_ASSUME` stays the zero-branch kernel spelling.

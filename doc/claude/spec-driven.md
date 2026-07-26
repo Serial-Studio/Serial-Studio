@@ -9,7 +9,8 @@ human approves before the next begins. The contract moves from "did the agent gu
 This is not a generic framework bolted on top of the repo. It reuses what is already here — the
 `doc/claude/` sub-docs as the knowledge base the plan reads, the `scripts/` linters as the
 verification gate, the existing skills (`ss-hotpath`, `ss-new-driver`, `ss-verify`,
-`qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`), and the Trust Contract from CLAUDE.md.
+`qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`, `ss-docs`, `ss-ai-audit`), and the
+Trust Contract from CLAUDE.md.
 The workflow just sequences them.
 
 ## Why spec-driven over prompt engineering

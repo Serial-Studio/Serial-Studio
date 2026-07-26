@@ -49,7 +49,9 @@ Dashboard / CSV / MDF4 / API / Sessions`
   `m_captureLatestFrame`, `m_changeDriven`, Dashboard `m_streamAvailable`). A new input to any
   of them must wire its change signal to the cache refresh, or frames/exports silently stop
   (mechanics in `doc/claude/architecture/dataflow.md` "Cached Hotpath Flags"; see also
-  `doc/claude/common-mistakes.md`).
+  `doc/claude/common-mistakes.md`). `streamAvailable()` also reads the spec-0040 mirror flag —
+  a plain module-static bool via `API::MirrorSession::mirroring()`, never a construction
+  (`doc/claude/architecture/mirror.md`).
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` → `parseUtf8Spans` →
   `applyDatasetValuesSpans`): byte views + in-place QString writes (`assign_utf8_in_place` /
   `assign_string_in_place`, never implicit-share assignment — a share-assign re-links buffers

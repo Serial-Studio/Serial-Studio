@@ -359,6 +359,59 @@ Do NOT reintroduce per-widget `width >= toolbar.implicitWidth` hiding or imperat
 Terminal keeps its own toolbar (dashboard tool, external-window only — freeze never
 reaches it).
 
+## Widget Extensions (spec 0038) — `UI::WidgetExtensions`
+
+Installable dashboard widgets: `info.json` + one QML file, validated eagerly, compiled lazily.
+Catalog = `UI::WidgetExtensions` (`app/src/UI/WidgetExtensions.{h,cpp}` + `WidgetExtensionManifest.cpp`),
+built after ProjectModel and before Dashboard; its ctor is a leaf (member init only), and the
+first `rescan()` + the `ExtensionManager`/`WorkspaceManager` edges live in
+`setupCrossModuleConnections()`. `rescan()` reads `:/extensions/widget/*` first, then
+`<workspace>/Extensions/widget/*` (a disk id may not shadow a bundled one), and touches no
+`QQmlComponent` — compilation happens in `DashboardWidget::createExtensionItem()` the first time
+a project places the widget. Schema of record: `app/rcc/extensions/schema/widget-manifest.json`,
+gated by `registry-verify.py` + `tests/scripts/test_widget_manifests.py`.
+
+**Two identity mechanisms, and they are not interchangeable:**
+
+- *Third-party packages* resolve to `SerialStudio::DashboardExtension = 100` — explicitly valued,
+  after the `#ifdef BUILD_COMMERCIAL` block, so no existing ordinal moves in either build and the
+  `QMap`-keyed widget buckets always iterate extension widgets last. One enum value serves both
+  scopes, so `isGroupWidget`/`isDatasetWidget` stay enum-pure (both false) and
+  `Dashboard::widgetSlot(type, relativeIndex)` is the single group-vs-dataset discriminator;
+  group-scope slots occupy `[0, groupCount)` of the shared bucket and dataset-scope slots follow
+  (`datasetBucketBase`). Persisted keys (workspaces, freeze title mode, display titles, per-widget
+  settings) substitute `"ext:<id>"` for the numeric type token via
+  `WidgetExtensions::persistedTypeToken`; on the ProjectModel side the single formatter is the
+  file-local `extension_scope_key()` used by `freezeTitleMode`, `setFreezeTitleMode`,
+  `promptRenameWidget`, `widgetDisplayTitle`, and `setWidgetDisplayTitle`.
+- *Bundled conversions* (`compass`, `datagrid`) declare `"replaces": "<builtin string>"` and keep
+  their existing enum value, ordering, and project files. `builtinReplacement()` wins in
+  `DashboardWidget::setWidgetIndex`, so only the implementation moves. `builtinWidgetId()` maps
+  free, non-tool widget strings only — a bundled package can never become a Pro widget.
+
+**Rules that bite:**
+
+- `readsStringValues: true` is what puts a package's `ExtensionData` into `buildValuePushes`'
+  `string_targets` (`addExtensionStringTargets`) — the declarable form of the stale-string gotcha
+  above. Reconfigure-time only; the per-frame walk is untouched and a project with no package
+  builds bit-identical push tables.
+- Reserved ids are R10's mechanism: `WidgetExtensions::reservedIds()`, the schema's `reservedId`
+  enum, and every widget string `SerialStudio::getDashboardWidget*` resolves must agree —
+  `registry-verify.py` fails when they drift. No catalog data can select a Pro enumerator.
+- The dataset widget picker is generated (`app/rcc/properties/dataset.json` → `DatasetForm.cpp`).
+  Packages reach it through the `extensibleMap` option source: fixed built-in rows first, then
+  `PropertyHooks::widgetExtensionOptions()` appended, so stored combo indices never move.
+- **Trust model: no sandbox, and nothing may claim otherwise.** Package QML shares the app's QML
+  engine and privileges. `canInstantiate()` is default-deny (`qmlUrl()` returns empty without
+  consent, recorded per id *and version*); the `Cpp_*` shadowing in `createExtensionItem()` is a
+  speed bump, exempted for bundled packages so the two conversions stay verbatim copies, and
+  `hostContextNames()` is a hand-kept mirror of ModuleManager that `registry-verify.py` lints.
+- Every load-time rejection is a `Misc::ProblemCenter` finding through the `extension.widget`
+  checker (`widget-manifest-invalid`, `widget-id-reserved`, `widget-replaces-forbidden`,
+  `widget-api-version`, `widget-host-incompatible`, `widget-qml-missing`,
+  `widget-dependency-missing`, `widget-not-installed`, `widget-consent-required`,
+  `widget-load-failed`); the canvas shows `ExtensionPlaceholder.qml`, never an empty slot.
+
 ## Workspaces (`UI::Taskbar`)
 
 `app/qml/MainWindow/Taskbar/`: user-defined dashboard tabs.

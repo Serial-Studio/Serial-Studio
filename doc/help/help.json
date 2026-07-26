@@ -1,68 +1,410 @@
 [
-  { "id": "getting-started", "title": "Getting Started", "section": "Basics", "file": "Getting-Started.md" },
-  { "id": "windows-installation", "title": "Windows Installation", "section": "Basics", "file": "Windows-Installation.md" },
-  { "id": "linux-installation", "title": "Linux Installation", "section": "Basics", "file": "Linux-Installation.md" },
-  { "id": "operation-modes", "title": "Operation Modes", "section": "Basics", "file": "Operation-Modes.md" },
-  { "id": "data-sources", "title": "Data Sources", "section": "Basics", "file": "Data-Sources.md" },
-  { "id": "toolbar-reference", "title": "Toolbar & Button Reference", "section": "Basics", "file": "Toolbar-Reference.md" },
-  { "id": "command-palette", "title": "Command Palette", "section": "Basics", "file": "Command-Palette.md" },
-  { "id": "project-editor", "title": "Project Editor", "section": "Configuration", "file": "Project-Editor.md" },
-  { "id": "project-lock", "title": "Project Lock", "section": "Configuration", "file": "Project-Lock.md" },
-  { "id": "operator-deployments", "title": "Operator Deployments", "section": "Configuration", "file": "Operator-Deployments.md" },
-  { "id": "actions", "title": "Actions", "section": "Configuration", "file": "Actions.md" },
-  { "id": "notifications", "title": "Notifications", "section": "Configuration", "file": "Notifications.md" },
-  { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
-  { "id": "plots", "title": "Plots", "section": "Configuration", "file": "Plots.md" },
-  { "id": "painter-widget", "title": "Painter Widget", "section": "Configuration", "file": "Painter-Widget.md" },
-  { "id": "output-controls", "title": "Output Controls", "section": "Configuration", "file": "Output-Controls.md" },
-  { "id": "javascript-api", "title": "Frame Parser Reference", "section": "Scripting & Data Logic", "file": "JavaScript-API.md" },
-  { "id": "control-script", "title": "Control Loop (setup / loop)", "section": "Scripting & Data Logic", "file": "Control-Script.md" },
-  { "id": "dataset-transforms", "title": "Dataset Value Transforms", "section": "Scripting & Data Logic", "file": "Dataset-Transforms.md" },
-  { "id": "data-tables", "title": "Data Tables", "section": "Scripting & Data Logic", "file": "Data-Tables.md" },
-  { "id": "serial-studio-sdk", "title": "SDK Reference", "section": "Scripting & Data Logic", "file": "SerialStudio-SDK.md" },
-  { "id": "communication-protocols", "title": "Communication Protocols", "section": "Connectivity", "file": "Communication-Protocols.md" },
-  { "id": "protocol-setup-guides", "title": "Protocol Setup Guides", "section": "Connectivity", "file": "Protocol-Setup-Guides.md" },
-  { "id": "auto-generating-projects", "title": "Auto-Generating Projects", "section": "Connectivity", "file": "Auto-Generating-Projects.md" },
-  { "id": "mqtt-topics", "title": "MQTT Topics & Semantics", "section": "Connectivity", "file": "MQTT-Topics.md" },
-  { "id": "mqtt-publisher", "title": "MQTT Publisher", "section": "Connectivity", "file": "MQTT-Publisher.md" },
-  { "id": "file-transmission", "title": "File Transmission", "section": "Connectivity", "file": "File-Transmission.md" },
-  { "id": "drivers-uart", "title": "UART / Serial", "section": "Drivers", "file": "Drivers-UART.md" },
-  { "id": "drivers-network", "title": "Network (TCP / UDP)", "section": "Drivers", "file": "Drivers-Network.md" },
-  { "id": "drivers-bluetooth-le", "title": "Bluetooth Low Energy", "section": "Drivers", "file": "Drivers-Bluetooth-LE.md" },
-  { "id": "drivers-modbus", "title": "Modbus", "section": "Drivers", "file": "Drivers-Modbus.md" },
-  { "id": "drivers-can-bus", "title": "CAN Bus", "section": "Drivers", "file": "Drivers-CAN-Bus.md" },
-  { "id": "drivers-audio", "title": "Audio Input", "section": "Drivers", "file": "Drivers-Audio.md" },
-  { "id": "drivers-usb", "title": "Raw USB", "section": "Drivers", "file": "Drivers-USB.md" },
-  { "id": "drivers-hid", "title": "HID", "section": "Drivers", "file": "Drivers-HID.md" },
-  { "id": "drivers-process-io", "title": "Process I/O", "section": "Drivers", "file": "Drivers-Process-IO.md" },
-  { "id": "drivers-mqtt", "title": "MQTT Subscriber", "section": "Drivers", "file": "Drivers-MQTT.md" },
-  { "id": "csv-export", "title": "CSV Export & Playback", "section": "Data Management", "file": "CSV-Export-Playback.md" },
-  { "id": "mdf4", "title": "MDF4 Export & Playback", "section": "Data Management", "file": "MDF4.md" },
-  { "id": "session-database", "title": "Session Database", "section": "Data Management", "file": "Session-Database.md" },
-  { "id": "session-reports", "title": "Session Reports", "section": "Data Management", "file": "Session-Reports.md" },
-  { "id": "backup-recovery", "title": "Backups & Recovery", "section": "Data Management", "file": "Backup-Recovery.md" },
-  { "id": "api-reference", "title": "API Reference", "section": "Integration", "file": "API-Reference.md" },
-  { "id": "command-line-interface", "title": "Command-Line Interface", "section": "Integration", "file": "Command-Line-Interface.md" },
-  { "id": "grpc-server", "title": "gRPC Server", "section": "Integration", "file": "gRPC-Server.md" },
-  { "id": "plugin-development", "title": "Plugin Development", "section": "Integration", "file": "Plugin-Development.md" },
-  { "id": "extensions", "title": "Extensions", "section": "Integration", "file": "Extensions.md" },
-  { "id": "ai-assistant", "title": "AI Assistant", "section": "Integration", "file": "AI-Assistant.md" },
-  { "id": "data-flow", "title": "Data Flow", "section": "Architecture", "file": "Data-Flow.md" },
-  { "id": "data-hotpath", "title": "The Data Hotpath", "section": "Architecture", "file": "Data-Hotpath.md" },
-  { "id": "identity-model", "title": "Dataset Identity Model", "section": "Architecture", "file": "Identity-Model.md" },
-  { "id": "threading-and-timing", "title": "Threading and Timing Guarantees", "section": "Architecture", "file": "Threading-and-Timing.md" },
-  { "id": "benchmark", "title": "Benchmark Dialog", "section": "Architecture", "file": "Benchmark.md" },
-  { "id": "about", "title": "About Serial Studio", "section": "Support", "file": "About.md" },
-  { "id": "faq", "title": "FAQ", "section": "Support", "file": "FAQ.md" },
-  { "id": "glossary", "title": "Glossary", "section": "Support", "file": "Glossary.md" },
-  { "id": "troubleshooting", "title": "Troubleshooting Guide", "section": "Support", "file": "Troubleshooting.md" },
-  { "id": "use-cases", "title": "Use Cases", "section": "Support", "file": "Use-Cases.md" },
-  { "id": "become-an-affiliate", "title": "Become an Affiliate", "section": "Support", "file": "Become-an-Affiliate.md" },
-  { "id": "comparison", "title": "Comparison with Alternatives", "section": "Support", "file": "Comparison.md" },
-  { "id": "pro-vs-free", "title": "Pro vs Free Features", "section": "Licensing", "file": "Pro-vs-Free.md" },
-  { "id": "offline-activation", "title": "Offline Activation", "section": "Licensing", "file": "Offline-Activation.md" },
-  { "id": "license-agreement", "title": "License Agreement", "section": "Licensing", "file": "License-Agreement.md" },
-  { "id": "privacy-policy", "title": "Privacy Policy", "section": "Licensing", "file": "Privacy-Policy.md" },
-  { "id": "earn-pro-license", "title": "Earn a Pro License", "section": "Licensing", "file": "Earn-Pro-License.md" },
-  { "id": "support-serial-studio", "title": "Support Serial Studio", "section": "Licensing", "file": "Support-Serial-Studio.md" }
+ {
+  "id": "getting-started",
+  "title": "Getting Started",
+  "section": "Basics",
+  "file": "Getting-Started.md"
+ },
+ {
+  "id": "windows-installation",
+  "title": "Windows Installation",
+  "section": "Basics",
+  "file": "Windows-Installation.md"
+ },
+ {
+  "id": "linux-installation",
+  "title": "Linux Installation",
+  "section": "Basics",
+  "file": "Linux-Installation.md"
+ },
+ {
+  "id": "operation-modes",
+  "title": "Operation Modes",
+  "section": "Basics",
+  "file": "Operation-Modes.md"
+ },
+ {
+  "id": "data-sources",
+  "title": "Data Sources",
+  "section": "Basics",
+  "file": "Data-Sources.md"
+ },
+ {
+  "id": "toolbar-reference",
+  "title": "Toolbar & Button Reference",
+  "section": "Basics",
+  "file": "Toolbar-Reference.md"
+ },
+ {
+  "id": "command-palette",
+  "title": "Command Palette",
+  "section": "Basics",
+  "file": "Command-Palette.md"
+ },
+ {
+  "id": "project-editor",
+  "title": "Project Editor",
+  "section": "Configuration",
+  "file": "Project-Editor.md"
+ },
+ {
+  "id": "project-lock",
+  "title": "Project Lock",
+  "section": "Configuration",
+  "file": "Project-Lock.md"
+ },
+ {
+  "id": "operator-deployments",
+  "title": "Operator Deployments",
+  "section": "Configuration",
+  "file": "Operator-Deployments.md"
+ },
+ {
+  "id": "actions",
+  "title": "Actions",
+  "section": "Configuration",
+  "file": "Actions.md"
+ },
+ {
+  "id": "notifications",
+  "title": "Notifications",
+  "section": "Configuration",
+  "file": "Notifications.md"
+ },
+ {
+  "id": "widget-reference",
+  "title": "Widget Reference",
+  "section": "Configuration",
+  "file": "Widget-Reference.md"
+ },
+ {
+  "id": "plots",
+  "title": "Plots",
+  "section": "Configuration",
+  "file": "Plots.md"
+ },
+ {
+  "id": "painter-widget",
+  "title": "Painter Widget",
+  "section": "Configuration",
+  "file": "Painter-Widget.md"
+ },
+ {
+  "id": "output-controls",
+  "title": "Output Controls",
+  "section": "Configuration",
+  "file": "Output-Controls.md"
+ },
+ {
+  "id": "javascript-api",
+  "title": "Frame Parser Reference",
+  "section": "Scripting & Data Logic",
+  "file": "JavaScript-API.md"
+ },
+ {
+  "id": "control-script",
+  "title": "Control Loop (setup / loop)",
+  "section": "Scripting & Data Logic",
+  "file": "Control-Script.md"
+ },
+ {
+  "id": "dataset-transforms",
+  "title": "Dataset Value Transforms",
+  "section": "Scripting & Data Logic",
+  "file": "Dataset-Transforms.md"
+ },
+ {
+  "id": "data-tables",
+  "title": "Data Tables",
+  "section": "Scripting & Data Logic",
+  "file": "Data-Tables.md"
+ },
+ {
+  "id": "serial-studio-sdk",
+  "title": "SDK Reference",
+  "section": "Scripting & Data Logic",
+  "file": "SerialStudio-SDK.md"
+ },
+ {
+  "id": "communication-protocols",
+  "title": "Communication Protocols",
+  "section": "Connectivity",
+  "file": "Communication-Protocols.md"
+ },
+ {
+  "id": "protocol-setup-guides",
+  "title": "Protocol Setup Guides",
+  "section": "Connectivity",
+  "file": "Protocol-Setup-Guides.md"
+ },
+ {
+  "id": "auto-generating-projects",
+  "title": "Auto-Generating Projects",
+  "section": "Connectivity",
+  "file": "Auto-Generating-Projects.md"
+ },
+ {
+  "id": "mqtt-topics",
+  "title": "MQTT Topics & Semantics",
+  "section": "Connectivity",
+  "file": "MQTT-Topics.md"
+ },
+ {
+  "id": "mqtt-publisher",
+  "title": "MQTT Publisher",
+  "section": "Connectivity",
+  "file": "MQTT-Publisher.md"
+ },
+ {
+  "id": "file-transmission",
+  "title": "File Transmission",
+  "section": "Connectivity",
+  "file": "File-Transmission.md"
+ },
+ {
+  "id": "remote-dashboard",
+  "title": "Remote Dashboard",
+  "section": "Connectivity",
+  "file": "Remote-Dashboard.md"
+ },
+ {
+  "id": "drivers-uart",
+  "title": "UART / Serial",
+  "section": "Drivers",
+  "file": "Drivers-UART.md"
+ },
+ {
+  "id": "drivers-network",
+  "title": "Network (TCP / UDP)",
+  "section": "Drivers",
+  "file": "Drivers-Network.md"
+ },
+ {
+  "id": "drivers-bluetooth-le",
+  "title": "Bluetooth Low Energy",
+  "section": "Drivers",
+  "file": "Drivers-Bluetooth-LE.md"
+ },
+ {
+  "id": "drivers-modbus",
+  "title": "Modbus",
+  "section": "Drivers",
+  "file": "Drivers-Modbus.md"
+ },
+ {
+  "id": "drivers-can-bus",
+  "title": "CAN Bus",
+  "section": "Drivers",
+  "file": "Drivers-CAN-Bus.md"
+ },
+ {
+  "id": "drivers-audio",
+  "title": "Audio Input",
+  "section": "Drivers",
+  "file": "Drivers-Audio.md"
+ },
+ {
+  "id": "drivers-usb",
+  "title": "Raw USB",
+  "section": "Drivers",
+  "file": "Drivers-USB.md"
+ },
+ {
+  "id": "drivers-hid",
+  "title": "HID",
+  "section": "Drivers",
+  "file": "Drivers-HID.md"
+ },
+ {
+  "id": "drivers-process-io",
+  "title": "Process I/O",
+  "section": "Drivers",
+  "file": "Drivers-Process-IO.md"
+ },
+ {
+  "id": "drivers-mqtt",
+  "title": "MQTT Subscriber",
+  "section": "Drivers",
+  "file": "Drivers-MQTT.md"
+ },
+ {
+  "id": "csv-export",
+  "title": "CSV Export & Playback",
+  "section": "Data Management",
+  "file": "CSV-Export-Playback.md"
+ },
+ {
+  "id": "mdf4",
+  "title": "MDF4 Export & Playback",
+  "section": "Data Management",
+  "file": "MDF4.md"
+ },
+ {
+  "id": "session-database",
+  "title": "Session Database",
+  "section": "Data Management",
+  "file": "Session-Database.md"
+ },
+ {
+  "id": "session-reports",
+  "title": "Session Reports",
+  "section": "Data Management",
+  "file": "Session-Reports.md"
+ },
+ {
+  "id": "backup-recovery",
+  "title": "Backups & Recovery",
+  "section": "Data Management",
+  "file": "Backup-Recovery.md"
+ },
+ {
+  "id": "api-reference",
+  "title": "API Reference",
+  "section": "Integration",
+  "file": "API-Reference.md"
+ },
+ {
+  "id": "command-line-interface",
+  "title": "Command-Line Interface",
+  "section": "Integration",
+  "file": "Command-Line-Interface.md"
+ },
+ {
+  "id": "grpc-server",
+  "title": "gRPC Server",
+  "section": "Integration",
+  "file": "gRPC-Server.md"
+ },
+ {
+  "id": "plugin-development",
+  "title": "Plugin Development",
+  "section": "Integration",
+  "file": "Plugin-Development.md"
+ },
+ {
+  "id": "extensions",
+  "title": "Extensions",
+  "section": "Integration",
+  "file": "Extensions.md"
+ },
+ {
+  "id": "widget-extension-development",
+  "title": "Widget Extension Development",
+  "section": "Integration",
+  "file": "Widget-Extension-Development.md"
+ },
+ {
+  "id": "ai-assistant",
+  "title": "AI Assistant",
+  "section": "Integration",
+  "file": "AI-Assistant.md"
+ },
+ {
+  "id": "data-flow",
+  "title": "Data Flow",
+  "section": "Architecture",
+  "file": "Data-Flow.md"
+ },
+ {
+  "id": "data-hotpath",
+  "title": "The Data Hotpath",
+  "section": "Architecture",
+  "file": "Data-Hotpath.md"
+ },
+ {
+  "id": "identity-model",
+  "title": "Dataset Identity Model",
+  "section": "Architecture",
+  "file": "Identity-Model.md"
+ },
+ {
+  "id": "threading-and-timing",
+  "title": "Threading and Timing Guarantees",
+  "section": "Architecture",
+  "file": "Threading-and-Timing.md"
+ },
+ {
+  "id": "benchmark",
+  "title": "Benchmark Dialog",
+  "section": "Architecture",
+  "file": "Benchmark.md"
+ },
+ {
+  "id": "about",
+  "title": "About Serial Studio",
+  "section": "Support",
+  "file": "About.md"
+ },
+ {
+  "id": "faq",
+  "title": "FAQ",
+  "section": "Support",
+  "file": "FAQ.md"
+ },
+ {
+  "id": "glossary",
+  "title": "Glossary",
+  "section": "Support",
+  "file": "Glossary.md"
+ },
+ {
+  "id": "troubleshooting",
+  "title": "Troubleshooting Guide",
+  "section": "Support",
+  "file": "Troubleshooting.md"
+ },
+ {
+  "id": "use-cases",
+  "title": "Use Cases",
+  "section": "Support",
+  "file": "Use-Cases.md"
+ },
+ {
+  "id": "become-an-affiliate",
+  "title": "Become an Affiliate",
+  "section": "Support",
+  "file": "Become-an-Affiliate.md"
+ },
+ {
+  "id": "comparison",
+  "title": "Comparison with Alternatives",
+  "section": "Support",
+  "file": "Comparison.md"
+ },
+ {
+  "id": "pro-vs-free",
+  "title": "Pro vs Free Features",
+  "section": "Licensing",
+  "file": "Pro-vs-Free.md"
+ },
+ {
+  "id": "offline-activation",
+  "title": "Offline Activation",
+  "section": "Licensing",
+  "file": "Offline-Activation.md"
+ },
+ {
+  "id": "license-agreement",
+  "title": "License Agreement",
+  "section": "Licensing",
+  "file": "License-Agreement.md"
+ },
+ {
+  "id": "privacy-policy",
+  "title": "Privacy Policy",
+  "section": "Licensing",
+  "file": "Privacy-Policy.md"
+ },
+ {
+  "id": "earn-pro-license",
+  "title": "Earn a Pro License",
+  "section": "Licensing",
+  "file": "Earn-Pro-License.md"
+ },
+ {
+  "id": "support-serial-studio",
+  "title": "Support Serial Studio",
+  "section": "Licensing",
+  "file": "Support-Serial-Studio.md"
+ }
 ]

@@ -201,7 +201,7 @@ deprecated classes.
 - `Q_INVOKABLE void` (must be a `public slots:`); in-header member initialization (init in the
   ctor list); missing `[[nodiscard]]` on a non-void return in a `.h`.
 - Missing/incorrect SPDX banner. Every file carries the
-  `GPL-3.0-only OR LicenseRef-SerialStudio-Commercial` dual-license block; commercial-only
+  `GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial` dual-license block; commercial-only
   files (API handlers, Pro modules) use `LicenseRef-SerialStudio-Commercial`.
 
 **Ref**: `qt-review-checklist.md` § API & Naming, § Enums, § Move Semantics;

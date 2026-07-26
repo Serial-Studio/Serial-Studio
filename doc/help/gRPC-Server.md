@@ -111,6 +111,26 @@ grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/StreamFrames
 > dynamic `SerialStudioAPI` service shown above, so generate client stubs from the repo's
 > `doc/grpc/serialstudio.proto`, not from the exported typed file.
 
+### The typed schema in the repository
+
+The same typed schema is checked in at
+[`doc/grpc/serialstudio-typed.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio-typed.proto),
+so you can read it, diff it between releases, and run `protoc` over it without launching
+Serial Studio:
+
+```bash
+protoc -I. --python_out=. serialstudio-typed.proto
+```
+
+Field numbers in that file are stable. They come from a checked-in ledger
+(`app/rcc/api/proto-fields.json`) rather than from the order a command's parameters happen
+to sort in, so adding a parameter appends a new number and a removed parameter's number is
+retired with a `reserved` statement instead of being handed to something else. A number
+that once meant `title` keeps meaning `title`.
+
+Both files are generated. Do not edit them by hand; the commit pipeline regenerates them and
+CI fails on a hand-edited copy.
+
 ## Generating client stubs
 
 Download `doc/grpc/serialstudio.proto` from the Serial Studio repository, then generate stubs for your language:

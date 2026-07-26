@@ -164,4 +164,4 @@ further copies. At a 10 Hz packet rate, this scales to 120 x 10 = 1200 frames/se
 ## License
 
 Copyright (C) 2020-2025 Alex Spataru
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial

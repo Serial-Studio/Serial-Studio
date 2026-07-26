@@ -166,6 +166,8 @@ The API Server always listens on **port 7777**; the port is not configurable. By
 
 When external connections are enabled, the server binds to all interfaces and non-loopback clients must authenticate with an access token. See [Authentication for External Connections](#authentication-for-external-connections).
 
+The same server and token also carry the [Remote Dashboard](Remote-Dashboard.md) mirror: a second Serial Studio instance can attach as a read-only viewer of the local dashboard.
+
 ## Security Considerations
 
 ### Localhost By Default
@@ -697,6 +699,7 @@ When a command is invoked through the AI Assistant rather than a raw TCP/JSON cl
 - Dashboard Configuration: 13 commands
 - Project Management: 64 commands
 - Workspace Management: 15 commands
+- Problem Center: 3 commands
 
 **Pro Build Additional:**
 - Modbus Driver: 22 commands
@@ -3800,6 +3803,178 @@ the group still exists but `compatibleWidgetTypes` has changed. Requires
 When `dryRun` is true, `removed` is the count of `removedRefs` and nothing
 is written.
 
+### Problems Commands (3)
+
+Read-only diagnostics. Serial Studio runs a set of checkers over the loaded project, the
+live link counters, and the parser/transform scripts, and keeps the result as a standing
+list: a finding stays until its cause is fixed, then disappears on the next run. Start here
+when a dashboard is blank, a widget stays empty, or values look wrong.
+
+Each finding carries:
+
+| Field | Meaning |
+|-------|---------|
+| `severity` | `info`, `warning`, or `error` |
+| `checkerId` | Which checker produced it (see `problems.listCheckers`) |
+| `code` | Stable identifier for the condition, e.g. `duplicate-frame-index` |
+| `title` | One-line summary |
+| `explanation` | One or two sentences naming the concrete cause |
+| `remedy` | What to change to fix it (may be empty) |
+| `entityUniqueId` | The project entity to fix, or `-1` when there is none |
+| `jump` | `dataset`, `group`, `action`, `source`, `settings/<page>`, or empty |
+
+#### 🟢 `problems.list`
+List the diagnostics currently reported.
+
+**Parameters:**
+- `severity` (string, optional): only `info`, `warning`, or `error` findings
+- `checkerId` (string, optional): only findings from this checker
+- `limit` (int, optional): maximum findings to return (default 50, max 200)
+
+**Returns:**
+```json
+{
+  "findings": [
+    {
+      "severity": "warning",
+      "checkerId": "project.frame-index",
+      "code": "duplicate-frame-index",
+      "title": "Two datasets share a frame index",
+      "explanation": "\"Altitude\" and \"Speed\" both read frame index 2 of the same source, so they will always show the same value.",
+      "remedy": "Give one of them the frame index of its own value, or delete the duplicate if the repetition is intentional.",
+      "entityUniqueId": 1025,
+      "jump": "dataset"
+    }
+  ],
+  "counts": {"info": 0, "warning": 1, "error": 0},
+  "total": 1,
+  "matchCount": 1,
+  "lastRun": "14:03:11"
+}
+```
+
+`total` and `counts` describe the whole list; `matchCount` is how many findings matched the
+filter, which may exceed the number returned when `limit` truncates.
+
+**Example:**
+```bash
+python test_api.py send problems.list -p severity=error
+```
+
+#### 🟢 `problems.run`
+Re-run every registered checker and return the refreshed list in the same shape as
+`problems.list`. Use it after an edit to confirm a finding cleared. Checkers only
+read the project, the link counters, and the script engines; nothing is modified.
+
+**Parameters:** None
+
+**Example:**
+```bash
+python test_api.py send problems.run
+```
+
+#### 🟢 `problems.listCheckers`
+List the registered checkers and the triggers each one answers to.
+
+**Parameters:** None
+
+**Returns:**
+```json
+{
+  "checkers": [
+    {"id": "project.frame-index", "triggers": ["projectChanged", "onDemand"]},
+    {"id": "link.statistics", "triggers": ["linkSample", "onDemand"]}
+  ],
+  "total": 2
+}
+```
+
+`projectChanged` runs on project load, edit, and save; `linkSample` runs on the shared 1 Hz
+diagnostics tick; `onDemand` runs only through `problems.run`.
+
+### Diagnostics Commands (2)
+
+Connection self-checks: whether this machine is set up to connect at all. Run them when a
+connection fails, when the Connect button does nothing, or before plugging anything in.
+Checks never open a data link, never change a setting, and never run a repair — where a
+remedy is a shell command, the command is printed verbatim for you to run.
+
+Checks come in two classes:
+
+| Class | What it covers | Timing |
+|-------|----------------|--------|
+| Instant | Serial ports and device-node permissions, Bluetooth adapter power and permission, audio backend and input devices, host/port configuration | Complete before `diagnostics.run` returns |
+| Probing | Host name resolution and a bounded TCP connect to the configured network or MQTT endpoint | Finish in the background, within `estimatedMs` |
+
+Because a run can outlive the call that started it, `diagnostics.run` acknowledges
+immediately and you poll `diagnostics.status`. The findings themselves are read with
+`problems.list`, filtered by `checkerId`: `diagnostics.serial`, `diagnostics.bluetooth`,
+`diagnostics.network`, `diagnostics.broker`, or `diagnostics.audio`. `broker` and `audio`
+exist only in Pro builds.
+
+#### 🟢 `diagnostics.run`
+Start a diagnostics run and return the instant results, which are already complete.
+
+**Parameters:**
+- `bus` (string, optional): check only `serial`, `bluetooth`, `network`, `broker`, or
+  `audio`. Omitted means every bus this build supports. An unknown or unsupported slug
+  returns `INVALID_PARAM` naming the valid values.
+
+**Returns:**
+```json
+{
+  "started": true,
+  "running": true,
+  "buses": ["serial", "bluetooth", "network"],
+  "probing": ["network"],
+  "instant": [
+    {
+      "bus": "serial",
+      "verdict": "failure",
+      "code": "port-not-writable",
+      "title": "The serial port cannot be opened by this account",
+      "explanation": "/dev/ttyUSB0 belongs to the group dialout, and the account alex is not a member of it.",
+      "remedy": "Run sudo usermod -aG dialout alex, then log out and back in."
+    }
+  ],
+  "estimatedMs": 5000,
+  "hint": "..."
+}
+```
+
+`running` is false when the requested scope had no probing work; `probing` lists the buses
+still in flight; `estimatedMs` is the declared worst case for the scope that was started.
+`verdict` is `pass`, `info`, `warning`, or `failure`.
+
+**Example:**
+```bash
+python test_api.py send diagnostics.run -p bus=serial
+```
+
+#### 🟢 `diagnostics.status`
+Report whether a run is still probing and what the standing results add up to.
+
+**Parameters:** None
+
+**Returns:**
+```json
+{
+  "running": false,
+  "lastRun": "14:03:11",
+  "buses": ["serial", "bluetooth", "network"],
+  "counts": {"info": 0, "warning": 1, "failure": 1},
+  "hint": "..."
+}
+```
+
+`running` false means every probe settled. Poll this after `diagnostics.run`, then read the
+findings with `problems.list`.
+
+**Example:**
+```bash
+python test_api.py send diagnostics.status
+```
+
 ### Modbus Driver Commands - Pro (22)
 
 **Note:** These commands require a Serial Studio Pro license.
@@ -5259,7 +5434,7 @@ See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tr
 The Serial Studio API Server is dual-licensed:
 
 - **GPL-3.0**: For use with Serial Studio GPL builds (core command set)
-- **GPL-3.0-only**: For open-source use
+- **GPL-3.0-or-later**: For open-source use
 - **Commercial**: For use with Serial Studio Pro builds (the full command set)
 - **LicenseRef-SerialStudio-Commercial**: For commercial Pro features
 
