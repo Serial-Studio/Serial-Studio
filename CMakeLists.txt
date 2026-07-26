@@ -281,15 +281,23 @@ if(BUILD_COMMERCIAL)
         message(FATAL_ERROR "curl not found in PATH, required to validate license.")
     endif()
 
+    # Credentials go through a payload file, never the curl command line, so they
+    # are not visible in process listings or CI command echoes.
+    set(LS_PAYLOAD_FILE "${CMAKE_BINARY_DIR}/ls-validate-payload.json")
+    file(WRITE "${LS_PAYLOAD_FILE}"
+        "{\"license_key\": \"${SERIAL_STUDIO_LICENSE_KEY}\", \"instance_id\": \"${SERIAL_STUDIO_INSTANCE_ID}\"}")
+
     execute_process(
-        COMMAND curl -s -X POST https://api.lemonsqueezy.com/v1/licenses/validate
+        COMMAND ${CURL_EXECUTABLE} -s -X POST https://api.lemonsqueezy.com/v1/licenses/validate
         -H "Accept: application/vnd.api+json"
         -H "Content-Type: application/vnd.api+json"
-        -d "{\"license_key\": \"${SERIAL_STUDIO_LICENSE_KEY}\", \"instance_id\": \"${SERIAL_STUDIO_INSTANCE_ID}\"}"
+        --data "@${LS_PAYLOAD_FILE}"
         OUTPUT_VARIABLE LS_RESPONSE
         ERROR_VARIABLE LS_ERROR
         RESULT_VARIABLE LS_RESULT
     )
+
+    file(REMOVE "${LS_PAYLOAD_FILE}")
 
     if(NOT LS_RESULT EQUAL 0)
         message(FATAL_ERROR "License validation failed: ${LS_ERROR}")
@@ -297,6 +305,7 @@ if(BUILD_COMMERCIAL)
 
     string(FIND "${LS_RESPONSE}" "\"valid\":true" VALID_POS)
     if(VALID_POS EQUAL -1)
+        string(REPLACE "${SERIAL_STUDIO_LICENSE_KEY}" "<redacted>" LS_RESPONSE "${LS_RESPONSE}")
         message(FATAL_ERROR
             "Commercial build denied: License not valid or not active.\n"
             "Response: ${LS_RESPONSE}")

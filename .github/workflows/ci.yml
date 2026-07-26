@@ -86,7 +86,8 @@ env:
   INSTALL_QT_LINUX_ARM64: false
 
   #
-  # Test gating
+  # Test gating: tagged releases always block on the live pytest suite; this
+  # flag only controls whether continuous (untagged) builds block as well.
   #
   REQUIRE_TESTS_TO_PUBLISH: false
   
@@ -334,7 +335,7 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@main
+      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
       with:
         path: build/app/${{env.UNIXNAME}}
         sarif: deglyph.sarif
@@ -386,7 +387,7 @@ jobs:
         cd "build/app"
         wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-x86_64.AppImage
         #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-x86_64.AppImage
         chmod +x linuxdeploy-x86_64.AppImage
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
@@ -445,7 +446,7 @@ jobs:
         python3 -m venv /tmp/ldnp-venv
         /tmp/ldnp-venv/bin/pip install --upgrade pip
         /tmp/ldnp-venv/bin/pip install \
-          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git"
+          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
 
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
@@ -772,7 +773,7 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@main
+      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
       with:
         path: build/app/${{env.UNIXNAME}}
         sarif: deglyph.sarif
@@ -824,7 +825,7 @@ jobs:
         cd "build/app"
         wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-aarch64.AppImage
         #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-aarch64.AppImage
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-aarch64.AppImage
+        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-aarch64.AppImage
         chmod +x linuxdeploy-aarch64.AppImage
         chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
@@ -883,7 +884,7 @@ jobs:
         python3 -m venv /tmp/ldnp-venv
         /tmp/ldnp-venv/bin/pip install --upgrade pip
         /tmp/ldnp-venv/bin/pip install \
-          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git"
+          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
 
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
@@ -1345,7 +1346,7 @@ jobs:
           > "${{env.APPLICATION}}.app/Contents/Resources/ss-config.json"
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@main
+      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
       with:
         path: ${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}
         sarif: deglyph.sarif
@@ -1592,7 +1593,7 @@ jobs:
         exit 0
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@main
+      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
       with:
         path: build/app/${{env.EXECUTABLE}}.exe
         sarif: deglyph.sarif
@@ -2180,7 +2181,7 @@ jobs:
 
     - name: '🧪 Run tests'
       id: run_tests
-      continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' }}
+      continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' && !startsWith(github.ref, 'refs/tags/') }}
       timeout-minutes: 60
       env:
         PYTHONIOENCODING: utf-8

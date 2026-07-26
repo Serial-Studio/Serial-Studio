@@ -43,15 +43,21 @@ function(target_link_openssl TARGET)
 
   if(WIN32 AND MSVC)
     set(ASSET "OpenSSL-${VERSION}-Windows-MSVC-amd64.zip")
+    set(ASSET_SHA256 "d4d37c5e86c771611e5063bcfac2946db4adc771d5c203c799a633a0181726db")
   elseif(WIN32 AND MINGW)
     set(ASSET "OpenSSL-${VERSION}-Windows-MinGW-amd64.zip")
+    set(ASSET_SHA256 "62ffac706223bdaa967055b7a5dcf44bb7c498ce2729ba72431aac5a8f8392a1")
   elseif(APPLE)
     set(ASSET "OpenSSL-${VERSION}-macOS-Universal.zip")
+    set(ASSET_SHA256 "2313a4a6ba4e28bb7fc3528640bcace917348d19fe747244dbbb5e67acd4ca66")
   else()
     message(FATAL_ERROR "target_link_openssl: unsupported platform/toolchain.")
   endif()
 
-  FetchContent_Declare(openssl_prebuilt URL ${BASE_URL}/${ASSET} DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+  FetchContent_Declare(openssl_prebuilt
+    URL ${BASE_URL}/${ASSET}
+    URL_HASH SHA256=${ASSET_SHA256}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
   FetchContent_MakeAvailable(openssl_prebuilt)
 
   set(ROOT "${openssl_prebuilt_SOURCE_DIR}")
