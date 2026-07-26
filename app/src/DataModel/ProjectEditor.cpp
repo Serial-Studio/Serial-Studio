@@ -521,29 +521,29 @@ void DataModel::ProjectEditor::openTransformEditorFor(int groupId, int datasetId
     connect(m_transformEditor,
             &DatasetTransformEditor::transformApplied,
             this,
-            [this](const QString& code, int lang, int gId, int dId) {
-              auto& pm     = m_projectModelRef;
-              auto& groups = pm.groups();
-              if (gId < 0 || static_cast<size_t>(gId) >= groups.size())
+            [this](const QString& code, int langId, int gId, int dId) {
+              auto& model     = m_projectModelRef;
+              auto& groupList = model.groups();
+              if (gId < 0 || static_cast<size_t>(gId) >= groupList.size())
                 return;
 
-              if (dId < 0 || static_cast<size_t>(dId) >= groups[gId].datasets.size())
+              if (dId < 0 || static_cast<size_t>(dId) >= groupList[gId].datasets.size())
                 return;
 
-              auto dataset              = groups[gId].datasets[dId];
-              dataset.transformCode     = code;
-              dataset.transformLanguage = code.isEmpty() ? -1 : lang;
-              pm.updateDataset(gId, dId, dataset, false);
+              auto updated              = groupList[gId].datasets[dId];
+              updated.transformCode     = code;
+              updated.transformLanguage = code.isEmpty() ? -1 : langId;
+              model.updateDataset(gId, dId, updated, false);
 
               if (m_selectedDataset.groupId == gId && m_selectedDataset.datasetId == dId) {
                 m_selectedDataset.transformCode     = code;
-                m_selectedDataset.transformLanguage = dataset.transformLanguage;
+                m_selectedDataset.transformLanguage = updated.transformLanguage;
               }
 
               for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
                 if (it.value().groupId == gId && it.value().datasetId == dId) {
                   it.value().transformCode     = code;
-                  it.value().transformLanguage = dataset.transformLanguage;
+                  it.value().transformLanguage = updated.transformLanguage;
                   break;
                 }
               }

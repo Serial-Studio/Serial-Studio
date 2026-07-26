@@ -1535,6 +1535,8 @@ def render_api(manifest: dict) -> str:
             name = f"applyDataset{family}Fields{index}"
             appliers.append(name)
             body = []
+            if not any(p.get("api", {}).get("rebuildTree", False) for p in chunk):
+                body += ["  Q_UNUSED(rebuildTree);", ""]
             if any(p.get("validate") == "aliasUnique" for p in chunk):
                 body += [
                     "  static auto& project = DataModel::ProjectModel::instance();",

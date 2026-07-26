@@ -522,16 +522,16 @@ void Widgets::Waterfall::loadMarkers()
   m_markers.clear();
   m_markers.reserve(dataset.fftMarkers.size());
   for (const auto& m : dataset.fftMarkers) {
-    MarkerData d;
-    d.freqLo      = m.frequency;
-    d.freqHi      = m.endFrequency;
-    d.warningDb   = static_cast<float>(m.warningDb);
-    d.alarmDb     = static_cast<float>(m.alarmDb);
-    d.peakDb      = kFloorDb;
-    d.state       = 0;
-    d.customColor = m.color.isEmpty() ? QColor() : QColor::fromString(m.color);
-    d.label       = m.label;
-    m_markers.push_back(std::move(d));
+    MarkerData md;
+    md.freqLo      = m.frequency;
+    md.freqHi      = m.endFrequency;
+    md.warningDb   = static_cast<float>(m.warningDb);
+    md.alarmDb     = static_cast<float>(m.alarmDb);
+    md.peakDb      = kFloorDb;
+    md.state       = 0;
+    md.customColor = m.color.isEmpty() ? QColor() : QColor::fromString(m.color);
+    md.label       = m.label;
+    m_markers.push_back(std::move(md));
   }
 }
 
@@ -1167,11 +1167,11 @@ std::vector<double> Widgets::Waterfall::collectFreqTicks(double wMin, double wMa
   constexpr double mants[] = {1.0, 2.0, 5.0};
   const int dLo            = static_cast<int>(std::floor(wMin)) - 1;
   const int dHi            = static_cast<int>(std::ceil(wMax)) + 1;
-  for (int d = dLo; d <= dHi; ++d) {
+  for (int dec = dLo; dec <= dHi; ++dec) {
     for (const double m : mants) {
-      const double w = d + std::log10(m);
+      const double w = dec + std::log10(m);
       if (w >= wMin - 1e-9 && w <= wMax + 1e-9)
-        out.push_back(m * fastPow10(d));
+        out.push_back(m * fastPow10(dec));
     }
   }
 

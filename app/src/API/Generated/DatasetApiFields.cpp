@@ -127,6 +127,8 @@ static QString applyDatasetStringFields2(DataModel::Dataset& d,
                                          bool& rebuildTree,
                                          QSet<QString>& consumed)
 {
+  Q_UNUSED(rebuildTree);
+
   const auto key_transform_code = takeDatasetField(params, consumed, {Keys::TransformCode});
   if (!key_transform_code.isEmpty())
     d.transformCode = params.value(key_transform_code).toString();
@@ -197,6 +199,8 @@ static QString applyDatasetNumberFields2(DataModel::Dataset& d,
                                          bool& rebuildTree,
                                          QSet<QString>& consumed)
 {
+  Q_UNUSED(rebuildTree);
+
   const auto key_fft_samples = takeDatasetField(params, consumed, {Keys::FFTSamples});
   if (!key_fft_samples.isEmpty())
     d.fftSamples = params.value(key_fft_samples).toInt();
@@ -240,6 +244,8 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
                                          bool& rebuildTree,
                                          QSet<QString>& consumed)
 {
+  Q_UNUSED(rebuildTree);
+
   const auto key_decimal_points = takeDatasetField(params, consumed, {Keys::DecimalPoints});
   if (!key_decimal_points.isEmpty())
     d.decimalPoints = qBound(-1, params.value(key_decimal_points).toInt(), 15);
