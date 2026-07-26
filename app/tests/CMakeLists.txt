@@ -46,6 +46,16 @@ find_package(Qt6 REQUIRED COMPONENTS Test)
 set(SS_APP_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(SS_UNIT_TEST_TARGETS "")
 
+#
+# AppPlatform.cpp reaches QDBusConnection under Q_OS_LINUX (same gate as the application target in
+# app/CMakeLists.txt), so any suite that compiles it needs the QtDBus include path on Linux.
+#
+set(SS_PLATFORM_LIBS "")
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  find_package(Qt6 REQUIRED COMPONENTS DBus)
+  list(APPEND SS_PLATFORM_LIBS Qt6::DBus)
+endif()
+
 #---------------------------------------------------------------------------------------------------
 # Suite registration helper
 #---------------------------------------------------------------------------------------------------
@@ -178,6 +188,7 @@ ss_add_unit_test(tst_frame_delimiters
           Qt6::Qml
           Qt6::Widgets
           lua54
+          ${SS_PLATFORM_LIBS}
 )
 
 #
