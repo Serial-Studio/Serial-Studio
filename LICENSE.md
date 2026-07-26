@@ -38,11 +38,11 @@ After 14 days, you must either:
 The official binary will **automatically disable** after the trial ends unless a valid license is activated.
 
 For full commercial terms, see [LicenseRef-SerialStudio-Commercial](LICENSES/LicenseRef-SerialStudio-Commercial.txt).  
-For open-source GPL terms, see [GPL-3.0-only](LICENSES/GPL-3.0-only.txt).
+For open-source GPL terms, see [GPL-3.0-or-later](LICENSES/GPL-3.0-or-later.txt).
 
 ## 2. GPLv3 Licensing Terms (Source Code Only)
 
-You may use, modify, and redistribute the source code under the [GNU GPLv3](LICENSES/GPL-3.0-only.txt), **only if** you meet all the following conditions:
+You may use, modify, and redistribute the source code under the [GNU GPLv3](LICENSES/GPL-3.0-or-later.txt), **only if** you meet all the following conditions:
 
 ### 2.1 GPL Compliance Requirements
 

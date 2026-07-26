@@ -1,0 +1,31 @@
+Public Domain
+
+The work covered by this identifier has been dedicated to the public domain by
+its authors.
+
+This is used in Serial Studio for the vendored TweetNaCl sources
+(app/src/ThirdParty/tweetnacl.c and app/src/ThirdParty/tweetnacl.h), which
+upstream releases into the public domain. The TweetNaCl authors are:
+
+  Daniel J. Bernstein, Bernard van Gastel, Wesley Janssen, Tanja Lange,
+  Peter Schwabe, Sjaak Smetsers
+
+The upstream project states:
+
+  TweetNaCl is a public domain library.
+
+Anyone is free to copy, modify, publish, use, compile, sell or distribute this
+work, either in source code form or as a compiled binary, for any purpose,
+commercial or non-commercial, and by any means.
+
+In jurisdictions that do not recognise a dedication of a work to the public
+domain, the authors grant anyone obtaining a copy of this work an unrestricted,
+irrevocable, worldwide, royalty-free, non-exclusive licence to exercise all
+rights in the work, to the maximum extent permitted by applicable law.
+
+THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE WORK OR THE
+USE OR OTHER DEALINGS IN THE WORK.

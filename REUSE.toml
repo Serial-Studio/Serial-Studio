@@ -1,0 +1,201 @@
+version = 1
+SPDX-PackageName = "Serial Studio"
+SPDX-PackageSupplier = "Alex Spataru <alex@serial-studio.com>"
+SPDX-PackageDownloadLocation = "https://github.com/Serial-Studio/Serial-Studio"
+
+# ------------------------------------------------------------------------------------------------
+# First-party assets under app/rcc. Subdirectories are listed one by one so that the third-party
+# trees (fonts/, vendor/) can never be swallowed by a wildcard: app/rcc/** would cover them too.
+# ------------------------------------------------------------------------------------------------
+
+[[annotations]]
+path = [
+  "app/rcc/actions/**",
+  "app/rcc/ai/**",
+  "app/rcc/api/**",
+  "app/rcc/chartjs/**",
+  "app/rcc/commands/**",
+  "app/rcc/demo/**",
+  "app/rcc/extensions/**",
+  "app/rcc/icons/**",
+  "app/rcc/images/**",
+  "app/rcc/instruments/**",
+  "app/rcc/logo/**",
+  "app/rcc/messages/**",
+  "app/rcc/properties/**",
+  "app/rcc/scripts/**",
+  "app/rcc/templates/**",
+  "app/rcc/themes/**",
+  "app/rcc/chat-viewer.html",
+  "app/rcc/markdown-viewer.html",
+  "app/rcc/rcc.qrc",
+]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+
+# ------------------------------------------------------------------------------------------------
+# First-party build glue, docs, examples, tooling and repo metadata. The default precedence
+# ("closest") means a file's own SPDX header always wins; these globs only cover what has none.
+# ------------------------------------------------------------------------------------------------
+
+[[annotations]]
+path = [
+  "app/deploy/**",
+  "app/translations/**",
+  "cmake/**",
+  "doc/**",
+  "examples/**",
+  "scripts/**",
+  "tests/**",
+  ".github/**",
+  "*.md",
+  "updates.json",
+  "CMakePresets.json",
+  ".clang-format",
+  ".clang-tidy",
+  ".gitattributes",
+  ".gitignore",
+]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+
+# The agent skills quote SPDX headers inside fenced code samples, so a header scan of these files
+# picks up a truncated expression; "override" makes the annotation the only source of truth.
+
+[[annotations]]
+path = [".claude/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+
+# ------------------------------------------------------------------------------------------------
+# Bundled fonts. OFL-1.1 requires the license text to travel with the fonts; LICENSES/OFL-1.1.txt
+# is what satisfies that obligation for the shipped binaries and installers.
+# ------------------------------------------------------------------------------------------------
+
+[[annotations]]
+path = ["app/rcc/fonts/GeistMono-*.ttf"]
+SPDX-FileCopyrightText = "2024 The Geist Project Authors (https://github.com/vercel/geist-font.git)"
+SPDX-License-Identifier = "OFL-1.1"
+
+# ------------------------------------------------------------------------------------------------
+# Vendored web assets for the AI chat / markdown viewers. Each upstream bundle keeps its own
+# .LICENSE sidecar; the sidecar itself is covered by the same annotation as the code it documents.
+# ------------------------------------------------------------------------------------------------
+
+[[annotations]]
+path = ["app/rcc/vendor/highlight*"]
+SPDX-FileCopyrightText = "2006 Ivan Sagalaev and other contributors"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["app/rcc/vendor/mermaid*"]
+SPDX-FileCopyrightText = "2014-2025 Knut Sveidqvist"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["app/rcc/vendor/showdown*"]
+SPDX-FileCopyrightText = "2018, 2021 ShowdownJS"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["app/rcc/vendor/sanitize*"]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+
+# ------------------------------------------------------------------------------------------------
+# Vendored single-header C/C++ libraries. Declared here rather than by editing the files so that
+# future upstream drops stay byte-identical and diffable.
+# ------------------------------------------------------------------------------------------------
+
+[[annotations]]
+path = ["app/src/ThirdParty/miniaudio.h", "app/src/ThirdParty/miniaudio.cpp"]
+SPDX-FileCopyrightText = "2025 David Reid"
+SPDX-License-Identifier = "MIT-0 OR Unlicense"
+
+[[annotations]]
+path = ["app/src/ThirdParty/fast_float.h"]
+SPDX-FileCopyrightText = "2021 The fast_float authors"
+SPDX-License-Identifier = "Apache-2.0 OR MIT OR BSL-1.0"
+
+[[annotations]]
+path = [
+  "app/src/ThirdParty/readerwriterqueue.h",
+  "app/src/ThirdParty/readerwritercircularbuffer.h",
+]
+SPDX-FileCopyrightText = "2013-2020 Cameron Desrochers"
+SPDX-License-Identifier = "BSD-2-Clause"
+
+# atomicops.h embeds Jeff Preshing's semaphore under its own zlib license, quoted in the file.
+[[annotations]]
+path = ["app/src/ThirdParty/atomicops.h"]
+SPDX-FileCopyrightText = ["2013-2016 Cameron Desrochers", "2015 Jeff Preshing"]
+SPDX-License-Identifier = "BSD-2-Clause AND Zlib"
+
+[[annotations]]
+path = ["app/src/ThirdParty/tweetnacl.h", "app/src/ThirdParty/tweetnacl.c"]
+SPDX-FileCopyrightText = "2014 Daniel J. Bernstein, Bernard van Gastel, Wesley Janssen, Tanja Lange, Peter Schwabe, Sjaak Smetsers"
+SPDX-License-Identifier = "LicenseRef-PublicDomain"
+
+# ------------------------------------------------------------------------------------------------
+# Vendored libraries under lib/. There are no git submodules, so REUSE sees every one of these
+# files as ours to declare. "override" is used for the trees whose upstream tarball ships
+# generated documentation containing HTML-escaped SPDX tags that no longer parse as expressions.
+# ------------------------------------------------------------------------------------------------
+
+[[annotations]]
+path = ["lib/hidapi/**"]
+SPDX-FileCopyrightText = "2010 Alan Ott, Signal 11 Software"
+SPDX-License-Identifier = "GPL-3.0-only OR BSD-3-Clause OR LicenseRef-HIDAPI-Original"
+
+[[annotations]]
+path = ["lib/KissFFT/**"]
+SPDX-FileCopyrightText = "2003-2010 Mark Borgerding"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["lib/lua/**"]
+SPDX-FileCopyrightText = "1994-2024 Lua.org, PUC-Rio"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["lib/mdflib/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2022 Ingemar Hedvall"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["lib/QCodeEditor/**"]
+SPDX-FileCopyrightText = "2013-2019 Megaxela"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["lib/QSimpleUpdater/**"]
+SPDX-FileCopyrightText = "2014-2025 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["lib/QuaZip/**"]
+SPDX-FileCopyrightText = "2005-2020 Sergey A. Tachenov and contributors"
+SPDX-License-Identifier = "LGPL-2.1-or-later"
+
+# The bundled MiniZip sources predate QuaZip and stay under Gilles Vollant's zlib terms; this
+# entry follows lib/QuaZip/** so that the more specific declaration wins.
+[[annotations]]
+path = [
+  "lib/QuaZip/quazip/unzip.c",
+  "lib/QuaZip/quazip/unzip.h",
+  "lib/QuaZip/quazip/zip.c",
+  "lib/QuaZip/quazip/zip.h",
+  "lib/QuaZip/quazip/ioapi.h",
+  "lib/QuaZip/quazip/qioapi.cpp",
+  "lib/QuaZip/quazip/minizip_crypt.h",
+]
+precedence = "override"
+SPDX-FileCopyrightText = ["1998-2010 Gilles Vollant", "2005-2020 Sergey A. Tachenov"]
+SPDX-License-Identifier = "Zlib"
+
+[[annotations]]
+path = ["lib/CMakeLists.txt", "lib/OpenSSL/**"]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
