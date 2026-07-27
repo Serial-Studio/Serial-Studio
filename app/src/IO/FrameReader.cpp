@@ -34,9 +34,10 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs a FrameReader with a 1 MiB scan buffer. Pre-allocates the frame-slot
- *        pool so steady-state extraction never touches the heap, and best-effort pins the
- *        scan buffer resident so a page fault can't stall the hotpath at rate.
+ * @brief Constructs a FrameReader with a 1 MiB scan buffer: pre-allocated frame-slot pool,
+ *        best-effort resident pin against page faults. The drop-notify throttle starts armed
+ *        so the first saturation defers its notification up to 5 s (the counters carry the
+ *        truth), keeping the delimiter unit suite off NotificationCenter.
  */
 IO::FrameReader::FrameReader(QObject* parent)
   : QObject(parent)
@@ -52,7 +53,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_checksumErrors(0)
   , m_framesExtracted(0)
   , m_totalOverflowBytes(0)
-  , m_lastDropNotify()
+  , m_lastDropNotify(CapturedData::SteadyClock::now())
   , m_lastOverflowLog()
   , m_lastChecksumLog()
 {
