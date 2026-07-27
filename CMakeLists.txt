@@ -483,12 +483,14 @@ include(${CMAKE_SOURCE_DIR}/cmake/Signing.cmake)
 #
 #---------------------------------------------------------------------------------------------------
 
+# enable_testing() must precede the subdirectories: a directory processed before testing is
+# enabled records no add_test() calls, and ctest then finds an empty test manifest.
+if(SS_BUILD_TESTS)
+  enable_testing()
+endif()
+
 add_subdirectory(lib)
 add_subdirectory(app)
-
-if(SS_BUILD_TESTS)
-   enable_testing()
-endif()
 
 #---------------------------------------------------------------------------------------------------
 # Build configuration summary

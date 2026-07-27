@@ -41,8 +41,10 @@
 // Bounds
 //--------------------------------------------------------------------------------------------------
 
+#ifdef Q_OS_UNIX
 static constexpr int kMaxGroupMembers        = 4096;
 static constexpr int kMaxSupplementaryGroups = 256;
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // POSIX helpers
