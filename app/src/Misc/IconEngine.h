@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <optional>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QQuickImageProvider>
@@ -80,7 +81,7 @@ private:
   bool m_busy;
   QStringList m_iconNames;
   QStringList m_iconPreviews;
-  QNetworkAccessManager m_manager;
+  std::optional<QNetworkAccessManager> m_manager;
 };
 
 /**

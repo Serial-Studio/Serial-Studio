@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <optional>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMap>
@@ -249,7 +250,7 @@ private:
   QMap<QString, QVariantMap> m_pluginMetadataCache;
   QVariantList m_runningPlugins;
   QVariantList m_installedPlugins;
-  QNetworkAccessManager m_nam;
+  std::optional<QNetworkAccessManager> m_nam;
   QSet<QNetworkReply*> m_activeReplies;
 };
 }  // namespace Misc

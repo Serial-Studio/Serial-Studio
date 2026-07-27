@@ -21,6 +21,7 @@
 
 #include "Misc/HelpCenter.h"
 
+#include <QCoreApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -47,7 +48,9 @@ static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%
  */
 Misc::HelpCenter::HelpCenter() : m_loading(false), m_currentIndex(-1), m_pendingPreloads(0)
 {
-  m_nam.setTransferTimeout(15 * 1000);
+  m_nam.emplace();
+  m_nam->setTransferTimeout(15 * 1000);
+  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_nam.reset(); });
 
   onThemeChanged();
   static auto& themeManager = Misc::ThemeManager::instance();
@@ -315,6 +318,9 @@ void Misc::HelpCenter::onPageReply()
  */
 void Misc::HelpCenter::fetchManifest()
 {
+  if (!m_nam)
+    return;
+
   if (m_loading || !m_allPages.isEmpty())
     return;
 
@@ -322,7 +328,7 @@ void Misc::HelpCenter::fetchManifest()
   Q_EMIT loadingChanged();
 
   const auto url = QUrl(kBase + "help.json");
-  auto* reply    = m_nam.get(QNetworkRequest(url));
+  auto* reply    = m_nam->get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, &HelpCenter::onManifestReply);
 }
 
@@ -370,6 +376,9 @@ bool Misc::HelpCenter::pageMatchesFilter(const QJsonObject& obj) const
  */
 void Misc::HelpCenter::fetchPage(int index)
 {
+  if (!m_nam)
+    return;
+
   if (index < 0 || index >= m_filteredPages.count())
     return;
 
@@ -389,7 +398,7 @@ void Misc::HelpCenter::fetchPage(int index)
 
   auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
   auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
-  auto* reply  = m_nam.get(QNetworkRequest(url));
+  auto* reply  = m_nam->get(QNetworkRequest(url));
   reply->setProperty("pageId", id);
   connect(reply, &QNetworkReply::finished, this, &HelpCenter::onPageReply);
 }
@@ -400,6 +409,9 @@ void Misc::HelpCenter::fetchPage(int index)
  */
 void Misc::HelpCenter::preloadAllPages()
 {
+  if (!m_nam)
+    return;
+
   m_pendingPreloads = 0;
 
   for (const auto& entry : std::as_const(m_allPages)) {
@@ -413,7 +425,7 @@ void Misc::HelpCenter::preloadAllPages()
     ++m_pendingPreloads;
     auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
     auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
-    auto* reply  = m_nam.get(QNetworkRequest(url));
+    auto* reply  = m_nam->get(QNetworkRequest(url));
     reply->setProperty("pageId", id);
     connect(reply, &QNetworkReply::finished, this, &HelpCenter::onPreloadReply);
   }

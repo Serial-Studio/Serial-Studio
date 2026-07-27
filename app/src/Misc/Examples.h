@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <optional>
 #include <QJsonArray>
 #include <QNetworkAccessManager>
 #include <QObject>
@@ -132,6 +133,6 @@ private:
   QVariantList m_filteredExamples;
 
   QList<QPair<QString, QUrl>> m_downloadQueue;
-  QNetworkAccessManager m_nam;
+  std::optional<QNetworkAccessManager> m_nam;
 };
 }  // namespace Misc

@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <optional>
 #include <QDateTime>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
@@ -154,6 +155,6 @@ private:
   QSettings m_settings;
   SimpleCrypt m_simpleCrypt;
   QJsonObject m_licensingData;
-  QNetworkAccessManager m_manager;
+  std::optional<QNetworkAccessManager> m_manager;
 };
 }  // namespace Licensing

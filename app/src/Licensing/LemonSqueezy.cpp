@@ -22,6 +22,7 @@
 
 #include "Licensing/LemonSqueezy.h"
 
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QNetworkReply>
 
@@ -77,6 +78,9 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_silentValidation(true)
   , m_gracePeriod(0)
 {
+  m_manager.emplace();
+  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_manager.reset(); });
+
   static auto& machineId = MachineID::instance();
 
   m_simpleCrypt.setKey(machineId.machineSpecificKey());
@@ -231,6 +235,9 @@ void Licensing::LemonSqueezy::buy()
  */
 void Licensing::LemonSqueezy::activate()
 {
+  if (!m_manager)
+    return;
+
   if (!canActivate())
     return;
 
@@ -253,7 +260,7 @@ void Licensing::LemonSqueezy::activate()
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  auto* reply = m_manager.post(req, payloadData);
+  auto* reply = m_manager->post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
       qWarning() << "[LemonSqueezy] Activation network error:" << reply->errorString();
@@ -269,6 +276,9 @@ void Licensing::LemonSqueezy::activate()
  */
 void Licensing::LemonSqueezy::validate()
 {
+  if (!m_manager)
+    return;
+
   if (!canActivate())
     return;
 
@@ -290,7 +300,7 @@ void Licensing::LemonSqueezy::validate()
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  auto* reply = m_manager.post(req, payloadData);
+  auto* reply = m_manager->post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
       qWarning() << "[LemonSqueezy] Validation network error:" << reply->errorString();
@@ -309,6 +319,9 @@ void Licensing::LemonSqueezy::validate()
  */
 void Licensing::LemonSqueezy::deactivate()
 {
+  if (!m_manager)
+    return;
+
   static auto& offlineLicense = OfflineLicense::instance();
   if (offlineLicense.isActivated()) {
     offlineLicense.deactivate();
@@ -336,7 +349,7 @@ void Licensing::LemonSqueezy::deactivate()
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  auto* reply = m_manager.post(req, payloadData);
+  auto* reply = m_manager->post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
       qWarning() << "[LemonSqueezy] Deactivation network error:" << reply->errorString();

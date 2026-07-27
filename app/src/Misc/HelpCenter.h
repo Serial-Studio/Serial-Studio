@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <optional>
 #include <QHash>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -130,6 +131,6 @@ private:
   QVariantList m_filteredPages;
   QHash<QString, QString> m_pageContents;
 
-  QNetworkAccessManager m_nam;
+  std::optional<QNetworkAccessManager> m_nam;
 };
 }  // namespace Misc

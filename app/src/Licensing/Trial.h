@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <optional>
 #include <QDateTime>
 #include <QNetworkAccessManager>
 #include <QObject>
@@ -98,6 +99,6 @@ private:
   SimpleCrypt m_crypt;
   QSettings m_settings;
   QDateTime m_trialExpiry;
-  QNetworkAccessManager m_manager;
+  std::optional<QNetworkAccessManager> m_manager;
 };
 }  // namespace Licensing
