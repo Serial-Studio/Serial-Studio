@@ -22,12 +22,29 @@ param(
 $dir  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $port = 8080
 
+# Ask WER for a minidump on any crash: the exit code alone cannot say whether the app died
+# mid-run or during teardown, and CI uploads the dump for offline triage.
+$dumpDir = Join-Path $dir 'dumps'
+$exeName = Split-Path -Leaf $App
+try {
+    New-Item -ItemType Directory -Force -Path $dumpDir | Out-Null
+    $werKey = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\$exeName"
+    New-Item -Path $werKey -Force | Out-Null
+    Set-ItemProperty -Path $werKey -Name DumpFolder -Value $dumpDir -Type ExpandString
+    Set-ItemProperty -Path $werKey -Name DumpType -Value 1 -Type DWord
+    Set-ItemProperty -Path $werKey -Name DumpCount -Value 4 -Type DWord
+}
+catch {
+    Write-Host "big_db_test: WER LocalDumps setup skipped ($_)"
+}
+
 # One faulted channel per board type keeps the diagnostics decode path under
 # load: healthy boards suppress their diagnostics frame entirely.
 $sim = Start-Process -FilePath 'python' `
     -ArgumentList @("$dir/big_db_test.py", '--host', '127.0.0.1', '--port', "$port", '--rate', '50', `
         '--faults', 'TA:2:5,TB:1:3,TC:3:7') `
     -PassThru -NoNewWindow
+$clock = [System.Diagnostics.Stopwatch]::StartNew()
 $appProc = Start-Process -FilePath $App `
     -ArgumentList @('--headless', '--project', "$dir/big_db_test.ssproj", '--udp', "$port", `
         '--exit-after', "$Seconds") `
@@ -37,11 +54,13 @@ $grace = 30
 $rc = 0
 if ($appProc.WaitForExit(($Seconds + $grace) * 1000)) {
     $rc = $appProc.ExitCode
+    $elapsed = [math]::Round($clock.Elapsed.TotalSeconds, 1)
     if ($rc -eq 0) {
         Write-Host "big_db_test: load run completed $Seconds s and exited cleanly"
     }
     else {
-        Write-Host "big_db_test: app exited with rc=$rc"
+        $phase = if ($elapsed -lt $Seconds) { 'mid-run' } else { 'during teardown' }
+        Write-Host "big_db_test: app exited with rc=$rc after $elapsed s ($phase)"
     }
 }
 else {
@@ -51,4 +70,22 @@ else {
 }
 
 try { $sim.Kill() } catch { }
+
+# Surface any crash dump: name it in the log and print a stack if a debugger is on the image.
+if ($rc -ne 0) {
+    Start-Sleep -Seconds 5
+    $dumps = Get-ChildItem -Path $dumpDir -Filter '*.dmp' -ErrorAction SilentlyContinue
+    foreach ($dump in $dumps) {
+        Write-Host "big_db_test: crash dump written: $($dump.FullName)"
+        $cdb = Get-ChildItem -Path "${env:ProgramFiles(x86)}\Windows Kits\10\Debuggers\x64\cdb.exe" `
+            -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($cdb) {
+            & $cdb.FullName -z $dump.FullName -c '.symfix; .reload; !analyze -v; k 40; q' 2>$null
+        }
+    }
+    if (-not $dumps) {
+        Write-Host "big_db_test: no crash dump found in $dumpDir"
+    }
+}
+
 exit $rc

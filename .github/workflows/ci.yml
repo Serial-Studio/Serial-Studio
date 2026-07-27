@@ -1579,6 +1579,14 @@ jobs:
       run: |
         ./tests/benchmarks/big_db_test/run_load.ps1 -App "build/app/${{env.EXECUTABLE}}.exe" -Seconds 15
 
+    - name: '📦 Upload big_db_test crash dumps'
+      if: failure()
+      uses: actions/upload-artifact@v5
+      with:
+        name: windows-big-db-test-dumps
+        path: tests/benchmarks/big_db_test/dumps/
+        if-no-files-found: ignore
+
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
       run: |
