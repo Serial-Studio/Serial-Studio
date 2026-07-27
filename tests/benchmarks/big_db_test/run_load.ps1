@@ -23,16 +23,23 @@ $dir  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $port = 8080
 
 # Ask WER for a minidump on any crash: the exit code alone cannot say whether the app died
-# mid-run or during teardown, and CI uploads the dump for offline triage.
+# mid-run or during teardown, and CI uploads the dump for offline triage. CI runner images ship
+# with WER reporting disabled, so re-enable it and register LocalDumps under both hives.
 $dumpDir = Join-Path $dir 'dumps'
 $exeName = Split-Path -Leaf $App
 try {
     New-Item -ItemType Directory -Force -Path $dumpDir | Out-Null
-    $werKey = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\$exeName"
-    New-Item -Path $werKey -Force | Out-Null
-    Set-ItemProperty -Path $werKey -Name DumpFolder -Value $dumpDir -Type ExpandString
-    Set-ItemProperty -Path $werKey -Name DumpType -Value 1 -Type DWord
-    Set-ItemProperty -Path $werKey -Name DumpCount -Value 4 -Type DWord
+    $werRoot = 'SOFTWARE\Microsoft\Windows\Windows Error Reporting'
+    foreach ($hive in @('HKLM:', 'HKCU:')) {
+        New-Item -Path "$hive\$werRoot" -Force | Out-Null
+        Set-ItemProperty -Path "$hive\$werRoot" -Name Disabled -Value 0 -Type DWord
+        Set-ItemProperty -Path "$hive\$werRoot" -Name DontShowUI -Value 1 -Type DWord
+        $werKey = "$hive\$werRoot\LocalDumps\$exeName"
+        New-Item -Path $werKey -Force | Out-Null
+        Set-ItemProperty -Path $werKey -Name DumpFolder -Value $dumpDir -Type ExpandString
+        Set-ItemProperty -Path $werKey -Name DumpType -Value 2 -Type DWord
+        Set-ItemProperty -Path $werKey -Name DumpCount -Value 4 -Type DWord
+    }
 }
 catch {
     Write-Host "big_db_test: WER LocalDumps setup skipped ($_)"
