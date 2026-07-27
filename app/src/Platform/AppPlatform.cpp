@@ -272,6 +272,15 @@ static void enableWindowsPerformanceMode()
 }
 
 // code-verify off  (cold argv setup before QApplication exists; C malloc is intentional)
+
+// Snapshot of the heap-duplicated argv: QApplication compacts recognized arguments out of the
+// array in place (shifting pointers and shrinking its argc), so releasing by the live array and
+// count would double-free shifted entries and leak removed ones. The release path frees this
+// snapshot instead.
+static char** s_adjustedArgv    = nullptr;
+static char** s_adjustedStrings = nullptr;
+static int s_adjustedCount      = 0;
+
 /**
  * @brief Forces the Qt windows platform plugin to use FreeType font rendering.
  */
@@ -298,6 +307,14 @@ static char** adjustArgumentsForFreeType(int& argc, char** argv)
     newArgv[argc]      = _strdup("-platform");
     newArgv[argc + 1]  = _strdup("windows:fontengine=freetype");
     argc              += 2;
+  }
+
+  char** snapshot = static_cast<char**>(malloc(sizeof(char*) * argc));
+  if (snapshot) {
+    std::memcpy(snapshot, newArgv, sizeof(char*) * argc);
+    s_adjustedArgv    = newArgv;
+    s_adjustedStrings = snapshot;
+    s_adjustedCount   = argc;
   }
 
   return newArgv;
@@ -529,18 +546,24 @@ void registerFileAssociation()
 
 // code-verify off  (mirrors malloc above; pair with adjustArgumentsForFreeType / injectPlatformArg)
 /**
- * @brief Frees the heap-duplicated argv produced by adjustArgumentsForFreeType.
+ * @brief Frees the heap-duplicated argv via the snapshot taken at adjustment time. Call only
+ *        after ~QApplication: Qt reads argv for the application's whole lifetime.
  */
-void releaseAdjustedArgv(int argc, char** argv)
+void releaseAdjustedArgv()
 {
 #ifdef Q_OS_WIN
-  for (int i = 0; i < argc; ++i)
-    free(argv[i]);
+  if (!s_adjustedStrings)
+    return;
 
-  free(argv);
-#else
-  Q_UNUSED(argc);
-  Q_UNUSED(argv);
+  for (int i = 0; i < s_adjustedCount; ++i)
+    free(s_adjustedStrings[i]);
+
+  free(s_adjustedStrings);
+  free(s_adjustedArgv);
+
+  s_adjustedArgv    = nullptr;
+  s_adjustedStrings = nullptr;
+  s_adjustedCount   = 0;
 #endif
 }
 

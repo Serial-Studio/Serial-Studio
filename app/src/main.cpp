@@ -98,28 +98,12 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
 }
 
 /**
- * @brief Application entry-point: bootstraps Qt, parses CLI flags, and runs the event loop.
+ * @brief Runs the whole application lifecycle inside one QApplication scope: QApplication reads
+ *        argv for its entire lifetime, so main() may free the adjusted argv only after this
+ *        returns and ~QApplication has run.
  */
-int main(int argc, char** argv)
+static int runApplication(int argc, char** argv, bool headless, const QString& shortcutPath)
 {
-  setupQtApplicationMetadata();
-
-  const bool cliEarlyExit = Misc::CLI::isCliEarlyExit(argc, argv);
-  if (!cliEarlyExit)
-    Misc::CrashTracker::instance().markStartup();
-
-  const bool benchmark = Misc::CLI::isBenchmarkRequested(argc, argv);
-  const bool headless  = Misc::CLI::argvHasFlag(argc, argv, "--headless");
-  if (headless || benchmark)
-    argv = Platform::AppPlatform::injectPlatformArg(argc, argv, "offscreen");
-
-  const QString shortcutPath = Misc::CLI::argvValueFor(argc, argv, "--shortcut-path");
-  Platform::AppPlatform::prepareEnvironment(argc, argv, shortcutPath);
-
-  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("graphics-backend-apply"));
-  Misc::GraphicsBackend::applyConfiguredBackend();
-  Misc::HighDpiScaling::applyConfiguredPolicy();
-
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("qapplication-construct"));
   QApplication app(argc, argv);
 
@@ -185,6 +169,34 @@ int main(int argc, char** argv)
   qInstallMessageHandler(nullptr);
   SessionContext::current().shutdown();
 
-  Platform::AppPlatform::releaseAdjustedArgv(argc, argv);
+  return status;
+}
+
+/**
+ * @brief Application entry-point: bootstraps Qt, parses CLI flags, and runs the event loop.
+ */
+int main(int argc, char** argv)
+{
+  setupQtApplicationMetadata();
+
+  const bool cliEarlyExit = Misc::CLI::isCliEarlyExit(argc, argv);
+  if (!cliEarlyExit)
+    Misc::CrashTracker::instance().markStartup();
+
+  const bool benchmark = Misc::CLI::isBenchmarkRequested(argc, argv);
+  const bool headless  = Misc::CLI::argvHasFlag(argc, argv, "--headless");
+  if (headless || benchmark)
+    argv = Platform::AppPlatform::injectPlatformArg(argc, argv, "offscreen");
+
+  const QString shortcutPath = Misc::CLI::argvValueFor(argc, argv, "--shortcut-path");
+  Platform::AppPlatform::prepareEnvironment(argc, argv, shortcutPath);
+
+  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("graphics-backend-apply"));
+  Misc::GraphicsBackend::applyConfiguredBackend();
+  Misc::HighDpiScaling::applyConfiguredPolicy();
+
+  const int status = runApplication(argc, argv, headless, shortcutPath);
+
+  Platform::AppPlatform::releaseAdjustedArgv();
   return status;
 }
