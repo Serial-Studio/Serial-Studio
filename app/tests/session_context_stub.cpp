@@ -21,11 +21,12 @@
 
 #include <QtGlobal>
 
+#include "SerialStudio.h"
 #include "SessionContext.h"
 
 /**
  * @file session_context_stub.cpp
- * @brief Link-only stand-in for SessionContext::current() in unit suites (spec 0032/0039).
+ * @brief Link-only stand-ins for unit suites (spec 0032/0039).
  *
  * Production instance() forwarders route through SessionContext::current(), so any suite that
  * compiles one of their TUs needs the symbol at link time even when no test ever executes it.
@@ -38,3 +39,12 @@ SessionContext& SessionContext::current()
 {
   qFatal("SessionContext::current() reached from a unit test without a composition root");
 }
+
+/**
+ * @brief Satisfies the qt_getEnumMetaObject() inlines that FrameReader's moc instantiates for
+ *        the SerialStudio Q_ENUMs. Compiling the real moc instead would pull the entire
+ *        invokable surface through qt_static_metacall and with it SerialStudio.cpp, which this
+ *        tier deliberately never links. QObject's tables mean enum lookups return not-found;
+ *        no test reads them.
+ */
+const QMetaObject SerialStudio::staticMetaObject = QObject::staticMetaObject;
