@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <QColor>
+
 #include "DataModel/Frame.h"
 #include "ThirdParty/fast_float.h"
 
