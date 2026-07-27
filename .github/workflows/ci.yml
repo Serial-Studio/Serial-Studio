@@ -395,6 +395,7 @@ jobs:
 
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
+        rm -f "$QT_PLUGINS_PATH/sqldrivers/libqsqlmimer.so"
 
         ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
         mkdir -p AppDir/usr/plugins/canbus
@@ -833,6 +834,7 @@ jobs:
 
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
+        rm -f "$QT_PLUGINS_PATH/sqldrivers/libqsqlmimer.so"
 
         ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
         mkdir -p AppDir/usr/plugins/canbus
@@ -1965,12 +1967,16 @@ jobs:
           zlib1g-dev \
           libexpat1-dev
 
+    # The path list must stay byte-identical to the build jobs' cache steps: actions/cache
+    # scopes entries by a hash of the resolved path list, so a one-line list here can never
+    # restore a two-line cache saved by the build job and every run pays a licensed install.
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
       uses: actions/cache/restore@v5
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-${{matrix.qt_arch}}
+          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-${{matrix.qt_arch}}
 
     - name: '⚙️ Install Qt (cache miss fallback)'
