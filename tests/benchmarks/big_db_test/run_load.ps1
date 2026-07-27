@@ -51,6 +51,8 @@ $sim = Start-Process -FilePath 'python' `
     -ArgumentList @("$dir/big_db_test.py", '--host', '127.0.0.1', '--port', "$port", '--rate', '50', `
         '--faults', 'TA:2:5,TB:1:3,TC:3:7') `
     -PassThru -NoNewWindow
+$env:SS_TEARDOWN_TRACE = '1'
+$env:SS_CRASH_DUMP_DIR = $dumpDir
 $clock = [System.Diagnostics.Stopwatch]::StartNew()
 $appProc = Start-Process -FilePath $App `
     -ArgumentList @('--headless', '--project', "$dir/big_db_test.ssproj", '--udp', "$port", `

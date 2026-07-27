@@ -26,10 +26,12 @@
 #  endif
 #  include <windows.h>
 #  include <avrt.h>
+#  include <dbghelp.h>
 #  include <shlobj.h>
 #  include <psapi.h>
 #  include <io.h>
 #  include <fcntl.h>
+#  pragma comment(lib, "dbghelp")
 #endif
 
 #ifdef __linux__
@@ -543,6 +545,67 @@ void registerFileAssociation()
   SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 #endif
 }
+
+// code-verify off  (crash-context Win32: no Qt calls, fixed buffers, dbghelp only)
+#ifdef Q_OS_WIN
+
+static wchar_t s_dumpPath[MAX_PATH];
+
+/**
+ * @brief Last-resort unhandled-exception filter: writes a minidump to the path prepared by
+ *        installCrashDumpWriter(), then lets the default handling continue so the process
+ *        still exits with the original exception code.
+ */
+static LONG WINAPI writeCrashDump(EXCEPTION_POINTERS* info)
+{
+  HANDLE file = CreateFileW(
+    s_dumpPath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+  if (file != INVALID_HANDLE_VALUE) {
+    MINIDUMP_EXCEPTION_INFORMATION mei;
+    mei.ThreadId          = GetCurrentThreadId();
+    mei.ExceptionPointers = info;
+    mei.ClientPointers    = FALSE;
+
+    const auto type =
+      static_cast<MINIDUMP_TYPE>(MiniDumpWithIndirectlyReferencedMemory | MiniDumpWithThreadInfo);
+    MiniDumpWriteDump(
+      GetCurrentProcess(), GetCurrentProcessId(), file, type, &mei, nullptr, nullptr);
+    CloseHandle(file);
+
+    fprintf(stderr, "[crash] minidump written: %ls\n", s_dumpPath);
+    fflush(stderr);
+  }
+
+  return EXCEPTION_CONTINUE_SEARCH;
+}
+
+#endif
+
+/**
+ * @brief Installs the minidump-on-crash filter when SS_CRASH_DUMP_DIR is set (CI harness).
+ *        Independent of WER, which runner images ship disabled and which produced no dump
+ *        for the teardown crashes this exists to capture.
+ */
+void installCrashDumpWriter()
+{
+#ifdef Q_OS_WIN
+  const QByteArray dir = qgetenv("SS_CRASH_DUMP_DIR");
+  if (dir.isEmpty())
+    return;
+
+  const QString path = QString::fromLocal8Bit(dir) + QStringLiteral("/crash_")
+                     + QString::number(GetCurrentProcessId()) + QStringLiteral(".dmp");
+  const std::wstring wide = path.toStdWString();
+  if (wide.size() >= MAX_PATH)
+    return;
+
+  wcsncpy(s_dumpPath, wide.c_str(), MAX_PATH - 1);
+  s_dumpPath[MAX_PATH - 1] = L'\0';
+  SetUnhandledExceptionFilter(writeCrashDump);
+#endif
+}
+
+// code-verify on
 
 // code-verify off  (mirrors malloc above; pair with adjustArgumentsForFreeType / injectPlatformArg)
 /**

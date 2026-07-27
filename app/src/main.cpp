@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <cstdio>
 #include <QApplication>
 #include <QIcon>
 #include <QLoggingCategory>
@@ -98,6 +99,19 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
 }
 
 /**
+ * @brief Prints a teardown stage marker to stderr when SS_TEARDOWN_TRACE is set, so a CI crash
+ *        log brackets the exact shutdown region that died.
+ */
+static void teardownTrace(const char* stage)
+{
+  if (!qEnvironmentVariableIsSet("SS_TEARDOWN_TRACE"))
+    return;
+
+  fprintf(stderr, "[teardown] %s\n", stage);
+  fflush(stderr);
+}
+
+/**
  * @brief Runs the whole application lifecycle inside one QApplication scope: QApplication reads
  *        argv for its entire lifetime, so main() may free the adjusted argv only after this
  *        returns and ~QApplication has run.
@@ -162,12 +176,16 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
     cli.applyBusConfiguration();
 
     status = app.exec();
+    teardownTrace("event-loop-exited");
   }
 
+  teardownTrace("module-manager-destroyed");
   IO::ConnectionManager::instance().shutdownDrivers();
+  teardownTrace("drivers-shut-down");
 
   qInstallMessageHandler(nullptr);
   SessionContext::current().shutdown();
+  teardownTrace("session-shutdown-done");
 
   return status;
 }
@@ -190,13 +208,16 @@ int main(int argc, char** argv)
 
   const QString shortcutPath = Misc::CLI::argvValueFor(argc, argv, "--shortcut-path");
   Platform::AppPlatform::prepareEnvironment(argc, argv, shortcutPath);
+  Platform::AppPlatform::installCrashDumpWriter();
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("graphics-backend-apply"));
   Misc::GraphicsBackend::applyConfiguredBackend();
   Misc::HighDpiScaling::applyConfiguredPolicy();
 
   const int status = runApplication(argc, argv, headless, shortcutPath);
+  teardownTrace("qapplication-destroyed");
 
   Platform::AppPlatform::releaseAdjustedArgv();
+  teardownTrace("argv-released");
   return status;
 }

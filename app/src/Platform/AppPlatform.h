@@ -60,6 +60,7 @@ void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath);
 void inhibitIdleSleep();
 void registerFileAssociation();
 void releaseAdjustedArgv();
+void installCrashDumpWriter();
 char** injectPlatformArg(int& argc, char** argv, const char* platform);
 QString shortcutIdentityHash(const QString& shortcutPath);
 
