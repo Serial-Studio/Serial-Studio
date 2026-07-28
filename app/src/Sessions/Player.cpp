@@ -87,11 +87,13 @@ Sessions::Player::Player()
 }
 
 /**
- * @brief Closes the database before the singleton destructs.
+ * @brief Joins the loader worker only: the dtor runs at static destruction, after
+ *        SessionContext::shutdown() has freed FrameBuilder and the other core modules, so the
+ *        closeFile() half of shutdown() must never run here (2026-07 Windows teardown AV).
  */
 Sessions::Player::~Player()
 {
-  shutdown();
+  joinWorker();
 }
 
 /**
@@ -124,12 +126,20 @@ void Sessions::Player::initWorker()
 }
 
 /**
- * @brief Closes the active database, cancels pending loads, joins the worker thread.
+ * @brief Closes the active database, cancels pending loads, joins the worker thread. Call while
+ *        the core modules are still alive (ModuleManager::onQuit); closeFile() touches them.
  */
 void Sessions::Player::shutdown()
 {
   closeFile();
+  joinWorker();
+}
 
+/**
+ * @brief Cancels and joins the loader worker; touches only Player-owned state.
+ */
+void Sessions::Player::joinWorker()
+{
   if (!m_workerThread)
     return;
 

@@ -118,6 +118,7 @@ protected:
 
 private:
   void initWorker();
+  void joinWorker();
   void clearLocalState();
   void teardownLocalDb();
   bool openLocalDb(const QString& filePath);
