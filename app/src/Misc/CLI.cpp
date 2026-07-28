@@ -855,7 +855,9 @@ void CLI::applyExportToggles()
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief Activates a license key against the Lemon Squeezy API and exits.
+ * @brief Activates a license key against the Lemon Squeezy API and exits. Quit is deferred to
+ *        the next loop pass: activatedChanged fires inside the network reply's finished handler,
+ *        and a synchronous quit() would tear the manager down under that reply's stack frame.
  */
 int CLI::activateLicense(QApplication& app, const QString& licenseKey)
 {
@@ -880,7 +882,7 @@ int CLI::activateLicense(QApplication& app, const QString& licenseKey)
     else
       qCritical() << "License activation failed.";
 
-    app.quit();
+    QTimer::singleShot(0, &app, &QCoreApplication::quit);
   });
 
   QObject::connect(&timeout, &QTimer::timeout, &app, [&] {
@@ -896,7 +898,8 @@ int CLI::activateLicense(QApplication& app, const QString& licenseKey)
 }
 
 /**
- * @brief Deactivates the stored license instance on this machine and exits.
+ * @brief Deactivates the stored license instance on this machine and exits. Quit is deferred
+ *        to the next loop pass for the same reply-stack reason as activateLicense().
  */
 int CLI::deactivateLicense(QApplication& app)
 {
@@ -920,7 +923,7 @@ int CLI::deactivateLicense(QApplication& app)
     else
       qCritical() << "License deactivation failed.";
 
-    app.quit();
+    QTimer::singleShot(0, &app, &QCoreApplication::quit);
   });
 
   QObject::connect(&timeout, &QTimer::timeout, &app, [&] {
