@@ -160,6 +160,10 @@ if(PRODUCTION_OPTIMIZATION)
       # every other production toolchain instead of clang-cl's /O2 -> -O2 mapping. The /O and LTO
       # flags are gated to optimized configs (SS_OPT_CONFIGS) so they never collide with Debug's
       # /RTC1 on a multi-config generator.
+      #
+      # /Z7 embeds CodeView in the objects and lld-link's /DEBUG folds it into an external .pdb
+      # so CI can symbolize crash minidumps; codegen is untouched and cpack never installs the
+      # .pdb, so shipped packages are unchanged.
       add_compile_options(
          $<${SS_OPT_CONFIGS}:/O2>
          $<${SS_OPT_CONFIGS}:/Oi>
@@ -167,11 +171,13 @@ if(PRODUCTION_OPTIMIZATION)
          $<${SS_OPT_CONFIGS}:/clang:-O3>
          /Gy
          /Gw
+         /Z7
          /clang:-march=x86-64-v2
          /fp:precise
          /DNDEBUG
       )
       add_link_options(
+         /DEBUG
          /OPT:REF
          /OPT:ICF
       )

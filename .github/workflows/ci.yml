@@ -1588,7 +1588,9 @@ jobs:
       uses: actions/upload-artifact@v5
       with:
         name: windows-big-db-test-dumps
-        path: tests/benchmarks/big_db_test/dumps/
+        path: |
+          tests/benchmarks/big_db_test/dumps/
+          build/app/${{env.EXECUTABLE}}.pdb
         if-no-files-found: ignore
 
     - name: '🔑 Deactivate Serial Studio license'
