@@ -77,15 +77,6 @@ env:
   GRPC_REPO: alex-spataru/gRPC-Builds
 
   #
-  # Qt cache management
-  #
-  INSTALL_QT_WINDOWS: false
-  INSTALL_QT_MACOS_ARM64: false
-  INSTALL_QT_MACOS_INTEL: false
-  INSTALL_QT_LINUX_INTEL: false
-  INSTALL_QT_LINUX_ARM64: false
-
-  #
   # Test gating: tagged releases always block on the live pytest suite; this
   # flag only controls whether continuous (untagged) builds block as well.
   #
@@ -192,17 +183,17 @@ jobs:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
       uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_LINUX_INTEL == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
 
-    - name: '⚙️ Install Qt'
+    - name: '⚙️ Install Qt (cache miss)'
       shell: bash
-      if: env.INSTALL_QT_LINUX_INTEL == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
         QT_ARCH: x64
@@ -214,7 +205,7 @@ jobs:
         ./scripts/install-qt.sh
 
     - name: '⚙️ Save Qt Cache'
-      if: env.INSTALL_QT_LINUX_INTEL == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -633,16 +624,16 @@ jobs:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
       uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_LINUX_ARM64 == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
 
-    - name: '⚙️ Install Qt'
+    - name: '⚙️ Install Qt (cache miss)'
       shell: bash
-      if: env.INSTALL_QT_LINUX_ARM64 == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
         QT_ARCH: arm64
@@ -655,7 +646,7 @@ jobs:
 
     - name: '⚙️ Save Qt Cache'
       uses: actions/cache/save@v5
-      if: env.INSTALL_QT_LINUX_ARM64 == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
@@ -1009,17 +1000,17 @@ jobs:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
       uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_MACOS_ARM64 == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
-    - name: '⚙️ Install Qt'
+    - name: '⚙️ Install Qt (cache miss)'
       shell: bash
-      if: env.INSTALL_QT_MACOS_ARM64 == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_MACOS}}
         QT_ARCH: x64
@@ -1031,7 +1022,7 @@ jobs:
         ./scripts/install-qt.sh
 
     - name: '⚙️ Save Qt Cache'
-      if: env.INSTALL_QT_MACOS_ARM64 == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -1205,17 +1196,17 @@ jobs:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
       uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_MACOS_INTEL == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
 
-    - name: '⚙️ Install Qt'
+    - name: '⚙️ Install Qt (cache miss)'
       shell: bash
-      if: env.INSTALL_QT_MACOS_INTEL == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_MACOS}}
         QT_ARCH: x64
@@ -1227,7 +1218,7 @@ jobs:
         ./scripts/install-qt.sh
 
     - name: '⚙️ Save Qt Cache'
-      if: env.INSTALL_QT_MACOS_INTEL == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -1429,17 +1420,17 @@ jobs:
         submodules: 'recursive'
 
     - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
       uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_WINDOWS == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
 
-    - name: '⚙️ Install Qt'
+    - name: '⚙️ Install Qt (cache miss)'
       shell: pwsh
-      if: env.INSTALL_QT_WINDOWS == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
         QT_ARCH: x64
@@ -1450,7 +1441,7 @@ jobs:
         ./scripts/install-qt.ps1
 
     - name: '⚙️ Save Qt Cache'
-      if: env.INSTALL_QT_WINDOWS == 'true'
+      if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -1588,9 +1579,7 @@ jobs:
       uses: actions/upload-artifact@v5
       with:
         name: windows-big-db-test-dumps
-        path: |
-          tests/benchmarks/big_db_test/dumps/
-          build/app/${{env.EXECUTABLE}}.pdb
+        path: tests/benchmarks/big_db_test/dumps/
         if-no-files-found: ignore
 
     - name: '🔑 Deactivate Serial Studio license'
