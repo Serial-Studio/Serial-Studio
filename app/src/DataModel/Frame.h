@@ -934,10 +934,10 @@ SS_FORCE_INLINE void assign_string_in_place(QString& dst, const QString& src) no
  */
 SS_FORCE_INLINE void assign_utf8_in_place(QString& dst, QByteArrayView src)
 {
-  const char* p = src.data();
-  qsizetype n   = src.size();
+  const char* p     = src.data();
+  const qsizetype n = src.size();
 
-  SS_ASSERT(n >= 0, n = 0);
+  SS_ASSERT_HOTPATH(n >= 0);
 
   if (!(dst.isDetached() && dst.capacity() >= n)) {
     dst = QString();

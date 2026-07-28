@@ -339,10 +339,7 @@ void IO::CircularBuffer<T, StorageType>::peekRangeInto(qsizetype offset,
                                                        qsizetype size,
                                                        T& out) const
 {
-  SS_ASSERT(offset >= 0, {
-    out = T();
-    return;
-  });
+  SS_ASSERT_HOTPATH(offset >= 0);
 
   const qsizetype current_size = this->size();
   if (offset >= current_size || size <= 0) [[unlikely]] {
@@ -419,8 +416,8 @@ int IO::CircularBuffer<T, StorageType>::byteScanLinear(const StorageType* base,
                                                        int pos,
                                                        typename T::value_type byte)
 {
-  SS_ASSERT(base != nullptr, return -1);
-  SS_ASSERT(pos >= 0, return -1);
+  SS_ASSERT_HOTPATH(base != nullptr);
+  SS_ASSERT_HOTPATH(pos >= 0);
 
   if (pos >= current_size) [[unlikely]]
     return -1;
@@ -443,8 +440,8 @@ int IO::CircularBuffer<T, StorageType>::byteScanWrap(qsizetype current_size,
                                                      qsizetype head,
                                                      typename T::value_type byte) const
 {
-  SS_ASSERT(pos >= 0, return -1);
-  SS_ASSERT(head >= 0 && head < m_capacity, return -1);
+  SS_ASSERT_HOTPATH(pos >= 0);
+  SS_ASSERT_HOTPATH(head >= 0 && head < m_capacity);
 
   const qsizetype firstLen = m_capacity - head;
   const auto c             = static_cast<unsigned char>(byte);
@@ -478,8 +475,8 @@ int IO::CircularBuffer<T, StorageType>::shortPatternScanLinear(const StorageType
                                                                const typename T::value_type* pData,
                                                                qsizetype pSize)
 {
-  SS_ASSERT(base != nullptr, return -1);
-  SS_ASSERT(pSize >= 2 && pSize <= kShortPatternMax, return -1);
+  SS_ASSERT_HOTPATH(base != nullptr);
+  SS_ASSERT_HOTPATH(pSize >= 2 && pSize <= kShortPatternMax);
 
   const auto first     = static_cast<unsigned char>(pData[0]);
   const qsizetype last = current_size - pSize;

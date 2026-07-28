@@ -222,7 +222,7 @@ size_t DataModel::FrameBuilder::claimPoolSlot(int sourceId) noexcept
 {
   const size_t n = m_framePool.size();
 
-  SS_ASSERT(sourceId >= 0, return kInvalidSlotIdx);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
   SS_ASSUME(n == static_cast<size_t>(kFramePoolSize));
 
   const auto hit = m_poolSlotHintBySource.constFind(sourceId);
@@ -316,7 +316,7 @@ void DataModel::FrameBuilder::bindSlotTemplate(PooledFrameSlot* slot, const Data
  */
 bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src)
 {
-  SS_ASSERT(slot != nullptr, return false);
+  SS_ASSERT_HOTPATH(slot != nullptr);
 
   if (slot->generation == m_framePoolGeneration && slot->matchedSrc == &src) [[likely]] {
     // code-verify off
@@ -362,7 +362,7 @@ SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
 
   slotRaw->frame.timestamp           = ts;
   slotRaw->frame.structureGeneration = m_framePoolGeneration;
-  SS_ASSERT_LOG(slotRaw->frame.data.groups.size() == src.groups.size());
+  SS_ASSERT_HOTPATH(slotRaw->frame.data.groups.size() == src.groups.size());
 
   return TimestampedFramePtr(slotOwner, &slotRaw->frame);
 }
@@ -751,8 +751,8 @@ void DataModel::FrameBuilder::captureLatestChannelSpans(int sourceId,
  */
 void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(data, return);
-  SS_ASSERT(!data->data.isEmpty(), return);
+  SS_ASSERT_HOTPATH(data);
+  SS_ASSERT_HOTPATH(!data->data.isEmpty());
   // code-verify off
   // Debug-only cache-coherence probe: polling AppState::instance() per frame in release is exactly
   // the singleton read the cached m_operationMode exists to avoid (spec 0001).
@@ -781,9 +781,9 @@ void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
  */
 void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(sourceId >= 0, return);
-  SS_ASSERT(data, return);
-  SS_ASSERT(!data->data.isEmpty(), return);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(data);
+  SS_ASSERT_HOTPATH(!data->data.isEmpty());
 
   if (m_operationMode != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
@@ -1021,8 +1021,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
  */
 void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(data, return);
-  SS_ASSERT(!data->data.isEmpty(), return);
+  SS_ASSERT_HOTPATH(data);
+  SS_ASSERT_HOTPATH(!data->data.isEmpty());
 
   if (m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1074,9 +1074,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
  */
 void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(sourceId >= 0, return);
-  SS_ASSERT(data, return);
-  SS_ASSERT(!data->data.isEmpty(), return);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(data);
+  SS_ASSERT_HOTPATH(!data->data.isEmpty());
 
   if (m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1135,9 +1135,9 @@ void DataModel::FrameBuilder::replayChannels(
   const QStringList& channels,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  SS_ASSERT(sourceId >= 0, return);
-  SS_ASSERT(m_playerOpen, return);
-  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(m_playerOpen);
+  SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::ProjectFile);
 
   if (channels.isEmpty() || m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1165,11 +1165,11 @@ static void assignFormattedDouble(QString& dst, double value)
   char buf[32];
 #ifdef SS_APPLE_NO_FLOAT_TO_CHARS
   const int len = snprintf_l(buf, sizeof(buf), nullptr, "%.10g", value);
-  SS_ASSERT(len > 0 && static_cast<size_t>(len) < sizeof(buf), return);
+  SS_ASSERT_HOTPATH(len > 0 && static_cast<size_t>(len) < sizeof(buf));
   DataModel::assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(len)));
 #else
   const auto res = std::to_chars(buf, buf + sizeof(buf), value, std::chars_format::general, 10);
-  SS_ASSERT(res.ec == std::errc(), return);
+  SS_ASSERT_HOTPATH(res.ec == std::errc());
   DataModel::assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(res.ptr - buf)));
 #endif
   // code-verify off
@@ -1185,8 +1185,8 @@ static void assignFormattedDouble(QString& dst, double value)
  */
 const std::unordered_map<int, int>* DataModel::FrameBuilder::replayColumnsFor(int sourceId) const
 {
-  SS_ASSERT(sourceId >= 0, return nullptr);
-  SS_ASSERT(SerialStudio::isFinalValuePlayerOpen(), return nullptr);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(SerialStudio::isFinalValuePlayerOpen());
 
   const auto it = m_replayColumnMap.find(sourceId);
   return (it != m_replayColumnMap.end()) ? &it->second : nullptr;
@@ -1202,8 +1202,8 @@ void DataModel::FrameBuilder::applyReplaySpanValue(Dataset& dataset,
                                                    qsizetype count,
                                                    const std::unordered_map<int, int>* columns)
 {
-  SS_ASSERT(cells != nullptr, return);
-  SS_ASSERT(count > 0, return);
+  SS_ASSERT_HOTPATH(cells != nullptr);
+  SS_ASSERT_HOTPATH(count > 0);
 
   if (columns) [[likely]] {
     const auto it       = columns->find(dataset.uniqueId);
@@ -1254,8 +1254,8 @@ void DataModel::FrameBuilder::applyReplayTypedValue(Dataset& dataset,
                                                     qsizetype count,
                                                     const std::unordered_map<int, int>* columns)
 {
-  SS_ASSERT(cells != nullptr, return);
-  SS_ASSERT(count > 0, return);
+  SS_ASSERT_HOTPATH(cells != nullptr);
+  SS_ASSERT_HOTPATH(count > 0);
 
   const auto applyCell = [&](const ReplayCell& cell) {
     if (cell.text) {
@@ -1316,10 +1316,10 @@ void DataModel::FrameBuilder::replayChannelSpans(
   qsizetype count,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  SS_ASSERT(sourceId >= 0, return);
-  SS_ASSERT(cells != nullptr || count == 0, return);
-  SS_ASSERT(m_playerOpen, return);
-  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(cells != nullptr || count == 0);
+  SS_ASSERT_HOTPATH(m_playerOpen);
+  SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::ProjectFile);
 
   if (count <= 0 || m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1357,10 +1357,10 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   qsizetype count,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  SS_ASSERT(sourceId >= 0, return);
-  SS_ASSERT(cells != nullptr || count == 0, return);
-  SS_ASSERT(m_playerOpen, return);
-  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(cells != nullptr || count == 0);
+  SS_ASSERT_HOTPATH(m_playerOpen);
+  SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::ProjectFile);
 
   if (count <= 0 || m_frame.groups.empty()) [[unlikely]]
     return;
@@ -1396,8 +1396,8 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
                                          DataModel::Frame& frame,
                                          const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(sourceId >= 0, return -1);
-  SS_ASSERT(data, return -1);
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+  SS_ASSERT_HOTPATH(data);
 
   if (m_playerOpen) [[unlikely]]
     return -1;
@@ -1694,7 +1694,7 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
                                                            qsizetype count,
                                                            const TransformFrameInfo& info)
 {
-  SS_ASSERT(spans != nullptr, return);
+  SS_ASSERT_HOTPATH(spans != nullptr);
   SS_ASSUME(count > 0);
 
   DatasetDeps* dep = nullptr;
@@ -1783,7 +1783,7 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
 
   const bool armJsWatchdog =
     (m_jsEngineForSource != nullptr) && (m_jsEngineForSource->jsWatchdog != nullptr);
-  SS_ASSERT_LOG(m_jsEngineForSource == nullptr || m_jsEngineForSource->jsWatchdog);
+  SS_ASSERT_HOTPATH(m_jsEngineForSource == nullptr || m_jsEngineForSource->jsWatchdog);
 
   if (armJsWatchdog) [[unlikely]] {
     m_jsTransformTimedOut = false;
@@ -1800,7 +1800,7 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
  */
 void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
 {
-  SS_ASSERT(m_compileGuard > 0, m_compileGuard = 1);
+  SS_ASSERT_HOTPATH(m_compileGuard > 0);
 
   --m_compileGuard;
 
@@ -1941,8 +1941,8 @@ void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Frame& frame,
                                                       qsizetype count,
                                                       const TransformFrameInfo& info)
 {
-  SS_ASSERT(spans != nullptr, return);
-  SS_ASSERT(count > 0, return);
+  SS_ASSERT_HOTPATH(spans != nullptr);
+  SS_ASSERT_HOTPATH(count > 0);
 
   const bool armedWatchdog = beginDatasetPass(info);
 
@@ -1966,8 +1966,8 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValuesSpans(
   qsizetype count,
   const TransformFrameInfo& info)
 {
-  SS_ASSERT(datasets != nullptr, return);
-  SS_ASSERT(spans != nullptr, return);
+  SS_ASSERT_HOTPATH(datasets != nullptr);
+  SS_ASSERT_HOTPATH(spans != nullptr);
 
   const bool armedWatchdog = beginDatasetPass(info);
 
@@ -1983,9 +1983,9 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValuesSpans(
  */
 void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(data, return);
-  SS_ASSERT(!data->data.isEmpty(), return);
-  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
+  SS_ASSERT_HOTPATH(data);
+  SS_ASSERT_HOTPATH(!data->data.isEmpty());
+  SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::QuickPlot);
 
   QList<QStringList> splitRows;
   if (m_playerOpen) [[unlikely]]
@@ -2257,9 +2257,9 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
  */
 void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  SS_ASSERT(frame, return);
-  SS_ASSERT(!frame->data.groups.empty(), return);
-  SS_ASSERT(!frame->data.title.isEmpty(), return);
+  SS_ASSERT_HOTPATH(frame);
+  SS_ASSERT_HOTPATH(!frame->data.groups.empty());
+  SS_ASSERT_HOTPATH(!frame->data.title.isEmpty());
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.hotpathRxFrame(frame);
@@ -2300,9 +2300,9 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
  */
 void DataModel::FrameBuilder::publishReplayFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  SS_ASSERT(frame, return);
-  SS_ASSERT(m_playerOpen, return);
-  SS_ASSERT(!frame->data.groups.empty(), return);
+  SS_ASSERT_HOTPATH(frame);
+  SS_ASSERT_HOTPATH(m_playerOpen);
+  SS_ASSERT_HOTPATH(!frame->data.groups.empty());
 
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.hotpathRxFrame(frame);
@@ -2724,9 +2724,9 @@ QVariant DataModel::FrameBuilder::applyTransform(int language,
                                                  const QVariant& rawValue,
                                                  const TransformFrameInfo& info)
 {
-  SS_ASSERT(info.sourceId >= 0, return rawValue);
-  SS_ASSERT(uniqueId >= 0, return rawValue);
-  SS_ASSERT(info.sourceId == m_engineCacheSourceId, return rawValue);
+  SS_ASSERT_HOTPATH(info.sourceId >= 0);
+  SS_ASSERT_HOTPATH(uniqueId >= 0);
+  SS_ASSERT_HOTPATH(info.sourceId == m_engineCacheSourceId);
 
   TransformEngine* engine =
     (language == SerialStudio::Lua) ? m_luaEngineForSource : m_jsEngineForSource;

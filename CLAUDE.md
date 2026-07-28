@@ -372,5 +372,9 @@ rules. Full spec and the NASA Power of Ten live in
   condition evaluates in **every** build; debug aborts, release reports once per site and
   runs the recovery `action` instead of the guarded code. Condition side-effect-free and
   cheap; action side-effect-complete, single statement, no top-level comma, never
-  `continue`/`break` (use `SS_ASSERT_LOG(cond); if (!(cond)) continue;`). Pass path is one
-  not-taken branch — hotpath-safe. `SS_ASSUME` stays the zero-branch kernel spelling.
+  `continue`/`break` (use `SS_ASSERT_LOG(cond); if (!(cond)) continue;`). On the
+  per-frame/per-cell kernels use `SS_ASSERT_HOTPATH(cond)` instead — compiles out of release
+  (even the pass-path branch is measurable at rate; the 2026-07 wholesale swap cost ~5%
+  throughput), admissible only where the condition restates a guard that provably already
+  ran, never on device bytes; the blocking `hotpath-assert-scope` lint pins it to the
+  hotpath TUs. `SS_ASSUME` stays the zero-branch kernel spelling.

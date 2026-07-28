@@ -1797,8 +1797,8 @@ void UI::Dashboard::armMultiplotSweep(const int index)
  */
 void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  SS_ASSERT(frame, return);
-  SS_ASSERT(frame->data.sourceId >= 0, return);
+  SS_ASSERT_HOTPATH(frame);
+  SS_ASSERT_HOTPATH(frame->data.sourceId >= 0);
 
   const auto& payload = frame->data;
 
@@ -1931,8 +1931,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
  */
 void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 {
-  SS_ASSERT(!frame.groups.empty(), return);
-  SS_ASSERT_LOG(!m_datasetReferences.isEmpty());
+  SS_ASSERT_HOTPATH(!frame.groups.empty());
+  SS_ASSERT_HOTPATH(!m_datasetReferences.isEmpty());
 
   if (!m_layoutValid) [[unlikely]]
     return;

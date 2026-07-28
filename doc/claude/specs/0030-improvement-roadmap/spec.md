@@ -236,6 +236,18 @@ severs the link 100 times mid-stream (R3 tier) always recovers and leaks nothing
   recovery action, never crashes release. Migrate the 87 files using `Q_ASSERT`;
   ban `Q_ASSERT` in `code-verify.py`. Supports the existing assertion-density rule
   with release-safe semantics.
+
+  *Amended 2026-07-27:* the wholesale swap regressed the hotpath ~5% — `Q_ASSERT`
+  compiled out of release, `SS_ASSERT` evaluates every build, and the sweep put
+  evaluated branches (plus per-site report machinery and, in PGO-instrumented
+  builds, an atomic profile counter per new branch) on the per-frame, per-dataset,
+  and per-cell kernels. CI showed it as `HOTPATH_STAGE_PUBLISH_NS` 291-317 → 360
+  and instrumented `HOTPATH_NATIVE_FPS` 785-819k → 749-752k across the campaign
+  boundary (c249720a). Fix: `SS_ASSERT_HOTPATH(cond)` — debug-only, compiles out
+  under `QT_NO_DEBUG`, no recovery action (it would never run) — applied to ~45
+  provable-invariant sites on the frame path; untrusted-byte guards (`checksum`,
+  chunk-boundary entries) keep `SS_ASSERT`. The macro is pinned to the hotpath
+  TUs by the blocking `hotpath-assert-scope` rule in `code-verify.py`.
 - **`REUSE.toml` + CI `reuse lint`** — completes the existing `LICENSES/` directory
   into verifiable SPDX compliance for the dual-license model.
 - **UI token lint** — extend `code-verify.py` to flag hard-coded colors, font

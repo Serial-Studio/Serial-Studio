@@ -1835,6 +1835,58 @@ def find_qassert_violations(
     return violations
 
 
+# SS_ASSERT_HOTPATH compiles out of release builds, trading the release-safety
+# contract of SS_ASSERT for zero per-frame cost. That trade is only sound inside
+# the per-frame/per-cell kernels where the condition restates a guard that
+# provably already ran (the 2026-07 campaign's wholesale SS_ASSERT swap cost ~5%
+# of hotpath throughput). Everywhere else SS_ASSERT stays the default, so the
+# macro is pinned to the hotpath TUs; growing this list is a review decision.
+_HOTPATH_ASSERT_RE = re.compile(r"\bSS_ASSERT_HOTPATH\s*\(")
+_HOTPATH_ASSERT_ALLOWED = (
+    "app/src/SSAssert.h",
+    "app/src/DSPSimd.h",
+    "app/src/DataModel/Frame.h",
+    "app/src/DataModel/Frame.cpp",
+    "app/src/DataModel/FrameBuilder.h",
+    "app/src/DataModel/FrameBuilder.cpp",
+    "app/src/IO/CircularBuffer.h",
+    "app/src/IO/CircularBuffer.cpp",
+    "app/src/IO/FrameReader.h",
+    "app/src/IO/FrameReader.cpp",
+    "app/src/UI/Dashboard.h",
+    "app/src/UI/Dashboard.cpp",
+)
+
+
+def find_hotpath_assert_scope_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag `SS_ASSERT_HOTPATH` outside the hotpath TU whitelist (error)."""
+    posix = path.as_posix()
+    if any(posix.endswith(allowed) for allowed in _HOTPATH_ASSERT_ALLOWED):
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _HOTPATH_ASSERT_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "hotpath-assert-scope",
+                    "`SS_ASSERT_HOTPATH` compiles out of release builds and is "
+                    "reserved for the per-frame/per-cell hotpath TUs where its "
+                    "condition restates a guard that provably already ran. Use "
+                    "`SS_ASSERT(cond, <recovery>)` / `SS_ASSERT_LOG(cond)` here, "
+                    "or extend the whitelist in a reviewed commit if this file "
+                    "genuinely joined the hotpath.",
+                )
+            )
+    return violations
+
+
 def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
     # Read as bytes first so CRLF detection isn't masked by Python's universal
     # newline translation in text mode — read_text() silently rewrites \r\n
@@ -1877,6 +1929,9 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(find_interrupt_guard_violations(raw_lines, path, fence_mask))
         violations.extend(find_todouble_violations(raw_lines, path, fence_mask))
         violations.extend(find_qassert_violations(raw_lines, path, fence_mask))
+        violations.extend(
+            find_hotpath_assert_scope_violations(raw_lines, path, fence_mask)
+        )
         violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).

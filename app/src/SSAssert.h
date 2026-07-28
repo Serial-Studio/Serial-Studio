@@ -39,9 +39,12 @@
  *
  * The recovery action is part of the assertion, not an afterthought: an assertion whose author
  * cannot name what the code should do when it fails is an assertion whose failure has no defined
- * behavior. SS_ASSERT_LOG is the explicit escape for invariants where no recovery is meaningful,
- * and SS_ASSUME (HotpathOptimization.h) stays the spelling for a guard that provably already ran
- * inside a kernel that must carry zero branches.
+ * behavior. SS_ASSERT_LOG is the explicit escape for invariants where no recovery is meaningful.
+ * SS_ASSERT_HOTPATH is the debug-only tier for the per-frame/per-cell kernels, where even the
+ * pass-path branch is measurable at rate (the 2026-07 campaign's wholesale swap cost ~5% of
+ * hotpath throughput); it compiles out under QT_NO_DEBUG. SS_ASSUME (HotpathOptimization.h) stays
+ * the spelling for a guard that provably already ran inside a kernel that must carry zero
+ * branches.
  *
  * Contract, in order of how often it is violated:
  *
@@ -129,3 +132,18 @@ SS_COLD SS_NEVER_INLINE void reportSoftAssert(const char* expr,
         qt_assert(#cond, __FILE__, __LINE__);    \
     }                                            \
   } while (0)
+
+/**
+ * @brief Debug-only invariant for the per-frame/per-cell kernels: compiles out entirely under
+ *        QT_NO_DEBUG (Qt's own parsed-but-unevaluated idiom, so variables the condition names stay
+ *        referenced). Admissible exactly where SS_ASSUME is admissible -- the condition restates a
+ *        guard that provably already ran -- but without SS_ASSUME's optimizer promise, so a wrong
+ *        one costs a missed debug abort instead of a miscompile. Never use it on a condition
+ *        derived from device bytes: that class keeps SS_ASSERT and its release recovery. The
+ *        hotpath-assert-scope lint pins this macro to the hotpath TUs.
+ */
+#ifdef QT_NO_DEBUG
+#  define SS_ASSERT_HOTPATH(cond) static_cast<void>(false && (cond))
+#else
+#  define SS_ASSERT_HOTPATH(cond) SS_ASSERT_LOG(cond)
+#endif

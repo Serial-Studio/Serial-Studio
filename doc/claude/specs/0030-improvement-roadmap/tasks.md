@@ -96,3 +96,31 @@ committed):
 - post-review fixes landed: the `m_points` clamp recoveries in `configureLineSeries()`,
   `configurePlot3DSeries()` and `configureMultiLineSeries()` emit `pointsChanged()` with the
   assignment, matching every other write site.
+
+### SS_ASSERT hotpath regression fixed (2026-07-27)
+
+The first post-campaign CI run with a working optimized gate (582dad5d; the runs in between lost
+the gate to the big_db PGO-training crash skipping it) showed the SS_ASSERT sweep cost ~5% of
+hotpath throughput: `HOTPATH_STAGE_PUBLISH_NS` 291-317 → 360 on the optimized gate, instrumented
+`HOTPATH_NATIVE_FPS` 785-819k → 749-752k, tokenize 221-257 → 266-306 ns, all bracketed exactly at
+c249720a. Root cause: `Q_ASSERT` compiled out of release; `SS_ASSERT` evaluates its condition in
+every build and the sweep placed it on per-frame, per-dataset, and per-cell kernels — worst site
+was `assign_utf8_in_place` (`Frame.h`), the span lane's per-cell QString write. Instrumented
+builds amplified it further: `-fprofile-update=atomic` adds an atomic counter to every new branch.
+
+Fix landed (not built, not committed):
+
+- `SS_ASSERT_HOTPATH(cond)` added to `SSAssert.h`: debug = `SS_ASSERT_LOG`; release =
+  `static_cast<void>(false && (cond))` (parsed, never evaluated, zero codegen). No recovery
+  action by design — it would never run. Admissibility matches SS_ASSUME (condition restates a
+  guard that provably already ran) without the optimizer promise.
+- ~45 sites migrated across `Frame.h`, `FrameBuilder.cpp`, `FrameReader.cpp`, `Dashboard.cpp`,
+  `CircularBuffer.h` — the per-frame chain, per-dataset applies, per-cell formatters, and the
+  delimiter-scan kernels. Kept as `SS_ASSERT`: `checksum()` (device bytes), per-chunk boundary
+  entries (`processData`, `appendChunk`, `readX*`), `findFirstOfPatterns` pattern-count (user
+  config, clamp is load-bearing), and all reconfigure/compile/cold paths.
+- Blocking `hotpath-assert-scope` rule in `code-verify.py` pins the macro to the hotpath TU
+  whitelist.
+
+Maintainer gate: rerun `--benchmark-hotpath` — expect publish back near ~315 ns and native
+above 2.05M on the optimized run.

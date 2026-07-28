@@ -74,6 +74,12 @@ Dashboard / CSV / MDF4 / API / Sessions`
   must restate a guard that already ran, never a precondition on a parsed frame.
 - **Fixed loop bounds + assertion density ≥ 2 per function** (NASA Power of Ten). The frame
   extractors cap iterations at `kMaxFramesPerCall`; keep any new loop bounded the same way.
+- **Asserts on the per-frame/per-cell kernels are `SS_ASSERT_HOTPATH(cond)`** (debug-only,
+  compiles out of release): even the evaluated pass-path branch of `SS_ASSERT` is measurable
+  at rate (the 2026-07 sweep cost ~5% throughput). Admissible only where the condition
+  restates a guard that provably already ran — a condition derived from device bytes keeps
+  `SS_ASSERT` and its release recovery. The `hotpath-assert-scope` lint pins the macro to
+  the hotpath TUs.
 
 ## Measure, don't guess
 

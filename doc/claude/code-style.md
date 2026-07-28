@@ -156,8 +156,15 @@ Mission-critical telemetry. Hotpath violations are blockers.
    large by-value params, `shared_ptr` by-value, runtime divide/modulo, `pow()`,
    `dynamic_cast`, virtual calls, large stack buffers, false-sharing, recursion in hot loops.
 4. **Functions 40-80 lines, hard limit 100.** Nesting ≤3. Split into helpers.
-5. **Assertion density ≥2 per function.** Pre/post-conditions + invariants. `Q_ASSERT` for
-   debug; `if (!cond) return;` for release safety. No `assert(true)`.
+5. **Assertion density ≥2 per function.** Pre/post-conditions + invariants. Three tiers
+   (`app/src/SSAssert.h`): `SS_ASSERT(cond, action)` — the default; condition evaluates in
+   every build, release reports once per site and runs the recovery. `SS_ASSERT_HOTPATH(cond)`
+   — per-frame/per-cell kernels only; compiles out under `QT_NO_DEBUG`; admissible exactly
+   where SS_ASSUME is (condition restates a guard that provably already ran), never on a
+   condition derived from device bytes; pinned to the hotpath TUs by the blocking
+   `hotpath-assert-scope` lint. `SS_ASSUME(cond)` — zero-branch kernel spelling, carries an
+   optimizer promise. Bare `Q_ASSERT` only inside a `// code-verify off` fence for conditions
+   too expensive to evaluate in release. No `assert(true)`.
 6. **Smallest scope.** Declare at first use. No function-top var blocks. Anonymous namespaces
    only for true file-locals.
 7. **Check return values at system boundaries** (driver/file/network/API). `[[nodiscard]]`

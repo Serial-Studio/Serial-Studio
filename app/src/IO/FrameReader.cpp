@@ -327,7 +327,7 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 IO::CapturedData* IO::FrameReader::claimCapturedSlot(IO::CapturedDataPtr& ptr)
 {
   const size_t n = m_capturedPool.size();
-  SS_ASSERT_LOG(n == static_cast<size_t>(kCapturedPoolSize));
+  SS_ASSERT_HOTPATH(n == static_cast<size_t>(kCapturedPoolSize));
 
   const size_t probes = std::min<size_t>(n, kMaxClaimProbes);
   for (size_t k = 0; k < probes; ++k) {
@@ -354,11 +354,8 @@ void IO::FrameReader::enqueueCaptured(IO::CapturedDataPtr&& ptr,
                                       IO::CapturedData* cd,
                                       qsizetype frameEndPos)
 {
-  SS_ASSERT(cd != nullptr, {
-    noteDroppedFrame();
-    return;
-  });
-  SS_ASSERT(frameEndPos >= 0, frameEndPos = 0);
+  SS_ASSERT_HOTPATH(cd != nullptr);
+  SS_ASSERT_HOTPATH(frameEndPos >= 0);
 
   cd->timestamp         = frameTimestamp(frameEndPos);
   cd->frameStep         = std::chrono::nanoseconds(1);
