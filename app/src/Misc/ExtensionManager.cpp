@@ -22,7 +22,6 @@
 #include "Misc/ExtensionManager.h"
 
 #include <QApplication>
-#include <QCoreApplication>
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDir>
@@ -89,9 +88,7 @@ Misc::ExtensionManager::ExtensionManager()
   , m_pendingExtensionMetas(0)
   , m_dashboardWasAvailable(false)
 {
-  m_nam.emplace();
-  m_nam->setTransferTimeout(15 * 1000);
-  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_nam.reset(); });
+  m_nam.setTransferTimeout(15 * 1000);
 
   const auto saved = m_settings.value("ExtensionRepositories").toStringList();
   if (saved.isEmpty())
@@ -313,9 +310,6 @@ QString Misc::ExtensionManager::installedVersion(const QString& id) const
  */
 void Misc::ExtensionManager::setSelectedIndex(int index)
 {
-  if (!m_nam)
-    return;
-
   if (m_selectedIndex == index)
     return;
 
@@ -339,7 +333,7 @@ void Misc::ExtensionManager::setSelectedIndex(int index)
     }
 
     else if (!base.isEmpty()) {
-      auto* reply = m_nam->get(QNetworkRequest(QUrl(base + "README.md")));
+      auto* reply = m_nam.get(QNetworkRequest(QUrl(base + "README.md")));
       m_activeReplies.insert(reply);
       connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onReadmeReply);
     }
@@ -395,9 +389,6 @@ void Misc::ExtensionManager::setFilterType(const QString& type)
  */
 void Misc::ExtensionManager::refreshRepositories()
 {
-  if (!m_nam)
-    return;
-
   if (m_loading)
     return;
 
@@ -436,7 +427,7 @@ void Misc::ExtensionManager::refreshRepositories()
     Q_EMIT loadingChanged();
 
     for (const auto& repoUrl : std::as_const(remoteRepos)) {
-      auto* reply = m_nam->get(QNetworkRequest(QUrl(repoUrl)));
+      auto* reply = m_nam.get(QNetworkRequest(QUrl(repoUrl)));
       reply->setProperty("repoUrl", repoUrl);
       m_activeReplies.insert(reply);
       connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onManifestReply);
@@ -719,9 +710,6 @@ void Misc::ExtensionManager::autoUpdateExtensions()
  */
 void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
 {
-  if (!m_nam)
-    return;
-
   const auto parsed = Misc::JsonValidator::parseAndValidate(reply->readAll());
   if (!parsed.valid || !parsed.document.isObject()) {
     qWarning() << "[ExtensionManager] Rejected manifest JSON:" << parsed.errorMessage;
@@ -740,7 +728,7 @@ void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
       const auto addonBase = metaUrl.left(metaUrl.lastIndexOf('/') + 1);
 
       ++m_pendingExtensionMetas;
-      auto* metaReply = m_nam->get(QNetworkRequest(QUrl(metaUrl)));
+      auto* metaReply = m_nam.get(QNetworkRequest(QUrl(metaUrl)));
       metaReply->setProperty("addonBase", addonBase);
       m_activeReplies.insert(metaReply);
       connect(metaReply, &QNetworkReply::finished, this, &ExtensionManager::onExtensionMetaReply);
@@ -887,14 +875,11 @@ void Misc::ExtensionManager::onFileDownloadReply()
  */
 void Misc::ExtensionManager::downloadNextFile()
 {
-  if (!m_nam)
-    return;
-
   if (m_downloadQueue.isEmpty())
     return;
 
   const auto [localName, url] = m_downloadQueue.takeFirst();
-  auto* reply                 = m_nam->get(QNetworkRequest(url));
+  auto* reply                 = m_nam.get(QNetworkRequest(url));
   reply->setProperty("localName", localName);
   m_activeReplies.insert(reply);
   connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onFileDownloadReply);

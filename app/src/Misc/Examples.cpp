@@ -21,7 +21,6 @@
 
 #include "Misc/Examples.h"
 
-#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QJsonArray>
@@ -60,9 +59,7 @@ Misc::Examples::Examples()
   , m_pendingDownloads(0)
   , m_totalDownloads(0)
 {
-  m_nam.emplace();
-  m_nam->setTransferTimeout(15 * 1000);
-  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_nam.reset(); });
+  m_nam.setTransferTimeout(15 * 1000);
 }
 
 /**
@@ -207,9 +204,6 @@ void Misc::Examples::setSearchFilter(const QString& filter)
  */
 void Misc::Examples::downloadExample()
 {
-  if (!m_nam)
-    return;
-
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExamples.count())
     return;
 
@@ -227,7 +221,7 @@ void Misc::Examples::downloadExample()
 
   auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
   auto url     = QUrl::fromEncoded((kApiContentsBase + encoded).toUtf8());
-  auto* reply  = m_nam->get(QNetworkRequest(url));
+  auto* reply  = m_nam.get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, &Examples::onContentsReply);
 }
 
@@ -434,9 +428,6 @@ void Misc::Examples::onFileDownloadReply()
  */
 void Misc::Examples::fetchManifest()
 {
-  if (!m_nam)
-    return;
-
   if (m_loading || !m_allExamples.isEmpty())
     return;
 
@@ -444,7 +435,7 @@ void Misc::Examples::fetchManifest()
   Q_EMIT loadingChanged();
 
   const auto url = QUrl(kRawBase + "examples.json");
-  auto* reply    = m_nam->get(QNetworkRequest(url));
+  auto* reply    = m_nam.get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, &Examples::onManifestReply);
 }
 
@@ -484,9 +475,6 @@ void Misc::Examples::applyFilter()
  */
 void Misc::Examples::fetchReadme(const QString& id)
 {
-  if (!m_nam)
-    return;
-
   const auto cached = exampleCachePath(id) + "/README.md";
   if (QFile::exists(cached)) {
     QFile file(cached);
@@ -503,7 +491,7 @@ void Misc::Examples::fetchReadme(const QString& id)
   auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
   auto url     = QUrl::fromEncoded((kRawBase + encoded + "/README.md").toUtf8());
   QNetworkRequest request(url);
-  auto* reply = m_nam->get(request);
+  auto* reply = m_nam.get(request);
   reply->setProperty("exampleId", id);
   connect(reply, &QNetworkReply::finished, this, &Examples::onReadmeReply);
 }
@@ -513,9 +501,6 @@ void Misc::Examples::fetchReadme(const QString& id)
  */
 void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
 {
-  if (!m_nam)
-    return;
-
   const auto cached = exampleCachePath(id) + "/doc/" + fileName;
   if (QFile::exists(cached)) {
     m_selectedScreenshot = QUrl::fromLocalFile(cached);
@@ -525,7 +510,7 @@ void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
 
   auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
   auto url     = QUrl::fromEncoded((kRawBase + encoded + "/doc/" + fileName).toUtf8());
-  auto* reply  = m_nam->get(QNetworkRequest(url));
+  auto* reply  = m_nam.get(QNetworkRequest(url));
   reply->setProperty("exampleId", id);
   reply->setProperty("fileName", fileName);
   connect(reply, &QNetworkReply::finished, this, &Examples::onScreenshotReply);
@@ -536,14 +521,11 @@ void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
  */
 void Misc::Examples::downloadNextFile()
 {
-  if (!m_nam)
-    return;
-
   if (m_downloadQueue.isEmpty())
     return;
 
   const auto [name, url] = m_downloadQueue.takeFirst();
-  auto* reply            = m_nam->get(QNetworkRequest(url));
+  auto* reply            = m_nam.get(QNetworkRequest(url));
   reply->setProperty("fileName", name);
   connect(reply, &QNetworkReply::finished, this, &Examples::onFileDownloadReply);
 }

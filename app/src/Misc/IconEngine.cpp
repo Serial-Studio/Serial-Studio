@@ -22,7 +22,6 @@
 #include "Misc/IconEngine.h"
 
 #include <QBuffer>
-#include <QCoreApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -42,9 +41,7 @@
  */
 Misc::IconEngine::IconEngine() : m_busy(false)
 {
-  m_manager.emplace();
-  m_manager->setTransferTimeout(15 * 1000);
-  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_manager.reset(); });
+  m_manager.setTransferTimeout(15 * 1000);
 }
 
 /**
@@ -122,9 +119,6 @@ bool Misc::IconEngine::isInlineSvg(const QString& icon)
  */
 void Misc::IconEngine::searchIcons(const QString& query)
 {
-  if (!m_manager)
-    return;
-
   if (query.trimmed().isEmpty())
     return;
 
@@ -137,7 +131,7 @@ void Misc::IconEngine::searchIcons(const QString& query)
   params.addQueryItem(QStringLiteral("limit"), QStringLiteral("96"));
   url.setQuery(params);
 
-  auto* reply = m_manager->get(QNetworkRequest(url));
+  auto* reply = m_manager.get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, [this, reply]() { onSearchFinished(reply); });
 }
 
@@ -146,9 +140,6 @@ void Misc::IconEngine::searchIcons(const QString& query)
  */
 void Misc::IconEngine::downloadIcon(int index)
 {
-  if (!m_manager)
-    return;
-
   if (index < 0 || index >= m_iconNames.size())
     return;
 
@@ -167,7 +158,7 @@ void Misc::IconEngine::downloadIcon(int index)
   const auto urlStr =
     QStringLiteral("https://api.iconify.design/%1/%2.svg").arg(parts[0], parts[1]);
 
-  auto* reply = m_manager->get(QNetworkRequest(QUrl(urlStr)));
+  auto* reply = m_manager.get(QNetworkRequest(QUrl(urlStr)));
   connect(reply, &QNetworkReply::finished, this, [this, reply]() { onDownloadFinished(reply); });
 }
 
