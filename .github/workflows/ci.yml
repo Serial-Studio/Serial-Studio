@@ -325,21 +325,6 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
-    - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
-      with:
-        path: build/app/${{env.UNIXNAME}}
-        sarif: deglyph.sarif
-        fail-on: never
-        cve: "true"
-
-    - name: '🛡 Upload deglyph SARIF'
-      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: deglyph.sarif
-        category: deglyph-linux-x64
-
     - name: '🔐 Prepare GPG signing (optional)'
       env:
         GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
@@ -763,21 +748,6 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
         ./build/app/${{env.UNIXNAME}} --deactivate || true
-
-    - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
-      with:
-        path: build/app/${{env.UNIXNAME}}
-        sarif: deglyph.sarif
-        fail-on: never
-        cve: "true"
-
-    - name: '🛡 Upload deglyph SARIF'
-      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: deglyph.sarif
-        category: deglyph-linux-arm64
 
     - name: '🔐 Prepare GPG signing (optional)'
       env:
@@ -1338,21 +1308,6 @@ jobs:
         printf '{"packageType":"dmg","arch":"universal"}\n' \
           > "${{env.APPLICATION}}.app/Contents/Resources/ss-config.json"
 
-    - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
-      with:
-        path: ${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}
-        sarif: deglyph.sarif
-        fail-on: never
-        cve: "true"
-
-    - name: '🛡 Upload deglyph SARIF'
-      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: deglyph.sarif
-        category: deglyph-macos
-
     - name: '🪪 Import Certificates'
       uses: apple-actions/import-codesign-certs@v6
       with:
@@ -1594,21 +1549,6 @@ jobs:
           Write-Host "License deactivation error: $_"
         }
         exit 0
-
-    - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@46862576617aab1bc2f50c81d162c0060838e27e # main, pinned 2026-07-26
-      with:
-        path: build/app/${{env.EXECUTABLE}}.exe
-        sarif: deglyph.sarif
-        fail-on: never
-        cve: "true"
-
-    - name: '🛡 Upload deglyph SARIF'
-      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: deglyph.sarif
-        category: deglyph-windows
 
     - name: '⚙️ Add msbuild to PATH'
       uses: microsoft/setup-msbuild@v3
