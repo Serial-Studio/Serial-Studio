@@ -207,6 +207,25 @@ ctest --preset dev -R dsp_kernels --output-on-failure
 | `tst_dsp_kernels`     | Every `DSPSimd.h` kernel compared bit-for-bit against a scalar build of the same header, over edge lengths, source offsets, and NaN / ±0.0 / ±inf / denormal payloads |
 | `tst_frame_delimiters`| `IO::FrameReader` extraction: start / end / start+end delimiters, delimiters split across chunks, multi-byte delimiters at the scan-lane boundary, validation outcomes, dropped-frame and overflow accounting |
 | `tst_async_engine`    | The spec-0034 task-tree engine against a virtual clock: sequential and parallel outcomes, timeouts, the retry backoff schedule, cancel mid-step and mid-backoff |
+| `tst_ring_wrap`       | `CircularBuffer` wrap-state gaps: `operator[]` across the boundary, `pos`-resumed pattern scans on wrapped content, `setCapacity` while wrapped, offset `peekRangeInto` spans |
+| `tst_frame_reader_modes` | `IO::FrameReader` beyond the delimiter suite: checksum x detection-mode combinations, 1/2/4-byte checksum widths, zero-length frames, `NoDelimiters` saturation, mode-switch checksum reset, multi-chunk timestamps, slot-pool heap fallback |
+| `tst_frame_json_legacy` | `Frame.cpp` edge paths: `get_tx_bytes`, `read_io_settings`, table folder paths, `commercialCfg` stamping, legacy alarm-band fallback, clamps and malformed-entry skip/abort behavior |
+| `tst_frame_support`   | `SerialStudioFrameSupport.cpp` helpers: `hexToBytes`, `resolveEscapeSequences`, `commercialCfg` overload parity and gates, `encodeText`/`decodeText` across all eleven encodings |
+| `tst_frame_consumer`  | `FrameConsumerWorkerBase::monotonicFrameNs` monotonic-bump semantics, `resetMonotonicClock`, and the move-only `TimestampedFrame` contract |
+| `tst_async_combinators` | The `Async::` free-function combinator layer, the real `autoReconnect()` geometric schedule, the 24-step backoff cap, `RetryTask::setPolicy`, dead-sender `SignalTask`, nested trees |
+| `tst_connection_flows` | Spec-0034 connection flows with a fake driver and loopback sockets: `DriverOpenTask`, `SocketConnectTask` (phantom-connect guard, dial generations), `SupervisorTask` drop/recover, the flow factories |
+| `tst_hal_driver`      | `HAL_Driver.h` default implementations: sync `beginOpen` seam, `abortOpen`, `applyConnectionSettings` routing, `publishReceivedData`, `makeCapturedData` frame-step clamp |
+| `tst_xymodem`         | XMODEM/YMODEM sender state machines through the `writeRequested`/`processInput` seam plus `CRC.h` vectors; block framing, ACK/NAK/EOT flows, padding, cancellation, YMODEM batch headers |
+| `tst_zmodem`          | ZMODEM sender against a simulated receiver: header/subpacket framing with independently reimplemented CRCs, ZDLE escaping, reposition, cancel paths, session teardown |
+| `tst_cframe_parser`   | The Built-In parser engine: catalog/schema/descriptor contracts and a behavior test for every native template (10 text, 13 binary, 2 multi-frame) plus the span fast lane |
+| `tst_lua_compat`      | The Lua 5.1/5.2 compat shim on a raw `lua_State`: math/table/string/bit32 surface, native `string.split`, sandboxed console and restricted `os` |
+| `tst_js_watchdog`     | `JsWatchdog`/`JsWatchdogThread`: interrupt of runaway scripts within budget, engine reuse after interrupt, per-engine isolation, exception-vs-timeout distinction, worker shutdown |
+| `tst_mirror_protocol` | Spec-0040 wire codec: `layoutHash` FNV-1a pins (including fixture cross-checks), `roundSignificant`, structure/snapshot/heartbeat encoding, chunking and reassembly |
+| `tst_json_validator`  | `Misc::JsonValidator` security limits: file-size, depth, and array-size boundaries (exact `>` semantics), custom limits, malformed input |
+| `tst_enum_labels`     | `API::EnumLabels` slug/label registries: full GPL enumerator sweeps, round-trip inverters, out-of-range fallbacks, dataset-option bitmask conversions |
+| `tst_property_validators` | The spec-0036 `PropertyValidators.cpp` set: color, dataset index, FFT window, and transform-language boundary sweeps |
+| `tst_password_hash`   | `Misc::PasswordHash`: PBKDF2-SHA256 round-trip and PHC shape, legacy MD5 verification, malformed-hash rejection matrix, salt randomness |
+| `tst_legacy_icons`    | `Misc::legacyIconPath`: identity fallback, sampled table pairs, case sensitivity, target-shape checks against the spec-0028 icon tree |
 
 **Linter coverage.** `sanitize-commit.py` clang-formats `app/tests/` like the rest of `app/`, so the
 100-column, 2-space, pointer-binds-to-type formatting applies. `code-verify.py`'s structural,

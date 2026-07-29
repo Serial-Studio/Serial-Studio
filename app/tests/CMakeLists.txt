@@ -198,6 +198,225 @@ ss_add_unit_test(tst_frame_delimiters
           ${SS_PLATFORM_LIBS}
 )
 
+#---------------------------------------------------------------------------------------------------
+# Coverage-expansion suites (2026-07-27)
+#---------------------------------------------------------------------------------------------------
+#
+# Registered up front like the originals: ss_add_unit_test() skips any suite whose .cpp has not
+# landed yet, so the tier configures and runs at every intermediate state. Ordered by link cost.
+#
+#---------------------------------------------------------------------------------------------------
+
+ss_add_unit_test(tst_json_validator
+  SOURCES tst_json_validator.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+ss_add_unit_test(tst_ring_wrap
+  SOURCES tst_ring_wrap.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+ss_add_unit_test(tst_enum_labels
+  SOURCES tst_enum_labels.cpp
+          ${SS_APP_SRC}/API/EnumLabels.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+#
+# PasswordHash.cpp includes QPasswordDigestor, which lives in QtNetwork (not QtCore) despite the
+# rest of the file being Core-only; without Qt6::Network here the TU fails to find the header.
+#
+ss_add_unit_test(tst_password_hash
+  SOURCES tst_password_hash.cpp
+          ${SS_APP_SRC}/Misc/PasswordHash.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+
+ss_add_unit_test(tst_legacy_icons
+  SOURCES tst_legacy_icons.cpp
+          ${SS_APP_SRC}/Misc/IconRegistryLegacy.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+ss_add_unit_test(tst_property_validators
+  SOURCES tst_property_validators.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+ss_add_unit_test(tst_hal_driver
+  SOURCES tst_hal_driver.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+ss_add_unit_test(tst_mirror_protocol
+  SOURCES tst_mirror_protocol.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+ss_add_unit_test(tst_async_combinators
+  SOURCES tst_async_combinators.cpp
+          ${SS_APP_SRC}/Async/TaskTree.cpp
+          ${SS_APP_SRC}/Async/RetryPolicy.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# HAL_Driver.h is header-only, so AUTOMOC's same-basename rule never reaches it and the driver's
+# meta-object (openFinished, linkDropped, the vtable) goes undefined at link. Listing the header as
+# a source is what gets moc_HAL_Driver.cpp generated for this suite.
+#
+ss_add_unit_test(tst_connection_flows
+  SOURCES tst_connection_flows.cpp
+          ${SS_APP_SRC}/IO/HAL_Driver.h
+          ${SS_APP_SRC}/IO/ConnectionFlows.cpp
+          ${SS_APP_SRC}/Async/TaskTree.cpp
+          ${SS_APP_SRC}/Async/RetryPolicy.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+
+#
+# Protocol.h is a header-only Q_OBJECT (the abstract sender base): with no Protocol.cpp to pair it
+# with, AUTOMOC only emits its meta-object if the header itself is a target source. Dropping it
+# surfaces as an undefined vtable for IO::Protocols::Protocol, not as a missing-file error.
+#
+ss_add_unit_test(tst_xymodem
+  SOURCES tst_xymodem.cpp
+          ${SS_APP_SRC}/IO/FileTransmission/Protocol.h
+          ${SS_APP_SRC}/IO/FileTransmission/XMODEM.cpp
+          ${SS_APP_SRC}/IO/FileTransmission/YMODEM.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Protocol.h is listed as a source on purpose: IO::Protocols::Protocol is an abstract QObject with
+# no .cpp of its own, so nothing in this link set would make AUTOMOC emit its meta-object and the
+# base-class signals ZMODEM emits would stay undefined at link time.
+#
+ss_add_unit_test(tst_zmodem
+  SOURCES tst_zmodem.cpp
+          ${SS_APP_SRC}/IO/FileTransmission/ZMODEM.cpp
+          ${SS_APP_SRC}/IO/FileTransmission/Protocol.h
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+ss_add_unit_test(tst_lua_compat
+  SOURCES tst_lua_compat.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          lua54
+)
+
+ss_add_unit_test(tst_js_watchdog
+  SOURCES tst_js_watchdog.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+)
+
+ss_add_unit_test(tst_frame_consumer
+  SOURCES tst_frame_consumer.cpp
+          ${SS_APP_SRC}/DataModel/FrameConsumer.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+
+ss_add_unit_test(tst_frame_support
+  SOURCES tst_frame_support.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+
+ss_add_unit_test(tst_frame_json_legacy
+  SOURCES tst_frame_json_legacy.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+
+#
+# CFrameParser reports a load failure through Misc::Utilities::showMessageBox(), so Utilities.cpp is
+# a link-time dependency even though every test in the suite loads with message boxes disabled. On
+# macOS that TU forwards to the Objective-C++ native alert, which has to come along with it.
+#
+set(SS_CFRAME_PARSER_PLATFORM_SOURCES "")
+if(APPLE)
+  list(APPEND SS_CFRAME_PARSER_PLATFORM_SOURCES ${SS_APP_SRC}/Misc/Utilities_macOS.mm)
+endif()
+
+ss_add_unit_test(tst_cframe_parser
+  SOURCES tst_cframe_parser.cpp
+          ${SS_CFRAME_PARSER_PLATFORM_SOURCES}
+          ${SS_APP_SRC}/DataModel/Scripting/CFrameParser.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/Misc/Utilities.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          Qt6::Svg
+          Qt6::Widgets
+)
+
+ss_add_unit_test(tst_frame_reader_modes
+  SOURCES tst_frame_reader_modes.cpp
+          session_context_stub.cpp
+          ${SS_APP_SRC}/IO/FrameReader.cpp
+          ${SS_APP_SRC}/IO/Checksum.cpp
+          ${SS_APP_SRC}/DataModel/NotificationCenter.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Qml
+          Qt6::Widgets
+          lua54
+          ${SS_PLATFORM_LIBS}
+)
+
 #
 # tst_proto_importer (spec 0039 AC3) is written and lands with this file, but it stays unregistered:
 # the minimal link set that resolves is the application, which is the one thing a suite here may not
