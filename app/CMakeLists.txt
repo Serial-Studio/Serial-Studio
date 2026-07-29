@@ -735,6 +735,7 @@ if(BUILD_COMMERCIAL)
     src/MQTT/Publisher.h
     src/MQTT/PublisherScript.h
     src/MQTT/PublisherScriptEditor.h
+    src/MQTT/TlsIdentity.h
     src/IO/Drivers/Audio.h
     src/Misc/Diagnostics/AudioChecks.h
     src/IO/Drivers/CANBus.h
@@ -837,6 +838,7 @@ if(BUILD_COMMERCIAL)
     src/MQTT/Publisher.cpp
     src/MQTT/PublisherScript.cpp
     src/MQTT/PublisherScriptEditor.cpp
+    src/MQTT/TlsIdentity.cpp
     src/IO/Drivers/Audio.cpp
     src/Misc/Diagnostics/AudioChecks.cpp
     src/IO/Drivers/CANBus.cpp

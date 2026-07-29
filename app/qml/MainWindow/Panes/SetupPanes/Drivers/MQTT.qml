@@ -350,6 +350,130 @@ Item {
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
         onClicked: Cpp_IO_Mqtt.addCaCertificates()
       }
+
+      //
+      // Client certificate (mutual TLS)
+      //
+      Label {
+        text: qsTr("Client Certificate") + ":"
+        visible: Cpp_IO_Mqtt.sslEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+        opacity: enabled ? 1 : 0.5
+      } RowLayout {
+        spacing: 4
+        Layout.fillWidth: true
+        visible: Cpp_IO_Mqtt.sslEnabled
+
+        Widgets.BoundField {
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          placeholderText: qsTr("Optional (mutual TLS)")
+          enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+          externalValue: Cpp_IO_Mqtt.clientCertificatePath
+          onEdited: text => Cpp_IO_Mqtt.clientCertificatePath = text
+        }
+
+        Button {
+          text: qsTr("Browse…")
+          opacity: enabled ? 1 : 0.5
+          enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+          onClicked: Cpp_IO_Mqtt.selectClientCertificate()
+        }
+      }
+
+      //
+      // Private key (mutual TLS)
+      //
+      Label {
+        text: qsTr("Private Key") + ":"
+        visible: Cpp_IO_Mqtt.sslEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+        opacity: enabled ? 1 : 0.5
+      } RowLayout {
+        spacing: 4
+        Layout.fillWidth: true
+        visible: Cpp_IO_Mqtt.sslEnabled
+
+        Widgets.BoundField {
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          externalValue: Cpp_IO_Mqtt.privateKeyPath
+          enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+          onEdited: text => Cpp_IO_Mqtt.privateKeyPath = text
+          placeholderText: qsTr("Defaults to the certificate file")
+        }
+
+        Button {
+          text: qsTr("Browse…")
+          opacity: enabled ? 1 : 0.5
+          enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+          onClicked: Cpp_IO_Mqtt.selectPrivateKey()
+        }
+      }
+
+      //
+      // Private key passphrase
+      //
+      Label {
+        text: qsTr("Key Passphrase") + ":"
+        visible: Cpp_IO_Mqtt.sslEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+        opacity: enabled ? 1 : 0.5
+      } Widgets.BoundField {
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        echoMode: TextInput.Password
+        visible: Cpp_IO_Mqtt.sslEnabled
+        externalValue: Cpp_IO_Mqtt.keyPassphrase
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+        onEdited: text => Cpp_IO_Mqtt.keyPassphrase = text
+      }
+
+      //
+      // ALPN (MQTT over port 443)
+      //
+      Label {
+        text: qsTr("ALPN") + ":"
+        visible: Cpp_IO_Mqtt.sslEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+        opacity: _alpn.enabled ? 1 : 0.5
+      } CheckBox {
+        id: _alpn
+
+        Layout.leftMargin: -8
+        opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignLeft
+        visible: Cpp_IO_Mqtt.sslEnabled
+        checked: Cpp_IO_Mqtt.alpnEnabled
+        onClicked: Cpp_IO_Mqtt.alpnEnabled = checked
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
+
+        Connections {
+          target: Cpp_IO_Mqtt
+          function onSslConfigurationChanged() {
+            if (_alpn.checked !== Cpp_IO_Mqtt.alpnEnabled)
+              _alpn.checked = Cpp_IO_Mqtt.alpnEnabled
+          }
+        }
+      }
+
+      //
+      // ALPN protocol name
+      //
+      Label {
+        text: qsTr("ALPN Protocol") + ":"
+        visible: Cpp_IO_Mqtt.sslEnabled && Cpp_IO_Mqtt.alpnEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled && Cpp_IO_Mqtt.alpnEnabled
+        opacity: enabled ? 1 : 0.5
+      } Widgets.BoundField {
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        placeholderText: "x-amzn-mqtt-ca"
+        externalValue: Cpp_IO_Mqtt.alpnProtocol
+        onEdited: text => Cpp_IO_Mqtt.alpnProtocol = text
+        visible: Cpp_IO_Mqtt.sslEnabled && Cpp_IO_Mqtt.alpnEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled && Cpp_IO_Mqtt.alpnEnabled
+      }
     }
 
     //

@@ -61,6 +61,8 @@ IO::Drivers::MQTT::MQTT()
   , m_keepAlive(60)
   , m_protocolVersion(QMqttClient::MQTT_5_0)
   , m_hostname(QStringLiteral("127.0.0.1"))
+  , m_alpnEnabled(false)
+  , m_alpnProtocol(QStringLiteral("x-amzn-mqtt-ca"))
   , m_runner(this)
 {
   m_mqttVersions.insert(tr("MQTT 3.1"), QMqttClient::MQTT_3_1);
@@ -548,6 +550,46 @@ QString IO::Drivers::MQTT::topicFilter() const
 }
 
 /**
+ * @brief Returns the client certificate PEM path used for mutual TLS (empty = off).
+ */
+QString IO::Drivers::MQTT::clientCertificatePath() const
+{
+  return m_clientCertificatePath;
+}
+
+/**
+ * @brief Returns the private key PEM path (empty = look in the certificate file).
+ */
+QString IO::Drivers::MQTT::privateKeyPath() const
+{
+  return m_privateKeyPath;
+}
+
+/**
+ * @brief Returns the private-key passphrase (kept in the encrypted vault, never in QSettings).
+ */
+QString IO::Drivers::MQTT::keyPassphrase() const
+{
+  return m_keyPassphrase;
+}
+
+/**
+ * @brief Returns whether ALPN is requested during the TLS handshake (MQTT over port 443).
+ */
+bool IO::Drivers::MQTT::alpnEnabled() const noexcept
+{
+  return m_alpnEnabled;
+}
+
+/**
+ * @brief Returns the ALPN protocol name announced when ALPN is enabled.
+ */
+QString IO::Drivers::MQTT::alpnProtocol() const
+{
+  return m_alpnProtocol;
+}
+
+/**
  * @brief Returns the available MQTT protocol versions (display names).
  */
 const QStringList& IO::Drivers::MQTT::mqttVersions() const
@@ -643,6 +685,57 @@ void IO::Drivers::MQTT::addCaCertificates()
   });
 
   dialog->open();
+}
+
+/**
+ * @brief Opens a PEM file picker and routes the selection into the given path setter. The work
+ *        runs through a queued invoke: on macOS fileSelected fires inside QFileDialog::done()
+ *        and re-entering Qt synchronously can delete the dialog under the native panel.
+ */
+void IO::Drivers::MQTT::selectPemFile(const QString& title, void (MQTT::*setter)(const QString&))
+{
+  SS_ASSERT(setter != nullptr, return);
+  SS_ASSERT(!title.isEmpty(), return);
+
+  auto* dialog =
+    new QFileDialog(qApp->activeWindow(),
+                    title,
+                    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                    tr("PEM files (*.pem *.crt *.cer *.key);;All files (*)"));
+
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, setter](const QString& path) {
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this,
+      [this, setter, path]() {
+        (this->*setter)(path);
+        reloadTlsIdentity(true);
+      },
+      Qt::QueuedConnection);
+  });
+
+  dialog->open();
+}
+
+/**
+ * @brief Opens a file picker for the mutual-TLS client certificate.
+ */
+void IO::Drivers::MQTT::selectClientCertificate()
+{
+  selectPemFile(tr("Select Client Certificate"), &MQTT::setClientCertificatePath);
+}
+
+/**
+ * @brief Opens a file picker for the mutual-TLS private key.
+ */
+void IO::Drivers::MQTT::selectPrivateKey()
+{
+  selectPemFile(tr("Select Private Key"), &MQTT::setPrivateKeyPath);
 }
 
 /**
@@ -856,6 +949,86 @@ void IO::Drivers::MQTT::setPassword(const QString& password)
 }
 
 /**
+ * @brief Sets the client certificate PEM path and reloads the parsed TLS identity.
+ */
+void IO::Drivers::MQTT::setClientCertificatePath(const QString& path)
+{
+  if (m_clientCertificatePath == path)
+    return;
+
+  m_clientCertificatePath = path;
+  m_settings.setValue(settingsKey("clientCertPath"), path);
+  reloadTlsIdentity(false);
+  scheduleReconnectIfActive();
+  Q_EMIT sslConfigurationChanged();
+}
+
+/**
+ * @brief Sets the private key PEM path and reloads the parsed TLS identity.
+ */
+void IO::Drivers::MQTT::setPrivateKeyPath(const QString& path)
+{
+  if (m_privateKeyPath == path)
+    return;
+
+  m_privateKeyPath = path;
+  m_settings.setValue(settingsKey("privateKeyPath"), path);
+  reloadTlsIdentity(false);
+  scheduleReconnectIfActive();
+  Q_EMIT sslConfigurationChanged();
+}
+
+/**
+ * @brief Sets the private-key passphrase, persists it to the vault and re-parses the key.
+ */
+void IO::Drivers::MQTT::setKeyPassphrase(const QString& passphrase)
+{
+  if (m_keyPassphrase == passphrase)
+    return;
+
+  m_keyPassphrase = passphrase;
+  m_vault.setKeyPassphrase(m_hostname, m_port, m_keyPassphrase);
+  reloadTlsIdentity(false);
+  scheduleReconnectIfActive();
+  Q_EMIT sslConfigurationChanged();
+}
+
+/**
+ * @brief Enables or disables ALPN announcement during the TLS handshake. Re-applies the cached
+ *        identity instead of re-parsing the PEM files: an ALPN edit cannot change them, and a
+ *        reload here would drop a valid in-memory identity if the files moved since load.
+ */
+void IO::Drivers::MQTT::setAlpnEnabled(const bool enabled)
+{
+  if (m_alpnEnabled == enabled)
+    return;
+
+  m_alpnEnabled = enabled;
+  m_settings.setValue(settingsKey("alpnEnabled"), enabled);
+  ::MQTT::applyTlsIdentity(
+    m_sslConfiguration, m_tlsIdentity, m_alpnEnabled ? m_alpnProtocol.toUtf8() : QByteArray());
+  scheduleReconnectIfActive();
+  Q_EMIT sslConfigurationChanged();
+}
+
+/**
+ * @brief Sets the ALPN protocol name (AWS IoT uses "x-amzn-mqtt-ca" on port 443). Same cached
+ *        re-apply as setAlpnEnabled.
+ */
+void IO::Drivers::MQTT::setAlpnProtocol(const QString& protocol)
+{
+  if (m_alpnProtocol == protocol)
+    return;
+
+  m_alpnProtocol = protocol;
+  m_settings.setValue(settingsKey("alpnProtocol"), protocol);
+  ::MQTT::applyTlsIdentity(
+    m_sslConfiguration, m_tlsIdentity, m_alpnEnabled ? m_alpnProtocol.toUtf8() : QByteArray());
+  scheduleReconnectIfActive();
+  Q_EMIT sslConfigurationChanged();
+}
+
+/**
  * @brief Sets the MQTT topic filter used for subscription.
  */
 void IO::Drivers::MQTT::setTopicFilter(const QString& topic)
@@ -961,7 +1134,9 @@ QList<IO::DriverProperty> IO::Drivers::MQTT::driverProperties() const
 }
 
 /**
- * @brief Appends SSL/TLS toggle and (when enabled) protocol, peer verify mode, and depth.
+ * @brief Appends SSL/TLS toggle and (when enabled) protocol, peer verify mode, depth, and the
+ *        mutual-TLS rows. The key passphrase is deliberately absent: property values are
+ *        snapshotted into project files as plaintext, so it lives only in the encrypted vault.
  */
 void IO::Drivers::MQTT::appendMqttSslProperties(QList<IO::DriverProperty>& props) const
 {
@@ -999,6 +1174,36 @@ void IO::Drivers::MQTT::appendMqttSslProperties(QList<IO::DriverProperty>& props
   depth.min   = 0;
   depth.max   = 100;
   props.append(depth);
+
+  IO::DriverProperty cert;
+  cert.key   = QStringLiteral("clientCertificatePath");
+  cert.label = tr("Client Certificate (PEM)");
+  cert.type  = IO::DriverProperty::Text;
+  cert.value = m_clientCertificatePath;
+  props.append(cert);
+
+  IO::DriverProperty key;
+  key.key   = QStringLiteral("privateKeyPath");
+  key.label = tr("Private Key (PEM)");
+  key.type  = IO::DriverProperty::Text;
+  key.value = m_privateKeyPath;
+  props.append(key);
+
+  IO::DriverProperty alpn;
+  alpn.key   = QStringLiteral("alpnEnabled");
+  alpn.label = tr("ALPN (MQTT over port 443)");
+  alpn.type  = IO::DriverProperty::CheckBox;
+  alpn.value = m_alpnEnabled;
+  props.append(alpn);
+
+  if (m_alpnEnabled) {
+    IO::DriverProperty proto443;
+    proto443.key   = QStringLiteral("alpnProtocol");
+    proto443.label = tr("ALPN Protocol");
+    proto443.type  = IO::DriverProperty::Text;
+    proto443.value = m_alpnProtocol;
+    props.append(proto443);
+  }
 }
 
 /**
@@ -1071,8 +1276,33 @@ void IO::Drivers::MQTT::setDriverProperty(const QString& key, const QVariant& va
     return;
   }
 
-  if (key == QLatin1String("peerVerifyDepth"))
+  if (key == QLatin1String("peerVerifyDepth")) {
     setPeerVerifyDepth(value.toInt());
+    return;
+  }
+
+  if (key == QLatin1String("clientCertificatePath")) {
+    setClientCertificatePath(value.toString());
+    return;
+  }
+
+  if (key == QLatin1String("privateKeyPath")) {
+    setPrivateKeyPath(value.toString());
+    return;
+  }
+
+  if (key == QLatin1String("keyPassphrase")) {
+    setKeyPassphrase(value.toString());
+    return;
+  }
+
+  if (key == QLatin1String("alpnEnabled")) {
+    setAlpnEnabled(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("alpnProtocol"))
+    setAlpnProtocol(value.toString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1138,6 +1368,11 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
     case QMqttClient::TransportInvalid:
       title   = tr("Network or Transport Error");
       message = tr("Network/transport layer issue while connecting to the broker.");
+      if (!m_tlsIdentity.certificate.isNull())
+        message += QStringLiteral(" ")
+                 + tr("A client certificate is configured: verify that it matches the private "
+                      "key and is activated on the broker.");
+
       break;
     case QMqttClient::ProtocolViolation:
       title   = tr("MQTT Protocol Violation");
@@ -1240,6 +1475,15 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   setSslProtocol(static_cast<quint8>(sslP));
   setPeerVerifyMode(static_cast<quint8>(pvm));
   setPeerVerifyDepth(pvd);
+
+  m_keyPassphrase = m_vault.keyPassphrase(host, port16);
+  m_alpnEnabled   = m_settings.value(settingsKey("alpnEnabled"), false).toBool();
+  m_alpnProtocol =
+    m_settings.value(settingsKey("alpnProtocol"), QStringLiteral("x-amzn-mqtt-ca")).toString();
+  m_clientCertificatePath = m_settings.value(settingsKey("clientCertPath"), QString()).toString();
+  m_privateKeyPath        = m_settings.value(settingsKey("privateKeyPath"), QString()).toString();
+  reloadTlsIdentity(false);
+  Q_EMIT sslConfigurationChanged();
 }
 
 /**
@@ -1266,6 +1510,29 @@ void IO::Drivers::MQTT::applyPendingToClient()
   m_client.setAutoKeepAlive(m_autoKeepAlive);
   m_client.setCleanSession(m_cleanSession);
   m_client.setProtocolVersion(m_protocolVersion);
+}
+
+/**
+ * @brief Re-parses the client certificate + key pair and applies the result (plus ALPN) to the
+ *        driver's SSL configuration. A failed parse clears the identity so a stale pair is never
+ *        sent; interactive callers get a message box, restore paths only log.
+ */
+void IO::Drivers::MQTT::reloadTlsIdentity(const bool interactive)
+{
+  const auto result = ::MQTT::loadTlsIdentity(
+    m_clientCertificatePath, m_privateKeyPath, m_keyPassphrase, m_tlsIdentity);
+
+  const auto alpn = m_alpnEnabled ? m_alpnProtocol.toUtf8() : QByteArray();
+  ::MQTT::applyTlsIdentity(m_sslConfiguration, m_tlsIdentity, alpn);
+
+  if (result.ok())
+    return;
+
+  qCWarning(lcMqttSub) << "TLS identity rejected:" << ::MQTT::tlsIdentityErrorString(result);
+  if (interactive)
+    Misc::Utilities::showMessageBox(tr("MQTT Client Certificate Error"),
+                                    ::MQTT::tlsIdentityErrorString(result),
+                                    QMessageBox::Warning);
 }
 
 /**

@@ -42,6 +42,7 @@
 #  include "DataModel/FrameConsumer.h"
 #  include "IO/HAL_Driver.h"
 #  include "MQTT/CredentialVault.h"
+#  include "MQTT/TlsIdentity.h"
 
 namespace MQTT {
 
@@ -69,6 +70,9 @@ struct BrokerConfig {
   QString notificationTopic;
   QString scriptCode;
   QString scriptTopic;
+  QByteArray alpnProtocol;
+  QSslKey clientPrivateKey;
+  QSslCertificate clientCertificate;
   QList<QSslCertificate> caCertificates;
 };
 
@@ -241,6 +245,26 @@ class Publisher : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr
              READ password
              WRITE setPassword
              NOTIFY configurationChanged)
+  Q_PROPERTY(QString clientCertificatePath
+             READ clientCertificatePath
+             WRITE setClientCertificatePath
+             NOTIFY configurationChanged)
+  Q_PROPERTY(QString privateKeyPath
+             READ privateKeyPath
+             WRITE setPrivateKeyPath
+             NOTIFY configurationChanged)
+  Q_PROPERTY(QString keyPassphrase
+             READ keyPassphrase
+             WRITE setKeyPassphrase
+             NOTIFY configurationChanged)
+  Q_PROPERTY(bool alpnEnabled
+             READ alpnEnabled
+             WRITE setAlpnEnabled
+             NOTIFY configurationChanged)
+  Q_PROPERTY(QString alpnProtocol
+             READ alpnProtocol
+             WRITE setAlpnProtocol
+             NOTIFY configurationChanged)
   Q_PROPERTY(QString topicBase
              READ topicBase
              WRITE setTopicBase
@@ -338,6 +362,11 @@ public:
   [[nodiscard]] QString hostname() const;
   [[nodiscard]] QString username() const;
   [[nodiscard]] QString password() const;
+  [[nodiscard]] QString clientCertificatePath() const;
+  [[nodiscard]] QString privateKeyPath() const;
+  [[nodiscard]] QString keyPassphrase() const;
+  [[nodiscard]] bool alpnEnabled() const noexcept;
+  [[nodiscard]] QString alpnProtocol() const;
   [[nodiscard]] QString topicBase() const;
   [[nodiscard]] QString notificationTopic() const;
   [[nodiscard]] QString scriptCode() const;
@@ -381,6 +410,13 @@ public slots:
   void setHostname(const QString& hostname);
   void setUsername(const QString& username);
   void setPassword(const QString& password);
+  void setClientCertificatePath(const QString& path);
+  void setPrivateKeyPath(const QString& path);
+  void setKeyPassphrase(const QString& passphrase);
+  void setAlpnEnabled(const bool enabled);
+  void setAlpnProtocol(const QString& protocol);
+  void selectClientCertificate();
+  void selectPrivateKey();
   void setTopicBase(const QString& topic);
   void setNotificationTopic(const QString& topic);
   void setScriptCode(const QString& code);
@@ -415,6 +451,8 @@ private:
   void applyTimerInterval();
   void reloadCredentialsFromVault();
   void persistCredentialsToVault();
+  void reloadTlsIdentity(const bool interactive);
+  void selectPemFile(const QString& title, void (Publisher::*setter)(const QString&));
   [[nodiscard]] BrokerConfig snapshotConfig() const;
 
 private:
@@ -447,6 +485,13 @@ private:
   QString m_scriptCode;
   QString m_scriptTopic;
   int m_scriptLanguage;
+
+  bool m_alpnEnabled;
+  QString m_alpnProtocol;
+  QString m_keyPassphrase;
+  QString m_privateKeyPath;
+  QString m_clientCertificatePath;
+  TlsIdentity m_tlsIdentity;
 
   QList<QSslCertificate> m_caCertificates;
   CredentialVault m_credentialVault;
@@ -489,6 +534,10 @@ private:
   static constexpr QLatin1StringView kKeySslProtocol{"sslProtocol"};
   static constexpr QLatin1StringView kKeyPeerVerifyMode{"peerVerifyMode"};
   static constexpr QLatin1StringView kKeyPeerVerifyDepth{"peerVerifyDepth"};
+  static constexpr QLatin1StringView kKeyClientCertPath{"clientCertPath"};
+  static constexpr QLatin1StringView kKeyPrivateKeyPath{"privateKeyPath"};
+  static constexpr QLatin1StringView kKeyAlpnEnabled{"alpnEnabled"};
+  static constexpr QLatin1StringView kKeyAlpnProtocol{"alpnProtocol"};
 };
 
 }  // namespace MQTT

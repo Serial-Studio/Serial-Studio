@@ -326,6 +326,83 @@ void DataModel::ProjectEditor::buildMqttBrokerCredentials(const MQTT::Publisher&
 
 #ifdef BUILD_COMMERCIAL
 /**
+ * @brief Appends the mutual-TLS client identity rows (certificate, key, passphrase, ALPN).
+ */
+static void appendMqttClientIdentityRows(DataModel::CustomModel* model,
+                                         const MQTT::Publisher& pub,
+                                         bool enabled)
+{
+  using Editor = DataModel::ProjectEditor;
+
+  auto* certPathItem = new QStandardItem();
+  certPathItem->setEditable(true);
+  certPathItem->setData(enabled, Editor::Active);
+  certPathItem->setData(Editor::TextField, Editor::WidgetType);
+  certPathItem->setData(pub.clientCertificatePath(), Editor::EditableValue);
+  certPathItem->setData(kMqttPublisher_ClientCertPath, Editor::ParameterType);
+  certPathItem->setData(Editor::tr("Client Certificate"), Editor::ParameterName);
+  certPathItem->setData(Editor::tr("Optional (mutual TLS)"), Editor::PlaceholderValue);
+  certPathItem->setData(Editor::tr("PEM certificate presented to brokers that require mutual "
+                                   "TLS (AWS IoT Core)"),
+                        Editor::ParameterDescription);
+  model->appendRow(certPathItem);
+
+  auto* keyPathItem = new QStandardItem();
+  keyPathItem->setEditable(true);
+  keyPathItem->setData(enabled, Editor::Active);
+  keyPathItem->setData(Editor::TextField, Editor::WidgetType);
+  keyPathItem->setData(pub.privateKeyPath(), Editor::EditableValue);
+  keyPathItem->setData(kMqttPublisher_PrivateKeyPath, Editor::ParameterType);
+  keyPathItem->setData(Editor::tr("Private Key"), Editor::ParameterName);
+  keyPathItem->setData(Editor::tr("Defaults to the certificate file"), Editor::PlaceholderValue);
+  keyPathItem->setData(Editor::tr("PEM private key matching the client certificate"),
+                       Editor::ParameterDescription);
+  model->appendRow(keyPathItem);
+
+  auto* passphraseItem = new QStandardItem();
+  passphraseItem->setEditable(true);
+  passphraseItem->setData(enabled, Editor::Active);
+  passphraseItem->setData(Editor::PasswordField, Editor::WidgetType);
+  passphraseItem->setData(pub.keyPassphrase(), Editor::EditableValue);
+  passphraseItem->setData(kMqttPublisher_KeyPassphrase, Editor::ParameterType);
+  passphraseItem->setData(Editor::tr("Key Passphrase"), Editor::ParameterName);
+  passphraseItem->setData(Editor::tr("Passphrase for an encrypted private key (stored in the "
+                                     "encrypted vault, never in the project file)"),
+                          Editor::ParameterDescription);
+  model->appendRow(passphraseItem);
+
+  auto* alpnItem = new QStandardItem();
+  alpnItem->setEditable(true);
+  alpnItem->setData(enabled, Editor::Active);
+  alpnItem->setData(Editor::CheckBox, Editor::WidgetType);
+  alpnItem->setData(pub.alpnEnabled(), Editor::EditableValue);
+  alpnItem->setData(kMqttPublisher_AlpnEnabled, Editor::ParameterType);
+  alpnItem->setData(Editor::tr("ALPN (MQTT over port 443)"), Editor::ParameterName);
+  alpnItem->setData(Editor::tr("Announce an ALPN protocol so brokers can serve MQTT on port "
+                               "443 behind firewalls"),
+                    Editor::ParameterDescription);
+  model->appendRow(alpnItem);
+
+  if (!pub.alpnEnabled())
+    return;
+
+  auto* alpnProtoItem = new QStandardItem();
+  alpnProtoItem->setEditable(true);
+  alpnProtoItem->setData(enabled, Editor::Active);
+  alpnProtoItem->setData(Editor::TextField, Editor::WidgetType);
+  alpnProtoItem->setData(pub.alpnProtocol(), Editor::EditableValue);
+  alpnProtoItem->setData(kMqttPublisher_AlpnProtocol, Editor::ParameterType);
+  alpnProtoItem->setData(Editor::tr("ALPN Protocol"), Editor::ParameterName);
+  alpnProtoItem->setData(QStringLiteral("x-amzn-mqtt-ca"), Editor::PlaceholderValue);
+  alpnProtoItem->setData(Editor::tr("Protocol name announced during the TLS handshake (AWS "
+                                    "IoT uses x-amzn-mqtt-ca)"),
+                         Editor::ParameterDescription);
+  model->appendRow(alpnProtoItem);
+}
+#endif
+
+#ifdef BUILD_COMMERCIAL
+/**
  * @brief Appends the SSL/TLS section (toggle, protocol, peer verification, depth).
  */
 void DataModel::ProjectEditor::buildMqttSslSection(const MQTT::Publisher& pub, bool enabled)
@@ -383,6 +460,34 @@ void DataModel::ProjectEditor::buildMqttSslSection(const MQTT::Publisher& pub, b
   peerDepthItem->setData(tr("Maximum certificate chain length accepted (0 = unlimited)"),
                          ParameterDescription);
   m_mqttPublisherModel->appendRow(peerDepthItem);
+
+  appendMqttClientIdentityRows(m_mqttPublisherModel, pub, enabled);
+}
+#endif
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Applies the mutual-TLS identity edits that need no model rebuild; returns true when
+ *        the parameter was one of them.
+ */
+static bool applyMqttClientIdentityEdit(MQTT::Publisher& pub, int type, const QVariant& value)
+{
+  switch (type) {
+    case kMqttPublisher_ClientCertPath:
+      pub.setClientCertificatePath(value.toString());
+      return true;
+    case kMqttPublisher_PrivateKeyPath:
+      pub.setPrivateKeyPath(value.toString());
+      return true;
+    case kMqttPublisher_KeyPassphrase:
+      pub.setKeyPassphrase(value.toString());
+      return true;
+    case kMqttPublisher_AlpnProtocol:
+      pub.setAlpnProtocol(value.toString());
+      return true;
+    default:
+      return false;
+  }
 }
 #endif
 
@@ -398,6 +503,9 @@ void DataModel::ProjectEditor::onMqttPublisherItemChanged(QStandardItem* item)
   auto& pub        = m_mqttPublisher;
   const auto type  = item->data(ParameterType).toInt();
   const auto value = item->data(EditableValue);
+
+  if (applyMqttClientIdentityEdit(pub, type, value))
+    return;
 
   switch (type) {
     case kMqttPublisher_Enabled:
@@ -468,6 +576,10 @@ void DataModel::ProjectEditor::onMqttPublisherItemChanged(QStandardItem* item)
     case kMqttPublisher_PeerVerifyDepth:
       pub.setPeerVerifyDepth(value.toInt());
       break;
+    case kMqttPublisher_AlpnEnabled:
+      pub.setAlpnEnabled(value.toBool());
+      buildMqttPublisherModel();
+      return;
     default:
       break;
   }

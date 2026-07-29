@@ -174,6 +174,42 @@ Widgets.Pane {
                              : qsTr("Enable SSL/TLS first"))
             onClicked: Cpp_MQTT_Publisher.addCaCertificates()
           }
+
+          //
+          // Pick the mutual-TLS client certificate (TLS only)
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Client Certificate")
+            enabled: Cpp_MQTT_Publisher.enabled && Cpp_MQTT_Publisher.sslEnabled
+            icon.source: Cpp_Misc_IconRegistry.icon("editor", "load-ca-certs", 24)
+            ToolTip.text: !Cpp_MQTT_Publisher.enabled
+                          ? qsTr("Enable publishing first")
+                          : (Cpp_MQTT_Publisher.sslEnabled
+                             ? qsTr("Select the PEM client certificate for mutual TLS")
+                             : qsTr("Enable SSL/TLS first"))
+            onClicked: Cpp_MQTT_Publisher.selectClientCertificate()
+          }
+
+          //
+          // Pick the mutual-TLS private key (TLS only)
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Private Key")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_MQTT_Publisher.enabled && Cpp_MQTT_Publisher.sslEnabled
+            icon.source: Cpp_Misc_IconRegistry.icon("editor", "load-ca-certs", 24)
+            ToolTip.text: !Cpp_MQTT_Publisher.enabled
+                          ? qsTr("Enable publishing first")
+                          : (Cpp_MQTT_Publisher.sslEnabled
+                             ? qsTr("Select the PEM private key for mutual TLS")
+                             : qsTr("Enable SSL/TLS first"))
+            onClicked: Cpp_MQTT_Publisher.selectPrivateKey()
+          }
         }
 
         Rectangle {

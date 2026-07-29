@@ -87,6 +87,32 @@ bool MQTT::CredentialVault::hasCredentials(const QString& host, quint16 port) co
   return present;
 }
 
+/**
+ * @brief Returns the decrypted private-key passphrase for host:port, or empty on miss /
+ *        decrypt failure.
+ */
+QString MQTT::CredentialVault::keyPassphrase(const QString& host, quint16 port) const
+{
+  if (host.isEmpty())
+    return QString();
+
+  const auto key = settingsKey(host, port);
+  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  const auto cipher = m_settings.value(key + QStringLiteral("/keyPass")).toString();
+  m_settings.endGroup();
+
+  if (cipher.isEmpty())
+    return QString();
+
+  auto plain = m_simpleCrypt.decryptToString(cipher);
+  if (m_simpleCrypt.lastError() != Licensing::SimpleCrypt::ErrorNoError) {
+    qCWarning(lcMqttVault) << "Key passphrase decrypt failed for" << key;
+    return QString();
+  }
+
+  return plain;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Mutations
 //--------------------------------------------------------------------------------------------------
@@ -117,6 +143,28 @@ void MQTT::CredentialVault::setCredentials(const QString& host,
 
   if (username.isEmpty() && password.isEmpty())
     m_settings.remove(key);
+
+  m_settings.endGroup();
+}
+
+/**
+ * @brief Encrypts and writes the private-key passphrase for host:port; empty removes the slot.
+ */
+void MQTT::CredentialVault::setKeyPassphrase(const QString& host,
+                                             quint16 port,
+                                             const QString& passphrase)
+{
+  if (host.isEmpty())
+    return;
+
+  const auto key = settingsKey(host, port);
+  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+
+  if (passphrase.isEmpty())
+    m_settings.remove(key + QStringLiteral("/keyPass"));
+  else
+    m_settings.setValue(key + QStringLiteral("/keyPass"),
+                        m_simpleCrypt.encryptToString(passphrase));
 
   m_settings.endGroup();
 }

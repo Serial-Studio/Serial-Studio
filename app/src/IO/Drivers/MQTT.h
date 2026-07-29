@@ -32,6 +32,7 @@
 #include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 #include "MQTT/CredentialVault.h"
+#include "MQTT/TlsIdentity.h"
 
 namespace IO {
 namespace Drivers {
@@ -81,6 +82,26 @@ class MQTT : public HAL_Driver {
   Q_PROPERTY(int peerVerifyDepth
              READ peerVerifyDepth
              WRITE setPeerVerifyDepth
+             NOTIFY sslConfigurationChanged)
+  Q_PROPERTY(QString clientCertificatePath
+             READ clientCertificatePath
+             WRITE setClientCertificatePath
+             NOTIFY sslConfigurationChanged)
+  Q_PROPERTY(QString privateKeyPath
+             READ privateKeyPath
+             WRITE setPrivateKeyPath
+             NOTIFY sslConfigurationChanged)
+  Q_PROPERTY(QString keyPassphrase
+             READ keyPassphrase
+             WRITE setKeyPassphrase
+             NOTIFY sslConfigurationChanged)
+  Q_PROPERTY(bool alpnEnabled
+             READ alpnEnabled
+             WRITE setAlpnEnabled
+             NOTIFY sslConfigurationChanged)
+  Q_PROPERTY(QString alpnProtocol
+             READ alpnProtocol
+             WRITE setAlpnProtocol
              NOTIFY sslConfigurationChanged)
   Q_PROPERTY(QString clientId
              READ clientId
@@ -159,6 +180,11 @@ public:
   [[nodiscard]] QString username() const;
   [[nodiscard]] QString password() const;
   [[nodiscard]] QString topicFilter() const;
+  [[nodiscard]] QString clientCertificatePath() const;
+  [[nodiscard]] QString privateKeyPath() const;
+  [[nodiscard]] QString keyPassphrase() const;
+  [[nodiscard]] bool alpnEnabled() const noexcept;
+  [[nodiscard]] QString alpnProtocol() const;
 
   [[nodiscard]] const QStringList& mqttVersions() const;
   [[nodiscard]] const QStringList& sslProtocols() const;
@@ -183,6 +209,13 @@ public slots:
   void setUsername(const QString& username);
   void setPassword(const QString& password);
   void setTopicFilter(const QString& topic);
+  void setClientCertificatePath(const QString& path);
+  void setPrivateKeyPath(const QString& path);
+  void setKeyPassphrase(const QString& passphrase);
+  void setAlpnEnabled(const bool enabled);
+  void setAlpnProtocol(const QString& protocol);
+  void selectClientCertificate();
+  void selectPrivateKey();
 
 private slots:
   void onStateChanged(QMqttClient::ClientState state);
@@ -196,6 +229,8 @@ private:
   void appendMqttSslProperties(QList<IO::DriverProperty>& props) const;
   void scheduleReconnectIfActive();
   void applyPendingToClient();
+  void reloadTlsIdentity(const bool interactive);
+  void selectPemFile(const QString& title, void (MQTT::*setter)(const QString&));
 
   [[nodiscard]] Async::Task* makeConnectStep();
   [[nodiscard]] Async::Task* buildOpenFlow();
@@ -221,6 +256,12 @@ private:
   QString m_username;
   QString m_password;
   QString m_topicFilter;
+  bool m_alpnEnabled;
+  QString m_alpnProtocol;
+  QString m_keyPassphrase;
+  QString m_privateKeyPath;
+  QString m_clientCertificatePath;
+  ::MQTT::TlsIdentity m_tlsIdentity;
   QSettings m_settings;
   ::MQTT::CredentialVault m_vault;
   QMqttClient m_client;

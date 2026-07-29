@@ -507,6 +507,8 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
     || cfg.cleanSession != m_cfg.cleanSession || cfg.sslEnabled != m_cfg.sslEnabled
     || cfg.sslProtocol != m_cfg.sslProtocol || cfg.peerVerifyMode != m_cfg.peerVerifyMode
     || cfg.peerVerifyDepth != m_cfg.peerVerifyDepth || cfg.caCertificates != m_cfg.caCertificates
+    || cfg.clientCertificate != m_cfg.clientCertificate
+    || cfg.clientPrivateKey != m_cfg.clientPrivateKey || cfg.alpnProtocol != m_cfg.alpnProtocol
     || cfg.enabled != m_cfg.enabled;
 
   m_csvHeaderDirty = true;
@@ -523,6 +525,9 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
   m_sslConfiguration.setProtocol(m_cfg.sslProtocol);
   m_sslConfiguration.setPeerVerifyMode(m_cfg.peerVerifyMode);
   m_sslConfiguration.setPeerVerifyDepth(m_cfg.peerVerifyDepth);
+  applyTlsIdentity(m_sslConfiguration,
+                   TlsIdentity{m_cfg.clientCertificate, m_cfg.clientPrivateKey},
+                   m_cfg.alpnProtocol);
   if (!m_cfg.caCertificates.isEmpty()) {
     auto existing = m_sslConfiguration.caCertificates();
     for (const auto& cert : m_cfg.caCertificates)
@@ -759,14 +764,22 @@ void MQTT::PublisherWorker::onClientStateChanged(QMqttClient::ClientState state)
 }
 
 /**
- * @brief Forwards a broker error to the main thread as a human-readable string.
+ * @brief Forwards a broker error to the main thread as a human-readable string. A transport
+ *        failure with a client identity configured names mutual TLS as the likely cause: a
+ *        certificate/key mismatch or a broker-side rejection only surfaces at the handshake.
  */
 void MQTT::PublisherWorker::onClientErrorChanged(QMqttClient::ClientError error)
 {
   if (error == QMqttClient::NoError)
     return;
 
-  Q_EMIT brokerErrorOccurred(describeMqttError(error));
+  QString message = describeMqttError(error);
+  if (error == QMqttClient::TransportInvalid && !m_cfg.clientCertificate.isNull())
+    message += QStringLiteral(" ")
+             + Publisher::tr("A client certificate is configured: verify that it matches the "
+                             "private key and is activated on the broker.");
+
+  Q_EMIT brokerErrorOccurred(message);
 }
 
 //==================================================================================================
@@ -798,6 +811,8 @@ MQTT::Publisher::Publisher()
   , m_customClientId(false)
   , m_hostname(QStringLiteral("127.0.0.1"))
   , m_scriptLanguage(0)
+  , m_alpnEnabled(false)
+  , m_alpnProtocol(QStringLiteral("x-amzn-mqtt-ca"))
   , m_rawBytesQueue(8192)
   , m_rawFramesQueue(8192)
   , m_workerMode(static_cast<int>(Mode::RawRxData))
@@ -1053,6 +1068,46 @@ QString MQTT::Publisher::password() const
 }
 
 /**
+ * @brief Returns the client certificate PEM path used for mutual TLS (empty = off).
+ */
+QString MQTT::Publisher::clientCertificatePath() const
+{
+  return m_clientCertificatePath;
+}
+
+/**
+ * @brief Returns the private key PEM path (empty = look in the certificate file).
+ */
+QString MQTT::Publisher::privateKeyPath() const
+{
+  return m_privateKeyPath;
+}
+
+/**
+ * @brief Returns the private-key passphrase (kept in the encrypted vault, never in projects).
+ */
+QString MQTT::Publisher::keyPassphrase() const
+{
+  return m_keyPassphrase;
+}
+
+/**
+ * @brief Returns whether ALPN is requested during the TLS handshake (MQTT over port 443).
+ */
+bool MQTT::Publisher::alpnEnabled() const noexcept
+{
+  return m_alpnEnabled;
+}
+
+/**
+ * @brief Returns the ALPN protocol name announced when ALPN is enabled.
+ */
+QString MQTT::Publisher::alpnProtocol() const
+{
+  return m_alpnProtocol;
+}
+
+/**
  * @brief Returns the base MQTT topic for dashboard or raw publishing.
  */
 QString MQTT::Publisher::topicBase() const
@@ -1223,6 +1278,10 @@ QJsonObject MQTT::Publisher::toJson() const
   obj.insert(kKeySslProtocol, static_cast<int>(sslProtocol()));
   obj.insert(kKeyPeerVerifyMode, static_cast<int>(peerVerifyMode()));
   obj.insert(kKeyPeerVerifyDepth, m_peerVerifyDepth);
+  obj.insert(kKeyClientCertPath, m_clientCertificatePath);
+  obj.insert(kKeyPrivateKeyPath, m_privateKeyPath);
+  obj.insert(kKeyAlpnEnabled, m_alpnEnabled);
+  obj.insert(kKeyAlpnProtocol, m_alpnProtocol);
   return obj;
 }
 
@@ -1265,6 +1324,13 @@ void MQTT::Publisher::applyProjectConfig(const QJsonObject& cfg)
   setSslProtocol(static_cast<quint8>(cfg.value(kKeySslProtocol).toInt(5)));
   setPeerVerifyMode(static_cast<quint8>(cfg.value(kKeyPeerVerifyMode).toInt(3)));
   setPeerVerifyDepth(cfg.value(kKeyPeerVerifyDepth).toInt(10));
+
+  setAlpnEnabled(cfg.value(kKeyAlpnEnabled).toBool(false));
+  setAlpnProtocol(cfg.value(kKeyAlpnProtocol).toString(QStringLiteral("x-amzn-mqtt-ca")));
+
+  m_clientCertificatePath = cfg.value(kKeyClientCertPath).toString();
+  m_privateKeyPath        = cfg.value(kKeyPrivateKeyPath).toString();
+  reloadTlsIdentity(false);
 
   m_inApply = false;
 
@@ -1366,6 +1432,57 @@ void MQTT::Publisher::addCaCertificates()
   });
 
   dialog->open();
+}
+
+/**
+ * @brief Opens a PEM file picker and routes the selection into the given path setter. The work
+ *        runs through a queued invoke: on macOS fileSelected fires inside QFileDialog::done()
+ *        and re-entering Qt synchronously can delete the dialog under the native panel.
+ */
+void MQTT::Publisher::selectPemFile(const QString& title, void (Publisher::*setter)(const QString&))
+{
+  SS_ASSERT(setter != nullptr, return);
+  SS_ASSERT(!title.isEmpty(), return);
+
+  auto* dialog =
+    new QFileDialog(qApp->activeWindow(),
+                    title,
+                    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                    tr("PEM files (*.pem *.crt *.cer *.key);;All files (*)"));
+
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, setter](const QString& path) {
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this,
+      [this, setter, path]() {
+        (this->*setter)(path);
+        reloadTlsIdentity(true);
+      },
+      Qt::QueuedConnection);
+  });
+
+  dialog->open();
+}
+
+/**
+ * @brief Opens a file picker for the mutual-TLS client certificate.
+ */
+void MQTT::Publisher::selectClientCertificate()
+{
+  selectPemFile(tr("Select Client Certificate"), &Publisher::setClientCertificatePath);
+}
+
+/**
+ * @brief Opens a file picker for the mutual-TLS private key.
+ */
+void MQTT::Publisher::selectPrivateKey()
+{
+  selectPemFile(tr("Select Private Key"), &Publisher::setPrivateKeyPath);
 }
 
 /**
@@ -1593,8 +1710,10 @@ void MQTT::Publisher::setPort(const quint16 port)
 
   m_port = port;
 
-  if (!m_inApply)
+  if (!m_inApply) {
     reloadCredentialsFromVault();
+    reloadTlsIdentity(false);
+  }
 
   markConfigChanged();
 }
@@ -1653,8 +1772,10 @@ void MQTT::Publisher::setHostname(const QString& hostname)
 
   m_hostname = hostname;
 
-  if (!m_inApply)
+  if (!m_inApply) {
     reloadCredentialsFromVault();
+    reloadTlsIdentity(false);
+  }
 
   markConfigChanged();
 }
@@ -1682,6 +1803,70 @@ void MQTT::Publisher::setPassword(const QString& password)
 
   m_password = password;
   persistCredentialsToVault();
+  markConfigChanged();
+}
+
+/**
+ * @brief Sets the client certificate PEM path and reloads the parsed TLS identity.
+ */
+void MQTT::Publisher::setClientCertificatePath(const QString& path)
+{
+  if (m_clientCertificatePath == path)
+    return;
+
+  m_clientCertificatePath = path;
+  reloadTlsIdentity(false);
+  markConfigChanged();
+}
+
+/**
+ * @brief Sets the private key PEM path and reloads the parsed TLS identity.
+ */
+void MQTT::Publisher::setPrivateKeyPath(const QString& path)
+{
+  if (m_privateKeyPath == path)
+    return;
+
+  m_privateKeyPath = path;
+  reloadTlsIdentity(false);
+  markConfigChanged();
+}
+
+/**
+ * @brief Sets the private-key passphrase, persists it to the vault and re-parses the key.
+ */
+void MQTT::Publisher::setKeyPassphrase(const QString& passphrase)
+{
+  if (m_keyPassphrase == passphrase)
+    return;
+
+  m_keyPassphrase = passphrase;
+  persistCredentialsToVault();
+  reloadTlsIdentity(false);
+  markConfigChanged();
+}
+
+/**
+ * @brief Enables or disables ALPN announcement during the TLS handshake.
+ */
+void MQTT::Publisher::setAlpnEnabled(const bool enabled)
+{
+  if (m_alpnEnabled == enabled)
+    return;
+
+  m_alpnEnabled = enabled;
+  markConfigChanged();
+}
+
+/**
+ * @brief Sets the ALPN protocol name (AWS IoT uses "x-amzn-mqtt-ca" on port 443).
+ */
+void MQTT::Publisher::setAlpnProtocol(const QString& protocol)
+{
+  if (m_alpnProtocol == protocol)
+    return;
+
+  m_alpnProtocol = protocol;
   markConfigChanged();
 }
 
@@ -1969,6 +2154,9 @@ MQTT::BrokerConfig MQTT::Publisher::snapshotConfig() const
   cfg.scriptTopic          = m_scriptTopic;
   cfg.scriptLanguage       = m_scriptLanguage;
   cfg.caCertificates       = m_caCertificates;
+  cfg.clientCertificate    = m_tlsIdentity.certificate;
+  cfg.clientPrivateKey     = m_tlsIdentity.privateKey;
+  cfg.alpnProtocol         = m_alpnEnabled ? m_alpnProtocol.toUtf8() : QByteArray();
   return cfg;
 }
 
@@ -1997,12 +2185,15 @@ void MQTT::Publisher::applyTimerInterval()
 
 /**
  * @brief Loads credentials for the current host:port from the vault into the in-memory fields.
+ *        Callers re-parse the TLS identity themselves once their path state is final: parsing
+ *        here would run against whatever paths happen to be current mid-restore.
  */
 void MQTT::Publisher::reloadCredentialsFromVault()
 {
   const auto creds = m_credentialVault.credentials(m_hostname, m_port);
   m_username       = creds.username;
   m_password       = creds.password;
+  m_keyPassphrase  = m_credentialVault.keyPassphrase(m_hostname, m_port);
 }
 
 /**
@@ -2014,6 +2205,28 @@ void MQTT::Publisher::persistCredentialsToVault()
     return;
 
   m_credentialVault.setCredentials(m_hostname, m_port, m_username, m_password);
+  m_credentialVault.setKeyPassphrase(m_hostname, m_port, m_keyPassphrase);
+}
+
+/**
+ * @brief Re-parses the client certificate + key pair from the configured paths. A failed parse
+ *        clears the identity (so a stale pair is never sent). Only the queued file-picker path
+ *        passes interactive=true: a modal box from a plain setter would open a nested event
+ *        loop inside the form model's itemChanged emission and re-enter the editing delegate.
+ */
+void MQTT::Publisher::reloadTlsIdentity(const bool interactive)
+{
+  const auto result =
+    loadTlsIdentity(m_clientCertificatePath, m_privateKeyPath, m_keyPassphrase, m_tlsIdentity);
+  if (result.ok())
+    return;
+
+  qCWarning(lcMqttPub) << "TLS identity rejected:" << tlsIdentityErrorString(result);
+  if (interactive)
+    Misc::Utilities::showMessageBox(tr("MQTT Client Certificate Error"),
+                                    tlsIdentityErrorString(result),
+                                    QMessageBox::Warning,
+                                    tr("MQTT Publisher"));
 }
 
 #endif  // BUILD_COMMERCIAL

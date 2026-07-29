@@ -41,11 +41,13 @@ public:
 
   [[nodiscard]] Credentials credentials(const QString& host, quint16 port) const;
   [[nodiscard]] bool hasCredentials(const QString& host, quint16 port) const;
+  [[nodiscard]] QString keyPassphrase(const QString& host, quint16 port) const;
 
   void setCredentials(const QString& host,
                       quint16 port,
                       const QString& username,
                       const QString& password);
+  void setKeyPassphrase(const QString& host, quint16 port, const QString& passphrase);
   void clear(const QString& host, quint16 port);
 
 private:

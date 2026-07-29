@@ -132,6 +132,11 @@ typedef enum {
   kMqttPublisher_SslProtocol,
   kMqttPublisher_PeerVerifyMode,
   kMqttPublisher_PeerVerifyDepth,
+  kMqttPublisher_ClientCertPath,
+  kMqttPublisher_PrivateKeyPath,
+  kMqttPublisher_KeyPassphrase,
+  kMqttPublisher_AlpnEnabled,
+  kMqttPublisher_AlpnProtocol,
 } MqttPublisherItem;
 
 // clang-format on

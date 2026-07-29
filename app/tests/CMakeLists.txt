@@ -318,6 +318,20 @@ ss_add_unit_test(tst_zmodem
   LIBS    Qt6::Core
 )
 
+#
+# TlsIdentity.{h,cpp} are commercial-only TUs guarded by BUILD_COMMERCIAL; the suite defines the
+# macro itself so the tier stays independent of the application target's configuration.
+#
+ss_add_unit_test(tst_tls_identity
+  SOURCES tst_tls_identity.cpp
+          ${SS_APP_SRC}/MQTT/TlsIdentity.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+if(TARGET tst_tls_identity)
+  target_compile_definitions(tst_tls_identity PRIVATE BUILD_COMMERCIAL)
+endif()
+
 ss_add_unit_test(tst_lua_compat
   SOURCES tst_lua_compat.cpp
           ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
