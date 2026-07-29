@@ -1,19 +1,19 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1605,
+  "total": 1607,
   "files": 198,
   "buckets": {
     "root": 149,
     "accessor": 68,
     "ctor-capture": 93,
     "deferred": 20,
-    "static-cache": 1158,
+    "static-cache": 1160,
     "loose": 117
   },
   "per_class": {
     "IO::ConnectionManager": 212,
-    "DataModel::ProjectModel": 208,
+    "DataModel::ProjectModel": 209,
     "AppState": 136,
     "CommandRegistry": 98,
     "UI::Dashboard": 83,
@@ -49,8 +49,8 @@
     "Console::Export": 11,
     "Misc::BackupManager": 10,
     "Misc::CrashTracker": 10,
+    "MachineID": 9,
     "Licensing::Trial": 8,
-    "MachineID": 8,
     "Widgets::AudioExport": 8,
     "Assistant": 7,
     "Licensing::MachineID": 7,
@@ -1413,13 +1413,13 @@
       }
     },
     "app/src/Licensing/LemonSqueezy.cpp": {
-      "total": 7,
+      "total": 8,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 6,
+        "static-cache": 7,
         "loose": 0
       }
     },
@@ -1743,13 +1743,13 @@
       }
     },
     "app/src/Misc/Problems/ProjectCheckers.cpp": {
-      "total": 9,
+      "total": 10,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 9,
+        "static-cache": 10,
         "loose": 0
       }
     },

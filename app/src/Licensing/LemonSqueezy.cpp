@@ -41,27 +41,6 @@
 static constexpr quint64 STORE_ID = 170454;
 static constexpr quint64 PRDCT_ID = 496241;
 
-/**
- * @brief Derives a feature tier from the Lemon Squeezy variant name; any
- * non-empty variant that is not Enterprise maps to Pro on purpose, so a legacy
- * variant such as "Hobbyist" still unlocks the full feature set.
- */
-static Licensing::FeatureTier tierFromVariant(const QString& variant)
-{
-  const auto lower = variant.toLower();
-
-  if (lower.startsWith("enterprise"))
-    return Licensing::FeatureTier::Enterprise;
-
-  if (lower.startsWith("pro") || lower.startsWith("team"))
-    return Licensing::FeatureTier::Pro;
-
-  if (!lower.isEmpty())
-    return Licensing::FeatureTier::Pro;
-
-  return Licensing::FeatureTier::None;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -76,11 +55,9 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_activated(false)
   , m_appName(APP_NAME)
   , m_silentValidation(true)
+  , m_revalidatingCache(false)
   , m_gracePeriod(0)
 {
-  m_manager.emplace();
-  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_manager.reset(); });
-
   static auto& machineId = MachineID::instance();
 
   m_simpleCrypt.setKey(machineId.machineSpecificKey());
@@ -235,9 +212,6 @@ void Licensing::LemonSqueezy::buy()
  */
 void Licensing::LemonSqueezy::activate()
 {
-  if (!m_manager)
-    return;
-
   if (!canActivate())
     return;
 
@@ -260,7 +234,7 @@ void Licensing::LemonSqueezy::activate()
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  auto* reply = m_manager->post(req, payloadData);
+  auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
       qWarning() << "[LemonSqueezy] Activation network error:" << reply->errorString();
@@ -276,9 +250,6 @@ void Licensing::LemonSqueezy::activate()
  */
 void Licensing::LemonSqueezy::validate()
 {
-  if (!m_manager)
-    return;
-
   if (!canActivate())
     return;
 
@@ -300,7 +271,7 @@ void Licensing::LemonSqueezy::validate()
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  auto* reply = m_manager->post(req, payloadData);
+  auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
       qWarning() << "[LemonSqueezy] Validation network error:" << reply->errorString();
@@ -309,8 +280,38 @@ void Licensing::LemonSqueezy::validate()
       reply->error() == QNetworkReply::NoError ? reply->readAll() : QByteArray(), false);
     reply->deleteLater();
 
-    writeSettings();
+    const bool silent   = m_revalidatingCache;
+    m_revalidatingCache = false;
+    if (!silent || m_activated)
+      writeSettings();
   });
+}
+
+/**
+ * @brief Startup re-check of a stored license: runs even when the cached restore was rejected
+ *        (that is exactly the state a live verdict must resolve), but marks the attempt silent
+ *        so a failure can neither box the user nor touch the stored blob. Only a confirmed
+ *        activation writes anything back.
+ */
+void Licensing::LemonSqueezy::revalidateCachedLicense()
+{
+  if (!canActivate() || isOnlineActivated())
+    return;
+
+  m_revalidatingCache = true;
+  validate();
+  if (!busy())
+    m_revalidatingCache = false;
+}
+
+/**
+ * @brief Returns true when a validation failure is a live server verdict the app may act on:
+ *        a cached restore and a silent startup re-check must never clear stored state, or a
+ *        transient rejection permanently destroys a valid license (spec 0042).
+ */
+bool Licensing::LemonSqueezy::liveVerdict(const bool cachedResponse) const
+{
+  return !cachedResponse && !m_revalidatingCache;
 }
 
 /**
@@ -319,9 +320,6 @@ void Licensing::LemonSqueezy::validate()
  */
 void Licensing::LemonSqueezy::deactivate()
 {
-  if (!m_manager)
-    return;
-
   static auto& offlineLicense = OfflineLicense::instance();
   if (offlineLicense.isActivated()) {
     offlineLicense.deactivate();
@@ -349,7 +347,7 @@ void Licensing::LemonSqueezy::deactivate()
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  auto* reply = m_manager->post(req, payloadData);
+  auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
       qWarning() << "[LemonSqueezy] Deactivation network error:" << reply->errorString();
@@ -427,6 +425,9 @@ void Licensing::LemonSqueezy::writeSettings()
 {
   auto json = QJsonDocument(m_licensingData).toJson(QJsonDocument::Compact);
 
+  if (m_licensingData.isEmpty() && canActivate())
+    return;
+
   if (!json.isEmpty() && canActivate()) {
     m_settings.beginGroup("licensing");
     m_settings.setValue("license", m_simpleCrypt.encryptToString(m_license));
@@ -503,7 +504,7 @@ void Licensing::LemonSqueezy::handleEmptyValidationResponse(const bool cachedRes
 
   if (m_gracePeriod <= 0) {
     qWarning() << "Grace period expired. Clearing cached license.";
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, liveVerdict(cachedResponse));
   }
 
   else {
@@ -532,13 +533,15 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
   const auto storeId       = meta.value("store_id").toInteger();
   const auto productId     = meta.value("product_id").toInteger();
 
+  const bool live = liveVerdict(cachedResponse);
+
   if (!error.isNull() && !error.toString().simplified().isEmpty()) {
     qWarning() << "[LemonSqueezy] Validation error:" << error.toString();
-    if (!cachedResponse)
+    if (live)
       Misc::Utilities::showMessageBox(
         tr("There was an issue validating your license."), error.toString(), QMessageBox::Critical);
 
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, live);
     return false;
   }
 
@@ -552,60 +555,60 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
 
   if (storeId != STORE_ID || productId != PRDCT_ID) {
     qWarning() << "[LemonSqueezy] Store ID or Product ID mismatch";
-    if (!cachedResponse)
+    if (live)
       Misc::Utilities::showMessageBox(
         tr("The license key you provided does not belong to Serial Studio."),
         tr("Please double-check that you purchased your license from the official "
            "Serial Studio store."),
         QMessageBox::Critical);
 
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, live);
     return false;
   }
 
   static auto& machineId = MachineID::instance();
   if (instanceName != machineId.machineId()) {
     qWarning() << "[LemonSqueezy] Machine ID mismatch";
-    if (!cachedResponse)
+    if (live)
       Misc::Utilities::showMessageBox(tr("This license key was activated on a different device."),
                                       tr("Deactivate it there first or contact support for help."),
                                       QMessageBox::Critical);
 
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, live);
     return false;
   }
 
   if (licenseStatus != "active") {
     qWarning() << "[LemonSqueezy] License status is not active:" << licenseStatus;
-    if (!cachedResponse)
+    if (live)
       Misc::Utilities::showMessageBox(
         tr("This license is not currently active."),
         tr("It may have expired or been deactivated (status: %1).").arg(licenseStatus),
         QMessageBox::Warning);
 
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, live);
     return false;
   }
 
   if (instanceId.isEmpty()) {
     qWarning() << "[LemonSqueezy] Activation response missing instance ID";
-    if (!cachedResponse)
+    if (live)
       Misc::Utilities::showMessageBox(tr("Something went wrong on the server."),
                                       tr("No activation ID was returned."),
                                       QMessageBox::Critical);
 
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, live);
     return false;
   }
 
   if (!valid) {
     qWarning() << "[LemonSqueezy] Validation failed";
-    if (!cachedResponse)
+    if (live)
       Misc::Utilities::showMessageBox(tr("Could not validate your license at this time."),
                                       tr("Try again later."),
                                       QMessageBox::Warning);
 
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, live);
     return false;
   }
 
@@ -629,9 +632,9 @@ void Licensing::LemonSqueezy::updateAppNameFromVariant(const QString& variantNam
 
 /**
  * @brief Persists fresh license fields, installs the commercial token, and notifies QML.
- *        activatedChanged fires on the actual off->on flip, not the one-shot silent-validation
- *        flag, so a late re-activation (grace-period recovery, licensing.validate) still
- *        rebuilds every activation-gated consumer.
+ *        A server-validated license IS the entitlement: deriving the tier from the variant
+ *        string once turned a valid legacy key into an invalid token, so names only label
+ *        the token and an empty one falls back instead of failing the seal.
  */
 void Licensing::LemonSqueezy::applyValidatedLicense(const QJsonObject& json,
                                                     const bool cachedResponse)
@@ -655,11 +658,13 @@ void Licensing::LemonSqueezy::applyValidatedLicense(const QJsonObject& json,
 
   updateAppNameFromVariant(m_variantName);
 
+  static auto& machineId = MachineID::instance();
+
   CommercialToken token;
-  token.setVariantName(m_variantName);
-  token.setInstanceName(m_instanceName);
+  token.setVariantName(m_variantName.isEmpty() ? QStringLiteral(APP_NAME) : m_variantName);
+  token.setInstanceName(m_instanceName.isEmpty() ? machineId.machineId() : m_instanceName);
   token.setGraceDaysRemaining(cachedResponse ? m_gracePeriod : 30);
-  token.setFeatureTier(tierFromVariant(m_variantName));
+  token.setFeatureTier(FeatureTier::Pro);
   token.seal();
   CommercialToken::setCurrent(token);
 
@@ -701,7 +706,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
   const auto doc = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError) {
     qWarning() << "[LemonSqueezy] JSON parse error" << parseError.errorString();
-    clearLicenseCache(false, !cachedResponse);
+    clearLicenseCache(false, liveVerdict(cachedResponse));
     return;
   }
 

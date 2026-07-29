@@ -253,10 +253,13 @@ cached flags, benchmark mechanics) in
   on any increase. Full contract:
   [doc/claude/architecture/startup.md](doc/claude/architecture/startup.md).
 - **License-gated state must exist before `restoreLastProject()` or re-derive on
-  `activatedChanged`.** OfflineLicense/Trial are pinned in `instantiateCoreModules()` (their
-  ctors install the CommercialToken); anything baking `proWidgetsEnabled()` into derived
-  state at load time also needs a `LemonSqueezy::activatedChanged` hook, or late/async
-  activation ships fallback widgets (2026-07-09: Plot3D degraded to MultiPlot).
+  `activatedChanged`.** The licensing block (MachineID, LemonSqueezy, OfflineLicense, Trial)
+  is the FIRST thing `instantiateCoreModules()` builds after Translator (spec 0042): their
+  ctors install the CommercialToken, so entitlement is final-for-startup before any consumer
+  constructs. Anything baking `proWidgetsEnabled()` into derived state at load time still
+  needs a `LemonSqueezy::activatedChanged` hook (Trial/Offline transitions funnel into it;
+  consumer inventory: `doc/claude/specs/0042-license-token-hardening/consumers.md`), or
+  late/async activation ships fallback widgets (2026-07-09: Plot3D degraded to MultiPlot).
 
 ## Project Layout — the god files are split
 

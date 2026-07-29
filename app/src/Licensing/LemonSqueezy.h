@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <optional>
 #include <QDateTime>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
@@ -115,6 +114,7 @@ public slots:
   void activate();
   void validate();
   void deactivate();
+  void revalidateCachedLicense();
   void openCustomerPortal();
   void setLicense(const QString& license);
 
@@ -128,6 +128,7 @@ private:
   void readDeactivationResponse(const QByteArray& data);
   void readValidationResponse(const QByteArray& data, const bool cachedResponse);
 
+  [[nodiscard]] bool liveVerdict(const bool cachedResponse) const;
   void handleEmptyValidationResponse(const bool cachedResponse);
   [[nodiscard]] bool checkValidationRules(const QJsonObject& json, const bool cachedResponse);
   void updateAppNameFromVariant(const QString& variantName);
@@ -148,6 +149,7 @@ private:
   QString m_customerName;
   QString m_customerEmail;
   bool m_silentValidation;
+  bool m_revalidatingCache;
   QDateTime m_activationDate;
 
   int m_gracePeriod;
@@ -155,6 +157,6 @@ private:
   QSettings m_settings;
   SimpleCrypt m_simpleCrypt;
   QJsonObject m_licensingData;
-  std::optional<QNetworkAccessManager> m_manager;
+  QNetworkAccessManager m_manager;
 };
 }  // namespace Licensing

@@ -605,6 +605,56 @@ static void checkDuplicateAliases(QList<Finding>& out)
   capFindings(out);
 }
 
+/**
+ * @brief Returns true when the bus type is only available with a commercial entitlement.
+ */
+[[nodiscard]] static bool busRequiresCommercial(const int busType)
+{
+  switch (static_cast<SerialStudio::BusType>(busType)) {
+    case SerialStudio::BusType::UART:
+    case SerialStudio::BusType::Network:
+    case SerialStudio::BusType::BluetoothLE:
+      return false;
+    default:
+      return true;
+  }
+}
+
+/**
+ * @brief Flags project sources whose bus is commercial-gated while the session has no valid
+ *        entitlement: without this the device is silently never built and Connect stays dead
+ *        with no explanation (spec 0042). Runs on the 1 Hz link tick too, so the finding
+ *        clears within a second of a license or trial activating.
+ */
+static void checkUnlicensedSources(QList<Finding>& out)
+{
+  if (!projectAvailable())
+    return;
+
+  if (SerialStudio::activated())
+    return;
+
+  static auto& project = DataModel::ProjectModel::instance();
+  for (const auto& src : project.sources()) {
+    if (!busRequiresCommercial(src.busType))
+      continue;
+
+    const auto label = src.title.isEmpty() ? trProblem("Source %1").arg(src.sourceId) : src.title;
+    out.append(makeFinding(Misc::ProblemCenter::Warning,
+                           "unlicensed-source",
+                           trProblem("Data source requires Serial Studio Pro"),
+                           trProblem("\"%1\" uses a data source that needs a license or an "
+                                     "active trial, so it cannot connect in this session.")
+                             .arg(label),
+                           trProblem("Activate Serial Studio Pro or start the free trial, then "
+                                     "reconnect."),
+                           -1,
+                           QString()));
+  }
+
+  capFindings(out);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Registration
 //--------------------------------------------------------------------------------------------------
@@ -623,4 +673,7 @@ void Misc::ProjectCheckers::registerAll()
   center.registerChecker(QStringLiteral("project.reference"), triggers, checkDanglingReferences);
   center.registerChecker(QStringLiteral("project.numeric-range"), triggers, checkNumericRanges);
   center.registerChecker(QStringLiteral("project.alias"), triggers, checkDuplicateAliases);
+  center.registerChecker(QStringLiteral("project.licensing"),
+                         triggers | Misc::ProblemCenter::LinkSample,
+                         checkUnlicensedSources);
 }

@@ -650,22 +650,30 @@ void Misc::ModuleManager::initializeQmlInterface()
 
 #ifdef BUILD_COMMERCIAL
   auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
-  if (!lemonSqueezy.licensingData().isEmpty())
+  if (lemonSqueezy.isOnlineActivated())
     QMetaObject::invokeMethod(&lemonSqueezy, &Licensing::LemonSqueezy::validate);
+  else
+    QMetaObject::invokeMethod(&lemonSqueezy, &Licensing::LemonSqueezy::revalidateCachedLicense);
 #endif
 }
 
 /**
- * @brief Constructs every core singleton in a pinned, dependency-verified order (ProjectModel
- *        before AppState; ctor-edge proof in doc/claude/specs/0001-composition-root/).
- *        OfflineLicense/Trial precede restoreLastProject(): their ctors install the
- *        CommercialToken, and a late token bakes fallback widgets into auto workspaces.
+ * @brief Constructs every core singleton in a pinned, dependency-verified order (ctor-edge
+ *        proof in doc/claude/specs/0001-composition-root/). Licensing sits right after
+ *        Translator (its ctors emit tr() strings) so the CommercialToken is final-for-startup
+ *        before any entitlement consumer constructs or restores state (spec 0042).
  */
 void Misc::ModuleManager::instantiateCoreModules()
 {
   auto& ctx = SessionContext::current();
 
   (void)Misc::Translator::instance();
+#ifdef BUILD_COMMERCIAL
+  (void)Licensing::MachineID::instance();
+  (void)Licensing::LemonSqueezy::instance();
+  (void)Licensing::OfflineLicense::instance();
+  (void)Licensing::Trial::instance();
+#endif
   (void)Misc::TimerEvents::instance();
   (void)Misc::CommonFonts::instance();
   (void)Misc::WorkspaceManager::instance();
@@ -677,12 +685,6 @@ void Misc::ModuleManager::instantiateCoreModules()
   (void)DataModel::ControlScript::instance();
   ctx.adoptProjectModel(SessionContext::create<DataModel::ProjectModel>());
   ctx.adoptAppState(SessionContext::create<AppState>());
-#ifdef BUILD_COMMERCIAL
-  (void)Licensing::MachineID::instance();
-  (void)Licensing::LemonSqueezy::instance();
-  (void)Licensing::OfflineLicense::instance();
-  (void)Licensing::Trial::instance();
-#endif
   ctx.adoptFrameBuilder(SessionContext::create<DataModel::FrameBuilder>());
   ctx.adoptConnectionManager(SessionContext::create<IO::ConnectionManager>());
   ctx.adoptConsole(SessionContext::create<Console::Handler>());

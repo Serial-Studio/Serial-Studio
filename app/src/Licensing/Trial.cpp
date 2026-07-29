@@ -22,7 +22,6 @@
 
 #include "Trial.h"
 
-#include <QCoreApplication>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QNetworkReply>
@@ -82,9 +81,7 @@ Licensing::Trial::Trial()
           this,
           &Licensing::Trial::availableChanged);
 
-  m_manager.emplace();
-  connect(&*m_manager, &QNetworkAccessManager::finished, this, &Licensing::Trial::onServerReply);
-  connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { m_manager.reset(); });
+  connect(&m_manager, &QNetworkAccessManager::finished, this, &Licensing::Trial::onServerReply);
 
   m_crypt.setKey(machineId.machineSpecificKey());
   m_crypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
@@ -242,9 +239,6 @@ void Licensing::Trial::writeSettings()
  */
 void Licensing::Trial::fetchTrialState()
 {
-  if (!m_manager)
-    return;
-
   if (m_busy)
     return;
 
@@ -267,7 +261,7 @@ void Licensing::Trial::fetchTrialState()
   request.setTransferTimeout(15 * 1000);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-  (void)m_manager->post(request, payloadData);
+  (void)m_manager.post(request, payloadData);
 }
 
 /**
