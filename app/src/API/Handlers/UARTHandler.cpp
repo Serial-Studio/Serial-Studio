@@ -37,30 +37,13 @@
  */
 void API::Handlers::UARTHandler::registerLineSettings(CommandRegistry& registry)
 {
-  static const QJsonArray kBaudRates = {110,
-                                        150,
-                                        300,
-                                        1200,
-                                        2400,
-                                        4800,
-                                        9600,
-                                        19200,
-                                        38400,
-                                        57600,
-                                        115200,
-                                        230400,
-                                        256000,
-                                        460800,
-                                        576000,
-                                        921600};
-
   registry.registerCommand(
     QStringLiteral("io.uart.setBaudRate"),
     QStringLiteral("Set baud rate (params: baudRate)"),
-    API::makeSchema({API::enumProp(QStringLiteral("baudRate"),
-                                   QStringLiteral("Baud rate in bits per second"),
-                                   kBaudRates,
-                                   9600)}),
+    API::makeSchema({API::rangeProp(QStringLiteral("baudRate"),
+                                    QStringLiteral("Baud rate in bits per second (1-15000000)"),
+                                    1,
+                                    15000000)}),
     &setBaudRate);
   registry.registerCommand(
     QStringLiteral("io.uart.setParity"),

@@ -23,6 +23,10 @@
 
 #include <QJsonObject>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -39,13 +43,41 @@ static size_t idealSerialBufferSize(const qint32 baud)
 {
   size_t bytes = static_cast<size_t>(baud * 0.02);
   bytes        = std::max<size_t>(256, bytes);
-  bytes        = std::min<size_t>(16384, bytes);
+  bytes        = std::min<size_t>(524288, bytes);
 
   constexpr size_t granularity = 256;
   bytes                        = ((bytes + granularity - 1) / granularity) * granularity;
 
   return bytes;
 }
+
+#ifdef Q_OS_WIN
+/**
+ * @brief Expands the kernel-side serial FIFO and tunes COMM timeouts for
+ *        high-throughput reception. QSerialPort::setReadBufferSize() only
+ *        controls the Qt-level ring; the OS driver has its own FIFO that
+ *        overflows at high baud rates if left at the default (typically 4 KB).
+ */
+static void configureNativeBuffer(QSerialPort* port, const qint32 baud)
+{
+  if (!port || !port->isOpen())
+    return;
+
+  const auto handle = port->handle();
+  if (handle == INVALID_HANDLE_VALUE)
+    return;
+
+  const size_t buf = idealSerialBufferSize(baud);
+  SetupComm(handle, static_cast<DWORD>(buf), static_cast<DWORD>(buf));
+
+  COMMTIMEOUTS timeouts;
+  GetCommTimeouts(handle, &timeouts);
+  timeouts.ReadIntervalTimeout        = MAXDWORD;
+  timeouts.ReadTotalTimeoutMultiplier = 0;
+  timeouts.ReadTotalTimeoutConstant   = 0;
+  SetCommTimeouts(handle, &timeouts);
+}
+#endif
 
 /**
  * @brief Returns whether the open attempt in flight is the first of its sequence, which is what
@@ -275,7 +307,12 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
       return false;
 
     port()->setParity(parity());
-    port()->setBaudRate(baudRate());
+    if (!port()->setBaudRate(baudRate())) {
+      queueErrorBox(this,
+                    tr("Failed to set baud rate"),
+                    tr("Baud rate %1 rejected for port \"%2\": %3")
+                      .arg(QString::number(baudRate()), name, port()->errorString()));
+    }
     port()->setDataBits(dataBits());
     port()->setStopBits(stopBits());
     port()->setFlowControl(flowControl());
@@ -286,6 +323,9 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     if (port()->open(mode)) {
       connect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
       port()->setDataTerminalReady(dtrEnabled());
+#ifdef Q_OS_WIN
+      configureNativeBuffer(port(), baudRate());
+#endif
       return true;
     }
 
@@ -528,8 +568,14 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
     m_baudRate = rate;
     m_settings.setValue("IO_Serial_Baud_Rate", rate);
 
-    if (port())
-      port()->setBaudRate(baudRate());
+    if (port()) {
+      if (!port()->setBaudRate(baudRate())) {
+        queueErrorBox(this,
+                      tr("Failed to set baud rate"),
+                      tr("Baud rate %1 rejected: %2")
+                        .arg(QString::number(baudRate()), port()->errorString()));
+      }
+    }
 
     Q_EMIT baudRateChanged();
   }
