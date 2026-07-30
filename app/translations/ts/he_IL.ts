@@ -1,12 +1,72 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="he_IL" sourcelanguage="en_US">
 <context>
-    <name/>
+    <name></name>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
         <translation>מעורב</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
+        <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
+        <source>PEM private key matching the client certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
+        <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
+        <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,7 +121,7 @@
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
         <translation>זה מאפשר לעוזר ה-AI להגדיר מכשירים, לפתוח ולסגור חיבורים ולשלוח נתונים לחומרה שלך.
 
-כל פעולת מכשיר עדיין דורשת את אישורך המפורש לכל קריאה בצ'אט, גם כאשר אישור אוטומטי מופעל. הפעל זאת רק אם אתה סומך על ספק ה-AI המוגדר עם גישה לחומרה.</translation>
+כל פעולת מכשיר עדיין דורשת את אישורך המפורש לכל קריאה בצ&apos;אט, גם כאשר אישור אוטומטי מופעל. הפעל זאת רק אם אתה סומך על ספק ה-AI המוגדר עם גישה לחומרה.</translation>
     </message>
     <message>
         <location filename="../../src/AI/Assistant.cpp" line="639"/>
@@ -166,7 +226,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
         <translation>(המודל החזיר תגובה ריקה. נסה לנסח מחדש, לעבור למודל אחר, או לבדוק שהבקשה מותרת על-ידי מסנני הבטיחות של הספק.)</translation>
     </message>
     <message>
@@ -310,7 +370,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote's dataset layout does not match its announced hash</source>
+        <source>The remote&apos;s dataset layout does not match its announced hash</source>
         <translation>פריסת ה-dataset של המרוחק אינה תואמת את ה-hash שהוכרז</translation>
     </message>
     <message>
@@ -351,8 +411,8 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program "%1" not found in PATH</source>
-        <translation>תוכנית "%1" לא נמצאה ב-PATH</translation>
+        <source>Program &quot;%1&quot; not found in PATH</source>
+        <translation>תוכנית &quot;%1&quot; לא נמצאה ב-PATH</translation>
     </message>
 </context>
 <context>
@@ -388,7 +448,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>תוכנית המשתמשת ב-API המקומי של Serial Studio מבקשת לשלוח נתונים למכשיר המחובר. לאפשר ללקוחות API לכתוב למכשיר?</translation>
     </message>
     <message>
@@ -450,8 +510,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>תוכנה זו מסופקת 'כמות שהיא' ללא אחריות מכל סוג, מפורשת או משתמעת, לרבות אך לא רק אחריות לסחירות או התאמה למטרה מסוימת. בשום מקרה המחבר לא יהיה אחראי לנזקים הנובעים משימוש בתוכנה זו.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>תוכנה זו מסופקת &apos;כמות שהיא&apos; ללא אחריות מכל סוג, מפורשת או משתמעת, לרבות אך לא רק אחריות לסחירות או התאמה למטרה מסוימת. בשום מקרה המחבר לא יהיה אחראי לנזקים הנובעים משימוש בתוכנה זו.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -474,7 +534,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>הדגמת פרויקט</translation>
     </message>
     <message>
-        <source>What's New</source>
+        <source>What&apos;s New</source>
         <translation type="vanished">מה חדש</translation>
     </message>
     <message>
@@ -699,22 +759,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="383"/>
         <source>No widgets available.</source>
-        <translation>אין ווידג'טים זמינים.</translation>
+        <translation>אין ווידג&apos;טים זמינים.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="384"/>
         <source>No widgets match.</source>
-        <translation>אין ווידג'טים תואמים.</translation>
+        <translation>אין ווידג&apos;טים תואמים.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="401"/>
         <source>%1 widgets</source>
-        <translation>%1 ווידג'טים</translation>
+        <translation>%1 ווידג&apos;טים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="402"/>
         <source>%1 of %2 widgets</source>
-        <translation>%1 מתוך %2 ווידג'טים</translation>
+        <translation>%1 מתוך %2 ווידג&apos;טים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="406"/>
@@ -756,7 +816,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="83"/>
         <source>Tachometer</source>
-        <translation>מד סל"ד</translation>
+        <translation>מד סל&quot;ד</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="85"/>
@@ -1001,7 +1061,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">החל ערכה מוגדרת</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
         <translation type="vanished">החלפת התחומים הנוכחיים בערכה המוגדרת הנבחרת, מותאמת לטווח של מערך נתונים זה.</translation>
     </message>
     <message>
@@ -1115,12 +1175,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="79"/>
         <source>New chat</source>
-        <translation>צ'אט חדש</translation>
+        <translation>צ&apos;אט חדש</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="125"/>
         <source>Toggle chat list</source>
-        <translation>הצג/הסתר רשימת צ'אטים</translation>
+        <translation>הצג/הסתר רשימת צ&apos;אטים</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="238"/>
@@ -1164,7 +1224,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio's features</source>
+        <source>Help me discover Serial Studio&apos;s features</source>
         <translation>עזור לי לגלות את התכונות של Serial Studio</translation>
     </message>
     <message>
@@ -1270,7 +1330,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
         <source>Suggest dashboard widgets for my data</source>
-        <translation>הצעת ווידג'טים למרכז הבקרה עבור הנתונים שלי</translation>
+        <translation>הצעת ווידג&apos;טים למרכז הבקרה עבור הנתונים שלי</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="449"/>
@@ -1280,7 +1340,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
         <source>Add a painter widget for a custom visualization</source>
-        <translation>הוספת ווידג'ט ציור לוויזואליזציה מותאמת אישית</translation>
+        <translation>הוספת ווידג&apos;ט ציור לוויזואליזציה מותאמת אישית</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
@@ -1329,13 +1389,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder "%1" - readable this session</source>
-        <translation>התיקייה "%1" נוספה - ניתנת לקריאה בהפעלה זו</translation>
+        <source>Added folder &quot;%1&quot; - readable this session</source>
+        <translation>התיקייה &quot;%1&quot; נוספה - ניתנת לקריאה בהפעלה זו</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added "%1" - readable this session</source>
-        <translation>"%1" נוסף - ניתן לקריאה בהפעלה זו</translation>
+        <source>Added &quot;%1&quot; - readable this session</source>
+        <translation>&quot;%1&quot; נוסף - ניתן לקריאה בהפעלה זו</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1350,7 +1410,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="838"/>
         <source>Start fresh chat</source>
-        <translation>התחל צ'אט חדש</translation>
+        <translation>התחל צ&apos;אט חדש</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="889"/>
@@ -1370,7 +1430,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="935"/>
         <source>Continuing from your previous chat. Its recent context was carried over.</source>
-        <translation>ממשיך מהצ'אט הקודם שלך. ההקשר האחרון שלו הועבר.</translation>
+        <translation>ממשיך מהצ&apos;אט הקודם שלך. ההקשר האחרון שלו הועבר.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="1014"/>
@@ -1627,7 +1687,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Output Widget</source>
-        <translation>לפני מחיקת ווידג'ט פלט</translation>
+        <translation>לפני מחיקת ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
@@ -1683,7 +1743,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>שינוי כותרת מ-"%1" ל-"%2". מבנה הקבוצה ללא שינוי.</translation>
+        <translation>שינוי כותרת מ-&quot;%1&quot; ל-&quot;%2&quot;. מבנה הקבוצה ללא שינוי.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1775,7 +1835,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
         <translation>מודד כמה מהר המחשב יכול לחלץ, לנתח ולהציג מסגרות דרך צינור הנתונים של Serial Studio.</translation>
     </message>
     <message>
@@ -1786,7 +1846,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="179"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
-        <translation>כל שלב רץ במלוא העוצמה בחוט הראשי, כך שהחלון מפסיק להגיב עד לסיומו. הפרויקט הנוכחי שלך נטען מחדש אוטומטית כאשר הבנצ'מרק מסתיים.</translation>
+        <translation>כל שלב רץ במלוא העוצמה בחוט הראשי, כך שהחלון מפסיק להגיב עד לסיומו. הפרויקט הנוכחי שלך נטען מחדש אוטומטית כאשר הבנצ&apos;מרק מסתיים.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="236"/>
@@ -1836,7 +1896,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="351"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
-        <translation>בחר לפחות שלב אחד וסוג נתונים אחד כדי להריץ בנצ'מרק.</translation>
+        <translation>בחר לפחות שלב אחד וסוג נתונים אחד כדי להריץ בנצ&apos;מרק.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="210"/>
@@ -2231,7 +2291,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio יעודכן לעבודה עם מערכת הפעלה זו ברגע ש-QT תתמוך בה רשמית</translation>
     </message>
 </context>
@@ -2418,13 +2478,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="44"/>
         <source>Chats</source>
-        <translation>צ'אטים</translation>
+        <translation>צ&apos;אטים</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="57"/>
         <location filename="../../qml/AI/ChatSidebar.qml" line="115"/>
         <source>New chat</source>
-        <translation>צ'אט חדש</translation>
+        <translation>צ&apos;אט חדש</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="125"/>
@@ -2439,7 +2499,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="158"/>
         <source>Continue in new chat</source>
-        <translation>המשך בצ'אט חדש</translation>
+        <translation>המשך בצ&apos;אט חדש</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="165"/>
@@ -2449,7 +2509,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="204"/>
         <source>Rename chat</source>
-        <translation>שנה שם צ'אט</translation>
+        <translation>שנה שם צ&apos;אט</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="224"/>
@@ -2519,7 +2579,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="30"/>
         <source>AI Wiki &amp; Chat</source>
-        <translation>Wiki וצ'אט AI</translation>
+        <translation>Wiki וצ&apos;אט AI</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="31"/>
@@ -2689,7 +2749,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
         <source>Add a compass widget for directional data</source>
-        <translation>הוספת ווידג'ט מצפן לנתוני כיוון</translation>
+        <translation>הוספת ווידג&apos;ט מצפן לנתוני כיוון</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="65"/>
@@ -2704,7 +2764,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="67"/>
         <source>Add a gauge widget for numeric data</source>
-        <translation>הוספת ווידג'ט מד לנתונים מספריים</translation>
+        <translation>הוספת ווידג&apos;ט מד לנתונים מספריים</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="68"/>
@@ -2719,12 +2779,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="70"/>
         <source>Add a group for 3-axis gyroscope data</source>
-        <translation>הוסף קבוצה לנתוני ג'ירוסקופ תלת-צירי</translation>
+        <translation>הוסף קבוצה לנתוני ג&apos;ירוסקופ תלת-צירי</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="71"/>
         <source>Add a map widget for GPS data</source>
-        <translation>הוסף וידג'ט מפה לנתוני GPS</translation>
+        <translation>הוסף וידג&apos;ט מפה לנתוני GPS</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="72"/>
@@ -3587,7 +3647,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance's dashboard over the network</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
         <translation>צפה בלוח הבקרה של מופע Serial Studio אחר דרך הרשת</translation>
     </message>
     <message>
@@ -3899,7 +3959,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler's number</source>
+        <source>Euler&apos;s number</source>
         <translation>מספר אוילר</translation>
     </message>
     <message>
@@ -4290,7 +4350,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="421"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>ווידג'טים חלופיים פעילים. רכוש רישיון לפונקציונליות מלאה.</translation>
+        <translation>ווידג&apos;טים חלופיים פעילים. רכוש רישיון לפונקציונליות מלאה.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="751"/>
@@ -4300,12 +4360,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="765"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
-        <translation>השתמש בשורת החיפוש כדי למצוא ולהוסיף ווידג'טים, או לחץ לחיצה ימנית על ווידג'ט בסביבת עבודה אחרת כדי להוסיף אותו לכאן.</translation>
+        <translation>השתמש בשורת החיפוש כדי למצוא ולהוסיף ווידג&apos;טים, או לחץ לחיצה ימנית על ווידג&apos;ט בסביבת עבודה אחרת כדי להוסיף אותו לכאן.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="780"/>
         <source>Search Widgets</source>
-        <translation>חיפוש ווידג'טים</translation>
+        <translation>חיפוש ווידג&apos;טים</translation>
     </message>
 </context>
 <context>
@@ -5107,11 +5167,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">ערך</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">הזן נתוני מסגרת למעלה, הפעל מצב HEX במידת הצורך, ולאחר מכן לחץ על "הערך" כדי להריץ את מנתח המסגרות.
+        <translation type="vanished">הזן נתוני מסגרת למעלה, הפעל מצב HEX במידת הצורך, ולאחר מכן לחץ על &quot;הערך&quot; כדי להריץ את מנתח המסגרות.
 
 דוגמה (טקסט): a,b,c,d,e,f
 דוגמה (HEX):  48 65 6C 6C 6F</translation>
@@ -5343,10 +5403,10 @@ Any unsaved changes are lost. Continue?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>"%1" expects %2 dataset(s); the current group has %3.
+        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template's defaults?</source>
-        <translation>"%1" מצפה ל־%2 מערכי נתונים; הקבוצה הנוכחית מכילה %3.
+Add %4 dataset(s) using the template&apos;s defaults?</source>
+        <translation>&quot;%1&quot; מצפה ל־%2 מערכי נתונים; הקבוצה הנוכחית מכילה %3.
 
 להוסיף %4 מערכי נתונים עם ברירות המחדל של התבנית?</translation>
     </message>
@@ -5585,47 +5645,47 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>סיסמה לאימות מול ה-Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="335"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="412"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="346"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="423"/>
         <source>Use SSL/TLS</source>
         <translation>שימוש ב-SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="347"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="424"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>העברת חיבור ה-Broker דרך TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="360"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="437"/>
         <source>Protocol</source>
         <translation>פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="361"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="438"/>
         <source>Negotiated TLS protocol family</source>
         <translation>משפחת פרוטוקול TLS המוסכמת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="371"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="448"/>
         <source>Peer Verify</source>
         <translation>אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="372"/>
-        <source>How strictly the broker's certificate chain is validated</source>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
+        <source>How strictly the broker&apos;s certificate chain is validated</source>
         <translation>רמת הקפדה באימות שרשרת אישורי ה-Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="382"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="459"/>
         <source>Verify Depth</source>
         <translation>עומק אימות</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="383"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="460"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>אורך מרבי של שרשרת אישורים מקובל (0 = ללא הגבלה)</translation>
     </message>
@@ -5781,12 +5841,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="347"/>
         <source>Web address to load in this widget</source>
-        <translation>כתובת אינטרנט לטעינה בווידג'ט זה</translation>
+        <translation>כתובת אינטרנט לטעינה בווידג&apos;ט זה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="387"/>
         <source>Composite Widget</source>
-        <translation>וידג'ט מורכב</translation>
+        <translation>וידג&apos;ט מורכב</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="388"/>
@@ -6150,8 +6210,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
-        <translation>דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג'ט הציור עדיין יכול לקרוא את ערכיו</translation>
+        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
+        <translation>דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג&apos;ט הציור עדיין יכול לקרוא את ערכיו</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
@@ -6211,12 +6271,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
-        <translation>גבול תחתון של טווח ערכי מערך הנתונים; ווידג'טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
+        <translation>גבול תחתון של טווח ערכי מערך הנתונים; ווידג&apos;טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
-        <translation>גבול עליון של טווח ערכי מערך הנתונים; ווידג'טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
+        <translation>גבול עליון של טווח ערכי מערך הנתונים; ווידג&apos;טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
@@ -6226,7 +6286,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Enable Plot Widget</source>
-        <translation>הפעלת ווידג'ט גרף</translation>
+        <translation>הפעלת ווידג&apos;ט גרף</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
@@ -6430,7 +6490,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
-        <translation>מספר הסימונים הראשיים על סולם החוגה (0 = התאמה אוטומטית לגודל הווידג'ט)</translation>
+        <translation>מספר הסימונים הראשיים על סולם החוגה (0 = התאמה אוטומטית לגודל הווידג&apos;ט)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
@@ -6448,7 +6508,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <source>Toggle the boxed numeric readout that sits below or beside the widget</source>
-        <translation type="vanished">הפעל או כבה את התצוגה המספרית הממוסגרת שנמצאת מתחת או לצד הווידג'ט</translation>
+        <translation type="vanished">הפעל או כבה את התצוגה המספרית הממוסגרת שנמצאת מתחת או לצד הווידג&apos;ט</translation>
     </message>
     <message>
         <source>Alarm Settings</source>
@@ -6705,7 +6765,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="709"/>
         <source>Gyroscope</source>
-        <translation>ג'ירוסקופ</translation>
+        <translation>ג&apos;ירוסקופ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="710"/>
@@ -6730,7 +6790,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation>וידג&apos;ט ציור</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="715"/>
@@ -6889,7 +6949,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="463"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="464"/>
         <source>Dashboard Widgets</source>
-        <translation>ווידג'טים של לוח הבקרה</translation>
+        <translation>ווידג&apos;טים של לוח הבקרה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="852"/>
@@ -6983,12 +7043,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="806"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
-        <translation>להסיר הפניה אחת לווידג'ט שקבוצת היעד או מערך הנתונים שלו אינם קיימים עוד?</translation>
+        <translation>להסיר הפניה אחת לווידג&apos;ט שקבוצת היעד או מערך הנתונים שלו אינם קיימים עוד?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="807"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
-        <translation>להסיר %1 הפניות לווידג'טים שקבוצות היעד או מערכי הנתונים שלהם אינם קיימים עוד?</translation>
+        <translation>להסיר %1 הפניות לווידג&apos;טים שקבוצות היעד או מערכי הנתונים שלהם אינם קיימים עוד?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="812"/>
@@ -7034,8 +7094,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias "%1" is already in use</source>
-        <translation>הכינוי "%1" כבר בשימוש</translation>
+        <source>Alias &quot;%1&quot; is already in use</source>
+        <translation>הכינוי &quot;%1&quot; כבר בשימוש</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="646"/>
@@ -7049,13 +7109,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias "%1" contains only digits</source>
-        <translation>הכינוי "%1" מכיל ספרות בלבד</translation>
+        <source>Alias &quot;%1&quot; contains only digits</source>
+        <translation>הכינוי &quot;%1&quot; מכיל ספרות בלבד</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>סקריפטים חייבים לצטט אותו כמחרוזת, למשל getDataset("%1"); ארגומנט מספרי נקרא כ-uniqueId, לא ככינוי זה.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>סקריפטים חייבים לצטט אותו כמחרוזת, למשל getDataset(&quot;%1&quot;); ארגומנט מספרי נקרא כ-uniqueId, לא ככינוי זה.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7080,7 +7140,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="1003"/>
         <source>Edit Output Widget</source>
-        <translation>עריכת ווידג'ט פלט</translation>
+        <translation>עריכת ווידג&apos;ט פלט</translation>
     </message>
 </context>
 <context>
@@ -7130,7 +7190,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="333"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
-        <translation>קבוצות מארגנות מערכי נתונים לווידג'טים בלוח הבקרה. השתמש בלחצן קבוצה בסרגל הכלים למעלה כדי ליצור אחת, ולאחר מכן הוסף אליה מערכי נתונים.</translation>
+        <translation>קבוצות מארגנות מערכי נתונים לווידג&apos;טים בלוח הבקרה. השתמש בלחצן קבוצה בסרגל הכלים למעלה כדי ליצור אחת, ולאחר מכן הוסף אליה מערכי נתונים.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="337"/>
@@ -7296,8 +7356,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source "%1"?</source>
-        <translation>האם למחוק את מקור הנתונים "%1"?</translation>
+        <source>Do you want to delete data source &quot;%1&quot;?</source>
+        <translation>האם למחוק את מקור הנתונים &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7453,13 +7513,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>הפרויקט שלך השתמש בפונקציית מנתח מסגרות מדור קודם עם ארגומנט 'separator'. היא הומרה אוטומטית לפורמט החדש.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>הפרויקט שלך השתמש בפונקציית מנתח מסגרות מדור קודם עם ארגומנט &apos;separator&apos;. היא הומרה אוטומטית לפורמט החדש.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>למחוק את הקבוצה "%1"?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>למחוק את הקבוצה &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7471,13 +7531,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>למחוק את הפעולה "%1"?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>למחוק את הפעולה &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>למחוק את מערך הנתונים "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>למחוק את מערך הנתונים &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7553,17 +7613,17 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="879"/>
         <source>Move Output Widget</source>
-        <translation>העברת ווידג'ט פלט</translation>
+        <translation>העברת ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1020"/>
         <source>Change Output Widget Type</source>
-        <translation>שינוי סוג ווידג'ט פלט</translation>
+        <translation>שינוי סוג ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1050"/>
         <source>Change Output Widget Icon</source>
-        <translation>שינוי סמל ווידג'ט פלט</translation>
+        <translation>שינוי סמל ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1074"/>
@@ -7579,7 +7639,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1089"/>
         <source>Add Output Widget</source>
-        <translation>הוספת ווידג'ט פלט</translation>
+        <translation>הוספת ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1124"/>
@@ -7608,24 +7668,24 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget "%1"?</source>
-        <translation>למחוק את וידג'ט הפלט "%1"?</translation>
+        <source>Do you want to delete output widget &quot;%1&quot;?</source>
+        <translation>למחוק את וידג&apos;ט הפלט &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
         <source>Delete Output Widget</source>
-        <translation>מחיקת ווידג'ט פלט</translation>
+        <translation>מחיקת ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1225"/>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2040"/>
         <source>Duplicate Output Widget</source>
-        <translation>שכפול ווידג'ט פלט</translation>
+        <translation>שכפול ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1258"/>
         <source>Edit Output Widget</source>
-        <translation>עריכת ווידג'ט פלט</translation>
+        <translation>עריכת ווידג&apos;ט פלט</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1281"/>
@@ -7746,12 +7806,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1639"/>
         <source>Change Group Widget</source>
-        <translation>שינוי ווידג'ט קבוצה</translation>
+        <translation>שינוי ווידג&apos;ט קבוצה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1686"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>האם לשנות את הווידג'ט ברמת הקבוצה?</translation>
+        <translation>האם לשנות את הווידג&apos;ט ברמת הקבוצה?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1688"/>
@@ -7770,7 +7830,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1773"/>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1773"/>
         <source>Gyro %1</source>
-        <translation>ג'ירוסקופ %1</translation>
+        <translation>ג&apos;ירוסקופ %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1788"/>
@@ -7905,8 +7965,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete "%1"?</source>
-        <translation>למחוק את "%1"?</translation>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation>למחוק את &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -7997,8 +8057,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder "%1"?</source>
-        <translation>למחוק את התיקייה "%1"?</translation>
+        <source>Delete folder &quot;%1&quot;?</source>
+        <translation>למחוק את התיקייה &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8066,7 +8126,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
         <translation>כיבוי התאמה אישית מבטל את העריכות ובונה מחדש את רשימת סביבות העבודה מקבוצות הפרויקט.</translation>
     </message>
     <message>
@@ -8517,7 +8577,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="150"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
-        <translation>משתמש בווידג'טים חלופיים. רכוש רישיון לפתיחת הפונקציונליות המלאה.</translation>
+        <translation>משתמש בווידג&apos;טים חלופיים. רכוש רישיון לפתיחת הפונקציונליות המלאה.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="178"/>
@@ -8557,7 +8617,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <source>Widgets</source>
-        <translation>ווידג'טים</translation>
+        <translation>ווידג&apos;טים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
@@ -8577,7 +8637,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="261"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>החלף ווידג'ט מד לתצוגה בסגנון אנלוגי</translation>
+        <translation>החלף ווידג&apos;ט מד לתצוגה בסגנון אנלוגי</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="273"/>
@@ -8587,7 +8647,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="277"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>החלף ווידג'ט מצפן עבור נתוני כיוון</translation>
+        <translation>החלף ווידג&apos;ט מצפן עבור נתוני כיוון</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="288"/>
@@ -8597,11 +8657,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="292"/>
         <source>Toggle analog meter (half-arc) widget</source>
-        <translation>החלף ווידג'ט מד אנלוגי (חצי קשת)</translation>
+        <translation>החלף ווידג&apos;ט מד אנלוגי (חצי קשת)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
         <translation>הגדרת טווחי ערכים צבעוניים עם דרגות חומרה עבור מד או LED של מערך נתונים זה.</translation>
     </message>
     <message>
@@ -8620,7 +8680,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <source>Toggle thermometer widget for temperature data</source>
-        <translation type="vanished">החלף ווידג'ט מדחום עבור נתוני טמפרטורה</translation>
+        <translation type="vanished">החלף ווידג&apos;ט מדחום עבור נתוני טמפרטורה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="304"/>
@@ -8643,7 +8703,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>תחומי אזעקה</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
         <translation type="vanished">הגדרת טווחי ערכים צבעוניים עם דרגות חומרה עבור מד מערך נתונים זה.</translation>
     </message>
     <message>
@@ -8766,8 +8826,8 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>לחץ "אישור" כדי להתחיל בהתקנת העדכון</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>לחץ &quot;אישור&quot; כדי להתחיל בהתקנת העדכון</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -8781,8 +8841,8 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>לחץ על הלחצן "פתח" כדי להחיל את העדכון</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>לחץ על הלחצן &quot;פתח&quot; כדי להחיל את העדכון</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -9020,7 +9080,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="37"/>
         <source>Allow Widget Extension?</source>
-        <translation>לאפשר הרחבת ווידג'ט?</translation>
+        <translation>לאפשר הרחבת ווידג&apos;ט?</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="164"/>
@@ -9059,7 +9119,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don't Allow</source>
+        <source>Don&apos;t Allow</source>
         <translation>אל תאפשר</translation>
     </message>
     <message>
@@ -9271,12 +9331,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="86"/>
         <source>This widget is installed but has not been allowed to run.</source>
-        <translation>ווידג'ט זה מותקן אך לא הורשה לפעול.</translation>
+        <translation>ווידג&apos;ט זה מותקן אך לא הורשה לפעול.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="89"/>
         <source>This widget could not be loaded.</source>
-        <translation>לא ניתן לטעון ווידג'ט זה.</translation>
+        <translation>לא ניתן לטעון ווידג&apos;ט זה.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="95"/>
@@ -9294,7 +9354,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="35"/>
         <source>Widget Settings</source>
-        <translation>הגדרות ווידג'ט</translation>
+        <translation>הגדרות ווידג&apos;ט</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="57"/>
@@ -9304,12 +9364,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="191"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
-        <translation>הגדרות אלו מוגדרות על ידי חבילת הווידג'ט ונשמרות בפרויקט.</translation>
+        <translation>הגדרות אלו מוגדרות על ידי חבילת הווידג&apos;ט ונשמרות בפרויקט.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="192"/>
         <source>This widget declares no settings.</source>
-        <translation>ווידג'ט זה אינו מגדיר הגדרות.</translation>
+        <translation>ווידג&apos;ט זה אינו מגדיר הגדרות.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="262"/>
@@ -9394,7 +9454,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>לא זמין בחיבור מרוחק. Widget זה דורש את זרם הדגימות הגולמי מהמרוחק, שאינו נישא על ידי שיקוף לוח הבקרה.</translation>
     </message>
     <message>
@@ -10492,7 +10552,7 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="83"/>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="85"/>
         <source>Gyroscope</source>
-        <translation>ג'ירוסקופ</translation>
+        <translation>ג&apos;ירוסקופ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="91"/>
@@ -10516,7 +10576,7 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="115"/>
         <location filename="../../qml/ProjectEditor/Views/GroupTemplateMenu.qml" line="117"/>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation>וידג&apos;ט ציור</translation>
     </message>
 </context>
 <context>
@@ -10598,7 +10658,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="207"/>
         <source>Add a gauge widget for analog-style visualization</source>
-        <translation>הוסף ווידג'ט מד להצגה בסגנון אנלוגי</translation>
+        <translation>הוסף ווידג&apos;ט מד להצגה בסגנון אנלוגי</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="214"/>
@@ -10618,7 +10678,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="228"/>
         <source>Add an analog meter (half-arc) widget</source>
-        <translation>הוספת ווידג'ט מד אנלוגי (חצי קשת)</translation>
+        <translation>הוספת ווידג&apos;ט מד אנלוגי (חצי קשת)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="253"/>
@@ -10631,7 +10691,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <source>Add a thermometer widget for temperature data</source>
-        <translation type="vanished">הוספת ווידג'ט מדחום לנתוני טמפרטורה</translation>
+        <translation type="vanished">הוספת ווידג&apos;ט מדחום לנתוני טמפרטורה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="235"/>
@@ -10705,7 +10765,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
         <source>Edit the JavaScript that draws this painter widget</source>
-        <translation>ערוך את קוד JavaScript שמצייר את ווידג'ט הציור הזה</translation>
+        <translation>ערוך את קוד JavaScript שמצייר את ווידג&apos;ט הציור הזה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="339"/>
@@ -10733,7 +10793,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="35"/>
         <source>Dashboard Widgets</source>
-        <translation>וידג'טים של לוח הבקרה</translation>
+        <translation>וידג&apos;טים של לוח הבקרה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupsView.qml" line="147"/>
@@ -10809,7 +10869,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
-        <translation>חיבור ג'ויסטיקים, הגאים, הגה הגה, בקרי טיסה והתקני USB ממחלקת HID אחרים.</translation>
+        <translation>חיבור ג&apos;ויסטיקים, הגאים, הגה הגה, בקרי טיסה והתקני USB ממחלקת HID אחרים.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
@@ -10868,97 +10928,97 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="349"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="350"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
         <source>Network Socket</source>
         <translation>Network Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="351"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="353"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
         <source>Audio</source>
         <translation>אודיו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="354"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="355"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
         <source>CAN Bus</source>
         <translation>אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="356"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
         <source>USB Device</source>
         <translation>התקן USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="357"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
         <source>HID Device</source>
         <translation>התקן HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="358"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
         <source>Process</source>
         <translation>תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="359"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
         <source>MQTT Subscriber</source>
         <translation>מנוי MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="767"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
         <source>Your trial period has ended.</source>
         <translation>תקופת הניסיון הסתיימה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="768"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>להמשך שימוש ב-Serial Studio, יש להפעיל את הרישיון.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
         <source>Connection Lost</source>
         <translation>החיבור אבד</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1461"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
         <translation>החיבור אבד ולא ניתן היה לשחזרו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1480"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
         <translation>%1: קישור אבד</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1481"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
         <translation>מנסה להתחבר מחדש אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1487"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
         <translation>%1: קישור שוחזר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1488"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
         <translation>החיבור התאושש אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1503"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
         <translation>התקן %1</translation>
     </message>
@@ -11034,77 +11094,77 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
         <source>BLE I/O Module Error</source>
         <translation>שגיאת מודול BLE קלט/פלט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="982"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
         <source>Select Device</source>
         <translation>בחר התקן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="993"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
         <source>Select Service</source>
         <translation>בחר שירות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1004"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
         <source>Select Characteristic</source>
         <translation>בחר מאפיין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1214"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
         <source>Error while configuring BLE service</source>
         <translation>שגיאה בעת הגדרת שירות BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
         <source>Operation error</source>
         <translation>שגיאת פעולה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1508"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
         <source>Characteristic write error</source>
         <translation>שגיאת כתיבת מאפיין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1511"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
         <source>Descriptor write error</source>
         <translation>שגיאת כתיבת מתאר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
         <source>Characteristic read error</source>
         <translation>שגיאת קריאת מאפיין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
         <source>Descriptor read error</source>
         <translation>שגיאת קריאת מתאר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1756"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
         <source>BLE Device</source>
         <translation>התקן BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
         <source>Service</source>
         <translation>שירות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
         <source>Notify Characteristic</source>
         <translation>מאפיין התראה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1778"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
         <source>Characteristic</source>
         <translation>מאפיין</translation>
     </message>
@@ -11155,7 +11215,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
         <translation>לא נמצאו תוספי CAN bus במערכת.
 
-ב-Windows, יש להתקין מנהלי התקן לחומרת CAN (PEAK, VECTOR וכו').</translation>
+ב-Windows, יש להתקין מנהלי התקן לחומרת CAN (PEAK, VECTOR וכו&apos;).</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="338"/>
@@ -11244,18 +11304,18 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>התקן &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;מנהלי התקן PEAK CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>התקן &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;מנהלי התקן PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>התקן &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;מנהלי התקן VECTOR CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>התקן &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;מנהלי התקן VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>התקן &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;מנהלי התקן SysTec CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>התקן &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;מנהלי התקן SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
@@ -11393,15 +11453,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
         <source>
 
-Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
-        <translation>וודא שהמשתמש שלך נמצא בקבוצת 'plugdev' או שכלל udev מעניק גישה להתקן זה.
+Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
+        <translation>וודא שהמשתמש שלך נמצא בקבוצת &apos;plugdev&apos; או שכלל udev מעניק גישה להתקן זה.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open "%1"</source>
-        <translation>נכשל לפתוח "%1"</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>נכשל לפתוח &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
@@ -11427,72 +11487,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 או חדש יותר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 או חדש יותר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>Any Protocol</source>
         <translation>כל פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
         <source>Secure Protocols Only</source>
         <translation>פרוטוקולים מאובטחים בלבד</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>Query Peer</source>
         <translation>שאילתת עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>Verify Peer</source>
         <translation>אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Auto Verify Peer</source>
         <translation>אימות עמית אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="249"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>תכונת MQTT דורשת רישיון מסחרי</translation>
     </message>
@@ -11501,196 +11561,241 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">הרשמה למתווך MQTT זמינה רק עם רישיון מסחרי תקף של Serial Studio (רמת Hobbyist ומעלה).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>הרשמה למתווך MQTT זמינה רק עם רישיון Serial Studio תקף או תקופת ניסיון פעילה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
         <source>Use System Database</source>
         <translation>השתמש במסד נתונים של המערכת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="597"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
         <source>Load From Folder…</source>
         <translation>טען מתיקייה…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="630"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
         <source>Select PEM Certificates Directory</source>
         <translation>בחר ספריית אישורי PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
         <source>Hostname</source>
         <translation>שם מארח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
         <source>Port</source>
         <translation>פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
         <source>Topic Filter</source>
         <translation>מסנן נושא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
         <source>Client ID</source>
         <translation>מזהה לקוח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
         <source>Username</source>
         <translation>שם משתמש</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
         <source>Password</source>
         <translation>סיסמה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="929"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
         <source>MQTT Version</source>
         <translation>גרסת MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="953"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
         <source>Auto Keep Alive</source>
         <translation>Keep Alive אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS מופעל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>SSL Protocol</source>
         <translation>פרוטוקול SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>Peer Verify Mode</source>
         <translation>מצב אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Peer Verify Depth</source>
         <translation>עומק אימות עמית</translation>
     </message>
     <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <source>Client Certificate (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <source>Private Key (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
         <source>MQTT Subscription Error</source>
-        <translation type="vanished">שגיאת מנוי MQTT</translation>
+        <translation>שגיאת מנוי MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="372"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>המנוי לנושא "%1" נכשל.</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>המנוי לנושא &quot;%1&quot; נכשל.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="401"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The broker closed the connection.</source>
-        <translation>ה-Broker סגר את החיבור.</translation>
+        <translation type="vanished">ה-Broker סגר את החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>גרסת פרוטוקול MQTT לא חוקית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>הברוקר דחה את גרסת פרוטוקול MQTT שהוגדרה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1123"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
         <source>Client ID Rejected</source>
         <translation>מזהה לקוח נדחה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>הברוקר דחה את מזהה הלקוח. נסה מזהה אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1127"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
         <source>MQTT Server Unavailable</source>
         <translation>שרת MQTT לא זמין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>הברוקר אינו זמין כעת. נסה שוב מאוחר יותר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
         <source>Authentication Error</source>
         <translation>שגיאת אימות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>פרטי הגישה שסופקו נדחו על ידי הברוקר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1135"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
         <source>Authorization Error</source>
         <translation>שגיאת הרשאה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
         <source>Account lacks permission for this operation.</source>
         <translation>לחשבון אין הרשאה לפעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1139"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
         <source>Network or Transport Error</source>
         <translation>שגיאת רשת או תעבורה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>בעיה בשכבת הרשת/תעבורה בעת התחברות ל-Broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1143"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
         <source>MQTT Protocol Violation</source>
         <translation>הפרת פרוטוקול MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1144"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>ה-Broker דיווח על הפרת פרוטוקול וסגר את החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
         <source>MQTT 5 Error</source>
         <translation>שגיאת MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>אירעה שגיאה ברמת פרוטוקול MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1151"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
         <source>MQTT Error</source>
         <translation>שגיאת MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>אירעה שגיאת MQTT בלתי צפויה.</translation>
     </message>
@@ -11698,239 +11803,238 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Invalid Serial Port</source>
         <translation>יציאה טורית לא חוקית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
-        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
-        <translation>היציאה הטורית שנבחרה "%1" אינה זמינה עוד. יש לרענן את רשימת הפורטים ולנסות שוב.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
+        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
+        <translation>היציאה הטורית שנבחרה &quot;%1&quot; אינה זמינה עוד. יש לרענן את רשימת הפורטים ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
         <source>Modbus Initialization Failed</source>
         <translation>אתחול Modbus נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>לא ניתן ליצור התקן Modbus. בדוק את תצורת המערכת ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
         <source>Modbus Connection Failed</source>
         <translation>חיבור Modbus נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="574"/>
-        <source>Unable to connect to "%1". Check your connection settings.</source>
-        <translation>לא ניתן להתחבר אל "%1". בדוק את הגדרות החיבור.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
+        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
+        <translation>לא ניתן להתחבר אל &quot;%1&quot;. בדוק את הגדרות החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>The Modbus client refused to start the connection.</source>
-        <translation>לקוח ה-Modbus סירב להתחיל את החיבור.</translation>
+        <translation type="vanished">לקוח ה-Modbus סירב להתחיל את החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="575"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="708"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
         <source>Even</source>
         <translation>זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="710"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
         <source>Odd</source>
         <translation>אי-זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="711"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Space</source>
         <translation>רווח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Mark</source>
         <translation>סימון</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="764"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
         <source>Holding Registers (0x03)</source>
         <translation>רגיסטרי החזקה (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
         <source>Input Registers (0x04)</source>
         <translation>רגיסטרי קלט (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
         <source>Coils (0x01)</source>
         <translation>סלילים (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>כניסות בדידות (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="949"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
         <source>No register groups configured</source>
         <translation>לא הוגדרו קבוצות רגיסטרים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>יש להוסיף לפחות קבוצת רגיסטרים אחת לפני יצירת פרויקט.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="952"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="990"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
         <source>Modbus Project Generator</source>
         <translation>מחולל פרויקט Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
         <source>Failed to load generated project</source>
         <translation>טעינת הפרויקט שנוצר נכשלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>לא ניתן לטעון את JSON של הפרויקט שנוצר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>הפרויקט נוצר בהצלחה עם %1 קבוצות ו־%2 מערכי נתונים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
         <source>The project editor is now open for customization.</source>
         <translation>עורך הפרויקט פתוח כעת להתאמה אישית.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus Project</source>
         <translation>פרויקט Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1028"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
         <source>Holding Registers</source>
         <translation>רגיסטרי Holding</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
         <source>Input Registers</source>
         <translation>רגיסטרי Input</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
         <source>Coils</source>
         <translation>סלילים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
         <source>Discrete Inputs</source>
         <translation>כניסות בדידות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1058"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
         <source>Register %1</source>
         <translation>רגיסטר %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Coil %1</source>
         <translation>סליל %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Discrete %1</source>
         <translation>בדיד %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Error code: %1</source>
         <translation>קוד שגיאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
         <source>Modbus Communication Error</source>
         <translation>שגיאת תקשורת Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1496"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
         <source>Select Port</source>
         <translation>בחר פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1649"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
         <source>Protocol</source>
         <translation>פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
         <source>Slave Address</source>
         <translation>כתובת Slave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
         <source>Poll Interval (ms)</source>
         <translation>מרווח סקירה (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1706"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
         <source>Host / IP</source>
         <translation>מארח / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1713"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
         <source>Port</source>
         <translation>פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
         <source>Serial Port</source>
         <translation>יציאה טורית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1736"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
         <source>Baud Rate</source>
         <translation>קצב באוד</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1744"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
         <source>Parity</source>
         <translation>זוגיות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1752"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
         <source>Data Bits</source>
         <translation>ביטי נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1760"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
         <source>Stop Bits</source>
         <translation>ביטי עצירה</translation>
     </message>
@@ -11938,37 +12042,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
         <source>Network socket error</source>
         <translation>שגיאת שקע רשת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
         <source>Socket Type</source>
         <translation>סוג שקע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
         <source>Remote Address</source>
         <translation>כתובת מרוחקת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
         <source>TCP Port</source>
         <translation>פורט TCP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
         <source>UDP Local Port</source>
         <translation>פורט מקומי UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="749"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
         <source>UDP Remote Port</source>
         <translation>פורט מרוחק UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
         <source>UDP Multicast</source>
         <translation>ריבוי שידור UDP</translation>
     </message>
@@ -11983,8 +12087,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable "%1" not found in PATH.</source>
-        <translation>קובץ הפעלה "%1" לא נמצא ב-PATH.</translation>
+        <source>Executable &quot;%1&quot; not found in PATH.</source>
+        <translation>קובץ הפעלה &quot;%1&quot; לא נמצא ב-PATH.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
@@ -12013,8 +12117,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process "%1" stopped</source>
-        <translation>תהליך "%1" הופסק</translation>
+        <source>Process &quot;%1&quot; stopped</source>
+        <translation>תהליך &quot;%1&quot; הופסק</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
@@ -12131,171 +12235,171 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="92"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="93"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="421"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="294"/>
-        <source>Failed to connect to serial port "%1"</source>
-        <translation>כשל בהתחברות ליציאה טורית "%1"</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
+        <source>Failed to connect to serial port &quot;%1&quot;</source>
+        <translation>כשל בהתחברות ליציאה טורית &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
         <source>Select Port</source>
         <translation>בחר פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="422"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
         <source>Even</source>
         <translation>זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
         <source>Odd</source>
         <translation>אי-זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
         <source>Space</source>
         <translation>רווח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
         <source>Mark</source>
         <translation>סימון</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="461"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="462"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="592"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" אינו נתיב חוקי</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; אינו נתיב חוקי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>נא להזין נתיב אחר לרישום התקן טורי מותאם אישית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="849"/>
-        <source>Critical error on serial port "%1"</source>
-        <translation>שגיאה קריטית ביציאה הטורית "%1"</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
+        <source>Critical error on serial port &quot;%1&quot;</source>
+        <translation>שגיאה קריטית ביציאה הטורית &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="871"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>No error occurred.</source>
         <translation>לא אירעה שגיאה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>ההתקן המצוין לא נמצא. יש לבדוק את החיבור ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="873"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>הגישה נדחתה. יש לוודא שליישום יש הרשאות גישה נדרשות להתקן.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="874"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>פתיחת ההתקן נכשלה. ייתכן שהוא כבר בשימוש או שאינו זמין.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>אירעה שגיאה בעת כתיבת נתונים להתקן.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>אירעה שגיאה בעת קריאת נתונים מההתקן.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>אירעה שגיאת משאב קריטית. ייתכן שההתקן נותק או שאינו זמין עוד.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>הפעולה המבוקשת אינה נתמכת בהתקן זה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>אירעה שגיאה לא ידועה. בדוק את ההתקן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>תם הזמן המוקצב לפעולה. ייתכן שההתקן אינו מגיב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>ההתקן אינו פתוח. פתח את ההתקן לפני ביצוע פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
         <source>Serial Port</source>
         <translation>יציאה טורית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1051"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
         <source>Baud Rate</source>
         <translation>קצב שידור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1059"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
         <source>Parity</source>
         <translation>זוגיות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1067"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
         <source>Data Bits</source>
         <translation>סיביות נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1075"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
         <source>Stop Bits</source>
         <translation>סיביות עצירה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1083"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
         <source>Flow Control</source>
         <translation>בקרת זרימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1091"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1098"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
         <source>Auto-Reconnect</source>
         <translation>התחברות מחדש אוטומטית</translation>
     </message>
@@ -12325,8 +12429,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open "%1"</source>
-        <translation>פתיחת "%1" נכשלה</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>פתיחת &quot;%1&quot; נכשלה</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="182"/>
@@ -12354,19 +12458,19 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
         <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
         <translation>לא נמצאה נקודת קצה IN איזוכרונית בהתקן זה, אך נקודות קצה בתפזורת או בהפרעה זמינות.
 
-החלף את מצב ההעברה ל-"זרם בתפזורת/הפרעה" ונסה שוב.</translation>
+החלף את מצב ההעברה ל-&quot;זרם בתפזורת/הפרעה&quot; ונסה שוב.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation>לא נמצאה נקודת קצה IN בתפזורת או בהפרעה בהתקן זה, אך נקודות קצה איזוכרוניות זמינות.
 
-החלף את מצב ההעברה ל-"איזוכרוני" ונסה שוב.</translation>
+החלף את מצב ההעברה ל-&quot;איזוכרוני&quot; ונסה שוב.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="812"/>
@@ -12484,18 +12588,18 @@ Another driver or application may already have it open. On Linux, try unloading 
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to "Bulk Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
         <translation type="vanished">לא נמצאה נקודת קצה IN איזוכרונית בהתקן זה, אך נקודות קצה בתפזורת זמינות.
 
-החלף את מצב ההעברה ל-"זרם בתפזורת" ונסה שוב.</translation>
+החלף את מצב ההעברה ל-&quot;זרם בתפזורת&quot; ונסה שוב.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation type="vanished">לא נמצאה נקודת קצה IN בתפזורת בהתקן זה, אך נקודות קצה איזוכרוניות זמינות.
 
-החלף את מצב ההעברה ל-"איזוכרוני" ונסה שוב.</translation>
+החלף את מצב ההעברה ל-&quot;איזוכרוני&quot; ונסה שוב.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -12658,12 +12762,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="392"/>
         <source>Frames dropped</source>
         <translation>מסגרות שנשמטו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="396"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>נתונים נכנסים מגיעים מהר יותר ממה ש-Serial Studio יכול לעבד; %1 מסגרות נשמטו. יש להפחית את קצב הנתונים או להשבית צרכן כבד.</translation>
     </message>
@@ -13134,7 +13238,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>שרת מודל מקומי. עובד עם כל נקודת קצה תואמת OpenAI -- Ollama, llama-server של llama.cpp, LM Studio או vLLM. שום דבר לא עוזב את המכשיר שלך. רשימת המודלים נשאלת בזמן אמת מהשרת.</translation>
     </message>
     <message>
@@ -13179,7 +13283,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider's console to create a new key</source>
+        <source>Open the provider&apos;s console to create a new key</source>
         <translation>פתח את קונסולת הספק כדי ליצור מפתח חדש</translation>
     </message>
     <message>
@@ -13388,129 +13492,129 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="526"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
         <source>There was an issue validating your license.</source>
         <translation>אירעה בעיה באימות הרישיון שלך.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="733"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>מפתח הרישיון שסיפקת אינו שייך ל-Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>יש לוודא שרכשת את הרישיון מהחנות הרשמית של Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>This license key was activated on a different device.</source>
         <translation>מפתח רישיון זה הופעל במכשיר אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>יש לבטל את ההפעלה שם תחילה או לפנות לתמיכה לקבלת עזרה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
         <source>This license is not currently active.</source>
         <translation>רישיון זה אינו פעיל כרגע.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>ייתכן שפג תוקפו או שבוטלה הפעלתו (סטטוס: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
         <source>Something went wrong on the server.</source>
         <translation>משהו השתבש בשרת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
         <source>No activation ID was returned.</source>
         <translation>לא הוחזר מזהה הפעלה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
         <source>Could not validate your license at this time.</source>
         <translation>לא ניתן לאמת את הרישיון כעת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="592"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>יש לנסות שוב מאוחר יותר.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
         <source>Your license has been successfully activated.</source>
         <translation>הרישיון הופעל בהצלחה.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>תודה על התמיכה ב-Serial Studio!
 כעת יש לך גישה לכל התכונות המתקדמות.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
         <source>There was an issue activating your license.</source>
         <translation>הייתה בעיה בהפעלת הרישיון.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>יש לוודא שהרישיון נרכש מהחנות הרשמית של Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Something went wrong on the server…</source>
         <translation>משהו השתבש בשרת…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Could not activate your license at this time.</source>
         <translation>לא ניתן להפעיל את הרישיון שלך כעת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>There was an issue deactivating your license.</source>
         <translation>הייתה בעיה בביטול הרישיון שלך.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>לא ניתן לבטל את הרישיון שלך כעת.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>Your license has been deactivated.</source>
         <translation>הרישיון שלך בוטל.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>הגישה לתכונות Pro הוסרה.
@@ -13615,7 +13719,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
         <translation>חלק ממקטע הנתונים של הקובץ לא ניתן לקריאה; ההקלטה עשויה להיות קטועה.</translation>
     </message>
     <message>
@@ -13737,134 +13841,196 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <source>Load From Folder…</source>
         <translation>טעינה מתיקייה…</translation>
     </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
+        <source>Browse…</source>
+        <translation type="unfinished">עיון…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
+        <source>ALPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="814"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="829"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="815"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="830"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="816"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="831"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="818"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="833"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="819"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="834"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="820"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="835"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 ומעלה</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="821"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="836"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 ומעלה</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="822"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="837"/>
         <source>Any Protocol</source>
         <translation>כל פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="823"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="838"/>
         <source>Secure Protocols Only</source>
         <translation>פרוטוקולים מאובטחים בלבד</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="825"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="840"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="826"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="841"/>
         <source>Query Peer</source>
         <translation>שאילתת עמית</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="827"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="842"/>
         <source>Verify Peer</source>
         <translation>אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="828"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="843"/>
         <source>Auto Verify Peer</source>
         <translation>אימות עמית אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1145"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1200"/>
         <source>Raw RX Data</source>
         <translation>נתוני RX גולמיים</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1146"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1201"/>
         <source>Custom Script</source>
         <translation>סקריפט מותאם אישית</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1147"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1202"/>
         <source>Dashboard Data (CSV)</source>
         <translation>נתוני לוח בקרה (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1148"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1203"/>
         <source>Dashboard Data (JSON)</source>
         <translation>נתוני לוח בקרה (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1304"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1370"/>
         <source>MQTT publisher unavailable</source>
         <translation>מפרסם MQTT אינו זמין</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1305"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1371"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>נדרש רישיון מסחרי תקף לשימוש בפרסום MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1307"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1876"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1373"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2061"/>
         <source>MQTT Test Connection</source>
         <translation>בדיקת חיבור MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1326"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1392"/>
         <source>Select PEM Certificates Directory</source>
         <translation>בחירת ספריית אישורי PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker reachable</source>
         <translation>ברוקר MQTT נגיש</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker unreachable</source>
         <translation>ברוקר MQTT לא נגיש</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
         <source>MQTT broker connection failed</source>
         <translation>חיבור לברוקר MQTT נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2229"/>
         <source>MQTT Publisher</source>
         <translation>מפרסם MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14074,17 +14240,17 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="696"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="701"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>הגדר שם מארח ופורט של Broker לפני בדיקת החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="732"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="737"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>התחבר בהצלחה אל %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="743"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="748"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>תם הזמן הקצוב לאחר 5 שניות ללא הגעה ל־Broker.</translation>
     </message>
@@ -14221,7 +14387,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="50"/>
         <source>Facts the assistant carries into every chat. Stored only on this computer. Delete anything you no longer want it to know.</source>
-        <translation>עובדות שהעוזר נושא לכל צ'אט. מאוחסנות רק במחשב זה. מחק כל דבר שאינך רוצה שהוא ידע יותר.</translation>
+        <translation>עובדות שהעוזר נושא לכל צ&apos;אט. מאוחסנות רק במחשב זה. מחק כל דבר שאינך רוצה שהוא ידע יותר.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
@@ -14261,7 +14427,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="162"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
-        <translation>עדיין לא נזכר דבר. הוסף עובדה למעלה, או אשר אחת כאשר העוזר מציע אותה בצ'אט.</translation>
+        <translation>עדיין לא נזכר דבר. הוסף עובדה למעלה, או אשר אחת כאשר העוזר מציע אותה בצ&apos;אט.</translation>
     </message>
 </context>
 <context>
@@ -14542,13 +14708,13 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin "%1" is not installed.</source>
-        <translation>Plugin "%1" אינו מותקן.</translation>
+        <source>Plugin &quot;%1&quot; is not installed.</source>
+        <translation>Plugin &quot;%1&quot; אינו מותקן.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension "%1" is not a plugin (type: %2).</source>
-        <translation>הרחבה "%1" אינה plugin (סוג: %2).</translation>
+        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
+        <translation>הרחבה &quot;%1&quot; אינה plugin (סוג: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
@@ -14559,8 +14725,8 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
-        <translation>Plugin "%1" דורש GRPC אך גרסה זו אינה כוללת תמיכה ב־GRPC.</translation>
+        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
+        <translation>Plugin &quot;%1&quot; דורש GRPC אך גרסה זו אינה כוללת תמיכה ב־GRPC.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
@@ -14583,8 +14749,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin "%1" has no 'entry' field in info.json.</source>
-        <translation>לתוסף "%1" אין שדה 'entry' בקובץ info.json.</translation>
+        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
+        <translation>לתוסף &quot;%1&quot; אין שדה &apos;entry&apos; בקובץ info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -14595,8 +14761,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin "%1" has an invalid entry point path.</source>
-        <translation>לתוסף "%1" נתיב נקודת כניסה לא חוקי.</translation>
+        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
+        <translation>לתוסף &quot;%1&quot; נתיב נקודת כניסה לא חוקי.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1490"/>
@@ -14605,10 +14771,10 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires "%1" but it was not found on your system.
+        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>תוסף זה דורש את "%1" אך הוא לא נמצא במערכת שלך.
+        <translation>תוסף זה דורש את &quot;%1&quot; אך הוא לא נמצא במערכת שלך.
 
 האם ברצונך לפתוח את דף ההורדה?</translation>
     </message>
@@ -15186,7 +15352,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="361"/>
         <source>Total: %1 registers in %2 groups</source>
-        <translation>סה"כ: %1 רגיסטרים ב-%2 קבוצות</translation>
+        <translation>סה&quot;כ: %1 רגיסטרים ב-%2 קבוצות</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="367"/>
@@ -15230,6 +15396,8 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="139"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="156"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="189"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="207"/>
         <source>Enable publishing first</source>
         <translation>יש להפעיל פרסום תחילה</translation>
     </message>
@@ -15255,8 +15423,30 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="174"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="192"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="210"/>
         <source>Enable SSL/TLS first</source>
         <translation>הפעל SSL/TLS תחילה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
+        <source>Select the PEM client certificate for mutual TLS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
+        <source>Select the PEM private key for mutual TLS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15365,7 +15555,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="209"/>
         <source>Widgets</source>
-        <translation>ווידג'טים</translation>
+        <translation>ווידג&apos;טים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="215"/>
@@ -15493,7 +15683,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two's-complement signed.</source>
+        <source>Interprets each value as two&apos;s-complement signed.</source>
         <translation>מפרש כל ערך כמספר מסומן בשיטת משלים-לשניים.</translation>
     </message>
     <message>
@@ -15570,7 +15760,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
         <translation>מפרש רגיסטרים של 16 סיביות כערכים מסומנים בשיטת משלים לשניים.</translation>
     </message>
     <message>
@@ -15841,7 +16031,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
         <translation>שמור את קובץ המכשיר של מחשב זה. הוא מזהה מחשב זה ואינו מכיל מידע אישי.</translation>
     </message>
     <message>
@@ -15985,12 +16175,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="100"/>
         <source>Output widgets require a Pro license.</source>
-        <translation>ווידג'טי פלט דורשים רישיון Pro.</translation>
+        <translation>ווידג&apos;טי פלט דורשים רישיון Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="102"/>
         <source>You can configure output widgets, but they only appear on the dashboard with a Pro license.</source>
-        <translation>ניתן להגדיר ווידג'טים לפלט, אך הם מופיעים בלוח הבקרה רק עם רישיון Pro.</translation>
+        <translation>ניתן להגדיר ווידג&apos;טים לפלט, אך הם מופיעים בלוח הבקרה רק עם רישיון Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
@@ -16050,7 +16240,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="194"/>
         <source>Duplicate this output widget</source>
-        <translation>שכפל ווידג'ט פלט זה</translation>
+        <translation>שכפל ווידג&apos;ט פלט זה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="204"/>
@@ -16060,7 +16250,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="206"/>
         <source>Delete this output widget</source>
-        <translation>מחק ווידג'ט פלט זה</translation>
+        <translation>מחק ווידג&apos;ט פלט זה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="284"/>
@@ -16374,7 +16564,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/PaletteModel.qml" line="246"/>
         <source>Widgets</source>
-        <translation>ווידג'טים</translation>
+        <translation>ווידג&apos;טים</translation>
     </message>
 </context>
 <context>
@@ -16489,7 +16679,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>לא זמין בחיבור מרוחק. Widget זה דורש את זרם הדגימות הגולמי מהמרוחק, שאינו נישא על ידי שיקוף לוח הבקרה.</translation>
     </message>
 </context>
@@ -16933,7 +17123,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Painter Widget</source>
-        <translation type="vanished">וידג'ט ציור</translation>
+        <translation type="vanished">וידג&apos;ט ציור</translation>
     </message>
     <message>
         <source>Add Data Table</source>
@@ -16969,11 +17159,11 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Add Gyroscope</source>
-        <translation type="vanished">הוסף ג'ירוסקופ</translation>
+        <translation type="vanished">הוסף ג&apos;ירוסקופ</translation>
     </message>
     <message>
         <source>Gyroscope</source>
-        <translation type="vanished">ג'ירוסקופ</translation>
+        <translation type="vanished">ג&apos;ירוסקופ</translation>
     </message>
     <message>
         <source>Add GPS Map</source>
@@ -17090,17 +17280,17 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="172"/>
         <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation>הוספת ווידג'ט ציור מותאם אישית מבוסס JavaScript</translation>
+        <translation>הוספת ווידג&apos;ט ציור מותאם אישית מבוסס JavaScript</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
         <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
-        <translation>וידג'טי ציור דורשים רישיון Pro, הוספת אחד תחזור לרשת נתונים</translation>
+        <translation>וידג&apos;טי ציור דורשים רישיון Pro, הוספת אחד תחזור לרשת נתונים</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="174"/>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation>וידג&apos;ט ציור</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="178"/>
@@ -17125,7 +17315,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="198"/>
         <source>Gyroscope</source>
-        <translation>ג'ירוסקופ</translation>
+        <translation>ג&apos;ירוסקופ</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="202"/>
@@ -17401,7 +17591,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Add a gauge widget for numeric data</source>
-        <translation type="vanished">הוספת ווידג'ט מד לנתונים מספריים</translation>
+        <translation type="vanished">הוספת ווידג&apos;ט מד לנתונים מספריים</translation>
     </message>
     <message>
         <source>Level Indicator</source>
@@ -17417,7 +17607,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Add a compass widget for directional data</source>
-        <translation type="vanished">הוספת ווידג'ט מצפן לנתוני כיוון</translation>
+        <translation type="vanished">הוספת ווידג&apos;ט מצפן לנתוני כיוון</translation>
     </message>
     <message>
         <source>LED Indicator</source>
@@ -17469,15 +17659,15 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation type="vanished">הוסף וידג'ט ציור מותאם אישית מעובד ב-JavaScript</translation>
+        <translation type="vanished">הוסף וידג&apos;ט ציור מותאם אישית מעובד ב-JavaScript</translation>
     </message>
     <message>
         <source>Painter widgets require a Pro license — adding one will fall back to a data grid</source>
-        <translation type="vanished">וידג'טי ציור דורשים רישיון Pro — הוספת אחד יחזור לטבלת נתונים</translation>
+        <translation type="vanished">וידג&apos;טי ציור דורשים רישיון Pro — הוספת אחד יחזור לטבלת נתונים</translation>
     </message>
     <message>
         <source>Painter Widget</source>
-        <translation type="vanished">וידג'ט ציור</translation>
+        <translation type="vanished">וידג&apos;ט ציור</translation>
     </message>
     <message>
         <source>Table</source>
@@ -17521,11 +17711,11 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Gyroscope</source>
-        <translation type="vanished">ג'ירוסקופ</translation>
+        <translation type="vanished">ג&apos;ירוסקופ</translation>
     </message>
     <message>
         <source>Add a group for 3-axis gyroscope data</source>
-        <translation type="vanished">הוספת קבוצה לנתוני ג'ירוסקופ תלת־צירי</translation>
+        <translation type="vanished">הוספת קבוצה לנתוני ג&apos;ירוסקופ תלת־צירי</translation>
     </message>
     <message>
         <source>GPS Map</source>
@@ -17533,7 +17723,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <source>Add a map widget for GPS data</source>
-        <translation type="vanished">הוסף ווידג'ט מפה לנתוני GPS</translation>
+        <translation type="vanished">הוסף ווידג&apos;ט מפה לנתוני GPS</translation>
     </message>
     <message>
         <source>Assistant</source>
@@ -17567,7 +17757,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="85"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
-        <translation>משתמש בווידג'טים חלופיים. רכוש רישיון לפתיחת הפונקציונליות המלאה.</translation>
+        <translation>משתמש בווידג&apos;טים חלופיים. רכוש רישיון לפתיחת הפונקציונליות המלאה.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="120"/>
@@ -17610,7 +17800,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>הרץ טרנספורמציה של מערך נתונים רק כאשר אחד מהקלטים שלו משתנה. מאיץ פרויקטים גדולים מונעי-טבלאות; כבוי כברירת מחדל.</translation>
     </message>
     <message>
@@ -17731,7 +17921,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
         <translation>ה-Broker דחה את החיבור עקב גרסת פרוטוקול לא נתמכת. יש להתאים את גרסת MQTT של ה-Broker ולנסות שוב.</translation>
     </message>
     <message>
@@ -17771,13 +17961,18 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
         <translation>אירעה שגיאה ברמת פרוטוקול MQTT 5. יש לבדוק את קוד הסיבה של ה-Broker לפרטים.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="109"/>
         <source>Unspecified MQTT error (code %1).</source>
         <translation>שגיאת MQTT לא מוגדרת (קוד %1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17847,22 +18042,22 @@ Click Refresh to update the list.</source>
         <translation>זמן: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1626"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>מתאם Bluetooth לא תקין!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
         <source>Unsuported platform or operating system</source>
         <translation>פלטפורמה או מערכת הפעלה לא נתמכת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1632"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
         <source>Unsupported discovery method</source>
         <translation>שיטת גילוי לא נתמכת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
         <source>General I/O error</source>
         <translation>שגיאת קלט/פלט כללית</translation>
     </message>
@@ -17999,11 +18194,11 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>הפונקציה 'parse' אינה מוגדרת בסקריפט.
+        <translation>הפונקציה &apos;parse&apos; אינה מוגדרת בסקריפט.
 
 וודא שהקוד שלך כולל:
 function parse(frame) ... end</translation>
@@ -18085,11 +18280,11 @@ Most likely cause: an infinite loop at the top level of the script.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>הפונקציה 'parse' אינה מוגדרת בסקריפט.
+        <translation>הפונקציה &apos;parse&apos; אינה מוגדרת בסקריפט.
 
 יש לוודא שהקוד שלך כולל:
 function parse(frame) { ... }</translation>
@@ -18114,12 +18309,12 @@ Please fix the error in the function body.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable 'parse' export found.
+        <source>No callable &apos;parse&apos; export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>לא נמצא ייצוא 'parse' שניתן לקריאה.
+        <translation>לא נמצא ייצוא &apos;parse&apos; שניתן לקריאה.
 
 הגדר אחד מהבאים:
   function parse(frame) { ... }
@@ -18127,15 +18322,15 @@ Define one of:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
-        <translation>הפונקציה 'parse' חייבת לקבל לפחות פרמטר אחד (המטען של ה-Frame).</translation>
+        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
+        <translation>הפונקציה &apos;parse&apos; חייבת לקבל לפחות פרמטר אחד (המטען של ה-Frame).</translation>
     </message>
     <message>
-        <source>No valid 'parse' function declaration found.
+        <source>No valid &apos;parse&apos; function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">לא נמצאה הצהרת פונקציה 'parse' תקינה.
+        <translation type="vanished">לא נמצאה הצהרת פונקציה &apos;parse&apos; תקינה.
 
 פורמט צפוי:
 function parse(frame) { ... }</translation>
@@ -18146,11 +18341,11 @@ function parse(frame) { ... }</translation>
         <translation>פרמטר פונקציה לא חוקי</translation>
     </message>
     <message>
-        <source>The 'parse' function must have at least one parameter.
+        <source>The &apos;parse&apos; function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">הפונקציה 'parse' חייבת לכלול לפחות פרמטר אחד.
+        <translation type="vanished">הפונקציה &apos;parse&apos; חייבת לכלול לפחות פרמטר אחד.
 
 פורמט צפוי:
 function parse(frame) { ... }</translation>
@@ -18162,13 +18357,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
+        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>הפונקציה 'parse' משתמשת בפורמט הישן של שני פרמטרים: parse(%1, %2)
+        <translation>הפונקציה &apos;parse&apos; משתמשת בפורמט הישן של שני פרמטרים: parse(%1, %2)
 
 פורמט זה אינו נתמך עוד. יש לעדכן לפורמט החדש של פרמטר יחיד:
 function parse(%1) { ... }
@@ -18177,13 +18372,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got '%2'</source>
-        <translation>צפוי %1, התקבל '%2'</translation>
+        <source>Expected %1, got &apos;%2&apos;</source>
+        <translation>צפוי %1, התקבל &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after 'enum'</source>
-        <translation>צפוי שם enum אחרי 'enum'</translation>
+        <source>Expected enum name after &apos;enum&apos;</source>
+        <translation>צפוי שם enum אחרי &apos;enum&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18192,8 +18387,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag '%1' out of range (1..%2)</source>
-        <translation>תג שדה '%1' מחוץ לטווח (1..%2)</translation>
+        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
+        <translation>תג שדה &apos;%1&apos; מחוץ לטווח (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18217,8 +18412,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got '%1'</source>
-        <translation>צפוי סוג שדה, התקבל '%1'</translation>
+        <source>Expected field type, got &apos;%1&apos;</source>
+        <translation>צפוי סוג שדה, התקבל &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18242,13 +18437,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token '%1' at file scope</source>
-        <translation>אסימון לא צפוי '%1' בהיקף הקובץ</translation>
+        <source>Unexpected token &apos;%1&apos; at file scope</source>
+        <translation>אסימון לא צפוי &apos;%1&apos; בהיקף הקובץ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword '%1'</source>
-        <translation>מילת מפתח ברמה עליונה לא נתמכת '%1'</translation>
+        <source>Unsupported top-level keyword &apos;%1&apos;</source>
+        <translation>מילת מפתח ברמה עליונה לא נתמכת &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="170"/>
@@ -18299,8 +18494,8 @@ function parse(%1) { ... }
         <translation type="vanished">תצורת המנתח המקורי אינה אובייקט JSON תקין.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: "%1".</source>
-        <translation type="vanished">תבנית מנתח מקורי לא ידועה: "%1".</translation>
+        <source>Unknown native parser template: &quot;%1&quot;.</source>
+        <translation type="vanished">תבנית מנתח מקורי לא ידועה: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -18309,8 +18504,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: "%1".</source>
-        <translation>תבנית מנתח מובנה לא ידועה: "%1".</translation>
+        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
+        <translation>תבנית מנתח מובנה לא ידועה: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -18490,7 +18685,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>צפה בלוח המחוונים של מופע Serial Studio אחר דרך הרשת. התצוגה היא לקריאה בלבד: שום דבר שתעשה כאן לא מגיע להתקן המרוחק.</translation>
     </message>
     <message>
@@ -18584,72 +18779,72 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
         <source>A4 (210 × 297 mm)</source>
-        <translation>A4 (210 × 297 מ"מ)</translation>
+        <translation>A4 (210 × 297 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
         <source>A3 (297 × 420 mm)</source>
-        <translation>A3 (297 × 420 מ"מ)</translation>
+        <translation>A3 (297 × 420 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A2 (420 × 594 mm)</source>
-        <translation>A2 (420 × 594 מ"מ)</translation>
+        <translation>A2 (420 × 594 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A1 (594 × 841 mm)</source>
-        <translation>A1 (594 × 841 מ"מ)</translation>
+        <translation>A1 (594 × 841 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A0 (841 × 1189 mm)</source>
-        <translation>A0 (841 × 1189 מ"מ)</translation>
+        <translation>A0 (841 × 1189 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A5 (148 × 210 mm)</source>
-        <translation>A5 (148 × 210 מ"מ)</translation>
+        <translation>A5 (148 × 210 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A6 (105 × 148 mm)</source>
-        <translation>A6 (105 × 148 מ"מ)</translation>
+        <translation>A6 (105 × 148 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>B4 (250 × 353 mm)</source>
-        <translation>B4 (250 × 353 מ"מ)</translation>
+        <translation>B4 (250 × 353 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>B5 (176 × 250 mm)</source>
-        <translation>B5 (176 × 250 מ"מ)</translation>
+        <translation>B5 (176 × 250 מ&quot;מ)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>Letter (8.5 × 11 in)</source>
-        <translation>Letter (8.5 × 11 אינץ')</translation>
+        <translation>Letter (8.5 × 11 אינץ&apos;)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>Legal (8.5 × 14 in)</source>
-        <translation>Legal (8.5 × 14 אינץ')</translation>
+        <translation>Legal (8.5 × 14 אינץ&apos;)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Executive (7.25 × 10.5 in)</source>
-        <translation>Executive (7.25 × 10.5 אינץ')</translation>
+        <translation>Executive (7.25 × 10.5 אינץ&apos;)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Tabloid (11 × 17 in)</source>
-        <translation>Tabloid (11 × 17 אינץ')</translation>
+        <translation>Tabloid (11 × 17 אינץ&apos;)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Ledger (17 × 11 in)</source>
-        <translation>Ledger (17 × 11 אינץ')</translation>
+        <translation>Ledger (17 × 11 אינץ&apos;)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
@@ -18880,7 +19075,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn't reach your device.</source>
+        <source>Serial Studio couldn&apos;t reach your device.</source>
         <translation>Serial Studio לא הצליח להגיע להתקן.</translation>
     </message>
     <message>
@@ -18890,7 +19085,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>ודא שההתקן מחובר, מופעל, ולא נמצא כבר בשימוש על ידי יישום אחר. ניתן לנסות שוב, לבחור התקן אחר, או לצאת.</translation>
     </message>
     <message>
@@ -19044,7 +19239,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/SerialStudio.cpp" line="357"/>
         <source>Painter Widgets</source>
-        <translation>ווידג'טי ציור</translation>
+        <translation>ווידג&apos;טי ציור</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="361"/>
@@ -19721,48 +19916,48 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="292"/>
+        <location filename="../../src/Sessions/Player.cpp" line="302"/>
         <source>Open Session File</source>
         <translation>פתח קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="294"/>
+        <location filename="../../src/Sessions/Player.cpp" line="304"/>
         <source>Session files (*.db)</source>
         <translation>קבצי סשן (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="367"/>
+        <location filename="../../src/Sessions/Player.cpp" line="377"/>
         <source>Device Connection Active</source>
         <translation>חיבור למכשיר פעיל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="368"/>
+        <location filename="../../src/Sessions/Player.cpp" line="378"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>כדי להשתמש בתכונה זו, יש להתנתק מהמכשיר. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="416"/>
-        <location filename="../../src/Sessions/Player.cpp" line="497"/>
+        <location filename="../../src/Sessions/Player.cpp" line="426"/>
+        <location filename="../../src/Sessions/Player.cpp" line="507"/>
         <source>Cannot open session file</source>
         <translation>לא ניתן לפתוח קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="417"/>
+        <location filename="../../src/Sessions/Player.cpp" line="427"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="433"/>
+        <location filename="../../src/Sessions/Player.cpp" line="443"/>
         <source>No project data</source>
         <translation>אין נתוני פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="434"/>
+        <location filename="../../src/Sessions/Player.cpp" line="444"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>הסשן אינו מכיל קובץ פרויקט משובץ — לוח הבקרה עובר לפריסת quick-plot.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="498"/>
+        <location filename="../../src/Sessions/Player.cpp" line="508"/>
         <source>Check file permissions and try again.</source>
         <translation>בדוק הרשאות קובץ ונסה שוב.</translation>
     </message>
@@ -19940,7 +20135,7 @@ function parse(%1) { ... }
         <translation>עדכונים וחדשות</translation>
     </message>
     <message>
-        <source>Show What's New on Startup</source>
+        <source>Show What&apos;s New on Startup</source>
         <translation type="vanished">הצג מה חדש בהפעלה</translation>
     </message>
     <message>
@@ -20490,7 +20685,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>לחיצה כפולה על פריסה זו מעבירה ישירות ל-Dashboard החי של הפרויקט. אין סרגל כלים או חלונית הגדרות, רק הנתונים, ו-Serial Studio נסגר ברגע שההתקן מתנתק.</translation>
     </message>
     <message>
@@ -20859,8 +21054,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show "%1"</source>
-        <translation>הצג "%1"</translation>
+        <source>Show &quot;%1&quot;</source>
+        <translation>הצג &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -21007,7 +21202,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="350"/>
         <source>Total</source>
-        <translation>סה"כ</translation>
+        <translation>סה&quot;כ</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="446"/>
@@ -21594,7 +21789,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation type="vanished">הפסק לגלול כדי למצוא את הווידג'ט הנכון. קבץ אותם למרחבי עבודה משלך וקפוץ ביניהם מחיפוש שורת המשימות.</translation>
+        <translation type="vanished">הפסק לגלול כדי למצוא את הווידג&apos;ט הנכון. קבץ אותם למרחבי עבודה משלך וקפוץ ביניהם מחיפוש שורת המשימות.</translation>
     </message>
     <message>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
@@ -21651,6 +21846,44 @@ function parse(%1) { ... }
     <message>
         <source>Close</source>
         <translation type="vanished">סגור</translation>
+    </message>
+</context>
+<context>
+    <name>TlsIdentity</name>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
+        <source>The file &quot;%1&quot; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
+        <source>The file &quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
+        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
+        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
+        <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
+        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
+        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21972,7 +22205,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <source>AI Wiki &amp; Chat</source>
-        <translation type="vanished">Wiki וצ'אט AI</translation>
+        <translation type="vanished">Wiki וצ&apos;אט AI</translation>
     </message>
     <message>
         <source>View detailed documentation and ask questions on DeepWiki</source>
@@ -22081,7 +22314,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>השאר בסיס זמן ריק כדי להשתמש בטווח הזמן של הגרף; הקטן אותו כדי להתקרב לאות מהיר. Holdoff מתעלם מטריגרים חדשים לרגע אחרי כל אחד.</translation>
     </message>
     <message>
@@ -22147,7 +22380,7 @@ function parse(%1) { ... }
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">בסיס זמן קובע כמה זמן מציגה סריקה אחת; השאר ריק כדי להשתמש בטווח הזמן של הגרף. הקטן אותו כדי להתקרב לאות מהיר. Holdoff מתעלם מטריגרים חדשים לרגע אחרי כל אחד.</translation>
     </message>
     <message>
@@ -22669,7 +22902,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>לא זמין בחיבור מרוחק. Widget זה דורש את זרם הדגימות הגולמי מהמרוחק, שאינו נישא על ידי שיקוף ה-Dashboard.</translation>
     </message>
 </context>
@@ -22727,7 +22960,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
+        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
         <translation>אתה משתמש כעת בגרסת הניסיון המלאה של %1 Pro. היא תקפה ל-14 ימים לשימוש אישי ולא מסחרי.</translation>
     </message>
     <message>
@@ -22742,13 +22975,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>כדי לראות את תוכניות המנוי הזמינות, לחץ על "שדרג עכשיו" למטה.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>כדי לראות את תוכניות המנוי הזמינות, לחץ על &quot;שדרג עכשיו&quot; למטה.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>אל תטרידו אותי לגבי תקופת הניסיון.
 אני מבין שכאשר היא תסתיים, אצטרך לרכוש רישיון או לבנות את גרסת GPLv3.</translation>
     </message>
@@ -22810,7 +23043,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What's New in %1</source>
+        <source>What&apos;s New in %1</source>
         <translation type="vanished">מה חדש ב-%1</translation>
     </message>
     <message>
@@ -22851,7 +23084,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
-        <translation type="vanished">שדר חזרה למכשיר שלך עם ווידג'טים לבקרה ומנוע עזר פרוטוקול.</translation>
+        <translation type="vanished">שדר חזרה למכשיר שלך עם ווידג&apos;טים לבקרה ומנוע עזר פרוטוקול.</translation>
     </message>
     <message>
         <source>Dashboard Workspaces</source>
@@ -22859,7 +23092,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
-        <translation type="vanished">קבץ ווידג'טים ללוחות בקרה משלך ומצא אותם מחיפוש שורת המשימות.</translation>
+        <translation type="vanished">קבץ ווידג&apos;טים ללוחות בקרה משלך ומצא אותם מחיפוש שורת המשימות.</translation>
     </message>
     <message>
         <source>Session Database &amp; Reports</source>
@@ -22879,7 +23112,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>New Dashboard Widgets</source>
-        <translation type="vanished">ווידג'טים חדשים ללוח בקרה</translation>
+        <translation type="vanished">ווידג&apos;טים חדשים ללוח בקרה</translation>
     </message>
     <message>
         <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
@@ -22895,7 +23128,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>Painter Widget</source>
-        <translation type="vanished">וידג'ט ציור</translation>
+        <translation type="vanished">וידג&apos;ט ציור</translation>
     </message>
     <message>
         <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
@@ -22911,7 +23144,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>Image Widget</source>
-        <translation type="vanished">וידג'ט תמונה</translation>
+        <translation type="vanished">וידג&apos;ט תמונה</translation>
     </message>
     <message>
         <source>Decode and display image frames streamed straight from your device.</source>
@@ -22946,7 +23179,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">ברוכים הבאים ל-%1!</translation>
     </message>
     <message>
-        <source>Here's what's new in version %1.</source>
+        <source>Here&apos;s what&apos;s new in version %1.</source>
         <translation type="vanished">הנה מה חדש בגרסה %1.</translation>
     </message>
     <message>
@@ -23151,7 +23384,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>לא ניתן להציע גישה בלתי מוגבלת מכיוון שמפתח API של ArcGIS כרוך בעלויות ממשיות.</translation>
     </message>
 </context>
@@ -23244,7 +23477,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/Waterfall.cpp" line="417"/>
         <source>Jet</source>
-        <translation>ג'ט</translation>
+        <translation>ג&apos;ט</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Waterfall.cpp" line="419"/>
@@ -23287,7 +23520,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="189"/>
         <source>Select widgets to include:</source>
-        <translation>בחירת ווידג'טים לכלול:</translation>
+        <translation>בחירת ווידג&apos;טים לכלול:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="197"/>
@@ -23404,7 +23637,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>Widgets</source>
-        <translation type="vanished">ווידג'טים</translation>
+        <translation type="vanished">ווידג&apos;טים</translation>
     </message>
     <message>
         <source>Tools</source>
@@ -23650,12 +23883,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="190"/>
         <source>Remove %1 widget reference(s) whose target group or dataset no longer exists</source>
-        <translation>הסר %1 הפניות לווידג'טים שקבוצת היעד או מערך הנתונים שלהם אינם קיימים עוד</translation>
+        <translation>הסר %1 הפניות לווידג&apos;טים שקבוצת היעד או מערך הנתונים שלהם אינם קיימים עוד</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="193"/>
         <source>No stale widget references in any workspace</source>
-        <translation>אין הפניות מיושנות לווידג'טים באף מרחב עבודה</translation>
+        <translation>אין הפניות מיושנות לווידג&apos;טים באף מרחב עבודה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="208"/>
@@ -23669,7 +23902,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <source>Widgets</source>
-        <translation type="vanished">ווידג'טים</translation>
+        <translation type="vanished">ווידג&apos;טים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="302"/>
@@ -23679,7 +23912,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="304"/>
         <source>Project has no eligible groups -- add a group with widgets to populate workspaces.</source>
-        <translation>הפרויקט אינו מכיל קבוצות מתאימות -- הוסף קבוצה עם ווידג'טים כדי למלא סביבות עבודה.</translation>
+        <translation>הפרויקט אינו מכיל קבוצות מתאימות -- הוסף קבוצה עם ווידג&apos;טים כדי למלא סביבות עבודה.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="310"/>

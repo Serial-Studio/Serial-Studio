@@ -1489,7 +1489,10 @@
     ],
     "hexadecimalDelimiters": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -1500,6 +1503,7 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",
@@ -1934,7 +1938,7 @@
             "interpolationMode": 1,
             "showAreaUnderPlot": true
         },
-        "activeGroup": 5006,
+        "activeGroup": 5000,
         "externalWindows": {
             "data": [
             ]
@@ -2206,27 +2210,27 @@
         "layout:5006": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 478,
-                "canvasWidth": 991,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 478,
+                        "height": 546,
                         "id": 6,
                         "relativeIndex": 5,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 496,
+                        "width": 526,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 478,
+                        "height": 546,
                         "id": 16,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 8,
-                        "width": 496,
-                        "x": 495,
+                        "width": 526,
+                        "x": 525,
                         "y": 0
                     }
                 ],

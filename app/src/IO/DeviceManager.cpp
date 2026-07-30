@@ -21,7 +21,6 @@
 
 #include "IO/DeviceManager.h"
 
-#include "IO/ConnectionFlows.h"
 #include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -35,28 +34,13 @@ IO::DeviceManager::DeviceManager(int deviceId,
                                  std::unique_ptr<HAL_Driver> driver,
                                  const FrameConfig& config,
                                  QObject* parent)
-  : QObject(parent)
-  , m_linkUp(false)
-  , m_opening(false)
-  , m_deviceId(deviceId)
-  , m_linkEstablished(false)
-  , m_frameConfig(config)
-  , m_driver(std::move(driver))
-  , m_runner(this)
+  : QObject(parent), m_deviceId(deviceId), m_frameConfig(config), m_driver(std::move(driver))
 {
-  SS_ASSERT_LOG(m_driver != nullptr);
+  SS_ASSERT_LOG(m_driver);
   SS_ASSERT_LOG(deviceId >= 0);
 
   connect(
     m_driver.get(), &IO::HAL_Driver::dataReceived, this, &IO::DeviceManager::onRawDataReceived);
-
-  connect(
-    m_driver.get(), &IO::HAL_Driver::openFinished, this, &IO::DeviceManager::onDriverOpenFinished);
-
-  connect(
-    m_driver.get(), &IO::HAL_Driver::linkDropped, this, &IO::DeviceManager::onDriverLinkDropped);
-
-  connect(&m_runner, &Async::TaskRunner::finished, this, &IO::DeviceManager::onFlowFinished);
 
   startFrameReader(config);
 }
@@ -90,33 +74,6 @@ bool IO::DeviceManager::isOpen() const
 }
 
 /**
- * @brief Returns true while an orchestrated open attempt is still in flight.
- */
-bool IO::DeviceManager::isOpening() const noexcept
-{
-  return m_opening;
-}
-
-/**
- * @brief Returns true while an orchestration flow owns this device, which stays true for the
- *        life of a supervised link because the supervisor keeps watching it for a drop.
- */
-bool IO::DeviceManager::hasActiveFlow() const noexcept
-{
-  return m_runner.isRunning();
-}
-
-/**
- * @brief Returns how many open attempts the flow has made in the sequence it is working on, and
- *        zero once the link is up: a caller reads this to tell a retrying source from a dead one.
- */
-int IO::DeviceManager::reconnectAttempt() const
-{
-  const auto* supervisor = qobject_cast<const IO::SupervisorTask*>(m_runner.root());
-  return supervisor ? supervisor->attempt() : 0;
-}
-
-/**
  * @brief Returns true when the device is open and writable.
  */
 bool IO::DeviceManager::isWritable() const
@@ -141,7 +98,8 @@ IO::HAL_Driver* IO::DeviceManager::driver() const noexcept
  */
 qint64 IO::DeviceManager::write(const QByteArray& data)
 {
-  SS_ASSERT(!data.isEmpty(), return -1);
+  SS_ASSERT_LOG(!data.isEmpty());
+  SS_ASSERT_LOG(m_driver);
 
   if (!m_driver || !m_driver->isOpen())
     return -1;
@@ -154,14 +112,12 @@ qint64 IO::DeviceManager::write(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the device in the given @p mode and ensures the FrameReader is running. A driver
- *        that opted into orchestration is opened by a supervised flow, on a short connect policy
- *        because the owner waits behind it; a drop that follows recovers on the longer schedule.
- *        Every other driver takes the same synchronous call, with its result no longer discarded.
+ * @brief Opens the device in the given @p mode and ensures the FrameReader is running.
  */
 void IO::DeviceManager::open(QIODevice::OpenMode mode)
 {
-  SS_ASSERT(mode != QIODevice::NotOpen, return);
+  SS_ASSERT_LOG(m_driver);
+  SS_ASSERT_LOG(mode != QIODevice::NotOpen);
 
   if (!m_driver)
     return;
@@ -169,32 +125,15 @@ void IO::DeviceManager::open(QIODevice::OpenMode mode)
   if (m_frameReader.isNull())
     startFrameReader(m_frameConfig);
 
-  if (!m_driver->supportsAsyncOpen()) {
-    const bool ok = m_driver->open(mode);
-    Q_EMIT openFinished(
-      m_deviceId, ok, ok ? QString() : QStringLiteral("driver reported open failure"));
-    return;
-  }
-
-  m_opening         = true;
-  m_linkEstablished = false;
-  m_runner.run(Flows::makeSupervised(m_driver.get(),
-                                     Flows::makeOpenFlow(m_driver.get(), mode, m_runner.clock()),
-                                     Async::RetryPolicy::initialConnect(),
-                                     Async::RetryPolicy::autoReconnect(),
-                                     m_runner.clock()));
+  (void)m_driver->open(mode);
 }
 
 /**
- * @brief Closes the device and stops the FrameReader. The flow is cancelled first so a pending
- *        attempt cannot resurrect the link, or touch the reader, while it is being torn down.
+ * @brief Closes the device and stops the FrameReader.
  */
 void IO::DeviceManager::close()
 {
-  m_linkUp          = false;
-  m_opening         = false;
-  m_linkEstablished = false;
-  m_runner.cancel();
+  SS_ASSERT_LOG(m_driver);
 
   if (m_driver)
     m_driver->close();
@@ -208,7 +147,7 @@ void IO::DeviceManager::close()
  */
 void IO::DeviceManager::reconfigure(const FrameConfig& config)
 {
-  SS_ASSERT(m_driver != nullptr, return);
+  SS_ASSERT_LOG(m_driver);
 
   m_frameConfig = config;
   killFrameReader();
@@ -224,7 +163,7 @@ void IO::DeviceManager::reconfigure(const FrameConfig& config)
  */
 void IO::DeviceManager::onReadyRead()
 {
-  SS_ASSERT_LOG(m_driver != nullptr);
+  SS_ASSERT_LOG(m_driver);
 
   if (!m_frameReader)
     return;
@@ -242,68 +181,6 @@ void IO::DeviceManager::onRawDataReceived(const IO::CapturedDataPtr& data)
   Q_EMIT rawDataReceived(m_deviceId, data);
 }
 
-/**
- * @brief Reports a link that came up. A failed attempt inside a running flow is swallowed here
- *        because the flow will retry it; only its final verdict reaches the owner. A link that
- *        came up is remembered, so a later give-up can be told from a connect that never landed.
- */
-void IO::DeviceManager::onDriverOpenFinished(bool ok, const QString& reason)
-{
-  SS_ASSERT_LOG(m_driver != nullptr);
-  SS_ASSERT_LOG(ok || !reason.isEmpty());
-
-  if (!ok && m_runner.isRunning())
-    return;
-
-  m_opening = false;
-  if (ok)
-    m_linkEstablished = true;
-
-  Q_EMIT openFinished(m_deviceId, ok, reason);
-
-  if (ok && !m_linkUp) {
-    m_linkUp = true;
-    Q_EMIT linkStateChanged(m_deviceId);
-  }
-}
-
-/**
- * @brief Reports the up-to-down edge of a supervised link exactly once per drop, so the UI can
- *        reflect the outage the moment it happens while the silent recovery keeps retrying
- *        without any per-attempt signal.
- */
-void IO::DeviceManager::onDriverLinkDropped()
-{
-  if (!m_linkUp)
-    return;
-
-  m_linkUp = false;
-  Q_EMIT linkStateChanged(m_deviceId);
-}
-
-/**
- * @brief Reports a flow that gave up. Success needs no report (the link already announced
- *        itself) and a cancel is a close the owner asked for, so neither emits. A give-up that
- *        ends the recovery of a link which had been up is also reported as a lost link, which is
- *        what lets the owner tear the source down and name the last reason exactly once.
- */
-void IO::DeviceManager::onFlowFinished(Async::Outcome outcome, const Async::StepError& error)
-{
-  SS_ASSERT_LOG(m_driver != nullptr);
-
-  m_opening = false;
-  if (outcome == Async::Outcome::Success || outcome == Async::Outcome::Cancelled)
-    return;
-
-  m_linkUp          = false;
-  const bool lost   = m_linkEstablished;
-  m_linkEstablished = false;
-
-  Q_EMIT openFinished(m_deviceId, false, error.reason);
-  if (lost)
-    Q_EMIT linkLost(m_deviceId, error.reason);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
@@ -313,7 +190,8 @@ void IO::DeviceManager::onFlowFinished(Async::Outcome outcome, const Async::Step
  */
 void IO::DeviceManager::startFrameReader(const FrameConfig& config)
 {
-  SS_ASSERT(m_deviceId >= 0, return);
+  SS_ASSERT_LOG(m_driver);
+  SS_ASSERT_LOG(m_deviceId >= 0);
 
   if (!m_driver)
     return;

@@ -47,29 +47,6 @@ static size_t idealSerialBufferSize(const qint32 baud)
   return bytes;
 }
 
-/**
- * @brief Returns whether the open attempt in flight is the first of its sequence, which is what
- *        keeps an error box tied to the user's request instead of to every retried attempt.
- */
-static bool firstOpenAttempt()
-{
-  static auto& connectionManager = IO::ConnectionManager::instance();
-  return connectionManager.reconnectAttempt() <= 1;
-}
-
-/**
- * @brief Queues an error box so it opens once the open attempt has returned: a modal spins the
- *        event loop, and a connect request arriving inside it would replace the flow whose stack
- *        the box was raised from.
- */
-static void queueErrorBox(QObject* context, const QString& title, const QString& text)
-{
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
-    Qt::QueuedConnection);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -81,6 +58,7 @@ IO::Drivers::UART::UART()
   : m_port(nullptr)
   , m_dtrEnabled(true)
   , m_autoReconnect(false)
+  , m_pendingReconnect(false)
   , m_usingCustomSerialPort(false)
   , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
@@ -154,6 +132,7 @@ void IO::Drivers::UART::close()
   }
 
   m_port                  = nullptr;
+  m_pendingReconnect      = false;
   m_usingCustomSerialPort = false;
 
   Q_EMIT portChanged();
@@ -199,15 +178,6 @@ bool IO::Drivers::UART::isWritable() const noexcept
 bool IO::Drivers::UART::configurationOk() const noexcept
 {
   return portIndex() > 0;
-}
-
-/**
- * @brief Returns true; the port is opened through an orchestrated flow, which is what lets the
- *        shared supervisor bring a lost port back instead of a driver-owned reconnect tick.
- */
-bool IO::Drivers::UART::supportsAsyncOpen() const noexcept
-{
-  return true;
 }
 
 /**
@@ -289,9 +259,11 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
       return true;
     }
 
-    else if (firstOpenAttempt())
-      queueErrorBox(
-        this, tr("Failed to connect to serial port \"%1\"").arg(name), port()->errorString());
+    else {
+      Misc::Utilities::showMessageBox(tr("Failed to connect to serial port \"%1\"").arg(name),
+                                      port()->errorString(),
+                                      QMessageBox::Critical);
+    }
   }
 
   close();
@@ -753,9 +725,7 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 }
 
 /**
- * @brief Scans for available serial ports and rebuilds the device list. While an open attempt is
- *        in flight the selection is pinned back to the port the user connected to, since a port
- *        that disappeared shifts every index after it.
+ * @brief Scans for available serial ports and rebuilds the device list.
  */
 void IO::Drivers::UART::refreshSerialDevices()
 {
@@ -785,10 +755,11 @@ void IO::Drivers::UART::refreshSerialDevices()
 
     static auto& connectionManager = ConnectionManager::instance();
     const bool uart_active         = connectionManager.busType() == SerialStudio::BusType::UART;
-    const bool attempting          = uart_active && connectionManager.reconnectAttempt() > 0;
-    if (attempting && autoReconnect() && !isOpen() && m_lastSerialDeviceIndex > 0
-        && m_lastSerialDeviceIndex < portList().count())
+    if (uart_active && autoReconnect() && m_pendingReconnect && !isOpen()
+        && m_lastSerialDeviceIndex > 0 && m_lastSerialDeviceIndex < portList().count()) {
       setPortIndex(m_lastSerialDeviceIndex);
+      connectionManager.connectDevice();
+    }
 
     Q_EMIT availablePortsChanged();
 
@@ -805,51 +776,38 @@ void IO::Drivers::UART::refreshSerialDevices()
 }
 
 /**
- * @brief Handles a serial port error. The drop is reported after the handler lock is released,
- *        because the recovery it starts re-enters this driver to close and re-open the port.
+ * @brief Handles a serial port error by disconnecting and showing a message box.
  */
 void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 {
-  bool dropped = false;
+  QMutexLocker locker(&m_errorHandlerMutex);
 
-  {
-    QMutexLocker locker(&m_errorHandlerMutex);
-    dropped = applyErrorPolicy(error);
-  }
-
-  if (dropped)
-    Q_EMIT linkDropped();
-}
-
-/**
- * @brief Applies the error policy and returns whether the link should be recovered instead of
- *        torn down: a resource loss on a port the user asked to auto-reconnect is a dropped link,
- *        every other error disconnects the source and reports it as before.
- */
-bool IO::Drivers::UART::applyErrorPolicy(QSerialPort::SerialPortError error)
-{
   auto serialPort = port();
   if (serialPort && !serialPort->isOpen())
-    return false;
+    return;
 
-  if (!isOpen() || error == QSerialPort::NoError)
-    return false;
+  if (!isOpen())
+    return;
 
-  if (m_usingCustomSerialPort
-      && (error == QSerialPort::UnsupportedOperationError || error == QSerialPort::ResourceError))
-    return false;
+  if (error != QSerialPort::NoError) {
+    if (m_usingCustomSerialPort) {
+      if (error == QSerialPort::UnsupportedOperationError || error == QSerialPort::ResourceError)
+        return;
+    }
 
-  if (m_autoReconnect && error == QSerialPort::ResourceError)
-    return true;
+    static auto& connectionManager = ConnectionManager::instance();
+    connectionManager.disconnectDevice(this);
 
-  static auto& connectionManager = ConnectionManager::instance();
-  connectionManager.disconnectDevice(this);
+    if (!m_autoReconnect || error != QSerialPort::ResourceError) {
+      const auto name = serialPort ? serialPort->portName() : tr("Unknown");
+      Misc::Utilities::showMessageBox(tr("Critical error on serial port \"%1\"").arg(name),
+                                      m_errorDescriptions.value(error, tr("Unknown error")),
+                                      QMessageBox::Critical);
+    }
 
-  const auto name = serialPort ? serialPort->portName() : tr("Unknown");
-  Misc::Utilities::showMessageBox(tr("Critical error on serial port \"%1\"").arg(name),
-                                  m_errorDescriptions.value(error, tr("Unknown error")),
-                                  QMessageBox::Critical);
-  return false;
+    else
+      m_pendingReconnect = true;
+  }
 }
 
 /**

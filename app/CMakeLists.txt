@@ -307,7 +307,6 @@ set(SOURCES
   src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
   src/IO/ConnectionManager.cpp
-  src/IO/ConnectionFlows.cpp
   src/Async/TaskTree.cpp
   src/Async/RetryPolicy.cpp
   src/Console/Export.cpp
@@ -495,7 +494,6 @@ set(HEADERS
   src/IO/FrameConfig.h
   src/IO/DeviceManager.h
   src/IO/ConnectionManager.h
-  src/IO/ConnectionFlows.h
   src/Async/TaskTree.h
   src/Async/RetryPolicy.h
   src/Async/AsyncClock.h
