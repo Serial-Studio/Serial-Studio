@@ -29,7 +29,6 @@
 #include "Console/Handler.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
-#include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ControlScript.h"
 #include "IO/Drivers/BluetoothLE.h"
@@ -73,7 +72,6 @@ IO::ConnectionManager::ConnectionManager()
   , m_writeEnabled(true)
   , m_connectFanOut(false)
   , m_connectPending(false)
-  , m_linkLossNotified(false)
   , m_waitCursorActive(false)
   , m_lastConnectedState(false)
   , m_syncingFromProject(false)
@@ -223,28 +221,8 @@ int IO::ConnectionManager::connectedDeviceCount() const
 }
 
 /**
- * @brief Returns how many devices currently have an orchestration flow attached. A supervised
- *        link keeps its flow for as long as it is up, so this count is steady rather than zero
- *        while connected; a count that grows across connect/drop/recover cycles is a leak.
- */
-int IO::ConnectionManager::activeFlowCount() const
-{
-  return 0;
-}
-
-/**
- * @brief Returns the highest open-attempt count any device's flow is working through: one while a
- *        first attempt is in flight, higher while the shared retry policy is re-attempting, and
- *        zero once every link is either up or idle.
- */
-int IO::ConnectionManager::reconnectAttempt() const
-{
-  return 0;
-}
-
-/**
- * @brief Reports the link as idle, connecting, retrying, or connected, which is what tells a
- *        caller that a source is coming back on its own instead of merely being down.
+ * @brief Reports the link as connected or idle. The connecting and retrying states went away with
+ *        the orchestration flows: a synchronous open is over by the time anyone can ask.
  */
 QString IO::ConnectionManager::linkState() const
 {
@@ -776,15 +754,12 @@ void IO::ConnectionManager::connectDevice()
 }
 
 /**
- * @brief Ends a connect request once no device is still opening: restores the cursor and reports
- *        the state change exactly once, whether the opens finished inside the fan-out or later.
+ * @brief Ends a connect request once the fan-out that raised it is over: restores the cursor and
+ *        reports the state change exactly once, no matter how many devices the request opened.
  */
 void IO::ConnectionManager::concludeConnectRequest()
 {
   if (!m_connectPending || m_connectFanOut)
-    return;
-
-  if (hasPendingOpen())
     return;
 
   m_connectPending     = false;
@@ -816,14 +791,6 @@ void IO::ConnectionManager::endWaitCursor()
 
   m_waitCursorActive = false;
   QApplication::restoreOverrideCursor();
-}
-
-/**
- * @brief Returns whether any device is still working through an open attempt.
- */
-bool IO::ConnectionManager::hasPendingOpen() const
-{
-  return false;
 }
 
 /**
@@ -1033,7 +1000,9 @@ void IO::ConnectionManager::shutdownDrivers()
 }
 
 /**
- * @brief Connects the device with the given @p deviceId.
+ * @brief Connects the device with the given @p deviceId and reports the driver's verdict, which
+ *        is what drives the connection diagnostics. The verdict is the open call's own return
+ *        value, not `isOpen()`: a driver that dials asynchronously is not up yet when it returns.
  */
 void IO::ConnectionManager::connectDevice(int deviceId)
 {
@@ -1041,10 +1010,11 @@ void IO::ConnectionManager::connectDevice(int deviceId)
   if (it == m_devices.end() || !it->second)
     return;
 
-  m_linkLossNotified             = false;
   const QIODevice::OpenMode mode = m_writeEnabled ? QIODevice::ReadWrite : QIODevice::ReadOnly;
-  it->second->open(mode);
+  const bool ok                  = it->second->open(mode);
   setPaused(false);
+
+  onDeviceOpenFinished(deviceId, ok, ok ? QString() : QStringLiteral("device did not open"));
 }
 
 /**
@@ -1378,8 +1348,8 @@ bool IO::ConnectionManager::diagnosticsBusFor(int deviceId, Misc::Diagnostics::B
 /**
  * @brief Settles the pending connect request when a device finishes opening, and hands the
  *        outcome to the connection diagnostics: a failure diagnoses that bus only, a success
- *        clears what the previous failure reported. A failure with no request behind it is a
- *        supervised link that gave up, which nothing else would report.
+ *        clears what the previous failure reported. Every open reports its outcome here exactly
+ *        once, so a failure with no request behind it still emits the state change.
  */
 void IO::ConnectionManager::onDeviceOpenFinished(int deviceId, bool ok, const QString& reason)
 {
@@ -1400,83 +1370,6 @@ void IO::ConnectionManager::onDeviceOpenFinished(int deviceId, bool ok, const QS
 
   if (!ok && !had_request)
     Q_EMIT connectedChanged();
-}
-
-/**
- * @brief Tears a source down once its supervised flow gave up on a dropped link, naming the last
- *        reason at most once per connect request so a project whose sources drop together cannot
- *        stack modals. The state change was already reported when the flow failed, so nothing is
- *        emitted here, and a device a newer request already re-opened is left alone.
- */
-void IO::ConnectionManager::onDeviceLinkLost(int deviceId, const QString& reason)
-{
-  SS_ASSERT_LOG(deviceId >= 0);
-  SS_ASSERT_LOG(!m_connectFanOut);
-
-  const auto it = m_devices.find(deviceId);
-  if (it == m_devices.end() || !it->second)
-    return;
-
-  if (it->second->isOpen())
-    return;
-
-  disconnectDevice(deviceId);
-  if (!isConnected()) {
-    static auto& frameBuilder = DataModel::FrameBuilder::instance();
-    frameBuilder.registerQuickPlotHeaders(QStringList());
-    Q_EMIT driverChanged();
-    Q_EMIT sessionClosed();
-  }
-
-  if (m_linkLossNotified)
-    return;
-
-  m_linkLossNotified = true;
-  Misc::Utilities::showMessageBox(
-    tr("Connection Lost"),
-    reason.isEmpty() ? tr("The connection was lost and could not be restored.") : reason,
-    QMessageBox::Critical);
-}
-
-/**
- * @brief Reflects a supervised link's up/down edge: refreshes the aggregate connection state and
- *        posts a notification naming the source, so a single-source outage in a multi-source
- *        project stays visible while the dashboard remains connected through its siblings.
- */
-void IO::ConnectionManager::onDeviceLinkStateChanged(int deviceId)
-{
-  Q_EMIT connectedChanged();
-
-  static auto& notificationCenter = DataModel::NotificationCenter::instance();
-  const QString name              = deviceDisplayName(deviceId);
-
-  if (!isDeviceConnected(deviceId)) {
-    m_droppedDevices.insert(deviceId);
-    notificationCenter.postWarning(QStringLiteral("ConnectionManager"),
-                                   tr("%1: link lost").arg(name),
-                                   tr("Attempting to reconnect automatically"));
-    return;
-  }
-
-  if (m_droppedDevices.remove(deviceId)) {
-    notificationCenter.postInfo(QStringLiteral("ConnectionManager"),
-                                tr("%1: link restored").arg(name),
-                                tr("The connection recovered automatically"));
-  }
-}
-
-/**
- * @brief Returns the project source title behind @p deviceId, or a generic fallback for a device
- *        the project does not name.
- */
-QString IO::ConnectionManager::deviceDisplayName(int deviceId) const
-{
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  for (const auto& src : projectModel.sources())
-    if (src.sourceId == deviceId && !src.title.isEmpty())
-      return src.title;
-
-  return tr("Device %1").arg(deviceId);
 }
 
 /**
@@ -1605,7 +1498,6 @@ void IO::ConnectionManager::rebuildDevices()
     }
   }
 
-  m_droppedDevices.clear();
   for (auto it = m_devices.begin(); it != m_devices.end();) {
     const bool skipPrimary = (it->first == 0 && !willRebuildDevice0);
     if (skipPrimary) {

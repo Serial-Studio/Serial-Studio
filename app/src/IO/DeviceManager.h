@@ -60,7 +60,7 @@ public:
   void reconfigure(const FrameConfig& config);
 
 public slots:
-  void open(QIODevice::OpenMode mode = QIODevice::ReadWrite);
+  bool open(QIODevice::OpenMode mode = QIODevice::ReadWrite);
   void close();
 
 private slots:

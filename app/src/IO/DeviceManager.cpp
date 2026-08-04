@@ -112,20 +112,22 @@ qint64 IO::DeviceManager::write(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the device in the given @p mode and ensures the FrameReader is running.
+ * @brief Opens the device in the given @p mode and ensures the FrameReader is running. The
+ *        driver's verdict is returned rather than discarded: for a driver that dials
+ *        asynchronously it means the attempt started, not that the link is up.
  */
-void IO::DeviceManager::open(QIODevice::OpenMode mode)
+bool IO::DeviceManager::open(QIODevice::OpenMode mode)
 {
   SS_ASSERT_LOG(m_driver);
   SS_ASSERT_LOG(mode != QIODevice::NotOpen);
 
   if (!m_driver)
-    return;
+    return false;
 
   if (m_frameReader.isNull())
     startFrameReader(m_frameConfig);
 
-  (void)m_driver->open(mode);
+  return m_driver->open(mode);
 }
 
 /**

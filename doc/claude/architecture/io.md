@@ -38,13 +38,25 @@ describe a design that is no longer in the tree.
   `beginWaitCursor()` / `endWaitCursor()`, and `concludeConnectRequest()`, which emits
   `connectedChanged()` exactly once. Because opens complete synchronously,
   `hasPendingOpen()` is a constant `false` and the request always settles inside the fan-out.
-- **Three `ConnectionManager` accessors are constant stubs** kept only so the QML and API
-  surfaces do not change shape: `activeFlowCount()` returns `0`, `reconnectAttempt()` returns
-  `0`, and `linkState()` returns `connected` or `idle` — never `connecting` or `retrying`. Their
-  Doxygen still describes the removed flows. `io.getStatus` reports these values as-is.
-- **`ConnectionManager::onDeviceOpenFinished()` is currently unreachable** — `DeviceManager` no
-  longer emits an open-finished signal and nothing else calls it, so the spec-0035 diagnostics
-  auto-trigger below never fires. Diagnostics still run when invoked explicitly.
+- **`linkState()` reports only `connected` or `idle`.** The `connecting` and `retrying` states
+  went with the flows, and `io.getStatus` no longer returns `activeFlows` or `reconnectAttempt`
+  at all — the accessors behind them are gone rather than stubbed, so nothing can read a `0`
+  as "first attempt". An API client watching a flapping link polls `isConnected`.
+- **`connectDevice(int)` reports the outcome itself.** `DeviceManager::open()` returns the
+  driver's verdict instead of discarding it, and `connectDevice(int)` passes that to
+  `onDeviceOpenFinished(deviceId, ok, reason)` — the only thing driving the spec-0035
+  diagnostics auto-trigger now that no signal reports an open. Use the open call's return value,
+  **never `isOpen()`**: MQTT, TCP and BLE dial asynchronously, so `isOpen()` is still false when
+  a perfectly good attempt returns, and diagnostics would probe on every connect. The
+  consequence is that a *later* async failure does not auto-trigger anything; the synchronous
+  refusals diagnostics care about most (missing port, permissions) do. The reason string is
+  never shown — diagnostics ignore it and the driver surfaces its own error.
+- **Nothing reports a drop centrally.** `onDeviceLinkLost()` and `onDeviceLinkStateChanged()`
+  were driven by signals the flow layer owned; both are deleted, along with the "Connection
+  Lost" modal and the per-source "link lost / link restored" notifications. A driver that loses
+  its link calls `disconnectDevice(this)` and raises its own error box (`UART::handleError()` is
+  the reference). Restoring a central notification means giving `HAL_Driver` a drop signal
+  again — decide that deliberately, do not re-add a half-wired handler.
 
 ## The Async Task-Tree Engine (`app/src/Async/`)
 
@@ -89,13 +101,11 @@ Results cache per bus; the five `diagnostics.<bus>` problem-center checkers only
 cache, because `ProblemCenter::Checker` must return findings synchronously. Diagnostics never
 touch a driver's configuration and start no discovery scan.
 
-`ConnectionManager::onDeviceOpenFinished(deviceId, ok, reason)` was the auto-trigger: on
-failure it resolves the failing device's bus and calls `onOpenFailed()` (instant checks
-always, probing run only outside the 30 s per-bus window); on success it calls
-`onOpenSucceeded()`, which clears that bus's cached results. **It is dead code since the
-connection flows were removed** — no signal reaches it, so nothing auto-runs diagnostics after
-a failed open. Rewiring it means calling it from the synchronous open path in
-`ConnectionManager::connectDevice()`.
+`ConnectionManager::onDeviceOpenFinished(deviceId, ok, reason)` is the auto-trigger, called
+straight from `connectDevice(int)` once the synchronous open returns: on failure it resolves the
+failing device's bus and calls `onOpenFailed()` (instant checks always, probing run only outside
+the 30 s per-bus window); on success it calls `onOpenSucceeded()`, which clears that bus's cached
+results.
 
 ## File Transmission (Pro)
 

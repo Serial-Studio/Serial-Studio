@@ -24,7 +24,7 @@
 #include <QJsonObject>
 
 #ifdef Q_OS_WIN
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 #include "IO/ConnectionManager.h"
@@ -80,19 +80,9 @@ static void configureNativeBuffer(QSerialPort* port, const qint32 baud)
 #endif
 
 /**
- * @brief Returns whether the open attempt in flight is the first of its sequence, which is what
- *        keeps an error box tied to the user's request instead of to every retried attempt.
- */
-static bool firstOpenAttempt()
-{
-  static auto& connectionManager = IO::ConnectionManager::instance();
-  return connectionManager.reconnectAttempt() <= 1;
-}
-
-/**
  * @brief Queues an error box so it opens once the open attempt has returned: a modal spins the
- *        event loop, and a connect request arriving inside it would replace the flow whose stack
- *        the box was raised from.
+ *        event loop, and a connect request arriving inside it would re-enter the open whose
+ *        stack the box was raised from.
  */
 static void queueErrorBox(QObject* context, const QString& title, const QString& text)
 {
@@ -565,10 +555,10 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
 
     if (port()) {
       if (!port()->setBaudRate(baudRate())) {
-        queueErrorBox(this,
-                      tr("Failed to set baud rate"),
-                      tr("Baud rate %1 rejected: %2")
-                        .arg(QString::number(baudRate()), port()->errorString()));
+        queueErrorBox(
+          this,
+          tr("Failed to set baud rate"),
+          tr("Baud rate %1 rejected: %2").arg(QString::number(baudRate()), port()->errorString()));
       }
     }
 

@@ -153,8 +153,6 @@ public:
   [[nodiscard]] bool readWrite() const;
   [[nodiscard]] bool isConnected() const;
   [[nodiscard]] bool configurationOk() const;
-  [[nodiscard]] int activeFlowCount() const;
-  [[nodiscard]] int reconnectAttempt() const;
   [[nodiscard]] int connectedDeviceCount() const;
 
   [[nodiscard]] QString linkState() const;
@@ -229,8 +227,6 @@ private slots:
   void wireDevice(DeviceManager* dm);
   void refreshConnectedState();
   void onUiDriverConfigurationChanged();
-  void onDeviceLinkLost(int deviceId, const QString& reason);
-  void onDeviceLinkStateChanged(int deviceId);
   void onFrameReady(int deviceId, const IO::CapturedDataPtr& frame);
   void onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
   void onDeviceOpenFinished(int deviceId, bool ok, const QString& reason);
@@ -242,8 +238,6 @@ private:
   void wireUiDriver(IO::HAL_Driver* driver);
   void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
 
-  [[nodiscard]] bool hasPendingOpen() const;
-  [[nodiscard]] QString deviceDisplayName(int deviceId) const;
   [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] bool diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const;
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
@@ -254,7 +248,6 @@ private:
   bool m_writeEnabled;
   bool m_connectFanOut;
   bool m_connectPending;
-  bool m_linkLossNotified;
   bool m_waitCursorActive;
   bool m_lastConnectedState;
   bool m_syncingFromProject;
@@ -266,7 +259,6 @@ private:
 
   QSettings m_settings;
   QTimer m_uiDriverSaveTimer;
-  QSet<int> m_droppedDevices;
 
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
 
