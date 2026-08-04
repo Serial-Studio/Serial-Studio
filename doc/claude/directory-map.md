@@ -2,12 +2,11 @@
 
 ```
 app/src/
-├── IO/              ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig,
-│   │                ConnectionFlows (spec-0034 task-tree connect/reconnect flows)
+├── IO/              ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig
 │   ├── Drivers/     UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, MQTT, Process, USB
 │   └── FileTransmission/  Protocol base, XMODEM, YMODEM, ZMODEM, CRC utilities
-├── Async/           TaskTree, RetryPolicy, AsyncClock — connection orchestration engine
-│                    (spec 0034); boundaries only, nothing per frame
+├── Async/           TaskTree, RetryPolicy, AsyncClock — task-tree engine used by MQTT::Publisher
+│                    and the spec-0035 diagnostics probes; boundaries only, nothing per frame
 ├── DataModel/       Frame, FrameBuilder, FrameConsumer, DataTable(Store), ExportSchema,
 │   │                ProjectModel, ProjectEditor, NotificationCenter, HotpathOptimization.h
 │   ├── Project/     ProjectModel TU split (Crud, Folders, Loading, Persistence, Sources,

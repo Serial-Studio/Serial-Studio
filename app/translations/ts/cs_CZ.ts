@@ -1,12 +1,72 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="cs_CZ" sourcelanguage="en_US">
 <context>
-    <name/>
+    <name></name>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
         <translation>Smíšené</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
+        <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
+        <source>PEM private key matching the client certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
+        <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
+        <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -166,7 +226,7 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
         <translation>(Model vrátil prázdnou odpověď. Zkuste přeformulovat dotaz, přepnout na jiný model nebo zkontrolovat, zda je požadavek povolen bezpečnostními filtry poskytovatele.)</translation>
     </message>
     <message>
@@ -314,7 +374,7 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote's dataset layout does not match its announced hash</source>
+        <source>The remote&apos;s dataset layout does not match its announced hash</source>
         <translation>Rozložení datové sady vzdáleného systému neodpovídá ohlášenému hash</translation>
     </message>
     <message>
@@ -355,8 +415,8 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program "%1" not found in PATH</source>
-        <translation>Program „%1" nebyl nalezen v PATH</translation>
+        <source>Program &quot;%1&quot; not found in PATH</source>
+        <translation>Program „%1&quot; nebyl nalezen v PATH</translation>
     </message>
 </context>
 <context>
@@ -392,7 +452,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Program používající lokální API Serial Studia žádá o povolení odesílat data do připojeného zařízení. Povolit klientům API zápis do zařízení?</translation>
     </message>
     <message>
@@ -454,8 +514,8 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Tento software je poskytován 'tak, jak je' bez záruky jakéhokoli druhu, výslovné či předpokládané, včetně, ale nejen, záruk prodejnosti nebo vhodnosti pro konkrétní účel. Autor v žádném případě nenese odpovědnost za škody vzniklé použitím tohoto softwaru.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Tento software je poskytován &apos;tak, jak je&apos; bez záruky jakéhokoli druhu, výslovné či předpokládané, včetně, ale nejen, záruk prodejnosti nebo vhodnosti pro konkrétní účel. Autor v žádném případě nenese odpovědnost za škody vzniklé použitím tohoto softwaru.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -478,7 +538,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Ukázka Projektu</translation>
     </message>
     <message>
-        <source>What's New</source>
+        <source>What&apos;s New</source>
         <translation type="vanished">Co Je Nového</translation>
     </message>
     <message>
@@ -1005,7 +1065,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Použít Předvolbu</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
         <translation type="vanished">Nahradit aktuální pásma vybranou předvolbou, škálovanou na rozsah tohoto datasetu.</translation>
     </message>
     <message>
@@ -1213,7 +1273,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio's features</source>
+        <source>Help me discover Serial Studio&apos;s features</source>
         <translation>Pomozte mi objevit funkce Serial Studio</translation>
     </message>
     <message>
@@ -1341,13 +1401,13 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder "%1" - readable this session</source>
-        <translation>Složka "%1" přidána – čitelná během této relace</translation>
+        <source>Added folder &quot;%1&quot; - readable this session</source>
+        <translation>Složka &quot;%1&quot; přidána – čitelná během této relace</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added "%1" - readable this session</source>
-        <translation>Soubor "%1" přidán – čitelný během této relace</translation>
+        <source>Added &quot;%1&quot; - readable this session</source>
+        <translation>Soubor &quot;%1&quot; přidán – čitelný během této relace</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1695,7 +1755,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>Název se mění z "%1" na "%2". Struktura skupiny beze změny.</translation>
+        <translation>Název se mění z &quot;%1&quot; na &quot;%2&quot;. Struktura skupiny beze změny.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1787,7 +1847,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
         <translation>Měří, jak rychle tento počítač dokáže extrahovat, parsovat a vizualizovat rámce prostřednictvím datového pipeline Serial Studio.</translation>
     </message>
     <message>
@@ -2243,7 +2303,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio aktualizujeme pro tento operační systém, jakmile jej QT oficiálně podpoří</translation>
     </message>
 </context>
@@ -3599,7 +3659,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance's dashboard over the network</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
         <translation>Sledovat dashboard jiné instance Serial Studio přes síť</translation>
     </message>
     <message>
@@ -3911,7 +3971,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler's number</source>
+        <source>Euler&apos;s number</source>
         <translation>Eulerovo číslo</translation>
     </message>
     <message>
@@ -5183,11 +5243,11 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation type="vanished">Hodnota</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Zadejte data rámce výše, v případě potřeby zapněte režim HEX a poté klikněte na „Vyhodnotit" pro spuštění parseru rámců.
+        <translation type="vanished">Zadejte data rámce výše, v případě potřeby zapněte režim HEX a poté klikněte na „Vyhodnotit&quot; pro spuštění parseru rámců.
 
 Příklad (Text): a,b,c,d,e,f
 Příklad (HEX):  48 65 6C 6C 6F</translation>
@@ -5427,10 +5487,10 @@ Veškeré neuložené změny budou ztraceny. Pokračovat?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>"%1" expects %2 dataset(s); the current group has %3.
+        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template's defaults?</source>
-        <translation>"%1" očekává %2 dataset(ů); aktuální skupina má %3.
+Add %4 dataset(s) using the template&apos;s defaults?</source>
+        <translation>&quot;%1&quot; očekává %2 dataset(ů); aktuální skupina má %3.
 
 Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
@@ -5891,47 +5951,47 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation>Heslo pro autentizaci brokera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="335"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="412"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="346"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="423"/>
         <source>Use SSL/TLS</source>
         <translation>Použít SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="347"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="424"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Tunelovat připojení k brokeru přes TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="360"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="437"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="361"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="438"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Vyjednaná rodina TLS protokolu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="371"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="448"/>
         <source>Peer Verify</source>
         <translation>Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="372"/>
-        <source>How strictly the broker's certificate chain is validated</source>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
+        <source>How strictly the broker&apos;s certificate chain is validated</source>
         <translation>Jak přísně je validován řetězec certifikátů brokeru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="382"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="459"/>
         <source>Verify Depth</source>
         <translation>Hloubka Ověření</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="383"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="460"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Maximální délka akceptovaného řetězce certifikátů (0 = neomezeno)</translation>
     </message>
@@ -6258,7 +6318,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Potlačit samostatnou dlaždici tohoto datasetu na dashboardu; painter widget může stále číst jeho hodnoty</translation>
     </message>
     <message>
@@ -7130,8 +7190,8 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias "%1" is already in use</source>
-        <translation>Alias "%1" je již používán</translation>
+        <source>Alias &quot;%1&quot; is already in use</source>
+        <translation>Alias &quot;%1&quot; je již používán</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="646"/>
@@ -7145,13 +7205,13 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias "%1" contains only digits</source>
-        <translation>Alias "%1" obsahuje pouze číslice</translation>
+        <source>Alias &quot;%1&quot; contains only digits</source>
+        <translation>Alias &quot;%1&quot; obsahuje pouze číslice</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Skripty jej musí citovat jako řetězec, např. getDataset("%1"); numerický argument je čten jako uniqueId, nikoli tento alias.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Skripty jej musí citovat jako řetězec, např. getDataset(&quot;%1&quot;); numerický argument je čten jako uniqueId, nikoli tento alias.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7460,8 +7520,8 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source "%1"?</source>
-        <translation>Chcete smazat zdroj dat "%1"?</translation>
+        <source>Do you want to delete data source &quot;%1&quot;?</source>
+        <translation>Chcete smazat zdroj dat &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7549,13 +7609,13 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Váš projekt používal starší funkci parseru rámců s argumentem 'separator'. Byl automaticky migrován do nového formátu.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>Váš projekt používal starší funkci parseru rámců s argumentem &apos;separator&apos;. Byl automaticky migrován do nového formátu.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>Chcete smazat skupinu "%1"?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>Chcete smazat skupinu &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7567,13 +7627,13 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>Chcete smazat akci "%1"?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>Chcete smazat akci &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>Chcete smazat datovou sadu "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>Chcete smazat datovou sadu &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7704,8 +7764,8 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget "%1"?</source>
-        <translation>Chcete smazat výstupní widget „%1"?</translation>
+        <source>Do you want to delete output widget &quot;%1&quot;?</source>
+        <translation>Chcete smazat výstupní widget „%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
@@ -8001,8 +8061,8 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete "%1"?</source>
-        <translation>Smazat „%1"?</translation>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation>Smazat „%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -8093,8 +8153,8 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder "%1"?</source>
-        <translation>Smazat složku „%1"?</translation>
+        <source>Delete folder &quot;%1&quot;?</source>
+        <translation>Smazat složku „%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8162,7 +8222,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
         <translation>Vypnutí přizpůsobení zahodí vaše úpravy a znovu vytvoří seznam pracovních prostorů ze skupin projektu.</translation>
     </message>
     <message>
@@ -8697,7 +8757,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
         <translation>Definujte barevné rozsahy hodnot s úrovněmi závažnosti pro měřič nebo LED tohoto datasetu.</translation>
     </message>
     <message>
@@ -8739,7 +8799,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Pásma Alarmu</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
         <translation type="vanished">Definujte barevné rozsahy hodnot s úrovněmi závažnosti pro měřič tohoto datasetu.</translation>
     </message>
     <message>
@@ -8857,8 +8917,8 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>Klikněte na „OK" pro zahájení instalace aktualizace</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>Klikněte na „OK&quot; pro zahájení instalace aktualizace</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -8877,8 +8937,8 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>Klikněte na tlačítko „Otevřít" pro aplikaci aktualizace</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>Klikněte na tlačítko „Otevřít&quot; pro aplikaci aktualizace</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -9155,7 +9215,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don't Allow</source>
+        <source>Don&apos;t Allow</source>
         <translation>Nepovolit</translation>
     </message>
     <message>
@@ -9490,7 +9550,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Není dostupné přes vzdálené připojení. Tento widget potřebuje surový proud vzorků ze vzdáleného zařízení, který zrcadlení dashboardu nepřenáší.</translation>
     </message>
     <message>
@@ -10968,97 +11028,97 @@ Platný formát: 01 A2 FF 3C</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="349"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="350"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
         <source>Network Socket</source>
         <translation>Síťový Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="351"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="353"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="354"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="355"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
         <source>CAN Bus</source>
         <translation>Sběrnice CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="356"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
         <source>USB Device</source>
         <translation>Zařízení USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="357"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
         <source>HID Device</source>
         <translation>Zařízení HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="358"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="359"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT Odběratel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="767"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
         <source>Your trial period has ended.</source>
         <translation>Zkušební období skončilo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="768"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Pro pokračování v používání Serial Studio aktivujte licenci.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
         <source>Connection Lost</source>
         <translation>Připojení Ztraceno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1461"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
         <translation>Připojení bylo ztraceno a nelze jej obnovit.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1480"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
         <translation>%1: spojení ztraceno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1481"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
         <translation>Probíhá automatické opětovné připojení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1487"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
         <translation>%1: spojení obnoveno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1488"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
         <translation>Spojení bylo automaticky obnoveno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1503"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
         <translation>Zařízení %1</translation>
     </message>
@@ -11134,77 +11194,77 @@ Platný formát: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
         <source>BLE I/O Module Error</source>
         <translation>Chyba BLE I/O Modulu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="982"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
         <source>Select Device</source>
         <translation>Vybrat Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="993"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
         <source>Select Service</source>
         <translation>Vybrat Službu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1004"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
         <source>Select Characteristic</source>
         <translation>Vybrat Charakteristiku</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1214"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
         <source>Error while configuring BLE service</source>
         <translation>Chyba při konfiguraci BLE služby</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
         <source>Operation error</source>
         <translation>Chyba operace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1508"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
         <source>Characteristic write error</source>
         <translation>Chyba zápisu charakteristiky</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1511"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
         <source>Descriptor write error</source>
         <translation>Chyba zápisu deskriptoru</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
         <source>Characteristic read error</source>
         <translation>Chyba čtení charakteristiky</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
         <source>Descriptor read error</source>
         <translation>Chyba čtení deskriptoru</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1756"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
         <source>BLE Device</source>
         <translation>BLE Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
         <source>Service</source>
         <translation>Služba</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
         <source>Notify Characteristic</source>
         <translation>Notifikační Charakteristika</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1778"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
         <source>Characteristic</source>
         <translation>Charakteristika</translation>
     </message>
@@ -11349,18 +11409,18 @@ Ve Windows nainstalujte ovladače CAN hardware (PEAK, VECTOR atd.).</translation
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Nainstalujte &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;ovladače PEAK CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Nainstalujte &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;ovladače PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Nainstalujte &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;ovladače VECTOR CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Nainstalujte &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;ovladače VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Nainstalujte &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;ovladače SysTec CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Nainstalujte &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;ovladače SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
@@ -11493,15 +11553,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
         <source>
 
-Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
-        <translation>Ověřte, že váš uživatel je ve skupině 'plugdev' nebo že pravidlo udev uděluje přístup k tomuto zařízení.
+Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
+        <translation>Ověřte, že váš uživatel je ve skupině &apos;plugdev&apos; nebo že pravidlo udev uděluje přístup k tomuto zařízení.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open "%1"</source>
-        <translation>Nepodařilo se otevřít "%1"</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>Nepodařilo se otevřít &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
@@ -11527,72 +11587,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>Any Protocol</source>
         <translation>Jakýkoliv Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
         <source>Secure Protocols Only</source>
         <translation>Pouze Zabezpečené Protokoly</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>None</source>
         <translation>Žádné</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>Query Peer</source>
         <translation>Dotázat Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>Verify Peer</source>
         <translation>Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Auto Verify Peer</source>
         <translation>Automaticky Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="249"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Funkce MQTT Vyžaduje Komerční Licenci</translation>
     </message>
@@ -11601,196 +11661,241 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Přihlášení k MQTT brokeru je dostupné pouze s platnou komerční licencí Serial Studio (úroveň Hobbyist nebo vyšší).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Přihlášení k MQTT brokeru je dostupné pouze s platnou licencí Serial Studio nebo aktivní zkušební verzí.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
         <source>Use System Database</source>
         <translation>Použít Systémovou Databázi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="597"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
         <source>Load From Folder…</source>
         <translation>Načíst Ze Složky…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="630"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Vybrat Adresář Certifikátů PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
         <source>Hostname</source>
         <translation>Název Hostitele</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
         <source>Topic Filter</source>
         <translation>Filtr Tématu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
         <source>Client ID</source>
         <translation>ID Klienta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
         <source>Username</source>
         <translation>Uživatelské Jméno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
         <source>Password</source>
         <translation>Heslo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="929"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
         <source>MQTT Version</source>
         <translation>Verze MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
         <source>Clean Session</source>
         <translation>Vyčistit Relaci</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="953"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
         <source>Auto Keep Alive</source>
         <translation>Automatický Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Povoleno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>SSL Protocol</source>
         <translation>Protokol SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>Peer Verify Mode</source>
         <translation>Režim Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Peer Verify Depth</source>
         <translation>Hloubka Ověření Protějšku</translation>
     </message>
     <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <source>Client Certificate (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <source>Private Key (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
         <source>MQTT Subscription Error</source>
-        <translation type="vanished">Chyba Odběru MQTT</translation>
+        <translation>Chyba Odběru MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="372"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>Nepodařilo se odebírat téma "%1".</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>Nepodařilo se odebírat téma &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="401"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The broker closed the connection.</source>
-        <translation>Broker ukončil připojení.</translation>
+        <translation type="vanished">Broker ukončil připojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Neplatná Verze Protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Broker odmítl nakonfigurovanou verzi protokolu MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1123"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
         <source>Client ID Rejected</source>
         <translation>ID Klienta Odmítnuto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Broker odmítl ID klienta. Zkuste jiný identifikátor.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1127"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT Server Nedostupný</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Broker je momentálně nedostupný. Opakujte akci později.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
         <source>Authentication Error</source>
         <translation>Chyba Autentizace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Poskytnuté přihlašovací údaje byly brokerem odmítnuty.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1135"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
         <source>Authorization Error</source>
         <translation>Chyba Autorizace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Účet nemá oprávnění pro tuto operaci.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1139"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
         <source>Network or Transport Error</source>
         <translation>Chyba Sítě nebo Transportní Vrstvy</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problém síťové/transportní vrstvy při připojování k brokeru.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1143"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
         <source>MQTT Protocol Violation</source>
         <translation>Porušení Protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1144"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Broker nahlásil porušení protokolu a ukončil spojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
         <source>MQTT 5 Error</source>
         <translation>Chyba MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Došlo k chybě protokolu MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1151"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
         <source>MQTT Error</source>
         <translation>Chyba MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Došlo k neočekávané chybě MQTT.</translation>
     </message>
@@ -11798,104 +11903,103 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Invalid Serial Port</source>
         <translation>Neplatný Sériový Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
         <source>Modbus Initialization Failed</source>
         <translation>Inicializace Modbus Selhala</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
         <source>Modbus Connection Failed</source>
         <translation>Připojení Modbus Selhalo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
-        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
-        <translation>Vybraný sériový port „%1" již není dostupný. Obnovte seznam portů a zkuste to znovu.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
+        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
+        <translation>Vybraný sériový port „%1&quot; již není dostupný. Obnovte seznam portů a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>The Modbus client refused to start the connection.</source>
-        <translation>Modbus klient odmítl zahájit připojení.</translation>
+        <translation type="vanished">Modbus klient odmítl zahájit připojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Nelze vytvořit zařízení Modbus. Zkontrolujte konfiguraci systému a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="574"/>
-        <source>Unable to connect to "%1". Check your connection settings.</source>
-        <translation>Nelze se připojit k „%1". Zkontrolujte nastavení připojení.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
+        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
+        <translation>Nelze se připojit k „%1&quot;. Zkontrolujte nastavení připojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="575"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="708"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
         <source>None</source>
         <translation>Žádná</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
         <source>Even</source>
         <translation>Sudá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="710"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
         <source>Odd</source>
         <translation>Lichá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="711"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Space</source>
         <translation>Mezera</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Mark</source>
         <translation>Značka</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="764"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding Registry (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
         <source>Input Registers (0x04)</source>
         <translation>Input Registry (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
         <source>Coils (0x01)</source>
         <translation>Cívky (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Diskrétní Vstupy (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="949"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
         <source>No register groups configured</source>
         <translation>Nejsou nakonfigurovány žádné skupiny registrů</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Před vygenerováním projektu přidejte alespoň jednu skupinu registrů.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="952"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="990"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
         <source>Modbus Project Generator</source>
         <translation>Generátor Projektů Modbus</translation>
     </message>
@@ -11908,137 +12012,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Zkontrolujte oprávnění k zápisu do dočasného adresáře.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný projekt JSON se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projekt úspěšně vygenerován s %1 skupinami a %2 datovými sadami.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus Project</source>
         <translation>Projekt Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1028"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
         <source>Holding Registers</source>
         <translation>Holding Registry</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
         <source>Input Registers</source>
         <translation>Vstupní Registry</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
         <source>Coils</source>
         <translation>Cívky</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
         <source>Discrete Inputs</source>
         <translation>Diskrétní Vstupy</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1058"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
         <source>Register %1</source>
         <translation>Registr %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Coil %1</source>
         <translation>Cívka %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Discrete %1</source>
         <translation>Diskrétní %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Error code: %1</source>
         <translation>Kód chyby: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
         <source>Modbus Communication Error</source>
         <translation>Chyba Komunikace Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1496"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
         <source>Select Port</source>
         <translation>Vybrat Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1649"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
         <source>Slave Address</source>
         <translation>Adresa Slave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Dotazování (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1706"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1713"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
         <source>Serial Port</source>
         <translation>Sériový Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1736"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
         <source>Baud Rate</source>
         <translation>Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1744"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
         <source>Parity</source>
         <translation>Parita</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1752"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
         <source>Data Bits</source>
         <translation>Datové Bity</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1760"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
         <source>Stop Bits</source>
         <translation>Stop Bity</translation>
     </message>
@@ -12046,37 +12150,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
         <source>Network socket error</source>
         <translation>Chyba síťového socketu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
         <source>Socket Type</source>
         <translation>Typ Socketu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
         <source>Remote Address</source>
         <translation>Vzdálená Adresa</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
         <source>TCP Port</source>
         <translation>TCP Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
         <source>UDP Local Port</source>
         <translation>UDP Lokální Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="749"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
         <source>UDP Remote Port</source>
         <translation>UDP Vzdálený Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
         <source>UDP Multicast</source>
         <translation>UDP Multicast</translation>
     </message>
@@ -12091,8 +12195,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable "%1" not found in PATH.</source>
-        <translation>Spustitelný soubor „%1" nebyl nalezen v PATH.</translation>
+        <source>Executable &quot;%1&quot; not found in PATH.</source>
+        <translation>Spustitelný soubor „%1&quot; nebyl nalezen v PATH.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
@@ -12121,8 +12225,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process "%1" stopped</source>
-        <translation>Proces „%1" zastaven</translation>
+        <source>Process &quot;%1&quot; stopped</source>
+        <translation>Proces „%1&quot; zastaven</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
@@ -12239,171 +12343,171 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="92"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="93"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="421"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
         <source>None</source>
         <translation>Žádná</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
         <source>Select Port</source>
         <translation>Vybrat Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="422"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
         <source>Even</source>
         <translation>Sudá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
         <source>Odd</source>
         <translation>Lichá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
         <source>Space</source>
         <translation>Mezera</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
         <source>Mark</source>
         <translation>Značka</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="461"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="462"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="592"/>
-        <source>"%1" is not a valid path</source>
-        <translation>„%1" není platná cesta</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>„%1&quot; není platná cesta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Zadejte jinou cestu pro registraci vlastního sériového zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Zadané zařízení nebylo nalezeno. Zkontrolujte připojení a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Došlo k neznámé chybě. Zkontrolujte zařízení a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Zařízení není otevřené. Před provedením této operace otevřete zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="294"/>
-        <source>Failed to connect to serial port "%1"</source>
-        <translation>Připojení k sériovému portu „%1" se nezdařilo</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
+        <source>Failed to connect to serial port &quot;%1&quot;</source>
+        <translation>Připojení k sériovému portu „%1&quot; se nezdařilo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
         <source>Unknown</source>
         <translation>Neznámá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="849"/>
-        <source>Critical error on serial port "%1"</source>
-        <translation>Kritická chyba na sériovém portu „%1"</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
+        <source>Critical error on serial port &quot;%1&quot;</source>
+        <translation>Kritická chyba na sériovém portu „%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="871"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>No error occurred.</source>
         <translation>Nedošlo k žádné chybě.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="873"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Přístup odepřen. Ujistěte se, že aplikace má potřebná přístupová práva k zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="874"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Otevření zařízení selhalo. Může být již používáno nebo nedostupné.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Při zápisu dat do zařízení došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Při čtení dat ze zařízení došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Došlo ke kritické chybě prostředku. Zařízení mohlo být odpojeno nebo již není přístupné.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Požadovaná operace není na tomto zařízení podporována.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Operace vypršela. Zařízení možná neodpovídá.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
         <source>Serial Port</source>
         <translation>Sériový Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1051"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
         <source>Baud Rate</source>
         <translation>Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1059"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
         <source>Parity</source>
         <translation>Parita</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1067"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
         <source>Data Bits</source>
         <translation>Datové Bity</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1075"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
         <source>Stop Bits</source>
         <translation>Stop Bity</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1083"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
         <source>Flow Control</source>
         <translation>Řízení Toku</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1091"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1098"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
         <source>Auto-Reconnect</source>
         <translation>Automatické Připojení</translation>
     </message>
@@ -12450,26 +12554,26 @@ V Linuxu zajistěte oprávnění ke čtení/zápisu uzlu zařízení (přidejte 
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open "%1"</source>
-        <translation>Otevření „%1" se nezdařilo</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>Otevření „%1&quot; se nezdařilo</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
         <translation>Na tomto zařízení nebyl nalezen žádný izochronní IN endpoint, ale jsou k dispozici hromadné nebo přerušovací endpointy.
 
-Přepněte režim přenosu na „Hromadný/přerušovací proud" a zkuste to znovu.</translation>
+Přepněte režim přenosu na „Hromadný/přerušovací proud&quot; a zkuste to znovu.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation>Na tomto zařízení nebyl nalezen žádný hromadný nebo přerušovací IN endpoint, ale jsou k dispozici izochronní endpointy.
 
-Přepněte režim přenosu na „Izochronní" a zkuste to znovu.</translation>
+Přepněte režim přenosu na „Izochronní&quot; a zkuste to znovu.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="812"/>
@@ -12592,18 +12696,18 @@ Jiný ovladač nebo aplikace jej může mít již otevřené. V Linuxu zkuste uv
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to "Bulk Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
         <translation type="vanished">Na tomto zařízení nebyl nalezen žádný izochronní IN endpoint, ale jsou k dispozici hromadné endpointy.
 
-Přepněte režim přenosu na „Hromadný proud" a zkuste to znovu.</translation>
+Přepněte režim přenosu na „Hromadný proud&quot; a zkuste to znovu.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation type="vanished">Na tomto zařízení nebyl nalezen žádný hromadný IN endpoint, ale jsou k dispozici izochronní endpointy.
 
-Přepněte režim přenosu na „Izochronní" a zkuste to znovu.</translation>
+Přepněte režim přenosu na „Izochronní&quot; a zkuste to znovu.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -12766,12 +12870,12 @@ Zařízení nemusí vystavovat datové endpointy ve své aktivní konfiguraci ne
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="392"/>
         <source>Frames dropped</source>
         <translation>Zahozené rámce</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="396"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>Příchozí data přicházejí rychleji, než je Serial Studio schopno zpracovat; %1 rámec(ů) bylo zahozeno. Snižte datový tok nebo vypněte náročného spotřebitele.</translation>
     </message>
@@ -13265,7 +13369,7 @@ Zařízení nemusí vystavovat datové endpointy ve své aktivní konfiguraci ne
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Lokální modelový server. Funguje s jakýmkoli endpointem kompatibilním s OpenAI -- Ollama, llama-server z llama.cpp, LM Studio nebo vLLM. Nic neopouští váš počítač. Seznam modelů je dotazován živě ze serveru.</translation>
     </message>
     <message>
@@ -13295,7 +13399,7 @@ Zařízení nemusí vystavovat datové endpointy ve své aktivní konfiguraci ne
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider's console to create a new key</source>
+        <source>Open the provider&apos;s console to create a new key</source>
         <translation>Otevřít konzoli poskytovatele pro vytvoření nového klíče</translation>
     </message>
     <message>
@@ -13508,129 +13612,129 @@ Roční plán nabízí nejlepší hodnotu; k dispozici jsou také měsíční a 
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="526"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
         <source>There was an issue validating your license.</source>
         <translation>Při ověřování licence došlo k problému.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="733"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Zadaný licenční klíč nepatří k Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Zkontrolujte, že jste licenci zakoupili v oficiálním obchodě Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>This license key was activated on a different device.</source>
         <translation>Tento licenční klíč byl aktivován na jiném zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Nejprve jej tam deaktivujte nebo kontaktujte podporu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
         <source>This license is not currently active.</source>
         <translation>Tato licence není aktuálně aktivní.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Mohla vypršet nebo být deaktivována (stav: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
         <source>Something went wrong on the server.</source>
         <translation>Na serveru došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
         <source>No activation ID was returned.</source>
         <translation>Nebylo vráceno ID aktivace.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
         <source>Could not validate your license at this time.</source>
         <translation>Licenci se nyní nepodařilo ověřit.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="592"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>Zkuste to znovu později.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Zkontrolujte, že jste licenci zakoupili v oficiálním obchodě Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Something went wrong on the server…</source>
         <translation>Na serveru se něco pokazilo…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
         <source>Your license has been successfully activated.</source>
         <translation>Vaše licence byla úspěšně aktivována.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Děkujeme za podporu Serial Studio!
 Nyní máte přístup ke všem prémiové funkcím.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
         <source>There was an issue activating your license.</source>
         <translation>Při aktivaci licence došlo k problému.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Could not activate your license at this time.</source>
         <translation>Licenci nelze v tuto chvíli aktivovat.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Při deaktivaci licence došlo k problému.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>V tuto chvíli nelze deaktivovat vaši licenci.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>Your license has been deactivated.</source>
         <translation>Vaše licence byla deaktivována.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Přístup k funkcím Pro byl odebrán.
@@ -13735,7 +13839,7 @@ Chcete-li toto místo použít na jiném zařízení, napište e-mail na alex@se
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
         <translation>Část datové sekce souboru se nepodařilo přečíst; záznam může být zkrácen.</translation>
     </message>
     <message>
@@ -13857,6 +13961,47 @@ Chcete-li toto místo použít na jiném zařízení, napište e-mail na alex@se
         <source>Load From Folder…</source>
         <translation>Načíst Ze Složky…</translation>
     </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
+        <source>Browse…</source>
+        <translation type="unfinished">Procházet…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
+        <source>ALPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MQTT::Client</name>
@@ -13957,7 +14102,7 @@ Pro odemknutí této funkce aktivujte licenci nebo navštivte obchod.</translati
         <translation type="vanished">Téma MQTT Není Nastaveno</translation>
     </message>
     <message>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation type="vanished">Nebudete přijímat žádné zprávy, dokud nebude nakonfigurováno téma.</translation>
     </message>
     <message>
@@ -13969,8 +14114,8 @@ Pro odemknutí této funkce aktivujte licenci nebo navštivte obchod.</translati
         <translation type="vanished">Neplatné MQTT Téma</translation>
     </message>
     <message>
-        <source>The topic "%1" is not valid.</source>
-        <translation type="vanished">Téma "%1" není platné.</translation>
+        <source>The topic &quot;%1&quot; is not valid.</source>
+        <translation type="vanished">Téma &quot;%1&quot; není platné.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -13981,8 +14126,8 @@ Pro odemknutí této funkce aktivujte licenci nebo navštivte obchod.</translati
         <translation type="vanished">Chyba Odběru</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation type="vanished">Nepodařilo se odebírat téma "%1".</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation type="vanished">Nepodařilo se odebírat téma &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -14077,10 +14222,10 @@ Pro odemknutí této funkce aktivujte licenci nebo navštivte obchod.</translati
         <translation type="vanished">Vyžadována Autentizace MQTT</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">Broker MQTT vyžaduje autentizaci metodou: "%1".
+        <translation type="vanished">Broker MQTT vyžaduje autentizaci metodou: &quot;%1&quot;.
 
 Zadejte potřebná pověření.</translation>
     </message>
@@ -14104,130 +14249,151 @@ Zadejte potřebná pověření.</translation>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="814"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="829"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="815"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="830"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="816"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="831"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="818"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="833"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="819"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="834"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="820"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="835"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="821"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="836"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="822"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="837"/>
         <source>Any Protocol</source>
         <translation>Jakýkoliv Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="823"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="838"/>
         <source>Secure Protocols Only</source>
         <translation>Pouze Zabezpečené Protokoly</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="825"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="840"/>
         <source>None</source>
         <translation>Žádná</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="826"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="841"/>
         <source>Query Peer</source>
         <translation>Dotázat Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="827"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="842"/>
         <source>Verify Peer</source>
         <translation>Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="828"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="843"/>
         <source>Auto Verify Peer</source>
         <translation>Automaticky Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1145"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1200"/>
         <source>Raw RX Data</source>
         <translation>Surová RX Data</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1146"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1201"/>
         <source>Custom Script</source>
         <translation>Vlastní Skript</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1147"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1202"/>
         <source>Dashboard Data (CSV)</source>
         <translation>Data Dashboardu (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1148"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1203"/>
         <source>Dashboard Data (JSON)</source>
         <translation>Data Dashboardu (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1304"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1370"/>
         <source>MQTT publisher unavailable</source>
         <translation>MQTT publisher není dostupný</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1305"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1371"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>Pro použití MQTT publikování je vyžadována platná komerční licence.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1307"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1876"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1373"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2061"/>
         <source>MQTT Test Connection</source>
         <translation>Test Připojení MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1326"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1392"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Vybrat Adresář Certifikátů PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker reachable</source>
         <translation>MQTT broker je dostupný</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTT broker není dostupný</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
         <source>MQTT broker connection failed</source>
         <translation>Připojení k MQTT brokeru selhalo</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2229"/>
         <source>MQTT Publisher</source>
         <translation>Vydavatel MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14437,17 +14603,17 @@ Zadejte potřebná pověření.</translation>
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="696"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="701"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>Před testováním připojení nakonfigurujte název hostitele a port brokeru.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="732"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="737"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>Úspěšně připojeno k %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="743"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="748"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>Časový limit vypršel po 5 sekundách bez dosažení brokeru.</translation>
     </message>
@@ -15040,13 +15206,13 @@ Zadejte potřebná pověření.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin "%1" is not installed.</source>
-        <translation>Plugin "%1" není nainstalován.</translation>
+        <source>Plugin &quot;%1&quot; is not installed.</source>
+        <translation>Plugin &quot;%1&quot; není nainstalován.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension "%1" is not a plugin (type: %2).</source>
-        <translation>Rozšíření "%1" není plugin (typ: %2).</translation>
+        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
+        <translation>Rozšíření &quot;%1&quot; není plugin (typ: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
@@ -15057,8 +15223,8 @@ Zadejte potřebná pověření.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
-        <translation>Plugin "%1" vyžaduje GRPC, ale toto sestavení neobsahuje podporu GRPC.</translation>
+        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
+        <translation>Plugin &quot;%1&quot; vyžaduje GRPC, ale toto sestavení neobsahuje podporu GRPC.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
@@ -15076,8 +15242,8 @@ Chcete jej nyní povolit?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin "%1" has no 'entry' field in info.json.</source>
-        <translation>Plugin "%1" nemá pole 'entry' v info.json.</translation>
+        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
+        <translation>Plugin &quot;%1&quot; nemá pole &apos;entry&apos; v info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -15088,8 +15254,8 @@ Chcete jej nyní povolit?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin "%1" has an invalid entry point path.</source>
-        <translation>Plugin "%1" má neplatnou cestu ke vstupnímu bodu.</translation>
+        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
+        <translation>Plugin &quot;%1&quot; má neplatnou cestu ke vstupnímu bodu.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1490"/>
@@ -15098,10 +15264,10 @@ Chcete jej nyní povolit?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires "%1" but it was not found on your system.
+        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Tento plugin vyžaduje "%1", ale nebyl nalezen ve vašem systému.
+        <translation>Tento plugin vyžaduje &quot;%1&quot;, ale nebyl nalezen ve vašem systému.
 
 Chcete otevřít stránku pro stažení?</translation>
     </message>
@@ -15327,8 +15493,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation type="vanished">Kontrolovat aktualizace automaticky?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation type="vanished">Má %1 automaticky kontrolovat aktualizace? Aktualizace lze vždy zkontrolovat ručně v dialogu „O aplikaci"</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation type="vanished">Má %1 automaticky kontrolovat aktualizace? Aktualizace lze vždy zkontrolovat ručně v dialogu „O aplikaci&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="192"/>
@@ -15736,6 +15902,8 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="139"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="156"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="189"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="207"/>
         <source>Enable publishing first</source>
         <translation>Nejprve povolit publikování</translation>
     </message>
@@ -15761,8 +15929,30 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="174"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="192"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="210"/>
         <source>Enable SSL/TLS first</source>
         <translation>Nejprve povolit SSL/TLS</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
+        <source>Select the PEM client certificate for mutual TLS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
+        <source>Select the PEM private key for mutual TLS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16003,7 +16193,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two's-complement signed.</source>
+        <source>Interprets each value as two&apos;s-complement signed.</source>
         <translation>Interpretuje každou hodnotu jako znaménkovou ve dvojkovém doplňku.</translation>
     </message>
     <message>
@@ -16080,7 +16270,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
         <translation>Interpretuje 16bitové registry jako znaménkové hodnoty v dvojkovém doplňku.</translation>
     </message>
     <message>
@@ -16355,7 +16545,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
         <translation>Uložte soubor zařízení tohoto počítače. Identifikuje tento stroj a neobsahuje žádné osobní informace.</translation>
     </message>
     <message>
@@ -17007,7 +17197,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Není dostupné přes vzdálené připojení. Tento widget potřebuje surový proud vzorků ze vzdáleného zařízení, který zrcadlení dashboardu nepřenáší.</translation>
     </message>
 </context>
@@ -18136,7 +18326,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Spustit transformaci datové sady pouze při změně jednoho z jejích vstupů. Zrychluje velké projekty řízené tabulkami; ve výchozím nastavení vypnuto.</translation>
     </message>
     <message>
@@ -18257,7 +18447,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
         <translation>Broker odmítl připojení kvůli nepodporované verzi protokolu. Slaďte verzi MQTT s brokerem a zkuste to znovu.</translation>
     </message>
     <message>
@@ -18297,13 +18487,18 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
         <translation>Došlo k chybě protokolu MQTT úrovně 5. Zkontrolujte kód důvodu brokeru.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="109"/>
         <source>Unspecified MQTT error (code %1).</source>
         <translation>Nespecifikovaná chyba MQTT (kód %1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18356,22 +18551,22 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Nelze otevřít soubor pro zápis!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1626"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Neplatný Bluetooth adaptér!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
         <source>Unsuported platform or operating system</source>
         <translation>Nepodporovaná platforma nebo operační systém</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1632"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
         <source>Unsupported discovery method</source>
         <translation>Nepodporovaná metoda zjišťování</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
         <source>General I/O error</source>
         <translation>Obecná chyba I/O</translation>
     </message>
@@ -18426,11 +18621,11 @@ Nejpravděpodobnější příčina: nekonečná smyčka nebo extrémně pomalá 
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>Funkce 'parse' není ve skriptu definována.
+        <translation>Funkce &apos;parse&apos; není ve skriptu definována.
 
 Ujistěte se, že váš kód obsahuje:
 function parse(frame) ... end</translation>
@@ -18512,11 +18707,11 @@ Nejpravděpodobnější příčina: nekonečná smyčka na nejvyšší úrovni s
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>Funkce 'parse' není ve skriptu definována.
+        <translation>Funkce &apos;parse&apos; není ve skriptu definována.
 
 Ujistěte se, že váš kód obsahuje:
 function parse(frame) { ... }</translation>
@@ -18541,12 +18736,12 @@ Opravte chybu v těle funkce.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable 'parse' export found.
+        <source>No callable &apos;parse&apos; export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>Nenalezen export volatelné funkce 'parse'.
+        <translation>Nenalezen export volatelné funkce &apos;parse&apos;.
 
 Definujte jednu z možností:
   function parse(frame) { ... }
@@ -18554,15 +18749,15 @@ Definujte jednu z možností:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
-        <translation>Funkce 'parse' musí přijímat alespoň jeden parametr (datový rámec).</translation>
+        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
+        <translation>Funkce &apos;parse&apos; musí přijímat alespoň jeden parametr (datový rámec).</translation>
     </message>
     <message>
-        <source>No valid 'parse' function declaration found.
+        <source>No valid &apos;parse&apos; function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Nebyla nalezena platná deklarace funkce 'parse'.
+        <translation type="vanished">Nebyla nalezena platná deklarace funkce &apos;parse&apos;.
 
 Očekávaný formát:
 function parse(frame) { ... }</translation>
@@ -18573,11 +18768,11 @@ function parse(frame) { ... }</translation>
         <translation>Neplatný Parametr Funkce</translation>
     </message>
     <message>
-        <source>The 'parse' function must have at least one parameter.
+        <source>The &apos;parse&apos; function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Funkce 'parse' musí mít alespoň jeden parametr.
+        <translation type="vanished">Funkce &apos;parse&apos; musí mít alespoň jeden parametr.
 
 Očekávaný formát:
 function parse(frame) { ... }</translation>
@@ -18589,13 +18784,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
+        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>Funkce 'parse' používá starý formát se dvěma parametry: parse(%1, %2)
+        <translation>Funkce &apos;parse&apos; používá starý formát se dvěma parametry: parse(%1, %2)
 
 Tento formát již není podporován. Aktualizujte na nový formát s jedním parametrem:
 function parse(%1) { ... }
@@ -18713,13 +18908,13 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got '%2'</source>
-        <translation>Očekáváno %1, obdrženo '%2'</translation>
+        <source>Expected %1, got &apos;%2&apos;</source>
+        <translation>Očekáváno %1, obdrženo &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after 'enum'</source>
-        <translation>Očekáván název výčtu po 'enum'</translation>
+        <source>Expected enum name after &apos;enum&apos;</source>
+        <translation>Očekáván název výčtu po &apos;enum&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18728,8 +18923,8 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag '%1' out of range (1..%2)</source>
-        <translation>Značka pole '%1' mimo rozsah (1..%2)</translation>
+        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
+        <translation>Značka pole &apos;%1&apos; mimo rozsah (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18753,8 +18948,8 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got '%1'</source>
-        <translation>Očekáván typ pole, obdrženo '%1'</translation>
+        <source>Expected field type, got &apos;%1&apos;</source>
+        <translation>Očekáván typ pole, obdrženo &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18778,13 +18973,13 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token '%1' at file scope</source>
-        <translation>Neočekávaný token '%1' v rozsahu souboru</translation>
+        <source>Unexpected token &apos;%1&apos; at file scope</source>
+        <translation>Neočekávaný token &apos;%1&apos; v rozsahu souboru</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword '%1'</source>
-        <translation>Nepodporované klíčové slovo nejvyšší úrovně '%1'</translation>
+        <source>Unsupported top-level keyword &apos;%1&apos;</source>
+        <translation>Nepodporované klíčové slovo nejvyšší úrovně &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -18825,8 +19020,8 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Konfigurace nativního parseru není platný objekt JSON.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: "%1".</source>
-        <translation type="vanished">Neznámá šablona nativního parseru: "%1".</translation>
+        <source>Unknown native parser template: &quot;%1&quot;.</source>
+        <translation type="vanished">Neznámá šablona nativního parseru: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -18835,8 +19030,8 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: "%1".</source>
-        <translation>Neznámá šablona vestavěného parseru: "%1".</translation>
+        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
+        <translation>Neznámá šablona vestavěného parseru: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -19016,7 +19211,7 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Sledujte dashboard jiné instance Serial Studio přes síť. Zobrazení je pouze pro čtení: žádná akce zde neovlivní vzdálené zařízení.</translation>
     </message>
     <message>
@@ -19406,7 +19601,7 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn't reach your device.</source>
+        <source>Serial Studio couldn&apos;t reach your device.</source>
         <translation>Serial Studio se nemohlo připojit k vašemu zařízení.</translation>
     </message>
     <message>
@@ -19416,7 +19611,7 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Ujistěte se, že je zapojeno, zapnuté a není již používáno jinou aplikací. Můžete to zkusit znovu, vybrat jiné zařízení nebo ukončit.</translation>
     </message>
     <message>
@@ -20269,48 +20464,48 @@ Parametr oddělovače již není potřeba.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="292"/>
+        <location filename="../../src/Sessions/Player.cpp" line="302"/>
         <source>Open Session File</source>
         <translation>Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="294"/>
+        <location filename="../../src/Sessions/Player.cpp" line="304"/>
         <source>Session files (*.db)</source>
         <translation>Soubory relací (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="367"/>
+        <location filename="../../src/Sessions/Player.cpp" line="377"/>
         <source>Device Connection Active</source>
         <translation>Aktivní Připojení k Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="368"/>
+        <location filename="../../src/Sessions/Player.cpp" line="378"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pro použití této funkce je nutné odpojit zařízení. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="416"/>
-        <location filename="../../src/Sessions/Player.cpp" line="497"/>
+        <location filename="../../src/Sessions/Player.cpp" line="426"/>
+        <location filename="../../src/Sessions/Player.cpp" line="507"/>
         <source>Cannot open session file</source>
         <translation>Nelze Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="417"/>
+        <location filename="../../src/Sessions/Player.cpp" line="427"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="433"/>
+        <location filename="../../src/Sessions/Player.cpp" line="443"/>
         <source>No project data</source>
         <translation>Žádná data projektu</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="434"/>
+        <location filename="../../src/Sessions/Player.cpp" line="444"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Tato relace neobsahuje vložený soubor projektu — dashboard se vrací k rychlému rozložení grafů.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="498"/>
+        <location filename="../../src/Sessions/Player.cpp" line="508"/>
         <source>Check file permissions and try again.</source>
         <translation>Zkontrolujte oprávnění souboru a zkuste to znovu.</translation>
     </message>
@@ -20565,7 +20760,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Aktualizace a Novinky</translation>
     </message>
     <message>
-        <source>Show What's New on Startup</source>
+        <source>Show What&apos;s New on Startup</source>
         <translation type="vanished">Zobrazit Co Je Nového při Spuštění</translation>
     </message>
     <message>
@@ -21084,7 +21279,7 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Dvojité kliknutí na toto nasazení přenese uživatele přímo na živý dashboard tohoto projektu. Není zde žádný panel nástrojů ani nastavení, pouze data, a Serial Studio se ukončí, jakmile se zařízení odpojí.</translation>
     </message>
     <message>
@@ -21198,7 +21393,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Celá Obrazovka</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">Dvojité kliknutí na tuto zástupce přenese uživatele přímo na živý dashboard tohoto projektu. Není zde žádný panel nástrojů ani nastavení, pouze data, a Serial Studio se ukončí, jakmile se zařízení odpojí.</translation>
     </message>
     <message>
@@ -21206,7 +21401,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Vložit Projekt</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">Dvojklik na tento zástupce otevře přímo živý dashboard pro tento projekt. Není zde panel nástrojů ani nastavení, pouze data, a Serial Studio se ukončí, jakmile se zařízení odpojí.
@@ -21543,8 +21738,8 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show "%1"</source>
-        <translation>Zobrazit "%1"</translation>
+        <source>Show &quot;%1&quot;</source>
+        <translation>Zobrazit &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -22306,6 +22501,44 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
 </context>
 <context>
+    <name>TlsIdentity</name>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
+        <source>The file &quot;%1&quot; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
+        <source>The file &quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
+        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
+        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
+        <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
+        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
+        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ToolActions</name>
     <message>
         <source>Auto Layout</source>
@@ -22757,7 +22990,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Ponechte časovou základnu prázdnou pro použití časového rozsahu grafu; snižte pro přiblížení rychlého signálu. Holdoff ignoruje nové triggery na chvíli po každém.</translation>
     </message>
     <message>
@@ -22823,7 +23056,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">Časová základna nastavuje, kolik času zobrazuje jeden průběh; ponechte prázdné pro použití časového rozsahu grafu. Snižte pro přiblížení rychlého signálu. Holdoff ignoruje nové triggery na chvíli po každém.</translation>
     </message>
     <message>
@@ -23345,7 +23578,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Není k dispozici při vzdáleném připojení. Tento widget vyžaduje proud surových vzorků ze vzdáleného zařízení, který zrcadlení dashboardu nepřenáší.</translation>
     </message>
     <message>
@@ -23411,7 +23644,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
+        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
         <translation>Aktuálně používáte plně funkční zkušební verzi %1 Pro. Je platná 14 dní pro osobní, nekomerční použití.</translation>
     </message>
     <message>
@@ -23426,13 +23659,13 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Dostupné předplatné zobrazíte kliknutím na „Upgradovat nyní" níže.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>Dostupné předplatné zobrazíte kliknutím na „Upgradovat nyní&quot; níže.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>Neupozorňovat na zkušební verzi.
 Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi GPLv3.</translation>
     </message>
@@ -23494,7 +23727,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What's New in %1</source>
+        <source>What&apos;s New in %1</source>
         <translation type="vanished">Co je nového v %1</translation>
     </message>
     <message>
@@ -23630,7 +23863,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation type="vanished">Vítejte v %1!</translation>
     </message>
     <message>
-        <source>Here's what's new in version %1.</source>
+        <source>Here&apos;s what&apos;s new in version %1.</source>
         <translation type="vanished">Co je nového ve verzi %1.</translation>
     </message>
     <message>
@@ -23839,7 +24072,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Nemůžeme nabídnout neomezený přístup, protože klíč API ArcGIS má reálné náklady.</translation>
     </message>
 </context>

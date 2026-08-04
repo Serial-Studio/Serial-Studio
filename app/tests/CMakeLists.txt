@@ -254,11 +254,6 @@ ss_add_unit_test(tst_property_validators
           Qt6::Gui
 )
 
-ss_add_unit_test(tst_hal_driver
-  SOURCES tst_hal_driver.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core
-)
 
 ss_add_unit_test(tst_mirror_protocol
   SOURCES tst_mirror_protocol.cpp
@@ -280,16 +275,6 @@ ss_add_unit_test(tst_async_combinators
 # meta-object (openFinished, linkDropped, the vtable) goes undefined at link. Listing the header as
 # a source is what gets moc_HAL_Driver.cpp generated for this suite.
 #
-ss_add_unit_test(tst_connection_flows
-  SOURCES tst_connection_flows.cpp
-          ${SS_APP_SRC}/IO/HAL_Driver.h
-          ${SS_APP_SRC}/IO/ConnectionFlows.cpp
-          ${SS_APP_SRC}/Async/TaskTree.cpp
-          ${SS_APP_SRC}/Async/RetryPolicy.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core
-          Qt6::Network
-)
 
 #
 # Protocol.h is a header-only Q_OBJECT (the abstract sender base): with no Protocol.cpp to pair it

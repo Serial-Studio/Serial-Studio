@@ -1,12 +1,72 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="es_MX" sourcelanguage="en_US">
 <context>
-    <name/>
+    <name></name>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
         <translation>Mixto</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
+        <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
+        <source>PEM private key matching the client certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
+        <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
+        <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -166,7 +226,7 @@ Cada acción del dispositivo aún requiere tu aprobación explícita por llamada
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
         <translation>(El modelo devolvió una respuesta vacía. Intente reformular, cambiar a un modelo diferente o verificar que la solicitud esté permitida por los filtros de seguridad del proveedor.)</translation>
     </message>
     <message>
@@ -314,7 +374,7 @@ Cada acción del dispositivo aún requiere tu aprobación explícita por llamada
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote's dataset layout does not match its announced hash</source>
+        <source>The remote&apos;s dataset layout does not match its announced hash</source>
         <translation>El diseño de conjunto de datos del remoto no coincide con su hash anunciado</translation>
     </message>
     <message>
@@ -355,8 +415,8 @@ Cada acción del dispositivo aún requiere tu aprobación explícita por llamada
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program "%1" not found in PATH</source>
-        <translation>Programa "%1" no encontrado en PATH</translation>
+        <source>Program &quot;%1&quot; not found in PATH</source>
+        <translation>Programa &quot;%1&quot; no encontrado en PATH</translation>
     </message>
 </context>
 <context>
@@ -392,7 +452,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Un programa que usa la API local de Serial Studio solicita enviar datos al dispositivo conectado. ¿Permitir que los clientes de la API escriban al dispositivo?</translation>
     </message>
     <message>
@@ -454,8 +514,8 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Este software se proporciona 'tal cual' sin garantía de ningún tipo, expresa o implícita, incluyendo pero no limitado a las garantías de comerciabilidad o idoneidad para un propósito particular. En ningún caso el autor será responsable de daños derivados del uso de este software.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Este software se proporciona &apos;tal cual&apos; sin garantía de ningún tipo, expresa o implícita, incluyendo pero no limitado a las garantías de comerciabilidad o idoneidad para un propósito particular. En ningún caso el autor será responsable de daños derivados del uso de este software.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -478,7 +538,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Demostración del Proyecto</translation>
     </message>
     <message>
-        <source>What's New</source>
+        <source>What&apos;s New</source>
         <translation type="vanished">Novedades</translation>
     </message>
     <message>
@@ -1005,7 +1065,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Aplicar Preajuste</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
         <translation type="vanished">Reemplazar las bandas actuales con el preajuste seleccionado, escalado al rango de este conjunto de datos.</translation>
     </message>
     <message>
@@ -1213,7 +1273,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio's features</source>
+        <source>Help me discover Serial Studio&apos;s features</source>
         <translation>Ayúdame a descubrir las funciones de Serial Studio</translation>
     </message>
     <message>
@@ -1341,13 +1401,13 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder "%1" - readable this session</source>
-        <translation>Carpeta "%1" agregada - legible esta sesión</translation>
+        <source>Added folder &quot;%1&quot; - readable this session</source>
+        <translation>Carpeta &quot;%1&quot; agregada - legible esta sesión</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added "%1" - readable this session</source>
-        <translation>"%1" agregado - legible esta sesión</translation>
+        <source>Added &quot;%1&quot; - readable this session</source>
+        <translation>&quot;%1&quot; agregado - legible esta sesión</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1695,7 +1755,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>El título cambia de "%1" a "%2". La estructura del grupo permanece sin cambios.</translation>
+        <translation>El título cambia de &quot;%1&quot; a &quot;%2&quot;. La estructura del grupo permanece sin cambios.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1787,7 +1847,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
         <translation>Mide qué tan rápido esta computadora puede extraer, analizar y visualizar tramas a través del pipeline de datos de Serial Studio.</translation>
     </message>
     <message>
@@ -2243,7 +2303,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Actualizaremos Serial Studio para funcionar con este sistema operativo tan pronto como QT lo soporte oficialmente</translation>
     </message>
 </context>
@@ -3599,7 +3659,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance's dashboard over the network</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
         <translation>Observar el tablero de otra instancia de Serial Studio a través de la red</translation>
     </message>
     <message>
@@ -3911,7 +3971,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler's number</source>
+        <source>Euler&apos;s number</source>
         <translation>Número de Euler</translation>
     </message>
     <message>
@@ -5183,11 +5243,11 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation type="vanished">Valor</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Ingresa los datos de trama arriba, habilita el modo HEX si es necesario, luego haz clic en "Evaluar" para ejecutar el analizador de tramas.
+        <translation type="vanished">Ingresa los datos de trama arriba, habilita el modo HEX si es necesario, luego haz clic en &quot;Evaluar&quot; para ejecutar el analizador de tramas.
 
 Ejemplo (Texto): a,b,c,d,e,f
 Ejemplo (HEX):  48 65 6C 6C 6F</translation>
@@ -5427,10 +5487,10 @@ Se pierden los cambios no guardados. ¿Continuar?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>"%1" expects %2 dataset(s); the current group has %3.
+        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template's defaults?</source>
-        <translation>"%1" espera %2 conjunto(s) de datos; el grupo actual tiene %3.
+Add %4 dataset(s) using the template&apos;s defaults?</source>
+        <translation>&quot;%1&quot; espera %2 conjunto(s) de datos; el grupo actual tiene %3.
 
 ¿Agregar %4 conjunto(s) de datos usando los valores predeterminados de la plantilla?</translation>
     </message>
@@ -5891,47 +5951,47 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Contraseña para autenticación del broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="335"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="412"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="346"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="423"/>
         <source>Use SSL/TLS</source>
         <translation>Usar SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="347"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="424"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Tunelizar la conexión del broker sobre TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="360"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="437"/>
         <source>Protocol</source>
         <translation>Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="361"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="438"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Familia de protocolo TLS negociado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="371"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="448"/>
         <source>Peer Verify</source>
         <translation>Verificar Par</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="372"/>
-        <source>How strictly the broker's certificate chain is validated</source>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
+        <source>How strictly the broker&apos;s certificate chain is validated</source>
         <translation>Qué tan estrictamente se valida la cadena de certificados del broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="382"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="459"/>
         <source>Verify Depth</source>
         <translation>Profundidad de Verificación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="383"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="460"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Longitud máxima de cadena de certificados aceptada (0 = ilimitado)</translation>
     </message>
@@ -6258,7 +6318,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Suprimir el mosaico independiente de este conjunto de datos en el tablero; el widget de pintor aún puede leer sus valores</translation>
     </message>
     <message>
@@ -7130,8 +7190,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias "%1" is already in use</source>
-        <translation>El alias "%1" ya está en uso</translation>
+        <source>Alias &quot;%1&quot; is already in use</source>
+        <translation>El alias &quot;%1&quot; ya está en uso</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="646"/>
@@ -7145,13 +7205,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias "%1" contains only digits</source>
-        <translation>El alias "%1" contiene solo dígitos</translation>
+        <source>Alias &quot;%1&quot; contains only digits</source>
+        <translation>El alias &quot;%1&quot; contiene solo dígitos</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Los scripts deben citarlo como cadena, p. ej. getDataset("%1"); un argumento numérico se lee como uniqueId, no como este alias.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Los scripts deben citarlo como cadena, p. ej. getDataset(&quot;%1&quot;); un argumento numérico se lee como uniqueId, no como este alias.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7460,8 +7520,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source "%1"?</source>
-        <translation>¿Deseas eliminar la fuente de datos "%1"?</translation>
+        <source>Do you want to delete data source &quot;%1&quot;?</source>
+        <translation>¿Deseas eliminar la fuente de datos &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7549,13 +7609,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Tu proyecto utilizó una función de análisis de tramas heredada con un argumento 'separator'. Ha sido migrado automáticamente al nuevo formato.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>Tu proyecto utilizó una función de análisis de tramas heredada con un argumento &apos;separator&apos;. Ha sido migrado automáticamente al nuevo formato.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>¿Deseas eliminar el grupo "%1"?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>¿Deseas eliminar el grupo &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7567,13 +7627,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>¿Deseas eliminar la acción "%1"?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>¿Deseas eliminar la acción &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>¿Deseas eliminar el conjunto de datos "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>¿Deseas eliminar el conjunto de datos &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7704,8 +7764,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget "%1"?</source>
-        <translation>¿Desea eliminar el widget de salida "%1"?</translation>
+        <source>Do you want to delete output widget &quot;%1&quot;?</source>
+        <translation>¿Desea eliminar el widget de salida &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
@@ -8001,8 +8061,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete "%1"?</source>
-        <translation>¿Eliminar "%1"?</translation>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation>¿Eliminar &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -8093,8 +8153,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder "%1"?</source>
-        <translation>¿Eliminar carpeta "%1"?</translation>
+        <source>Delete folder &quot;%1&quot;?</source>
+        <translation>¿Eliminar carpeta &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8162,7 +8222,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
         <translation>Desactivar Personalizar descarta tus ediciones y reconstruye la lista de espacios de trabajo desde los grupos del proyecto.</translation>
     </message>
     <message>
@@ -8697,7 +8757,7 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
         <translation>Define rangos de valores coloreados con niveles de severidad para el indicador o LED de este conjunto de datos.</translation>
     </message>
     <message>
@@ -8739,7 +8799,7 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation>Bandas de Alarma</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
         <translation type="vanished">Define rangos de valores coloreados con niveles de severidad para el indicador de este conjunto de datos.</translation>
     </message>
     <message>
@@ -8857,8 +8917,8 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>Haz clic en "Aceptar" para comenzar a instalar la actualización</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>Haz clic en &quot;Aceptar&quot; para comenzar a instalar la actualización</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -8877,8 +8937,8 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>Haz clic en el botón "Abrir" para aplicar la actualización</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>Haz clic en el botón &quot;Abrir&quot; para aplicar la actualización</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -9155,7 +9215,7 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don't Allow</source>
+        <source>Don&apos;t Allow</source>
         <translation>No Permitir</translation>
     </message>
     <message>
@@ -9490,7 +9550,7 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>No disponible mediante conexión remota. Este widget necesita el flujo de muestras sin procesar del remoto, el cual no transporta el espejo del tablero.</translation>
     </message>
     <message>
@@ -10968,97 +11028,97 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="349"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="350"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
         <source>Network Socket</source>
         <translation>Socket de Red</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="351"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="353"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="354"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="355"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
         <source>CAN Bus</source>
         <translation>Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="356"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
         <source>USB Device</source>
         <translation>Dispositivo USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="357"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
         <source>HID Device</source>
         <translation>Dispositivo HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="358"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
         <source>Process</source>
         <translation>Proceso</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="359"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
         <source>MQTT Subscriber</source>
         <translation>Suscriptor MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="767"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
         <source>Your trial period has ended.</source>
         <translation>Tu período de prueba ha terminado.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="768"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Para continuar usando Serial Studio, activa tu licencia.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
         <source>Connection Lost</source>
         <translation>Conexión Perdida</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1461"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
         <translation>Se perdió la conexión y no se pudo restablecer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1480"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
         <translation>%1: enlace perdido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1481"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
         <translation>Intentando reconectar automáticamente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1487"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
         <translation>%1: enlace restaurado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1488"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
         <translation>La conexión se recuperó automáticamente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1503"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
         <translation>Dispositivo %1</translation>
     </message>
@@ -11134,77 +11194,77 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
         <source>BLE I/O Module Error</source>
         <translation>Error del Módulo de E/S BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="982"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
         <source>Select Device</source>
         <translation>Seleccionar Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="993"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
         <source>Select Service</source>
         <translation>Seleccionar Servicio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1004"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
         <source>Select Characteristic</source>
         <translation>Seleccionar Característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1214"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
         <source>Error while configuring BLE service</source>
         <translation>Error al configurar el servicio BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
         <source>Operation error</source>
         <translation>Error de operación</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1508"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
         <source>Characteristic write error</source>
         <translation>Error de escritura de característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1511"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
         <source>Descriptor write error</source>
         <translation>Error de escritura de descriptor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
         <source>Unknown error</source>
         <translation>Error desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
         <source>Characteristic read error</source>
         <translation>Error de lectura de característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
         <source>Descriptor read error</source>
         <translation>Error de lectura de descriptor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1756"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
         <source>BLE Device</source>
         <translation>Dispositivo BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
         <source>Service</source>
         <translation>Servicio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
         <source>Notify Characteristic</source>
         <translation>Notificar Característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1778"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
         <source>Characteristic</source>
         <translation>Característica</translation>
     </message>
@@ -11349,18 +11409,18 @@ En Windows, instala controladores de hardware CAN (PEAK, VECTOR, etc.).</transla
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Instale los &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;controladores CAN de PEAK&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Instale los &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;controladores CAN de PEAK&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Instale los &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;controladores CAN de VECTOR&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Instale los &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;controladores CAN de VECTOR&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Instala &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;controladores CAN de SysTec&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Instala &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;controladores CAN de SysTec&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
@@ -11493,15 +11553,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
         <source>
 
-Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
-        <translation>Verifica que tu usuario esté en el grupo 'plugdev' o que una regla udev otorgue acceso a este dispositivo.
+Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
+        <translation>Verifica que tu usuario esté en el grupo &apos;plugdev&apos; o que una regla udev otorgue acceso a este dispositivo.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open "%1"</source>
-        <translation>No se pudo abrir "%1"</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>No se pudo abrir &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
@@ -11527,72 +11587,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 o Posterior</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 o Posterior</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>Any Protocol</source>
         <translation>Cualquier Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
         <source>Secure Protocols Only</source>
         <translation>Solo Protocolos Seguros</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>Query Peer</source>
         <translation>Consultar Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>Verify Peer</source>
         <translation>Verificar Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Auto Verify Peer</source>
         <translation>Verificar Par Automáticamente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="249"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>La Función MQTT Requiere una Licencia Comercial</translation>
     </message>
@@ -11601,196 +11661,241 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Suscribirse a un broker MQTT solo está disponible con una licencia comercial válida de Serial Studio (nivel Hobbyist o superior).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>La suscripción a un broker MQTT solo está disponible con una licencia válida de Serial Studio o una prueba activa.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
         <source>Use System Database</source>
         <translation>Usar Base de Datos del Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="597"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
         <source>Load From Folder…</source>
         <translation>Cargar desde Carpeta…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="630"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Seleccionar Directorio de Certificados PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
         <source>Hostname</source>
         <translation>Nombre de Host</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
         <source>Topic Filter</source>
         <translation>Filtro de Tema</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
         <source>Client ID</source>
         <translation>ID de Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
         <source>Username</source>
         <translation>Nombre de Usuario</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="929"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
         <source>MQTT Version</source>
         <translation>Versión MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
         <source>Clean Session</source>
         <translation>Sesión Limpia</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="953"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
         <source>Auto Keep Alive</source>
         <translation>Keep Alive Automático</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Habilitado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>SSL Protocol</source>
         <translation>Protocolo SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>Peer Verify Mode</source>
         <translation>Modo de Verificación de Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Peer Verify Depth</source>
         <translation>Profundidad de Verificación de Par</translation>
     </message>
     <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <source>Client Certificate (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <source>Private Key (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
         <source>MQTT Subscription Error</source>
-        <translation type="vanished">Error de Suscripción MQTT</translation>
+        <translation>Error de Suscripción MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="372"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>Error al suscribirse al tema "%1".</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>Error al suscribirse al tema &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="401"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The broker closed the connection.</source>
-        <translation>El broker cerró la conexión.</translation>
+        <translation type="vanished">El broker cerró la conexión.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Versión de Protocolo MQTT Inválida</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>El broker rechazó la versión de protocolo MQTT configurada.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1123"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
         <source>Client ID Rejected</source>
         <translation>ID de Cliente Rechazado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>El broker rechazó el ID de cliente. Intente con un identificador diferente.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1127"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
         <source>MQTT Server Unavailable</source>
         <translation>Servidor MQTT No Disponible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>El broker no está disponible actualmente. Reintentar más tarde.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
         <source>Authentication Error</source>
         <translation>Error de Autenticación</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Las credenciales proporcionadas fueron rechazadas por el broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1135"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
         <source>Authorization Error</source>
         <translation>Error de Autorización</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
         <source>Account lacks permission for this operation.</source>
         <translation>La cuenta carece de permiso para esta operación.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1139"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
         <source>Network or Transport Error</source>
         <translation>Error de Red o Transporte</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problema en la capa de red/transporte al conectar con el broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1143"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
         <source>MQTT Protocol Violation</source>
         <translation>Violación del Protocolo MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1144"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>El broker reportó una violación del protocolo y cerró la conexión.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
         <source>MQTT 5 Error</source>
         <translation>Error MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Ocurrió un error de protocolo MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1151"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
         <source>MQTT Error</source>
         <translation>Error MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Ocurrió un error MQTT inesperado.</translation>
     </message>
@@ -11798,104 +11903,103 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Invalid Serial Port</source>
         <translation>Puerto Serial Inválido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
         <source>Modbus Initialization Failed</source>
         <translation>Falló la Inicialización de Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
         <source>Modbus Connection Failed</source>
         <translation>Falló la Conexión de Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
-        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
-        <translation>El puerto serial seleccionado "%1" ya no está disponible. Actualiza la lista de puertos y vuelve a intentar.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
+        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
+        <translation>El puerto serial seleccionado &quot;%1&quot; ya no está disponible. Actualiza la lista de puertos y vuelve a intentar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>The Modbus client refused to start the connection.</source>
-        <translation>El cliente Modbus rechazó iniciar la conexión.</translation>
+        <translation type="vanished">El cliente Modbus rechazó iniciar la conexión.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>No se pudo crear el dispositivo Modbus. Verifica la configuración del sistema y vuelve a intentar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="574"/>
-        <source>Unable to connect to "%1". Check your connection settings.</source>
-        <translation>No se pudo conectar a "%1". Verifica la configuración de conexión.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
+        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
+        <translation>No se pudo conectar a &quot;%1&quot;. Verifica la configuración de conexión.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="575"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="708"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="710"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="711"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Space</source>
         <translation>Espacio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="764"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
         <source>Holding Registers (0x03)</source>
         <translation>Registros de Retención (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
         <source>Input Registers (0x04)</source>
         <translation>Registros de Entrada (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
         <source>Coils (0x01)</source>
         <translation>Bobinas (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Entradas Discretas (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="949"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
         <source>No register groups configured</source>
         <translation>No hay grupos de registros configurados</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Agregar al menos un grupo de registros antes de generar un proyecto.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="952"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="990"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
         <source>Modbus Project Generator</source>
         <translation>Generador de Proyectos Modbus</translation>
     </message>
@@ -11908,137 +12012,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Verificar permisos de escritura en el directorio temporal.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
         <source>Failed to load generated project</source>
         <translation>Error al cargar el proyecto generado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>No se pudo cargar el JSON del proyecto generado.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Proyecto generado exitosamente con %1 grupos y %2 conjuntos de datos.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
         <source>The project editor is now open for customization.</source>
         <translation>El editor de proyectos está ahora abierto para personalización.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus Project</source>
         <translation>Proyecto Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1028"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
         <source>Holding Registers</source>
         <translation>Holding Registers</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
         <source>Input Registers</source>
         <translation>Registros de Entrada</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
         <source>Coils</source>
         <translation>Bobinas</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
         <source>Discrete Inputs</source>
         <translation>Entradas Discretas</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1058"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
         <source>Register %1</source>
         <translation>Registro %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Coil %1</source>
         <translation>Bobina %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Discrete %1</source>
         <translation>Discreta %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Error code: %1</source>
         <translation>Código de error: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
         <source>Modbus Communication Error</source>
         <translation>Error de Comunicación Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1496"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
         <source>Select Port</source>
         <translation>Seleccionar Puerto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1649"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
         <source>Protocol</source>
         <translation>Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
         <source>Slave Address</source>
         <translation>Dirección del Esclavo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1706"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1713"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
         <source>Serial Port</source>
         <translation>Puerto Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1736"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
         <source>Baud Rate</source>
         <translation>Velocidad en Baudios</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1744"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
         <source>Parity</source>
         <translation>Paridad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1752"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
         <source>Data Bits</source>
         <translation>Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1760"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
@@ -12046,37 +12150,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
         <source>Network socket error</source>
         <translation>Error de socket de red</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
         <source>Socket Type</source>
         <translation>Tipo de Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
         <source>Remote Address</source>
         <translation>Dirección Remota</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
         <source>TCP Port</source>
         <translation>Puerto TCP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
         <source>UDP Local Port</source>
         <translation>Puerto Local UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="749"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
         <source>UDP Remote Port</source>
         <translation>Puerto Remoto UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
         <source>UDP Multicast</source>
         <translation>Multidifusión UDP</translation>
     </message>
@@ -12091,8 +12195,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable "%1" not found in PATH.</source>
-        <translation>Ejecutable "%1" no encontrado en PATH.</translation>
+        <source>Executable &quot;%1&quot; not found in PATH.</source>
+        <translation>Ejecutable &quot;%1&quot; no encontrado en PATH.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
@@ -12121,8 +12225,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process "%1" stopped</source>
-        <translation>Proceso "%1" detenido</translation>
+        <source>Process &quot;%1&quot; stopped</source>
+        <translation>Proceso &quot;%1&quot; detenido</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
@@ -12239,171 +12343,171 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="92"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="93"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="421"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
         <source>Select Port</source>
         <translation>Seleccionar Puerto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="422"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
         <source>Space</source>
         <translation>Espacio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="461"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="462"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="592"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" no es una ruta válida</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; no es una ruta válida</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Escribir otra ruta para registrar un dispositivo serial personalizado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>No se pudo encontrar el dispositivo especificado. Verificar la conexión e intentar de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Ocurrió un error desconocido. Verificar el dispositivo e intentar de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>El dispositivo no está abierto. Abrir el dispositivo antes de intentar esta operación.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="294"/>
-        <source>Failed to connect to serial port "%1"</source>
-        <translation>Error al conectar con el puerto serial "%1"</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
+        <source>Failed to connect to serial port &quot;%1&quot;</source>
+        <translation>Error al conectar con el puerto serial &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="849"/>
-        <source>Critical error on serial port "%1"</source>
-        <translation>Error crítico en el puerto serial "%1"</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
+        <source>Critical error on serial port &quot;%1&quot;</source>
+        <translation>Error crítico en el puerto serial &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
         <source>Unknown error</source>
         <translation>Error desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="871"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>No error occurred.</source>
         <translation>No ocurrió ningún error.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="873"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Permiso denegado. Asegurar que la aplicación tenga los derechos de acceso necesarios al dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="874"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Fallo al abrir el dispositivo. Puede estar ya en uso o no disponible.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Ocurrió un error al escribir datos al dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Ocurrió un error al leer datos del dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Ocurrió un error crítico de recursos. El dispositivo puede haberse desconectado o ya no es accesible.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>La operación solicitada no es compatible con este dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>La operación expiró. El dispositivo puede no estar respondiendo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
         <source>Serial Port</source>
         <translation>Puerto Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1051"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
         <source>Baud Rate</source>
         <translation>Velocidad en Baudios</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1059"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
         <source>Parity</source>
         <translation>Paridad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1067"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
         <source>Data Bits</source>
         <translation>Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1075"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1083"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
         <source>Flow Control</source>
         <translation>Control de Flujo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1091"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1098"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
         <source>Auto-Reconnect</source>
         <translation>Reconexión Automática</translation>
     </message>
@@ -12450,26 +12554,26 @@ En Linux, asegúrese de tener permiso de lectura/escritura en el nodo del dispos
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open "%1"</source>
-        <translation>Error al abrir "%1"</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>Error al abrir &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
         <translation>No se encontró un endpoint isócrono IN en este dispositivo, pero hay endpoints masivos o de interrupción disponibles.
 
-Cambia el Modo de Transferencia a "Flujo Masivo/Interrupción" e intenta de nuevo.</translation>
+Cambia el Modo de Transferencia a &quot;Flujo Masivo/Interrupción&quot; e intenta de nuevo.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation>No se encontró un endpoint masivo o de interrupción IN en este dispositivo, pero hay endpoints isócronos disponibles.
 
-Cambia el Modo de Transferencia a "Isócrono" e intenta de nuevo.</translation>
+Cambia el Modo de Transferencia a &quot;Isócrono&quot; e intenta de nuevo.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="812"/>
@@ -12592,18 +12696,18 @@ Otro controlador o aplicación puede tenerla abierta. En Linux, intente descarga
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to "Bulk Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
         <translation type="vanished">No se encontró un endpoint isócrono IN en este dispositivo, pero hay endpoints masivos disponibles.
 
-Cambia el Modo de Transferencia a "Flujo Masivo" e intenta de nuevo.</translation>
+Cambia el Modo de Transferencia a &quot;Flujo Masivo&quot; e intenta de nuevo.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation type="vanished">No se encontró un endpoint masivo IN en este dispositivo, pero hay endpoints isócronos disponibles.
 
-Cambia el Modo de Transferencia a "Isócrono" e intenta de nuevo.</translation>
+Cambia el Modo de Transferencia a &quot;Isócrono&quot; e intenta de nuevo.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -12766,12 +12870,12 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="392"/>
         <source>Frames dropped</source>
         <translation>Tramas descartadas</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="396"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>Los datos entrantes llegan más rápido de lo que Serial Studio puede procesarlos; se han descartado %1 trama(s). Reduzca la tasa de datos o deshabilite un consumidor pesado.</translation>
     </message>
@@ -13265,7 +13369,7 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Servidor de modelo local. Funciona con cualquier endpoint compatible con OpenAI -- Ollama, llama-server de llama.cpp, LM Studio o vLLM. Nada sale de tu máquina. La lista de modelos se consulta en vivo desde el servidor.</translation>
     </message>
     <message>
@@ -13295,7 +13399,7 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider's console to create a new key</source>
+        <source>Open the provider&apos;s console to create a new key</source>
         <translation>Abrir la consola del proveedor para crear una nueva clave</translation>
     </message>
     <message>
@@ -13508,129 +13612,129 @@ Anual es la mejor opción; también hay planes Mensual y de por Vida disponibles
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="526"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
         <source>There was an issue validating your license.</source>
         <translation>Hubo un problema al validar tu licencia.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="733"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>La clave de licencia proporcionada no pertenece a Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Verifica que hayas comprado tu licencia en la tienda oficial de Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>This license key was activated on a different device.</source>
         <translation>Esta clave de licencia se activó en un dispositivo diferente.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Desactívala ahí primero o contacta a soporte para obtener ayuda.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
         <source>This license is not currently active.</source>
         <translation>Esta licencia no está activa actualmente.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Puede haber expirado o sido desactivada (estado: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
         <source>Something went wrong on the server.</source>
         <translation>Algo salió mal en el servidor.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
         <source>No activation ID was returned.</source>
         <translation>No se devolvió ningún ID de activación.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
         <source>Could not validate your license at this time.</source>
         <translation>No se pudo validar tu licencia en este momento.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="592"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>Intentar de nuevo más tarde.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Verificar que la licencia fue comprada en la tienda oficial de Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Something went wrong on the server…</source>
         <translation>Algo salió mal en el servidor…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
         <source>Your license has been successfully activated.</source>
         <translation>La licencia ha sido activada exitosamente.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>¡Gracias por apoyar Serial Studio!
 Ahora tiene acceso a todas las funciones premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
         <source>There was an issue activating your license.</source>
         <translation>Hubo un problema al activar la licencia.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Could not activate your license at this time.</source>
         <translation>No se pudo activar la licencia en este momento.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Hubo un problema al desactivar la licencia.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>No se pudo desactivar su licencia en este momento.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>Your license has been deactivated.</source>
         <translation>Su licencia ha sido desactivada.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Se ha eliminado el acceso a las funciones Pro.
@@ -13735,7 +13839,7 @@ Para reutilizar este asiento en otro dispositivo, envía un correo a alex@serial
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
         <translation>No se pudo leer parte de la sección de datos del archivo; la grabación puede estar truncada.</translation>
     </message>
     <message>
@@ -13857,6 +13961,47 @@ Para reutilizar este asiento en otro dispositivo, envía un correo a alex@serial
         <source>Load From Folder…</source>
         <translation>Cargar desde Carpeta…</translation>
     </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
+        <source>Browse…</source>
+        <translation type="unfinished">Explorar…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
+        <source>ALPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MQTT::Client</name>
@@ -13957,7 +14102,7 @@ Para desbloquear esta función, activa tu licencia o visita la tienda.</translat
         <translation type="vanished">Tema MQTT No Establecido</translation>
     </message>
     <message>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation type="vanished">No se recibirán mensajes hasta que se configure un tema.</translation>
     </message>
     <message>
@@ -13969,8 +14114,8 @@ Para desbloquear esta función, activa tu licencia o visita la tienda.</translat
         <translation type="vanished">Tema MQTT Inválido</translation>
     </message>
     <message>
-        <source>The topic "%1" is not valid.</source>
-        <translation type="vanished">El tema "%1" no es válido.</translation>
+        <source>The topic &quot;%1&quot; is not valid.</source>
+        <translation type="vanished">El tema &quot;%1&quot; no es válido.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -13981,8 +14126,8 @@ Para desbloquear esta función, activa tu licencia o visita la tienda.</translat
         <translation type="vanished">Error de Suscripción</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation type="vanished">Error al suscribirse al tema "%1".</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation type="vanished">Error al suscribirse al tema &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -14077,10 +14222,10 @@ Para desbloquear esta función, activa tu licencia o visita la tienda.</translat
         <translation type="vanished">Autenticación MQTT Requerida</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">El broker MQTT requiere autenticación usando el método: "%1".
+        <translation type="vanished">El broker MQTT requiere autenticación usando el método: &quot;%1&quot;.
 
 Proporcione las credenciales necesarias.</translation>
     </message>
@@ -14104,130 +14249,151 @@ Proporcione las credenciales necesarias.</translation>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="814"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="829"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="815"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="830"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="816"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="831"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="818"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="833"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="819"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="834"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="820"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="835"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 o Posterior</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="821"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="836"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 o Posterior</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="822"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="837"/>
         <source>Any Protocol</source>
         <translation>Cualquier Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="823"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="838"/>
         <source>Secure Protocols Only</source>
         <translation>Solo Protocolos Seguros</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="825"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="840"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="826"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="841"/>
         <source>Query Peer</source>
         <translation>Consultar Par</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="827"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="842"/>
         <source>Verify Peer</source>
         <translation>Verificar Par</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="828"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="843"/>
         <source>Auto Verify Peer</source>
         <translation>Verificar Par Automáticamente</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1145"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1200"/>
         <source>Raw RX Data</source>
         <translation>Datos RX sin Procesar</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1146"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1201"/>
         <source>Custom Script</source>
         <translation>Script Personalizado</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1147"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1202"/>
         <source>Dashboard Data (CSV)</source>
         <translation>Datos del Tablero (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1148"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1203"/>
         <source>Dashboard Data (JSON)</source>
         <translation>Datos del Tablero (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1304"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1370"/>
         <source>MQTT publisher unavailable</source>
         <translation>Publicador MQTT no disponible</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1305"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1371"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>Se requiere una licencia comercial válida para usar la publicación MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1307"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1876"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1373"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2061"/>
         <source>MQTT Test Connection</source>
         <translation>Probar Conexión MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1326"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1392"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Seleccionar Directorio de Certificados PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker reachable</source>
         <translation>Broker MQTT alcanzable</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker unreachable</source>
         <translation>Broker MQTT inalcanzable</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
         <source>MQTT broker connection failed</source>
         <translation>Falló la conexión al broker MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2229"/>
         <source>MQTT Publisher</source>
         <translation>Publicador MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14437,17 +14603,17 @@ Proporcione las credenciales necesarias.</translation>
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="696"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="701"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>Configurar el nombre de host y puerto del broker antes de probar la conexión.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="732"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="737"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>Conectado exitosamente a %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="743"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="748"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>Tiempo de espera agotado después de 5 segundos sin alcanzar el broker.</translation>
     </message>
@@ -15040,13 +15206,13 @@ Proporcione las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin "%1" is not installed.</source>
-        <translation>El plugin "%1" no está instalado.</translation>
+        <source>Plugin &quot;%1&quot; is not installed.</source>
+        <translation>El plugin &quot;%1&quot; no está instalado.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension "%1" is not a plugin (type: %2).</source>
-        <translation>La extensión "%1" no es un plugin (tipo: %2).</translation>
+        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
+        <translation>La extensión &quot;%1&quot; no es un plugin (tipo: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
@@ -15057,8 +15223,8 @@ Proporcione las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
-        <translation>El plugin "%1" requiere GRPC pero esta compilación no incluye soporte para GRPC.</translation>
+        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
+        <translation>El plugin &quot;%1&quot; requiere GRPC pero esta compilación no incluye soporte para GRPC.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
@@ -15076,8 +15242,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin "%1" has no 'entry' field in info.json.</source>
-        <translation>El complemento "%1" no tiene el campo 'entry' en info.json.</translation>
+        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
+        <translation>El complemento &quot;%1&quot; no tiene el campo &apos;entry&apos; en info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -15088,8 +15254,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin "%1" has an invalid entry point path.</source>
-        <translation>El complemento "%1" tiene una ruta de punto de entrada no válida.</translation>
+        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
+        <translation>El complemento &quot;%1&quot; tiene una ruta de punto de entrada no válida.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1490"/>
@@ -15098,10 +15264,10 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires "%1" but it was not found on your system.
+        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Este complemento requiere "%1" pero no se encontró en el sistema.
+        <translation>Este complemento requiere &quot;%1&quot; pero no se encontró en el sistema.
 
 ¿Desea abrir la página de descarga?</translation>
     </message>
@@ -15327,8 +15493,8 @@ Would you like to open the download page?</source>
         <translation type="vanished">¿Buscar actualizaciones automáticamente?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation type="vanished">¿Debería %1 buscar actualizaciones automáticamente? Siempre se pueden buscar actualizaciones manualmente desde el diálogo "Acerca de"</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation type="vanished">¿Debería %1 buscar actualizaciones automáticamente? Siempre se pueden buscar actualizaciones manualmente desde el diálogo &quot;Acerca de&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="192"/>
@@ -15736,6 +15902,8 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="139"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="156"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="189"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="207"/>
         <source>Enable publishing first</source>
         <translation>Habilite la publicación primero</translation>
     </message>
@@ -15761,8 +15929,30 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="174"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="192"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="210"/>
         <source>Enable SSL/TLS first</source>
         <translation>Habilite SSL/TLS primero</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
+        <source>Select the PEM client certificate for mutual TLS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
+        <source>Select the PEM private key for mutual TLS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16003,7 +16193,7 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two's-complement signed.</source>
+        <source>Interprets each value as two&apos;s-complement signed.</source>
         <translation>Interpreta cada valor como con signo en complemento a dos.</translation>
     </message>
     <message>
@@ -16080,7 +16270,7 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
         <translation>Interpreta registros de 16 bits como valores con signo en complemento a dos.</translation>
     </message>
     <message>
@@ -16355,7 +16545,7 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
         <translation>Guardar el archivo de dispositivo de esta computadora. Identifica esta máquina y no contiene información personal.</translation>
     </message>
     <message>
@@ -17007,7 +17197,7 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>No disponible mediante conexión remota. Este widget necesita el flujo de muestras sin procesar del remoto, el cual no transporta el espejo del tablero.</translation>
     </message>
 </context>
@@ -18136,7 +18326,7 @@ Haz clic en Actualizar para actualizar la lista.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Ejecuta la transformación de un conjunto de datos solo cuando cambia una de sus entradas. Acelera proyectos grandes basados en tablas; desactivado por defecto.</translation>
     </message>
     <message>
@@ -18257,7 +18447,7 @@ Haz clic en Actualizar para actualizar la lista.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
         <translation>El broker rechazó la conexión debido a una versión de protocolo no compatible. Haga coincidir la versión MQTT del broker e intente nuevamente.</translation>
     </message>
     <message>
@@ -18297,13 +18487,18 @@ Haz clic en Actualizar para actualizar la lista.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
         <translation>Ocurrió un error de nivel de protocolo MQTT 5. Inspeccione el código de razón del broker para más detalles.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="109"/>
         <source>Unspecified MQTT error (code %1).</source>
         <translation>Error MQTT no especificado (código %1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18356,22 +18551,22 @@ Haz clic en Actualizar para actualizar la lista.</translation>
         <translation>¡No se puede abrir el archivo para escritura!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1626"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>¡Adaptador Bluetooth inválido!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
         <source>Unsuported platform or operating system</source>
         <translation>Plataforma o sistema operativo no compatible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1632"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
         <source>Unsupported discovery method</source>
         <translation>Método de descubrimiento no compatible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
         <source>General I/O error</source>
         <translation>Error general de E/S</translation>
     </message>
@@ -18426,11 +18621,11 @@ Causa más probable: un bucle infinito o una operación extremadamente lenta en 
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>La función 'parse' no está definida en el script.
+        <translation>La función &apos;parse&apos; no está definida en el script.
 
 Asegúrese de que su código incluya:
 function parse(frame) ... end</translation>
@@ -18512,11 +18707,11 @@ Causa más probable: un bucle infinito en el nivel superior del script.</transla
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>La función 'parse' no está definida en el script.
+        <translation>La función &apos;parse&apos; no está definida en el script.
 
 Asegúrese de que su código incluya:
 function parse(frame) { ... }</translation>
@@ -18541,12 +18736,12 @@ Por favor corrija el error en el cuerpo de la función.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable 'parse' export found.
+        <source>No callable &apos;parse&apos; export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>No se encontró una exportación 'parse' invocable.
+        <translation>No se encontró una exportación &apos;parse&apos; invocable.
 
 Define una de las siguientes:
   function parse(frame) { ... }
@@ -18554,15 +18749,15 @@ Define una de las siguientes:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
-        <translation>La función 'parse' debe aceptar al menos un parámetro (la carga útil de la trama).</translation>
+        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
+        <translation>La función &apos;parse&apos; debe aceptar al menos un parámetro (la carga útil de la trama).</translation>
     </message>
     <message>
-        <source>No valid 'parse' function declaration found.
+        <source>No valid &apos;parse&apos; function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">No se encontró una declaración válida de la función 'parse'.
+        <translation type="vanished">No se encontró una declaración válida de la función &apos;parse&apos;.
 
 Formato esperado:
 function parse(frame) { ... }</translation>
@@ -18573,11 +18768,11 @@ function parse(frame) { ... }</translation>
         <translation>Parámetro de Función Inválido</translation>
     </message>
     <message>
-        <source>The 'parse' function must have at least one parameter.
+        <source>The &apos;parse&apos; function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">La función 'parse' debe tener al menos un parámetro.
+        <translation type="vanished">La función &apos;parse&apos; debe tener al menos un parámetro.
 
 Formato esperado:
 function parse(frame) { ... }</translation>
@@ -18589,13 +18784,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
+        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>La función 'parse' utiliza el formato antiguo de dos parámetros: parse(%1, %2)
+        <translation>La función &apos;parse&apos; utiliza el formato antiguo de dos parámetros: parse(%1, %2)
 
 Este formato ya no es compatible. Por favor actualiza al nuevo formato de un solo parámetro:
 function parse(%1) { ... }
@@ -18713,13 +18908,13 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got '%2'</source>
-        <translation>Se esperaba %1, se obtuvo '%2'</translation>
+        <source>Expected %1, got &apos;%2&apos;</source>
+        <translation>Se esperaba %1, se obtuvo &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after 'enum'</source>
-        <translation>Se esperaba nombre de enum después de 'enum'</translation>
+        <source>Expected enum name after &apos;enum&apos;</source>
+        <translation>Se esperaba nombre de enum después de &apos;enum&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18728,8 +18923,8 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag '%1' out of range (1..%2)</source>
-        <translation>Etiqueta de campo '%1' fuera de rango (1..%2)</translation>
+        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
+        <translation>Etiqueta de campo &apos;%1&apos; fuera de rango (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18753,8 +18948,8 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got '%1'</source>
-        <translation>Se esperaba tipo de campo, se obtuvo '%1'</translation>
+        <source>Expected field type, got &apos;%1&apos;</source>
+        <translation>Se esperaba tipo de campo, se obtuvo &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18778,13 +18973,13 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token '%1' at file scope</source>
-        <translation>Token inesperado '%1' en el ámbito del archivo</translation>
+        <source>Unexpected token &apos;%1&apos; at file scope</source>
+        <translation>Token inesperado &apos;%1&apos; en el ámbito del archivo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword '%1'</source>
-        <translation>Palabra clave de nivel superior no soportada '%1'</translation>
+        <source>Unsupported top-level keyword &apos;%1&apos;</source>
+        <translation>Palabra clave de nivel superior no soportada &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -18825,8 +19020,8 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">La configuración del analizador nativo no es un objeto JSON válido.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: "%1".</source>
-        <translation type="vanished">Plantilla de analizador nativo desconocida: "%1".</translation>
+        <source>Unknown native parser template: &quot;%1&quot;.</source>
+        <translation type="vanished">Plantilla de analizador nativo desconocida: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -18835,8 +19030,8 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: "%1".</source>
-        <translation>Plantilla de analizador integrado desconocida: "%1".</translation>
+        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
+        <translation>Plantilla de analizador integrado desconocida: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -19016,7 +19211,7 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Observa el tablero de otra instancia de Serial Studio a través de la red. La vista es de solo lectura: nada de lo que hagas aquí llega al dispositivo remoto.</translation>
     </message>
     <message>
@@ -19406,7 +19601,7 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn't reach your device.</source>
+        <source>Serial Studio couldn&apos;t reach your device.</source>
         <translation>Serial Studio no pudo comunicarse con el dispositivo.</translation>
     </message>
     <message>
@@ -19416,7 +19611,7 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Verifica que esté conectado, encendido y que no esté en uso por otra aplicación. Puedes reintentar, elegir otro dispositivo o salir.</translation>
     </message>
     <message>
@@ -20269,48 +20464,48 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="292"/>
+        <location filename="../../src/Sessions/Player.cpp" line="302"/>
         <source>Open Session File</source>
         <translation>Abrir Archivo de Sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="294"/>
+        <location filename="../../src/Sessions/Player.cpp" line="304"/>
         <source>Session files (*.db)</source>
         <translation>Archivos de sesión (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="367"/>
+        <location filename="../../src/Sessions/Player.cpp" line="377"/>
         <source>Device Connection Active</source>
         <translation>Conexión de Dispositivo Activa</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="368"/>
+        <location filename="../../src/Sessions/Player.cpp" line="378"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Para usar esta función, debe desconectarse del dispositivo. ¿Desea continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="416"/>
-        <location filename="../../src/Sessions/Player.cpp" line="497"/>
+        <location filename="../../src/Sessions/Player.cpp" line="426"/>
+        <location filename="../../src/Sessions/Player.cpp" line="507"/>
         <source>Cannot open session file</source>
         <translation>No se Puede Abrir el Archivo de Sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="417"/>
+        <location filename="../../src/Sessions/Player.cpp" line="427"/>
         <source>Unknown error</source>
         <translation>Error desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="433"/>
+        <location filename="../../src/Sessions/Player.cpp" line="443"/>
         <source>No project data</source>
         <translation>No hay datos del proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="434"/>
+        <location filename="../../src/Sessions/Player.cpp" line="444"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Esta sesión no contiene un archivo de proyecto embebido — el tablero recurre a un diseño de gráfico rápido.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="498"/>
+        <location filename="../../src/Sessions/Player.cpp" line="508"/>
         <source>Check file permissions and try again.</source>
         <translation>Verificar permisos del archivo e intentar de nuevo.</translation>
     </message>
@@ -20565,7 +20760,7 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Actualizaciones y Noticias</translation>
     </message>
     <message>
-        <source>Show What's New on Startup</source>
+        <source>Show What&apos;s New on Startup</source>
         <translation type="vanished">Mostrar Novedades al Iniciar</translation>
     </message>
     <message>
@@ -21084,7 +21279,7 @@ El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Al hacer doble clic en este despliegue se accede directamente al tablero en vivo de este proyecto. No hay barra de herramientas ni panel de configuración, solo los datos, y Serial Studio se cierra en cuanto el dispositivo se desconecta.</translation>
     </message>
     <message>
@@ -21198,7 +21393,7 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Pantalla Completa</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">Al hacer doble clic en este acceso directo se accede directamente al tablero en vivo de este proyecto. No hay barra de herramientas ni panel de configuración, solo los datos, y Serial Studio se cierra en cuanto el dispositivo se desconecta.</translation>
     </message>
     <message>
@@ -21206,7 +21401,7 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Incrustar Proyecto</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">Al hacer doble clic en este acceso directo se accede directamente al tablero en vivo de este proyecto. No hay barra de herramientas ni panel de configuración, solo los datos, y Serial Studio se cierra en cuanto el dispositivo se desconecta.
@@ -21543,8 +21738,8 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show "%1"</source>
-        <translation>Mostrar "%1"</translation>
+        <source>Show &quot;%1&quot;</source>
+        <translation>Mostrar &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -22306,6 +22501,44 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
 </context>
 <context>
+    <name>TlsIdentity</name>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
+        <source>The file &quot;%1&quot; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
+        <source>The file &quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
+        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
+        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
+        <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
+        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
+        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ToolActions</name>
     <message>
         <source>Auto Layout</source>
@@ -22757,7 +22990,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Deja la base de tiempo vacía para usar el rango de tiempo del gráfico; redúcela para acercar una señal rápida. Holdoff ignora nuevos disparadores por un momento después de cada uno.</translation>
     </message>
     <message>
@@ -22823,7 +23056,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">La base de tiempo establece cuánto tiempo muestra un barrido; déjala vacía para usar el rango de tiempo del gráfico. Redúcela para acercar una señal rápida. Holdoff ignora nuevos disparadores por un momento después de cada uno.</translation>
     </message>
     <message>
@@ -23345,7 +23578,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>No disponible en conexión remota. Este widget necesita el flujo de muestras sin procesar del remoto, el cual el espejo del tablero no transmite.</translation>
     </message>
     <message>
@@ -23411,7 +23644,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
+        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
         <translation>Actualmente estás usando la versión de prueba completa de %1 Pro. Es válida por 14 días de uso personal y no comercial.</translation>
     </message>
     <message>
@@ -23426,13 +23659,13 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Para ver los planes de suscripción disponibles, haz clic en "Actualizar Ahora" a continuación.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>Para ver los planes de suscripción disponibles, haz clic en &quot;Actualizar Ahora&quot; a continuación.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>No me recuerdes sobre la prueba.
 Entiendo que cuando termine, necesitaré comprar una licencia o compilar la versión GPLv3.</translation>
     </message>
@@ -23494,7 +23727,7 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What's New in %1</source>
+        <source>What&apos;s New in %1</source>
         <translation type="vanished">Novedades en %1</translation>
     </message>
     <message>
@@ -23630,7 +23863,7 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
         <translation type="vanished">¡Bienvenido a %1!</translation>
     </message>
     <message>
-        <source>Here's what's new in version %1.</source>
+        <source>Here&apos;s what&apos;s new in version %1.</source>
         <translation type="vanished">Esto es lo nuevo en la versión %1.</translation>
     </message>
     <message>
@@ -23839,7 +24072,7 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>No podemos ofrecer acceso sin restricciones porque la clave API de ArcGIS genera costos reales.</translation>
     </message>
 </context>

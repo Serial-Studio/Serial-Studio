@@ -1,12 +1,72 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ja_JP" sourcelanguage="en_US">
 <context>
-    <name/>
+    <name></name>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
         <translation>混在</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
+        <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
+        <source>PEM private key matching the client certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
+        <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
+        <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -166,7 +226,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
         <translation>(モデルが空の応答を返しました。言い換えるか、別のモデルに切り替えるか、プロバイダーの安全フィルターでリクエストが許可されているか確認してください。)</translation>
     </message>
     <message>
@@ -314,7 +374,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote's dataset layout does not match its announced hash</source>
+        <source>The remote&apos;s dataset layout does not match its announced hash</source>
         <translation>リモートのデータセットレイアウトが通知されたハッシュと一致しません</translation>
     </message>
     <message>
@@ -355,8 +415,8 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program "%1" not found in PATH</source>
-        <translation>プログラム "%1" がPATHに見つかりません</translation>
+        <source>Program &quot;%1&quot; not found in PATH</source>
+        <translation>プログラム &quot;%1&quot; がPATHに見つかりません</translation>
     </message>
 </context>
 <context>
@@ -392,7 +452,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio のローカル API を使用しているプログラムが、接続されたデバイスへのデータ送信を要求しています。API クライアントによるデバイスへの書き込みを許可しますか？</translation>
     </message>
     <message>
@@ -454,7 +514,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>本ソフトウェアは「現状のまま」提供され、商品性または特定目的への適合性の保証を含む、明示的または黙示的ないかなる保証もありません。本ソフトウェアの使用から生じるいかなる損害についても、作者は一切の責任を負いません。</translation>
     </message>
     <message>
@@ -478,7 +538,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>プロジェクトデモ</translation>
     </message>
     <message>
-        <source>What's New</source>
+        <source>What&apos;s New</source>
         <translation type="vanished">新機能</translation>
     </message>
     <message>
@@ -1005,7 +1065,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">プリセットを適用</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
         <translation type="vanished">現在のバンドを選択したプリセットで置き換え、このデータセットの範囲に合わせてスケーリングします。</translation>
     </message>
     <message>
@@ -1213,7 +1273,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio's features</source>
+        <source>Help me discover Serial Studio&apos;s features</source>
         <translation>Serial Studioの機能を発見する手助けをして</translation>
     </message>
     <message>
@@ -1341,12 +1401,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder "%1" - readable this session</source>
+        <source>Added folder &quot;%1&quot; - readable this session</source>
         <translation>フォルダ「%1」を追加しました - このセッション中読み取り可能</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added "%1" - readable this session</source>
+        <source>Added &quot;%1&quot; - readable this session</source>
         <translation>「%1」を追加しました - このセッション中読み取り可能</translation>
     </message>
     <message>
@@ -1787,7 +1847,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
         <translation>このコンピュータがSerial Studioのデータパイプラインを通じてフレームを抽出、解析、可視化する速度を測定します。</translation>
     </message>
     <message>
@@ -2243,7 +2303,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>QTが正式にサポートし次第、このオペレーティングシステムに対応するようSerial Studioを更新します</translation>
     </message>
 </context>
@@ -3599,7 +3659,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance's dashboard over the network</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
         <translation>ネットワーク経由で別のSerial Studioインスタンスのダッシュボードを監視</translation>
     </message>
     <message>
@@ -3911,7 +3971,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler's number</source>
+        <source>Euler&apos;s number</source>
         <translation>ネイピア数</translation>
     </message>
     <message>
@@ -5183,7 +5243,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">値</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
@@ -5427,10 +5487,10 @@ Any unsaved changes are lost. Continue?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>"%1" expects %2 dataset(s); the current group has %3.
+        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template's defaults?</source>
-        <translation>"%1"には%2個のデータセットが必要ですが、現在のグループには%3個あります。
+Add %4 dataset(s) using the template&apos;s defaults?</source>
+        <translation>&quot;%1&quot;には%2個のデータセットが必要ですが、現在のグループには%3個あります。
 
 テンプレートのデフォルト値を使用して%4個のデータセットを追加しますか?</translation>
     </message>
@@ -5891,47 +5951,47 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>ブローカー認証用のパスワード</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="335"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="412"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="346"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="423"/>
         <source>Use SSL/TLS</source>
         <translation>SSL/TLSを使用</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="347"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="424"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>ブローカー接続をTLSでトンネル</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="360"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="437"/>
         <source>Protocol</source>
         <translation>プロトコル</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="361"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="438"/>
         <source>Negotiated TLS protocol family</source>
         <translation>ネゴシエートされたTLSプロトコルファミリー</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="371"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="448"/>
         <source>Peer Verify</source>
         <translation>ピア検証</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="372"/>
-        <source>How strictly the broker's certificate chain is validated</source>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
+        <source>How strictly the broker&apos;s certificate chain is validated</source>
         <translation>ブローカーの証明書チェーンを検証する厳密さ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="382"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="459"/>
         <source>Verify Depth</source>
         <translation>検証深度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="383"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="460"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>受け入れる証明書チェーンの最大長（0 = 無制限）</translation>
     </message>
@@ -6258,7 +6318,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
         <translation>このデータセットの独立したダッシュボードタイルを非表示にします。ペインターウィジェットは引き続きその値を読み取ることができます</translation>
     </message>
     <message>
@@ -7130,7 +7190,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias "%1" is already in use</source>
+        <source>Alias &quot;%1&quot; is already in use</source>
         <translation>エイリアス「%1」は既に使用されています</translation>
     </message>
     <message>
@@ -7145,13 +7205,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias "%1" contains only digits</source>
+        <source>Alias &quot;%1&quot; contains only digits</source>
         <translation>エイリアス「%1」は数字のみで構成されています</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>スクリプトでは文字列として引用符で囲む必要があります（例：getDataset("%1")）。数値引数はこのエイリアスではなくuniqueIdとして読み取られます。</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>スクリプトでは文字列として引用符で囲む必要があります（例：getDataset(&quot;%1&quot;)）。数値引数はこのエイリアスではなくuniqueIdとして読み取られます。</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7460,8 +7520,8 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source "%1"?</source>
-        <translation>データソース"%1"を削除しますか?</translation>
+        <source>Do you want to delete data source &quot;%1&quot;?</source>
+        <translation>データソース&quot;%1&quot;を削除しますか?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7549,13 +7609,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>プロジェクトで使用されていた旧形式のフレームパーサー関数（'separator'引数付き）は、新しい形式に自動的に移行されました。</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>プロジェクトで使用されていた旧形式のフレームパーサー関数（&apos;separator&apos;引数付き）は、新しい形式に自動的に移行されました。</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>グループ"%1"を削除しますか?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>グループ&quot;%1&quot;を削除しますか?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7567,13 +7627,13 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>アクション"%1"を削除しますか?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>アクション&quot;%1&quot;を削除しますか?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>データセット"%1"を削除しますか?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>データセット&quot;%1&quot;を削除しますか?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7704,7 +7764,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget "%1"?</source>
+        <source>Do you want to delete output widget &quot;%1&quot;?</source>
         <translation>出力ウィジェット「%1」を削除しますか？</translation>
     </message>
     <message>
@@ -8001,8 +8061,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete "%1"?</source>
-        <translation>"%1" を削除しますか？</translation>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation>&quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -8093,8 +8153,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder "%1"?</source>
-        <translation>フォルダ "%1" を削除しますか？</translation>
+        <source>Delete folder &quot;%1&quot;?</source>
+        <translation>フォルダ &quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8162,7 +8222,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
         <translation>カスタマイズをオフにすると、編集内容が破棄され、プロジェクトのグループからワークスペースリストが再構築されます。</translation>
     </message>
     <message>
@@ -8697,7 +8757,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
         <translation>このデータセットのゲージまたはLEDに対して、重大度階層を持つ色分けされた値範囲を定義します。</translation>
     </message>
     <message>
@@ -8739,7 +8799,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>アラームバンド</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
         <translation type="vanished">このデータセットのゲージに対して、重大度階層を持つ色分けされた値範囲を定義します。</translation>
     </message>
     <message>
@@ -8857,7 +8917,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click "OK" to begin installing the update</source>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
         <translation>「OK」をクリックしてアップデートのインストールを開始</translation>
     </message>
     <message>
@@ -8877,7 +8937,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the "Open" button to apply the update</source>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
         <translation>「開く」ボタンをクリックしてアップデートを適用</translation>
     </message>
     <message>
@@ -9155,7 +9215,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don't Allow</source>
+        <source>Don&apos;t Allow</source>
         <translation>許可しない</translation>
     </message>
     <message>
@@ -9490,7 +9550,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>リモート接続では利用できません。このウィジェットはリモートの生サンプルストリームを必要としますが、ダッシュボードミラーには含まれていません。</translation>
     </message>
     <message>
@@ -10968,97 +11028,97 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="349"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="350"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
         <source>Network Socket</source>
         <translation>ネットワークソケット</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="351"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="353"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
         <source>Audio</source>
         <translation>オーディオ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="354"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="355"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
         <source>CAN Bus</source>
         <translation>CANバス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="356"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
         <source>USB Device</source>
         <translation>USBデバイス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="357"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
         <source>HID Device</source>
         <translation>HIDデバイス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="358"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
         <source>Process</source>
         <translation>プロセス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="359"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
         <source>MQTT Subscriber</source>
         <translation>MQTTサブスクライバー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="767"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
         <source>Your trial period has ended.</source>
         <translation>試用期間が終了しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="768"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studioを引き続き使用するには、ライセンスを有効化してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
         <source>Connection Lost</source>
         <translation>接続が切断されました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1461"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
         <translation>接続が切断され、復元できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1480"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
         <translation>%1: リンク切断</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1481"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
         <translation>自動再接続を試行中</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1487"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
         <translation>%1: リンク復旧</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1488"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
         <translation>接続が自動的に回復しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1503"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
         <translation>デバイス %1</translation>
     </message>
@@ -11134,77 +11194,77 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
         <source>BLE I/O Module Error</source>
         <translation>BLE I/Oモジュールエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="982"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
         <source>Select Device</source>
         <translation>デバイスを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="993"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
         <source>Select Service</source>
         <translation>サービスを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1004"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
         <source>Select Characteristic</source>
         <translation>キャラクタリスティックを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1214"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
         <source>Error while configuring BLE service</source>
         <translation>BLEサービスの設定中にエラーが発生しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
         <source>Operation error</source>
         <translation>操作エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1508"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
         <source>Characteristic write error</source>
         <translation>キャラクタリスティック書き込みエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1511"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
         <source>Descriptor write error</source>
         <translation>ディスクリプタ書き込みエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
         <source>Unknown error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
         <source>Characteristic read error</source>
         <translation>キャラクタリスティック読み取りエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
         <source>Descriptor read error</source>
         <translation>ディスクリプタ読み取りエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1756"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
         <source>BLE Device</source>
         <translation>BLEデバイス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
         <source>Service</source>
         <translation>サービス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
         <source>Notify Characteristic</source>
         <translation>通知キャラクタリスティック</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1778"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
         <source>Characteristic</source>
         <translation>キャラクタリスティック</translation>
     </message>
@@ -11349,18 +11409,18 @@ Windowsでは、CANハードウェアドライバ（PEAK、VECTORなど）をイ
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CANドライバ&lt;/a&gt;をインストールしてください</translation>
+        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>&lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CANドライバ&lt;/a&gt;をインストールしてください</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CANドライバ&lt;/a&gt;をインストールしてください</translation>
+        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>&lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;VECTOR CANドライバ&lt;/a&gt;をインストールしてください</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CANドライバ&lt;/a&gt;をインストール</translation>
+        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>&lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CANドライバ&lt;/a&gt;をインストール</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
@@ -11493,15 +11553,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
         <source>
 
-Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
-        <translation>ユーザーが'plugdev'グループに属しているか、udevルールがこのデバイスへのアクセスを許可していることを確認してください。
+Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
+        <translation>ユーザーが&apos;plugdev&apos;グループに属しているか、udevルールがこのデバイスへのアクセスを許可していることを確認してください。
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open "%1"</source>
-        <translation>"%1"を開けませんでした</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>&quot;%1&quot;を開けませんでした</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
@@ -11527,72 +11587,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3以降</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2以降</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>Any Protocol</source>
         <translation>任意のプロトコル</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
         <source>Secure Protocols Only</source>
         <translation>セキュアプロトコルのみ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>Query Peer</source>
         <translation>ピアに問い合わせ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>Verify Peer</source>
         <translation>ピアを検証</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Auto Verify Peer</source>
         <translation>ピアを自動検証</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="249"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT機能には商用ライセンスが必要</translation>
     </message>
@@ -11601,196 +11661,241 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">MQTTブローカーへのサブスクライブは、有効なSerial Studio商用ライセンス（Hobbyist以上）が必要です。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>MQTTブローカーへのサブスクライブは、有効なSerial Studioライセンスまたはアクティブなトライアルでのみ利用可能です。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
         <source>Use System Database</source>
         <translation>システムデータベースを使用</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="597"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
         <source>Load From Folder…</source>
         <translation>フォルダから読み込み…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="630"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM証明書ディレクトリを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
         <source>Hostname</source>
         <translation>ホスト名</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
         <source>Port</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
         <source>Topic Filter</source>
         <translation>トピックフィルター</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
         <source>Client ID</source>
         <translation>クライアントID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
         <source>Username</source>
         <translation>ユーザー名</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
         <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="929"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
         <source>MQTT Version</source>
         <translation>MQTTバージョン</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
         <source>Clean Session</source>
         <translation>クリーンセッション</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
         <source>Keep Alive (s)</source>
         <translation>キープアライブ (秒)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="953"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
         <source>Auto Keep Alive</source>
         <translation>自動キープアライブ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS有効</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>SSL Protocol</source>
         <translation>SSLプロトコル</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>Peer Verify Mode</source>
         <translation>ピア検証モード</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Peer Verify Depth</source>
         <translation>ピア検証深度</translation>
     </message>
     <message>
-        <source>MQTT Subscription Error</source>
-        <translation type="vanished">MQTTサブスクリプションエラー</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <source>Client Certificate (PEM)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="372"/>
-        <source>Failed to subscribe to topic "%1".</source>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <source>Private Key (PEM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <source>ALPN (MQTT over port 443)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <source>MQTT Subscription Error</source>
+        <translation>MQTTサブスクリプションエラー</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
         <translation>トピック「%1」のサブスクライブに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="401"/>
-        <source>The broker closed the connection.</source>
-        <translation>ブローカーが接続を切断しました。</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The broker closed the connection.</source>
+        <translation type="vanished">ブローカーが接続を切断しました。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>無効なMQTTプロトコルバージョン</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>ブローカーが設定されたMQTTプロトコルバージョンを拒否しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1123"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
         <source>Client ID Rejected</source>
         <translation>クライアントIDが拒否されました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>ブローカーがクライアントIDを拒否しました。別の識別子を試してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1127"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTTサーバーが利用できません</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>ブローカーは現在利用できません。後で再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
         <source>Authentication Error</source>
         <translation>認証エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>提供された資格情報がブローカーによって拒否されました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1135"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
         <source>Authorization Error</source>
         <translation>認可エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
         <source>Account lacks permission for this operation.</source>
         <translation>アカウントにこの操作の権限がありません。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1139"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
         <source>Network or Transport Error</source>
         <translation>ネットワークまたはトランスポートエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>ブローカーへの接続中にネットワーク/トランスポート層の問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1143"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTTプロトコル違反</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1144"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>ブローカーがプロトコル違反を報告し、接続を閉じました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>MQTT 5 プロトコルレベルのエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1151"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
         <source>MQTT Error</source>
         <translation>MQTT エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>予期しない MQTT エラーが発生しました。</translation>
     </message>
@@ -11798,104 +11903,103 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Invalid Serial Port</source>
         <translation>無効なシリアルポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus初期化失敗</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus接続失敗</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
-        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
+        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
         <translation>選択されたシリアルポート「%1」は使用できなくなりました。ポートリストを更新して再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>The Modbus client refused to start the connection.</source>
-        <translation>Modbusクライアントが接続の開始を拒否しました。</translation>
+        <translation type="vanished">Modbusクライアントが接続の開始を拒否しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Modbusデバイスを作成できません。システム構成を確認して再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="574"/>
-        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
+        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
         <translation>「%1」に接続できません。接続設定を確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="575"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="708"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
         <source>Even</source>
         <translation>偶数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="710"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
         <source>Odd</source>
         <translation>奇数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="711"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Space</source>
         <translation>スペース</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Mark</source>
         <translation>マーク</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="764"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
         <source>Holding Registers (0x03)</source>
         <translation>保持レジスタ (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
         <source>Input Registers (0x04)</source>
         <translation>入力レジスタ (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
         <source>Coils (0x01)</source>
         <translation>コイル (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>離散入力 (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="949"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
         <source>No register groups configured</source>
         <translation>レジスタグループが設定されていません</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>プロジェクトを生成する前に、少なくとも1つのレジスタグループを追加してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="952"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="990"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
         <source>Modbus Project Generator</source>
         <translation>Modbusプロジェクトジェネレーター</translation>
     </message>
@@ -11908,137 +12012,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">一時ディレクトリへの書き込み権限を確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
         <source>Failed to load generated project</source>
         <translation>生成されたプロジェクトの読み込みに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>生成されたプロジェクトJSONを読み込めませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1グループと%2データセットを含むプロジェクトの生成に成功しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
         <source>The project editor is now open for customization.</source>
         <translation>プロジェクトエディターがカスタマイズのために開かれました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus Project</source>
         <translation>Modbusプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1028"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
         <source>Holding Registers</source>
         <translation>ホールディングレジスタ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
         <source>Input Registers</source>
         <translation>入力レジスタ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
         <source>Coils</source>
         <translation>コイル</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
         <source>Discrete Inputs</source>
         <translation>離散入力</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
         <source>Unknown</source>
         <translation>不明</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1058"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
         <source>Register %1</source>
         <translation>レジスタ %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Coil %1</source>
         <translation>コイル %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1066"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Discrete %1</source>
         <translation>離散 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Error code: %1</source>
         <translation>エラーコード: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus通信エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1496"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
         <source>Select Port</source>
         <translation>ポートを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1649"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
         <source>Protocol</source>
         <translation>プロトコル</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
         <source>Slave Address</source>
         <translation>スレーブアドレス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
         <source>Poll Interval (ms)</source>
         <translation>ポーリング間隔（ms）</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1706"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
         <source>Host / IP</source>
         <translation>ホスト / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1713"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
         <source>Port</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
         <source>Serial Port</source>
         <translation>シリアルポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1736"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
         <source>Baud Rate</source>
         <translation>ボーレート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1744"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
         <source>Parity</source>
         <translation>パリティ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1752"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
         <source>Data Bits</source>
         <translation>データビット</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1760"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
         <source>Stop Bits</source>
         <translation>ストップビット</translation>
     </message>
@@ -12046,37 +12150,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
         <source>Network socket error</source>
         <translation>ネットワークソケットエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
         <source>Socket Type</source>
         <translation>ソケットタイプ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
         <source>Remote Address</source>
         <translation>リモートアドレス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
         <source>TCP Port</source>
         <translation>TCPポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
         <source>UDP Local Port</source>
         <translation>UDPローカルポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="749"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
         <source>UDP Remote Port</source>
         <translation>UDPリモートポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
         <source>UDP Multicast</source>
         <translation>UDPマルチキャスト</translation>
     </message>
@@ -12091,8 +12195,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable "%1" not found in PATH.</source>
-        <translation>実行可能ファイル "%1" がPATHに見つかりません。</translation>
+        <source>Executable &quot;%1&quot; not found in PATH.</source>
+        <translation>実行可能ファイル &quot;%1&quot; がPATHに見つかりません。</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
@@ -12121,8 +12225,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process "%1" stopped</source>
-        <translation>プロセス "%1" が停止しました</translation>
+        <source>Process &quot;%1&quot; stopped</source>
+        <translation>プロセス &quot;%1&quot; が停止しました</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
@@ -12239,171 +12343,171 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="92"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="93"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="421"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
         <source>Select Port</source>
         <translation>ポートを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="422"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
         <source>Even</source>
         <translation>偶数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
         <source>Odd</source>
         <translation>奇数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
         <source>Space</source>
         <translation>スペース</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
         <source>Mark</source>
         <translation>マーク</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="461"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="462"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="592"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" は有効なパスではありません</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; は有効なパスではありません</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>カスタムシリアルデバイスを登録するには別のパスを入力してください</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>指定されたデバイスが見つかりませんでした。接続を確認して再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>不明なエラーが発生しました。デバイスを確認して再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>デバイスが開いていません。この操作を試行する前にデバイスを開いてください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="294"/>
-        <source>Failed to connect to serial port "%1"</source>
-        <translation>シリアルポート "%1" への接続に失敗しました</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
+        <source>Failed to connect to serial port &quot;%1&quot;</source>
+        <translation>シリアルポート &quot;%1&quot; への接続に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
         <source>Unknown</source>
         <translation>不明</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="849"/>
-        <source>Critical error on serial port "%1"</source>
-        <translation>シリアルポート "%1" で重大なエラーが発生しました</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
+        <source>Critical error on serial port &quot;%1&quot;</source>
+        <translation>シリアルポート &quot;%1&quot; で重大なエラーが発生しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
         <source>Unknown error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="871"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>No error occurred.</source>
         <translation>エラーは発生していません。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="873"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>アクセスが拒否されました。アプリケーションがデバイスへの必要なアクセス権を持っていることを確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="874"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>デバイスを開けませんでした。既に使用中か、利用できない可能性があります。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>デバイスへのデータ書き込み中にエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>デバイスからのデータ読み取り中にエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>重大なリソースエラーが発生しました。デバイスが切断されたか、アクセスできなくなった可能性があります。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>要求された操作はこのデバイスでサポートされていません。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>操作がタイムアウトしました。デバイスが応答していない可能性があります。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
         <source>Serial Port</source>
         <translation>シリアルポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1051"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
         <source>Baud Rate</source>
         <translation>ボーレート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1059"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
         <source>Parity</source>
         <translation>パリティ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1067"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
         <source>Data Bits</source>
         <translation>データビット</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1075"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
         <source>Stop Bits</source>
         <translation>ストップビット</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1083"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
         <source>Flow Control</source>
         <translation>フロー制御</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1091"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1098"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
         <source>Auto-Reconnect</source>
         <translation>自動再接続</translation>
     </message>
@@ -12450,14 +12554,14 @@ Linuxでは、デバイスノードに対する読み取り/書き込み権限�
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open "%1"</source>
-        <translation>"%1"を開けませんでした</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>&quot;%1&quot;を開けませんでした</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
         <translation>このデバイスにはアイソクロナスINエンドポイントが見つかりませんでしたが、バルクまたはインタラプトエンドポイントは利用可能です。
 
 転送モードを「バルク/インタラプトストリーム」に切り替えて再試行してください。</translation>
@@ -12466,7 +12570,7 @@ Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
         <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation>このデバイスにはバルクまたはインタラプトINエンドポイントが見つかりませんでしたが、アイソクロナスエンドポイントは利用可能です。
 
 転送モードを「アイソクロナス」に切り替えて再試行してください。</translation>
@@ -12592,7 +12696,7 @@ Another driver or application may already have it open. On Linux, try unloading 
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to "Bulk Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
         <translation type="vanished">このデバイスにはアイソクロナスINエンドポイントが見つかりませんでしたが、バルクエンドポイントは利用可能です。
 
 転送モードを「バルクストリーム」に切り替えて再試行してください。</translation>
@@ -12600,7 +12704,7 @@ Switch the Transfer Mode to "Bulk Stream" and try again.</source>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation type="vanished">このデバイスにはバルクINエンドポイントが見つかりませんでしたが、アイソクロナスエンドポイントは利用可能です。
 
 転送モードを「アイソクロナス」に切り替えて再試行してください。</translation>
@@ -12766,12 +12870,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="392"/>
         <source>Frames dropped</source>
         <translation>フレームドロップ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="396"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="394"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>受信データがSerial Studioの処理速度を超えています。%1個のフレームがドロップされました。データレートを下げるか、負荷の高い処理を無効にしてください</translation>
     </message>
@@ -13265,7 +13369,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>ローカルモデルサーバー。OpenAI互換のエンドポイント（Ollama、llama.cppのllama-server、LM Studio、vLLM）で動作します。データはマシン外に出ません。モデルリストはサーバーからリアルタイムで取得されます。</translation>
     </message>
     <message>
@@ -13295,7 +13399,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider's console to create a new key</source>
+        <source>Open the provider&apos;s console to create a new key</source>
         <translation>プロバイダーのコンソールを開いて新しいキーを作成</translation>
     </message>
     <message>
@@ -13508,129 +13612,129 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="526"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
         <source>There was an issue validating your license.</source>
         <translation>ライセンスの検証中に問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="733"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>入力されたライセンスキーはSerial Studioのものではありません。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>公式Serial Studioストアからライセンスを購入したか再度ご確認ください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>This license key was activated on a different device.</source>
         <translation>このライセンスキーは別のデバイスで有効化されています。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>先にそちらで無効化するか、サポートにお問い合わせください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
         <source>This license is not currently active.</source>
         <translation>このライセンスは現在有効ではありません。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="570"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>有効期限が切れているか、無効化されている可能性があります（ステータス: %1）。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
         <source>Something went wrong on the server.</source>
         <translation>サーバー側で問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
         <source>No activation ID was returned.</source>
         <translation>アクティベーションIDが返されませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
         <source>Could not validate your license at this time.</source>
         <translation>現在ライセンスを検証できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="592"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>後で再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="854"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>公式Serial Studioストアからライセンスを購入したことを再確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Something went wrong on the server…</source>
         <translation>サーバーで問題が発生しました…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
         <source>Your license has been successfully activated.</source>
         <translation>ライセンスが正常に有効化されました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Serial Studioをサポートいただきありがとうございます！
 すべてのプレミアム機能にアクセスできるようになりました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
         <source>There was an issue activating your license.</source>
         <translation>ライセンスの有効化中に問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Could not activate your license at this time.</source>
         <translation>現在ライセンスを有効化できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>There was an issue deactivating your license.</source>
         <translation>ライセンスの無効化中に問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>現在、ライセンスを無効化できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>Your license has been deactivated.</source>
         <translation>ライセンスが無効化されました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro機能へのアクセスが削除されました。
@@ -13735,7 +13839,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
         <translation>ファイルのデータセクションの一部を読み取れませんでした。記録が切り詰められている可能性があります。</translation>
     </message>
     <message>
@@ -13857,6 +13961,47 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <source>Load From Folder…</source>
         <translation>フォルダから読み込み…</translation>
     </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
+        <source>Optional (mutual TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
+        <source>Browse…</source>
+        <translation type="unfinished">参照…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <source>Defaults to the certificate file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
+        <source>Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
+        <source>ALPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
+        <source>ALPN Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MQTT::Client</name>
@@ -13957,7 +14102,7 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">MQTTトピックが設定されていません</translation>
     </message>
     <message>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation type="vanished">トピックが設定されるまでメッセージを受信できません。</translation>
     </message>
     <message>
@@ -13969,7 +14114,7 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">無効なMQTTトピック</translation>
     </message>
     <message>
-        <source>The topic "%1" is not valid.</source>
+        <source>The topic &quot;%1&quot; is not valid.</source>
         <translation type="vanished">トピック「%1」は無効です。</translation>
     </message>
     <message>
@@ -13981,7 +14126,7 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">サブスクリプションエラー</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic "%1".</source>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
         <translation type="vanished">トピック「%1」のサブスクライブに失敗しました。</translation>
     </message>
     <message>
@@ -14077,10 +14222,10 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">MQTT認証が必要</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">MQTTブローカーは次の方法による認証を要求しています: "%1"。
+        <translation type="vanished">MQTTブローカーは次の方法による認証を要求しています: &quot;%1&quot;。
 
 必要な認証情報を入力してください。</translation>
     </message>
@@ -14104,130 +14249,151 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="814"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="829"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="815"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="830"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="816"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="831"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="818"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="833"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="819"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="834"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="820"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="835"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3以降</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="821"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="836"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2以降</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="822"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="837"/>
         <source>Any Protocol</source>
         <translation>任意のプロトコル</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="823"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="838"/>
         <source>Secure Protocols Only</source>
         <translation>セキュアプロトコルのみ</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="825"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="840"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="826"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="841"/>
         <source>Query Peer</source>
         <translation>ピアに問い合わせ</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="827"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="842"/>
         <source>Verify Peer</source>
         <translation>ピアを検証</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="828"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="843"/>
         <source>Auto Verify Peer</source>
         <translation>ピアを自動検証</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1145"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1200"/>
         <source>Raw RX Data</source>
         <translation>生RX データ</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1146"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1201"/>
         <source>Custom Script</source>
         <translation>カスタムスクリプト</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1147"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1202"/>
         <source>Dashboard Data (CSV)</source>
         <translation>ダッシュボードデータ (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1148"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1203"/>
         <source>Dashboard Data (JSON)</source>
         <translation>ダッシュボードデータ (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1304"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1370"/>
         <source>MQTT publisher unavailable</source>
         <translation>MQTT パブリッシャーが利用できません</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1305"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1371"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>MQTT パブリッシング機能を使用するには有効な商用ライセンスが必要です。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1307"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1876"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1373"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2061"/>
         <source>MQTT Test Connection</source>
         <translation>MQTT接続テスト</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1326"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1392"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM証明書ディレクトリを選択</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
+        <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
+        <source>Select Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
+        <source>Select Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker reachable</source>
         <translation>MQTTブローカーに到達可能</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1873"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTTブローカーに到達不可</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
         <source>MQTT broker connection failed</source>
         <translation>MQTTブローカー接続失敗</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2229"/>
         <source>MQTT Publisher</source>
         <translation>MQTTパブリッシャー</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14437,17 +14603,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="696"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="701"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>接続をテストする前に、ブローカーのホスト名とポートを設定してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="732"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="737"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>%1:%2への接続に成功しました。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="743"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="748"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>ブローカーに到達できず、5秒後にタイムアウトしました。</translation>
     </message>
@@ -15040,12 +15206,12 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin "%1" is not installed.</source>
+        <source>Plugin &quot;%1&quot; is not installed.</source>
         <translation>プラグイン「%1」はインストールされていません。</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension "%1" is not a plugin (type: %2).</source>
+        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
         <translation>拡張機能「%1」はプラグインではありません（種類: %2）。</translation>
     </message>
     <message>
@@ -15057,7 +15223,7 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
+        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
         <translation>プラグイン「%1」はGRPCを必要としますが、このビルドにはGRPCサポートが含まれていません。</translation>
     </message>
     <message>
@@ -15076,8 +15242,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin "%1" has no 'entry' field in info.json.</source>
-        <translation>プラグイン「%1」のinfo.jsonに'entry'フィールドがありません。</translation>
+        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
+        <translation>プラグイン「%1」のinfo.jsonに&apos;entry&apos;フィールドがありません。</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -15088,7 +15254,7 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin "%1" has an invalid entry point path.</source>
+        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
         <translation>プラグイン「%1」のエントリーポイントパスが無効です。</translation>
     </message>
     <message>
@@ -15098,7 +15264,7 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires "%1" but it was not found on your system.
+        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
 
 Would you like to open the download page?</source>
         <translation>このプラグインには「%1」が必要ですが、システム上に見つかりませんでした。
@@ -15327,7 +15493,7 @@ Would you like to open the download page?</source>
         <translation type="vanished">自動的にアップデートを確認しますか?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
         <translation type="vanished">%1 は自動的にアップデートを確認しますか? 「バージョン情報」ダイアログからいつでも手動で確認できます</translation>
     </message>
     <message>
@@ -15736,6 +15902,8 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="139"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="156"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="189"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="207"/>
         <source>Enable publishing first</source>
         <translation>最初にパブリッシュを有効にしてください</translation>
     </message>
@@ -15761,8 +15929,30 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="174"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="192"/>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="210"/>
         <source>Enable SSL/TLS first</source>
         <translation>最初にSSL/TLSを有効にしてください</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
+        <source>Client Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
+        <source>Select the PEM client certificate for mutual TLS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
+        <source>Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
+        <source>Select the PEM private key for mutual TLS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16003,7 +16193,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two's-complement signed.</source>
+        <source>Interprets each value as two&apos;s-complement signed.</source>
         <translation>各値を2の補数符号付きとして解釈します。</translation>
     </message>
     <message>
@@ -16080,7 +16270,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
         <translation>16ビットレジスタを2の補数符号付き値として解釈します。</translation>
     </message>
     <message>
@@ -16355,7 +16545,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
         <translation>このコンピュータのデバイスファイルを保存します。このファイルはマシンを識別するもので、個人情報は含まれません。</translation>
     </message>
     <message>
@@ -17007,7 +17197,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>リモート接続では利用できません。このウィジェットはリモートの生サンプルストリームを必要としますが、ダッシュボードミラーには含まれていません。</translation>
     </message>
 </context>
@@ -18136,7 +18326,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>データセットの変換を、その入力のいずれかが変更された場合にのみ実行します。大規模なテーブル駆動型プロジェクトを高速化します。デフォルトではオフです。</translation>
     </message>
     <message>
@@ -18257,7 +18447,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
         <translation>ブローカーがサポートされていないプロトコルバージョンのため接続を拒否しました。ブローカーのMQTTバージョンに合わせて再試行してください。</translation>
     </message>
     <message>
@@ -18297,13 +18487,18 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
         <translation>MQTT 5プロトコルレベルのエラーが発生しました。詳細はブローカーの理由コードを確認してください。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="109"/>
         <source>Unspecified MQTT error (code %1).</source>
         <translation>不明なMQTTエラー (コード %1)。</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
+        <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -18356,22 +18551,22 @@ Click Refresh to update the list.</source>
         <translation>書き込み用ファイルを開けません!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1626"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>無効なBluetoothアダプタです！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
         <source>Unsuported platform or operating system</source>
         <translation>サポートされていないプラットフォームまたはオペレーティングシステム</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1632"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
         <source>Unsupported discovery method</source>
         <translation>サポートされていない検出方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
         <source>General I/O error</source>
         <translation>一般的なI/Oエラー</translation>
     </message>
@@ -18426,11 +18621,11 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>スクリプトに'parse'関数が定義されていません。
+        <translation>スクリプトに&apos;parse&apos;関数が定義されていません。
 
 コードに以下が含まれていることを確認してください:
 function parse(frame) ... end</translation>
@@ -18512,11 +18707,11 @@ Most likely cause: an infinite loop at the top level of the script.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The 'parse' function is not defined in the script.
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>スクリプトに'parse'関数が定義されていません。
+        <translation>スクリプトに&apos;parse&apos;関数が定義されていません。
 
 コードに次の記述が含まれていることを確認してください:
 function parse(frame) { ... }</translation>
@@ -18541,12 +18736,12 @@ Please fix the error in the function body.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable 'parse' export found.
+        <source>No callable &apos;parse&apos; export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>呼び出し可能な 'parse' エクスポートが見つかりません。
+        <translation>呼び出し可能な &apos;parse&apos; エクスポートが見つかりません。
 
 次のいずれかを定義してください:
   function parse(frame) { ... }
@@ -18554,15 +18749,15 @@ Define one of:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
-        <translation>'parse'関数は少なくとも1つのパラメータ（フレームペイロード）を受け取る必要があります。</translation>
+        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
+        <translation>&apos;parse&apos;関数は少なくとも1つのパラメータ（フレームペイロード）を受け取る必要があります。</translation>
     </message>
     <message>
-        <source>No valid 'parse' function declaration found.
+        <source>No valid &apos;parse&apos; function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">有効な'parse'関数宣言が見つかりません。
+        <translation type="vanished">有効な&apos;parse&apos;関数宣言が見つかりません。
 
 期待される形式:
 function parse(frame) { ... }</translation>
@@ -18573,11 +18768,11 @@ function parse(frame) { ... }</translation>
         <translation>無効な関数パラメータ</translation>
     </message>
     <message>
-        <source>The 'parse' function must have at least one parameter.
+        <source>The &apos;parse&apos; function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">'parse'関数には少なくとも1つのパラメータが必要です。
+        <translation type="vanished">&apos;parse&apos;関数には少なくとも1つのパラメータが必要です。
 
 期待される形式:
 function parse(frame) { ... }</translation>
@@ -18589,13 +18784,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
+        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>'parse'関数は古い2パラメータ形式を使用しています: parse(%1, %2)
+        <translation>&apos;parse&apos;関数は古い2パラメータ形式を使用しています: parse(%1, %2)
 
 この形式はサポートされなくなりました。新しい単一パラメータ形式に更新してください:
 function parse(%1) { ... }
@@ -18713,13 +18908,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got '%2'</source>
-        <translation>%1 が期待されましたが、'%2' が取得されました</translation>
+        <source>Expected %1, got &apos;%2&apos;</source>
+        <translation>%1 が期待されましたが、&apos;%2&apos; が取得されました</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after 'enum'</source>
-        <translation>'enum' の後に列挙型名が必要です</translation>
+        <source>Expected enum name after &apos;enum&apos;</source>
+        <translation>&apos;enum&apos; の後に列挙型名が必要です</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18728,8 +18923,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag '%1' out of range (1..%2)</source>
-        <translation>フィールドタグ '%1' が範囲外です (1..%2)</translation>
+        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
+        <translation>フィールドタグ &apos;%1&apos; が範囲外です (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18753,8 +18948,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got '%1'</source>
-        <translation>フィールド型が必要ですが、'%1' が見つかりました</translation>
+        <source>Expected field type, got &apos;%1&apos;</source>
+        <translation>フィールド型が必要ですが、&apos;%1&apos; が見つかりました</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18778,13 +18973,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token '%1' at file scope</source>
-        <translation>ファイルスコープで予期しないトークン '%1'</translation>
+        <source>Unexpected token &apos;%1&apos; at file scope</source>
+        <translation>ファイルスコープで予期しないトークン &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword '%1'</source>
-        <translation>サポートされていないトップレベルキーワード '%1'</translation>
+        <source>Unsupported top-level keyword &apos;%1&apos;</source>
+        <translation>サポートされていないトップレベルキーワード &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -18825,7 +19020,7 @@ function parse(%1) { ... }
         <translation type="vanished">ネイティブパーサー設定が有効なJSONオブジェクトではありません。</translation>
     </message>
     <message>
-        <source>Unknown native parser template: "%1".</source>
+        <source>Unknown native parser template: &quot;%1&quot;.</source>
         <translation type="vanished">不明なネイティブパーサーテンプレート：「%1」。</translation>
     </message>
     <message>
@@ -18835,7 +19030,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: "%1".</source>
+        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
         <translation>不明な組み込みパーサーテンプレート：「%1」。</translation>
     </message>
     <message>
@@ -19016,7 +19211,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>ネットワーク経由で別の Serial Studio インスタンスのダッシュボードを監視します。表示は読み取り専用です：ここでの操作はリモートデバイスに送信されません。</translation>
     </message>
     <message>
@@ -19406,7 +19601,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn't reach your device.</source>
+        <source>Serial Studio couldn&apos;t reach your device.</source>
         <translation>Serial Studio はデバイスに接続できませんでした。</translation>
     </message>
     <message>
@@ -19416,7 +19611,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>デバイスが接続され、電源が入っており、他のアプリで使用されていないことを確認してください。再試行するか、別のデバイスを選択するか、終了できます。</translation>
     </message>
     <message>
@@ -20269,48 +20464,48 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="292"/>
+        <location filename="../../src/Sessions/Player.cpp" line="302"/>
         <source>Open Session File</source>
         <translation>セッションファイルを開く</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="294"/>
+        <location filename="../../src/Sessions/Player.cpp" line="304"/>
         <source>Session files (*.db)</source>
         <translation>セッションファイル (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="367"/>
+        <location filename="../../src/Sessions/Player.cpp" line="377"/>
         <source>Device Connection Active</source>
         <translation>デバイス接続がアクティブです</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="368"/>
+        <location filename="../../src/Sessions/Player.cpp" line="378"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>この機能を使用するには、デバイスから切断する必要があります。続行しますか?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="416"/>
-        <location filename="../../src/Sessions/Player.cpp" line="497"/>
+        <location filename="../../src/Sessions/Player.cpp" line="426"/>
+        <location filename="../../src/Sessions/Player.cpp" line="507"/>
         <source>Cannot open session file</source>
         <translation>セッションファイルを開けません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="417"/>
+        <location filename="../../src/Sessions/Player.cpp" line="427"/>
         <source>Unknown error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="433"/>
+        <location filename="../../src/Sessions/Player.cpp" line="443"/>
         <source>No project data</source>
         <translation>プロジェクトデータがありません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="434"/>
+        <location filename="../../src/Sessions/Player.cpp" line="444"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>このセッションには埋め込みプロジェクトファイルが含まれていません — ダッシュボードはクイックプロットレイアウトにフォールバックします。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="498"/>
+        <location filename="../../src/Sessions/Player.cpp" line="508"/>
         <source>Check file permissions and try again.</source>
         <translation>ファイルのアクセス許可を確認して、再試行してください。</translation>
     </message>
@@ -20565,7 +20760,7 @@ function parse(%1) { ... }
         <translation>アップデートとニュース</translation>
     </message>
     <message>
-        <source>Show What's New on Startup</source>
+        <source>Show What&apos;s New on Startup</source>
         <translation type="vanished">起動時に新機能を表示</translation>
     </message>
     <message>
@@ -21084,7 +21279,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>このデプロイメントをダブルクリックすると、このプロジェクトのライブダッシュボードに直接移動します。ツールバーや設定ペインはなく、データのみが表示され、デバイスが切断されるとSerial Studioは終了します。</translation>
     </message>
     <message>
@@ -21198,7 +21393,7 @@ function parse(%1) { ... }
         <translation>フルスクリーン</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">このショートカットをダブルクリックすると、このプロジェクトのライブダッシュボードに直接移動します。ツールバーや設定ペインはなく、データのみが表示され、デバイスが切断されるとSerial Studioは終了します。</translation>
     </message>
     <message>
@@ -21206,7 +21401,7 @@ function parse(%1) { ... }
         <translation type="vanished">プロジェクトを埋め込む</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">このショートカットをダブルクリックすると、このプロジェクトのライブダッシュボードに直接移動します。ツールバーや設定ペインはなく、データのみが表示され、デバイスが切断されるとSerial Studioは終了します。
@@ -21543,8 +21738,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show "%1"</source>
-        <translation>"%1"を表示</translation>
+        <source>Show &quot;%1&quot;</source>
+        <translation>&quot;%1&quot;を表示</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -22278,6 +22473,44 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
 </context>
 <context>
+    <name>TlsIdentity</name>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
+        <source>The file &quot;%1&quot; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
+        <source>The file &quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
+        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
+        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
+        <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
+        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
+        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ToolActions</name>
     <message>
         <source>Auto Layout</source>
@@ -22729,7 +22962,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>タイムベースを空欄にするとプロットの時間範囲が使用されます。高速信号をズームインするには値を下げます。ホールドオフは各トリガー後、一定時間新しいトリガーを無視します。</translation>
     </message>
     <message>
@@ -22795,7 +23028,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">タイムベースは1スイープで表示する時間を設定します。空欄の場合はプロットの時間範囲が使用されます。高速信号をズームインするには値を下げます。ホールドオフは各トリガー後、一定時間新しいトリガーを無視します。</translation>
     </message>
     <message>
@@ -23317,7 +23550,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>リモート接続では利用できません。このウィジェットはリモートの生サンプルストリームを必要としますが、ダッシュボードミラーには含まれていません。</translation>
     </message>
     <message>
@@ -23383,7 +23616,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
+        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
         <translation>現在、%1 Pro の全機能を備えた試用版を使用しています。個人的な非商用利用として14日間有効です。</translation>
     </message>
     <message>
@@ -23398,13 +23631,13 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
         <translation>利用可能なサブスクリプションプランを確認するには、下の「今すぐアップグレード」をクリックしてください。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>試用版について通知しない。
 試用期間終了後、ライセンスを購入するか GPLv3 版をビルドする必要があることを理解しています。</translation>
     </message>
@@ -23466,7 +23699,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What's New in %1</source>
+        <source>What&apos;s New in %1</source>
         <translation type="vanished">%1 の新機能</translation>
     </message>
     <message>
@@ -23602,7 +23835,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">%1へようこそ！</translation>
     </message>
     <message>
-        <source>Here's what's new in version %1.</source>
+        <source>Here&apos;s what&apos;s new in version %1.</source>
         <translation type="vanished">バージョン%1の新機能です。</translation>
     </message>
     <message>
@@ -23811,7 +24044,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>ArcGIS APIキーには実際のコストが発生するため、無制限のアクセスを提供できません。</translation>
     </message>
 </context>

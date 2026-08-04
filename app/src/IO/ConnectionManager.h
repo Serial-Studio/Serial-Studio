@@ -227,6 +227,7 @@ private slots:
   void syncUiDriverToLive();
   void syncUiDriverFromSource0();
   void wireDevice(DeviceManager* dm);
+  void refreshConnectedState();
   void onUiDriverConfigurationChanged();
   void onDeviceLinkLost(int deviceId, const QString& reason);
   void onDeviceLinkStateChanged(int deviceId);
@@ -255,6 +256,7 @@ private:
   bool m_connectPending;
   bool m_linkLossNotified;
   bool m_waitCursorActive;
+  bool m_lastConnectedState;
   bool m_syncingFromProject;
   SerialStudio::BusType m_busType;
 

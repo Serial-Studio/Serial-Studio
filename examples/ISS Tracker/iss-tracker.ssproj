@@ -1,7 +1,9 @@
 {
     "actions": [
     ],
+    "changeDrivenTransforms": false,
     "controlScriptCode": "/**\n * ISS Position Tracker - Control Loop\n * \n * Fetches ISS (International Space Station) location data from the\n * open-notify.org API every second and sends it to Serial Studio.\n */\n\nfunction setup() {}\n\nfunction loop() {\n  const status = io.getStatus();\n  if (!status.isConnected) {\n    io.connect();\n    delay(300); \n  }\n\n  const host = \"api.open-notify.org\";\n  const path = \"/iss-now.json\";\n  const httpRequest = \n    \"GET \" + path + \" HTTP/1.1\\r\\n\" +\n    \"Host: \" + host + \"\\r\\n\" +\n    \"Connection: keep-alive\\r\\n\" +\n    \"User-Agent: SerialStudio ISS Tracker\\r\\n\" +\n    \"\\r\\n\";\n\n  io.writeData(httpRequest, SerialStudio.Text);\n \n  delay(5000);\n}\n",
+    "frozen": false,
     "groups": [
         {
             "datasets": [
@@ -14,6 +16,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 1,
@@ -41,6 +44,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 2,
@@ -68,6 +72,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 3,
@@ -102,7 +107,10 @@
     ],
     "hexadecimalDelimiters": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -113,6 +121,7 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",

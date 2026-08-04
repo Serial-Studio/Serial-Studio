@@ -75,6 +75,7 @@ IO::ConnectionManager::ConnectionManager()
   , m_connectPending(false)
   , m_linkLossNotified(false)
   , m_waitCursorActive(false)
+  , m_lastConnectedState(false)
   , m_syncingFromProject(false)
   , m_busType(SerialStudio::BusType::UART)
   , m_startSequence("/*")
@@ -228,12 +229,7 @@ int IO::ConnectionManager::connectedDeviceCount() const
  */
 int IO::ConnectionManager::activeFlowCount() const
 {
-  int count = 0;
-  for (const auto& [id, dm] : m_devices)
-    if (dm && dm->hasActiveFlow())
-      ++count;
-
-  return count;
+  return 0;
 }
 
 /**
@@ -243,12 +239,7 @@ int IO::ConnectionManager::activeFlowCount() const
  */
 int IO::ConnectionManager::reconnectAttempt() const
 {
-  int attempt = 0;
-  for (const auto& [id, dm] : m_devices)
-    if (dm)
-      attempt = qMax(attempt, dm->reconnectAttempt());
-
-  return attempt;
+  return 0;
 }
 
 /**
@@ -259,13 +250,6 @@ QString IO::ConnectionManager::linkState() const
 {
   if (isConnected())
     return QStringLiteral("connected");
-
-  const int attempt = reconnectAttempt();
-  if (attempt > 1)
-    return QStringLiteral("retrying");
-
-  if (attempt > 0 || hasPendingOpen())
-    return QStringLiteral("connecting");
 
   return QStringLiteral("idle");
 }
@@ -741,11 +725,13 @@ void IO::ConnectionManager::disarmReplyCapture(int deviceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Toggles between connected and disconnected states for the primary device.
+ * @brief Toggles between connected and disconnected states for the primary device. A request still
+ *        in flight counts as connected here, so the button aborts the attempt instead of stacking a
+ *        second one on top of it.
  */
 void IO::ConnectionManager::toggleConnection()
 {
-  if (isConnected())
+  if (isConnected() || m_connectPending)
     disconnectDevice();
   else
     connectDevice();
@@ -801,7 +787,8 @@ void IO::ConnectionManager::concludeConnectRequest()
   if (hasPendingOpen())
     return;
 
-  m_connectPending = false;
+  m_connectPending     = false;
+  m_lastConnectedState = isConnected();
   endWaitCursor();
   Q_EMIT connectedChanged();
 }
@@ -836,10 +823,6 @@ void IO::ConnectionManager::endWaitCursor()
  */
 bool IO::ConnectionManager::hasPendingOpen() const
 {
-  for (const auto& [id, dm] : m_devices)
-    if (dm && dm->isOpening())
-      return true;
-
   return false;
 }
 
@@ -1223,6 +1206,12 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
             this,
             &IO::ConnectionManager::configurationChanged);
 
+    connect(driver.get(),
+            &IO::HAL_Driver::configurationChanged,
+            this,
+            &IO::ConnectionManager::refreshConnectedState,
+            Qt::QueuedConnection);
+
     if (type == SerialStudio::BusType::BluetoothLE) {
       auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(driver.get());
       if (ble)
@@ -1356,19 +1345,6 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
           this,
           &IO::ConnectionManager::onRawDataReceived,
           Qt::DirectConnection);
-
-  connect(dm, &IO::DeviceManager::openFinished, this, &IO::ConnectionManager::onDeviceOpenFinished);
-
-  connect(dm,
-          &IO::DeviceManager::linkStateChanged,
-          this,
-          &IO::ConnectionManager::onDeviceLinkStateChanged);
-
-  connect(dm,
-          &IO::DeviceManager::linkLost,
-          this,
-          &IO::ConnectionManager::onDeviceLinkLost,
-          Qt::QueuedConnection);
 }
 
 /**
@@ -1441,7 +1417,7 @@ void IO::ConnectionManager::onDeviceLinkLost(int deviceId, const QString& reason
   if (it == m_devices.end() || !it->second)
     return;
 
-  if (it->second->isOpen() || it->second->isOpening())
+  if (it->second->isOpen())
     return;
 
   disconnectDevice(deviceId);
@@ -1501,6 +1477,22 @@ QString IO::ConnectionManager::deviceDisplayName(int deviceId) const
       return src.title;
 
   return tr("Device %1").arg(deviceId);
+}
+
+/**
+ * @brief Reports a connected-state transition a live driver reached on its own; BLE waits out GATT
+ *        discovery and CAN dials asynchronously, so their open lands after connectedChanged() was
+ *        already emitted for a driver that still read closed. Queued because a driver reporting
+ *        mid-open is still inside its own open(), and this signal would re-enter that stack.
+ */
+void IO::ConnectionManager::refreshConnectedState()
+{
+  const bool connected = isConnected();
+  if (m_lastConnectedState == connected)
+    return;
+
+  m_lastConnectedState = connected;
+  Q_EMIT connectedChanged();
 }
 
 /**
@@ -1565,6 +1557,12 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
           this,
           &IO::ConnectionManager::configurationChanged,
           Qt::UniqueConnection);
+
+  connect(rawDriver,
+          &IO::HAL_Driver::configurationChanged,
+          this,
+          &IO::ConnectionManager::refreshConnectedState,
+          static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
   wireDevice(dm.get());
   m_devices[src.sourceId] = std::move(dm);

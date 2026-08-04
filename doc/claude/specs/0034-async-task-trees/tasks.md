@@ -1,8 +1,8 @@
 ---
 spec: 0034-async-task-trees
 phase: tasks
-status: approved     # draft -> approved (gate before /ss-implement)
-updated: 2026-07-25
+status: shelved      # reverted 2026-07-30; see spec.md
+updated: 2026-07-30
 ---
 
 # Tasks 0034 — Declarative async orchestration for I/O flows

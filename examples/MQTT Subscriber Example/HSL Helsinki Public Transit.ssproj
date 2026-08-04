@@ -1,6 +1,8 @@
 {
     "actions": [
     ],
+    "changeDrivenTransforms": false,
+    "frozen": false,
     "groups": [
         {
             "datasets": [
@@ -13,6 +15,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 1,
@@ -40,6 +43,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 2,
@@ -67,6 +71,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 3,
@@ -101,6 +106,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 4,
@@ -128,6 +134,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 5,
@@ -155,6 +162,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 6,
@@ -182,6 +190,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 7,
@@ -216,6 +225,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 8,
@@ -245,6 +255,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 9,
@@ -271,7 +282,10 @@
     ],
     "hexadecimalDelimiters": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -282,6 +296,7 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",
@@ -325,6 +340,39 @@
         }
     ],
     "title": "HSL Helsinki Public Transit",
+    "treeExpansion": {
+        "": false,
+        "HSL Helsinki Public Transit": true,
+        "HSL Helsinki Public Transit/ ": false,
+        "HSL Helsinki Public Transit/Control Loop": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets": true,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard": true,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Direction": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Heading": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Line Designation": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Speed": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Timestamp": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Vehicle ID": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)": true,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)/Altitude": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)/Latitude": false,
+        "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)/Longitude": false,
+        "HSL Helsinki Public Transit/HSL Broker": true,
+        "HSL Helsinki Public Transit/HSL Broker/Frame Parser": false,
+        "HSL Helsinki Public Transit/MQTT Publisher": false,
+        "HSL Helsinki Public Transit/Shared Memory": true,
+        "HSL Helsinki Public Transit/Shared Memory/Dataset Values": false,
+        "HSL Helsinki Public Transit/Workspaces": true,
+        "HSL Helsinki Public Transit/Workspaces/All Data": false,
+        "HSL Helsinki Public Transit/Workspaces/Overview": false,
+        "HSL Helsinki Public Transit/Workspaces/Vehicle Dashboard": false,
+        "HSL Helsinki Public Transit/Workspaces/Vehicle Position (GPS)": false
+    },
+    "widgetDisplay": {
+        "freezeTitle": {
+            "13:10004": "bar"
+        }
+    },
     "widgetSettings": {
         "12:1:9": {
             "page": 0
