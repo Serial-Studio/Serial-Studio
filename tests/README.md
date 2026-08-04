@@ -61,7 +61,6 @@ Each test connects to Serial Studio over TCP, configures it through the API, str
 | `test_problem_center.py`             | `problems.*` diagnostics: project findings, link counters, failing transforms |
 | `test_widget_extensions.py`          | Spec 0038 widget extensions: `extension.widget` findings for uninstalled, malformed, incompatible, dependency-less and reserved-id packages, scope acceptance, no Pro bypass. Two tiers -- the seeded tier writes packages under `<workspace>/Extensions/widget` and skips until Serial Studio is restarted once (set `SS_WORKSPACE` for a non-default workspace, `SS_CLEAN_TEST_PACKAGES=1` to remove them) |
 | `test_connection_diagnostics.py`     | `diagnostics.*` connection self-checks: the three reachability verdicts, byte-free probe, ack-and-poll, bus scoping |
-| `test_link_recovery.py`              | Automatic reconnect (spec 0034): 100 TCP severances in 10 chunks, steady-state `activeFlows`, immediate cancel, MQTT recovery |
 | `test_console_configuration.py`      | Echo, timestamps, display and data modes, font, send, line endings |
 | `test_console_ansi_vt100.py`         | ANSI SGR colors (standard, bright, 256, RGB), VT100 cursor, edge cases |
 | `test_dashboard_configuration.py`    | FPS, data points, operation mode, status and data query fields |
@@ -302,7 +301,6 @@ tests/
 │   ├── test_problem_center.py          # problems.* diagnostics: project, link, script findings
 │   ├── test_widget_extensions.py       # Widget extension findings, scope rules, no Pro bypass
 │   ├── test_connection_diagnostics.py  # diagnostics.* self-checks: reachability, ack-and-poll
-│   ├── test_link_recovery.py           # 100 TCP severances, steady state, cancel, MQTT recovery
 │   ├── test_console_configuration.py   # Console settings: echo, timestamps, modes, font, send
 │   ├── test_console_ansi_vt100.py      # ANSI/VT100 color codes, cursor sequences, edge cases
 │   ├── test_dashboard_configuration.py # FPS, data points, operation mode, status/data queries
