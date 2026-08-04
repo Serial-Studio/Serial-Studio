@@ -354,14 +354,14 @@ Widgets.SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
+            visible: Cpp_Licensing_LemonSqueezy.isOnlineActivated
             source: Cpp_Misc_IconRegistry.icon("licensing", "key", 16)
-            visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
           }
 
           Label {
             text: qsTr("License Key") + ":"
             font: Cpp_Misc_CommonFonts.boldUiFont
-            visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
+            visible: Cpp_Licensing_LemonSqueezy.isOnlineActivated
           }
 
           Widgets.LineField {
@@ -371,7 +371,7 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             onTextChanged: cursorPosition = 0
             text: Cpp_Licensing_LemonSqueezy.license
-            visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
+            visible: Cpp_Licensing_LemonSqueezy.isOnlineActivated
 
             MouseArea {
               anchors.fill: parent

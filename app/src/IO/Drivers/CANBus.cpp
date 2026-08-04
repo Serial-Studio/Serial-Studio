@@ -156,6 +156,17 @@ bool IO::Drivers::CANBus::isOpen() const noexcept
 }
 
 /**
+ * @brief Returns true while the CAN device is dialing.
+ */
+bool IO::Drivers::CANBus::isConnecting() const noexcept
+{
+  if (m_device)
+    return m_device->state() == QCanBusDevice::ConnectingState;
+
+  return false;
+}
+
+/**
  * @brief Returns true when the CAN bus device can be read.
  */
 bool IO::Drivers::CANBus::isReadable() const noexcept
@@ -693,27 +704,34 @@ void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
 }
 
 /**
- * @brief Handles CAN bus errors by showing a message box.
+ * @brief Handles CAN bus errors with a queued, rate-limited message box: the handler runs inside
+ *        QCanBusDevice's own emission, and a flapping bus (bus-off cycling, write errors) would
+ *        otherwise stack one modal per error until the user clicks through the storm.
  */
 void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 {
+  static constexpr qint64 kErrorBoxIntervalMs = 5000;
+
   if (error == QCanBusDevice::NoError)
     return;
 
-  if (!m_device) {
-    Misc::Utilities::showMessageBox(
-      tr("CAN Bus Error"),
-      tr("An error occurred but the CAN device is no longer available."),
-      QMessageBox::Warning);
-    return;
-  }
-
-  QString error_string = m_device->errorString();
+  QString error_string = m_device ? m_device->errorString() : QString();
   if (error_string.isEmpty())
     error_string = tr("Error code: %1").arg(error);
 
-  Misc::Utilities::showMessageBox(
-    tr("CAN Bus Communication Error"), error_string, QMessageBox::Warning);
+  if (m_errorBoxTimer.isValid() && m_errorBoxTimer.elapsed() < kErrorBoxIntervalMs) {
+    qWarning() << "CAN bus error (suppressed dialog):" << error_string;
+    return;
+  }
+
+  m_errorBoxTimer.restart();
+  QMetaObject::invokeMethod(
+    this,
+    [error_string] {
+      Misc::Utilities::showMessageBox(
+        tr("CAN Bus Communication Error"), error_string, QMessageBox::Warning);
+    },
+    Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------

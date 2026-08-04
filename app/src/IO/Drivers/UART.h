@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QString>
+#include <QTimer>
 #include <QtSerialPort>
 
 #include "IO/HAL_Driver.h"
@@ -167,6 +168,7 @@ public slots:
 private slots:
   void onReadyRead();
   void populateErrors();
+  void pollAutoReconnect();
   void refreshSerialDevices();
   void handleError(QSerialPort::SerialPortError error);
 
@@ -186,7 +188,7 @@ private:
   bool m_pendingReconnect;
   bool m_usingCustomSerialPort;
 
-  int m_lastSerialDeviceIndex;
+  QString m_lastPortName;
 
   qint32 m_baudRate;
   QSerialPort::Parity m_parity;
@@ -199,6 +201,8 @@ private:
   quint8 m_dataBitsIndex;
   quint8 m_stopBitsIndex;
   quint8 m_flowControlIndex;
+
+  QTimer m_reconnectTimer;
 
   QSettings m_settings;
   QStringList m_deviceNames;

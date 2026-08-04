@@ -456,8 +456,13 @@ IO::Drivers::BluetoothLE::BluetoothLE()
           this,
           &IO::Drivers::BluetoothLE::configurationChanged);
 
-  connect(this, &IO::Drivers::BluetoothLE::error, this, [=](const QString& message) {
-    Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message, QMessageBox::Critical);
+  connect(this, &IO::Drivers::BluetoothLE::error, this, [=, this](const QString& message) {
+    QMetaObject::invokeMethod(
+      this,
+      [message] {
+        Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message, QMessageBox::Critical);
+      },
+      Qt::QueuedConnection);
   });
 }
 
@@ -689,8 +694,36 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   connect(
     m_controller, &QLowEnergyController::disconnected, this, &IO::Drivers::BluetoothLE::close);
 
+  connect(m_controller,
+          &QLowEnergyController::errorOccurred,
+          this,
+          &IO::Drivers::BluetoothLE::onControllerError);
+
   m_controller->connectToDevice();
   return true;
+}
+
+/**
+ * @brief Returns true while a dial started by open() has neither reached GATT-ready nor failed.
+ */
+bool IO::Drivers::BluetoothLE::isConnecting() const noexcept
+{
+  return m_controller != nullptr && !isOpen();
+}
+
+/**
+ * @brief Reports a controller-level failure (dial refused, timeout, link error) and tears the
+ *        connection down. Without this hook a failed dial died silently: Qt reports it via
+ *        errorOccurred without a disconnected signal, so the connect button wedged forever.
+ */
+void IO::Drivers::BluetoothLE::onControllerError(QLowEnergyController::Error controllerError)
+{
+  if (controllerError == QLowEnergyController::NoError)
+    return;
+
+  Q_EMIT error(tr("BLE connection error: %1")
+                 .arg(m_controller ? m_controller->errorString() : tr("Unknown error")));
+  close();
 }
 
 /**

@@ -153,6 +153,7 @@ public:
   void close() override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;

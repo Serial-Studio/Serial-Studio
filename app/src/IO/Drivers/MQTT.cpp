@@ -124,6 +124,14 @@ bool IO::Drivers::MQTT::isOpen() const noexcept
 }
 
 /**
+ * @brief Returns true while a broker dial or a settle-then-redial cycle is in flight.
+ */
+bool IO::Drivers::MQTT::isConnecting() const noexcept
+{
+  return m_client.state() == QMqttClient::Connecting || m_reconnectPending;
+}
+
+/**
  * @brief Returns true when the driver can receive payloads (subscriber-only).
  */
 bool IO::Drivers::MQTT::isReadable() const noexcept
@@ -165,11 +173,16 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
 
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()) {
-    Misc::Utilities::showMessageBox(
-      tr("MQTT Feature Requires a Commercial License"),
-      tr("Subscribing to an MQTT broker is only available with a valid Serial Studio license "
-         "or an active trial."),
-      QMessageBox::Warning);
+    QMetaObject::invokeMethod(
+      this,
+      [] {
+        Misc::Utilities::showMessageBox(
+          tr("MQTT Feature Requires a Commercial License"),
+          tr("Subscribing to an MQTT broker is only available with a valid Serial Studio license "
+             "or an active trial."),
+          QMessageBox::Warning);
+      },
+      Qt::QueuedConnection);
     return false;
   }
 
@@ -183,8 +196,13 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  if (m_client.state() == QMqttClient::Connected)
+    return true;
+
   if (m_client.state() != QMqttClient::Disconnected) {
-    qCInfo(lcMqttSub) << "open() no-op; state already" << m_client.state();
+    qCInfo(lcMqttSub) << "open() while teardown/dial in flight -- re-arming reconnect";
+    m_userWantsOpen = true;
+    scheduleReconnectIfActive();
     return true;
   }
 

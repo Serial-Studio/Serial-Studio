@@ -1,7 +1,7 @@
 ---
 spec: 0032-cpp-unit-tests
 title: C++ unit-test tier plus build presets
-status: draft        # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # implemented + CI-gated; maintainer ACs pending
 created: 2026-07-25
 author: Claude (drafted with Alex)
 ---

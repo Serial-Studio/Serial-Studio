@@ -122,12 +122,14 @@ public slots:
 
 private slots:
   void onPipeError();
+  void onPipeClosed();
   void onReadyRead();
   void onProcessFinished(int exitCode, QProcess::ExitStatus status);
   void onProcessError(QProcess::ProcessError error);
 
 private:
   void doClose();
+  void queuePipeTeardown();
   void pipeReadLoop();
   void pipeReadLoopWindows();
   void pipeReadLoopPosix();

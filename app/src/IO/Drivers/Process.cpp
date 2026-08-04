@@ -542,6 +542,25 @@ void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 }
 
 /**
+ * @brief Called on the main thread when the pipe peer closed or the read loop died mid-stream.
+ *        The flag drops first so isOpen() turns false immediately: without this the UI kept
+ *        showing a connected device that could never produce data again.
+ */
+void IO::Drivers::Process::onPipeClosed()
+{
+  if (!m_pipeRunning.load())
+    return;
+
+  m_pipeRunning = false;
+  queuePipeTeardown();
+
+  Misc::Utilities::showMessageBox(
+    tr("Pipe Closed"),
+    tr("The named pipe \"%1\" was closed on the other end.").arg(m_pipePath),
+    QMessageBox::Warning);
+}
+
+/**
  * @brief Called on the main thread when pipeReadLoop() fails to open the pipe.
  */
 void IO::Drivers::Process::onPipeError()
@@ -549,6 +568,14 @@ void IO::Drivers::Process::onPipeError()
   Misc::Utilities::showMessageBox(
     tr("Pipe Error"), tr("Could not open named pipe: %1").arg(m_pipePath), QMessageBox::Warning);
 
+  queuePipeTeardown();
+}
+
+/**
+ * @brief Queues the device teardown shared by the pipe failure paths.
+ */
+void IO::Drivers::Process::queuePipeTeardown()
+{
   static auto& connectionManager = IO::ConnectionManager::instance();
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
@@ -631,6 +658,9 @@ void IO::Drivers::Process::pipeReadLoopWindows()
   }
 
   CloseHandle(hPipe);
+
+  if (m_pipeRunning.load())
+    QMetaObject::invokeMethod(this, "onPipeClosed", Qt::QueuedConnection);
 #endif
 }
 
@@ -698,6 +728,9 @@ void IO::Drivers::Process::pipeReadLoopPosix()
   }
 
   ::close(fd);
+
+  if (m_pipeRunning.load())
+    QMetaObject::invokeMethod(this, "onPipeClosed", Qt::QueuedConnection);
 #endif
 }
 

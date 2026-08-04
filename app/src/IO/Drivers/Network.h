@@ -27,6 +27,7 @@
 #include <QHostInfo>
 #include <QSettings>
 #include <QTcpSocket>
+#include <QTimer>
 #include <QUdpSocket>
 
 #include "IO/HAL_Driver.h"
@@ -105,6 +106,7 @@ public:
   void close() override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -155,11 +157,13 @@ public slots:
 
 private slots:
   void onReadyRead();
+  void onDialTimeout();
+  void onTcpStateChanged();
+  void startTcpDialAttempt();
   void lookupFinished(const QHostInfo& info);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
-  [[nodiscard]] bool connectTcp(const QString& hostAddr);
   [[nodiscard]] static QHostAddress preferredAddress(const QList<QHostAddress>& addresses);
   void enlargeUdpReceiveBuffer();
 
@@ -167,17 +171,22 @@ private:
   QSettings m_settings;
 
   QString m_address;
+  QString m_dialHost;
   QString m_pendingLookup;
   QHostAddress m_resolvedAddress;
   quint16 m_tcpPort;
   bool m_hostExists;
-  bool m_connecting;
-  bool m_abortConnect;
+  bool m_dialInProgress;
   bool m_udpMulticast;
   bool m_lookupActive;
+  int m_dialAttempts;
   quint16 m_udpLocalPort;
   quint16 m_udpRemotePort;
+  QIODevice::OpenMode m_dialMode;
   QAbstractSocket::SocketType m_socketType;
+
+  QTimer m_dialRetryTimer;
+  QTimer m_dialTimeoutTimer;
 
   QTcpSocket m_tcpSocket;
   QUdpSocket m_udpSocket;

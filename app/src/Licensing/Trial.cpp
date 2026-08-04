@@ -65,6 +65,7 @@ static void installTrialToken(int daysRemaining)
  */
 Licensing::Trial::Trial()
   : m_busy(false)
+  , m_silentFetch(false)
   , m_trialEnabled(false)
   , m_deviceRegistered(false)
   , m_trialExpiry(QDateTime::currentDateTimeUtc())
@@ -75,11 +76,15 @@ Licensing::Trial::Trial()
   connect(this,
           &Licensing::Trial::enabledChanged,
           &lemonSqueezy,
-          &Licensing::LemonSqueezy::activatedChanged);
+          &Licensing::LemonSqueezy::notifyEntitlementMaybeChanged);
   connect(&lemonSqueezy,
-          &Licensing::LemonSqueezy::activatedChanged,
+          &Licensing::LemonSqueezy::licenseDataChanged,
           this,
           &Licensing::Trial::availableChanged);
+  connect(&lemonSqueezy,
+          &Licensing::LemonSqueezy::licenseDataChanged,
+          this,
+          &Licensing::Trial::enabledChanged);
 
   connect(&m_manager, &QNetworkAccessManager::finished, this, &Licensing::Trial::onServerReply);
 
@@ -210,8 +215,10 @@ void Licensing::Trial::readSettings()
   if (trialEnabled())
     installTrialToken(daysRemaining());
 
-  if (trialAvailable() && m_deviceRegistered)
+  if (trialAvailable() && m_deviceRegistered) {
+    m_silentFetch = true;
     fetchTrialState();
+  }
 }
 
 /**
@@ -265,23 +272,27 @@ void Licensing::Trial::fetchTrialState()
 }
 
 /**
- * @brief Handles the server response for trial activation; the expiry is capped
- * at 14 days. A malformed reply leaves in-memory and persisted state untouched,
- * and the shared token slot is only cleared when the trial owns it, so neither
- * a flaky proxy nor a mid-flight Pro activation can strip an entitlement.
+ * @brief Handles the trial server response (expiry capped at 14 days). A malformed reply leaves
+ *        state untouched and the token slot is only cleared when the trial owns it. The startup
+ *        refresh is silent and enabledChanged fires only on a real state change: redundant
+ *        emissions reach device-rebuilding consumers and looped connections on offline stands.
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
+  const bool silent = m_silentFetch;
+  m_silentFetch     = false;
+
   m_busy = false;
   Q_EMIT busyChanged();
 
   if (reply->error() != QNetworkReply::NoError) {
-    Misc::Utilities::showMessageBox(QObject::tr("Network error"),
-                                    reply->errorString(),
-                                    QMessageBox::Critical,
-                                    QObject::tr("Trial Activation Error"));
+    if (!silent)
+      Misc::Utilities::showMessageBox(QObject::tr("Network error"),
+                                      reply->errorString(),
+                                      QMessageBox::Critical,
+                                      QObject::tr("Trial Activation Error"));
+
     reply->deleteLater();
-    Q_EMIT enabledChanged();
     return;
   }
 
@@ -291,12 +302,13 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
   QJsonParseError parseError;
   const QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError || !document.isObject()) {
-    Misc::Utilities::showMessageBox(
-      QObject::tr("Invalid server response"),
-      QObject::tr("The server returned malformed data: %1").arg(parseError.errorString()),
-      QMessageBox::Warning,
-      QObject::tr("Trial Activation Error"));
-    Q_EMIT enabledChanged();
+    if (!silent)
+      Misc::Utilities::showMessageBox(
+        QObject::tr("Invalid server response"),
+        QObject::tr("The server returned malformed data: %1").arg(parseError.errorString()),
+        QMessageBox::Warning,
+        QObject::tr("Trial Activation Error"));
+
     return;
   }
 
@@ -310,11 +322,13 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     expiry = QDateTime::fromString(expiryVal.toString(), Qt::ISODate).toUTC();
 
   if (!expiry.isValid()) {
-    Misc::Utilities::showMessageBox(QObject::tr("Unexpected server response"),
-                                    QObject::tr("The server response is missing required fields."),
-                                    QMessageBox::Warning,
-                                    QObject::tr("Trial Activation Error"));
-    Q_EMIT enabledChanged();
+    if (!silent)
+      Misc::Utilities::showMessageBox(
+        QObject::tr("Unexpected server response"),
+        QObject::tr("The server response is missing required fields."),
+        QMessageBox::Warning,
+        QObject::tr("Trial Activation Error"));
+
     return;
   }
 
@@ -322,15 +336,22 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
   if (expiry > now.addDays(14))
     expiry = now.addDays(14);
 
+  const bool wasEnabled     = m_trialEnabled;
+  const bool wasRegistered  = m_deviceRegistered;
+  const QDateTime wasExpiry = m_trialExpiry;
+
   m_trialExpiry      = expiry;
   m_trialEnabled     = enabledVal.toBool() && (expiry > now);
   m_deviceRegistered = deviceRegistered.toBool();
 
   if (trialEnabled())
     installTrialToken(daysRemaining());
-  else if (CommercialToken::current().variantName() == QStringLiteral("Trial"))
+  else if (CommercialToken::current().featureTier() == FeatureTier::Trial)
     Licensing::CommercialToken::clearCurrent();
 
   writeSettings();
-  Q_EMIT enabledChanged();
+
+  if (m_trialEnabled != wasEnabled || m_deviceRegistered != wasRegistered
+      || m_trialExpiry != wasExpiry)
+    Q_EMIT enabledChanged();
 }

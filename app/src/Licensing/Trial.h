@@ -92,6 +92,7 @@ private slots:
 
 private:
   bool m_busy;
+  bool m_silentFetch;
   bool m_trialEnabled;
   bool m_deviceRegistered;
 

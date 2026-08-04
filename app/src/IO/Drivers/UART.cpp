@@ -105,7 +105,6 @@ IO::Drivers::UART::UART()
   , m_autoReconnect(false)
   , m_pendingReconnect(false)
   , m_usingCustomSerialPort(false)
-  , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
 {
   populateErrors();
@@ -141,6 +140,9 @@ IO::Drivers::UART::UART()
     this, &IO::Drivers::UART::autoReconnectChanged, this, &IO::Drivers::UART::configurationChanged);
 
   connect(this, &IO::Drivers::UART::languageChanged, this, &IO::Drivers::UART::populateErrors);
+
+  m_reconnectTimer.setInterval(1000);
+  connect(&m_reconnectTimer, &QTimer::timeout, this, &IO::Drivers::UART::pollAutoReconnect);
 }
 
 /**
@@ -179,6 +181,7 @@ void IO::Drivers::UART::close()
   m_port                  = nullptr;
   m_pendingReconnect      = false;
   m_usingCustomSerialPort = false;
+  m_reconnectTimer.stop();
 
   Q_EMIT portChanged();
   Q_EMIT availablePortsChanged();
@@ -260,11 +263,11 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
   auto portId = portIndex();
   if (portId >= 1 && portId < ports.count()) {
     close();
-    m_portIndex             = portId;
-    m_lastSerialDeviceIndex = m_portIndex;
+    m_portIndex = portId;
     Q_EMIT portIndexChanged();
 
     const auto name = ports.at(portId);
+    m_lastPortName  = name;
 
     if (m_deviceNames.contains(name)) {
       const auto target =
@@ -313,9 +316,8 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     }
 
     else {
-      Misc::Utilities::showMessageBox(tr("Failed to connect to serial port \"%1\"").arg(name),
-                                      port()->errorString(),
-                                      QMessageBox::Critical);
+      queueErrorBox(
+        this, tr("Failed to connect to serial port \"%1\"").arg(name), port()->errorString());
     }
   }
 
@@ -812,14 +814,6 @@ void IO::Drivers::UART::refreshSerialDevices()
 
     const bool indexChanged = relocateOpenPortIndex(validPortList);
 
-    static auto& connectionManager = ConnectionManager::instance();
-    const bool uart_active         = connectionManager.busType() == SerialStudio::BusType::UART;
-    if (uart_active && autoReconnect() && m_pendingReconnect && !isOpen()
-        && m_lastSerialDeviceIndex > 0 && m_lastSerialDeviceIndex < portList().count()) {
-      setPortIndex(m_lastSerialDeviceIndex);
-      connectionManager.connectDevice();
-    }
-
     Q_EMIT availablePortsChanged();
 
     if (indexChanged)
@@ -832,6 +826,31 @@ void IO::Drivers::UART::refreshSerialDevices()
     if (!lastPort.isEmpty() && ports.contains(lastPort))
       setPortIndex(ports.indexOf(lastPort));
   }
+}
+
+/**
+ * @brief Retry poll after a resource-loss drop, driven by this instance's own timer so live
+ *        drivers recover too (the UI-config instance never opens and never arms it). The flag is
+ *        set only by handleError() and cleared by close(), so a user's manual disconnect always
+ *        ends the retry; a reappeared port is matched by name, not by a stale list index.
+ */
+void IO::Drivers::UART::pollAutoReconnect()
+{
+  if (!m_pendingReconnect || !autoReconnect() || isOpen()) {
+    m_reconnectTimer.stop();
+    return;
+  }
+
+  refreshSerialDevices();
+  if (m_lastPortName.isEmpty() || !portList().contains(m_lastPortName))
+    return;
+
+  m_pendingReconnect = false;
+  m_reconnectTimer.stop();
+  setPortIndex(static_cast<quint8>(portList().indexOf(m_lastPortName)));
+
+  static auto& connectionManager = ConnectionManager::instance();
+  connectionManager.connectDevice();
 }
 
 /**
@@ -864,8 +883,10 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
                                       QMessageBox::Critical);
     }
 
-    else
+    else {
       m_pendingReconnect = true;
+      m_reconnectTimer.start();
+    }
   }
 }
 

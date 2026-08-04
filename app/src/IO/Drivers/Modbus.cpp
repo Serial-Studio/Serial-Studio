@@ -289,6 +289,14 @@ bool IO::Drivers::Modbus::isOpen() const noexcept
 }
 
 /**
+ * @brief Returns true while the retrying connect window is live.
+ */
+bool IO::Drivers::Modbus::isConnecting() const noexcept
+{
+  return m_connecting;
+}
+
+/**
  * @brief Returns true when the Modbus device can be read.
  */
 bool IO::Drivers::Modbus::isReadable() const noexcept
@@ -500,12 +508,23 @@ bool IO::Drivers::Modbus::connectWithRetry()
       break;
 
     device->disconnectDevice();
-    if (attempt + 1 < attempts)
-      QThread::msleep(kTcpConnectBackoffMs);
+    if (attempt + 1 < attempts && !m_abortConnect)
+      pauseBetweenAttempts();
   }
 
   m_connecting = false;
   return connected && device && !m_abortConnect;
+}
+
+/**
+ * @brief Abortable backoff between TCP attempts: processes events instead of freezing the GUI,
+ *        so a user's disconnect can land mid-wait and m_abortConnect actually breaks the loop.
+ */
+void IO::Drivers::Modbus::pauseBetweenAttempts()
+{
+  QEventLoop pause;
+  QTimer::singleShot(kTcpConnectBackoffMs, &pause, &QEventLoop::quit);
+  pause.exec();
 }
 
 /**

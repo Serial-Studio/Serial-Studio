@@ -124,8 +124,11 @@ public:
 
   virtual ~HAL_Driver() = default;
 
-  virtual void close()                                                     = 0;
-  [[nodiscard]] virtual bool isOpen() const noexcept                       = 0;
+  virtual void close()                               = 0;
+  [[nodiscard]] virtual bool isOpen() const noexcept = 0;
+
+  [[nodiscard]] virtual bool isConnecting() const noexcept { return false; }
+
   [[nodiscard]] virtual bool isReadable() const noexcept                   = 0;
   [[nodiscard]] virtual bool isWritable() const noexcept                   = 0;
   [[nodiscard]] virtual bool configurationOk() const noexcept              = 0;

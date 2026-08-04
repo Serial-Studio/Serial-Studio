@@ -235,8 +235,11 @@ private:
   void endWaitCursor();
   void beginWaitCursor();
   void concludeConnectRequest();
+  void notifyConnectedStateChanged();
   void wireUiDriver(IO::HAL_Driver* driver);
   void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
+
+  [[nodiscard]] bool anyDeviceConnecting() const;
 
   [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] bool diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const;
@@ -251,6 +254,8 @@ private:
   bool m_waitCursorActive;
   bool m_lastConnectedState;
   bool m_syncingFromProject;
+  bool m_rebuildingDevices;
+  int m_lastConnectedCount;
   SerialStudio::BusType m_busType;
 
   QByteArray m_startSequence;

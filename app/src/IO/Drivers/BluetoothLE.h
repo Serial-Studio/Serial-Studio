@@ -94,6 +94,7 @@ public:
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
@@ -131,6 +132,7 @@ public slots:
 private slots:
   void configureCharacteristics();
   void onServiceDiscoveryFinished();
+  void onControllerError(QLowEnergyController::Error controllerError);
   void onServiceError(QLowEnergyService::ServiceError serviceError);
   void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);
   void onCharacteristicChanged(const QLowEnergyCharacteristic& info, const QByteArray& value);

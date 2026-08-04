@@ -25,6 +25,7 @@
 #include <QByteArray>
 #include <QCanBusDevice>
 #include <QCanBusFrame>
+#include <QElapsedTimer>
 #include <QObject>
 #include <QSet>
 #include <QSettings>
@@ -102,6 +103,7 @@ public:
   void close() override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -156,6 +158,7 @@ private:
 
 private:
   QCanBusDevice* m_device;
+  QElapsedTimer m_errorBoxTimer;
 
   bool m_canFD;
   bool m_loopback;

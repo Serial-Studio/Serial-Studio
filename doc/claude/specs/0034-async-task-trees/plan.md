@@ -7,6 +7,11 @@ updated: 2026-07-30
 
 # Plan 0034 — Declarative async orchestration for I/O flows
 
+> **Shelved 2026-07-30 (38c9ef66):** the connection-flow layer this plan designs was removed;
+> the design below describes code that no longer exists. Current contract:
+> doc/claude/architecture/io.md. The Async engine itself survives (MQTT::Publisher +
+> diagnostics probes).
+
 > **Phase 2 of 4 — the HOW.** The technical design that satisfies every requirement in
 > [`spec.md`](./spec.md). Read the relevant `doc/claude/` sub-docs and the *actual code*
 > before writing this — a plan grounded in a stale mental model is worse than no plan.

@@ -56,6 +56,7 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_appName(APP_NAME)
   , m_silentValidation(true)
   , m_revalidatingCache(false)
+  , m_lastNotifiedEntitled(false)
   , m_gracePeriod(0)
 {
   static auto& machineId = MachineID::instance();
@@ -370,6 +371,22 @@ void Licensing::LemonSqueezy::openCustomerPortal()
 }
 
 /**
+ * @brief Emits activatedChanged() only when the commercial token's validity actually flipped
+ *        since the last notification. Every entitlement mutation funnels here: consumers like
+ *        ConnectionManager::rebuildDevices() tear down and reopen live devices on this signal,
+ *        so a redundant emission put connected hardware into an unstoppable reconnect loop.
+ */
+void Licensing::LemonSqueezy::notifyEntitlementMaybeChanged()
+{
+  const bool entitled = CommercialToken::current().isValid();
+  if (m_lastNotifiedEntitled == entitled)
+    return;
+
+  m_lastNotifiedEntitled = entitled;
+  Q_EMIT activatedChanged();
+}
+
+/**
  * @brief Updates the license key stored locally.
  */
 void Licensing::LemonSqueezy::setLicense(const QString& license)
@@ -482,8 +499,8 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense, const b
   }
 
   Q_EMIT busyChanged();
-  Q_EMIT activatedChanged();
   Q_EMIT licenseDataChanged();
+  notifyEntitlementMaybeChanged();
 
   if (persist)
     writeSettings();
@@ -616,18 +633,24 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
 }
 
 /**
- * @brief Updates m_appName from the variant name; falls back to APP_NAME on a single-token variant.
+ * @brief Updates m_appName from the variant name. Legacy variant strings that do not follow the
+ *        "Edition - Term" pattern, or that already embed the product name, fall back to plain
+ *        APP_NAME instead of garbling the window title (entitlement never depends on this).
  */
 void Licensing::LemonSqueezy::updateAppNameFromVariant(const QString& variantName)
 {
+  m_appName = APP_NAME;
+
   const auto list = variantName.split("-");
-  if (list.count() >= 2)
-    if (list.first().simplified() != "Pro")
-      m_appName = tr("%1 %2").arg(APP_NAME, list.first().simplified());
-    else
-      m_appName = tr("%1 (%2)").arg(APP_NAME, list.last().simplified());
-  else
-    m_appName = APP_NAME;
+  if (list.count() < 2)
+    return;
+
+  const auto first = list.first().simplified();
+  const auto last  = list.last().simplified();
+  if (first.compare(QStringLiteral("Pro"), Qt::CaseInsensitive) == 0 && !last.isEmpty())
+    m_appName = tr("%1 (%2)").arg(APP_NAME, last);
+  else if (!first.isEmpty() && !first.contains(QStringLiteral(APP_NAME), Qt::CaseInsensitive))
+    m_appName = tr("%1 %2").arg(APP_NAME, first);
 }
 
 /**
@@ -642,8 +665,6 @@ void Licensing::LemonSqueezy::applyValidatedLicense(const QJsonObject& json,
   const auto meta       = json.value("meta").toObject();
   const auto instance   = json.value("instance").toObject();
   const auto licenseKey = json.value("license_key").toObject();
-
-  const bool wasActivated = m_activated;
 
   m_activated      = true;
   m_licensingData  = json;
@@ -679,8 +700,7 @@ void Licensing::LemonSqueezy::applyValidatedLicense(const QJsonObject& json,
     m_settings.endGroup();
   }
 
-  if (!wasActivated)
-    Q_EMIT activatedChanged();
+  notifyEntitlementMaybeChanged();
 
   if (!m_silentValidation) {
     m_silentValidation = true;

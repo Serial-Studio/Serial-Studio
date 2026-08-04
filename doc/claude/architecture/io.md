@@ -27,21 +27,30 @@ and the `HAL_Driver` hooks it drove (`supportsAsyncOpen`, `beginOpen`, `abortOpe
 `openTimeoutMsec`, `openFinished`, `linkDropped`) were removed 2026-07-30; spec 0034's docs
 describe a design that is no longer in the tree.
 
-- **Drop recovery is each driver's own business.** UART sets `m_pendingReconnect` on a
-  `QSerialPort::ResourceError` and retries off the 1 Hz `TimerEvents` tick, gated on the user's
-  `autoReconnect` checkbox and fed by the same 1 Hz port rescan. MQTT funnels every
-  configuration change and error into `scheduleReconnectIfActive()`. Modbus and Network dial
-  inside `open()`. A new driver that needs recovery adds it locally — there is no shared
-  supervisor to inherit.
-- **The connect request still settles once.** `ConnectionManager` keeps the
-  `m_connectPending` / `m_connectFanOut` pair, the idempotent
-  `beginWaitCursor()` / `endWaitCursor()`, and `concludeConnectRequest()`, which emits
-  `connectedChanged()` exactly once. Because opens complete synchronously,
-  `hasPendingOpen()` is a constant `false` and the request always settles inside the fan-out.
-- **`linkState()` reports only `connected` or `idle`.** The `connecting` and `retrying` states
-  went with the flows, and `io.getStatus` no longer returns `activeFlows` or `reconnectAttempt`
-  at all — the accessors behind them are gone rather than stubbed, so nothing can read a `0`
-  as "first attempt". An API client watching a flapping link polls `isConnected`.
+- **Drop recovery is each driver's own business.** UART arms `m_pendingReconnect` plus its own
+  1 s `m_reconnectTimer` in `handleError()` on a `QSerialPort::ResourceError` (live instances
+  recover too — the timer belongs to the instance, not the UI driver's 1 Hz rescan), matches
+  the returned port by name, and `close()` disarms both so a manual disconnect is always final.
+  MQTT funnels every configuration change and error into `scheduleReconnectIfActive()`. Modbus
+  dials inside `open()`; Network TCP retries refusals itself (below). A new driver that needs
+  recovery adds it locally — there is no shared supervisor to inherit.
+- **The connected state is published idempotently.** Every lifecycle path funnels into the
+  private `notifyConnectedStateChanged()`, which emits `connectedChanged()` only when the
+  `isConnected()` flag or the open-device count actually moved. Callers never reason about
+  whether another path already reported; calling it twice is harmless. The
+  `m_connectPending` / `m_connectFanOut` pair and `concludeConnectRequest()` survive only to
+  settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
+  "connected" so the button aborts instead of stacking a second attempt.
+- **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`).
+  Network (TCP), BluetoothLE, MQTT, Modbus and CANBus override it; `toggleConnection()` also
+  aborts when any device reports an in-flight dial. `linkState()` still reports only
+  `connected` or `idle`; an API client watching a flapping link polls `isConnected`.
+- **Network TCP dials asynchronously.** `open()` starts `connectToHost()` and returns true
+  ("attempt started"); a refused dial retries up to 5 times with a 300 ms backoff (a server a
+  control-script onConnect() just launched needs time to listen), a 15 s per-attempt timer
+  bounds a hung dial, and `close()` cancels everything — nothing may redial after it returns.
+  Success reaches the UI via `stateChanged` → `configurationChanged` →
+  `refreshConnectedState()`; failure via a queued error box + `disconnectDevice(this)`.
 - **`connectDevice(int)` reports the outcome itself.** `DeviceManager::open()` returns the
   driver's verdict instead of discarding it, and `connectDevice(int)` passes that to
   `onDeviceOpenFinished(deviceId, ok, reason)` — the only thing driving the spec-0035
@@ -51,12 +60,20 @@ describe a design that is no longer in the tree.
   consequence is that a *later* async failure does not auto-trigger anything; the synchronous
   refusals diagnostics care about most (missing port, permissions) do. The reason string is
   never shown — diagnostics ignore it and the driver surfaces its own error.
-- **Nothing reports a drop centrally.** `onDeviceLinkLost()` and `onDeviceLinkStateChanged()`
-  were driven by signals the flow layer owned; both are deleted, along with the "Connection
-  Lost" modal and the per-source "link lost / link restored" notifications. A driver that loses
-  its link calls `disconnectDevice(this)` and raises its own error box (`UART::handleError()` is
-  the reference). Restoring a central notification means giving `HAL_Driver` a drop signal
-  again — decide that deliberately, do not re-add a half-wired handler.
+- **Nothing reports a drop centrally, but every drop must reach the UI.** A driver that loses
+  its link either calls `disconnectDevice(this)` with a **queued** error box (`UART` and
+  `Network` are the reference; a synchronous modal inside an open() or error stack spins a
+  nested event loop mid-emission) or guarantees a `configurationChanged` emission on the state
+  transition (`Modbus`, `CANBus`, `MQTT`). BLE hooks `QLowEnergyController::errorOccurred`
+  (a failed dial emits no `disconnected`); Process marshals a pipe-peer close to
+  `onPipeClosed()` from the read thread. CANBus rate-limits its error box (one per 5 s) so a
+  flapping bus cannot stack a modal storm.
+- **`rebuildDevices()` reacts to real transitions only.** It is wired to
+  `LemonSqueezy::activatedChanged`, which since 2026-08-04 fires only when
+  `CommercialToken` validity actually flipped (`notifyEntitlementMaybeChanged()`), and to the
+  project structure/operation-mode signals. It coalesces reentrant triggers into one queued
+  follow-up, and the connect/disconnect fan-outs iterate id snapshots because a close can spin
+  the event loop into another rebuild.
 
 ## The Async Task-Tree Engine (`app/src/Async/`)
 
