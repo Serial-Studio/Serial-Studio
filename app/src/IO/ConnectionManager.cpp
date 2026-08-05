@@ -903,7 +903,6 @@ void IO::ConnectionManager::disconnectDevice()
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
 
-  qWarning() << "[ConnectionManager] session closed (explicit disconnect)";
   Q_EMIT sessionClosed();
 }
 

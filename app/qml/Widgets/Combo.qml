@@ -28,4 +28,27 @@ ComboBox {
     rightPadding: control.rtl ? 6 : control.indicator.width + 4
     horizontalAlignment: control.rtl ? Text.AlignRight : Text.AlignLeft
   }
+
+  //
+  // Show the full item text on hover (long device names elide in the popup)
+  //
+  delegate: ItemDelegate {
+    required property var model
+    required property int index
+
+    readonly property bool isCurrent: control.currentIndex === index
+    readonly property string label: control.textRole === ""
+                                    ? String(model.modelData ?? "")
+                                    : String(model[control.textRole] ?? "")
+
+    text: label
+    hoverEnabled: true
+    highlighted: control.highlightedIndex === index
+    width: ListView.view ? ListView.view.width : control.width
+    font: isCurrent ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
+
+    ToolTip.delay: 400
+    ToolTip.text: label
+    ToolTip.visible: hovered
+  }
 }

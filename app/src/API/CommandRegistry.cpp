@@ -59,6 +59,7 @@ static int editDistance(const QString& a, const QString& b)
     }
     std::swap(prev, curr);
   }
+
   return prev[lb];
 }
 
@@ -79,7 +80,6 @@ static int similarityScore(const QString& want, const QString& have)
       break;
 
   const int dist = editDistance(want, have);
-
   return dist - (sharedSegments * 6);
 }
 
