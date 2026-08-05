@@ -15,6 +15,8 @@ hand-written one it replaces:
     against its checked-in baseline, allowing only the deltas declared by
     spec 0036 (overviewDisplay is now serialized; the read-side defaults for
     fftSamples, fftSamplingRate, ledHigh and index match the struct defaults).
+    Per-source connection blocks are excluded on both sides: loading resolves
+    them against live device discovery, so they vary per machine and per run.
 
   - offline mode: test_corpus_files_unchanged needs no running app; it checks
     the on-disk corpus against the sha256 manifest recorded in
@@ -93,13 +95,31 @@ def export_project(api_client, path):
     return api_client.command("project.exportJson")["config"]
 
 
+def dataset_lists(config):
+    """Yield every dataset list in a config: top-level groups and per-source groups."""
+    for group in config.get("groups", []):
+        yield group.get("datasets", [])
+    for source in config.get("sources", []):
+        for group in source.get("groups", []):
+            yield group.get("datasets", [])
+
+
 def strip_declared_deltas(config):
     """Drop the dataset keys spec 0036 intentionally changes, so the rest of the
     document can be compared for byte-for-byte equality."""
-    for group in config.get("groups", []):
-        for dataset in group.get("datasets", []):
+    for datasets in dataset_lists(config):
+        for dataset in datasets:
             for key in DECLARED_DELTA_KEYS:
                 dataset.pop(key, None)
+    return config
+
+
+def strip_live_connection(config):
+    """Drop per-source connection blocks: loading a project resolves them against
+    live device discovery (BLE scan results, enumerated ports), so they are
+    environment state, not document state."""
+    for source in config.get("sources", []):
+        source.pop("connection", None)
     return config
 
 
@@ -136,7 +156,7 @@ def test_capture_baselines(api_client, clean_state):
     BASELINE_DIR.mkdir(parents=True, exist_ok=True)
     written = 0
     for path in corpus_projects():
-        config = export_project(api_client, path)
+        config = strip_live_connection(export_project(api_client, path))
         target = BASELINE_DIR / baseline_name(path)
         target.write_text(canonical(config) + "\n", encoding="utf-8", newline="")
         written += 1
@@ -229,32 +249,28 @@ def test_overview_display_survives_a_save_reload_cycle(api_client, clean_state):
 @pytest.mark.integration
 @pytest.mark.project
 def test_omitted_keys_load_the_struct_defaults(api_client, clean_state):
-    """AC3: a project file that omits a key loads what a fresh dataset carries.
+    """AC3: a project file that omits a key loads the declared struct default.
 
     The four keys below had a reader fallback that disagreed with the struct
     initializer, so the same dataset ended up in two different states depending on
-    how it arrived.
+    how it arrived. The expectation comes from the manifest, not a fresh dataset:
+    project.dataset.add auto-assigns the next parser slot to index, while an
+    omitted key must load the declared default (0 = unassigned).
     """
     make_dataset(api_client, "default alignment")
     keys = document_keys()
-    drifted = [
-        keys["Index"],
-        keys["FftSamples"],
-        keys["FftSamplingRate"],
-        keys["LedHigh"],
-    ]
-
-    fresh = exported_dataset(api_client)
-    expected = {key: fresh[key] for key in drifted}
+    declared = {p["id"]: p.get("default") for p in property_manifest()["properties"]}
+    drifted = ["Index", "FftSamples", "FftSamplingRate", "LedHigh"]
+    expected = {keys[pid]: declared[pid] for pid in drifted}
 
     config = api_client.command("project.exportJson")["config"]
-    for key in drifted:
+    for key in expected:
         config["groups"][0]["datasets"][0].pop(key, None)
 
     api_client.load_project_from_json(config)
     time.sleep(0.4)
     reloaded = exported_dataset(api_client)
-    actual = {key: reloaded.get(key) for key in drifted}
+    actual = {key: reloaded.get(key) for key in expected}
     assert actual == expected
 
 
@@ -360,8 +376,12 @@ def test_round_trip_matches_baseline(api_client, clean_state):
             mismatched.append(f"{path.name}: missing baseline")
             continue
 
-        expected = strip_declared_deltas(json.loads(target.read_text(encoding="utf-8")))
-        actual = strip_declared_deltas(export_project(api_client, path))
+        expected = strip_declared_deltas(
+            strip_live_connection(json.loads(target.read_text(encoding="utf-8")))
+        )
+        actual = strip_declared_deltas(
+            strip_live_connection(export_project(api_client, path))
+        )
         if canonical(expected) != canonical(actual):
             mismatched.append(path.relative_to(REPO_ROOT).as_posix())
 

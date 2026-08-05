@@ -1,0 +1,209 @@
+{
+  "actions": [],
+  "changeDrivenTransforms": false,
+  "controlScriptCode": "/**\n * ISS Position Tracker - Control Loop\n * \n * Fetches ISS (International Space Station) location data from the\n * open-notify.org API every second and sends it to Serial Studio.\n */\n\nfunction setup() {}\n\nfunction loop() {\n  const status = io.getStatus();\n  if (!status.isConnected) {\n    io.connect();\n    delay(300); \n  }\n\n  const host = \"api.open-notify.org\";\n  const path = \"/iss-now.json\";\n  const httpRequest = \n    \"GET \" + path + \" HTTP/1.1\\r\\n\" +\n    \"Host: \" + host + \"\\r\\n\" +\n    \"Connection: keep-alive\\r\\n\" +\n    \"User-Agent: SerialStudio ISS Tracker\\r\\n\" +\n    \"\\r\\n\";\n\n  io.writeData(httpRequest, SerialStudio.Text);\n \n  delay(5000);\n}\n",
+  "frozen": false,
+  "groups": [
+    {
+      "datasets": [
+        {
+          "datasetId": 0,
+          "displayFormat": "0d",
+          "displayTickCount": 5,
+          "fft": false,
+          "fftMax": 0,
+          "fftMin": 0,
+          "fftSamples": 256,
+          "fftSamplingRate": 100,
+          "fftWindow": 5,
+          "graph": false,
+          "groupId": 0,
+          "index": 1,
+          "led": false,
+          "ledHigh": 1,
+          "log": false,
+          "numericValue": 0,
+          "plotMax": 0,
+          "plotMin": 0,
+          "title": "Latitude",
+          "uniqueId": 0,
+          "units": "°",
+          "value": "",
+          "widget": "lat",
+          "widgetMax": 0,
+          "widgetMin": 0,
+          "xAxis": -2
+        },
+        {
+          "datasetId": 1,
+          "displayFormat": "0d",
+          "displayTickCount": 5,
+          "fft": false,
+          "fftMax": 0,
+          "fftMin": 0,
+          "fftSamples": 256,
+          "fftSamplingRate": 100,
+          "fftWindow": 5,
+          "graph": false,
+          "groupId": 0,
+          "index": 2,
+          "led": false,
+          "ledHigh": 1,
+          "log": false,
+          "numericValue": 0,
+          "plotMax": 0,
+          "plotMin": 0,
+          "title": "Longitude",
+          "uniqueId": 1,
+          "units": "°",
+          "value": "",
+          "widget": "lon",
+          "widgetMax": 0,
+          "widgetMin": 0,
+          "xAxis": -2
+        },
+        {
+          "datasetId": 2,
+          "displayFormat": "0d",
+          "displayTickCount": 5,
+          "fft": false,
+          "fftMax": 0,
+          "fftMin": 0,
+          "fftSamples": 256,
+          "fftSamplingRate": 100,
+          "fftWindow": 5,
+          "graph": false,
+          "groupId": 0,
+          "index": 3,
+          "led": false,
+          "ledHigh": 1,
+          "log": false,
+          "numericValue": 0,
+          "plotMax": 0,
+          "plotMin": 0,
+          "title": "Altitude",
+          "uniqueId": 2,
+          "units": "km",
+          "value": "",
+          "widget": "alt",
+          "widgetMax": 0,
+          "widgetMin": 0,
+          "xAxis": -2
+        }
+      ],
+      "title": "ISS Position",
+      "uniqueId": 10002,
+      "widget": "map"
+    },
+    {
+      "datasets": [],
+      "title": "3D Model",
+      "uniqueId": 10004,
+      "webViewUrl": "https://solarsystem.nasa.gov/gltf_embed/2378/",
+      "widget": "webview"
+    }
+  ],
+  "hexadecimalDelimiters": false,
+  "mqttPublisher": {
+    "alpnEnabled": false,
+    "alpnProtocol": "x-amzn-mqtt-ca",
+    "cleanSession": true,
+    "clientCertPath": "",
+    "customClientId": false,
+    "enabled": false,
+    "hostname": "127.0.0.1",
+    "keepAlive": 60,
+    "mode": 0,
+    "mqttVersion": 2,
+    "notificationTopic": "",
+    "peerVerifyDepth": 10,
+    "peerVerifyMode": 3,
+    "port": 1883,
+    "privateKeyPath": "",
+    "publishFrequency": 10,
+    "publishNotifications": false,
+    "scriptCode": "",
+    "scriptLanguage": 0,
+    "scriptTopic": "",
+    "sslEnabled": false,
+    "sslProtocol": 5,
+    "topicBase": ""
+  },
+  "nextUniqueId": 10005,
+  "plotTimeRange": 60,
+  "pointCount": 1000,
+  "schemaVersion": 3,
+  "sources": [
+    {
+      "busType": 1,
+      "checksum": "",
+      "checksumAlgorithm": "",
+      "decoder": 0,
+      "decoderMethod": 0,
+      "frameDetection": 1,
+      "frameEnd": "},",
+      "frameParserCode": "/**\n * Frame parser that extracts latitude and longitude from ISS position JSON.\n */\nfunction parse(frame) {\n  if (frame.length === 0) {\n    return [];\n  }\n  \n  try {\n    var data = JSON.parse(frame + \"}\");\n    return [\n      data.latitude,\n      data.longitude\n    ];\n  } catch (e) {\n    console.warn(\"Failed to parse JSON: \" + e);\n    return [];\n  }\n}\n",
+      "frameStart": "\"iss_position\":",
+      "hexadecimalDelimiters": false,
+      "sourceId": 0,
+      "title": "Device A"
+    }
+  ],
+  "title": "ISS Tracker",
+  "widgetSettings": {
+    "5:0:-1": {
+      "mapType": 0,
+      "showNasaWeather": false,
+      "showWeather": true
+    },
+    "externalWindows": {
+      "data": []
+    },
+    "layout:1000": {
+      "data": {
+        "autoLayout": true,
+        "canvasHeight": 500,
+        "canvasWidth": 1058,
+        "geometries": [
+          {
+            "height": 500,
+            "id": 1,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 5,
+            "width": 529,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "height": 500,
+            "id": 4,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 16,
+            "width": 529,
+            "x": 528,
+            "y": 0
+          }
+        ],
+        "userReordered": true,
+        "windowOrder": [
+          1,
+          4
+        ],
+        "windowOrderTyped": [
+          {
+            "relativeIndex": 0,
+            "widgetType": 5
+          },
+          {
+            "relativeIndex": 0,
+            "widgetType": 16
+          }
+        ]
+      }
+    }
+  },
+  "writerVersion": "4.0.3",
+  "writerVersionAtCreation": "4.0.3"
+}

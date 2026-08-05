@@ -362,7 +362,7 @@
             "colorbarVisible": true,
             "cursorEnabled": true
         },
-        "activeGroup": 5002,
+        "activeGroup": 5000,
         "layout:1000": {
             "data": {
                 "autoLayout": true,
@@ -1017,6 +1017,65 @@
                     {
                         "relativeIndex": 1,
                         "widgetType": 22
+                    }
+                ]
+            }
+        },
+        "layout:5002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
+                "geometries": [
+                    {
+                        "height": 546,
+                        "id": 7,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 525,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 6,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 7,
+                        "width": 527,
+                        "x": 524,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 12,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 21,
+                        "width": 527,
+                        "x": 524,
+                        "y": 272
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    7,
+                    6,
+                    12
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 7
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 21
                     }
                 ]
             }

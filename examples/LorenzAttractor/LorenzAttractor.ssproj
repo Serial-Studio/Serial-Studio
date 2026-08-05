@@ -208,7 +208,10 @@
     ],
     "hexadecimalDelimiters": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -219,6 +222,7 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",
