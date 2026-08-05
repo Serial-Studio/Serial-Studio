@@ -166,6 +166,7 @@ private slots:
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
+  [[nodiscard]] bool tcpLinkUp() const;
   [[nodiscard]] static QHostAddress preferredAddress(const QList<QHostAddress>& addresses);
   void enlargeUdpReceiveBuffer();
 

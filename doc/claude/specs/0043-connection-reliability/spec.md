@@ -55,7 +55,7 @@ The first landing broke three bundled examples. Root causes and fixes, landed 20
 | # | Regression | Root cause | Fix |
 |---|-----------|-----------|-----|
 | R1 | ISS Tracker "reloads every 5 s" | Script does `io.connect(); delay(300); writeData(...)`. Blocking dial guaranteed the socket was up; async dial made `DeviceManager::write` drop the HTTP request silently (`isOpen()` false mid-dial), so the server closed the idle keep-alive → error → disconnect → repeat per loop | `DeviceManager::write` accepts data while `isConnecting()`; QTcpSocket buffers and flushes on connect |
-| R2 | Drone/CAN helpers killed (exit 15) in a loop | `onConnect()` launches the helper, dials race its startup; failed dials emitted `sessionClosed` with nothing connected, and `ProcessLauncher::onSessionClosed` reaps all helpers — killing the process the retry needed | `sessionClosed` only when a live session existed: never from `rebuildDevices`, and `disconnectDevice(HAL_Driver*)` gates it on was-connected |
+| R2 | Drone/CAN helpers killed (exit 15) in a loop | `onConnect()` launches the helper; failed dials and single-source drops emitted `sessionClosed`, and `ProcessLauncher::onSessionClosed` reaps all helpers — killing the process the retry needed. A was-connected gate proved insufficient: in multi-source startup, source 0 connecting-then-dropping while source 1 still dialed passed the gate and still reaped | `sessionClosed` fires ONLY from the explicit `disconnectDevice()` path — never from `rebuildDevices`, never from driver-initiated drops. A drop is a link event; the session outlives it |
 | R3 | Dial patience halved | Refusal retry window shrank from ~4 s (blocking loop) to 1.5 s | `kTcpConnectAttempts` 5 → 10 (~3 s of refusal patience) |
 | R4 | "Changing ports/options does not affect the driver" | Live socket kept the old endpoint until a manual reconnect | Endpoint edits on a live Network driver reopen it after a 500 ms debounce; closed drivers never self-dial |
 
@@ -71,6 +71,15 @@ dependencies on first run — a private venv next to the script (or under
 `~/.serial-studio/example-venvs` for read-only installs), then re-exec — so PEP 668
 "externally managed" system Pythons (Homebrew, Debian) never block an example.
 `dual_drone_telemetry.py` and the ISS example are stdlib-only and need no bootstrap.
+
+Round 3 (traced live via the new teardown diagnostics): the first dual-drone dial reported
+`ConnectedState` with `peerPort() == 0` — the 2026-07 **phantom-connect** pathology (reused
+QTcpSocket + same-turn abort/connectToHost), whose guards lived in the removed flow layer.
+The phantom cleared the dial state, so the follow-up `RemoteHostClosedError` was treated as
+an established-link drop instead of a retryable dial failure. Restored in the driver:
+deferred dial (connectToHost never in the same turn as an abort), `tcpLinkUp()` peer
+validation gating `isOpen()` and the connected transition, and `RemoteHostClosedError`
+retryable while dialing. Driver drops additionally never end the session (see R2).
 
 ## Deferred gap register (next pass; from the 2026-08-04 driver audit)
 

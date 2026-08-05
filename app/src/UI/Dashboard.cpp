@@ -1888,7 +1888,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
   SS_ASSERT(frame.sourceId >= 0, return);
 
   if (m_updateRetryInProgress) {
-    qWarning() << "Failed to build dashboard widget model";
+    qWarning() << "[Dashboard] widget model build failed twice for source" << frame.sourceId
+               << "-- forcing disconnect";
 
     static auto& connMgr = IO::ConnectionManager::instance();
     if (connMgr.isConnected()) {

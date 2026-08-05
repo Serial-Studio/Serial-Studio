@@ -149,20 +149,16 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
-  bool open  = false;
-  auto state = QAbstractSocket::UnconnectedState;
+  if (socketType() == QAbstractSocket::TcpSocket)
+    return m_tcpSocket.isOpen() && tcpLinkUp();
 
   if (socketType() == QAbstractSocket::UdpSocket) {
-    open  = m_udpSocket.isOpen();
-    state = m_udpSocket.state();
+    const auto state = m_udpSocket.state();
+    return m_udpSocket.isOpen()
+        && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
   }
 
-  else if (socketType() == QAbstractSocket::TcpSocket) {
-    open  = m_tcpSocket.isOpen();
-    state = m_tcpSocket.state();
-  }
-
-  return open && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
+  return false;
 }
 
 /**
@@ -255,7 +251,8 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
             this,
             &IO::Drivers::Network::onReadyRead,
             Qt::UniqueConnection);
-    startTcpDialAttempt();
+    QMetaObject::invokeMethod(
+      this, &IO::Drivers::Network::startTcpDialAttempt, Qt::QueuedConnection);
     return true;
   }
 
@@ -294,17 +291,34 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 }
 
 /**
- * @brief Starts (or retries) one TCP connect attempt without blocking the GUI thread. The retry
- *        backoff exists so a server a control-script onConnect() just launched has time to start
- *        listening; onErrorOccurred() decides between another attempt and reporting the failure.
+ * @brief Returns true only for a genuine established TCP link: a reused QTcpSocket can fake
+ *        ConnectedState with peerPort() == 0 when connectToHost() runs in the same event-loop
+ *        turn as an abort() (the 2026-07 phantom-connect pathology), so the state alone is
+ *        never trusted.
+ */
+bool IO::Drivers::Network::tcpLinkUp() const
+{
+  return m_tcpSocket.state() == QAbstractSocket::ConnectedState && m_tcpSocket.peerPort() != 0;
+}
+
+/**
+ * @brief Starts (or retries) one TCP connect attempt without blocking the GUI thread. A socket
+ *        not settled in UnconnectedState is aborted and the attempt re-queued (same-turn
+ *        abort + dial fakes a phantom connect); onErrorOccurred() picks retry vs failure.
  */
 void IO::Drivers::Network::startTcpDialAttempt()
 {
   if (!m_dialInProgress)
     return;
 
+  if (m_tcpSocket.state() != QAbstractSocket::UnconnectedState) {
+    m_tcpSocket.abort();
+    QMetaObject::invokeMethod(
+      this, &IO::Drivers::Network::startTcpDialAttempt, Qt::QueuedConnection);
+    return;
+  }
+
   ++m_dialAttempts;
-  m_tcpSocket.abort();
   m_tcpSocket.connectToHost(m_dialHost, tcpPort(), m_dialMode);
   m_dialTimeoutTimer.start();
 }
@@ -361,7 +375,7 @@ void IO::Drivers::Network::reopenAfterConfigChange()
  */
 void IO::Drivers::Network::onTcpStateChanged()
 {
-  if (m_tcpSocket.state() == QAbstractSocket::ConnectedState) {
+  if (tcpLinkUp()) {
     m_dialInProgress = false;
     m_dialRetryTimer.stop();
     m_dialTimeoutTimer.stop();
@@ -673,13 +687,16 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
 {
   if (m_dialInProgress && socketType() == QAbstractSocket::TcpSocket) {
     m_dialTimeoutTimer.stop();
-    if (socketError == QAbstractSocket::ConnectionRefusedError
-        && m_dialAttempts < kTcpConnectAttempts) {
+    const bool retryable = socketError == QAbstractSocket::ConnectionRefusedError
+                        || socketError == QAbstractSocket::RemoteHostClosedError;
+    if (retryable && m_dialAttempts < kTcpConnectAttempts) {
       m_dialRetryTimer.start();
       return;
     }
 
     m_dialInProgress = false;
+    qWarning() << "[Network] TCP dial to" << m_dialHost << ":" << tcpPort() << "failed after"
+               << m_dialAttempts << "attempt(s):" << m_tcpSocket.errorString();
   }
 
   if (socketType() == QAbstractSocket::UdpSocket

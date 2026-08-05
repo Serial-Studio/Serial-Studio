@@ -855,6 +855,8 @@ void IO::ConnectionManager::disconnectDevice()
 
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
+
+  qWarning() << "[ConnectionManager] session closed (explicit disconnect)";
   Q_EMIT sessionClosed();
 }
 
@@ -1076,10 +1078,10 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
 }
 
 /**
- * @brief Disconnects the source owned by @p driver, keeping other sources alive. sessionClosed
- *        fires only when a live session actually ended: a dial that failed before anything was
- *        connected never had a session, and emitting it there made ProcessLauncher reap the
- *        script-launched helper the retrying dial was waiting for.
+ * @brief Disconnects the source owned by @p driver, keeping other sources alive. Never emits
+ *        sessionClosed: a driver drop is a link event, not the end of the user's session, and
+ *        reaping the script-launched helpers here kills the very servers a retry needs.
+ *        Only an explicit disconnect ends the session.
  */
 void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
 {
@@ -1097,16 +1099,14 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
   if (deviceId < 0)
     return;
 
-  const bool wasConnected = isConnected();
+  qWarning() << "[ConnectionManager] device" << deviceId << "dropped ("
+             << driver->metaObject()->className() << "); session continues";
   disconnectDevice(deviceId);
 
   if (!isConnected()) {
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
     frameBuilder.registerQuickPlotHeaders(QStringList());
     Q_EMIT driverChanged();
-
-    if (wasConnected)
-      Q_EMIT sessionClosed();
   }
 }
 

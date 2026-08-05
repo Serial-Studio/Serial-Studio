@@ -56,11 +56,12 @@ describe a design that is no longer in the tree.
   `io.connect()` + `writeData()` sequence works without waiting out the dial (the ISS example
   broke silently without this). An endpoint edit (address/port/socket type/multicast) on a
   live driver reopens it after a 500 ms debounce; a closed driver never dials on its own.
-- **`sessionClosed` means a live session actually ended** — an explicit disconnect, or a
-  driver-reported drop of the last connected device. It never fires from `rebuildDevices`
-  churn or from a dial that failed before anything connected: `API::ProcessLauncher` reaps
-  every script-launched helper on this signal, and those helpers usually serve the very link
-  that is retrying (the dual-drone/CAN examples died to exactly this).
+- **`sessionClosed` means the USER (or an API client / player takeover) ended the session** —
+  it fires only from the explicit `disconnectDevice()` path. Driver-initiated drops,
+  `rebuildDevices` churn, and failed dials never emit it: `API::ProcessLauncher` reaps every
+  script-launched helper on this signal, and those helpers usually serve the very link that
+  is dropping or retrying (the dual-drone example died to a source-0 drop reaping the helper
+  while source 1 was still dialing). A drop is a link event; the session outlives it.
 - **`connectDevice(int)` reports the outcome itself.** `DeviceManager::open()` returns the
   driver's verdict instead of discarding it, and `connectDevice(int)` passes that to
   `onDeviceOpenFinished(deviceId, ok, reason)` — the only thing driving the spec-0035
