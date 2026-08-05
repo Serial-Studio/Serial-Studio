@@ -99,3 +99,6 @@ cmake-build-*/
 
 # out 
 out/
+
+# Example-script private virtualenvs (created by the dependency bootstrap)
+examples/**/.venv/

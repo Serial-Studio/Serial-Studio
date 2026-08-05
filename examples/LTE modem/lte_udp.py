@@ -1,5 +1,75 @@
 #!/usr/bin/env python
 
+# --------------------------------------------------------------------------------------
+# Automatic dependency install (first run)
+#
+# Creates a private virtualenv next to this script (falling back to
+# ~/.serial-studio/example-venvs when the example lives in a read-only install) and
+# re-executes inside it, so system Python installs (PEP 668 "externally managed") are
+# never modified. Requires only the standard library.
+# --------------------------------------------------------------------------------------
+import importlib.util
+import os
+import subprocess
+import sys
+
+
+def _ensure_deps(mod_to_pip):
+    missing = [
+        pip for mod, pip in mod_to_pip.items() if importlib.util.find_spec(mod) is None
+    ]
+    if not missing:
+        return
+
+    if os.environ.get("SS_EXAMPLE_BOOTSTRAPPED") == "1":
+        sys.stderr.write("dependency bootstrap failed: %s\n" % ", ".join(missing))
+        sys.exit(1)
+
+    base = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(base, ".venv"),
+        os.path.join(
+            os.path.expanduser("~"),
+            ".serial-studio",
+            "example-venvs",
+            os.path.basename(base),
+        ),
+    ]
+
+    py = None
+    for venv in candidates:
+        try:
+            binary = (
+                os.path.join(venv, "Scripts", "python.exe")
+                if os.name == "nt"
+                else os.path.join(venv, "bin", "python")
+            )
+            if not os.path.exists(binary):
+                subprocess.check_call([sys.executable, "-m", "venv", venv])
+
+            py = binary
+            break
+        except (OSError, subprocess.CalledProcessError):
+            continue
+
+    if py is None:
+        sys.stderr.write("dependency bootstrap failed: cannot create a virtualenv\n")
+        sys.exit(1)
+
+    subprocess.check_call(
+        [py, "-m", "pip", "install", "--disable-pip-version-check"] + missing
+    )
+
+    env = dict(os.environ, SS_EXAMPLE_BOOTSTRAPPED="1")
+    argv = [py, "-u", os.path.abspath(__file__)] + sys.argv[1:]
+    if os.name == "nt":
+        sys.exit(subprocess.call(argv, env=env))
+
+    os.execve(py, argv, env)
+
+
+_ensure_deps({"requests": "requests"})
+
 import sys
 
 # Force UTF-8 console output: Windows defaults to cp1252, which cannot encode

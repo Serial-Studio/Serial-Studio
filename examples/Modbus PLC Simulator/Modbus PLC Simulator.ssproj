@@ -426,6 +426,14 @@
     "widgetSettings": {
         "externalWindows": {
             "data": [
+                {
+                    "relativeIndex": 0,
+                    "widgetType": 11
+                },
+                {
+                    "relativeIndex": 1,
+                    "widgetType": 11
+                }
             ]
         }
     },

@@ -302,7 +302,10 @@
     ],
     "hexadecimalDelimiters": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -313,6 +316,7 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",
@@ -358,7 +362,7 @@
             "colorbarVisible": true,
             "cursorEnabled": true
         },
-        "activeGroup": 5000,
+        "activeGroup": 5002,
         "layout:1000": {
             "data": {
                 "autoLayout": true,
@@ -812,38 +816,38 @@
         "layout:5000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 538,
-                "canvasWidth": 1043,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 538,
+                        "height": 546,
                         "id": 12,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 21,
-                        "width": 521,
+                        "width": 525,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 269,
+                        "height": 273,
                         "id": 5,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 523,
-                        "x": 520,
+                        "width": 527,
+                        "x": 524,
                         "y": 0
                     },
                     {
-                        "height": 269,
+                        "height": 273,
                         "id": 4,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 523,
-                        "x": 520,
-                        "y": 268
+                        "width": 527,
+                        "x": 524,
+                        "y": 272
                     }
                 ],
                 "userReordered": true,
@@ -1020,38 +1024,38 @@
         "layout:5003": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 538,
-                "canvasWidth": 1043,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 538,
+                        "height": 546,
                         "id": 4,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 521,
+                        "width": 525,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 269,
+                        "height": 273,
                         "id": 8,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 523,
-                        "x": 520,
+                        "width": 527,
+                        "x": 524,
                         "y": 0
                     },
                     {
-                        "height": 269,
+                        "height": 273,
                         "id": 9,
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 523,
-                        "x": 520,
-                        "y": 268
+                        "width": 527,
+                        "x": 524,
+                        "y": 272
                     }
                 ],
                 "userReordered": false,
@@ -1079,16 +1083,16 @@
         "layout:5004": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 538,
-                "canvasWidth": 1043,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 538,
+                        "height": 546,
                         "id": 10,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 11,
-                        "width": 1043,
+                        "width": 1051,
                         "x": 0,
                         "y": 0
                     }
@@ -1108,16 +1112,16 @@
         "layout:5005": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 538,
-                "canvasWidth": 1043,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 538,
+                        "height": 546,
                         "id": 11,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 11,
-                        "width": 1043,
+                        "width": 1051,
                         "x": 0,
                         "y": 0
                     }
@@ -1137,16 +1141,16 @@
         "layout:5006": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 538,
-                "canvasWidth": 1043,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 538,
+                        "height": 546,
                         "id": 5,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 1043,
+                        "width": 1051,
                         "x": 0,
                         "y": 0
                     }
