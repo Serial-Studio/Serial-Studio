@@ -59,6 +59,25 @@ if(SS_MIMALLOC_PLATFORM)
   set(MI_BUILD_OBJECT OFF CACHE BOOL "" FORCE)
   set(MI_BUILD_TESTS  OFF CACHE BOOL "" FORCE)
 
+  # Skip the final heap collect at process exit: a long capture session can hold gigabytes of
+  # cold (paged-out) history, and touching every page just to free it makes quitting slow. The
+  # OS reclaims the whole address space anyway.
+  set(MI_SKIP_COLLECT_ON_EXIT ON CACHE BOOL "" FORCE)
+
+  if(WIN32 AND MSVC)
+    # Pin mimalloc's per-thread heap pointer to a fixed TLS slot. mimalloc.dll loads before the
+    # app (import-time redirect), so TlsAlloc() lands on a low slot and every malloc/free skips
+    # the dynamic TLS lookup. Only safe because we ship the DLL with the app.
+    set(MI_WIN_USE_FIXED_TLS ON CACHE BOOL "" FORCE)
+  endif()
+
+  if(APPLE)
+    # armv8.1-a LSE atomics for the malloc fast path. Auto-enabled for plain arm64 builds, but a
+    # universal (x86_64;arm64) build detects as x64 and silently drops it; forcing ON keeps the
+    # arm64 slice fast either way (mimalloc scopes the flag with -Xarch_arm64).
+    set(MI_OPT_ARCH ON CACHE BOOL "" FORCE)
+  endif()
+
   if(APPLE)
     set(MI_BUILD_SHARED OFF CACHE BOOL "" FORCE)
     set(MI_BUILD_STATIC ON  CACHE BOOL "" FORCE)
@@ -74,7 +93,7 @@ if(SS_MIMALLOC_PLATFORM)
   FetchContent_Declare(
     mimalloc
     GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
-    GIT_TAG        v3.4.3
+    GIT_TAG        v3.4.5
     GIT_SHALLOW    TRUE
   )
   FetchContent_MakeAvailable(mimalloc)
@@ -88,8 +107,25 @@ if(SS_MIMALLOC_PLATFORM)
   endif()
 
   if(WIN32 AND MSVC)
-    set(SS_MIMALLOC_REDIRECT_DLL "${mimalloc_SOURCE_DIR}/bin/mimalloc-redirect.dll"
-        CACHE INTERNAL "Path to the prebuilt mimalloc-redirect.dll")
+    # Mirror mimalloc's own per-arch redirect selection (MIMALLOC_REDIRECT_SUFFIX in its
+    # CMakeLists): x64 -> "", x86 -> "32", arm64 -> "-arm64", arm64ec -> "-arm64ec". Shipping the
+    # x64 DLL on another arch makes load-time patching fail silently and the CRT heap is used.
+    # Both VS (CMAKE_GENERATOR_PLATFORM) and Ninja (CMAKE_SYSTEM_PROCESSOR) builds are covered.
+    if(CMAKE_GENERATOR_PLATFORM STREQUAL "arm64ec")
+      set(_ss_mi_redirect_suffix "-arm64ec")
+    elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^(ARM64|arm64)$"
+           OR (NOT CMAKE_GENERATOR_PLATFORM
+               AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$"))
+      set(_ss_mi_redirect_suffix "-arm64")
+    elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^(x86|Win32)$"
+           OR (NOT CMAKE_GENERATOR_PLATFORM AND CMAKE_SIZEOF_VOID_P EQUAL 4))
+      set(_ss_mi_redirect_suffix "32")
+    else()
+      set(_ss_mi_redirect_suffix "")
+    endif()
+    set(SS_MIMALLOC_REDIRECT_DLL
+        "${mimalloc_SOURCE_DIR}/bin/mimalloc-redirect${_ss_mi_redirect_suffix}.dll"
+        CACHE INTERNAL "Path to the prebuilt mimalloc-redirect DLL for the target architecture")
   endif()
 endif()
 
@@ -102,6 +138,11 @@ function(target_link_mimalloc target)
     message(STATUS "mimalloc disabled for sanitizer build (${target})")
     return()
   endif()
+
+  # Expose <mimalloc.h> so the app can tune runtime options (see main.cpp). The macro gates those
+  # calls out of builds where the override is absent (SS_USE_MIMALLOC=OFF, sanitizers, other OSes).
+  target_compile_definitions(${target} PRIVATE SS_MIMALLOC_ACTIVE=1)
+  target_include_directories(${target} PRIVATE "${mimalloc_SOURCE_DIR}/include")
 
   if(WIN32 AND MSVC)
     target_link_libraries(${target} PRIVATE mimalloc)

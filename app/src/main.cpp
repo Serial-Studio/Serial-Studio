@@ -27,6 +27,10 @@
 #include <QQuickStyle>
 #include <QStyleFactory>
 
+#if defined(SS_MIMALLOC_ACTIVE)
+#  include <mimalloc.h>
+#endif
+
 #include "AppInfo.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/CLI.h"
@@ -192,9 +196,16 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
 
 /**
  * @brief Application entry-point: bootstraps Qt, parses CLI flags, and runs the event loop.
+ *        The 250 ms mimalloc purge delay batches page purges across frames: parse/export churn
+ *        recycles the same page range continuously, and the 10 ms default decommits pages the
+ *        next frame needs, paying madvise/VirtualFree plus re-fault costs in steady state.
  */
 int main(int argc, char** argv)
 {
+#if defined(SS_MIMALLOC_ACTIVE)
+  mi_option_set(mi_option_purge_delay, 250);
+#endif
+
   setupQtApplicationMetadata();
 
   const bool cliEarlyExit = Misc::CLI::isCliEarlyExit(argc, argv);
