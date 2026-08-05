@@ -36,7 +36,9 @@
 #include <libusb.h>
 
 #include <atomic>
+#include <condition_variable>
 #include <cstddef>
+#include <mutex>
 #include <new>
 #include <QHash>
 #include <QList>
@@ -192,6 +194,7 @@ private:
   void stopReadThread();
   void stopEventThread();
   void cancelAndDrainTransfers();
+  void notifyDrainWaiter();
   void freeTransfers();
 
   [[nodiscard]] QString enrichDeviceLabel(libusb_device* dev,
@@ -234,6 +237,10 @@ private:
   alignas(kCacheLine) std::atomic<bool> m_eventLoopRunning;
   alignas(kCacheLine) std::atomic<int> m_isoInFlight;
   alignas(kCacheLine) std::atomic<bool> m_controlInFlight;
+  alignas(kCacheLine) std::atomic<bool> m_drainWaiting;
+
+  std::mutex m_drainMutex;
+  std::condition_variable m_drainCv;
 
   QThread m_readThread;
   QThread m_eventThread;

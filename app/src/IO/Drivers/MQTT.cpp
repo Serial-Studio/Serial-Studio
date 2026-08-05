@@ -952,12 +952,21 @@ void IO::Drivers::MQTT::setDriverProperty(const QString& key, const QVariant& va
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles broker state transitions; subscribes once Connected.
+ * @brief Handles broker state transitions; subscribes once Connected and finishes a pending
+ *        settle-then-redial cycle once Disconnected.
  */
 void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
 {
   qCInfo(lcMqttSub) << "state changed:" << state;
   Q_EMIT connectedChanged();
+
+  if (state == QMqttClient::Disconnected && m_reconnectPending) {
+    m_reconnectPending = false;
+    if (m_userWantsOpen)
+      (void)open(QIODevice::ReadOnly);
+
+    return;
+  }
 
   if (state == QMqttClient::Connected && !m_topicFilter.isEmpty()) {
     QMqttTopicFilter filter;
@@ -1356,38 +1365,19 @@ void IO::Drivers::MQTT::applyPendingToClient()
 }
 
 /**
- * @brief If the live connection is active, disconnect now and reopen once Disconnected.
+ * @brief If the live connection is active, disconnect now and reopen once Disconnected. The
+ *        continuation lives in onStateChanged() (Disconnected + m_reconnectPending), not a
+ *        per-call connection: a heap Connection* leaked whenever the settle never arrived.
  */
 void IO::Drivers::MQTT::scheduleReconnectIfActive()
 {
   if (m_client.state() == QMqttClient::Disconnected)
     return;
 
-  if (m_reconnectPending) {
-    if (m_client.state() != QMqttClient::Disconnected)
-      m_client.disconnectFromHost();
-
-    return;
+  if (!m_reconnectPending) {
+    qCInfo(lcMqttSub) << "broker setting changed while connected -- scheduling reconnect";
+    m_reconnectPending = true;
   }
-
-  qCInfo(lcMqttSub) << "broker setting changed while connected -- scheduling reconnect";
-  m_reconnectPending = true;
-
-  auto* conn = new QMetaObject::Connection;
-  *conn =
-    connect(&m_client, &QMqttClient::stateChanged, this, [this, conn](QMqttClient::ClientState s) {
-      if (s != QMqttClient::Disconnected)
-        return;
-
-      disconnect(*conn);
-      delete conn;
-      m_reconnectPending = false;
-
-      if (!m_userWantsOpen)
-        return;
-
-      (void)open(QIODevice::ReadOnly);
-    });
 
   m_client.disconnectFromHost();
 }

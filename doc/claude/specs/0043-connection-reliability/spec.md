@@ -96,33 +96,28 @@ retryable while dialing. Driver drops additionally never end the session (see R2
 - Modbus dials asynchronously (timer-driven retries mirroring Network; RTU one attempt);
   the nested QEventLoop/msleep machinery is gone.
 
+## Register round 5 (2026-08-04 night): the remaining code gaps landed
+
+- Modbus config-change auto-reconnect: endpoint edits (host, port, protocol, serial
+  parameters) on a live or dialing driver reopen after a 500 ms debounce, mirroring
+  Network's `m_reopenTimer`; `close()` cancels the pending reopen so a disconnect is final.
+- USB iso drain no longer poll-sleeps the GUI: `cancelAndDrainTransfers` waits on a
+  condition variable the transfer-completion callbacks wake (atomic-guarded, so the steady
+  state costs one load); the 2 s deadline survives only as the dead-device safety net.
+- Audio registers miniaudio's notification callback: a backend-initiated stop (device
+  yanked, exclusive-mode steal, fatal xrun) disconnects the device with a queued box
+  instead of streaming silence; `closeDevice()` disarms before `ma_device_uninit` so
+  teardown's own stop notification never re-enters.
+- HID `close()` emits `configurationChanged` (symmetric with USB/Modbus/CANBus).
+- MQTT settle-then-redial moved into `onStateChanged` (Disconnected + `m_reconnectPending`);
+  the per-call heap `QMetaObject::Connection*` and its leak are gone.
+- `linkState()` reports `connecting` while a dial is in flight (connected outranks it in a
+  multi-source session); `io.getStatus` mirrors it in linkState, the description, and a
+  "Connecting via X" summary branch. `api-schema.json` carries the new description text —
+  needs the maintainer's in-app schema re-dump before CI's `--check-snapshot` gate.
+
 ## Deferred gap register (still open)
 
-- Modbus config-change auto-reconnect (Network has it; MQTT always did).
-- USB `cancelAndDrainTransfers` 2 s GUI sleep (iso mode); Audio backend-stop detection;
-  HID `close()` missing `configurationChanged`; MQTT reconnect `Connection*` leak;
-  `linkState()`/`io.getStatus` not exposing the connecting state (API surface, maintainer
-  schema dump required).
-
-- **USB/HID/CANBus/Process `open()` synchronous modals** — mid-open-stack modals remain in
-  USB (4 sites + endpoint activation), HID (1), CANBus open-path helpers, Process (2).
-  Convert to queued boxes like UART/Network/MQTT.
-- **Process Launch-mode**: `onProcessFinished`/`onProcessError` raise the modal *before*
-  scheduling the disconnect (state lies while the box is up); `waitForStarted(3000)` blocks
-  the GUI; NamedPipe `isOpen()` reads true during the dial (needs a real connected flag +
-  `isConnecting()` override).
-- **Modbus**: nested `QEventLoop` connect window is still live UI (reentrancy bounded by
-  `isConnecting()`+toggle-abort now, but a full async dial like Network's is the end state).
-- **USB**: `cancelAndDrainTransfers` can sleep the GUI up to 2 s in iso mode; device unplug
-  zeroes the selection before the read loop reports.
-- **Audio**: a backend-stopped stream whose device still enumerates is undetected (no
-  miniaudio stop callback registered).
-- **HID `close()`** never emits `configurationChanged` (asymmetric with USB/Modbus/CANBus).
-- **MQTT** `scheduleReconnectIfActive` leaks a heap `QMetaObject::Connection*` if the driver
-  dies with a reconnect pending.
-- **`linkState()`** still reports only connected/idle; decided against adding "connecting"
-  this pass because it is a documented API surface — revisit deliberately if ground-station
-  UX needs it.
 - **Trial-expiry mid-session** leaves the sealed token valid until the next server verdict
   or restart (named as intended grace behavior; keep deliberate).
 

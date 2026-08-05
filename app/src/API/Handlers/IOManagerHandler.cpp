@@ -182,10 +182,11 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
     QStringLiteral("Returns the current connection state: isConnected, paused, "
                    "busType + busTypeLabel, configurationOk (true when the active "
                    "bus has enough config to call io.connect), readOnly/readWrite "
-                   "capability flags and linkState (connected or idle). Call this "
-                   "first when the user reports a connection issue. Reconnection is "
-                   "each driver's own business, so no attempt counter is reported: "
-                   "poll isConnected to watch a link that keeps dropping."),
+                   "capability flags and linkState (connected, connecting or idle; "
+                   "connecting means a dial is in flight). Call this first when the "
+                   "user reports a connection issue. Reconnection is each driver's "
+                   "own business, so no attempt counter is reported: poll "
+                   "isConnected to watch a link that keeps dropping."),
     emptySchema,
     &getStatus);
 
@@ -414,6 +415,9 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
     summary = QStringLiteral("Connected via %1%2.")
                 .arg(API::EnumLabels::busTypeLabel(busInt))
                 .arg(paused ? QStringLiteral(" (paused)") : QString());
+  else if (link == QStringLiteral("connecting"))
+    summary = QStringLiteral("Connecting via %1 (dial in flight).")
+                .arg(API::EnumLabels::busTypeLabel(busInt));
   else if (!ok)
     summary = QStringLiteral("Not connected. The %1 driver is not fully "
                              "configured yet.")

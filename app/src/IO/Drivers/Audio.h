@@ -168,6 +168,7 @@ private slots:
   void generateLists();
   void configureInput();
   void configureOutput();
+  void onBackendStopped();
   void processInputBuffer();
   void refreshAudioDevices();
   void syncInputParameters();
@@ -188,6 +189,7 @@ private:
 
   void handleCallback(void* output, const void* input, ma_uint32 frameCount);
   static void callback(ma_device* device, void* output, const void* input, ma_uint32 frameCount);
+  static void notificationCallback(const ma_device_notification* notification);
 
   void applyPlatformAudioConfig();
   void configureCaptureFormat(QIODevice::OpenMode mode);
@@ -234,6 +236,8 @@ private:
 
   bool m_sampleClockValid;
   CapturedData::SteadyTimePoint m_nextSampleTime;
+
+  std::atomic<bool> m_stopNotifyArmed;
 
   // code-verify off
   // Written once in open() before the RT thread starts, then read-only; there are no concurrent

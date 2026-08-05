@@ -224,13 +224,16 @@ int IO::ConnectionManager::connectedDeviceCount() const
 }
 
 /**
- * @brief Reports the link as connected or idle. The connecting and retrying states went away with
- *        the orchestration flows: a synchronous open is over by the time anyone can ask.
+ * @brief Reports the link as connected, connecting or idle. A live session outranks a device
+ *        still dialing beside it (multi-source), so connected wins over connecting.
  */
 QString IO::ConnectionManager::linkState() const
 {
   if (isConnected())
     return QStringLiteral("connected");
+
+  if (anyDeviceConnecting())
+    return QStringLiteral("connecting");
 
   return QStringLiteral("idle");
 }

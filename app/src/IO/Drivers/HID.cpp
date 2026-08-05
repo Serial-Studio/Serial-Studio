@@ -107,6 +107,7 @@ void IO::Drivers::HID::close()
 {
   cleanupDevice();
   Q_EMIT deviceInfoChanged();
+  Q_EMIT configurationChanged();
 }
 
 /**

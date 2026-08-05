@@ -37,6 +37,7 @@
 static constexpr int kTcpConnectAttempts  = 10;
 static constexpr int kTcpConnectTimeoutMs = 15000;
 static constexpr int kTcpConnectBackoffMs = 300;
+static constexpr int kReopenDebounceMs    = 500;
 
 #include "AppState.h"
 #include "DataModel/Frame.h"
@@ -188,45 +189,45 @@ IO::Drivers::Modbus::Modbus()
 
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
+  m_reopenTimer.setSingleShot(true);
+  m_reopenTimer.setInterval(kReopenDebounceMs);
   m_dialRetryTimer.setSingleShot(true);
   m_dialRetryTimer.setInterval(kTcpConnectBackoffMs);
   m_dialTimeoutTimer.setSingleShot(true);
   m_dialTimeoutTimer.setInterval(kTcpConnectTimeoutMs);
+  connect(&m_reopenTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::reopenAfterConfigChange);
   connect(&m_dialRetryTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::startDialAttempt);
   connect(&m_dialTimeoutTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::onDialTimeout);
 
-  connect(this,
-          &IO::Drivers::Modbus::protocolIndexChanged,
-          this,
-          &IO::Drivers::Modbus::configurationChanged);
-  connect(this,
-          &IO::Drivers::Modbus::serialPortIndexChanged,
-          this,
-          &IO::Drivers::Modbus::configurationChanged);
-  connect(
-    this, &IO::Drivers::Modbus::hostChanged, this, &IO::Drivers::Modbus::configurationChanged);
-  connect(
-    this, &IO::Drivers::Modbus::portChanged, this, &IO::Drivers::Modbus::configurationChanged);
+  wireConfigurationSignals();
+}
+
+/**
+ * @brief Forwards every setting signal into configurationChanged, and the endpoint-affecting
+ *        subset (host, port, protocol, serial parameters) into the live-reopen debounce.
+ */
+void IO::Drivers::Modbus::wireConfigurationSignals()
+{
+  static constexpr void (Modbus::* kEndpointSignals[])() = {&Modbus::hostChanged,
+                                                            &Modbus::portChanged,
+                                                            &Modbus::baudRateChanged,
+                                                            &Modbus::parityIndexChanged,
+                                                            &Modbus::dataBitsIndexChanged,
+                                                            &Modbus::stopBitsIndexChanged,
+                                                            &Modbus::protocolIndexChanged,
+                                                            &Modbus::serialPortIndexChanged};
+
+  for (const auto signal : kEndpointSignals) {
+    connect(this, signal, this, &IO::Drivers::Modbus::scheduleReopenIfActive);
+    connect(this, signal, this, &IO::Drivers::Modbus::configurationChanged);
+  }
+
   connect(this,
           &IO::Drivers::Modbus::slaveAddressChanged,
           this,
           &IO::Drivers::Modbus::configurationChanged);
   connect(this,
           &IO::Drivers::Modbus::pollIntervalChanged,
-          this,
-          &IO::Drivers::Modbus::configurationChanged);
-  connect(
-    this, &IO::Drivers::Modbus::baudRateChanged, this, &IO::Drivers::Modbus::configurationChanged);
-  connect(this,
-          &IO::Drivers::Modbus::parityIndexChanged,
-          this,
-          &IO::Drivers::Modbus::configurationChanged);
-  connect(this,
-          &IO::Drivers::Modbus::dataBitsIndexChanged,
-          this,
-          &IO::Drivers::Modbus::configurationChanged);
-  connect(this,
-          &IO::Drivers::Modbus::stopBitsIndexChanged,
           this,
           &IO::Drivers::Modbus::configurationChanged);
 }
@@ -250,6 +251,7 @@ IO::Drivers::Modbus::~Modbus()
 void IO::Drivers::Modbus::close()
 {
   m_connecting = false;
+  m_reopenTimer.stop();
   m_dialRetryTimer.stop();
   m_dialTimeoutTimer.stop();
   doClose();
@@ -523,6 +525,30 @@ void IO::Drivers::Modbus::failDial(const QString& error)
 void IO::Drivers::Modbus::onDialTimeout()
 {
   failDial(tr("Connection attempt timed out"));
+}
+
+/**
+ * @brief Debounces a reopen while the link is live so an endpoint edit (host, port, protocol,
+ *        serial parameters) takes effect without a manual disconnect/reconnect cycle. A closed
+ *        driver stays closed: configuration edits never dial on their own.
+ */
+void IO::Drivers::Modbus::scheduleReopenIfActive()
+{
+  if (!isOpen() && !isConnecting())
+    return;
+
+  m_reopenTimer.start();
+}
+
+/**
+ * @brief Applies a debounced endpoint change by redialing with the new configuration.
+ */
+void IO::Drivers::Modbus::reopenAfterConfigChange()
+{
+  if (!isOpen() && !isConnecting())
+    return;
+
+  (void)open(QIODevice::ReadWrite);
 }
 
 //--------------------------------------------------------------------------------------------------

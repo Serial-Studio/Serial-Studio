@@ -22,9 +22,9 @@
 
 #include "IO/Drivers/USB.h"
 
+#include <chrono>
 #include <cstring>
 #include <QApplication>
-#include <QElapsedTimer>
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QMetaObject>
@@ -48,7 +48,6 @@ constexpr int kIsoNumTransfers           = 8;
 constexpr int kIsoPacketsPerTransfer     = 8;
 constexpr int kHotplugFallbackIntervalMs = 2000;
 constexpr int kIsoDrainTimeoutMs         = 2000;
-constexpr int kIsoDrainPollMs            = 5;
 constexpr int kMaxControlLength          = 4096;
 
 /**
@@ -86,6 +85,7 @@ IO::Drivers::USB::USB()
   , m_eventLoopRunning(false)
   , m_isoInFlight(0)
   , m_controlInFlight(false)
+  , m_drainWaiting(false)
   , m_activeInEp(0)
   , m_activeOutEp(0)
   , m_activeInEpType(0)
@@ -990,9 +990,10 @@ void IO::Drivers::USB::stopReadThread()
 }
 
 /**
- * @brief Cancels every iso transfer and pumps the event loop until all callbacks have reported
- * back. libusb forbids freeing an in-flight transfer, so this must drain to zero before the event
- * thread is stopped; the bounded deadline is a safety net, not the expected exit.
+ * @brief Cancels every iso transfer and waits until all callbacks have reported back. libusb
+ * forbids freeing an in-flight transfer, so this must drain to zero before the pool is freed;
+ * the completion callbacks wake the wait as soon as the last one lands, and the bounded
+ * deadline covers a dead device whose cancellations never complete.
  */
 void IO::Drivers::USB::cancelAndDrainTransfers()
 {
@@ -1002,12 +1003,31 @@ void IO::Drivers::USB::cancelAndDrainTransfers()
   if (m_controlTransfer)
     libusb_cancel_transfer(m_controlTransfer);
 
-  QElapsedTimer timer;
-  timer.start();
-  while ((m_isoInFlight.load(std::memory_order_acquire) > 0
-          || m_controlInFlight.load(std::memory_order_acquire))
-         && timer.elapsed() < kIsoDrainTimeoutMs)
-    QThread::msleep(kIsoDrainPollMs);
+  m_drainWaiting.store(true, std::memory_order_release);
+  {
+    std::unique_lock<std::mutex> lock(m_drainMutex);
+    (void)m_drainCv.wait_for(lock, std::chrono::milliseconds(kIsoDrainTimeoutMs), [this] {
+      return m_isoInFlight.load(std::memory_order_acquire) == 0
+          && !m_controlInFlight.load(std::memory_order_acquire);
+    });
+  }
+  m_drainWaiting.store(false, std::memory_order_release);
+}
+
+/**
+ * @brief Wakes a drain wait once an in-flight counter dropped (event thread). The empty lock
+ * before notify is what closes the race with a waiter that checked the counters but has not
+ * gone to sleep yet; the steady state (no drain pending) costs one atomic load.
+ */
+void IO::Drivers::USB::notifyDrainWaiter()
+{
+  if (!m_drainWaiting.load(std::memory_order_acquire))
+    return;
+
+  {
+    std::lock_guard<std::mutex> lock(m_drainMutex);
+  }
+  m_drainCv.notify_all();
 }
 
 /**
@@ -1288,12 +1308,14 @@ void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer
 
   if (!self->m_running.load(std::memory_order_relaxed)) {
     self->m_isoInFlight.fetch_sub(1, std::memory_order_acq_rel);
+    self->notifyDrainWaiter();
     return;
   }
 
   if (libusb_submit_transfer(transfer) < 0) {
     self->m_running.store(false, std::memory_order_release);
     self->m_isoInFlight.fetch_sub(1, std::memory_order_acq_rel);
+    self->notifyDrainWaiter();
     QMetaObject::invokeMethod(self, "onReadError", Qt::QueuedConnection);
   }
 }
@@ -1484,6 +1506,7 @@ void LIBUSB_CALL IO::Drivers::USB::controlTransferCallback(libusb_transfer* tran
   SS_ASSERT(self != nullptr, return);
   SS_ASSERT(transfer->buffer != nullptr, {
     self->m_controlInFlight.store(false, std::memory_order_release);
+    self->notifyDrainWaiter();
     return;
   });
 
@@ -1511,6 +1534,7 @@ void LIBUSB_CALL IO::Drivers::USB::controlTransferCallback(libusb_transfer* tran
     Qt::QueuedConnection);
 
   self->m_controlInFlight.store(false, std::memory_order_release);
+  self->notifyDrainWaiter();
 }
 
 //--------------------------------------------------------------------------------------------------

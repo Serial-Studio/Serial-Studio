@@ -1,18 +1,18 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1599,
+  "total": 1600,
   "files": 198,
   "buckets": {
     "root": 149,
     "accessor": 68,
     "ctor-capture": 93,
     "deferred": 20,
-    "static-cache": 1152,
+    "static-cache": 1153,
     "loose": 117
   },
   "per_class": {
-    "IO::ConnectionManager": 209,
+    "IO::ConnectionManager": 210,
     "DataModel::ProjectModel": 208,
     "AppState": 136,
     "CommandRegistry": 98,
@@ -1303,13 +1303,13 @@
       }
     },
     "app/src/IO/Drivers/Audio.cpp": {
-      "total": 3,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 3,
+        "static-cache": 4,
         "loose": 0
       }
     },

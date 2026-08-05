@@ -209,12 +209,15 @@ private slots:
   void refreshSerialPorts();
   void onDialTimeout();
   void startDialAttempt();
+  void scheduleReopenIfActive();
+  void reopenAfterConfigChange();
   void onStateChanged(QModbusDevice::State state);
   void onErrorOccurred(QModbusDevice::Error error);
 
 private:
   void doClose();
   void handleDialSetback();
+  void wireConfigurationSignals();
   void failDial(const QString& error);
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] QString buildFrameParser() const;
@@ -228,6 +231,7 @@ private:
   bool m_connecting;
   int m_dialAttempts;
   QString m_dialTarget;
+  QTimer m_reopenTimer;
   QTimer m_dialRetryTimer;
   QTimer m_dialTimeoutTimer;
   QTimer* m_pollTimer;

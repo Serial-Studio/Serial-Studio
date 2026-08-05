@@ -47,9 +47,14 @@ describe a design that is no longer in the tree.
   `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
   idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
   Network's timer-driven dial (10 refusal retries at 300 ms, 15 s timeout, `close()`
-  cancels; RTU gets one attempt). Process reports the launch phase and the pipe's
-  wait-for-writer window as connecting instead of faking an open channel. `linkState()`
-  still reports only `connected` or `idle`; an API client polls `isConnected`.
+  cancels; RTU gets one attempt) and its 500 ms endpoint-edit reopen debounce (host, port,
+  protocol, serial parameters — a closed driver never dials on its own). Process reports
+  the launch phase and the pipe's wait-for-writer window as connecting instead of faking an
+  open channel. Audio arms miniaudio's stopped notification while open: a backend-initiated
+  stop (device yanked, exclusive-mode steal) disconnects the device instead of streaming
+  silence, and `closeDevice()` disarms it before `ma_device_uninit` so teardown's own stop
+  never re-enters. `linkState()` reports `connected`, `connecting` or `idle` (connected
+  wins when a live session and a dialing device coexist); `io.getStatus` mirrors it.
 - **Network TCP dials asynchronously.** `open()` starts `connectToHost()` and returns true
   ("attempt started"); a refused dial retries up to 10 times with a 300 ms backoff (a server a
   control-script onConnect() just launched needs seconds to listen), a 15 s per-attempt timer
