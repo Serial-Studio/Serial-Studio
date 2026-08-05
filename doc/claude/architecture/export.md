@@ -73,3 +73,43 @@
     `INSERT` — **never `INSERT OR IGNORE`** — `timestamp_ns` collisions are routine.
   - Break ts ties with `reading_id` in ORDER BY / MIN/MAX subqueries. `DISTINCT timestamp_ns`
     stats undercount on collisions.
+
+## Reproducibility Verification (spec 0044)
+
+- **Capture-side fingerprints.** `ExportWorker` keeps two incremental SHA-256 hashes on the
+  worker thread: raw chunks (in `writeRawBytes`, insertion = `raw_id` order) and readings
+  rows (in `bindAndInsertReading`), over the canonical byte layout in
+  `Sessions::hashRawChunk` / `hashReadingRow` (`Export.h` free functions — the verifier
+  reuses them, never re-derive the layout). `finalizeSession()` stamps them into the
+  session row together with `app_version`, `capture_format`
+  (`DatabaseManager::kCaptureFormatVersion`), `repro_class` (JSON: controlScript /
+  transformsPresent / tablesPresent / virtualDatasets), and the link-loss counters sampled
+  at 1 Hz on the main thread (`Export::sampleSessionHealth`, delta-accumulated,
+  decrease = reader reset). All new `sessions` columns are nullable; NULL means legacy
+  capture. `PRAGMA user_version = 1`; migration is `migrateSessionsTable` (additive ALTERs,
+  same pattern as `migrateColumnsTable`).
+- **Verification is a child process** (`--verify-session <db> [--verify-session-id N]
+  [--verify-keep-regen]`, pair with `--headless`): `CLI::runSessionVerification()` builds
+  the pinned composition root (benchmark pattern) and runs `Sessions::Verifier` — archive
+  opened read-only; integrity re-hash; classification check; then re-parse: archived
+  `project_json` into `ProjectModel`, one `FrameReader` per archived device from
+  `ConnectionManager::buildFrameConfig`, chunks fed in `raw_id` order into
+  `FrameBuilder::hotpathRxSourceFrame`, re-recorded by the **untouched** `Sessions::Export`
+  into a temp DB (`DatabaseManager::setDbPathOverride`), with blocking `flushWorker()`
+  every 4096 frames so the re-record never drops. Diff = per-uid lockstep walk ordered by
+  `(timestamp_ns, reading_id)` (prefix-covered by the existing per-uid index; the integrity
+  re-hash stays global `reading_id` order because it must mirror capture insertion order),
+  bit-exact doubles (`std::bit_cast` compare; NaN folds to 0.0 in the digest since SQLite
+  round-trips NaN as NULL), raw mismatch = parse stage,
+  final-only = transform stage; virtual datasets and table-fed finals are classified, never
+  compared. Verdicts: `reproduced` / `diverged` / `partial` / `not_verifiable` / `error`
+  (JSON on stdout; process exit is binary 0/1). The only archive write is one appended
+  `verifications` row (legacy archives get just that table created — never migrated).
+- **Consumers.** `DatabaseManager::verifySession` spawns the child via QProcess (async,
+  never blocks GUI); `latestVerification`/`latestVerdicts` read verdicts back (short-lived
+  read-only connections); `sessions.verify` / `sessions.getVerification` are the API verbs;
+  the Explorer shows a Verify action (SessionDetail) and a Verified column (SessionList).
+  Count mismatches are reported as divergence annotated with the capture-time
+  drop/overflow stats — never silently realigned. Known gap: `FrameConsumer::enqueueData`
+  drops (consumer queue full at capture time) are invisible; only FrameReader-level
+  drops/overflow are persisted.

@@ -464,8 +464,10 @@ MDF4::Export::Export()
   , m_isOpen(false)
   , m_exportEnabled(false)
   , m_persistSettings(true)
+  // code-verify off: ctor captures, invisible to the AST scan through the #ifdef-split list
   , m_appState(&AppState::instance())
   , m_frameBuilder(&DataModel::FrameBuilder::instance())
+// code-verify on
 #else
   : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true)
 #endif

@@ -21,6 +21,7 @@
 
 #include "Misc/CLI.h"
 
+#include <cstdio>
 #include <cstring>
 #include <QApplication>
 #include <QFile>
@@ -35,6 +36,7 @@
 #include "AppInfo.h"
 #include "AppState.h"
 #include "Benchmark/HotpathBenchmark.h"
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
@@ -64,6 +66,7 @@
 #  include "Misc/ShortcutGenerator.h"
 #  include "Misc/ThemeManager.h"
 #  include "Sessions/Export.h"
+#  include "Sessions/Verifier.h"
 #endif
 
 namespace Misc {
@@ -133,6 +136,9 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.activateOpt);
   m_parser.addOption(m_opts.deactivateOpt);
   m_parser.addOption(m_opts.selftestOfflineOpt);
+  m_parser.addOption(m_opts.verifySessionOpt);
+  m_parser.addOption(m_opts.verifySessionIdOpt);
+  m_parser.addOption(m_opts.verifyKeepRegenOpt);
   m_parser.addOption(m_opts.validateGuardsOpt);
   m_parser.addOption(m_opts.modbusRtuOpt);
   m_parser.addOption(m_opts.modbusTcpOpt);
@@ -192,6 +198,7 @@ bool CLI::isCliEarlyExit(int argc, char** argv)
                                        "--deactivate",
                                        "--selftest-offline-license",
                                        "--validate-guards",
+                                       "--verify-session",
                                        "--dump-api-schema"};
 
   for (const char* flag : kFlags)
@@ -249,6 +256,11 @@ CLI::ProcessResult CLI::process(QApplication& app)
 #ifdef SS_INAPP_TESTS
   if (m_parser.isSet(m_opts.selftestOpt) || m_parser.isSet(m_opts.selftestSuiteOpt))
     return runSelfTests();
+#endif
+
+#ifdef BUILD_COMMERCIAL
+  if (m_parser.isSet(m_opts.verifySessionOpt))
+    return runSessionVerification();
 #endif
 
 #ifdef BUILD_COMMERCIAL
@@ -341,6 +353,44 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
   const int rc = Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Runs the spec-0044 verifier and exits: builds the pinned module order (benchmark
+ *        pattern) plus the headless session wiring, since the GUI wiring phase never runs
+ *        here. Exit code is binary (0 = reproduced); the verdict is in the JSON.
+ */
+CLI::ProcessResult CLI::runSessionVerification()
+{
+  Sessions::Verifier::Options options;
+  options.dbPath          = m_parser.value(m_opts.verifySessionOpt).trimmed();
+  options.keepRegenerated = m_parser.isSet(m_opts.verifyKeepRegenOpt);
+
+  if (m_parser.isSet(m_opts.verifySessionIdOpt)) {
+    bool ok       = false;
+    const int val = m_parser.value(m_opts.verifySessionIdOpt).toInt(&ok);
+    if (!ok || val < 0) {
+      std::fputs("{\"verdict\":\"error\",\"error\":\"invalid --verify-session-id\"}\n", stdout);
+      std::fflush(stdout);
+      return ProcessResult::ExitFailure;
+    }
+
+    options.sessionId = val;
+  }
+
+  Misc::ModuleManager::instantiateCoreModules();
+  Misc::ModuleManager::setupHeadlessSessionConnections();
+
+  Sessions::Verifier verifier(options);
+  const int code = verifier.run();
+
+  std::fputs(QJsonDocument(verifier.report()).toJson(QJsonDocument::Indented).constData(), stdout);
+  std::fflush(stdout);
+
+  return code == Sessions::Verifier::kExitReproduced ? ProcessResult::ExitSuccess
+                                                     : ProcessResult::ExitFailure;
+}
+#endif
 
 /**
  * @brief Dumps the API command registry to a JSON file for the SDK generator.

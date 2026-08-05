@@ -422,17 +422,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="485"/>
+        <location filename="../../src/API/Server.cpp" line="489"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCP सर्वर प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="532"/>
+        <location filename="../../src/API/Server.cpp" line="536"/>
         <source>Allow External API Connections?</source>
         <translation>बाहरी API कनेक्शन की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="533"/>
+        <location filename="../../src/API/Server.cpp" line="537"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -441,32 +441,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 इसे केवल विश्वसनीय नेटवर्क पर सक्षम करें। अविश्वसनीय क्लाइंट लाइव डेटा पढ़ सकते हैं या आपके डिवाइस को कमांड भेज सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="597"/>
+        <location filename="../../src/API/Server.cpp" line="601"/>
         <source>Unable to restart API TCP server</source>
         <translation>API TCP सर्वर पुनः प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="707"/>
+        <location filename="../../src/API/Server.cpp" line="711"/>
         <source>Allow API device control?</source>
         <translation>API डिवाइस नियंत्रण की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="708"/>
+        <location filename="../../src/API/Server.cpp" line="712"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio की लोकल API का उपयोग करने वाला एक प्रोग्राम कनेक्टेड डिवाइस को डेटा भेजने का अनुरोध कर रहा है। API क्लाइंट को डिवाइस पर लिखने की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="711"/>
+        <location filename="../../src/API/Server.cpp" line="715"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1598"/>
+        <location filename="../../src/API/Server.cpp" line="1602"/>
         <source>API server</source>
         <translation>API सर्वर</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1598"/>
+        <location filename="../../src/API/Server.cpp" line="1602"/>
         <source>Invalid pending connection</source>
         <translation>अमान्य लंबित कनेक्शन</translation>
     </message>
@@ -2000,7 +2000,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="268"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="272"/>
         <source>Data pipeline</source>
         <translation>डेटा पाइपलाइन</translation>
     </message>
@@ -2037,22 +2037,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Built-in पार्सर (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="294"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="298"/>
         <source>Lua parser (numeric)</source>
         <translation>Lua पार्सर (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="301"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="305"/>
         <source>JavaScript parser (numeric)</source>
         <translation>JavaScript पार्सर (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="312"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="316"/>
         <source>Lua parser (mixed)</source>
         <translation>Lua पार्सर (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="319"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="323"/>
         <source>JavaScript parser (mixed)</source>
         <translation>JavaScript पार्सर (मिश्रित)</translation>
     </message>
@@ -2061,12 +2061,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Built-in + डेटा एक्सपोर्ट (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="342"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="346"/>
         <source>Lua + data export (numeric)</source>
         <translation>Lua + डेटा एक्सपोर्ट (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="349"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="353"/>
         <source>JavaScript + data export (numeric)</source>
         <translation>JavaScript + डेटा एक्सपोर्ट (संख्यात्मक)</translation>
     </message>
@@ -2075,12 +2075,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Built-in + डेटा एक्सपोर्ट (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="360"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="364"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + डेटा एक्सपोर्ट (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="367"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="371"/>
         <source>JavaScript + data export (mixed)</source>
         <translation>JavaScript + डेटा एक्सपोर्ट (मिश्रित)</translation>
     </message>
@@ -2089,159 +2089,159 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Built-in + डैशबोर्ड (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="385"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="389"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + डैशबोर्ड (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>100 K frames</source>
         <translation>100 K फ़्रेम</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>250 K frames</source>
         <translation>250 K फ़्रेम</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>500 K frames</source>
         <translation>500 K फ़्रेम</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>1 M frames</source>
         <translation>1 M फ़्रेम</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>1 second</source>
         <translation>1 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>2 seconds</source>
         <translation>2 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>5 seconds</source>
         <translation>5 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>10 seconds</source>
         <translation>10 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="208"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="212"/>
         <source>Serial Studio %1 - Hotpath Benchmark</source>
         <translation>Serial Studio %1 - Hotpath बेंचमार्क</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="210"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="214"/>
         <source>%1 (%2), workload: %3 frames minimum, %4 s minimum</source>
         <translation>%1 (%2), वर्कलोड: न्यूनतम %3 फ्रेम्स, न्यूनतम %4 s</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="216"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="220"/>
         <source>Build: %1</source>
         <translation>बिल्ड: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Pipeline</source>
         <translation>पाइपलाइन</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Throughput</source>
         <translation>थ्रूपुट</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Target</source>
         <translation>लक्ष्य</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Time</source>
         <translation>समय</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Result</source>
         <translation>परिणाम</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="229"/>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="233"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="239"/>
         <source>%1 frames/s</source>
         <translation>%1 फ़्रेम/सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="229"/>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="231"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="233"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
         <source>n/a</source>
         <translation>उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="231"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
         <source>Pass</source>
         <translation>पास</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="231"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
         <source>Fail</source>
         <translation>फेल</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="237"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="241"/>
         <source>%1 s</source>
         <translation>%1 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="242"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="246"/>
         <source>Peak memory: %1</source>
         <translation>पीक मेमोरी: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="292"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="296"/>
         <source>Built-In parser (numeric)</source>
         <translation>Built-In पार्सर (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="310"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="314"/>
         <source>Built-In parser (mixed)</source>
         <translation>Built-In पार्सर (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="335"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="339"/>
         <source>Built-In + data export (numeric)</source>
         <translation>Built-In + डेटा एक्सपोर्ट (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="358"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="362"/>
         <source>Built-In + data export (mixed)</source>
         <translation>Built-In + डेटा एक्सपोर्ट (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="383"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="387"/>
         <source>Built-In + dashboard (numeric)</source>
         <translation>Built-In + डैशबोर्ड (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="392"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="396"/>
         <source>JavaScript + dashboard (numeric)</source>
         <translation>JavaScript + डैशबोर्ड (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="401"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="405"/>
         <source>Built-In + dashboard (mixed)</source>
         <translation>Built-In + डैशबोर्ड (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="612"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="623"/>
         <source>%1 MiB</source>
         <translation>%1 MiB</translation>
     </message>
@@ -2250,12 +2250,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">बिल्ट-इन + डैशबोर्ड (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="403"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="407"/>
         <source>Lua + dashboard (mixed)</source>
         <translation>Lua + डैशबोर्ड (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="410"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="414"/>
         <source>JavaScript + dashboard (mixed)</source>
         <translation>JavaScript + डैशबोर्ड (मिश्रित)</translation>
     </message>
@@ -7242,133 +7242,133 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="466"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="477"/>
         <source>Lock Project</source>
         <translation>प्रोजेक्ट लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="467"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="469"/>
         <source>Choose a password to lock the project:</source>
         <translation>प्रोजेक्ट लॉक करने के लिए पासवर्ड चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="477"/>
         <source>Confirm the password:</source>
         <translation>पासवर्ड की पुष्टि करें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="480"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="482"/>
         <source>Passwords do not match</source>
         <translation>पासवर्ड मेल नहीं खाते</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="483"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>दर्ज किए गए दोनों पासवर्ड मेल नहीं खाते। प्रोजेक्ट लॉक नहीं किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="520"/>
         <source>Unlock Project</source>
         <translation>प्रोजेक्ट अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="519"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="521"/>
         <source>Enter the project password:</source>
         <translation>प्रोजेक्ट पासवर्ड दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="529"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="531"/>
         <source>Incorrect password</source>
         <translation>गलत पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="532"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>दर्ज किया गया पासवर्ड प्रोजेक्ट फ़ाइल में संग्रहीत पासवर्ड से मेल नहीं खाता।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="564"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="566"/>
         <source>New Project</source>
         <translation>नया प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="617"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="619"/>
         <source>Samples</source>
         <translation>सैंपल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1146"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1148"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT प्रकाशक बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1244"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1246"/>
         <source>Rename Widget</source>
         <translation>विजेट का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1245"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1247"/>
         <source>Display title (empty restores the original):</source>
         <translation>प्रदर्शन शीर्षक (खाली करने पर मूल बहाल होगा):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1579"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1581"/>
         <source>Change Project Title</source>
         <translation>प्रोजेक्ट शीर्षक बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1605"/>
         <source>Edit Control Script</source>
         <translation>कंट्रोल स्क्रिप्ट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1620"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1622"/>
         <source>Change Point Count</source>
         <translation>पॉइंट संख्या बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1643"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1645"/>
         <source>Change Plot Time Range</source>
         <translation>प्लॉट टाइम रेंज बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1669"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1671"/>
         <source>Toggle Freeze</source>
         <translation>फ्रीज टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1686"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>परिवर्तन-संचालित ट्रांसफॉर्म्स टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1712"/>
         <source>Change Frame Start Sequence</source>
         <translation>फ्रेम स्टार्ट सीक्वेंस बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1731"/>
         <source>Change Frame End Sequence</source>
         <translation>फ्रेम एंड सीक्वेंस बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1748"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1750"/>
         <source>Change Checksum</source>
         <translation>चेकसम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1767"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1769"/>
         <source>Change Frame Detection</source>
         <translation>फ्रेम डिटेक्शन बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1814"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1816"/>
         <source>Change Decoder</source>
         <translation>डिकोडर बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1833"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1835"/>
         <source>Toggle Hex Delimiters</source>
         <translation>हेक्स डिलीमिटर टॉगल करें</translation>
     </message>
@@ -7463,7 +7463,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="243"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="252"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="266"/>
         <source>Project error</source>
         <translation>प्रोजेक्ट त्रुटि</translation>
     </message>
@@ -7478,43 +7478,43 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>आपको कम से कम एक ग्रुप जोड़ना होगा!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="266"/>
         <source>You need to add at least one dataset!</source>
         <translation>आपको कम से कम एक डेटासेट जोड़ना होगा!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="314"/>
         <source>Your project needs a title</source>
         <translation>आपके प्रोजेक्ट को एक शीर्षक चाहिए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="314"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="316"/>
         <source>Add a group to get started</source>
         <translation>शुरू करने के लिए एक समूह जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="316"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="318"/>
         <source>Add a dataset to a group</source>
         <translation>किसी समूह में एक डेटासेट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="332"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>ट्री के शीर्ष पर प्रोजेक्ट व्यू खोलें और एक नाम दर्ज करें। आप किसी भी समय प्रोजेक्ट का नाम बदल सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="335"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>समूह डेटासेट को डैशबोर्ड विजेट में व्यवस्थित करते हैं। एक बनाने के लिए ऊपर टूलबार में समूह बटन का उपयोग करें, फिर उसमें डेटासेट जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="339"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>डेटासेट वे मान हैं जो डैशबोर्ड पर दिखाई देते हैं। ट्री में एक समूह चुनें और एक जोड़ने के लिए टूलबार में डेटासेट बटन का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="616"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="618"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="667"/>
         <source>Time</source>
         <translation>समय</translation>
     </message>
@@ -7535,20 +7535,20 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="454"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="455"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio प्रोजेक्ट फ़ाइलें (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1503"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="445"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="446"/>
         <source>Untitled Project</source>
         <translation>अनाम प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1519"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="601"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1521"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="603"/>
         <source>Device A</source>
         <translation>डिवाइस A</translation>
     </message>
@@ -7578,37 +7578,37 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>यह प्रोजेक्ट स्कीमा संस्करण %1 के साथ सेव किया गया था; वर्तमान संस्करण %2 है। किसी भी नए फ़ील्ड के लिए डिफ़ॉल्ट लागू किए गए हैं। अपग्रेड लॉक करने के लिए प्रोजेक्ट सेव करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="452"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="453"/>
         <source>Save Imported Project</source>
         <translation>आयातित प्रोजेक्ट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="654"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="656"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>मल्टी-सोर्स प्रोजेक्ट के लिए Pro लाइसेंस आवश्यक है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="655"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="657"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>इस प्रोजेक्ट में एकाधिक डेटा स्रोत हैं। केवल पहला स्रोत लोड किया गया है। मल्टी-सोर्स प्रोजेक्ट उपयोग करने के लिए Serial Studio Pro लाइसेंस आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="899"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="901"/>
         <source>Workspace IDs remapped on load</source>
         <translation>लोड करते समय वर्कस्पेस ID फिर से मैप किए गए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="900"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="902"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 कस्टम वर्कस्पेस ID नई आरक्षित ऑटो रेंज से ओवरलैप हो गईं और यूज़र रेंज में स्थानांतरित कर दी गईं। रीमैप को स्थायी बनाने के लिए प्रोजेक्ट सहेजें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1101"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1103"/>
         <source>Legacy frame parser function updated</source>
         <translation>लीगेसी फ़्रेम पार्सर फ़ंक्शन अपडेट किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1104"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>आपके प्रोजेक्ट में 'separator' आर्गुमेंट के साथ एक लीगेसी फ़्रेम पार्सर फ़ंक्शन का उपयोग किया गया था। इसे स्वचालित रूप से नए फ़ॉर्मेट में माइग्रेट कर दिया गया है।</translation>
     </message>
@@ -7987,10 +7987,10 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>नई साझा टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1944"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1971"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1922"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1946"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1992"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
@@ -8015,22 +8015,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>टेबल का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1922"/>
         <source>Rename Group</source>
         <translation>समूह का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1944"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1946"/>
         <source>Rename Dataset</source>
         <translation>डेटासेट का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1973"/>
         <source>Rename Data Source</source>
         <translation>डेटा स्रोत का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1992"/>
         <source>Rename Action</source>
         <translation>एक्शन का नाम बदलें</translation>
     </message>
@@ -8236,28 +8236,28 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>वर्कस्पेस डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="496"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="497"/>
         <source>Project file removed from disk</source>
         <translation>प्रोजेक्ट फ़ाइल डिस्क से हटा दी गई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="497"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="498"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 को किसी अन्य प्रोग्राम द्वारा डिलीट या रीनेम किया गया। इसे फिर से बनाने के लिए प्रोजेक्ट सेव करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="519"/>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="540"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="520"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="541"/>
         <source>Project file changed on disk</source>
         <translation>प्रोजेक्ट फ़ाइल डिस्क पर बदल गई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="520"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="521"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 को किसी अन्य प्रोग्राम द्वारा संशोधित किया गया। मेमोरी में मौजूद प्रोजेक्ट रखा गया; बाहरी बदलाव लोड करने के लिए फ़ाइल फिर से खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="536"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="537"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -8266,7 +8266,7 @@ Reload it and discard your unsaved changes?</source>
 इसे रीलोड करें और अपने अनसेव्ड बदलाव डिस्कार्ड करें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="538"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="539"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -8275,7 +8275,7 @@ Reload it?</source>
 इसे रीलोड करें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="569"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="570"/>
         <source>File save error</source>
         <translation>फ़ाइल सहेजने में त्रुटि</translation>
     </message>
@@ -8290,7 +8290,7 @@ Reload it?</source>
         <translation>आइटम डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="488"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="489"/>
         <source>File open error</source>
         <translation>फ़ाइल खोलने में त्रुटि</translation>
     </message>
@@ -11028,72 +11028,72 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="314"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="317"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="315"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
         <source>Network Socket</source>
         <translation>नेटवर्क सॉकेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="316"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
         <source>Audio</source>
         <translation>ऑडियो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="320"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
         <source>USB Device</source>
         <translation>USB डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="325"/>
         <source>HID Device</source>
         <translation>HID डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="326"/>
         <source>Process</source>
         <translation>प्रोसेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="327"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT सब्सक्राइबर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="755"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="758"/>
         <source>Your trial period has ended.</source>
         <translation>आपकी ट्रायल अवधि समाप्त हो गई है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="756"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="759"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio का उपयोग जारी रखने के लिए, कृपया अपना लाइसेंस सक्रिय करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1274"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1319"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>इस कनेक्शन प्रकार के लिए सक्रिय लाइसेंस या ट्रायल आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1275"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1320"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>इस डिवाइस प्रकार का उपयोग करने के लिए Serial Studio Pro सक्रिय करें या ट्रायल प्रारंभ करें।</translation>
     </message>
@@ -11129,67 +11129,77 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="588"/>
+        <source>Audio Device Stopped</source>
+        <translation>ऑडियो डिवाइस रोका गया</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="589"/>
+        <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
+        <translation>ऑडियो बैकएंड ने स्ट्रीम रोक दी। डिवाइस अनप्लग हो सकता है या किसी अन्य एप्लिकेशन द्वारा उपयोग में लिया जा सकता है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="825"/>
         <source>channels</source>
         <translation>चैनल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="828"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="878"/>
         <source> channels</source>
         <translation>चैनल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="976"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1026"/>
         <source>Unsigned 8-bit</source>
         <translation>Unsigned 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="977"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
         <source>Signed 16-bit</source>
         <translation>Signed 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="978"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1028"/>
         <source>Signed 24-bit</source>
         <translation>Signed 24-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1029"/>
         <source>Signed 32-bit</source>
         <translation>Signed 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1030"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1033"/>
         <source>Mono</source>
         <translation>मोनो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1034"/>
         <source>Stereo</source>
         <translation>स्टीरियो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1374"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1424"/>
         <source>Input Device</source>
         <translation>इनपुट डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1382"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1432"/>
         <source>Sample Rate</source>
         <translation>सैम्पल रेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1390"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1440"/>
         <source>Sample Format</source>
         <translation>सैम्पल फ़ॉर्मेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1398"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1448"/>
         <source>Channels</source>
         <translation>चैनल</translation>
     </message>
@@ -11318,7 +11328,7 @@ macOS पर CAN bus समर्थन सीमित है और तृत�
         <translation>कोई डिवाइस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="305"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="304"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN डिवाइस निर्माण विफल</translation>
     </message>
@@ -11552,12 +11562,12 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="174"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="175"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="178"/>
         <source>
 
 Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
@@ -11566,27 +11576,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="181"/>
         <source>Failed to open "%1"</source>
         <translation>"%1" खोलने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="288"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
         <source>HID Device Error</source>
         <translation>HID डिवाइस त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="290"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID डिवाइस डिस्कनेक्ट हो गया या गंभीर रीड त्रुटि आई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="398"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="399"/>
         <source>Select Device</source>
         <translation>डिवाइस चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="540"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="541"/>
         <source>HID Device</source>
         <translation>HID डिवाइस</translation>
     </message>
@@ -11778,32 +11788,32 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>ALPN प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="978"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT सदस्यता त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Topic "%1" की सदस्यता लेने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1225"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT क्लाइंट प्रमाणपत्र त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1235"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1244"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM फाइलें (*.pem *.crt *.cer *.key);;सभी फाइलें (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1261"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1270"/>
         <source>Select Client Certificate</source>
         <translation>क्लाइंट सर्टिफिकेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1269"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1278"/>
         <source>Select Private Key</source>
         <translation>प्राइवेट की चुनें</translation>
     </message>
@@ -11812,97 +11822,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">ब्रोकर ने कनेक्शन बंद कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="997"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>अमान्य MQTT प्रोटोकॉल संस्करण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="998"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1007"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>ब्रोकर ने कॉन्फ़िगर किए गए MQTT प्रोटोकॉल संस्करण को अस्वीकार कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1001"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
         <source>Client ID Rejected</source>
         <translation>Client ID अस्वीकृत</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1002"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1011"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>ब्रोकर ने Client ID को अस्वीकार कर दिया। एक अलग पहचानकर्ता आज़माएं।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1005"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT सर्वर अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1015"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>ब्रोकर वर्तमान में अनुपलब्ध है। बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
         <source>Authentication Error</source>
         <translation>प्रमाणीकरण त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1019"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>प्रदान की गई क्रेडेंशियल्स को ब्रोकर द्वारा अस्वीकार कर दिया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
         <source>Authorization Error</source>
         <translation>प्राधिकरण त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1023"/>
         <source>Account lacks permission for this operation.</source>
         <translation>खाते में इस ऑपरेशन के लिए अनुमति नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>Network or Transport Error</source>
         <translation>नेटवर्क या ट्रांसपोर्ट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>ब्रोकर से कनेक्ट करते समय नेटवर्क/ट्रांसपोर्ट लेयर समस्या।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>क्लाइंट सर्टिफिकेट कॉन्फ़िगर किया गया है: सत्यापित करें कि यह प्राइवेट की से मेल खाता है और ब्रोकर पर सक्रिय है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT प्रोटोकॉल उल्लंघन</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>ब्रोकर ने प्रोटोकॉल उल्लंघन की रिपोर्ट की और कनेक्शन बंद कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>एक MQTT 5 प्रोटोकॉल-स्तरीय त्रुटि हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
         <source>MQTT Error</source>
         <translation>MQTT त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>एक अप्रत्याशित MQTT त्रुटि हुई।</translation>
     </message>
@@ -11910,22 +11920,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="405"/>
         <source>Invalid Serial Port</source>
         <translation>अमान्य सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="448"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus आरंभीकरण विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="512"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus कनेक्शन विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="404"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="406"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>चयनित सीरियल पोर्ट "%1" अब उपलब्ध नहीं है। पोर्ट सूची रिफ्रेश करें और पुनः प्रयास करें।</translation>
     </message>
@@ -11934,84 +11944,84 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Modbus क्लाइंट ने कनेक्शन शुरू करने से मना कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="449"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Modbus डिवाइस बनाने में असमर्थ। अपना सिस्टम कॉन्फ़िगरेशन जांचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="516"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>"%1" से कनेक्ट नहीं हो सका। अपनी कनेक्शन सेटिंग्स जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="517"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="525"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="527"/>
         <source>Connection attempt timed out</source>
         <translation>कनेक्शन प्रयास टाइमआउट हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="663"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="664"/>
         <source>Even</source>
         <translation>सम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="665"/>
         <source>Odd</source>
         <translation>विषम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="666"/>
         <source>Space</source>
         <translation>स्पेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="667"/>
         <source>Mark</source>
         <translation>मार्क</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="719"/>
         <source>Holding Registers (0x03)</source>
         <translation>होल्डिंग रजिस्टर (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="720"/>
         <source>Input Registers (0x04)</source>
         <translation>इनपुट रजिस्टर (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="721"/>
         <source>Coils (0x01)</source>
         <translation>कॉइल (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="722"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Discrete Inputs (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="904"/>
         <source>No register groups configured</source>
         <translation>कोई रजिस्टर समूह कॉन्फ़िगर नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="905"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>प्रोजेक्ट जेनरेट करने से पहले कम से कम एक रजिस्टर समूह जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="907"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="920"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="945"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus प्रोजेक्ट जेनरेटर</translation>
     </message>
@@ -12024,137 +12034,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">अस्थायी डायरेक्टरी में लिखने की अनुमति जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="891"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
         <source>Failed to load generated project</source>
         <translation>जेनरेट किया गया प्रोजेक्ट लोड नहीं हो सका</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>जेनरेट किया गया प्रोजेक्ट JSON लोड नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="940"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1 समूहों और %2 डेटासेट के साथ प्रोजेक्ट सफलतापूर्वक जेनरेट किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="943"/>
         <source>The project editor is now open for customization.</source>
         <translation>प्रोजेक्ट एडिटर अब अनुकूलन के लिए खुला है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="932"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Modbus Project</source>
         <translation>Modbus प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="957"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="983"/>
         <source>Holding Registers</source>
         <translation>होल्डिंग रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="984"/>
         <source>Input Registers</source>
         <translation>इनपुट रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
         <source>Coils</source>
         <translation>कॉइल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="986"/>
         <source>Discrete Inputs</source>
         <translation>डिस्क्रीट इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="974"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1013"/>
         <source>Register %1</source>
         <translation>रजिस्टर %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
         <source>Coil %1</source>
         <translation>कॉइल %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
         <source>Discrete %1</source>
         <translation>डिस्क्रीट %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1428"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1454"/>
         <source>Error code: %1</source>
         <translation>त्रुटि कोड: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1431"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1457"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus संचार त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1443"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1469"/>
         <source>Select Port</source>
         <translation>पोर्ट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1596"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1622"/>
         <source>Protocol</source>
         <translation>प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1604"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1630"/>
         <source>Slave Address</source>
         <translation>स्लेव एड्रेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1613"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
         <source>Poll Interval (ms)</source>
         <translation>पोल अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1679"/>
         <source>Host / IP</source>
         <translation>होस्ट / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1660"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
         <source>Port</source>
         <translation>पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1675"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1701"/>
         <source>Serial Port</source>
         <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1683"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1709"/>
         <source>Baud Rate</source>
         <translation>बॉड रेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1691"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1717"/>
         <source>Parity</source>
         <translation>पैरिटी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1699"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1725"/>
         <source>Data Bits</source>
         <translation>डेटा बिट्स</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1707"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1733"/>
         <source>Stop Bits</source>
         <translation>स्टॉप बिट्स</translation>
     </message>
@@ -12569,15 +12579,15 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>USB सबसिस्टम को आरंभ करने में विफल। जाँचें कि आपके सिस्टम पर libusb उपलब्ध है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="217"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1118"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1130"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="216"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1137"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1149"/>
         <source>USB Device Error</source>
         <translation>USB डिवाइस त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="197"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -12596,12 +12606,12 @@ Linux पर, सुनिश्चित करें कि आपके प�
         <translation>अज्ञात डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="195"/>
         <source>Failed to open "%1"</source>
         <translation>"%1" खोलने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="816"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="815"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
 Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
@@ -12610,7 +12620,7 @@ Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
 ट्रांसफर मोड को "बल्क/इंटरप्ट स्ट्रीम" पर स्विच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="821"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="820"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -12619,7 +12629,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 ट्रांसफर मोड को "Isochronous" पर स्विच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="825"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="824"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -12628,7 +12638,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 डिवाइस अपनी सक्रिय कॉन्फ़िगरेशन में डेटा एंडपॉइंट एक्सपोज़ नहीं कर रहा है, या यह एक समर्पित प्रोटोकॉल का उपयोग कर सकता है। प्रोटोकॉल एडाप्टर (जैसे CAN या Modbus इंटरफ़ेस) को उनके स्वयं के ड्राइवर के माध्यम से कनेक्ट किया जाना चाहिए।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1138"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -12637,102 +12647,102 @@ Another driver or application may already have it open. On Linux, try unloading 
 कोई अन्य ड्राइवर या एप्लिकेशन इसे पहले से खोल सकता है। Linux पर, कर्नेल ड्राइवर (जैसे cdc_acm) unload करने या udev नियम जोड़ने का प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1150"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>इंटरफ़ेस %2 पर वैकल्पिक सेटिंग %1 सक्रिय नहीं की जा सकी। चयनित एंडपॉइंट पहुँच योग्य नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1162"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1181"/>
         <source>USB Device Warning</source>
         <translation>USB डिवाइस चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1163"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1182"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>चयनित OUT एंडपॉइंट सक्रिय नहीं किया जा सका। केवल-पढ़ने मोड में जारी रखा जा रहा है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1395"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1416"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>Advanced Control मोड में कोई डिवाइस कनेक्ट नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1400"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1421"/>
         <source>A control transfer is already in progress.</source>
         <translation>एक कंट्रोल ट्रांसफर पहले से प्रगति में है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1431"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>अमान्य सेटअप फ़ील्ड: request type, request, wValue, और wIndex hex होने चाहिए।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1420"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1441"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>अमान्य डेटा payload: hex बाइट्स का अनुक्रम अपेक्षित है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1426"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1447"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>अमान्य ट्रांसफर लंबाई (0-%1 बाइट्स)।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1444"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1465"/>
         <source>Could not allocate the control transfer.</source>
         <translation>कंट्रोल ट्रांसफर आवंटित नहीं किया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1471"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1492"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>कंट्रोल ट्रांसफर सबमिट करने में विफल: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1498"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1520"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>ट्रांसफर पूर्ण: %1 बाइट(s)।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1527"/>
         <source>Control transfer failed: %1.</source>
         <translation>कंट्रोल ट्रांसफर विफल: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="372"/>
         <source>Select Device</source>
         <translation>डिवाइस चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="394"/>
         <source>No Usable IN Endpoints</source>
         <translation>कोई उपयोग योग्य IN एंडपॉइंट नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="397"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="396"/>
         <source>Select IN Endpoint</source>
         <translation>IN एंडपॉइंट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="408"/>
         <source>None (Read-only)</source>
         <translation>कोई नहीं (केवल-पढ़ने योग्य)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="483"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>उन्नत USB नियंत्रण स्थानांतरण सक्षम करें?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="485"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>यह बल्क स्थानांतरण के अतिरिक्त नियंत्रण स्थानांतरण सक्षम करता है। गलत नियंत्रण अनुरोध भेजने से कनेक्टेड हार्डवेयर क्रैश या क्षतिग्रस्त हो सकता है। केवल तभी सक्षम करें जब आप जानते हों कि आप क्या कर रहे हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="489"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="488"/>
         <source>Advanced USB Mode</source>
         <translation>उन्नत USB मोड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="607"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>USB डिवाइस डिस्कनेक्ट हो गया या गंभीर रीड त्रुटि आई।</translation>
     </message>
@@ -12761,12 +12771,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 डिवाइस अपने सक्रिय कॉन्फ़िगरेशन में डेटा एंडपॉइंट उजागर नहीं कर सकता, या इसे किसी विशिष्ट ड्राइवर की आवश्यकता हो सकती है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1642"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1665"/>
         <source>USB Device</source>
         <translation>USB डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1650"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1673"/>
         <source>Transfer Mode</source>
         <translation>ट्रांसफर मोड</translation>
     </message>
@@ -12775,32 +12785,32 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">बल्क स्ट्रीम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
         <source>Advanced Control</source>
         <translation>उन्नत नियंत्रण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
         <source>Isochronous</source>
         <translation>आइसोक्रोनस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Bulk/Interrupt स्ट्रीम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1658"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1681"/>
         <source>IN Endpoint</source>
         <translation>IN एंडपॉइंट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1689"/>
         <source>OUT Endpoint</source>
         <translation>OUT एंडपॉइंट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1674"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1697"/>
         <source>ISO Packet Size</source>
         <translation>ISO पैकेट आकार</translation>
     </message>
@@ -13833,12 +13843,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="649"/>
+        <location filename="../../src/MDF4/Export.cpp" line="646"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 एक्सपोर्ट एक Pro फीचर है।</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="650"/>
+        <location filename="../../src/MDF4/Export.cpp" line="647"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>इस फीचर के लिए लाइसेंस आवश्यक है। MDF4 एक्सपोर्ट सक्षम करने के लिए कृपया एक खरीदें।</translation>
     </message>
@@ -18851,12 +18861,12 @@ function parse(%1) { ... }
         <translation>चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="706"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>Project file not found</source>
         <translation>प्रोजेक्ट फ़ाइल नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="707"/>
+        <location filename="../../src/Misc/CLI.cpp" line="758"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -18865,17 +18875,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="710"/>
+        <location filename="../../src/Misc/CLI.cpp" line="761"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>क्या आप यह शॉर्टकट डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="714"/>
+        <location filename="../../src/Misc/CLI.cpp" line="765"/>
         <source>Delete Shortcut</source>
         <translation>शॉर्टकट डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="716"/>
+        <location filename="../../src/Misc/CLI.cpp" line="767"/>
         <source>Quit</source>
         <translation>बंद करें</translation>
     </message>
@@ -19091,32 +19101,32 @@ function parse(%1) { ... }
         <translation>ऑफ़लाइन सक्रियण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1363"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1384"/>
         <source>timed out</source>
         <translation>टाइमआउट हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1386"/>
         <source>cancelled</source>
         <translation>रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1388"/>
         <source>stalled (request not supported)</source>
         <translation>रुक गया (अनुरोध समर्थित नहीं)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1369"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1390"/>
         <source>device disconnected</source>
         <translation>डिवाइस डिस्कनेक्ट हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1371"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1392"/>
         <source>buffer overflow</source>
         <translation>बफर ओवरफ्लो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1373"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1394"/>
         <source>transfer error</source>
         <translation>ट्रांसफर त्रुटि</translation>
     </message>
@@ -19883,87 +19893,147 @@ function parse(%1) { ... }
         <translation>सत्र विवरण</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="88"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="39"/>
+        <source>Reproduced</source>
+        <translation>पुनरुत्पादित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="42"/>
+        <source>Diverged</source>
+        <translation>विचलित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="45"/>
+        <source>Partially verified</source>
+        <translation>आंशिक रूप से सत्यापित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="48"/>
+        <source>Not mechanically verifiable</source>
+        <translation>यांत्रिक रूप से सत्यापन योग्य नहीं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="51"/>
+        <source>Verification error</source>
+        <translation>सत्यापन त्रुटि</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
+        <source>Never verified</source>
+        <translation>कभी सत्यापित नहीं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
         <source>Select a session to view details.</source>
         <translation>विवरण देखने के लिए एक सत्र चुनें।</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="130"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="164"/>
         <source>Project:</source>
         <translation>प्रोजेक्ट:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="143"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="177"/>
         <source>Started:</source>
         <translation>प्रारंभ:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="156"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="190"/>
         <source>Ended:</source>
         <translation>समाप्त:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="162"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="196"/>
         <source>(in progress)</source>
         <translation>(प्रगति में)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="169"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="203"/>
         <source>Frames:</source>
         <translation>फ़्रेम:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="185"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="219"/>
         <source>Notes</source>
         <translation>नोट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="200"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
         <source>Add session notes…</source>
         <translation>सत्र नोट्स जोड़ें…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="235"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>पूर्ण सत्रों के लिए नोट्स केवल पढ़ने योग्य हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
         <source>New tag…</source>
         <translation>नया टैग…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="353"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="344"/>
+        <source>Reproducibility</source>
+        <translation>पुनरुत्पादनीयता</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="372"/>
+        <source>Checked %1 with version %2</source>
+        <translation>संस्करण %2 के साथ %1 जाँचा गया</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="383"/>
+        <source>Re-runs the archived raw data through the current build and compares it against the recorded values. This proves the archive is reproducible; it is not a determinism guarantee, a safety function, or a calibration authority.</source>
+        <translation>संग्रहीत कच्चे डेटा को वर्तमान बिल्ड के माध्यम से पुनः चलाता है और रिकॉर्ड किए गए मानों से तुलना करता है। यह साबित करता है कि संग्रह पुनरुत्पादनीय है; यह निर्धारणवाद की गारंटी, सुरक्षा फ़ंक्शन या अंशांकन प्राधिकरण नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="430"/>
+        <source>Only completed sessions can be verified</source>
+        <translation>केवल पूर्ण सत्रों को सत्यापित किया जा सकता है</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <source>Verifying…</source>
+        <translation>सत्यापन जारी…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <source>Verify</source>
+        <translation>सत्यापित करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="447"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>सेशन हटाने के लिए सेशन फ़ाइल अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="222"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="256"/>
         <source>Tags</source>
         <translation>टैग</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="293"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
         <source>Add</source>
         <translation>जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="321"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
         <source>Replay</source>
         <translation>रीप्ले करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="329"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
         <source>Export CSV</source>
         <translation>CSV एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="336"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="420"/>
         <source>Generate Report</source>
         <translation>रिपोर्ट जनरेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="347"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="441"/>
         <source>Delete</source>
         <translation>डिलीट करें</translation>
     </message>
@@ -19976,32 +20046,62 @@ function parse(%1) { ... }
         <translation>सेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="35"/>
+        <source>Reproduced</source>
+        <translation>पुनरुत्पादित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="38"/>
+        <source>Diverged</source>
+        <translation>विचलित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="41"/>
+        <source>Partial</source>
+        <translation>आंशिक</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="44"/>
+        <source>Not verifiable</source>
+        <translation>सत्यापन योग्य नहीं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="47"/>
+        <source>Error</source>
+        <translation>त्रुटि</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="107"/>
         <source>Search</source>
         <translation>खोजें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="91"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="127"/>
         <source>Date</source>
         <translation>तारीख</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="92"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="128"/>
         <source>Frames</source>
         <translation>फ़्रेम</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="93"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="129"/>
+        <source>Verified</source>
+        <translation>सत्यापित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="130"/>
         <source>Tags</source>
         <translation>टैग</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="193"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="249"/>
         <source>No sessions found.</source>
         <translation>कोई सेशन नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="194"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="250"/>
         <source>No session file open.</source>
         <translation>कोई सेशन फ़ाइल खुली नहीं है।</translation>
     </message>
@@ -20009,103 +20109,103 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1057"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1229"/>
         <source>Select logo image</source>
         <translation>लोगो इमेज चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1059"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>इमेज (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="441"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="613"/>
         <source>Open Session File</source>
         <translation>सेशन फ़ाइल खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="443"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
         <source>Session files (*.db)</source>
         <translation>सेशन फ़ाइलें (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1260"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1432"/>
         <source>Cannot open session file</source>
         <translation>सेशन फ़ाइल नहीं खोली जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="668"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="840"/>
         <source>Delete session from %1?</source>
         <translation>%1 से सेशन हटाएँ?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="671"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
         <source>Delete Session</source>
         <translation>सेशन डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1121"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1293"/>
         <source>No project data</source>
         <translation>कोई प्रोजेक्ट डेटा नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="669"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="841"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>इस सेशन की सभी रीडिंग और रॉ डेटा स्थायी रूप से हटा दिए जाएंगे।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="499"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="508"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="671"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="680"/>
         <source>Lock Session File</source>
         <translation>सेशन फ़ाइल लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="500"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="672"/>
         <source>Choose a password to lock the session file:</source>
         <translation>सेशन फ़ाइल लॉक करने के लिए पासवर्ड चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="509"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
         <source>Confirm the password:</source>
         <translation>पासवर्ड की पुष्टि करें:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="517"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="689"/>
         <source>Passwords do not match</source>
         <translation>पासवर्ड मेल नहीं खाते</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="518"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="690"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>दर्ज किए गए दोनों पासवर्ड मेल नहीं खाते। सेशन फ़ाइल लॉक नहीं की गई।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="554"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="726"/>
         <source>Unlock Session File</source>
         <translation>सेशन फ़ाइल अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="555"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="727"/>
         <source>Enter the session file password:</source>
         <translation>सेशन फ़ाइल पासवर्ड दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="565"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="737"/>
         <source>Incorrect password</source>
         <translation>गलत पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="566"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="738"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>दर्ज किया गया पासवर्ड सेशन फ़ाइल में संग्रहीत पासवर्ड से मेल नहीं खाता।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="658"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="830"/>
         <source>Session file locked</source>
         <translation>सेशन फ़ाइल लॉक की गई</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="659"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="831"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>रिकॉर्ड किए गए सेशन हटाने से पहले सेशन फ़ाइल अनलॉक करें।</translation>
     </message>
@@ -20114,12 +20214,12 @@ function parse(%1) { ... }
         <translation type="vanished">इस सेशन में एम्बेडेड प्रोजेक्ट फ़ाइल नहीं है — डैशबोर्ड क्विक-प्लॉट लेआउट पर वापस आ जाता है।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="812"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
         <source>Export Session to CSV</source>
         <translation>सेशन को CSV में एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="812"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV फ़ाइलें (*.CSV)</translation>
     </message>
@@ -20138,19 +20238,19 @@ function parse(%1) { ... }
         <translation type="vanished">एक्सपोर्ट तैयार किया जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1029"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
         <source>Done</source>
         <translation>पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="995"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1029"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1167"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
         <source>Failed</source>
         <translation>विफल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1000"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1038"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1172"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1210"/>
         <source>Report Failed</source>
         <translation>रिपोर्ट विफल</translation>
     </message>
@@ -20159,68 +20259,68 @@ function parse(%1) { ... }
         <translation type="vanished">रिपोर्ट जेनरेट नहीं हो सकी। आउटपुट पथ जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="930"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
         <source>Save PDF Report</source>
         <translation>PDF रिपोर्ट सेव करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="892"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1064"/>
         <source>Loading session data…</source>
         <translation>सेशन डेटा लोड हो रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="930"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
         <source>Save HTML Report</source>
         <translation>HTML रिपोर्ट सेव करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="931"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF फाइलें (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="931"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
         <source>HTML files (*.html)</source>
         <translation>HTML फाइलें (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1001"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1039"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1173"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1211"/>
         <source>Could not generate the report.</source>
         <translation>रिपोर्ट जेनरेट नहीं हो सकी।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1122"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1294"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>इस सेशन फाइल में एम्बेडेड प्रोजेक्ट नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1131"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1303"/>
         <source>Invalid project data</source>
         <translation>अमान्य प्रोजेक्ट डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1132"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1304"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>एम्बेडेड प्रोजेक्ट JSON खराब है और रिस्टोर नहीं किया जा सकता।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1142"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
         <source>Restore Project</source>
         <translation>प्रोजेक्ट रिस्टोर करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1142"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio प्रोजेक्ट (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1150"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
         <source>Cannot write file</source>
         <translation>फ़ाइल नहीं लिखी जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1150"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
         <source>Check file permissions and try again.</source>
         <translation>फ़ाइल अनुमतियाँ जाँचें और पुनः प्रयास करें।</translation>
     </message>
@@ -23157,37 +23257,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>COM पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="79"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="97"/>
         <source>Baud Rate</source>
         <translation>बॉड रेट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="181"/>
         <source>Data Bits</source>
         <translation>डेटा बिट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="202"/>
         <source>Parity</source>
         <translation>पैरिटी</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="223"/>
         <source>Stop Bits</source>
         <translation>स्टॉप बिट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="244"/>
         <source>Flow Control</source>
         <translation>फ्लो कंट्रोल</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
         <source>Auto Reconnect</source>
         <translation>ऑटो रीकनेक्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="294"/>
         <source>Send DTR Signal</source>
         <translation>DTR सिग्नल भेजें</translation>
     </message>

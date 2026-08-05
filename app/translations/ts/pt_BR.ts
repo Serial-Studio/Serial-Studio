@@ -422,17 +422,17 @@ Cada ação do dispositivo ainda requer sua aprovação explícita por chamada n
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="485"/>
+        <location filename="../../src/API/Server.cpp" line="489"/>
         <source>Unable to start API TCP server</source>
         <translation>Não foi possível iniciar o servidor TCP da API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="532"/>
+        <location filename="../../src/API/Server.cpp" line="536"/>
         <source>Allow External API Connections?</source>
         <translation>Permitir Conexões Externas à API?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="533"/>
+        <location filename="../../src/API/Server.cpp" line="537"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -441,32 +441,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados ao vivo ou enviar comandos ao dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="597"/>
+        <location filename="../../src/API/Server.cpp" line="601"/>
         <source>Unable to restart API TCP server</source>
         <translation>Não foi possível reiniciar o servidor TCP da API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="707"/>
+        <location filename="../../src/API/Server.cpp" line="711"/>
         <source>Allow API device control?</source>
         <translation>Permitir controle de dispositivo via API?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="708"/>
+        <location filename="../../src/API/Server.cpp" line="712"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Um programa usando a API local do Serial Studio está solicitando enviar dados ao dispositivo conectado. Permitir que clientes da API gravem no dispositivo?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="711"/>
+        <location filename="../../src/API/Server.cpp" line="715"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1598"/>
+        <location filename="../../src/API/Server.cpp" line="1602"/>
         <source>API server</source>
         <translation>Servidor da API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1598"/>
+        <location filename="../../src/API/Server.cpp" line="1602"/>
         <source>Invalid pending connection</source>
         <translation>Conexão pendente inválida</translation>
     </message>
@@ -2000,7 +2000,7 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="268"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="272"/>
         <source>Data pipeline</source>
         <translation>Pipeline de dados</translation>
     </message>
@@ -2037,22 +2037,22 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Analisador integrado (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="294"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="298"/>
         <source>Lua parser (numeric)</source>
         <translation>Analisador Lua (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="301"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="305"/>
         <source>JavaScript parser (numeric)</source>
         <translation>Analisador JavaScript (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="312"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="316"/>
         <source>Lua parser (mixed)</source>
         <translation>Analisador Lua (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="319"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="323"/>
         <source>JavaScript parser (mixed)</source>
         <translation>Analisador JavaScript (misto)</translation>
     </message>
@@ -2061,12 +2061,12 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Integrado + exportação de dados (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="342"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="346"/>
         <source>Lua + data export (numeric)</source>
         <translation>Lua + exportação de dados (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="349"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="353"/>
         <source>JavaScript + data export (numeric)</source>
         <translation>JavaScript + exportação de dados (numérico)</translation>
     </message>
@@ -2075,12 +2075,12 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Integrado + exportação de dados (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="360"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="364"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + exportação de dados (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="367"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="371"/>
         <source>JavaScript + data export (mixed)</source>
         <translation>JavaScript + exportação de dados (misto)</translation>
     </message>
@@ -2089,159 +2089,159 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Integrado + dashboard (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="385"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="389"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + dashboard (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>100 K frames</source>
         <translation>100 K frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>250 K frames</source>
         <translation>250 K frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>500 K frames</source>
         <translation>500 K frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>1 M frames</source>
         <translation>1 M frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>1 second</source>
         <translation>1 segundo</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>2 seconds</source>
         <translation>2 segundos</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>5 seconds</source>
         <translation>5 segundos</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>10 seconds</source>
         <translation>10 segundos</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="208"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="212"/>
         <source>Serial Studio %1 - Hotpath Benchmark</source>
         <translation>Serial Studio %1 - Benchmark de Hotpath</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="210"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="214"/>
         <source>%1 (%2), workload: %3 frames minimum, %4 s minimum</source>
         <translation>%1 (%2), carga de trabalho: %3 frames mínimo, %4 s mínimo</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="216"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="220"/>
         <source>Build: %1</source>
         <translation>Build: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Throughput</source>
         <translation>Taxa de Transferência</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Target</source>
         <translation>Alvo</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Time</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="223"/>
         <source>Result</source>
         <translation>Resultado</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="229"/>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="233"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="239"/>
         <source>%1 frames/s</source>
         <translation>%1 frames/s</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="229"/>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="231"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="233"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
         <source>n/a</source>
         <translation>n/d</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="231"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
         <source>Pass</source>
         <translation>Aprovado</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="231"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
         <source>Fail</source>
         <translation>Reprovado</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="237"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="241"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="242"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="246"/>
         <source>Peak memory: %1</source>
         <translation>Memória de pico: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="292"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="296"/>
         <source>Built-In parser (numeric)</source>
         <translation>Analisador Integrado (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="310"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="314"/>
         <source>Built-In parser (mixed)</source>
         <translation>Analisador Integrado (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="335"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="339"/>
         <source>Built-In + data export (numeric)</source>
         <translation>Integrado + exportação de dados (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="358"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="362"/>
         <source>Built-In + data export (mixed)</source>
         <translation>Integrado + exportação de dados (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="383"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="387"/>
         <source>Built-In + dashboard (numeric)</source>
         <translation>Integrado + dashboard (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="392"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="396"/>
         <source>JavaScript + dashboard (numeric)</source>
         <translation>JavaScript + painel (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="401"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="405"/>
         <source>Built-In + dashboard (mixed)</source>
         <translation>Integrado + dashboard (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="612"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="623"/>
         <source>%1 MiB</source>
         <translation>%1 Mib</translation>
     </message>
@@ -2250,12 +2250,12 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Integrado + painel (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="403"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="407"/>
         <source>Lua + dashboard (mixed)</source>
         <translation>Lua + painel (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="410"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="414"/>
         <source>JavaScript + dashboard (mixed)</source>
         <translation>JavaScript + painel (misto)</translation>
     </message>
@@ -7242,133 +7242,133 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="466"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="477"/>
         <source>Lock Project</source>
         <translation>Bloquear Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="467"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="469"/>
         <source>Choose a password to lock the project:</source>
         <translation>Escolha uma senha para bloquear o projeto:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="477"/>
         <source>Confirm the password:</source>
         <translation>Confirme a senha:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="480"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="482"/>
         <source>Passwords do not match</source>
         <translation>As senhas não coincidem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="483"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>As duas senhas inseridas não coincidem. O projeto não foi bloqueado.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="520"/>
         <source>Unlock Project</source>
         <translation>Desbloquear Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="519"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="521"/>
         <source>Enter the project password:</source>
         <translation>Insira a senha do projeto:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="529"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="531"/>
         <source>Incorrect password</source>
         <translation>Senha incorreta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="532"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>A senha inserida não corresponde à armazenada no arquivo do projeto.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="564"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="566"/>
         <source>New Project</source>
         <translation>Novo Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="617"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="619"/>
         <source>Samples</source>
         <translation>Amostras</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1146"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1148"/>
         <source>Change MQTT Publisher</source>
         <translation>Alterar Publicador MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1244"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1246"/>
         <source>Rename Widget</source>
         <translation>Renomear Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1245"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1247"/>
         <source>Display title (empty restores the original):</source>
         <translation>Título de exibição (vazio restaura o original):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1579"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1581"/>
         <source>Change Project Title</source>
         <translation>Alterar Título do Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1605"/>
         <source>Edit Control Script</source>
         <translation>Editar Script de Controle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1620"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1622"/>
         <source>Change Point Count</source>
         <translation>Alterar Contagem de Pontos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1643"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1645"/>
         <source>Change Plot Time Range</source>
         <translation>Alterar Intervalo de Tempo do Gráfico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1669"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1671"/>
         <source>Toggle Freeze</source>
         <translation>Alternar Congelamento</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1686"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Alternar Transformações Orientadas por Mudança</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1712"/>
         <source>Change Frame Start Sequence</source>
         <translation>Alterar Sequência de Início do Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1731"/>
         <source>Change Frame End Sequence</source>
         <translation>Alterar Sequência de Fim do Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1748"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1750"/>
         <source>Change Checksum</source>
         <translation>Alterar Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1767"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1769"/>
         <source>Change Frame Detection</source>
         <translation>Alterar Detecção de Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1814"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1816"/>
         <source>Change Decoder</source>
         <translation>Alterar Decodificador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1833"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1835"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Alternar Delimitadores Hex</translation>
     </message>
@@ -7463,7 +7463,7 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="243"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="252"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="266"/>
         <source>Project error</source>
         <translation>Erro do projeto</translation>
     </message>
@@ -7478,43 +7478,43 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Você precisa adicionar pelo menos um grupo!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="266"/>
         <source>You need to add at least one dataset!</source>
         <translation>Você precisa adicionar pelo menos um dataset!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="314"/>
         <source>Your project needs a title</source>
         <translation>Seu projeto precisa de um título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="314"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="316"/>
         <source>Add a group to get started</source>
         <translation>Adicione um grupo para começar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="316"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="318"/>
         <source>Add a dataset to a group</source>
         <translation>Adicione um dataset a um grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="332"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Abra a visualização Projeto no topo da árvore e insira um nome. Você pode renomear o projeto a qualquer momento.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="335"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Grupos organizam datasets em widgets do painel. Use o botão Grupo na barra de ferramentas acima para criar um e, em seguida, adicione datasets a ele.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="339"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Conjuntos de dados são os valores que aparecem no painel. Selecione um grupo na árvore e use o botão Conjunto de Dados na barra de ferramentas para adicionar um.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="616"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="618"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="667"/>
         <source>Time</source>
         <translation>Tempo</translation>
     </message>
@@ -7535,20 +7535,20 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="454"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="455"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Arquivos de Projeto do Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1503"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="445"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="446"/>
         <source>Untitled Project</source>
         <translation>Projeto sem Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1519"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="601"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1521"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="603"/>
         <source>Device A</source>
         <translation>Dispositivo A</translation>
     </message>
@@ -7578,37 +7578,37 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Este projeto foi salvo com a versão de esquema %1; a versão atual é %2. Os padrões foram aplicados a quaisquer novos campos. Salve o projeto para confirmar a atualização.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="452"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="453"/>
         <source>Save Imported Project</source>
         <translation>Salvar Projeto Importado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="654"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="656"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Projetos com múltiplas fontes requerem licença Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="655"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="657"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Este projeto contém múltiplas fontes de dados. Apenas a primeira fonte foi carregada. Uma licença Serial Studio Pro é necessária para usar projetos com múltiplas fontes.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="899"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="901"/>
         <source>Workspace IDs remapped on load</source>
         <translation>IDs de Espaço de Trabalho remapeados ao carregar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="900"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="902"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 IDs de espaços de trabalho personalizados sobrepuseram o novo intervalo automático reservado e foram movidos para o intervalo do usuário. Salve o projeto para tornar o remapeamento permanente.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1101"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1103"/>
         <source>Legacy frame parser function updated</source>
         <translation>Função de análise de frame legada atualizada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1104"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Seu projeto usou uma função de análise de quadros legada com um argumento 'separator'. Ela foi migrada automaticamente para o novo formato.</translation>
     </message>
@@ -7987,10 +7987,10 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Nova Tabela Compartilhada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1944"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1971"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1922"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1946"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1992"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
@@ -8015,22 +8015,22 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Renomear Tabela</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1922"/>
         <source>Rename Group</source>
         <translation>Renomear Grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1944"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1946"/>
         <source>Rename Dataset</source>
         <translation>Renomear Conjunto de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1973"/>
         <source>Rename Data Source</source>
         <translation>Renomear Fonte de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1992"/>
         <source>Rename Action</source>
         <translation>Renomear Ação</translation>
     </message>
@@ -8236,28 +8236,28 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Excluir Espaço de Trabalho</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="496"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="497"/>
         <source>Project file removed from disk</source>
         <translation>Arquivo de projeto removido do disco</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="497"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="498"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 foi excluído ou renomeado por outro programa. Salve o projeto para recriá-lo.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="519"/>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="540"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="520"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="541"/>
         <source>Project file changed on disk</source>
         <translation>Arquivo de projeto alterado no disco</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="520"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="521"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 foi modificado por outro programa. O projeto em memória foi mantido; reabra o arquivo para carregar as alterações externas.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="536"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="537"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -8266,7 +8266,7 @@ Reload it and discard your unsaved changes?</source>
 Recarregá-lo e descartar suas alterações não salvas?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="538"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="539"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -8275,7 +8275,7 @@ Reload it?</source>
 Recarregá-lo?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="569"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="570"/>
         <source>File save error</source>
         <translation>Erro ao salvar arquivo</translation>
     </message>
@@ -8290,7 +8290,7 @@ Recarregá-lo?</translation>
         <translation>Excluir Itens</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="488"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="489"/>
         <source>File open error</source>
         <translation>Erro ao abrir arquivo</translation>
     </message>
@@ -11028,72 +11028,72 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="314"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="317"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="315"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
         <source>Network Socket</source>
         <translation>Socket de Rede</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="316"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
         <source>Audio</source>
         <translation>Áudio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="320"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
         <source>CAN Bus</source>
         <translation>Barramento CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
         <source>USB Device</source>
         <translation>Dispositivo USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="325"/>
         <source>HID Device</source>
         <translation>Dispositivo HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="326"/>
         <source>Process</source>
         <translation>Processo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="327"/>
         <source>MQTT Subscriber</source>
         <translation>Assinante MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="755"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="758"/>
         <source>Your trial period has ended.</source>
         <translation>Seu período de avaliação terminou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="756"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="759"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Para continuar usando o Serial Studio, ative sua licença.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1274"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1319"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Este tipo de conexão requer uma licença ativa ou trial.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1275"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1320"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Ative o Serial Studio Pro ou inicie um trial para usar este tipo de dispositivo.</translation>
     </message>
@@ -11129,67 +11129,77 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="588"/>
+        <source>Audio Device Stopped</source>
+        <translation>Dispositivo de Áudio Parado</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="589"/>
+        <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
+        <translation>O backend de áudio parou o fluxo. O dispositivo pode ter sido desconectado ou reivindicado por outro aplicativo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="825"/>
         <source>channels</source>
         <translation>canais</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="828"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="878"/>
         <source> channels</source>
         <translation>canais</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="976"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1026"/>
         <source>Unsigned 8-bit</source>
         <translation>8-bit Sem Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="977"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
         <source>Signed 16-bit</source>
         <translation>16-bit Com Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="978"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1028"/>
         <source>Signed 24-bit</source>
         <translation>24-bit Com Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1029"/>
         <source>Signed 32-bit</source>
         <translation>32-bit Com Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1030"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1033"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1034"/>
         <source>Stereo</source>
         <translation>Estéreo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1374"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1424"/>
         <source>Input Device</source>
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1382"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1432"/>
         <source>Sample Rate</source>
         <translation>Taxa de Amostragem</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1390"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1440"/>
         <source>Sample Format</source>
         <translation>Formato de Amostra</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1398"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1448"/>
         <source>Channels</source>
         <translation>Canais</translation>
     </message>
@@ -11318,7 +11328,7 @@ O suporte ao barramento CAN no macOS é limitado e pode exigir drivers de hardwa
         <translation>Nenhum Dispositivo Disponível</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="305"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="304"/>
         <source>CAN Device Creation Failed</source>
         <translation>Falha na Criação do Dispositivo CAN</translation>
     </message>
@@ -11552,12 +11562,12 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="174"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="175"/>
         <source>Unknown error</source>
         <translation>Erro desconhecido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="178"/>
         <source>
 
 Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
@@ -11566,27 +11576,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="181"/>
         <source>Failed to open "%1"</source>
         <translation>Falha ao abrir "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="288"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
         <source>HID Device Error</source>
         <translation>Erro do Dispositivo HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="290"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>O dispositivo HID foi desconectado ou encontrou um erro fatal de leitura.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="398"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="399"/>
         <source>Select Device</source>
         <translation>Selecionar Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="540"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="541"/>
         <source>HID Device</source>
         <translation>Dispositivo HID</translation>
     </message>
@@ -11778,32 +11788,32 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Protocolo ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="978"/>
         <source>MQTT Subscription Error</source>
         <translation>Erro de Assinatura MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Falha ao assinar o tópico "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1225"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Erro de Certificado do Cliente MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1235"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1244"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Arquivos PEM (*.pem *.crt *.cer *.key);;Todos os arquivos (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1261"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1270"/>
         <source>Select Client Certificate</source>
         <translation>Selecionar Certificado do Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1269"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1278"/>
         <source>Select Private Key</source>
         <translation>Selecionar Chave Privada</translation>
     </message>
@@ -11812,97 +11822,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">O broker fechou a conexão.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="997"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Versão do Protocolo MQTT Inválida</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="998"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1007"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>O broker rejeitou a versão do protocolo MQTT configurada.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1001"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
         <source>Client ID Rejected</source>
         <translation>ID do Cliente Rejeitado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1002"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1011"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>O broker rejeitou o ID do cliente. Tente um identificador diferente.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1005"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
         <source>MQTT Server Unavailable</source>
         <translation>Servidor MQTT Indisponível</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1015"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>O broker está indisponível no momento. Tente novamente mais tarde.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
         <source>Authentication Error</source>
         <translation>Erro de Autenticação</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1019"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>As credenciais fornecidas foram rejeitadas pelo broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
         <source>Authorization Error</source>
         <translation>Erro de Autorização</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1023"/>
         <source>Account lacks permission for this operation.</source>
         <translation>A conta não possui permissão para esta operação.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>Network or Transport Error</source>
         <translation>Erro de Rede ou Transporte</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problema na camada de rede/transporte ao conectar ao broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Um certificado de cliente está configurado: verifique se corresponde à chave privada e está ativado no broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>MQTT Protocol Violation</source>
         <translation>Violação do Protocolo MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>O broker reportou uma violação de protocolo e encerrou a conexão.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
         <source>MQTT 5 Error</source>
         <translation>Erro MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Ocorreu um erro de protocolo MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
         <source>MQTT Error</source>
         <translation>Erro MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Ocorreu um erro MQTT inesperado.</translation>
     </message>
@@ -11910,22 +11920,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="405"/>
         <source>Invalid Serial Port</source>
         <translation>Porta Serial Inválida</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="448"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
         <source>Modbus Initialization Failed</source>
         <translation>Falha na Inicialização do Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="512"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
         <source>Modbus Connection Failed</source>
         <translation>Falha na Conexão Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="404"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="406"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>A porta serial selecionada "%1" não está mais disponível. Atualize a lista de portas e tente novamente.</translation>
     </message>
@@ -11934,84 +11944,84 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">O cliente Modbus recusou iniciar a conexão.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="449"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Não foi possível criar o dispositivo Modbus. Verifique a configuração do sistema e tente novamente.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="516"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>Não foi possível conectar a "%1". Verifique as configurações de conexão.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="517"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="525"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="527"/>
         <source>Connection attempt timed out</source>
         <translation>Tempo limite da tentativa de conexão excedido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="663"/>
         <source>None</source>
         <translation>Nenhum</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="664"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="665"/>
         <source>Odd</source>
         <translation>Ímpar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="666"/>
         <source>Space</source>
         <translation>Espaço</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="667"/>
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="719"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding Registers (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="720"/>
         <source>Input Registers (0x04)</source>
         <translation>Input Registers (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="721"/>
         <source>Coils (0x01)</source>
         <translation>Coils (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="722"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Discrete Inputs (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="904"/>
         <source>No register groups configured</source>
         <translation>Nenhum grupo de registradores configurado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="905"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Adicione pelo menos um grupo de registradores antes de gerar um projeto.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="907"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="920"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="945"/>
         <source>Modbus Project Generator</source>
         <translation>Gerador de Projeto Modbus</translation>
     </message>
@@ -12024,137 +12034,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Verifique as permissões de escrita no diretório temporário.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="891"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
         <source>Failed to load generated project</source>
         <translation>Falha ao carregar projeto gerado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>O JSON do projeto gerado não pôde ser carregado.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="940"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projeto gerado com sucesso com %1 grupos e %2 conjuntos de dados.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="943"/>
         <source>The project editor is now open for customization.</source>
         <translation>O editor de projeto está agora aberto para personalização.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="932"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Modbus Project</source>
         <translation>Projeto Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="957"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="983"/>
         <source>Holding Registers</source>
         <translation>Holding Registers</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="984"/>
         <source>Input Registers</source>
         <translation>Registradores de Entrada</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
         <source>Coils</source>
         <translation>Bobinas</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="986"/>
         <source>Discrete Inputs</source>
         <translation>Entradas Discretas</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="974"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
         <source>Unknown</source>
         <translation>Desconhecido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1013"/>
         <source>Register %1</source>
         <translation>Registrador %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
         <source>Coil %1</source>
         <translation>Bobina %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
         <source>Discrete %1</source>
         <translation>Discreto %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1428"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1454"/>
         <source>Error code: %1</source>
         <translation>Código de erro: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1431"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1457"/>
         <source>Modbus Communication Error</source>
         <translation>Erro de Comunicação Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1443"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1469"/>
         <source>Select Port</source>
         <translation>Selecionar Porta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1596"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1622"/>
         <source>Protocol</source>
         <translation>Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1604"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1630"/>
         <source>Slave Address</source>
         <translation>Endereço Escravo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1613"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Consulta (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1679"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1660"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
         <source>Port</source>
         <translation>Porta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1675"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1701"/>
         <source>Serial Port</source>
         <translation>Porta Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1683"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1709"/>
         <source>Baud Rate</source>
         <translation>Taxa de Transmissão</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1691"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1717"/>
         <source>Parity</source>
         <translation>Paridade</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1699"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1725"/>
         <source>Data Bits</source>
         <translation>Bits de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1707"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1733"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
@@ -12569,15 +12579,15 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Falha ao inicializar o subsistema USB. Verifique se libusb está disponível no sistema.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="217"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1118"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1130"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="216"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1137"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1149"/>
         <source>USB Device Error</source>
         <translation>Erro no Dispositivo USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="197"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -12596,12 +12606,12 @@ No Linux, certifique-se de ter permissão de leitura/escrita no nó do dispositi
         <translation>Dispositivo Desconhecido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="195"/>
         <source>Failed to open "%1"</source>
         <translation>Falha ao abrir "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="816"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="815"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
 Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
@@ -12610,7 +12620,7 @@ Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
 Alterne o Modo de Transferência para "Fluxo em Massa/Interrupção" e tente novamente.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="821"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="820"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -12619,7 +12629,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 Alterne o Modo de Transferência para "Isócrono" e tente novamente.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="825"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="824"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -12628,7 +12638,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 O dispositivo pode não expor endpoints de dados em sua configuração ativa, ou pode usar um protocolo dedicado. Adaptadores de protocolo (por exemplo, interfaces CAN ou Modbus) devem ser conectados através de seu próprio driver.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1138"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -12637,102 +12647,102 @@ Another driver or application may already have it open. On Linux, try unloading 
 Outro driver ou aplicativo pode já tê-la aberto. No Linux, tente descarregar o driver do kernel (ex.: cdc_acm) ou adicionar uma regra udev.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1150"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>Não foi possível ativar a configuração alternativa %1 na interface %2. O endpoint selecionado não está acessível.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1162"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1181"/>
         <source>USB Device Warning</source>
         <translation>Aviso de Dispositivo USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1163"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1182"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>O endpoint OUT selecionado não pôde ser ativado. Continuando em modo somente leitura.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1395"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1416"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>Nenhum dispositivo conectado no modo de Controle Avançado.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1400"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1421"/>
         <source>A control transfer is already in progress.</source>
         <translation>Uma transferência de controle já está em andamento.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1431"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>Campo de configuração inválido: tipo de requisição, requisição, wValue e wIndex devem ser hexadecimais.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1420"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1441"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>Carga de dados inválida: esperada uma sequência de bytes hexadecimais.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1426"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1447"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>Comprimento de transferência inválido (0-%1 bytes).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1444"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1465"/>
         <source>Could not allocate the control transfer.</source>
         <translation>Não foi possível alocar a transferência de controle.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1471"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1492"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>Falha ao enviar transferência de controle: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1498"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1520"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>Transferência concluída: %1 byte(s).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1527"/>
         <source>Control transfer failed: %1.</source>
         <translation>Falha na transferência de controle: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="372"/>
         <source>Select Device</source>
         <translation>Selecionar Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="394"/>
         <source>No Usable IN Endpoints</source>
         <translation>Nenhum Endpoint IN Utilizável</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="397"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="396"/>
         <source>Select IN Endpoint</source>
         <translation>Selecionar Endpoint IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="408"/>
         <source>None (Read-only)</source>
         <translation>Nenhum (Somente Leitura)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="483"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>Ativar Transferências de Controle USB Avançadas?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="485"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>Isso ativa transferências de controle além das transferências em massa. Enviar solicitações de controle incorretas pode travar ou danificar o hardware conectado. Ative apenas se souber o que está fazendo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="489"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="488"/>
         <source>Advanced USB Mode</source>
         <translation>Modo USB Avançado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="607"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>O dispositivo USB foi desconectado ou encontrou um erro fatal de leitura.</translation>
     </message>
@@ -12761,12 +12771,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 O dispositivo pode não expor endpoints de dados em sua configuração ativa, ou pode exigir um driver específico.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1642"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1665"/>
         <source>USB Device</source>
         <translation>Dispositivo USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1650"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1673"/>
         <source>Transfer Mode</source>
         <translation>Modo de Transferência</translation>
     </message>
@@ -12775,32 +12785,32 @@ O dispositivo pode não expor endpoints de dados em sua configuração ativa, ou
         <translation type="vanished">Fluxo em Massa</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
         <source>Advanced Control</source>
         <translation>Controle Avançado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
         <source>Isochronous</source>
         <translation>Isócrono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Fluxo Bulk/interrupt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1658"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1681"/>
         <source>IN Endpoint</source>
         <translation>Endpoint IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1689"/>
         <source>OUT Endpoint</source>
         <translation>Endpoint OUT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1674"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1697"/>
         <source>ISO Packet Size</source>
         <translation>Tamanho do Pacote ISO</translation>
     </message>
@@ -13833,12 +13843,12 @@ Para reutilizar esta licença em outro dispositivo, envie um e-mail para alex@se
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="649"/>
+        <location filename="../../src/MDF4/Export.cpp" line="646"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Exportação MDF4 é um recurso Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="650"/>
+        <location filename="../../src/MDF4/Export.cpp" line="647"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Este recurso requer uma licença. Adquira uma para habilitar a exportação MDF4.</translation>
     </message>
@@ -18851,12 +18861,12 @@ O parâmetro separador não é mais necessário.</translation>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="706"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>Project file not found</source>
         <translation>Arquivo de projeto não encontrado</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="707"/>
+        <location filename="../../src/Misc/CLI.cpp" line="758"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -18865,17 +18875,17 @@ O parâmetro separador não é mais necessário.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="710"/>
+        <location filename="../../src/Misc/CLI.cpp" line="761"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Excluir este atalho?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="714"/>
+        <location filename="../../src/Misc/CLI.cpp" line="765"/>
         <source>Delete Shortcut</source>
         <translation>Excluir Atalho</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="716"/>
+        <location filename="../../src/Misc/CLI.cpp" line="767"/>
         <source>Quit</source>
         <translation>Sair</translation>
     </message>
@@ -19091,32 +19101,32 @@ O parâmetro separador não é mais necessário.</translation>
         <translation>Ativação Offline</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1363"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1384"/>
         <source>timed out</source>
         <translation>tempo limite excedido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1386"/>
         <source>cancelled</source>
         <translation>cancelado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1388"/>
         <source>stalled (request not supported)</source>
         <translation>travado (requisição não suportada)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1369"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1390"/>
         <source>device disconnected</source>
         <translation>dispositivo desconectado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1371"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1392"/>
         <source>buffer overflow</source>
         <translation>estouro de buffer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1373"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1394"/>
         <source>transfer error</source>
         <translation>erro de transferência</translation>
     </message>
@@ -19883,87 +19893,147 @@ O parâmetro separador não é mais necessário.</translation>
         <translation>Detalhes da Sessão</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="88"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="39"/>
+        <source>Reproduced</source>
+        <translation>Reproduzido</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="42"/>
+        <source>Diverged</source>
+        <translation>Divergente</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="45"/>
+        <source>Partially verified</source>
+        <translation>Parcialmente Verificado</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="48"/>
+        <source>Not mechanically verifiable</source>
+        <translation>Não Verificável Mecanicamente</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="51"/>
+        <source>Verification error</source>
+        <translation>Erro de Verificação</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
+        <source>Never verified</source>
+        <translation>Nunca Verificado</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
         <source>Select a session to view details.</source>
         <translation>Selecione uma sessão para visualizar detalhes.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="130"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="164"/>
         <source>Project:</source>
         <translation>Projeto:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="143"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="177"/>
         <source>Started:</source>
         <translation>Iniciado:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="156"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="190"/>
         <source>Ended:</source>
         <translation>Finalizado:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="162"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="196"/>
         <source>(in progress)</source>
         <translation>(em andamento)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="169"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="203"/>
         <source>Frames:</source>
         <translation>Frames:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="185"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="219"/>
         <source>Notes</source>
         <translation>Notas</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="200"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
         <source>Add session notes…</source>
         <translation>Adicionar notas da sessão…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="235"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Notas são somente leitura para sessões concluídas.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
         <source>New tag…</source>
         <translation>Nova tag…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="353"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="344"/>
+        <source>Reproducibility</source>
+        <translation>Reprodutibilidade</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="372"/>
+        <source>Checked %1 with version %2</source>
+        <translation>Verificado %1 com versão %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="383"/>
+        <source>Re-runs the archived raw data through the current build and compares it against the recorded values. This proves the archive is reproducible; it is not a determinism guarantee, a safety function, or a calibration authority.</source>
+        <translation>Reexecuta os dados brutos arquivados através da compilação atual e os compara com os valores gravados. Isso prova que o arquivo é reproduzível; não é uma garantia de determinismo, uma função de segurança ou uma autoridade de calibração.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="430"/>
+        <source>Only completed sessions can be verified</source>
+        <translation>Apenas sessões concluídas podem ser verificadas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <source>Verifying…</source>
+        <translation>Verificando…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <source>Verify</source>
+        <translation>Verificar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="447"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>Desbloqueie o arquivo de sessão para excluir sessões</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="222"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="256"/>
         <source>Tags</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="293"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
         <source>Add</source>
         <translation>Adicionar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="321"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
         <source>Replay</source>
         <translation>Reproduzir</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="329"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
         <source>Export CSV</source>
         <translation>Exportar CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="336"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="420"/>
         <source>Generate Report</source>
         <translation>Gerar Relatório</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="347"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="441"/>
         <source>Delete</source>
         <translation>Excluir</translation>
     </message>
@@ -19976,32 +20046,62 @@ O parâmetro separador não é mais necessário.</translation>
         <translation>Sessões</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="35"/>
+        <source>Reproduced</source>
+        <translation>Reproduzido</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="38"/>
+        <source>Diverged</source>
+        <translation>Divergente</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="41"/>
+        <source>Partial</source>
+        <translation>Parcial</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="44"/>
+        <source>Not verifiable</source>
+        <translation>Não verificável</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="47"/>
+        <source>Error</source>
+        <translation>Erro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="107"/>
         <source>Search</source>
         <translation>Pesquisar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="91"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="127"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="92"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="128"/>
         <source>Frames</source>
         <translation>Quadros</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="93"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="129"/>
+        <source>Verified</source>
+        <translation>Verificado</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="130"/>
         <source>Tags</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="193"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="249"/>
         <source>No sessions found.</source>
         <translation>Nenhuma sessão encontrada.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="194"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="250"/>
         <source>No session file open.</source>
         <translation>Nenhum arquivo de sessão aberto.</translation>
     </message>
@@ -20009,103 +20109,103 @@ O parâmetro separador não é mais necessário.</translation>
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1057"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1229"/>
         <source>Select logo image</source>
         <translation>Selecionar imagem do logotipo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1059"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>Imagens (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="441"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="613"/>
         <source>Open Session File</source>
         <translation>Abrir Arquivo de Sessão</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="443"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
         <source>Session files (*.db)</source>
         <translation>Arquivos de sessão (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1260"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1432"/>
         <source>Cannot open session file</source>
         <translation>Não é possível abrir o arquivo de sessão</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="668"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="840"/>
         <source>Delete session from %1?</source>
         <translation>Excluir sessão de %1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="671"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
         <source>Delete Session</source>
         <translation>Excluir Sessão</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1121"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1293"/>
         <source>No project data</source>
         <translation>Nenhum dado de projeto</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="669"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="841"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Todas as leituras e dados brutos desta sessão serão removidos permanentemente.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="499"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="508"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="671"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="680"/>
         <source>Lock Session File</source>
         <translation>Bloquear Arquivo de Sessão</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="500"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="672"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Escolha uma senha para bloquear o arquivo de sessão:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="509"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
         <source>Confirm the password:</source>
         <translation>Confirme a senha:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="517"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="689"/>
         <source>Passwords do not match</source>
         <translation>As senhas não coincidem</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="518"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="690"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>As duas senhas inseridas não coincidem. O arquivo de sessão não foi bloqueado.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="554"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="726"/>
         <source>Unlock Session File</source>
         <translation>Desbloquear Arquivo de Sessão</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="555"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="727"/>
         <source>Enter the session file password:</source>
         <translation>Insira a senha do arquivo de sessão:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="565"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="737"/>
         <source>Incorrect password</source>
         <translation>Senha incorreta</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="566"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="738"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>A senha inserida não corresponde à armazenada no arquivo de sessão.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="658"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="830"/>
         <source>Session file locked</source>
         <translation>Arquivo de sessão bloqueado</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="659"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="831"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Desbloqueie o arquivo de sessão antes de excluir sessões gravadas.</translation>
     </message>
@@ -20114,12 +20214,12 @@ O parâmetro separador não é mais necessário.</translation>
         <translation type="vanished">Esta sessão não contém um arquivo de projeto incorporado — o painel usa um layout de gráfico rápido.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="812"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
         <source>Export Session to CSV</source>
         <translation>Exportar Sessão para CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="812"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
         <source>CSV files (*.csv)</source>
         <translation>Arquivos CSV (*.CSV)</translation>
     </message>
@@ -20138,19 +20238,19 @@ O parâmetro separador não é mais necessário.</translation>
         <translation type="vanished">Preparando exportação…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1029"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
         <source>Done</source>
         <translation>Concluído</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="995"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1029"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1167"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
         <source>Failed</source>
         <translation>Falhou</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1000"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1038"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1172"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1210"/>
         <source>Report Failed</source>
         <translation>Falha no Relatório</translation>
     </message>
@@ -20159,68 +20259,68 @@ O parâmetro separador não é mais necessário.</translation>
         <translation type="vanished">Não foi possível gerar o relatório. Verifique o caminho de saída e tente novamente.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="930"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
         <source>Save PDF Report</source>
         <translation>Salvar Relatório PDF</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="892"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1064"/>
         <source>Loading session data…</source>
         <translation>Carregando dados da sessão…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="930"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
         <source>Save HTML Report</source>
         <translation>Salvar Relatório HTML</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="931"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
         <source>PDF files (*.pdf)</source>
         <translation>Arquivos PDF (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="931"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
         <source>HTML files (*.html)</source>
         <translation>Arquivos HTML (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1001"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1039"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1173"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1211"/>
         <source>Could not generate the report.</source>
         <translation>Não foi possível gerar o relatório.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1122"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1294"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Este arquivo de sessão não contém um projeto incorporado.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1131"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1303"/>
         <source>Invalid project data</source>
         <translation>Dados de projeto inválidos</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1132"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1304"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>O JSON do projeto incorporado está malformado e não pode ser restaurado.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1142"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
         <source>Restore Project</source>
         <translation>Restaurar Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1142"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Projetos do Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1150"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
         <source>Cannot write file</source>
         <translation>Não é possível gravar o arquivo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1150"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
         <source>Check file permissions and try again.</source>
         <translation>Verifique as permissões do arquivo e tente novamente.</translation>
     </message>
@@ -23129,37 +23229,37 @@ Ative Incorporar Projeto para incluir o projeto no atalho, para que continue fun
         <translation>Porta COM</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="79"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="97"/>
         <source>Baud Rate</source>
         <translation>Taxa de Transmissão</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="181"/>
         <source>Data Bits</source>
         <translation>Bits de Dados</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="202"/>
         <source>Parity</source>
         <translation>Paridade</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="223"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="244"/>
         <source>Flow Control</source>
         <translation>Controle de Fluxo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
         <source>Auto Reconnect</source>
         <translation>Reconexão Automática</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="294"/>
         <source>Send DTR Signal</source>
         <translation>Enviar Sinal DTR</translation>
     </message>

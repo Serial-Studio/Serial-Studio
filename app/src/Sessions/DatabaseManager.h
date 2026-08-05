@@ -25,6 +25,7 @@
 #  include "Sessions/HtmlReport.h"
 
 class QThread;
+class QProcess;
 class AppState;
 
 namespace Misc {
@@ -95,6 +96,9 @@ class DatabaseManager : public QObject {
   Q_PROPERTY(bool locked
              READ locked
              NOTIFY lockedChanged)
+  Q_PROPERTY(bool verificationBusy
+             READ verificationBusy
+             NOTIFY verificationBusyChanged)
   // clang-format on
 
 signals:
@@ -113,6 +117,8 @@ signals:
   void projectMetadataRestored();
   void lockedChanged();
   void sessionDatasetsReady(int sessionId, const QVariantList& datasets);
+  void verificationBusyChanged();
+  void verificationFinished(int sessionId, bool success, const QVariantMap& verdict);
 
 private:
   explicit DatabaseManager();
@@ -137,6 +143,7 @@ public:
   [[nodiscard]] QString pdfExportStatus() const;
   [[nodiscard]] double pdfExportProgress() const;
   [[nodiscard]] double csvExportProgress() const;
+  [[nodiscard]] bool verificationBusy() const;
   [[nodiscard]] QVariantList sessionList() const;
   [[nodiscard]] QVariantList tagList() const;
   [[nodiscard]] QVariantList selectedSessionTags() const;
@@ -144,9 +151,16 @@ public:
 
   Q_INVOKABLE [[nodiscard]] QVariantList tagsForSession(int sessionId) const;
   Q_INVOKABLE [[nodiscard]] QVariantMap sessionMetadata(int sessionId) const;
+  Q_INVOKABLE [[nodiscard]] QVariantMap latestVerification(int sessionId) const;
+  Q_INVOKABLE [[nodiscard]] QVariantMap latestVerdicts() const;
   Q_INVOKABLE [[nodiscard]] static QString canonicalDbPath(const QString& projectTitle);
+  static void setDbPathOverride(const QString& path);
+
+  static constexpr int kUserVersion          = 1;
+  static constexpr int kCaptureFormatVersion = 1;
 
   static void createSchema(QSqlQuery& q);
+  static void createSchemaVerifications(QSqlQuery& q);
 
   void shutdown();
 
@@ -172,6 +186,7 @@ public slots:
   void assignTagToSession(int sessionId, int tagId);
   void removeTagFromSession(int sessionId, int tagId);
 
+  void verifySession(int sessionId);
   void exportSessionToCsv(int sessionId);
   void exportSessionToPdf(int sessionId, const QVariantMap& options);
   void requestSessionDatasets(int sessionId);
@@ -204,6 +219,7 @@ private slots:
 
 private:
   void initWorker();
+  void concludeVerification(int sessionId, bool success, const QVariantMap& verdict);
   [[nodiscard]] quint64 nextToken();
   void setBusy(bool busy);
   void renderReportFromPayload(const ReportPayloadPtr& payload);
@@ -213,6 +229,7 @@ private:
 
   static void createSchemaSessionTables(QSqlQuery& q);
   static void migrateColumnsTable(QSqlQuery& q);
+  static void migrateSessionsTable(QSqlQuery& q);
   static void createSchemaSampleTables(QSqlQuery& q);
   static void createSchemaTagTables(QSqlQuery& q);
   static void createSchemaProjectMetadata(QSqlQuery& q);
@@ -245,6 +262,9 @@ private:
 
   // CSV export tracking
   QString m_pendingCsvPath;
+
+  // Spec-0044 verification child process
+  QProcess* m_verifyProcess;
 
   // Outstanding mutation tokens awaiting worker confirmation
   quint64 m_nextToken;

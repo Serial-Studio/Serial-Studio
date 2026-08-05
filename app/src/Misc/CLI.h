@@ -144,6 +144,17 @@ struct CliOptions {
   QCommandLineOption selftestOfflineOpt{
     "selftest-offline-license",
     "Run offline-certificate verifier self-test vectors and exit (Pro)"};
+  QCommandLineOption verifySessionOpt{
+    "verify-session",
+    "Verify an archived session database's reproducibility and exit; prints a JSON verdict "
+    "(spec 0044, Pro). Pair with --headless for offscreen operation",
+    "file"};
+  QCommandLineOption verifySessionIdOpt{
+    "verify-session-id",
+    "Session id inside the --verify-session archive (default: latest completed session)",
+    "id"};
+  QCommandLineOption verifyKeepRegenOpt{
+    "verify-keep-regen", "Keep the temporary regenerated database for inspection (Pro)"};
   QCommandLineOption validateGuardsOpt{
     "validate-guards", "Verify all embedded license guards pass in this binary and exit (Pro)"};
   QCommandLineOption modbusRtuOpt{
@@ -219,6 +230,10 @@ private:
 
   ProcessResult runHotpathBenchmark();
   ProcessResult dumpApiSchema(const QString& path);
+
+#ifdef BUILD_COMMERCIAL
+  ProcessResult runSessionVerification();
+#endif
 
 #ifdef SS_INAPP_TESTS
   ProcessResult runSelfTests();

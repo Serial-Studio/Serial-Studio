@@ -44,6 +44,8 @@ private:
   static CommandResponse setNotes(const QString& id, const QJsonObject& params);
   static CommandResponse replay(const QString& id, const QJsonObject& params);
   static CommandResponse exportToCsv(const QString& id, const QJsonObject& params);
+  static CommandResponse verify(const QString& id, const QJsonObject& params);
+  static CommandResponse getVerification(const QString& id, const QJsonObject& params);
   static CommandResponse listTags(const QString& id, const QJsonObject& params);
   static CommandResponse addTag(const QString& id, const QJsonObject& params);
   static CommandResponse deleteTag(const QString& id, const QJsonObject& params);

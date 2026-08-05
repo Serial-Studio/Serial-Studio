@@ -61,6 +61,7 @@ signals:
 public:
   ModuleManager();
   static void instantiateCoreModules();
+  static void setupHeadlessSessionConnections();
   [[nodiscard]] bool performanceMode() const noexcept;
   [[nodiscard]] bool inhibitIdleSleep() const noexcept;
   [[nodiscard]] bool autoUpdaterEnabled() const noexcept;

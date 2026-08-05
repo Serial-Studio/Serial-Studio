@@ -68,7 +68,7 @@ void API::ProcessLauncher::setupExternalConnections()
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::sessionClosed,
           this,
-          &API::ProcessLauncher::onSessionClosed);
+          &API::ProcessLauncher::killAll);
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::jsonFileChanged,
           this,
@@ -284,39 +284,6 @@ QVariantList API::ProcessLauncher::runningProcesses() const
 }
 
 /**
- * @brief Reaps every helper when the connection session genuinely ends: an explicit disconnect
- *        or a supervised link's final give-up. Transient state churn (retry cycles, silent
- *        recovery, device rebuilds that auto-reconnect) must not reap, or the helper serving
- *        the very link under recovery dies and the recovery can never succeed.
- */
-void API::ProcessLauncher::onSessionClosed()
-{
-  if (!m_processes.isEmpty())
-    qWarning() << "[ProcessLauncher] sessionClosed -- stopping" << m_processes.size()
-               << "helper process(es)";
-
-  killAll();
-}
-
-/**
- * @brief Reaps every helper when the loaded project's file path actually changes.
- */
-void API::ProcessLauncher::onProjectFileChanged()
-{
-  SS_ASSERT(m_projectModel != nullptr, return);
-  const auto path = m_projectModel->jsonFilePath();
-  if (path == m_lastProjectPath)
-    return;
-
-  if (!m_processes.isEmpty())
-    qWarning() << "[ProcessLauncher] project changed to" << path << "-- stopping"
-               << m_processes.size() << "helper process(es)";
-
-  m_lastProjectPath = path;
-  killAll();
-}
-
-/**
  * @brief Reaps every helper during application teardown. This path blocks (bounded): the event
  *        loop is stopping, so the async timer/deleteLater machinery would never run and a
  *        SIGTERM'd child could be orphaned. The GUI is already gone, so the wait is harmless.
@@ -336,4 +303,22 @@ void API::ProcessLauncher::onAboutToQuit()
 
     process->deleteLater();
   }
+}
+
+/**
+ * @brief Reaps every helper when the loaded project's file path actually changes.
+ */
+void API::ProcessLauncher::onProjectFileChanged()
+{
+  SS_ASSERT(m_projectModel != nullptr, return);
+  const auto path = m_projectModel->jsonFilePath();
+  if (path == m_lastProjectPath)
+    return;
+
+  if (!m_processes.isEmpty())
+    qInfo() << "[ProcessLauncher] project changed to" << path << ", stopping" << m_processes.size()
+            << "helper process(es)";
+
+  m_lastProjectPath = path;
+  killAll();
 }

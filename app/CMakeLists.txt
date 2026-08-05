@@ -778,6 +778,7 @@ if(BUILD_COMMERCIAL)
     src/Sessions/Player.h
     src/Sessions/PlayerLoaderWorker.h
     src/Sessions/ReportData.h
+    src/Sessions/Verifier.h
     src/ThirdParty/miniaudio.h
     src/ThirdParty/tweetnacl.h
     src/ThirdParty/ed25519_verify.h
@@ -870,6 +871,7 @@ if(BUILD_COMMERCIAL)
     src/Sessions/Player.cpp
     src/Sessions/PlayerLoaderWorker.cpp
     src/Sessions/ReportData.cpp
+    src/Sessions/Verifier.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp

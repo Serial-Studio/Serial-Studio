@@ -706,6 +706,19 @@ void Misc::ModuleManager::instantiateCoreModules()
 }
 
 /**
+ * @brief Wires the modules a headless session re-record needs (spec 0044). Such a run builds
+ *        the pinned order without the QML interface, so setupCrossModuleConnections() never
+ *        runs and neither the frame builder nor the session exporter would see a frame.
+ */
+void Misc::ModuleManager::setupHeadlessSessionConnections()
+{
+  DataModel::FrameBuilder::instance().setupExternalConnections();
+#ifdef BUILD_COMMERCIAL
+  Sessions::Export::instance().setupExternalConnections();
+#endif
+}
+
+/**
  * @brief Wires the per-session problem reset on the false-to-true connection edge only
  *        (connectedChanged is also forwarded from config edits). A full run replaces every
  *        checker's findings wholesale, so no separate clear is needed and the dedup keys

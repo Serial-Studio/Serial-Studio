@@ -27,6 +27,31 @@ Widgets.Pane {
   property var metadata: sessionId >= 0
                          ? Cpp_Sessions_Manager.sessionMetadata(sessionId)
                          : ({})
+  property var verification: sessionId >= 0
+                             ? Cpp_Sessions_Manager.latestVerification(sessionId)
+                             : ({})
+
+  //
+  // Maps a stored verdict string to user-facing text
+  //
+  function verdictLabel(verdict) {
+    if (verdict === "reproduced")
+      return qsTr("Reproduced")
+
+    if (verdict === "diverged")
+      return qsTr("Diverged")
+
+    if (verdict === "partial")
+      return qsTr("Partially verified")
+
+    if (verdict === "not_verifiable")
+      return qsTr("Not mechanically verifiable")
+
+    if (verdict === "error")
+      return qsTr("Verification error")
+
+    return qsTr("Never verified")
+  }
 
   //
   // True when the explorer is opened from a deployed shortcut. Edits are
@@ -54,6 +79,15 @@ Widgets.Pane {
       root.metadata  = root.sessionId >= 0
                        ? Cpp_Sessions_Manager.sessionMetadata(root.sessionId)
                        : {}
+      root.verification = root.sessionId >= 0
+                          ? Cpp_Sessions_Manager.latestVerification(root.sessionId)
+                          : {}
+    }
+
+    function onVerificationFinished() {
+      root.verification = root.sessionId >= 0
+                          ? Cpp_Sessions_Manager.latestVerification(root.sessionId)
+                          : {}
     }
   }
 
@@ -304,6 +338,56 @@ Widgets.Pane {
         }
 
         //
+        // Reproducibility section
+        //
+        Label {
+          text: qsTr("Reproducibility")
+          color: Cpp_ThemeManager.colors["text"]
+          font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+          Component.onCompleted: font.capitalization = Font.AllUppercase
+        }
+
+        //
+        // Latest verdict + provenance
+        //
+        ColumnLayout {
+          spacing: 4
+          Layout.fillWidth: true
+
+          Label {
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.boldUiFont
+            text: root.verdictLabel(root.verification.verdict)
+          }
+
+          Label {
+            opacity: 0.6
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            visible: !!root.verification.verified_at
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.monoFont
+            text: qsTr("Checked %1 with version %2").arg(
+                    root.verification.verified_at || "")
+                  .arg(root.verification.app_version || "")
+          }
+
+          Label {
+            opacity: 0.6
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Re-runs the archived raw data through the current build and compares "
+                       + "it against the recorded values. This proves the archive is "
+                       + "reproducible; it is not a determinism guarantee, a safety function, "
+                       + "or a calibration authority.")
+          }
+        }
+
+        //
         // Spacer
         //
         Item {
@@ -337,6 +421,16 @@ Widgets.Pane {
             icon.source: "qrc:/icons/buttons/report.svg"
             onClicked: _reportDialog.openFor(root.sessionId)
             enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.pdfExportBusy
+          }
+
+          Widgets.IconButton {
+            visible: !root.operatorMode
+            icon.source: "qrc:/icons/buttons/apply.svg"
+            ToolTip.visible: hovered && !root.metadata.ended_at
+            ToolTip.text: qsTr("Only completed sessions can be verified")
+            onClicked: Cpp_Sessions_Manager.verifySession(root.sessionId)
+            enabled: !!root.metadata.ended_at && !Cpp_Sessions_Manager.verificationBusy
+            text: Cpp_Sessions_Manager.verificationBusy ? qsTr("Verifying…") : qsTr("Verify")
           }
 
           Item {

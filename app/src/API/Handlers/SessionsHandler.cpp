@@ -160,6 +160,18 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
       QStringLiteral("Export a stored session to CSV (async; params: sessionId)"),
       schema,
       &exportToCsv);
+    registry.registerCommand(
+      QStringLiteral("sessions.verify"),
+      QStringLiteral("Verify a stored session's reproducibility in a child process (async; "
+                     "poll sessions.getVerification; params: sessionId)"),
+      schema,
+      &verify);
+    registry.registerCommand(
+      QStringLiteral("sessions.getVerification"),
+      QStringLiteral("Return the latest stored verification verdict for a session "
+                     "(params: sessionId)"),
+      schema,
+      &getVerification);
   }
 
   {
@@ -519,6 +531,73 @@ API::CommandResponse API::Handlers::SessionsHandler::exportToCsv(const QString& 
   QJsonObject result;
   result[QStringLiteral("sessionId")] = sessionId;
   result[QStringLiteral("exporting")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Start a reproducibility verification (async; poll sessions.getVerification).
+ */
+API::CommandResponse API::Handlers::SessionsHandler::verify(const QString& id,
+                                                            const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("sessionId")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+
+  static auto& db = Sessions::DatabaseManager::instance();
+  if (!db.isOpen())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No database open. Call sessions.openDatabase first."));
+
+  if (db.verificationBusy())
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("A verification is already running."));
+
+  const auto idValue = params.value(QStringLiteral("sessionId"));
+  if (!idValue.isDouble() || idValue.toInt() < 1)
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("sessionId must be a positive integer"));
+
+  const int sessionId = idValue.toInt();
+  db.verifySession(sessionId);
+
+  QJsonObject result;
+  result[QStringLiteral("sessionId")] = sessionId;
+  result[QStringLiteral("verifying")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Return the latest stored verification verdict for a session.
+ */
+API::CommandResponse API::Handlers::SessionsHandler::getVerification(const QString& id,
+                                                                     const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("sessionId")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+
+  static auto& db = Sessions::DatabaseManager::instance();
+  if (!db.isOpen())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No database open. Call sessions.openDatabase first."));
+
+  const auto idValue = params.value(QStringLiteral("sessionId"));
+  if (!idValue.isDouble() || idValue.toInt() < 1)
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("sessionId must be a positive integer"));
+
+  const int sessionId = idValue.toInt();
+
+  QJsonObject result;
+  result[QStringLiteral("sessionId")] = sessionId;
+  result[QStringLiteral("verifying")] = db.verificationBusy();
+  result[QStringLiteral("verification")] =
+    QJsonObject::fromVariantMap(db.latestVerification(sessionId));
   return CommandResponse::makeSuccess(id, result);
 }
 

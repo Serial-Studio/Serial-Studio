@@ -27,6 +27,7 @@
 #  include <QJsonDocument>
 #  include <QJsonObject>
 #  include <QJsonParseError>
+#  include <QProcess>
 #  include <QSqlError>
 #  include <QSqlQuery>
 #  include <QThread>
@@ -43,6 +44,12 @@
 #  include "Sessions/Player.h"
 #  include "Sessions/ReportData.h"
 #  include "SSAssert.h"
+
+//--------------------------------------------------------------------------------------------------
+// File-local state
+//--------------------------------------------------------------------------------------------------
+
+static QString s_dbPathOverride;
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -102,6 +109,7 @@ Sessions::DatabaseManager::DatabaseManager()
   , m_pdfExportProgress(0.0)
   , m_pendingPdfSessionId(-1)
   , m_pendingPdfActive(false)
+  , m_verifyProcess(nullptr)
   , m_nextToken(1)
   , m_outstandingMutations(0)
   , m_workspaceManager(nullptr)
@@ -182,6 +190,12 @@ void Sessions::DatabaseManager::initWorker()
  */
 void Sessions::DatabaseManager::shutdown()
 {
+  if (m_verifyProcess) {
+    m_verifyProcess->terminate();
+    if (!m_verifyProcess->waitForFinished(3000))
+      m_verifyProcess->kill();
+  }
+
   if (!m_thread)
     return;
 
@@ -416,14 +430,174 @@ QVariantMap Sessions::DatabaseManager::sessionMetadata(int sessionId) const
 }
 
 /**
+ * @brief Redirects new session databases to @p path (spec-0044 verifier child process only).
+ *        Empty restores the canonical workspace location. The export worker reads this on its
+ *        own thread, so the override may only change while no recording session is open: the
+ *        worker enable/close handoff is what orders the access.
+ */
+void Sessions::DatabaseManager::setDbPathOverride(const QString& path)
+{
+  // code-verify off: the only caller overrides the path after the pinned order built Export
+  SS_ASSERT_LOG(!Sessions::Export::instance().isOpen());
+  // code-verify on
+  s_dbPathOverride = path;
+}
+
+/**
  * @brief Returns the canonical .db path for a project title. Pure path arithmetic.
  */
 QString Sessions::DatabaseManager::canonicalDbPath(const QString& projectTitle)
 {
+  if (!s_dbPathOverride.isEmpty())
+    return s_dbPathOverride;
+
   const QString safeTitle       = sanitiseTitleForPath(projectTitle);
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
   const auto subdir             = workspaceManager.path("Session Databases");
   return QStringLiteral("%1/%2/%2.db").arg(subdir, safeTitle);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reproducibility verification (spec 0044)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns true while a verification child process is running.
+ */
+bool Sessions::DatabaseManager::verificationBusy() const
+{
+  return m_verifyProcess != nullptr;
+}
+
+/**
+ * @brief Returns the latest stored verification record for @p sessionId (empty map when the
+ *        session was never verified or the archive predates the verifications table).
+ */
+QVariantMap Sessions::DatabaseManager::latestVerification(int sessionId) const
+{
+  QVariantMap result;
+  if (!m_open || m_filePath.isEmpty())
+    return result;
+
+  const QString connName = QStringLiteral("ss_dbm_verification_read");
+  {
+    auto db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connName);
+    db.setDatabaseName(m_filePath);
+    db.setConnectOptions(QStringLiteral("QSQLITE_OPEN_READONLY"));
+    if (db.open()) {
+      QSqlQuery q(db);
+      q.prepare(
+        QStringLiteral("SELECT verified_at, app_version, verdict, detail_json FROM verifications "
+                       "WHERE session_id = ? ORDER BY verification_id DESC LIMIT 1"));
+      q.bindValue(0, sessionId);
+      if (q.exec() && q.next()) {
+        result.insert(QStringLiteral("verified_at"), q.value(0).toString());
+        result.insert(QStringLiteral("app_version"), q.value(1).toString());
+        result.insert(QStringLiteral("verdict"), q.value(2).toString());
+        result.insert(
+          QStringLiteral("detail"),
+          QJsonDocument::fromJson(q.value(3).toString().toUtf8()).object().toVariantMap());
+      }
+
+      db.close();
+    }
+  }
+
+  QSqlDatabase::removeDatabase(connName);
+  return result;
+}
+
+/**
+ * @brief Returns a session_id -> verdict map with the latest stored verdict per session, in a
+ *        single query so the session list can badge rows without per-row lookups.
+ */
+QVariantMap Sessions::DatabaseManager::latestVerdicts() const
+{
+  QVariantMap result;
+  if (!m_open || m_filePath.isEmpty())
+    return result;
+
+  const QString connName = QStringLiteral("ss_dbm_verdicts_read");
+  {
+    auto db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connName);
+    db.setDatabaseName(m_filePath);
+    db.setConnectOptions(QStringLiteral("QSQLITE_OPEN_READONLY"));
+    if (db.open()) {
+      QSqlQuery q(db);
+      const bool ok = q.exec(QStringLiteral(
+        "SELECT v.session_id, v.verdict FROM verifications v JOIN "
+        "(SELECT session_id, MAX(verification_id) AS latest_id FROM verifications "
+        " GROUP BY session_id) latest "
+        "ON v.session_id = latest.session_id AND v.verification_id = latest.latest_id"));
+      while (ok && q.next())
+        result.insert(q.value(0).toString(), q.value(1).toString());
+
+      db.close();
+    }
+  }
+
+  QSqlDatabase::removeDatabase(connName);
+  return result;
+}
+
+/**
+ * @brief Launches the spec-0044 verifier child process for @p sessionId (-1 = latest completed).
+ *        The child appends the verification record itself; this side only parses the verdict
+ *        JSON from stdout and refreshes the UI. One verification runs at a time.
+ */
+void Sessions::DatabaseManager::verifySession(int sessionId)
+{
+  SS_ASSERT(m_open, return);
+  SS_ASSERT(!m_filePath.isEmpty(), return);
+
+  if (m_verifyProcess)
+    return;
+
+  auto* process   = new QProcess(this);
+  m_verifyProcess = process;
+  Q_EMIT verificationBusyChanged();
+
+  QStringList args{QStringLiteral("--verify-session"), m_filePath, QStringLiteral("--headless")};
+  if (sessionId >= 0)
+    args << QStringLiteral("--verify-session-id") << QString::number(sessionId);
+
+  connect(process,
+          &QProcess::finished,
+          this,
+          [this, process, sessionId](int exitCode, QProcess::ExitStatus status) {
+            const auto doc = QJsonDocument::fromJson(process->readAllStandardOutput());
+            const bool ok  = status == QProcess::NormalExit && doc.isObject();
+            const auto map = doc.object().toVariantMap();
+
+            int resolvedId = sessionId;
+            if (resolvedId < 0 && map.contains(QStringLiteral("sessionId")))
+              resolvedId = map.value(QStringLiteral("sessionId")).toInt();
+
+            concludeVerification(resolvedId, ok && exitCode == 0, map);
+          });
+  connect(process, &QProcess::errorOccurred, this, [this, sessionId](QProcess::ProcessError err) {
+    if (err == QProcess::FailedToStart)
+      concludeVerification(sessionId, false, QVariantMap());
+  });
+
+  process->start(QCoreApplication::applicationFilePath(), args);
+}
+
+/**
+ * @brief Tears the verification child process down and publishes the verdict exactly once.
+ */
+void Sessions::DatabaseManager::concludeVerification(int sessionId,
+                                                     bool success,
+                                                     const QVariantMap& verdict)
+{
+  if (!m_verifyProcess)
+    return;
+
+  m_verifyProcess->deleteLater();
+  m_verifyProcess = nullptr;
+  Q_EMIT verificationBusyChanged();
+  Q_EMIT verificationFinished(sessionId, success, verdict);
+  Q_EMIT sessionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1397,9 +1571,12 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
 {
   createSchemaSessionTables(q);
   migrateColumnsTable(q);
+  migrateSessionsTable(q);
   createSchemaSampleTables(q);
   createSchemaTagTables(q);
   createSchemaProjectMetadata(q);
+  createSchemaVerifications(q);
+  q.exec(QStringLiteral("PRAGMA user_version = %1").arg(kUserVersion));
 }
 
 /**
@@ -1455,6 +1632,47 @@ void Sessions::DatabaseManager::migrateColumnsTable(QSqlQuery& q)
   if (!columnExists(QStringLiteral("source_title"))) {
     if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_title TEXT NOT NULL DEFAULT ''"))
       qWarning() << "[Sessions] ALTER add source_title failed:" << q.lastError().text();
+  }
+}
+
+/**
+ * @brief Adds the spec-0044 fingerprint and classification columns to legacy sessions tables.
+ */
+void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
+{
+  auto columnExists = [&q](const QString& column) {
+    if (!q.exec(QStringLiteral("PRAGMA table_info(\"sessions\")"))) {
+      qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
+      return false;
+    }
+    while (q.next())
+      if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
+        return true;
+
+    return false;
+  };
+
+  static constexpr struct {
+    const char* name;
+    const char* type;
+  } kColumns[] = {
+    {     "raw_sha256",    "TEXT"},
+    {"readings_sha256",    "TEXT"},
+    {    "app_version",    "TEXT"},
+    { "capture_format", "INTEGER"},
+    {    "repro_class",    "TEXT"},
+    { "frames_dropped", "INTEGER"},
+    { "overflow_bytes", "INTEGER"},
+  };
+
+  for (const auto& col : kColumns) {
+    if (columnExists(QLatin1String(col.name)))
+      continue;
+
+    const auto sql = QStringLiteral("ALTER TABLE \"sessions\" ADD COLUMN %1 %2")
+                       .arg(QLatin1String(col.name), QLatin1String(col.type));
+    if (!q.exec(sql))
+      qWarning() << "[Sessions] ALTER add" << col.name << "failed:" << q.lastError().text();
   }
 }
 
@@ -1528,6 +1746,23 @@ void Sessions::DatabaseManager::createSchemaProjectMetadata(QSqlQuery& q)
          "  key   TEXT PRIMARY KEY,"
          "  value TEXT NOT NULL"
          ") WITHOUT ROWID");
+}
+
+/**
+ * @brief Creates the append-only verification-record table (spec 0044).
+ */
+void Sessions::DatabaseManager::createSchemaVerifications(QSqlQuery& q)
+{
+  q.exec("CREATE TABLE IF NOT EXISTS verifications ("
+         "  verification_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+         "  session_id      INTEGER NOT NULL REFERENCES sessions,"
+         "  verified_at     TEXT NOT NULL,"
+         "  app_version     TEXT NOT NULL,"
+         "  verdict         TEXT NOT NULL,"
+         "  detail_json     TEXT"
+         ")");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_verifications_session "
+         "ON verifications (session_id, verification_id)");
 }
 
 #endif  // BUILD_COMMERCIAL

@@ -162,6 +162,7 @@ public:
 
   [[nodiscard]] QString linkState() const;
   [[nodiscard]] LinkStats linkStats() const;
+  [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
 
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
@@ -249,7 +250,6 @@ private:
 
   [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] bool diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const;
-  [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
 
 private:

@@ -21,6 +21,10 @@
 
 #include "Benchmark/BenchmarkRunner.h"
 
+#if defined(SS_MIMALLOC_ACTIVE)
+#  include <mimalloc.h>
+#endif
+
 #include <cmath>
 #include <QClipboard>
 #include <QGuiApplication>
@@ -603,10 +607,16 @@ void BenchmarkRunner::executePhase(int index)
 }
 
 /**
- * @brief Restores the session, clears the dashboard preview, and ends the run.
+ * @brief Restores the session, clears the dashboard preview, and ends the run. Allocator stats
+ *        go to stderr first so mimalloc tuning (mi_option_purge_delay in main.cpp) is validated
+ *        against the run's real peak commit and purge counts instead of guessed.
  */
 void BenchmarkRunner::finishSession()
 {
+#if defined(SS_MIMALLOC_ACTIVE)
+  mi_stats_print(nullptr);
+#endif
+
   const quint64 peakBytes = Platform::AppPlatform::peakResidentBytes();
   const double peakMiB    = static_cast<double>(peakBytes) / (1024.0 * 1024.0);
   m_peakMemory = peakBytes > 0 ? tr("%1 MiB").arg(QString::number(peakMiB, 'f', 1)) : QString();

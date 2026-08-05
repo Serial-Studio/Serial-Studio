@@ -72,9 +72,8 @@ public:
   [[nodiscard]] QVariantList runningProcesses() const;
 
 private slots:
-  void onSessionClosed();
-  void onProjectFileChanged();
   void onAboutToQuit();
+  void onProjectFileChanged();
 
 private:
   [[nodiscard]] static QStringList extraSearchPaths();

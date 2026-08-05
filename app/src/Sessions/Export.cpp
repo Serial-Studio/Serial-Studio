@@ -15,17 +15,22 @@
 
 #  include "Sessions/Export.h"
 
+#  include <bit>
+#  include <cmath>
 #  include <QDateTime>
 #  include <QDir>
 #  include <QJsonArray>
 #  include <QJsonDocument>
 #  include <QJsonObject>
 #  include <QSqlError>
+#  include <QtEndian>
 
+#  include "AppInfo.h"
 #  include "AppState.h"
 #  include "CSV/Player.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/ProjectModel.h"
+#  include "DataModel/Scripting/ControlScript.h"
 #  include "DataModel/Scripting/FrameParser.h"
 #  include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #  include "IO/ConnectionManager.h"
@@ -36,6 +41,76 @@
 #  include "Misc/WorkspaceManager.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "SSAssert.h"
+
+//--------------------------------------------------------------------------------------------------
+// Fingerprint canonical serialization (spec 0044, shared with Sessions::Verifier)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Appends a little-endian 64-bit integer to the hash.
+ */
+static void hashLe64(QCryptographicHash& hash, quint64 value)
+{
+  char buffer[sizeof(quint64)];
+  qToLittleEndian(value, buffer);
+  hash.addData(QByteArrayView(buffer, sizeof(buffer)));
+}
+
+/**
+ * @brief Appends an IEEE-754 double as its little-endian bit pattern to the hash. NaN folds to
+ *        0.0 because SQLite stores NaN as NULL and the verifier reads NULL back as 0.0: the
+ *        digest must cover the value the archive actually round-trips.
+ */
+static void hashDouble(QCryptographicHash& hash, double value)
+{
+  const double canonical = std::isnan(value) ? 0.0 : value;
+  hashLe64(hash, std::bit_cast<quint64>(canonical));
+}
+
+/**
+ * @brief Appends a length-prefixed UTF-8 string to the hash.
+ */
+static void hashString(QCryptographicHash& hash, const QString& value)
+{
+  const QByteArray utf8 = value.toUtf8();
+  hashLe64(hash, static_cast<quint64>(utf8.size()));
+  hash.addData(utf8);
+}
+
+/**
+ * @brief Feeds one raw_bytes row into a fingerprint hash using the spec-0044 canonical layout.
+ */
+void Sessions::hashRawChunk(QCryptographicHash& hash,
+                            qint64 ns,
+                            int deviceId,
+                            const QByteArray& data)
+{
+  hashLe64(hash, static_cast<quint64>(ns));
+  hashLe64(hash, static_cast<quint64>(deviceId));
+  hashLe64(hash, static_cast<quint64>(data.size()));
+  hash.addData(data);
+}
+
+/**
+ * @brief Feeds one readings row into a fingerprint hash using the spec-0044 canonical layout.
+ */
+void Sessions::hashReadingRow(QCryptographicHash& hash,
+                              qint64 ns,
+                              qint64 uniqueId,
+                              double rawNumeric,
+                              const QString& rawString,
+                              double finalNumeric,
+                              const QString& finalString,
+                              bool isNumeric)
+{
+  hashLe64(hash, static_cast<quint64>(ns));
+  hashLe64(hash, static_cast<quint64>(uniqueId));
+  hashDouble(hash, rawNumeric);
+  hashString(hash, rawString);
+  hashDouble(hash, finalNumeric);
+  hashString(hash, finalString);
+  hashLe64(hash, isNumeric ? 1 : 0);
+}
 
 //--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
@@ -52,22 +127,33 @@ Sessions::ExportWorker::ExportWorker(
   moodycamel::ReaderWriterQueue<TableSnapshotEntry>* snapshotQueue,
   std::atomic<int>* operationMode,
   QMutex* projectSnapshotMutex,
-  const QByteArray* projectSnapshot)
+  const QByteArray* projectSnapshot,
+  const std::atomic<bool>* controlScriptSeen,
+  const std::atomic<quint64>* linkDroppedFrames,
+  const std::atomic<quint64>* linkOverflowBytes)
   : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(frameQueue, enabled, queueSize)
   , m_dbOpen(false)
   , m_sessionId(-1)
   , m_lastRawBytesNs(-1)
+  , m_rawHash(QCryptographicHash::Sha256)
+  , m_readingsHash(QCryptographicHash::Sha256)
   , m_rawQueue(rawQueue)
   , m_snapshotQueue(snapshotQueue)
   , m_operationMode(operationMode)
   , m_projectSnapshotMutex(projectSnapshotMutex)
   , m_projectSnapshot(projectSnapshot)
+  , m_controlScriptSeen(controlScriptSeen)
+  , m_linkDroppedFrames(linkDroppedFrames)
+  , m_linkOverflowBytes(linkOverflowBytes)
 {
   SS_ASSERT_LOG(rawQueue != nullptr);
   SS_ASSERT_LOG(snapshotQueue != nullptr);
   SS_ASSERT_LOG(operationMode != nullptr);
   SS_ASSERT_LOG(projectSnapshotMutex != nullptr);
   SS_ASSERT_LOG(projectSnapshot != nullptr);
+  SS_ASSERT_LOG(controlScriptSeen != nullptr);
+  SS_ASSERT_LOG(linkDroppedFrames != nullptr);
+  SS_ASSERT_LOG(linkOverflowBytes != nullptr);
 }
 
 /**
@@ -109,6 +195,8 @@ void Sessions::ExportWorker::closeResources()
   m_sessionId      = -1;
   m_lastRawBytesNs = -1;
   m_schema         = DataModel::ExportSchema{};
+  m_rawHash.reset();
+  m_readingsHash.reset();
   resetMonotonicClock();
 }
 
@@ -162,7 +250,9 @@ void Sessions::ExportWorker::writeFrameReadings(const DataModel::TimestampedFram
 }
 
 /**
- * @brief Binds dataset values into the reading insert query and executes it.
+ * @brief Binds dataset values into the reading insert query and executes it. The fingerprint
+ *        is fed only after a successful insert so the digest never covers rows the archive
+ *        does not contain.
  */
 void Sessions::ExportWorker::bindAndInsertReading(qint64 ns, const DataModel::Dataset& dataset)
 {
@@ -178,8 +268,19 @@ void Sessions::ExportWorker::bindAndInsertReading(qint64 ns, const DataModel::Da
   m_readingQuery->bindValue(6, dataset.value);
   m_readingQuery->bindValue(7, dataset.isNumeric ? 1 : 0);
 
-  if (!m_readingQuery->exec()) [[unlikely]]
+  if (!m_readingQuery->exec()) [[unlikely]] {
     qWarning() << "[SQLite] Insert reading failed:" << m_readingQuery->lastError().text();
+    return;
+  }
+
+  hashReadingRow(m_readingsHash,
+                 ns,
+                 dataset.uniqueId,
+                 dataset.rawNumericValue,
+                 dataset.rawValue,
+                 dataset.numericValue,
+                 dataset.value,
+                 dataset.isNumeric);
 }
 
 /**
@@ -500,6 +601,9 @@ void Sessions::ExportWorker::writeRawBytes()
 
   m_db->transaction();
   while (count < kMaxRawBatch && m_rawQueue->try_dequeue(entry)) {
+    if (!entry.data) [[unlikely]]
+      continue;
+
     const auto elapsed = entry.data->timestamp - m_steadyBaseline;
     qint64 ns          = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
 
@@ -510,15 +614,20 @@ void Sessions::ExportWorker::writeRawBytes()
 
     m_lastRawBytesNs = ns;
 
+    const QByteArray chunk = entry.data->data;
     m_rawBytesQuery->bindValue(0, m_sessionId);
     m_rawBytesQuery->bindValue(1, ns);
     m_rawBytesQuery->bindValue(2, entry.deviceId);
-    m_rawBytesQuery->bindValue(3, entry.data ? entry.data->data : QByteArray());
-
-    if (!m_rawBytesQuery->exec()) [[unlikely]]
-      qWarning() << "[SQLite] Insert raw_bytes failed:" << m_rawBytesQuery->lastError().text();
+    m_rawBytesQuery->bindValue(3, chunk);
 
     ++count;
+
+    if (!m_rawBytesQuery->exec()) [[unlikely]] {
+      qWarning() << "[SQLite] Insert raw_bytes failed:" << m_rawBytesQuery->lastError().text();
+      continue;
+    }
+
+    hashRawChunk(m_rawHash, ns, entry.deviceId, chunk);
   }
   m_db->commit();
 }
@@ -565,7 +674,8 @@ void Sessions::ExportWorker::writeTableSnapshots()
 }
 
 /**
- * @brief Updates the session's ended_at timestamp.
+ * @brief Updates the session's ended_at timestamp and stamps the spec-0044 fingerprint,
+ *        version, classification, and link-loss columns.
  */
 void Sessions::ExportWorker::finalizeSession()
 {
@@ -573,10 +683,81 @@ void Sessions::ExportWorker::finalizeSession()
     return;
 
   QSqlQuery q(*m_db);
-  q.prepare("UPDATE sessions SET ended_at = ? WHERE session_id = ?");
+  q.prepare("UPDATE sessions SET ended_at = ?, raw_sha256 = ?, readings_sha256 = ?, "
+            "app_version = ?, capture_format = ?, repro_class = ?, frames_dropped = ?, "
+            "overflow_bytes = ? WHERE session_id = ?");
   q.bindValue(0, QDateTime::currentDateTime().toString(Qt::ISODate));
-  q.bindValue(1, m_sessionId);
-  q.exec();
+  q.bindValue(1, QString::fromLatin1(m_rawHash.result().toHex()));
+  q.bindValue(2, QString::fromLatin1(m_readingsHash.result().toHex()));
+  q.bindValue(3, QStringLiteral(APP_VERSION));
+  q.bindValue(4, DatabaseManager::kCaptureFormatVersion);
+  q.bindValue(5, buildReproClassJson());
+  q.bindValue(6, static_cast<qint64>(m_linkDroppedFrames->load(std::memory_order_relaxed)));
+  q.bindValue(7, static_cast<qint64>(m_linkOverflowBytes->load(std::memory_order_relaxed)));
+  q.bindValue(8, m_sessionId);
+  if (q.exec())
+    return;
+
+  qWarning() << "[SQLite] Session finalize failed:" << q.lastError().text();
+
+  QSqlQuery fallback(*m_db);
+  fallback.prepare("UPDATE sessions SET ended_at = ? WHERE session_id = ?");
+  fallback.bindValue(0, QDateTime::currentDateTime().toString(Qt::ISODate));
+  fallback.bindValue(1, m_sessionId);
+  if (!fallback.exec())
+    qWarning() << "[SQLite] Session ended_at fallback failed:" << fallback.lastError().text();
+}
+
+/**
+ * @brief Returns true when any dataset in the project JSON carries a transform script.
+ */
+static bool projectHasTransforms(const QJsonObject& project)
+{
+  const auto groups = project.value(Keys::Groups).toArray();
+  for (const auto& groupRef : groups) {
+    const auto datasets = groupRef.toObject().value(Keys::Datasets).toArray();
+    for (const auto& datasetRef : datasets)
+      if (!datasetRef.toObject().value(Keys::TransformCode).toString().isEmpty())
+        return true;
+  }
+
+  return false;
+}
+
+/**
+ * @brief Builds the reproducibility classification JSON stored with the session: features whose
+ *        interpretation inputs are not archived make the session (or dataset) not mechanically
+ *        verifiable, so the verifier reports the reason instead of a false verdict.
+ */
+QString Sessions::ExportWorker::buildReproClassJson() const
+{
+  QByteArray snapshot;
+  {
+    QMutexLocker locker(m_projectSnapshotMutex);
+    snapshot = *m_projectSnapshot;
+  }
+
+  bool transformsPresent = false;
+  bool tablesPresent     = false;
+  if (!snapshot.isEmpty()) {
+    const auto project = QJsonDocument::fromJson(snapshot).object();
+    tablesPresent      = !project.value(Keys::Tables).toArray().isEmpty();
+    transformsPresent  = projectHasTransforms(project);
+  }
+
+  QJsonArray virtualIds;
+
+  for (const auto& col : m_schema.columns)
+    if (col.isVirtual)
+      virtualIds.append(col.uniqueId);
+
+  QJsonObject json;
+  json.insert(QStringLiteral("controlScript"),
+              m_controlScriptSeen->load(std::memory_order_relaxed));
+  json.insert(QStringLiteral("transformsPresent"), transformsPresent);
+  json.insert(QStringLiteral("tablesPresent"), tablesPresent);
+  json.insert(QStringLiteral("virtualDatasets"), virtualIds);
+  return QString::fromUtf8(QJsonDocument(json).toJson(QJsonDocument::Compact));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -596,9 +777,16 @@ Sessions::Export::Export()
   , m_rawBytesQueue(8192)
   , m_tableSnapshotQueue(1024)
   , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
+  , m_controlScriptSeen(false)
+  , m_linkDroppedFrames(0)
+  , m_linkOverflowBytes(0)
+  , m_lastLinkDroppedSample(0)
+  , m_lastLinkOverflowSample(0)
   , m_appState(&AppState::instance())
   , m_projectModel(&DataModel::ProjectModel::instance())
   , m_frameBuilder(&DataModel::FrameBuilder::instance())
+  , m_controlScript(nullptr)
+  , m_connectionManager(nullptr)
 {
   initializeWorker();
 
@@ -672,6 +860,9 @@ void Sessions::Export::closeFile()
  */
 void Sessions::Export::setupExternalConnections()
 {
+  m_controlScript     = &DataModel::ControlScript::instance();
+  m_connectionManager = &IO::ConnectionManager::instance();
+
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     const auto mode = AppState::instance().operationMode();
     m_operationMode.store(static_cast<int>(mode), std::memory_order_relaxed);
@@ -683,11 +874,10 @@ void Sessions::Export::setupExternalConnections()
       setExportEnabled(false);
   });
 
-  connect(
-    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
-      if (!IO::ConnectionManager::instance().isConnected())
-        closeFile();
-    });
+  connect(m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [this] {
+    if (!m_connectionManager->isConnected())
+      closeFile();
+  });
 
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
     if (CSV::Player::instance().isOpen())
@@ -807,6 +997,50 @@ void Sessions::Export::setSettingsPersistent(const bool persistent)
 }
 
 /**
+ * @brief Re-baselines the link-loss delta accumulators and the control-script sticky flag at
+ *        session open, so pre-session drops never count against the new session.
+ */
+void Sessions::Export::resetSessionHealthBaseline()
+{
+  SS_ASSERT(m_controlScript != nullptr, return);
+  SS_ASSERT(m_connectionManager != nullptr, return);
+
+  const auto stats         = m_connectionManager->linkStats();
+  m_lastLinkDroppedSample  = stats.droppedFrames;
+  m_lastLinkOverflowSample = stats.overflowBytes;
+  m_linkDroppedFrames.store(0, std::memory_order_relaxed);
+  m_linkOverflowBytes.store(0, std::memory_order_relaxed);
+  m_controlScriptSeen.store(m_controlScript->running(), std::memory_order_relaxed);
+}
+
+/**
+ * @brief Main-thread 1 Hz sample of the session-health classification inputs: sticky
+ *        control-script flag and link-loss counter deltas (a decrease means a reader reset).
+ */
+void Sessions::Export::sampleSessionHealth()
+{
+  SS_ASSERT(m_controlScript != nullptr, return);
+  SS_ASSERT(m_connectionManager != nullptr, return);
+
+  if (m_controlScript->running())
+    m_controlScriptSeen.store(true, std::memory_order_relaxed);
+
+  const auto stats = m_connectionManager->linkStats();
+
+  const quint64 droppedDelta  = stats.droppedFrames >= m_lastLinkDroppedSample
+                                ? stats.droppedFrames - m_lastLinkDroppedSample
+                                : stats.droppedFrames;
+  const quint64 overflowDelta = stats.overflowBytes >= m_lastLinkOverflowSample
+                                ? stats.overflowBytes - m_lastLinkOverflowSample
+                                : stats.overflowBytes;
+
+  m_lastLinkDroppedSample  = stats.droppedFrames;
+  m_lastLinkOverflowSample = stats.overflowBytes;
+  m_linkDroppedFrames.fetch_add(droppedDelta, std::memory_order_relaxed);
+  m_linkOverflowBytes.fetch_add(overflowDelta, std::memory_order_relaxed);
+}
+
+/**
  * @brief Main-thread 1 Hz poll: diffs the live data-table store against the last captured
  *        state and enqueues changed registers for the table_snapshots table.
  */
@@ -818,6 +1052,8 @@ void Sessions::Export::captureTableSnapshots()
     m_lastTableSnapshot.clear();
     return;
   }
+
+  sampleSessionHealth();
 
   const auto& store = m_frameBuilder->tableStore();
   if (!store.isInitialized())
@@ -899,7 +1135,10 @@ DataModel::FrameConsumerWorkerBase* Sessions::Export::createWorker()
                              &m_tableSnapshotQueue,
                              &m_operationMode,
                              &m_projectSnapshotMutex,
-                             &m_projectSnapshot);
+                             &m_projectSnapshot,
+                             &m_controlScriptSeen,
+                             &m_linkDroppedFrames,
+                             &m_linkOverflowBytes);
   connect(w,
           &DataModel::FrameConsumerWorkerBase::resourceOpenChanged,
           this,
@@ -929,6 +1168,9 @@ void Sessions::Export::onWorkerOpenChanged()
   auto* worker     = static_cast<ExportWorker*>(m_worker);
   const bool state = worker->isResourceOpen();
   if (m_isOpen.load(std::memory_order_relaxed) != state) {
+    if (state)
+      resetSessionHealthBaseline();
+
     m_isOpen.store(state, std::memory_order_relaxed);
     Q_EMIT openChanged();
   }

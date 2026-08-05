@@ -17,6 +17,7 @@
 #include <cstddef>
 #include <new>
 #include <optional>
+#include <QCryptographicHash>
 #include <QMap>
 #include <QMutex>
 #include <QObject>
@@ -33,6 +34,7 @@
 class AppState;
 
 namespace DataModel {
+class ControlScript;
 class FrameBuilder;
 class ProjectModel;
 }  // namespace DataModel
@@ -41,6 +43,23 @@ class ProjectModel;
 
 namespace Sessions {
 class Export;
+
+/**
+ * @brief Feeds one raw_bytes row into a fingerprint hash using the spec-0044 canonical layout.
+ */
+void hashRawChunk(QCryptographicHash& hash, qint64 ns, int deviceId, const QByteArray& data);
+
+/**
+ * @brief Feeds one readings row into a fingerprint hash using the spec-0044 canonical layout.
+ */
+void hashReadingRow(QCryptographicHash& hash,
+                    qint64 ns,
+                    qint64 uniqueId,
+                    double rawNumeric,
+                    const QString& rawString,
+                    double finalNumeric,
+                    const QString& finalString,
+                    bool isNumeric);
 
 /**
  * @brief Raw driver bytes paired with device id and capture timestamp.
@@ -77,7 +96,10 @@ public:
                moodycamel::ReaderWriterQueue<TableSnapshotEntry>* snapshotQueue,
                std::atomic<int>* operationMode,
                QMutex* projectSnapshotMutex,
-               const QByteArray* projectSnapshot);
+               const QByteArray* projectSnapshot,
+               const std::atomic<bool>* controlScriptSeen,
+               const std::atomic<quint64>* linkDroppedFrames,
+               const std::atomic<quint64>* linkOverflowBytes);
   ~ExportWorker() override;
 
   void closeResources() override;
@@ -101,6 +123,7 @@ private:
   void finalizeSession();
 
   [[nodiscard]] QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
+  [[nodiscard]] QString buildReproClassJson() const;
 
 private:
   bool m_dbOpen;
@@ -109,6 +132,8 @@ private:
   DataModel::ExportSchema m_schema;
   DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
   qint64 m_lastRawBytesNs;
+  QCryptographicHash m_rawHash;
+  QCryptographicHash m_readingsHash;
 
   std::optional<QSqlQuery> m_readingQuery;
   std::optional<QSqlQuery> m_rawBytesQuery;
@@ -119,6 +144,9 @@ private:
   std::atomic<int>* m_operationMode;
   QMutex* m_projectSnapshotMutex;
   const QByteArray* m_projectSnapshot;
+  const std::atomic<bool>* m_controlScriptSeen;
+  const std::atomic<quint64>* m_linkDroppedFrames;
+  const std::atomic<quint64>* m_linkOverflowBytes;
 };
 
 /**
@@ -178,6 +206,8 @@ private slots:
 
 private:
   void refreshProjectSnapshot();
+  void resetSessionHealthBaseline();
+  void sampleSessionHealth();
 
 private:
   static constexpr std::size_t kCacheLine = 64;
@@ -197,9 +227,17 @@ private:
   QMutex m_projectSnapshotMutex;
   QByteArray m_projectSnapshot;
 
+  alignas(kCacheLine) std::atomic<bool> m_controlScriptSeen;
+  alignas(kCacheLine) std::atomic<quint64> m_linkDroppedFrames;
+  alignas(kCacheLine) std::atomic<quint64> m_linkOverflowBytes;
+  quint64 m_lastLinkDroppedSample;
+  quint64 m_lastLinkOverflowSample;
+
   AppState* m_appState;
   DataModel::ProjectModel* m_projectModel;
   DataModel::FrameBuilder* m_frameBuilder;
+  DataModel::ControlScript* m_controlScript;
+  IO::ConnectionManager* m_connectionManager;
 };
 
 }  // namespace Sessions
