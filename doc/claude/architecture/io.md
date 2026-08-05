@@ -46,11 +46,21 @@ describe a design that is no longer in the tree.
   aborts when any device reports an in-flight dial. `linkState()` still reports only
   `connected` or `idle`; an API client watching a flapping link polls `isConnected`.
 - **Network TCP dials asynchronously.** `open()` starts `connectToHost()` and returns true
-  ("attempt started"); a refused dial retries up to 5 times with a 300 ms backoff (a server a
-  control-script onConnect() just launched needs time to listen), a 15 s per-attempt timer
+  ("attempt started"); a refused dial retries up to 10 times with a 300 ms backoff (a server a
+  control-script onConnect() just launched needs seconds to listen), a 15 s per-attempt timer
   bounds a hung dial, and `close()` cancels everything — nothing may redial after it returns.
   Success reaches the UI via `stateChanged` → `configurationChanged` →
   `refreshConnectedState()`; failure via a queued error box + `disconnectDevice(this)`.
+  **Writes flow during the dial**: `DeviceManager::write` accepts data while
+  `isConnecting()` and QTcpSocket buffers it until the connect lands, so a control script's
+  `io.connect()` + `writeData()` sequence works without waiting out the dial (the ISS example
+  broke silently without this). An endpoint edit (address/port/socket type/multicast) on a
+  live driver reopens it after a 500 ms debounce; a closed driver never dials on its own.
+- **`sessionClosed` means a live session actually ended** — an explicit disconnect, or a
+  driver-reported drop of the last connected device. It never fires from `rebuildDevices`
+  churn or from a dial that failed before anything connected: `API::ProcessLauncher` reaps
+  every script-launched helper on this signal, and those helpers usually serve the very link
+  that is retrying (the dual-drone/CAN examples died to exactly this).
 - **`connectDevice(int)` reports the outcome itself.** `DeviceManager::open()` returns the
   driver's verdict instead of discarding it, and `connectDevice(int)` passes that to
   `onDeviceOpenFinished(deviceId, ok, reason)` — the only thing driving the spec-0035

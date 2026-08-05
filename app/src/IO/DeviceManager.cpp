@@ -94,14 +94,16 @@ IO::HAL_Driver* IO::DeviceManager::driver() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Writes @p data to the underlying driver.
+ * @brief Writes @p data to the underlying driver. A driver dialing asynchronously still accepts
+ *        writes: QTcpSocket buffers and flushes them on connect, so a control script's
+ *        io.connect() + writeData() sequence works without waiting out the dial.
  */
 qint64 IO::DeviceManager::write(const QByteArray& data)
 {
   SS_ASSERT_LOG(!data.isEmpty());
   SS_ASSERT_LOG(m_driver);
 
-  if (!m_driver || !m_driver->isOpen())
+  if (!m_driver || (!m_driver->isOpen() && !m_driver->isConnecting()))
     return -1;
 
   return m_driver->write(data);

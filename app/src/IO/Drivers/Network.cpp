@@ -24,9 +24,10 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
-static constexpr int kTcpConnectAttempts  = 5;
+static constexpr int kTcpConnectAttempts  = 10;
 static constexpr int kTcpConnectTimeoutMs = 15000;
 static constexpr int kTcpConnectBackoffMs = 300;
+static constexpr int kReopenDebounceMs    = 500;
 
 /**
  * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
@@ -56,10 +57,13 @@ IO::Drivers::Network::Network()
   , m_dialAttempts(0)
   , m_dialMode(QIODevice::ReadWrite)
 {
+  m_reopenTimer.setSingleShot(true);
+  m_reopenTimer.setInterval(kReopenDebounceMs);
   m_dialRetryTimer.setSingleShot(true);
   m_dialRetryTimer.setInterval(kTcpConnectBackoffMs);
   m_dialTimeoutTimer.setSingleShot(true);
   m_dialTimeoutTimer.setInterval(kTcpConnectTimeoutMs);
+  connect(&m_reopenTimer, &QTimer::timeout, this, &IO::Drivers::Network::reopenAfterConfigChange);
   connect(&m_dialRetryTimer, &QTimer::timeout, this, &IO::Drivers::Network::startTcpDialAttempt);
   connect(&m_dialTimeoutTimer, &QTimer::timeout, this, &IO::Drivers::Network::onDialTimeout);
 
@@ -96,6 +100,21 @@ IO::Drivers::Network::Network()
 
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
   connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+
+  connect(this,
+          &IO::Drivers::Network::addressChanged,
+          this,
+          &IO::Drivers::Network::scheduleReopenIfActive);
+  connect(
+    this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::scheduleReopenIfActive);
+  connect(this,
+          &IO::Drivers::Network::socketTypeChanged,
+          this,
+          &IO::Drivers::Network::scheduleReopenIfActive);
+  connect(this,
+          &IO::Drivers::Network::udpMulticastChanged,
+          this,
+          &IO::Drivers::Network::scheduleReopenIfActive);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -110,6 +129,7 @@ IO::Drivers::Network::Network()
 void IO::Drivers::Network::close()
 {
   m_dialInProgress = false;
+  m_reopenTimer.stop();
   m_dialRetryTimer.stop();
   m_dialTimeoutTimer.stop();
 
@@ -220,6 +240,7 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
   close();
+  m_dialMode = mode;
 
   auto hostAddr = remoteAddress();
   if (hostAddr.isEmpty())
@@ -227,7 +248,6 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 
   if (socketType() == QAbstractSocket::TcpSocket) {
     m_dialHost       = hostAddr;
-    m_dialMode       = mode;
     m_dialAttempts   = 0;
     m_dialInProgress = true;
     connect(&m_tcpSocket,
@@ -307,6 +327,32 @@ void IO::Drivers::Network::onDialTimeout()
                 tr("Network socket error"),
                 tr("Connection to %1:%2 timed out.").arg(m_dialHost, QString::number(tcpPort())));
   connectionManager.disconnectDevice(this);
+}
+
+/**
+ * @brief Debounces a reopen while the link is live so an endpoint edit (address, port, socket
+ *        type, multicast) takes effect without a manual disconnect/reconnect cycle. A closed
+ *        driver stays closed: configuration edits never dial on their own.
+ */
+void IO::Drivers::Network::scheduleReopenIfActive()
+{
+  if (!isOpen() && !isConnecting())
+    return;
+
+  m_reopenTimer.start();
+}
+
+/**
+ * @brief Applies a debounced endpoint change by redialing with the mode the link was opened in.
+ */
+void IO::Drivers::Network::reopenAfterConfigChange()
+{
+  if (!isOpen() && !isConnecting())
+    return;
+
+  const auto mode = m_dialMode;
+  close();
+  (void)open(mode);
 }
 
 /**

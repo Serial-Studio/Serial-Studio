@@ -1076,8 +1076,10 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
 }
 
 /**
- * @brief Disconnects the source owned by @p driver, keeping other sources alive. The state change
- *        is published by the per-device teardown; only the session-level signals remain here.
+ * @brief Disconnects the source owned by @p driver, keeping other sources alive. sessionClosed
+ *        fires only when a live session actually ended: a dial that failed before anything was
+ *        connected never had a session, and emitting it there made ProcessLauncher reap the
+ *        script-launched helper the retrying dial was waiting for.
  */
 void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
 {
@@ -1095,13 +1097,16 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
   if (deviceId < 0)
     return;
 
+  const bool wasConnected = isConnected();
   disconnectDevice(deviceId);
 
   if (!isConnected()) {
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
     frameBuilder.registerQuickPlotHeaders(QStringList());
     Q_EMIT driverChanged();
-    Q_EMIT sessionClosed();
+
+    if (wasConnected)
+      Q_EMIT sessionClosed();
   }
 }
 
@@ -1502,8 +1507,9 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
 
 /**
  * @brief Rebuilds DeviceManagers for all sources when the project source list changes. Reentrant
- *        triggers (a close spinning the event loop into another structure change) coalesce into
- *        one queued follow-up rebuild instead of tearing down the map a second time mid-loop.
+ *        triggers coalesce into one queued follow-up rebuild. Never emits sessionClosed: a
+ *        rebuild is transient churn that reconnects on its own, and ProcessLauncher reaps the
+ *        script-launched helpers serving the very links being rebuilt on that signal.
  */
 void IO::ConnectionManager::rebuildDevices()
 {
@@ -1568,9 +1574,6 @@ void IO::ConnectionManager::rebuildDevices()
   Q_EMIT configurationChanged();
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
-
-  if (wasConnected && !isConnected())
-    Q_EMIT sessionClosed();
 
   Q_EMIT contextsRebuilt();
 

@@ -160,6 +160,8 @@ private slots:
   void onDialTimeout();
   void onTcpStateChanged();
   void startTcpDialAttempt();
+  void scheduleReopenIfActive();
+  void reopenAfterConfigChange();
   void lookupFinished(const QHostInfo& info);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
@@ -185,6 +187,7 @@ private:
   QIODevice::OpenMode m_dialMode;
   QAbstractSocket::SocketType m_socketType;
 
+  QTimer m_reopenTimer;
   QTimer m_dialRetryTimer;
   QTimer m_dialTimeoutTimer;
 

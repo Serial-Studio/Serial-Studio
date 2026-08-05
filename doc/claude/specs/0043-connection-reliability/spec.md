@@ -48,7 +48,39 @@ After the spec-0034 connection-flow layer was removed (38c9ef66) and its follow-
 | 14 | Selecting a Pro bus without entitlement silently produced no device | `setBusType` raises a queued "requires license/trial" box when driver creation is refused |
 | 15 | `trialEnabled`/`trialExpired`/`trialAvailable` QML bindings stale across license transitions | `licenseDataChanged` now feeds `enabledChanged` + `availableChanged` |
 
+## Same-day regression round (async dial fallout, found by the example projects)
+
+The first landing broke three bundled examples. Root causes and fixes, landed 2026-08-04:
+
+| # | Regression | Root cause | Fix |
+|---|-----------|-----------|-----|
+| R1 | ISS Tracker "reloads every 5 s" | Script does `io.connect(); delay(300); writeData(...)`. Blocking dial guaranteed the socket was up; async dial made `DeviceManager::write` drop the HTTP request silently (`isOpen()` false mid-dial), so the server closed the idle keep-alive → error → disconnect → repeat per loop | `DeviceManager::write` accepts data while `isConnecting()`; QTcpSocket buffers and flushes on connect |
+| R2 | Drone/CAN helpers killed (exit 15) in a loop | `onConnect()` launches the helper, dials race its startup; failed dials emitted `sessionClosed` with nothing connected, and `ProcessLauncher::onSessionClosed` reaps all helpers — killing the process the retry needed | `sessionClosed` only when a live session existed: never from `rebuildDevices`, and `disconnectDevice(HAL_Driver*)` gates it on was-connected |
+| R3 | Dial patience halved | Refusal retry window shrank from ~4 s (blocking loop) to 1.5 s | `kTcpConnectAttempts` 5 → 10 (~3 s of refusal patience) |
+| R4 | "Changing ports/options does not affect the driver" | Live socket kept the old endpoint until a manual reconnect | Endpoint edits on a live Network driver reopen it after a 500 ms debounce; closed drivers never self-dial |
+
+Lesson recorded: the blocking dial carried two undocumented contracts — "connected when
+`io.connect()` returns" for scripts, and seconds of patience for script-launched servers.
+Replacing a blocking primitive means re-providing its implicit guarantees, not just its API.
+The bundled examples (ISS, dual-drone, CAN) are the de-facto regression suite for the
+script + helper-process + multi-source connect paths; run them before shipping IO changes.
+
+Also landed with this round: the six example scripts with third-party Python imports
+(ecu_simulator, csv2wav, the three LTE modem bridges, daqbridge) bootstrap their own
+dependencies on first run — a private venv next to the script (or under
+`~/.serial-studio/example-venvs` for read-only installs), then re-exec — so PEP 668
+"externally managed" system Pythons (Homebrew, Debian) never block an example.
+`dual_drone_telemetry.py` and the ISS example are stdlib-only and need no bootstrap.
+
 ## Deferred gap register (next pass; from the 2026-08-04 driver audit)
+
+- **No "connecting" feedback in the UI.** An async dial shows nothing; users double-click
+  Connect and each click aborts their own dial (the telehack.com report). Needs an
+  `isConnecting` surface on ConnectionManager + button/QML treatment, decided deliberately.
+- **`Dashboard::handleMissingDataset` force-disconnects** (`Dashboard.cpp` retry-failure path)
+  — an explicit `disconnectDevice()` that reaps helpers; if a transient widget-model failure
+  can trigger it, a streaming session dies hard. Verify against the CAN example.
+- **Modbus TCP** has no config-change reconnect (Network now does; MQTT always did).
 
 - **USB/HID/CANBus/Process `open()` synchronous modals** — mid-open-stack modals remain in
   USB (4 sites + endpoint activation), HID (1), CANBus open-path helpers, Process (2).
