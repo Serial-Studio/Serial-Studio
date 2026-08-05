@@ -17,7 +17,7 @@ OfflineLicense transitions are ctor-forwarded).
 | `MDF4/Player.cpp:271` | `openFile` guard per open | sample | — |
 | `UI/Dashboard.cpp:1721,1753` | plot-sweep setter guards | sample | Dashboard's baked state (frozen) separately wired: `Dashboard.cpp:266` |
 | `IO/ConnectionManager.cpp:741-742` | `connectDevice` guard per attempt (now also consults `trial.trialExpired()`) | sample | — |
-| `IO/ConnectionManager.cpp:1779-1821` | `createDriver` commercial-bus gates | **bakes** (device existence) | `ConnectionManager.cpp:949` `activatedChanged -> rebuildDevices` |
+| `IO/ConnectionManager.cpp:1780-1822` | `createDriver` commercial-bus gates | **bakes** (device existence) | `ConnectionManager.cpp:951` `activatedChanged -> rebuildDevices` |
 | `IO/Drivers/MQTT.cpp:174-175,1049-1050` | open request (box now queued) / message drop guards | sample | — |
 | `MDF4/Export.cpp:407,617` | export enable per operation | sample | — |
 | `MDF4/Export.cpp:484` | re-derive on activation | **bakes** (export enable) | wired in place (lambda on `activatedChanged`) |
