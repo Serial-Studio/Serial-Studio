@@ -60,6 +60,24 @@ Item {
       model: Cpp_IO_Serial.portList
       currentIndex: Cpp_IO_Serial.portIndex
       editable: Qt.platform.os !== "windows"
+
+      //
+      // Show the full port name on hover (Windows entries elide in the popup).
+      //
+      delegate: ItemDelegate {
+        text: modelData
+        hoverEnabled: true
+        width: _portCombo.width
+        highlighted: _portCombo.highlightedIndex === index
+        font: isCurrent ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
+
+        readonly property bool isCurrent: _portCombo.currentIndex === index
+
+        ToolTip.delay: 400
+        ToolTip.text: modelData
+        ToolTip.visible: hovered
+      }
+
       onActivated: (index) => {
         if (enabled && index !== Cpp_IO_Serial.portIndex)
           Cpp_IO_Serial.portIndex = index
