@@ -76,6 +76,7 @@ IO::ConnectionManager::ConnectionManager()
   , m_lastConnectedState(false)
   , m_syncingFromProject(false)
   , m_rebuildingDevices(false)
+  , m_lastConnectingState(false)
   , m_lastConnectedCount(0)
   , m_busType(SerialStudio::BusType::UART)
   , m_startSequence("/*")
@@ -718,6 +719,15 @@ void IO::ConnectionManager::toggleConnection()
 }
 
 /**
+ * @brief Returns true while any device is dialing; drives the connect button's feedback so an
+ *        asynchronous attempt is visible instead of looking like a dead click.
+ */
+bool IO::ConnectionManager::isConnecting() const
+{
+  return anyDeviceConnecting();
+}
+
+/**
  * @brief Returns true while any device's driver reports an in-flight dial.
  */
 bool IO::ConnectionManager::anyDeviceConnecting() const
@@ -789,6 +799,12 @@ void IO::ConnectionManager::concludeConnectRequest()
  */
 void IO::ConnectionManager::notifyConnectedStateChanged()
 {
+  const bool connecting = anyDeviceConnecting();
+  if (m_lastConnectingState != connecting) {
+    m_lastConnectingState = connecting;
+    Q_EMIT connectingChanged();
+  }
+
   const bool connected = isConnected();
   const int count      = connectedDeviceCount();
   if (m_lastConnectedState == connected && m_lastConnectedCount == count)

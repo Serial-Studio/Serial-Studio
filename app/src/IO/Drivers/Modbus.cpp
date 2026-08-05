@@ -23,7 +23,6 @@
 #include "IO/Drivers/Modbus.h"
 
 #include <QDebug>
-#include <QEventLoop>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -32,12 +31,11 @@
 #include <QModbusTcpClient>
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include <QThread>
 #include <QTimer>
 #include <stdexcept>
 
-static constexpr int kTcpConnectAttempts  = 5;
-static constexpr int kTcpConnectTimeoutMs = 800;
+static constexpr int kTcpConnectAttempts  = 10;
+static constexpr int kTcpConnectTimeoutMs = 15000;
 static constexpr int kTcpConnectBackoffMs = 300;
 
 #include "AppState.h"
@@ -143,7 +141,7 @@ static void queueErrorBox(QObject* context, const QString& title, const QString&
  */
 IO::Drivers::Modbus::Modbus()
   : m_connecting(false)
-  , m_abortConnect(false)
+  , m_dialAttempts(0)
   , m_pollTimer(new QTimer(this))
   , m_device(nullptr)
   , m_lastReply(nullptr)
@@ -189,6 +187,13 @@ IO::Drivers::Modbus::Modbus()
   // clang-format on
 
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
+
+  m_dialRetryTimer.setSingleShot(true);
+  m_dialRetryTimer.setInterval(kTcpConnectBackoffMs);
+  m_dialTimeoutTimer.setSingleShot(true);
+  m_dialTimeoutTimer.setInterval(kTcpConnectTimeoutMs);
+  connect(&m_dialRetryTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::startDialAttempt);
+  connect(&m_dialTimeoutTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::onDialTimeout);
 
   connect(this,
           &IO::Drivers::Modbus::protocolIndexChanged,
@@ -239,13 +244,14 @@ IO::Drivers::Modbus::~Modbus()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the current Modbus connection. The flag is what lets a close that arrives from
- *        inside the connect wait break it: the attempt spins the event loop, so the user's
- *        disconnect lands on this stack and must not be undone by the attempt still running.
+ * @brief Closes the current Modbus connection and cancels an in-flight dial: stopping the dial
+ *        state and its timers first makes a user's disconnect final, nothing may redial after.
  */
 void IO::Drivers::Modbus::close()
 {
-  m_abortConnect = true;
+  m_connecting = false;
+  m_dialRetryTimer.stop();
+  m_dialTimeoutTimer.stop();
   doClose();
 
   Q_EMIT configurationChanged();
@@ -458,95 +464,65 @@ bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
           &IO::Drivers::Modbus::onErrorOccurred,
           Qt::UniqueConnection);
 
-  if (!connectWithRetry()) {
-    const bool aborted  = m_abortConnect;
-    const QString error = m_device ? m_device->errorString() : QString();
-    doClose();
-
-    if (!aborted)
-      queueErrorBox(this,
-                    tr("Modbus Connection Failed"),
-                    error.isEmpty() ? tr("Unable to connect to \"%1\". Check your connection "
-                                         "settings.")
-                                        .arg(target)
-                                    : tr("\"%1\": %2").arg(target, error));
-
-    return false;
-  }
-
-  if (m_device && m_device->state() == QModbusDevice::ConnectedState)
-    m_pollTimer->start(m_pollInterval);
+  m_dialTarget   = target;
+  m_dialAttempts = 0;
+  m_connecting   = true;
+  startDialAttempt();
 
   Q_EMIT configurationChanged();
-  return true;
+  return m_connecting || isOpen();
 }
 
 /**
- * @brief Connects the Modbus client. For TCP it retries a few times with a short backoff so a
- *        server a control-script onConnect() just launched has time to start listening; the
- *        per-attempt errors are swallowed via m_connecting. RTU connects once (no server race).
+ * @brief Starts (or retries) one connect attempt without blocking the GUI thread; the outcome
+ *        arrives through onStateChanged(), which picks between retry and failure.
  */
-bool IO::Drivers::Modbus::connectWithRetry()
+void IO::Drivers::Modbus::startDialAttempt()
 {
-  const int attempts = (m_protocolIndex == 1) ? kTcpConnectAttempts : 1;
-  QPointer<QModbusClient> device(m_device);
+  if (!m_connecting || !m_device)
+    return;
 
-  m_abortConnect = false;
-  m_connecting   = true;
-  bool connected = false;
-  for (int attempt = 0; attempt < attempts && device && !m_abortConnect; ++attempt) {
-    if (device->connectDevice()) {
-      awaitConnectState(device);
-
-      if (device && device->state() == QModbusDevice::ConnectedState) {
-        connected = true;
-        break;
-      }
-    }
-
-    if (!device || m_abortConnect)
-      break;
-
-    device->disconnectDevice();
-    if (attempt + 1 < attempts && !m_abortConnect)
-      pauseBetweenAttempts();
+  ++m_dialAttempts;
+  if (!m_device->connectDevice()) {
+    failDial(m_device->errorString());
+    return;
   }
 
+  m_dialTimeoutTimer.start();
+}
+
+/**
+ * @brief Ends a failed dial: reports once, tears the client down, and republishes the state so
+ *        the connect button reads idle again. close() has already run when the user aborted,
+ *        which is why the guard on m_connecting makes an abort silent.
+ */
+void IO::Drivers::Modbus::failDial(const QString& error)
+{
+  if (!m_connecting)
+    return;
+
   m_connecting = false;
-  return connected && device && !m_abortConnect;
+  m_dialRetryTimer.stop();
+  m_dialTimeoutTimer.stop();
+
+  const QString target = m_dialTarget;
+  doClose();
+
+  queueErrorBox(this,
+                tr("Modbus Connection Failed"),
+                error.isEmpty()
+                  ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(target)
+                  : tr("\"%1\": %2").arg(target, error));
+
+  Q_EMIT configurationChanged();
 }
 
 /**
- * @brief Abortable backoff between TCP attempts: processes events instead of freezing the GUI,
- *        so a user's disconnect can land mid-wait and m_abortConnect actually breaks the loop.
+ * @brief Fails a dial that neither connected nor errored within the timeout window.
  */
-void IO::Drivers::Modbus::pauseBetweenAttempts()
+void IO::Drivers::Modbus::onDialTimeout()
 {
-  QEventLoop pause;
-  QTimer::singleShot(kTcpConnectBackoffMs, &pause, &QEventLoop::quit);
-  pause.exec();
-}
-
-/**
- * @brief Spins the per-attempt window waiting for the client to leave ConnectingState. The loop
- *        keeps the interface live, so the client can be torn down under it: every step re-reads
- *        the guarded pointer instead of the member.
- */
-void IO::Drivers::Modbus::awaitConnectState(QPointer<QModbusClient>& device)
-{
-  QEventLoop loop;
-  QTimer timeout;
-  timeout.setSingleShot(true);
-  connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
-  connect(device, &QModbusClient::stateChanged, &loop, &QEventLoop::quit, Qt::UniqueConnection);
-  connect(device, &QModbusClient::errorOccurred, &loop, &QEventLoop::quit, Qt::UniqueConnection);
-
-  timeout.start(kTcpConnectTimeoutMs);
-  // code-verify off
-  while (device && !m_abortConnect && device->state() == QModbusDevice::ConnectingState
-         && timeout.isActive())
-    loop.exec();
-  // code-verify on
+  failDial(tr("Connection attempt timed out"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1401,6 +1377,9 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
     return;
 
   if (state == QModbusDevice::ConnectedState) {
+    m_connecting = false;
+    m_dialRetryTimer.stop();
+    m_dialTimeoutTimer.stop();
     if (m_pollTimer && !m_pollTimer->isActive())
       m_pollTimer->start(m_pollInterval);
   }
@@ -1408,9 +1387,29 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
   else if (state == QModbusDevice::UnconnectedState) {
     if (m_pollTimer)
       m_pollTimer->stop();
+
+    handleDialSetback();
   }
 
   Q_EMIT configurationChanged();
+}
+
+/**
+ * @brief Retries or fails a dial whose attempt fell back to UnconnectedState: refused attempts
+ *        back off and redial (a script-launched server needs time to listen), exhausted ones
+ *        report through failDial(). RTU gets a single attempt (no server race to wait out).
+ */
+void IO::Drivers::Modbus::handleDialSetback()
+{
+  if (!m_connecting)
+    return;
+
+  m_dialTimeoutTimer.stop();
+  const int max_attempts = (m_protocolIndex == 1) ? kTcpConnectAttempts : 1;
+  if (m_dialAttempts < max_attempts)
+    m_dialRetryTimer.start();
+  else
+    failDial(m_device ? m_device->errorString() : QString());
 }
 
 /**

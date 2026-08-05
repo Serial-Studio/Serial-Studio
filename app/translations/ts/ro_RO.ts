@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ro_RO" sourcelanguage="en_US">
 <context>
-    <name></name>
+    <name/>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
@@ -11,62 +11,62 @@
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificat Client</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
         <source>Optional (mutual TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Opțional (TLS mutual)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
         <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificat PEM prezentat brokerilor care necesită TLS mutual (AWS IoT Core)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Cheie Privată</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
         <source>Defaults to the certificate file</source>
-        <translation type="unfinished"></translation>
+        <translation>Implicit fișierul certificat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
         <source>PEM private key matching the client certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Cheie privată PEM corespunzătoare certificatului client</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
         <source>Key Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Frază de Acces Cheie</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
         <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frază de acces pentru o cheie privată criptată (stocată în seiful criptat, niciodată în fișierul proiect)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
         <source>ALPN (MQTT over port 443)</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN (MQTT pe portul 443)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
-        <translation type="unfinished"></translation>
+        <translation>Anunță un protocol ALPN astfel încât brokerii pot servi MQTT pe portul 443 în spatele firewall-urilor</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocol ALPN</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nume de protocol anunțat în timpul handshake-ului TLS (AWS IoT folosește x-amzn-mqtt-ca)</translation>
     </message>
 </context>
 <context>
@@ -226,7 +226,7 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Modelul a returnat un răspuns gol. Încercați să reformulați, să treceți la un alt model sau să verificați dacă cererea este permisă de filtrele de siguranță ale furnizorului.)</translation>
     </message>
     <message>
@@ -374,7 +374,7 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote&apos;s dataset layout does not match its announced hash</source>
+        <source>The remote's dataset layout does not match its announced hash</source>
         <translation>Structura seturilor de date de la distanță nu corespunde cu hash-ul anunțat</translation>
     </message>
     <message>
@@ -415,8 +415,8 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program &quot;%1&quot; not found in PATH</source>
-        <translation>Programul &quot;%1&quot; nu a fost găsit în PATH</translation>
+        <source>Program "%1" not found in PATH</source>
+        <translation>Programul "%1" nu a fost găsit în PATH</translation>
     </message>
 </context>
 <context>
@@ -452,7 +452,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Un program care utilizează API-ul local al Serial Studio solicită să trimită date către dispozitivul conectat. Permiteți clienților API să scrie pe dispozitiv?</translation>
     </message>
     <message>
@@ -514,8 +514,8 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Acest software este furnizat „ca atare&quot; fără nicio garanție de orice fel, expresă sau implicită, inclusiv, dar fără a se limita la, garanțiile de vandabilitate sau potrivire pentru un anumit scop. În niciun caz autorul nu va fi răspunzător pentru daune rezultate din utilizarea acestui software.</translation>
+        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Acest software este furnizat „ca atare" fără nicio garanție de orice fel, expresă sau implicită, inclusiv, dar fără a se limita la, garanțiile de vandabilitate sau potrivire pentru un anumit scop. În niciun caz autorul nu va fi răspunzător pentru daune rezultate din utilizarea acestui software.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -538,7 +538,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation>Demonstrație Proiect</translation>
     </message>
     <message>
-        <source>What&apos;s New</source>
+        <source>What's New</source>
         <translation type="vanished">Ce Este Nou</translation>
     </message>
     <message>
@@ -1065,7 +1065,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation type="vanished">Aplică Presetare</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
         <translation type="vanished">Înlocuiește benzile curente cu presetarea selectată, scalată la intervalul acestui set de date.</translation>
     </message>
     <message>
@@ -1273,7 +1273,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio&apos;s features</source>
+        <source>Help me discover Serial Studio's features</source>
         <translation>Ajută-mă să descopăr funcțiile Serial Studio</translation>
     </message>
     <message>
@@ -1401,13 +1401,13 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder &quot;%1&quot; - readable this session</source>
-        <translation>Dosarul „%1&quot; a fost adăugat - disponibil în această sesiune</translation>
+        <source>Added folder "%1" - readable this session</source>
+        <translation>Dosarul „%1" a fost adăugat - disponibil în această sesiune</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added &quot;%1&quot; - readable this session</source>
-        <translation>„%1&quot; a fost adăugat - disponibil în această sesiune</translation>
+        <source>Added "%1" - readable this session</source>
+        <translation>„%1" a fost adăugat - disponibil în această sesiune</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1755,7 +1755,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>Titlul se schimbă de la &quot;%1&quot; la &quot;%2&quot;. Structura grupului rămâne neschimbată.</translation>
+        <translation>Titlul se schimbă de la "%1" la "%2". Structura grupului rămâne neschimbată.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1847,7 +1847,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Măsoară cât de rapid poate acest calculator să extragă, să analizeze și să vizualizeze cadrele prin pipeline-ul de date al Serial Studio.</translation>
     </message>
     <message>
@@ -2303,7 +2303,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio va fi actualizat pentru a funcționa cu acest sistem de operare de îndată ce QT îl va suporta oficial</translation>
     </message>
 </context>
@@ -3659,7 +3659,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
+        <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Urmărește tabloul de bord al altei instanțe Serial Studio prin rețea</translation>
     </message>
     <message>
@@ -3971,7 +3971,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler&apos;s number</source>
+        <source>Euler's number</source>
         <translation>Numărul lui Euler</translation>
     </message>
     <message>
@@ -5243,11 +5243,11 @@ Format valid: 01 A2 FF 3C</translation>
         <translation type="vanished">Valoare</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Introduceți datele cadrului mai sus, activați modul HEX dacă este necesar, apoi faceți clic pe „Evaluează&quot; pentru a rula parserul de cadre.
+        <translation type="vanished">Introduceți datele cadrului mai sus, activați modul HEX dacă este necesar, apoi faceți clic pe „Evaluează" pentru a rula parserul de cadre.
 
 Exemplu (Text): a,b,c,d,e,f
 Exemplu (HEX):  48 65 6C 6C 6F</translation>
@@ -5487,10 +5487,10 @@ Orice modificări nesalvate se pierd. Continuați?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
+        <source>"%1" expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template&apos;s defaults?</source>
-        <translation>&quot;%1&quot; necesită %2 set(uri) de date; grupul curent are %3.
+Add %4 dataset(s) using the template's defaults?</source>
+        <translation>"%1" necesită %2 set(uri) de date; grupul curent are %3.
 
 Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</translation>
     </message>
@@ -5982,7 +5982,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
-        <source>How strictly the broker&apos;s certificate chain is validated</source>
+        <source>How strictly the broker's certificate chain is validated</source>
         <translation>Cât de strict este validat lanțul de certificate al brokerului</translation>
     </message>
     <message>
@@ -6318,7 +6318,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Suprimă caseta de tablou de bord independentă a acestui set de date; widget-ul painter poate citi în continuare valorile sale</translation>
     </message>
     <message>
@@ -7190,8 +7190,8 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias &quot;%1&quot; is already in use</source>
-        <translation>Aliasul „%1&quot; este deja utilizat</translation>
+        <source>Alias "%1" is already in use</source>
+        <translation>Aliasul „%1" este deja utilizat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="646"/>
@@ -7205,13 +7205,13 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias &quot;%1&quot; contains only digits</source>
-        <translation>Aliasul „%1&quot; conține doar cifre</translation>
+        <source>Alias "%1" contains only digits</source>
+        <translation>Aliasul „%1" conține doar cifre</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Script-urile trebuie să îl citeze ca șir de caractere, de ex. getDataset(&quot;%1&quot;); un argument numeric este citit ca uniqueId, nu ca acest alias.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Script-urile trebuie să îl citeze ca șir de caractere, de ex. getDataset("%1"); un argument numeric este citit ca uniqueId, nu ca acest alias.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7520,8 +7520,8 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation>Doriți să ștergeți sursa de date &quot;%1&quot;?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation>Doriți să ștergeți sursa de date "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7609,13 +7609,13 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation>Proiectul dumneavoastră a folosit o funcție veche de analiză a cadrelor cu un argument &apos;separator&apos;. A fost migrat automat la noul format.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation>Proiectul dumneavoastră a folosit o funcție veche de analiză a cadrelor cu un argument 'separator'. A fost migrat automat la noul format.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation>Doriți să ștergeți grupul &quot;%1&quot;?</translation>
+        <source>Do you want to delete group "%1"?</source>
+        <translation>Doriți să ștergeți grupul "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7627,13 +7627,13 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation>Doriți să ștergeți acțiunea &quot;%1&quot;?</translation>
+        <source>Do you want to delete action "%1"?</source>
+        <translation>Doriți să ștergeți acțiunea "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation>Doriți să ștergeți setul de date &quot;%1&quot;?</translation>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation>Doriți să ștergeți setul de date "%1"?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7764,8 +7764,8 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation>Doriți să ștergeți widget-ul de ieșire &quot;%1&quot;?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation>Doriți să ștergeți widget-ul de ieșire "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
@@ -8061,8 +8061,8 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation>Șterge &quot;%1&quot;?</translation>
+        <source>Delete "%1"?</source>
+        <translation>Șterge "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -8153,8 +8153,8 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation>Șterge folderul &quot;%1&quot;?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation>Șterge folderul "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8222,7 +8222,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Dezactivarea personalizării renunță la modificările tale și reconstruiește lista de spații de lucru din grupurile proiectului.</translation>
     </message>
     <message>
@@ -8757,7 +8757,7 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
         <translation>Definește intervale de valori colorate cu niveluri de severitate pentru indicatorul sau LED-ul acestui set de date.</translation>
     </message>
     <message>
@@ -8799,7 +8799,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Benzi de Alarmă</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
         <translation type="vanished">Definește intervale de valori colorate cu niveluri de severitate pentru indicatorul acestui set de date.</translation>
     </message>
     <message>
@@ -8917,8 +8917,8 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click &quot;OK&quot; to begin installing the update</source>
-        <translation>Faceți clic pe „OK&quot; pentru a începe instalarea actualizării</translation>
+        <source>Click "OK" to begin installing the update</source>
+        <translation>Faceți clic pe „OK" pentru a începe instalarea actualizării</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -8937,8 +8937,8 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation>Faceți clic pe butonul „Deschide&quot; pentru a aplica actualizarea</translation>
+        <source>Click the "Open" button to apply the update</source>
+        <translation>Faceți clic pe butonul „Deschide" pentru a aplica actualizarea</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -9215,7 +9215,7 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don&apos;t Allow</source>
+        <source>Don't Allow</source>
         <translation>Nu Permite</translation>
     </message>
     <message>
@@ -9550,7 +9550,7 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Indisponibil prin atașare la distanță. Acest widget necesită fluxul brut de eșantioane de la distanță, pe care oglinda tabloului de bord nu îl transmite.</translation>
     </message>
     <message>
@@ -11028,99 +11028,102 @@ Format valid: 01 A2 FF 3C</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="314"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="315"/>
         <source>Network Socket</source>
         <translation>Socket de Rețea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="316"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="320"/>
         <source>CAN Bus</source>
         <translation>Magistrala CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
         <source>USB Device</source>
         <translation>Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>HID Device</source>
         <translation>Dispozitiv HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
         <source>MQTT Subscriber</source>
         <translation>Abonat MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="755"/>
         <source>Your trial period has ended.</source>
         <translation>Perioada de probă s-a încheiat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="756"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Pentru a continua utilizarea Serial Studio, activați licența.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1274"/>
+        <source>This connection type requires an active license or trial.</source>
+        <translation>Acest tip de conexiune necesită o licență activă sau o perioadă de probă.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1275"/>
+        <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
+        <translation>Activează Serial Studio Pro sau începe o perioadă de probă pentru a folosi acest tip de dispozitiv.</translation>
+    </message>
+    <message>
         <source>Connection Lost</source>
-        <translation>Conexiune Pierdută</translation>
+        <translation type="vanished">Conexiune Pierdută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
-        <translation>Conexiunea a fost pierdută și nu a putut fi restabilită.</translation>
+        <translation type="vanished">Conexiunea a fost pierdută și nu a putut fi restabilită.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
-        <translation>%1: legătură pierdută</translation>
+        <translation type="vanished">%1: legătură pierdută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
-        <translation>Se încearcă reconectarea automată</translation>
+        <translation type="vanished">Se încearcă reconectarea automată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
-        <translation>%1: legătură restabilită</translation>
+        <translation type="vanished">%1: legătură restabilită</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
-        <translation>Conexiunea s-a recuperat automat</translation>
+        <translation type="vanished">Conexiunea s-a recuperat automat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
-        <translation>Dispozitiv %1</translation>
+        <translation type="vanished">Dispozitiv %1</translation>
     </message>
 </context>
 <context>
@@ -11194,77 +11197,83 @@ Format valid: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="463"/>
         <source>BLE I/O Module Error</source>
         <translation>Eroare Modul I/O BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="724"/>
+        <source>BLE connection error: %1</source>
+        <translation>Eroare conexiune BLE: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="804"/>
         <source>Select Device</source>
         <translation>Selectează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
         <source>Select Service</source>
         <translation>Selectează Serviciu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="826"/>
         <source>Select Characteristic</source>
         <translation>Selectează Caracteristică</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1036"/>
         <source>Error while configuring BLE service</source>
         <translation>Eroare la configurarea serviciului BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1254"/>
         <source>Operation error</source>
         <translation>Eroare de operațiune</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1257"/>
         <source>Characteristic write error</source>
         <translation>Eroare la scrierea caracteristicii</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1260"/>
         <source>Descriptor write error</source>
         <translation>Eroare la scrierea descriptorului</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1263"/>
         <source>Unknown error</source>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1266"/>
         <source>Characteristic read error</source>
         <translation>Eroare la citirea caracteristicii</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1269"/>
         <source>Descriptor read error</source>
         <translation>Eroare la citirea descriptorului</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
         <source>BLE Device</source>
         <translation>Dispozitiv BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1513"/>
         <source>Service</source>
         <translation>Serviciu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
         <source>Notify Characteristic</source>
         <translation>Caracteristică de Notificare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1527"/>
         <source>Characteristic</source>
         <translation>Caracteristică</translation>
     </message>
@@ -11272,15 +11281,15 @@ Format valid: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="337"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="342"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="353"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="359"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Bus Not Available</source>
         <translation>Magistrala CAN Indisponibilă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="338"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="360"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -11289,37 +11298,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Suportul pentru magistrala CAN pe macOS este limitat și poate necesita drivere hardware de la terți.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Nu există plugin-uri disponibile pentru magistrala CAN pe această platformă.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
         <source>Invalid CAN Configuration</source>
         <translation>Configurație CAN Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="363"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="384"/>
         <source>Invalid Selection</source>
         <translation>Selecție Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="393"/>
         <source>No Devices Available</source>
         <translation>Niciun Dispozitiv Disponibil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="281"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="305"/>
         <source>CAN Device Creation Failed</source>
         <translation>Crearea Dispozitivului CAN A Eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>CAN Connection Failed</source>
         <translation>Conexiunea CAN A Eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -11328,7 +11337,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Pe Linux, asigură-te că modulele kernel SOCKETCAN sunt încărcate.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="332"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -11337,103 +11346,101 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Pe Windows, instalează drivere hardware CAN (PEAK, VECTOR etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Configurația magistralei CAN este incompletă. Selectează un plugin și o interfață valide.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="385"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Plugin-ul sau interfața selectată nu mai este disponibilă. Reîmprospătează listele și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Lista de plugin-uri sau interfețe este goală. Reîmprospătează listele și asigură-te că hardware-ul CAN este conectat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="282"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Imposibil de creat dispozitivul de magistrală CAN. Verifică hardware-ul și driverele.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Imposibil de conectat la dispozitivul de magistrală CAN. Verifică conexiunea hardware și setările.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="705"/>
         <source>CAN Bus Error</source>
-        <translation>Eroare Magistrală CAN</translation>
+        <translation type="vanished">Eroare Magistrală CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>An error occurred but the CAN device is no longer available.</source>
-        <translation>A apărut o eroare, dar dispozitivul CAN nu mai este disponibil.</translation>
+        <translation type="vanished">A apărut o eroare, dar dispozitivul CAN nu mai este disponibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="713"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
         <source>Error code: %1</source>
         <translation>Cod eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="716"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>CAN Bus Communication Error</source>
         <translation>Eroare de Comunicare Magistrală CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="846"/>
         <source>No CAN driver selected</source>
         <translation>Niciun driver CAN selectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="786"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Încărcați mai întâi modulele kernel SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="755"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Conectați un adaptor %1, apoi reîmprospătați</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="789"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Configurați mai întâi o interfață CAN virtuală</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="764"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="791"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="811"/>
         <source>No interfaces found for %1</source>
         <translation>Nicio interfață găsită pentru %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Instalați &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;driverele PEAK CAN&lt;/a&gt;</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="795"/>
+        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Instalați &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;driverele PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Instalați &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;driverele VECTOR CAN&lt;/a&gt;</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="799"/>
+        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Instalați &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;driverele VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Instalează &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;driverele CAN SysTec&lt;/a&gt;</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="803"/>
+        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Instalează &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;driverele CAN SysTec&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="806"/>
         <source>Install %1 drivers</source>
         <translation>Instalează driverele %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="809"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Instalează driverele %1 pentru macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="823"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11444,32 +11451,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="903"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="930"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="938"/>
         <source>Interface</source>
         <translation>Interfață</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="946"/>
         <source>Bitrate</source>
         <translation>Rată de Biți</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="955"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="962"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="969"/>
         <source>Listen-Only</source>
         <translation>Doar Ascultare</translation>
     </message>
@@ -11545,41 +11552,41 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="173"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="174"/>
         <source>Unknown error</source>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="177"/>
         <source>
 
-Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
-        <translation>Verifică dacă utilizatorul tău este în grupul &apos;plugdev&apos; sau dacă o regulă udev acordă acces la acest dispozitiv.
+Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
+        <translation>Verifică dacă utilizatorul tău este în grupul 'plugdev' sau dacă o regulă udev acordă acces la acest dispozitiv.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Eșec la deschiderea &quot;%1&quot;</translation>
+        <source>Failed to open "%1"</source>
+        <translation>Eșec la deschiderea "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="288"/>
         <source>HID Device Error</source>
         <translation>Eroare Dispozitiv HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="287"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>Dispozitivul HID a fost deconectat sau a întâmpinat o eroare fatală de citire.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="398"/>
         <source>Select Device</source>
         <translation>Selectează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="538"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="540"/>
         <source>HID Device</source>
         <translation>Dispozitiv HID</translation>
     </message>
@@ -11652,7 +11659,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation>Verificare Automată Peer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="180"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Funcționalitatea MQTT Necesită o Licență Comercială</translation>
     </message>
@@ -11661,241 +11668,241 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Abonarea la un broker MQTT este disponibilă doar cu o licență comercială Serial Studio validă (nivelul Hobbyist sau superior).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="181"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Abonarea la un broker MQTT este disponibilă doar cu o licență Serial Studio validă sau o perioadă de probă activă.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="413"/>
         <source>Use System Database</source>
         <translation>Utilizare Bază de Date Sistem</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="414"/>
         <source>Load From Folder…</source>
         <translation>Încărcare din Folder…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="447"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Selectare Director Certificate PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="702"/>
         <source>Hostname</source>
         <translation>Nume Gazdă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="709"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
         <source>Topic Filter</source>
         <translation>Filtru Subiect</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
         <source>Username</source>
         <translation>Nume de Utilizator</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
         <source>Password</source>
         <translation>Parolă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
         <source>MQTT Version</source>
         <translation>Versiune MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="754"/>
         <source>Clean Session</source>
         <translation>Sesiune Curată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="761"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="770"/>
         <source>Auto Keep Alive</source>
         <translation>Keep Alive Automat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Activat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="797"/>
         <source>SSL Protocol</source>
         <translation>Protocol SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
         <source>Peer Verify Mode</source>
         <translation>Mod Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="813"/>
         <source>Peer Verify Depth</source>
         <translation>Adâncime Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="822"/>
         <source>Client Certificate (PEM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificat Client (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="829"/>
         <source>Private Key (PEM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cheie Privată (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
         <source>ALPN (MQTT over port 443)</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN (MQTT pe portul 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="844"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocol ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="969"/>
         <source>MQTT Subscription Error</source>
         <translation>Eroare Abonare MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation>Eșec la abonarea la topic-ul „%1&quot;.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
-        <source>MQTT Client Certificate Error</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation>Eșec la abonarea la topic-ul „%1".</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation>Eroare Certificat Client MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1235"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fișiere PEM (*.pem *.crt *.cer *.key);;Toate fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1261"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează Certificatul Client</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1269"/>
         <source>Select Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează Cheia Privată</translation>
     </message>
     <message>
         <source>The broker closed the connection.</source>
         <translation type="vanished">Broker-ul a închis conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="997"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Versiune Protocol MQTT Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="998"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Broker-ul a respins versiunea protocolului MQTT configurată.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1001"/>
         <source>Client ID Rejected</source>
         <translation>ID Client Respins</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1002"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Broker-ul a respins ID-ul clientului. Încercați un identificator diferit.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1005"/>
         <source>MQTT Server Unavailable</source>
         <translation>Server MQTT Indisponibil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Broker-ul este momentan indisponibil. Reîncercați mai târziu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>Authentication Error</source>
         <translation>Eroare de Autentificare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Acreditările furnizate au fost respinse de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>Authorization Error</source>
         <translation>Eroare de Autorizare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Contul nu are permisiunea pentru această operațiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>Network or Transport Error</source>
         <translation>Eroare de Rețea sau Transport</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problemă la nivelul rețelei/transportului în timpul conectării la broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un certificat client este configurat: verifică că se potrivește cu cheia privată și este activat pe broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>MQTT Protocol Violation</source>
         <translation>Violare Protocol MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Broker-ul a raportat o violare de protocol și a închis conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>MQTT 5 Error</source>
         <translation>Eroare MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>A apărut o eroare la nivel de protocol MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
         <source>MQTT Error</source>
         <translation>Eroare MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>A apărut o eroare MQTT neașteptată.</translation>
     </message>
@@ -11903,103 +11910,108 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>Invalid Serial Port</source>
         <translation>Port Serial Invalid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="448"/>
         <source>Modbus Initialization Failed</source>
         <translation>Inițializare Modbus Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="512"/>
         <source>Modbus Connection Failed</source>
         <translation>Conexiune Modbus Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
-        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
-        <translation>Portul serial selectat &quot;%1&quot; nu mai este disponibil. Reîmprospătează lista de porturi și încearcă din nou.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="404"/>
+        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <translation>Portul serial selectat "%1" nu mai este disponibil. Reîmprospătează lista de porturi și încearcă din nou.</translation>
     </message>
     <message>
         <source>The Modbus client refused to start the connection.</source>
         <translation type="vanished">Clientul Modbus a refuzat să pornească conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="449"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Imposibil de creat dispozitivul Modbus. Verifică configurația sistemului și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
-        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
-        <translation>Imposibil de conectat la &quot;%1&quot;. Verifică setările de conexiune.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <translation>Imposibil de conectat la "%1". Verifică setările de conexiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="525"/>
+        <source>Connection attempt timed out</source>
+        <translation>Tentativa de conexiune a expirat</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
         <source>Space</source>
         <translation>Spațiu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
         <source>Mark</source>
         <translation>Marcaj</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
         <source>Holding Registers (0x03)</source>
         <translation>Registre de Reținere (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
         <source>Input Registers (0x04)</source>
         <translation>Registre de Intrare (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
         <source>Coils (0x01)</source>
         <translation>Bobine (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Intrări Discrete (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
         <source>No register groups configured</source>
         <translation>Niciun grup de registre configurat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Adaugă cel puțin un grup de registre înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Modbus Project Generator</source>
         <translation>Generator de Proiect Modbus</translation>
     </message>
@@ -12012,137 +12024,137 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Verifică permisiunile de scriere în directorul temporar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="891"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="914"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Proiect generat cu succes cu %1 grupuri și %2 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="932"/>
         <source>Modbus Project</source>
         <translation>Proiect Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="957"/>
         <source>Holding Registers</source>
         <translation>Registre de Reținere</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Input Registers</source>
         <translation>Registre de Intrare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
         <source>Coils</source>
         <translation>Bobine</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
         <source>Discrete Inputs</source>
         <translation>Intrări Discrete</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="974"/>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="987"/>
         <source>Register %1</source>
         <translation>Registru %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
         <source>Coil %1</source>
         <translation>Bobină %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
         <source>Discrete %1</source>
         <translation>Discret %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1428"/>
         <source>Error code: %1</source>
         <translation>Cod eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1431"/>
         <source>Modbus Communication Error</source>
         <translation>Eroare de Comunicare Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1443"/>
         <source>Select Port</source>
         <translation>Selectează Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1596"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1604"/>
         <source>Slave Address</source>
         <translation>Adresă Slave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1613"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Interogare (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
         <source>Host / IP</source>
         <translation>Gazdă / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1660"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1675"/>
         <source>Serial Port</source>
         <translation>Port Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1683"/>
         <source>Baud Rate</source>
         <translation>Rată Baud</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1691"/>
         <source>Parity</source>
         <translation>Paritate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1699"/>
         <source>Data Bits</source>
         <translation>Biți de Date</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1707"/>
         <source>Stop Bits</source>
         <translation>Biți de Stop</translation>
     </message>
@@ -12150,37 +12162,43 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="341"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
         <source>Network socket error</source>
         <translation>Eroare socket de rețea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="342"/>
+        <source>Connection to %1:%2 timed out.</source>
+        <translation>Conexiunea la %1:%2 a expirat.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="732"/>
         <source>Socket Type</source>
         <translation>Tip Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
         <source>Remote Address</source>
         <translation>Adresă la Distanță</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="748"/>
         <source>TCP Port</source>
         <translation>Port TCP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="757"/>
         <source>UDP Local Port</source>
         <translation>Port UDP Local</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="766"/>
         <source>UDP Remote Port</source>
         <translation>Port UDP la Distanță</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="775"/>
         <source>UDP Multicast</source>
         <translation>Multicast UDP</translation>
     </message>
@@ -12188,98 +12206,107 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="225"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="217"/>
         <source>Failed to start process</source>
         <translation>Procesul nu a putut fi pornit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable &quot;%1&quot; not found in PATH.</source>
-        <translation>Executabilul &quot;%1&quot; nu a fost găsit în PATH.</translation>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="218"/>
+        <source>Executable "%1" not found in PATH.</source>
+        <translation>Executabilul "%1" nu a fost găsit în PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
         <source>Select Executable</source>
         <translation>Selectează Executabil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="416"/>
         <source>Select Working Directory</source>
         <translation>Selectează Directorul de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="418"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="441"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Selectează Named Pipe / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="539"/>
         <source>The process crashed.</source>
         <translation>Procesul s-a oprit forțat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="516"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="540"/>
         <source>Exit code: %1</source>
         <translation>Cod ieșire: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process &quot;%1&quot; stopped</source>
-        <translation>Procesul &quot;%1&quot; s-a oprit</translation>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="547"/>
+        <source>Process "%1" stopped</source>
+        <translation>Procesul "%1" s-a oprit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="559"/>
         <source>Unknown error</source>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="565"/>
         <source>Process Error</source>
         <translation>Eroare Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="582"/>
+        <source>Pipe Closed</source>
+        <translation>Pipe Închis</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="583"/>
+        <source>The named pipe "%1" was closed on the other end.</source>
+        <translation>Pipe-ul numit "%1" a fost închis la celălalt capăt.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
         <source>Pipe Error</source>
         <translation>Eroare Pipe</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
         <source>Could not open named pipe: %1</source>
         <translation>Nu s-a putut deschide named pipe: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="835"/>
         <source>Mode</source>
         <translation>Mod</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
         <source>Launch Process</source>
         <translation>Lansează Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
         <source>Named Pipe</source>
         <translation>Pipe Numit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="843"/>
         <source>Executable</source>
         <translation>Executabil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="850"/>
         <source>Arguments</source>
         <translation>Argumente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
         <source>Working Directory</source>
         <translation>Director de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="800"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="864"/>
         <source>Pipe Path</source>
         <translation>Cale Pipe</translation>
     </message>
@@ -12343,171 +12370,187 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="114"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="115"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="448"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="487"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="406"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="796"/>
         <source>Select Port</source>
         <translation>Selectează Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="450"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="451"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="452"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="488"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="489"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
-        <source>&quot;%1&quot; is not a valid path</source>
-        <translation>&quot;%1&quot; nu este o cale validă</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="625"/>
+        <source>"%1" is not a valid path</source>
+        <translation>"%1" nu este o cale validă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="626"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Introduceți o altă cale pentru a înregistra un dispozitiv serial personalizat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Dispozitivul specificat nu a putut fi găsit. Verificați conexiunea și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>A apărut o eroare necunoscută. Verificați dispozitivul și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Dispozitivul nu este deschis. Deschideți dispozitivul înainte de a încerca această operațiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
-        <source>Failed to connect to serial port &quot;%1&quot;</source>
-        <translation>Conectarea la portul serial &quot;%1&quot; a eșuat</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="320"/>
+        <source>Failed to connect to serial port "%1"</source>
+        <translation>Conectarea la portul serial "%1" a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="298"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="562"/>
+        <source>Failed to set baud rate</source>
+        <translation>Eșec la setarea ratei de transmisie</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="299"/>
+        <source>Baud rate %1 rejected for port "%2": %3</source>
+        <translation>Rata de transmisie %1 respinsă pentru portul "%2": %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="563"/>
+        <source>Baud rate %1 rejected: %2</source>
+        <translation>Rată Baud %1 respinsă: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
-        <source>Critical error on serial port &quot;%1&quot;</source>
-        <translation>Eroare critică pe portul serial &quot;%1&quot;</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <source>Critical error on serial port "%1"</source>
+        <translation>Eroare critică pe portul serial "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
         <source>Unknown error</source>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
         <source>No error occurred.</source>
         <translation>Nu a apărut nicio eroare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Permisiune refuzată. Asigurați-vă că aplicația are drepturile de acces necesare la dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Deschiderea dispozitivului a eșuat. Este posibil să fie deja în uz sau indisponibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>A apărut o eroare la scrierea datelor pe dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>A apărut o eroare la citirea datelor de pe dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>A apărut o eroare critică de resurse. Este posibil ca dispozitivul să fi fost deconectat sau nu mai este accesibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Operația solicitată nu este suportată pe acest dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Operațiunea a expirat. Dispozitivul ar putea să nu răspundă.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1081"/>
         <source>Serial Port</source>
         <translation>Port Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1089"/>
         <source>Baud Rate</source>
         <translation>Rată de Transmisie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1097"/>
         <source>Parity</source>
         <translation>Paritate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1105"/>
         <source>Data Bits</source>
         <translation>Biți de Date</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1113"/>
         <source>Stop Bits</source>
         <translation>Biți de Stop</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1121"/>
         <source>Flow Control</source>
         <translation>Control Flux</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1129"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1136"/>
         <source>Auto-Reconnect</source>
         <translation>Reconectare Automată</translation>
     </message>
@@ -12515,26 +12558,26 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="161"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>USB Error</source>
         <translation>Eroare USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="162"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>Inițializarea subsistemului USB a eșuat. Verificați dacă libusb este disponibil pe sistem.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="204"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="593"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1104"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="217"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1130"/>
         <source>USB Device Error</source>
         <translation>Eroare Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="182"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="197"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -12543,40 +12586,40 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 Pe Linux, asigurați-vă că aveți permisiuni de citire/scriere pe nodul dispozitivului (adăugați o regulă udev sau rulați ca root). Pe macOS, driverul kernel poate necesita detașare mai întâi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>Niciun dispozitiv USB selectat. Selectați un dispozitiv și reîncercați.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="190"/>
         <source>Unknown Device</source>
         <translation>Dispozitiv Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Deschiderea „%1&quot; a eșuat</translation>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
+        <source>Failed to open "%1"</source>
+        <translation>Deschiderea „%1" a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="816"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
         <translation>Nu a fost găsit niciun endpoint izocron IN pe acest dispozitiv, dar sunt disponibile endpoint-uri bulk sau de întrerupere.
 
-Comutați Modul de Transfer la „Flux Bulk/Întrerupere&quot; și încercați din nou.</translation>
+Comutați Modul de Transfer la „Flux Bulk/Întrerupere" și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="821"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation>Nu a fost găsit niciun endpoint bulk sau de întrerupere IN pe acest dispozitiv, dar sunt disponibile endpoint-uri izocrone.
 
-Comutați Modul de Transfer la „Izocron&quot; și încercați din nou.</translation>
+Comutați Modul de Transfer la „Izocron" și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="825"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -12585,7 +12628,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 Dispozitivul poate să nu expună endpoint-uri de date în configurația sa activă sau poate utiliza un protocol dedicat. Adaptoarele de protocol (de ex. interfețe CAN sau Modbus) trebuie conectate prin propriul lor driver.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1105"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1119"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -12594,120 +12637,120 @@ Another driver or application may already have it open. On Linux, try unloading 
 Un alt driver sau aplicație ar putea să îl dețină deja deschis. Pe Linux, încercați descărcarea driverului kernel (ex. cdc_acm) sau adăugarea unei reguli udev.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1131"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>Nu s-a putut activa setarea alternativă %1 pe interfața %2. Punctul final selectat nu este accesibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1162"/>
         <source>USB Device Warning</source>
         <translation>Avertisment Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1163"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>Punctul final OUT selectat nu a putut fi activat. Se continuă în modul doar citire.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1395"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>Niciun dispozitiv conectat în modul Control Avansat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1386"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1400"/>
         <source>A control transfer is already in progress.</source>
         <translation>Un transfer de control este deja în curs.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1410"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>Câmp de configurare invalid: tipul cererii, cererea, wValue și wIndex trebuie să fie hexazecimale.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1406"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1420"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>Payload de date invalid: se așteaptă o secvență de octeți hexazecimali.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1412"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1426"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>Lungime de transfer invalidă (0-%1 octeți).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1430"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1444"/>
         <source>Could not allocate the control transfer.</source>
         <translation>Nu s-a putut aloca transferul de control.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1457"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1471"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>Eșec la trimiterea transferului de control: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1498"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>Transfer finalizat: %1 octet(i).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1491"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1505"/>
         <source>Control transfer failed: %1.</source>
         <translation>Transfer de control eșuat: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="360"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="373"/>
         <source>Select Device</source>
         <translation>Selectează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="382"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="395"/>
         <source>No Usable IN Endpoints</source>
         <translation>Niciun Punct Final IN Utilizabil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="397"/>
         <source>Select IN Endpoint</source>
         <translation>Selectează Endpoint IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
         <source>None (Read-only)</source>
         <translation>Niciunul (Doar Citire)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>Activați Transferurile de Control USB Avansate?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="472"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="485"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>Aceasta activează transferurile de control în plus față de transferurile bulk. Trimiterea de cereri de control incorecte poate bloca sau deteriora hardware-ul conectat. Activați doar dacă știți ce faceți.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="476"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="489"/>
         <source>Advanced USB Mode</source>
         <translation>Mod USB Avansat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="594"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="607"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>Dispozitivul USB a fost deconectat sau a întâmpinat o eroare fatală de citire.</translation>
     </message>
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk Stream" and try again.</source>
         <translation type="vanished">Nu a fost găsit niciun endpoint izocron IN pe acest dispozitiv, dar sunt disponibile endpoint-uri bulk.
 
-Comutați Modul de Transfer la „Flux Bulk&quot; și încercați din nou.</translation>
+Comutați Modul de Transfer la „Flux Bulk" și încercați din nou.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation type="vanished">Nu a fost găsit niciun endpoint bulk IN pe acest dispozitiv, dar sunt disponibile endpoint-uri izocrone.
 
-Comutați Modul de Transfer la „Izocron&quot; și încercați din nou.</translation>
+Comutați Modul de Transfer la „Izocron" și încercați din nou.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -12718,12 +12761,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 Dispozitivul poate să nu expună endpoint-uri de date în configurația sa activă sau poate necesita un driver specific.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1628"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1642"/>
         <source>USB Device</source>
         <translation>Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1636"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1650"/>
         <source>Transfer Mode</source>
         <translation>Mod de Transfer</translation>
     </message>
@@ -12732,32 +12775,32 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
         <translation type="vanished">Flux Bulk</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Advanced Control</source>
         <translation>Control Avansat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Isochronous</source>
         <translation>Izocron</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Flux Bulk/interrupt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1644"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1658"/>
         <source>IN Endpoint</source>
         <translation>Endpoint IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1652"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1666"/>
         <source>OUT Endpoint</source>
         <translation>Endpoint OUT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1660"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1674"/>
         <source>ISO Packet Size</source>
         <translation>Dimensiune Pachet ISO</translation>
     </message>
@@ -13369,7 +13412,7 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Server local de modele. Funcționează cu orice endpoint compatibil OpenAI -- Ollama, llama-server al llama.cpp, LM Studio sau vLLM. Nimic nu părăsește mașina ta. Lista de modele este interogată live de la server.</translation>
     </message>
     <message>
@@ -13399,7 +13442,7 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider&apos;s console to create a new key</source>
+        <source>Open the provider's console to create a new key</source>
         <translation>Deschide consola furnizorului pentru a crea o cheie nouă</translation>
     </message>
     <message>
@@ -13612,129 +13655,129 @@ Anual este cea mai bună valoare; sunt disponibile și planuri Lunare și pe Via
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="559"/>
         <source>There was an issue validating your license.</source>
         <translation>A apărut o problemă la validarea licenței.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="771"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Cheia de licență furnizată nu aparține Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Verifică că ai achiziționat licența din magazinul oficial Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="590"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
         <source>This license key was activated on a different device.</source>
         <translation>Această cheie de licență a fost activată pe un alt dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Dezactivează-o mai întâi acolo sau contactează suportul pentru asistență.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="602"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
         <source>This license is not currently active.</source>
         <translation>Această licență nu este activă în prezent.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Este posibil să fi expirat sau să fi fost dezactivată (stare: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <source>Something went wrong on the server.</source>
         <translation>Ceva nu a funcționat pe server.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="803"/>
         <source>No activation ID was returned.</source>
         <translation>Nu s-a returnat niciun ID de activare.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="624"/>
         <source>Could not validate your license at this time.</source>
         <translation>Nu s-a putut valida licența în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="625"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="812"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Try again later.</source>
         <translation>Încearcă din nou mai târziu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Verifică din nou că ai achiziționat licența din magazinul oficial Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="802"/>
         <source>Something went wrong on the server…</source>
         <translation>Ceva nu a funcționat pe server…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="708"/>
         <source>Your license has been successfully activated.</source>
         <translation>Licența ta a fost activată cu succes.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Mulțumim că susții Serial Studio!
 Acum ai acces la toate funcționalitățile premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
         <source>There was an issue activating your license.</source>
         <translation>A apărut o problemă la activarea licenței tale.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="811"/>
         <source>Could not activate your license at this time.</source>
         <translation>Nu s-a putut activa licența ta în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="883"/>
         <source>There was an issue deactivating your license.</source>
         <translation>A apărut o problemă la dezactivarea licenței tale.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Nu s-a putut dezactiva licența în acest moment.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Your license has been deactivated.</source>
         <translation>Licența a fost dezactivată.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Accesul la funcțiile Pro a fost eliminat.
@@ -13839,7 +13882,7 @@ Pentru a reutiliza acest loc pe alt dispozitiv, trimiteți un email la alex@seri
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>O parte din secțiunea de date a fișierului nu a putut fi citită; înregistrarea poate fi trunchiată.</translation>
     </message>
     <message>
@@ -13964,43 +14007,43 @@ Pentru a reutiliza acest loc pe alt dispozitiv, trimiteți un email la alex@seri
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificat Client</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
         <source>Optional (mutual TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Opțional (TLS mutual)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
         <source>Browse…</source>
-        <translation type="unfinished">Răsfoiește…</translation>
+        <translation>Răsfoiește…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Cheie Privată</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
         <source>Defaults to the certificate file</source>
-        <translation type="unfinished"></translation>
+        <translation>Implicit fișierul certificatului</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
         <source>Key Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Frază de Acces Cheie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
         <source>ALPN</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocol ALPN</translation>
     </message>
 </context>
 <context>
@@ -14102,7 +14145,7 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Topic MQTT Nesetat</translation>
     </message>
     <message>
-        <source>You won&apos;t receive any messages until a topic is configured.</source>
+        <source>You won't receive any messages until a topic is configured.</source>
         <translation type="vanished">Nu veți primi niciun mesaj până când un topic este configurat.</translation>
     </message>
     <message>
@@ -14114,8 +14157,8 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Topic MQTT Invalid</translation>
     </message>
     <message>
-        <source>The topic &quot;%1&quot; is not valid.</source>
-        <translation type="vanished">Topic-ul „%1&quot; nu este valid.</translation>
+        <source>The topic "%1" is not valid.</source>
+        <translation type="vanished">Topic-ul „%1" nu este valid.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -14126,8 +14169,8 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Eroare Abonare</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation type="vanished">Eșec la abonarea la topic-ul „%1&quot;.</translation>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation type="vanished">Eșec la abonarea la topic-ul „%1".</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -14222,10 +14265,10 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Autentificare MQTT Necesară</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
+        <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">Broker-ul MQTT necesită autentificare folosind metoda: &quot;%1&quot;.
+        <translation type="vanished">Broker-ul MQTT necesită autentificare folosind metoda: "%1".
 
 Furniză acreditările necesare.</translation>
     </message>
@@ -14357,17 +14400,17 @@ Furniză acreditările necesare.</translation>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fișiere PEM (*.pem *.crt *.cer *.key);;Toate fișierele (*)</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează Certificatul Client</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
         <source>Select Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează Cheia Privată</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
@@ -14393,7 +14436,7 @@ Furniză acreditările necesare.</translation>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
         <source>MQTT Client Certificate Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Eroare Certificat Client MQTT</translation>
     </message>
 </context>
 <context>
@@ -15206,13 +15249,13 @@ Furniză acreditările necesare.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin &quot;%1&quot; is not installed.</source>
-        <translation>Plugin-ul &quot;%1&quot; nu este instalat.</translation>
+        <source>Plugin "%1" is not installed.</source>
+        <translation>Plugin-ul "%1" nu este instalat.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
-        <translation>Extensia &quot;%1&quot; nu este un plugin (tip: %2).</translation>
+        <source>Extension "%1" is not a plugin (type: %2).</source>
+        <translation>Extensia "%1" nu este un plugin (tip: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
@@ -15223,8 +15266,8 @@ Furniză acreditările necesare.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
-        <translation>Plugin-ul &quot;%1&quot; necesită GRPC, dar această versiune nu include suport GRPC.</translation>
+        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
+        <translation>Plugin-ul "%1" necesită GRPC, dar această versiune nu include suport GRPC.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
@@ -15242,8 +15285,8 @@ Doriți să îl activați acum?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
-        <translation>Plugin-ul &quot;%1&quot; nu are câmpul &apos;entry&apos; în info.json.</translation>
+        <source>Plugin "%1" has no 'entry' field in info.json.</source>
+        <translation>Plugin-ul "%1" nu are câmpul 'entry' în info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -15254,8 +15297,8 @@ Doriți să îl activați acum?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
-        <translation>Plugin-ul &quot;%1&quot; are o cale invalidă pentru punctul de intrare.</translation>
+        <source>Plugin "%1" has an invalid entry point path.</source>
+        <translation>Plugin-ul "%1" are o cale invalidă pentru punctul de intrare.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1490"/>
@@ -15264,10 +15307,10 @@ Doriți să îl activați acum?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
+        <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Acest plugin necesită &quot;%1&quot; dar nu a fost găsit pe sistemul dumneavoastră.
+        <translation>Acest plugin necesită "%1" dar nu a fost găsit pe sistemul dumneavoastră.
 
 Doriți să deschideți pagina de descărcare?</translation>
     </message>
@@ -15493,8 +15536,8 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation type="vanished">Verificare automată a actualizărilor?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation type="vanished">%1 să verifice automat actualizările? Poți verifica manual actualizările oricând din dialogul „Despre&quot;</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <translation type="vanished">%1 să verifice automat actualizările? Poți verifica manual actualizările oricând din dialogul „Despre"</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="192"/>
@@ -15937,22 +15980,22 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificat Client</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
         <source>Select the PEM client certificate for mutual TLS</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează certificatul client PEM pentru TLS mutual</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Cheie Privată</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
         <source>Select the PEM private key for mutual TLS</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează cheia privată PEM pentru TLS mutual</translation>
     </message>
 </context>
 <context>
@@ -16193,7 +16236,7 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two&apos;s-complement signed.</source>
+        <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpretează fiecare valoare ca semnat în complement față de doi.</translation>
     </message>
     <message>
@@ -16270,7 +16313,7 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
+        <source>Interprets 16-bit registers as two's-complement signed values.</source>
         <translation>Interpretează registrele pe 16 biți ca valori semnate în complement față de doi.</translation>
     </message>
     <message>
@@ -16545,7 +16588,7 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>Salvează fișierul dispozitivului acestui computer. Acesta identifică această mașină și nu conține informații personale.</translation>
     </message>
     <message>
@@ -17197,7 +17240,7 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Indisponibil prin atașare la distanță. Acest widget necesită fluxul brut de eșantioane de la distanță, pe care oglinda tabloului de bord nu îl transmite.</translation>
     </message>
 </context>
@@ -18326,7 +18369,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Execută transformarea unui set de date doar când una dintre intrările sale se modifică. Accelerează proiectele mari bazate pe tabele; dezactivat implicit.</translation>
     </message>
     <message>
@@ -18447,7 +18490,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
         <translation>Broker-ul a respins conexiunea din cauza unei versiuni de protocol nesuportate. Potrivește versiunea MQTT a broker-ului și încearcă din nou.</translation>
     </message>
     <message>
@@ -18487,7 +18530,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
         <translation>A apărut o eroare la nivelul protocolului MQTT 5. Inspectează codul de motiv al broker-ului pentru detalii.</translation>
     </message>
     <message>
@@ -18498,7 +18541,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un certificat client este configurat: verifică că se potrivește cu cheia privată și este activat pe broker.</translation>
     </message>
 </context>
 <context>
@@ -18509,34 +18552,34 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
         <translation>Nu s-a putut încărca textul de bun venit :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="279"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <source>Network error</source>
         <translation>Eroare de rețea</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="293"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="310"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
         <translation>Eroare de Activare Trial</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
         <source>Invalid server response</source>
         <translation>Răspuns invalid de la server</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="296"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="308"/>
         <source>The server returned malformed data: %1</source>
         <translation>Serverul a returnat date malformate: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="327"/>
         <source>Unexpected server response</source>
         <translation>Răspuns neașteptat de la server</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>The server response is missing required fields.</source>
         <translation>Răspunsul serverului nu conține câmpurile necesare.</translation>
     </message>
@@ -18551,22 +18594,22 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
         <translation>Nu se poate deschide fișierul pentru scriere!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1375"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Adaptor Bluetooth invalid!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1378"/>
         <source>Unsuported platform or operating system</source>
         <translation>Platformă sau sistem de operare nesuportat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1381"/>
         <source>Unsupported discovery method</source>
         <translation>Metodă de descoperire nesuportată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1384"/>
         <source>General I/O error</source>
         <translation>Eroare generală de I/O</translation>
     </message>
@@ -18621,11 +18664,11 @@ Cauza cea mai probabilă: o buclă infinită sau o operație extrem de lentă î
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>Funcția &apos;parse&apos; nu este definită în script.
+        <translation>Funcția 'parse' nu este definită în script.
 
 Asigurați-vă că codul include:
 function parse(frame) ... end</translation>
@@ -18707,11 +18750,11 @@ Cauza cea mai probabilă: o buclă infinită la nivelul superior al scriptului.<
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>Funcția &apos;parse&apos; nu este definită în script.
+        <translation>Funcția 'parse' nu este definită în script.
 
 Asigurați-vă că codul dvs. include:
 function parse(frame) { ... }</translation>
@@ -18736,12 +18779,12 @@ Vă rugăm să corectați eroarea în corpul funcției.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable &apos;parse&apos; export found.
+        <source>No callable 'parse' export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>Nu a fost găsit niciun export &apos;parse&apos; apelabil.
+        <translation>Nu a fost găsit niciun export 'parse' apelabil.
 
 Definește una dintre variante:
   function parse(frame) { ... }
@@ -18749,15 +18792,15 @@ Definește una dintre variante:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
-        <translation>Funcția &apos;parse&apos; trebuie să accepte cel puțin un parametru (payload-ul frame-ului).</translation>
+        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
+        <translation>Funcția 'parse' trebuie să accepte cel puțin un parametru (payload-ul frame-ului).</translation>
     </message>
     <message>
-        <source>No valid &apos;parse&apos; function declaration found.
+        <source>No valid 'parse' function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Nu a fost găsită o declarație validă a funcției &apos;parse&apos;.
+        <translation type="vanished">Nu a fost găsită o declarație validă a funcției 'parse'.
 
 Format așteptat:
 function parse(frame) { ... }</translation>
@@ -18768,11 +18811,11 @@ function parse(frame) { ... }</translation>
         <translation>Parametru Funcție Invalid</translation>
     </message>
     <message>
-        <source>The &apos;parse&apos; function must have at least one parameter.
+        <source>The 'parse' function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Funcția &apos;parse&apos; trebuie să aibă cel puțin un parametru.
+        <translation type="vanished">Funcția 'parse' trebuie să aibă cel puțin un parametru.
 
 Format așteptat:
 function parse(frame) { ... }</translation>
@@ -18784,13 +18827,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
+        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>Funcția &apos;parse&apos; folosește formatul vechi cu doi parametri: parse(%1, %2)
+        <translation>Funcția 'parse' folosește formatul vechi cu doi parametri: parse(%1, %2)
 
 Acest format nu mai este suportat. Vă rugăm să actualizați la noul format cu un singur parametru:
 function parse(%1) { ... }
@@ -18908,13 +18951,13 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got &apos;%2&apos;</source>
-        <translation>Se aștepta %1, s-a primit &apos;%2&apos;</translation>
+        <source>Expected %1, got '%2'</source>
+        <translation>Se aștepta %1, s-a primit '%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after &apos;enum&apos;</source>
-        <translation>Se așteaptă nume enum după &apos;enum&apos;</translation>
+        <source>Expected enum name after 'enum'</source>
+        <translation>Se așteaptă nume enum după 'enum'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18923,8 +18966,8 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
-        <translation>Eticheta câmpului &apos;%1&apos; în afara intervalului (1..%2)</translation>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>Eticheta câmpului '%1' în afara intervalului (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18948,8 +18991,8 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got &apos;%1&apos;</source>
-        <translation>Se așteaptă tip câmp, s-a primit &apos;%1&apos;</translation>
+        <source>Expected field type, got '%1'</source>
+        <translation>Se așteaptă tip câmp, s-a primit '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18973,13 +19016,13 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token &apos;%1&apos; at file scope</source>
-        <translation>Token neașteptat &apos;%1&apos; în domeniul fișierului</translation>
+        <source>Unexpected token '%1' at file scope</source>
+        <translation>Token neașteptat '%1' în domeniul fișierului</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword &apos;%1&apos;</source>
-        <translation>Cuvânt cheie de nivel superior nesuportat &apos;%1&apos;</translation>
+        <source>Unsupported top-level keyword '%1'</source>
+        <translation>Cuvânt cheie de nivel superior nesuportat '%1'</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -19020,8 +19063,8 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Configurația parserului nativ nu este un obiect JSON valid.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: &quot;%1&quot;.</source>
-        <translation type="vanished">Șablon parser nativ necunoscut: &quot;%1&quot;.</translation>
+        <source>Unknown native parser template: "%1".</source>
+        <translation type="vanished">Șablon parser nativ necunoscut: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -19030,8 +19073,8 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
-        <translation>Șablon parser integrat necunoscut: &quot;%1&quot;.</translation>
+        <source>Unknown Built-In parser template: "%1".</source>
+        <translation>Șablon parser integrat necunoscut: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -19048,32 +19091,32 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Activare Offline</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1349"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1363"/>
         <source>timed out</source>
         <translation>expirat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1351"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1365"/>
         <source>cancelled</source>
         <translation>anulat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1353"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1367"/>
         <source>stalled (request not supported)</source>
         <translation>blocat (cerere nesuportată)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1355"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1369"/>
         <source>device disconnected</source>
         <translation>dispozitiv deconectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1357"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1371"/>
         <source>buffer overflow</source>
         <translation>depășire buffer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1359"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1373"/>
         <source>transfer error</source>
         <translation>eroare de transfer</translation>
     </message>
@@ -19211,7 +19254,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Urmărește tabloul de bord al altei instanțe Serial Studio prin rețea. Vizualizarea este doar pentru citire: nimic din ce faceți aici nu ajunge la dispozitivul la distanță.</translation>
     </message>
     <message>
@@ -19601,7 +19644,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn&apos;t reach your device.</source>
+        <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio nu a putut accesa dispozitivul.</translation>
     </message>
     <message>
@@ -19611,7 +19654,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Asigură-te că este conectat, pornit și nu este deja utilizat de altă aplicație. Poți reîncerca, alege un alt dispozitiv sau închide.</translation>
     </message>
     <message>
@@ -20760,7 +20803,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Actualizări și Noutăți</translation>
     </message>
     <message>
-        <source>Show What&apos;s New on Startup</source>
+        <source>Show What's New on Startup</source>
         <translation type="vanished">Afișează Ce Este Nou la Pornire</translation>
     </message>
     <message>
@@ -21279,7 +21322,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Dublu-clic pe această implementare deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
     </message>
     <message>
@@ -21393,7 +21436,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Ecran Complet</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">Dublu-clic pe această comandă rapidă deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
     </message>
     <message>
@@ -21401,7 +21444,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Încorporează Proiectul</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">Dublu-clic pe această scurtătură duce pe cineva direct la tabloul de bord live pentru acest proiect. Nu există bară de unelte sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.
@@ -21717,8 +21760,8 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show &quot;%1&quot;</source>
-        <translation>Afișează &quot;%1&quot;</translation>
+        <source>Show "%1"</source>
+        <translation>Afișează "%1"</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -22476,38 +22519,38 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     <name>TlsIdentity</name>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
-        <source>The file &quot;%1&quot; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <source>The file "%1" does not exist.</source>
+        <translation>Fișierul "%1" nu există.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
-        <source>The file &quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <source>The file "%1" cannot be read.</source>
+        <translation>Fișierul "%1" nu poate fi citit.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
-        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is not a valid PEM certificate or key file.</source>
+        <translation>"%1" nu este un fișier certificat sau cheie PEM valid.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
-        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is too large to be a PEM certificate or key file.</source>
+        <translation>"%1" este prea mare pentru a fi un fișier certificat sau cheie PEM.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
         <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
-        <translation type="unfinished"></translation>
+        <translation>O cheie privată este setată, dar niciun certificat client nu este selectat. Selectează certificatul care corespunde.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
-        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
-        <translation type="unfinished"></translation>
+        <source>The private key "%1" is encrypted. Enter its passphrase and try again.</source>
+        <translation>Cheia privată "%1" este criptată. Introdu fraza de acces și încearcă din nou.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
-        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <source>The passphrase does not unlock the private key "%1".</source>
+        <translation>Fraza de acces nu deblochează cheia privată "%1".</translation>
     </message>
 </context>
 <context>
@@ -22866,15 +22909,20 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>Gestionează licența și activează Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
         <source>Disconnect</source>
         <translation>Deconectează</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
         <source>Connect</source>
         <translation>Conectează</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <source>Connecting…</source>
+        <translation>Se Conectează…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
@@ -22962,7 +23010,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Lasă baza de timp goală pentru a folosi intervalul de timp al graficului; micșorează-o pentru a mări un semnal rapid. Holdoff ignoră declanșările noi pentru un moment după fiecare.</translation>
     </message>
     <message>
@@ -23028,7 +23076,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">Baza de timp stabilește cât timp afișează un baleiaj; lasă-l gol pentru a folosi intervalul de timp al graficului. Micșorează-l pentru a mări un semnal rapid. Holdoff ignoră declanșările noi pentru un moment după fiecare declanșare.</translation>
     </message>
     <message>
@@ -23147,34 +23195,34 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2075"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2060"/>
         <source>Console</source>
         <translation>Consolă</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2068"/>
         <source>Notifications</source>
         <translation>Notificări</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2091"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2076"/>
         <source>Clock</source>
         <translation>Ceas</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2098"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
         <source>Stopwatch</source>
         <translation>Cronometru</translation>
     </message>
     <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="2137"/>
         <location filename="../../src/UI/Dashboard.cpp" line="2152"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2167"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Rezervă)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2189"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2268"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2174"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2253"/>
         <source>LED Panel (%1)</source>
         <translation>Panou LED (%1)</translation>
     </message>
@@ -23550,7 +23598,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Indisponibil prin conexiune la distanță. Acest widget necesită fluxul brut de eșantioane de la dispozitivul la distanță, pe care oglindirea tabloului de bord nu îl transmite.</translation>
     </message>
     <message>
@@ -23616,7 +23664,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
+        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>Folosești în prezent versiunea de probă completă a %1 Pro. Este valabilă 14 zile pentru uz personal, necomercial.</translation>
     </message>
     <message>
@@ -23631,13 +23679,13 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
-        <translation>Pentru a vedea planurile de abonament disponibile, apasă „Actualizează Acum&quot; mai jos.</translation>
+        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <translation>Pentru a vedea planurile de abonament disponibile, apasă „Actualizează Acum" mai jos.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don&apos;t nag me about the trial.
-I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>Nu mă mai înștiința despre perioada de probă.
 Înțeleg că la expirare va trebui să cumpăr o licență sau să compilez versiunea GPLv3.</translation>
     </message>
@@ -23699,7 +23747,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What&apos;s New in %1</source>
+        <source>What's New in %1</source>
         <translation type="vanished">Noutăți în %1</translation>
     </message>
     <message>
@@ -23835,7 +23883,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
         <translation type="vanished">Bine ai venit în %1!</translation>
     </message>
     <message>
-        <source>Here&apos;s what&apos;s new in version %1.</source>
+        <source>Here's what's new in version %1.</source>
         <translation type="vanished">Iată ce este nou în versiunea %1.</translation>
     </message>
     <message>
@@ -24044,7 +24092,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Nu putem oferi acces nelimitat deoarece cheia API ArcGIS generează costuri reale.</translation>
     </message>
 </context>

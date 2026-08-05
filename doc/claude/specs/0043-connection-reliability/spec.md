@@ -81,15 +81,28 @@ deferred dial (connectToHost never in the same turn as an abort), `tcpLinkUp()` 
 validation gating `isOpen()` and the connected transition, and `RemoteHostClosedError`
 retryable while dialing. Driver drops additionally never end the session (see R2).
 
-## Deferred gap register (next pass; from the 2026-08-04 driver audit)
+## Register round (2026-08-04 evening): the deferred items landed
 
-- **No "connecting" feedback in the UI.** An async dial shows nothing; users double-click
-  Connect and each click aborts their own dial (the telehack.com report). Needs an
-  `isConnecting` surface on ConnectionManager + button/QML treatment, decided deliberately.
-- **`Dashboard::handleMissingDataset` force-disconnects** (`Dashboard.cpp` retry-failure path)
-  — an explicit `disconnectDevice()` that reaps helpers; if a transient widget-model failure
-  can trigger it, a streaming session dies hard. Verify against the CAN example.
-- **Modbus TCP** has no config-change reconnect (Network now does; MQTT always did).
+- "Connecting…" feedback: `ConnectionManager::isConnecting` Q_PROPERTY (idempotent
+  `connectingChanged`) + toolbar button label; double-click still aborts, but on purpose now.
+- Every remaining synchronous modal in the USB/HID/CANBus/Process open()/error stacks is
+  queued; Process crash paths queue the teardown before the box.
+- Process truthfulness: launch is non-blocking (`waitForStarted` gone; QProcess::Starting =
+  connecting), and NamedPipe reports the wait-for-writer window as connecting instead of
+  faking isOpen (`m_pipeConnected` set by the read threads).
+- `Dashboard::handleMissingDataset` no longer force-disconnects or closes players: after one
+  rebuild retry the (sourceId, structureGeneration) pair is quarantined and its frames drop
+  cheaply; a new generation retries. Rendering failures never take the device away.
+- Modbus dials asynchronously (timer-driven retries mirroring Network; RTU one attempt);
+  the nested QEventLoop/msleep machinery is gone.
+
+## Deferred gap register (still open)
+
+- Modbus config-change auto-reconnect (Network has it; MQTT always did).
+- USB `cancelAndDrainTransfers` 2 s GUI sleep (iso mode); Audio backend-stop detection;
+  HID `close()` missing `configurationChanged`; MQTT reconnect `Connection*` leak;
+  `linkState()`/`io.getStatus` not exposing the connecting state (API surface, maintainer
+  schema dump required).
 
 - **USB/HID/CANBus/Process `open()` synchronous modals** — mid-open-stack modals remain in
   USB (4 sites + endpoint activation), HID (1), CANBus open-path helpers, Process (2).

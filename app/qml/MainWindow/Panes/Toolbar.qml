@@ -253,6 +253,7 @@ Rectangle {
     Widgets.ToolbarButton {
       id: _connectButton
 
+      readonly property bool connecting: Cpp_IO_Manager.isConnecting
       readonly property var entry: _tbModel.binding("io.toggleConnection")
 
       Layout.alignment: Qt.AlignVCenter
@@ -261,8 +262,8 @@ Rectangle {
       Layout.minimumWidth: metrics.width + 16
       Layout.maximumWidth: metrics.width + 16
       checked: entry !== null && entry.checked === true
-      text: checked ? qsTr("Disconnect") : qsTr("Connect")
       ToolTip.text: qsTr("Connect or disconnect from the configured device")
+      text: connecting ? qsTr("Connecting…") : (checked ? qsTr("Disconnect") : qsTr("Connect"))
       icon.source: Cpp_Misc_IconRegistry.iconById(checked ? "commands/connect" : "commands/disconnect", 32)
 
       visible: entry !== null && entry.visible !== false

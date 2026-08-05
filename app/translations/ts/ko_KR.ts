@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ko_KR" sourcelanguage="en_US">
 <context>
-    <name></name>
+    <name/>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
@@ -11,62 +11,62 @@
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
         <source>Optional (mutual TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>선택 사항 (상호 TLS)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
         <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
-        <translation type="unfinished"></translation>
+        <translation>상호 TLS를 요구하는 브로커에 제시되는 PEM 인증서 (AWS IoT Core)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
         <source>Defaults to the certificate file</source>
-        <translation type="unfinished"></translation>
+        <translation>기본값은 인증서 파일</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
         <source>PEM private key matching the client certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서와 일치하는 PEM 개인 키</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
         <source>Key Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>키 암호문구</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
         <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation type="unfinished"></translation>
+        <translation>암호화된 개인 키의 암호문구 (암호화된 저장소에 보관되며 프로젝트 파일에는 저장되지 않음)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
         <source>ALPN (MQTT over port 443)</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN (포트 443을 통한 MQTT)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
-        <translation type="unfinished"></translation>
+        <translation>브로커가 방화벽 뒤에서 포트 443으로 MQTT를 제공할 수 있도록 ALPN 프로토콜 알림</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN 프로토콜</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
-        <translation type="unfinished"></translation>
+        <translation>TLS 핸드셰이크 중 알리는 프로토콜 이름 (AWS IoT는 x-amzn-mqtt-ca 사용)</translation>
     </message>
 </context>
 <context>
@@ -226,7 +226,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(모델이 빈 응답을 반환했습니다. 다른 표현으로 다시 시도하거나, 다른 모델로 전환하거나, 제공업체의 안전 필터에서 요청이 허용되는지 확인하십시오.)</translation>
     </message>
     <message>
@@ -374,7 +374,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote&apos;s dataset layout does not match its announced hash</source>
+        <source>The remote's dataset layout does not match its announced hash</source>
         <translation>원격의 데이터셋 레이아웃이 발표된 해시와 일치하지 않습니다</translation>
     </message>
     <message>
@@ -415,8 +415,8 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program &quot;%1&quot; not found in PATH</source>
-        <translation>프로그램 &quot;%1&quot;을(를) PATH에서 찾을 수 없습니다</translation>
+        <source>Program "%1" not found in PATH</source>
+        <translation>프로그램 "%1"을(를) PATH에서 찾을 수 없습니다</translation>
     </message>
 </context>
 <context>
@@ -452,7 +452,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio의 로컬 API를 사용하는 프로그램이 연결된 장치로 데이터를 전송하도록 요청하고 있습니다. API 클라이언트가 장치에 쓰기를 수행하도록 허용하시겠습니까?</translation>
     </message>
     <message>
@@ -514,8 +514,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>이 소프트웨어는 상품성 또는 특정 목적에의 적합성에 대한 보증을 포함하되 이에 국한되지 않는 명시적 또는 묵시적 보증 없이 &apos;있는 그대로&apos; 제공됩니다. 저작자는 이 소프트웨어의 사용으로 인해 발생하는 어떠한 손해에 대해서도 책임을 지지 않습니다.</translation>
+        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>이 소프트웨어는 상품성 또는 특정 목적에의 적합성에 대한 보증을 포함하되 이에 국한되지 않는 명시적 또는 묵시적 보증 없이 '있는 그대로' 제공됩니다. 저작자는 이 소프트웨어의 사용으로 인해 발생하는 어떠한 손해에 대해서도 책임을 지지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -538,7 +538,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>프로젝트 데모</translation>
     </message>
     <message>
-        <source>What&apos;s New</source>
+        <source>What's New</source>
         <translation type="vanished">새로운 기능</translation>
     </message>
     <message>
@@ -1065,7 +1065,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">프리셋 적용</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
         <translation type="vanished">현재 밴드를 선택한 프리셋으로 교체하며, 이 데이터셋의 범위에 맞게 조정됩니다.</translation>
     </message>
     <message>
@@ -1273,7 +1273,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio&apos;s features</source>
+        <source>Help me discover Serial Studio's features</source>
         <translation>Serial Studio 기능 알아보기</translation>
     </message>
     <message>
@@ -1401,13 +1401,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder &quot;%1&quot; - readable this session</source>
-        <translation>폴더 &quot;%1&quot; 추가됨 - 이 세션에서 읽기 가능</translation>
+        <source>Added folder "%1" - readable this session</source>
+        <translation>폴더 "%1" 추가됨 - 이 세션에서 읽기 가능</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added &quot;%1&quot; - readable this session</source>
-        <translation>&quot;%1&quot; 추가됨 - 이 세션에서 읽기 가능</translation>
+        <source>Added "%1" - readable this session</source>
+        <translation>"%1" 추가됨 - 이 세션에서 읽기 가능</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1755,7 +1755,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>제목이 &quot;%1&quot;에서 &quot;%2&quot;(으)로 변경됩니다. 그룹 구조는 변경되지 않습니다.</translation>
+        <translation>제목이 "%1"에서 "%2"(으)로 변경됩니다. 그룹 구조는 변경되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1847,7 +1847,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>이 컴퓨터가 Serial Studio의 데이터 파이프라인을 통해 프레임을 추출, 파싱 및 시각화하는 속도를 측정합니다.</translation>
     </message>
     <message>
@@ -2303,7 +2303,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>QT에서 공식적으로 지원하는 즉시 이 운영 체제에서 작동하도록 Serial Studio를 업데이트할 예정입니다</translation>
     </message>
 </context>
@@ -3659,7 +3659,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
+        <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>네트워크를 통해 다른 Serial Studio 인스턴스의 대시보드 보기</translation>
     </message>
     <message>
@@ -3971,7 +3971,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler&apos;s number</source>
+        <source>Euler's number</source>
         <translation>오일러 수</translation>
     </message>
     <message>
@@ -5243,11 +5243,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">값</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">위에 프레임 데이터를 입력하고, 필요한 경우 HEX 모드를 활성화한 다음 &quot;평가&quot;를 클릭하여 프레임 파서를 실행하세요.
+        <translation type="vanished">위에 프레임 데이터를 입력하고, 필요한 경우 HEX 모드를 활성화한 다음 "평가"를 클릭하여 프레임 파서를 실행하세요.
 
 예제 (텍스트): a,b,c,d,e,f
 예제 (HEX):  48 65 6C 6C 6F</translation>
@@ -5487,10 +5487,10 @@ Any unsaved changes are lost. Continue?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
+        <source>"%1" expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template&apos;s defaults?</source>
-        <translation>&quot;%1&quot;은(는) %2개의 데이터셋이 필요하지만 현재 그룹에는 %3개가 있습니다.
+Add %4 dataset(s) using the template's defaults?</source>
+        <translation>"%1"은(는) %2개의 데이터셋이 필요하지만 현재 그룹에는 %3개가 있습니다.
 
 템플릿 기본값을 사용하여 %4개의 데이터셋을 추가하시겠습니까?</translation>
     </message>
@@ -5982,7 +5982,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
-        <source>How strictly the broker&apos;s certificate chain is validated</source>
+        <source>How strictly the broker's certificate chain is validated</source>
         <translation>브로커의 인증서 체인 검증 엄격도</translation>
     </message>
     <message>
@@ -6318,7 +6318,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>이 데이터셋의 독립 대시보드 타일을 표시하지 않습니다. 페인터 위젯은 여전히 값을 읽을 수 있습니다</translation>
     </message>
     <message>
@@ -7190,8 +7190,8 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias &quot;%1&quot; is already in use</source>
-        <translation>별칭 &quot;%1&quot;이(가) 이미 사용 중입니다</translation>
+        <source>Alias "%1" is already in use</source>
+        <translation>별칭 "%1"이(가) 이미 사용 중입니다</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="646"/>
@@ -7205,13 +7205,13 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias &quot;%1&quot; contains only digits</source>
-        <translation>별칭 &quot;%1&quot;에 숫자만 포함되어 있습니다</translation>
+        <source>Alias "%1" contains only digits</source>
+        <translation>별칭 "%1"에 숫자만 포함되어 있습니다</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>스크립트에서는 문자열로 인용해야 합니다(예: getDataset(&quot;%1&quot;)). 숫자 인수는 이 별칭이 아닌 uniqueId로 읽힙니다.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>스크립트에서는 문자열로 인용해야 합니다(예: getDataset("%1")). 숫자 인수는 이 별칭이 아닌 uniqueId로 읽힙니다.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7520,8 +7520,8 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation>데이터 소스 &quot;%1&quot;을(를) 삭제하시겠습니까?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation>데이터 소스 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7609,13 +7609,13 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation>프로젝트에서 &apos;separator&apos; 인수를 사용하는 레거시 프레임 파서 함수가 사용되었습니다. 새 형식으로 자동 마이그레이션되었습니다.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation>프로젝트에서 'separator' 인수를 사용하는 레거시 프레임 파서 함수가 사용되었습니다. 새 형식으로 자동 마이그레이션되었습니다.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation>그룹 &quot;%1&quot;을(를) 삭제하시겠습니까?</translation>
+        <source>Do you want to delete group "%1"?</source>
+        <translation>그룹 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7627,13 +7627,13 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation>액션 &quot;%1&quot;을(를) 삭제하시겠습니까?</translation>
+        <source>Do you want to delete action "%1"?</source>
+        <translation>액션 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation>데이터셋 &quot;%1&quot;을(를) 삭제하시겠습니까?</translation>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation>데이터셋 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7764,8 +7764,8 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation>출력 위젯 &quot;%1&quot;을(를) 삭제하시겠습니까?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation>출력 위젯 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
@@ -8061,8 +8061,8 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation>&quot;%1&quot;을(를) 삭제하시겠습니까?</translation>
+        <source>Delete "%1"?</source>
+        <translation>"%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -8153,8 +8153,8 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation>&quot;%1&quot; 폴더를 삭제하시겠습니까?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation>"%1" 폴더를 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8222,7 +8222,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>사용자 지정을 끄면 편집 내용이 삭제되고 프로젝트의 그룹에서 작업 공간 목록이 다시 생성됩니다.</translation>
     </message>
     <message>
@@ -8757,7 +8757,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
         <translation>이 데이터셋의 게이지 또는 LED에 대해 심각도 단계별로 색상이 지정된 값 범위를 정의합니다.</translation>
     </message>
     <message>
@@ -8799,7 +8799,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>알람 밴드</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
         <translation type="vanished">이 데이터셋의 게이지에 대해 심각도 단계별로 색상이 지정된 값 범위를 정의합니다.</translation>
     </message>
     <message>
@@ -8917,8 +8917,8 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click &quot;OK&quot; to begin installing the update</source>
-        <translation>&quot;확인&quot;을 클릭하여 업데이트 설치 시작</translation>
+        <source>Click "OK" to begin installing the update</source>
+        <translation>"확인"을 클릭하여 업데이트 설치 시작</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -8937,8 +8937,8 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation>&quot;열기&quot; 버튼을 클릭하여 업데이트 적용</translation>
+        <source>Click the "Open" button to apply the update</source>
+        <translation>"열기" 버튼을 클릭하여 업데이트 적용</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -9215,7 +9215,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don&apos;t Allow</source>
+        <source>Don't Allow</source>
         <translation>허용 안 함</translation>
     </message>
     <message>
@@ -9550,7 +9550,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
     </message>
     <message>
@@ -11028,99 +11028,102 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="314"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="315"/>
         <source>Network Socket</source>
         <translation>네트워크 소켓</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="316"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
         <source>Audio</source>
         <translation>오디오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="320"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
         <source>USB Device</source>
         <translation>USB 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
         <source>Process</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 구독자</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="755"/>
         <source>Your trial period has ended.</source>
         <translation>평가판 기간이 종료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="756"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio를 계속 사용하려면 라이선스를 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1274"/>
+        <source>This connection type requires an active license or trial.</source>
+        <translation>이 연결 유형은 활성 라이선스 또는 평가판이 필요합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1275"/>
+        <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
+        <translation>이 장치 유형을 사용하려면 Serial Studio Pro를 활성화하거나 평가판을 시작하십시오.</translation>
+    </message>
+    <message>
         <source>Connection Lost</source>
-        <translation>연결 끊김</translation>
+        <translation type="vanished">연결 끊김</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
-        <translation>연결이 끊어졌으며 복원할 수 없습니다.</translation>
+        <translation type="vanished">연결이 끊어졌으며 복원할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
-        <translation>%1: 연결 끊김</translation>
+        <translation type="vanished">%1: 연결 끊김</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
-        <translation>자동 재연결 시도 중</translation>
+        <translation type="vanished">자동 재연결 시도 중</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
-        <translation>%1: 연결 복구됨</translation>
+        <translation type="vanished">%1: 연결 복구됨</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
-        <translation>연결이 자동으로 복구되었습니다</translation>
+        <translation type="vanished">연결이 자동으로 복구되었습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
-        <translation>장치 %1</translation>
+        <translation type="vanished">장치 %1</translation>
     </message>
 </context>
 <context>
@@ -11194,77 +11197,83 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="463"/>
         <source>BLE I/O Module Error</source>
         <translation>BLE I/O 모듈 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="724"/>
+        <source>BLE connection error: %1</source>
+        <translation>BLE 연결 오류: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="804"/>
         <source>Select Device</source>
         <translation>장치 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
         <source>Select Service</source>
         <translation>서비스 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="826"/>
         <source>Select Characteristic</source>
         <translation>특성 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1036"/>
         <source>Error while configuring BLE service</source>
         <translation>BLE 서비스 구성 중 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1254"/>
         <source>Operation error</source>
         <translation>작업 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1257"/>
         <source>Characteristic write error</source>
         <translation>특성 쓰기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1260"/>
         <source>Descriptor write error</source>
         <translation>디스크립터 쓰기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1263"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1266"/>
         <source>Characteristic read error</source>
         <translation>특성 읽기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1269"/>
         <source>Descriptor read error</source>
         <translation>디스크립터 읽기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
         <source>BLE Device</source>
         <translation>BLE 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1513"/>
         <source>Service</source>
         <translation>서비스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
         <source>Notify Characteristic</source>
         <translation>알림 특성</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1527"/>
         <source>Characteristic</source>
         <translation>특성</translation>
     </message>
@@ -11272,15 +11281,15 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="337"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="342"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="353"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="359"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="338"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="360"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -11289,37 +11298,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS의 CAN bus 지원은 제한적이며 타사 하드웨어 드라이버가 필요할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>이 플랫폼에서는 CAN bus 플러그인을 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
         <source>Invalid CAN Configuration</source>
         <translation>잘못된 CAN 구성</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="363"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="384"/>
         <source>Invalid Selection</source>
         <translation>잘못된 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="393"/>
         <source>No Devices Available</source>
         <translation>사용 가능한 장치 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="281"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="305"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN 장치 생성 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>CAN Connection Failed</source>
         <translation>CAN 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -11328,7 +11337,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Linux에서는 SOCKETCAN 커널 모듈이 로드되었는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="332"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -11337,103 +11346,101 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Windows에서는 CAN 하드웨어 드라이버(PEAK, VECTOR 등)를 설치하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN 버스 구성이 불완전합니다. 유효한 플러그인과 인터페이스를 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="385"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>선택한 플러그인 또는 인터페이스를 더 이상 사용할 수 없습니다. 목록을 새로 고침하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>플러그인 또는 인터페이스 목록이 비어 있습니다. 목록을 새로 고침하고 CAN 하드웨어가 연결되어 있는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="282"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN 버스 장치를 생성할 수 없습니다. 하드웨어와 드라이버를 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN 버스 장치에 연결할 수 없습니다. 하드웨어 연결 및 설정을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="705"/>
         <source>CAN Bus Error</source>
-        <translation>CAN Bus 오류</translation>
+        <translation type="vanished">CAN Bus 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>An error occurred but the CAN device is no longer available.</source>
-        <translation>오류가 발생했지만 CAN 장치를 더 이상 사용할 수 없습니다.</translation>
+        <translation type="vanished">오류가 발생했지만 CAN 장치를 더 이상 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="713"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="716"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="846"/>
         <source>No CAN driver selected</source>
         <translation>CAN 드라이버가 선택되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="786"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>먼저 SOCKETCAN 커널 모듈을 로드하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="755"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>%1 어댑터를 연결한 후 새로고침하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="789"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>먼저 가상 CAN 인터페이스를 설정하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="764"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="791"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="811"/>
         <source>No interfaces found for %1</source>
         <translation>%1에 대한 인터페이스를 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="795"/>
+        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;VECTOR CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="799"/>
+        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN 드라이버&lt;/a&gt; 설치</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="803"/>
+        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN 드라이버&lt;/a&gt; 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="806"/>
         <source>Install %1 drivers</source>
         <translation>%1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="809"/>
         <source>Install %1 drivers for macOS</source>
         <translation>macOS용 %1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="823"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11444,32 +11451,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="903"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="930"/>
         <source>Plugin</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="938"/>
         <source>Interface</source>
         <translation>인터페이스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="946"/>
         <source>Bitrate</source>
         <translation>비트레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="955"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="962"/>
         <source>Loopback</source>
         <translation>루프백</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="969"/>
         <source>Listen-Only</source>
         <translation>수신 전용</translation>
     </message>
@@ -11545,41 +11552,41 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="173"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="174"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="177"/>
         <source>
 
-Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
-        <translation>사용자가 &apos;plugdev&apos; 그룹에 속해 있는지 또는 udev 규칙이 이 장치에 대한 액세스 권한을 부여하는지 확인하십시오.
+Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
+        <translation>사용자가 'plugdev' 그룹에 속해 있는지 또는 udev 규칙이 이 장치에 대한 액세스 권한을 부여하는지 확인하십시오.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; 열기 실패</translation>
+        <source>Failed to open "%1"</source>
+        <translation>"%1" 열기 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="288"/>
         <source>HID Device Error</source>
         <translation>HID 장치 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="287"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID 장치의 연결이 끊어졌거나 치명적인 읽기 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="398"/>
         <source>Select Device</source>
         <translation>장치 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="538"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="540"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
@@ -11652,7 +11659,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation>피어 자동 검증</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="180"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT 기능은 상용 라이선스가 필요합니다</translation>
     </message>
@@ -11661,241 +11668,241 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">MQTT 브로커 구독은 유효한 Serial Studio 상용 라이선스(Hobbyist 등급 이상)가 있어야 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="181"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>MQTT 브로커 구독은 유효한 Serial Studio 라이선스 또는 활성 평가판이 있어야 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="413"/>
         <source>Use System Database</source>
         <translation>시스템 데이터베이스 사용</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="414"/>
         <source>Load From Folder…</source>
         <translation>폴더에서 불러오기…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="447"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM 인증서 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="702"/>
         <source>Hostname</source>
         <translation>호스트명</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="709"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
         <source>Topic Filter</source>
         <translation>토픽 필터</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
         <source>Client ID</source>
         <translation>클라이언트 ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
         <source>Username</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
         <source>Password</source>
         <translation>비밀번호</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
         <source>MQTT Version</source>
         <translation>MQTT 버전</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="754"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="761"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (초)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="770"/>
         <source>Auto Keep Alive</source>
         <translation>자동 Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="797"/>
         <source>SSL Protocol</source>
         <translation>SSL 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
         <source>Peer Verify Mode</source>
         <translation>피어 검증 모드</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="813"/>
         <source>Peer Verify Depth</source>
         <translation>피어 검증 깊이</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="822"/>
         <source>Client Certificate (PEM)</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서 (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="829"/>
         <source>Private Key (PEM)</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키 (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
         <source>ALPN (MQTT over port 443)</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN (포트 443을 통한 MQTT)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="844"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="969"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT 구독 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation>토픽 &quot;%1&quot; 구독 실패.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
-        <source>MQTT Client Certificate Error</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation>토픽 "%1" 구독 실패.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation>MQTT 클라이언트 인증서 오류</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1235"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>PEM 파일 (*.pem *.crt *.cer *.key);;모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1261"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1269"/>
         <source>Select Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키 선택</translation>
     </message>
     <message>
         <source>The broker closed the connection.</source>
         <translation type="vanished">브로커가 연결을 종료했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="997"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>유효하지 않은 MQTT 프로토콜 버전</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="998"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>브로커가 설정된 MQTT 프로토콜 버전을 거부했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1001"/>
         <source>Client ID Rejected</source>
         <translation>클라이언트 ID 거부됨</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1002"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>브로커가 클라이언트 ID를 거부했습니다. 다른 식별자를 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1005"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT 서버 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>브로커를 현재 사용할 수 없습니다. 나중에 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>Authentication Error</source>
         <translation>인증 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>제공된 자격 증명이 브로커에 의해 거부되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>Authorization Error</source>
         <translation>권한 부여 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
         <source>Account lacks permission for this operation.</source>
         <translation>계정에 이 작업을 수행할 권한이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>Network or Transport Error</source>
         <translation>네트워크 또는 전송 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>브로커에 연결하는 동안 네트워크/전송 계층 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서가 구성되었습니다: 개인 키와 일치하는지, 브로커에서 활성화되었는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT 프로토콜 위반</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>브로커가 프로토콜 위반을 보고하고 연결을 종료했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>MQTT 5 프로토콜 수준 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
         <source>MQTT Error</source>
         <translation>MQTT 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>예기치 않은 MQTT 오류가 발생했습니다.</translation>
     </message>
@@ -11903,103 +11910,108 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>Invalid Serial Port</source>
         <translation>잘못된 시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="448"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus 초기화 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="512"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
-        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
-        <translation>선택한 시리얼 포트 &quot;%1&quot;을(를) 더 이상 사용할 수 없습니다. 포트 목록을 새로 고침하고 다시 시도하세요.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="404"/>
+        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <translation>선택한 시리얼 포트 "%1"을(를) 더 이상 사용할 수 없습니다. 포트 목록을 새로 고침하고 다시 시도하세요.</translation>
     </message>
     <message>
         <source>The Modbus client refused to start the connection.</source>
         <translation type="vanished">Modbus 클라이언트가 연결 시작을 거부했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="449"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Modbus 장치를 생성할 수 없습니다. 시스템 구성을 확인하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
-        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
-        <translation>&quot;%1&quot;에 연결할 수 없습니다. 연결 설정을 확인하세요.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <translation>"%1"에 연결할 수 없습니다. 연결 설정을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="525"/>
+        <source>Connection attempt timed out</source>
+        <translation>연결 시도 시간 초과</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
         <source>Even</source>
         <translation>짝수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
         <source>Odd</source>
         <translation>홀수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
         <source>Space</source>
         <translation>스페이스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
         <source>Mark</source>
         <translation>마크</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
         <source>Holding Registers (0x03)</source>
         <translation>홀딩 레지스터 (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
         <source>Input Registers (0x04)</source>
         <translation>입력 레지스터 (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
         <source>Coils (0x01)</source>
         <translation>코일 (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>이산 입력 (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
         <source>No register groups configured</source>
         <translation>레지스터 그룹이 구성되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>프로젝트를 생성하기 전에 하나 이상의 레지스터 그룹을 추가하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus 프로젝트 생성기</translation>
     </message>
@@ -12012,137 +12024,137 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">임시 디렉터리에 대한 쓰기 권한을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="891"/>
         <source>Failed to load generated project</source>
         <translation>생성된 프로젝트 로드 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="914"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1개 그룹과 %2개 데이터셋으로 프로젝트를 성공적으로 생성했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="932"/>
         <source>Modbus Project</source>
         <translation>Modbus 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="957"/>
         <source>Holding Registers</source>
         <translation>Holding Register</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Input Registers</source>
         <translation>입력 레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
         <source>Coils</source>
         <translation>코일</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
         <source>Discrete Inputs</source>
         <translation>이산 입력</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="974"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="987"/>
         <source>Register %1</source>
         <translation>레지스터 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
         <source>Coil %1</source>
         <translation>코일 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
         <source>Discrete %1</source>
         <translation>이산 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1428"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1431"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1443"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1596"/>
         <source>Protocol</source>
         <translation>프로토콜</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1604"/>
         <source>Slave Address</source>
         <translation>슬레이브 주소</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1613"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
         <source>Host / IP</source>
         <translation>호스트 / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1660"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1675"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1683"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1691"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1699"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1707"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
@@ -12150,37 +12162,43 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="341"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
         <source>Network socket error</source>
         <translation>네트워크 소켓 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="342"/>
+        <source>Connection to %1:%2 timed out.</source>
+        <translation>%1:%2 연결 시간 초과.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="732"/>
         <source>Socket Type</source>
         <translation>소켓 유형</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
         <source>Remote Address</source>
         <translation>원격 주소</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="748"/>
         <source>TCP Port</source>
         <translation>TCP 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="757"/>
         <source>UDP Local Port</source>
         <translation>UDP 로컬 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="766"/>
         <source>UDP Remote Port</source>
         <translation>UDP 원격 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="775"/>
         <source>UDP Multicast</source>
         <translation>UDP 멀티캐스트</translation>
     </message>
@@ -12188,98 +12206,107 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="225"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="217"/>
         <source>Failed to start process</source>
         <translation>프로세스 시작 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable &quot;%1&quot; not found in PATH.</source>
-        <translation>실행 파일 &quot;%1&quot;을(를) PATH에서 찾을 수 없습니다.</translation>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="218"/>
+        <source>Executable "%1" not found in PATH.</source>
+        <translation>실행 파일 "%1"을(를) PATH에서 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
         <source>Select Executable</source>
         <translation>실행 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="416"/>
         <source>Select Working Directory</source>
         <translation>작업 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="418"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="441"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Named Pipe / FIFO 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="539"/>
         <source>The process crashed.</source>
         <translation>프로세스가 충돌했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="516"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="540"/>
         <source>Exit code: %1</source>
         <translation>종료 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process &quot;%1&quot; stopped</source>
-        <translation>프로세스 &quot;%1&quot; 중지됨</translation>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="547"/>
+        <source>Process "%1" stopped</source>
+        <translation>프로세스 "%1" 중지됨</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="559"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="565"/>
         <source>Process Error</source>
         <translation>프로세스 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="582"/>
+        <source>Pipe Closed</source>
+        <translation>파이프 닫힘</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="583"/>
+        <source>The named pipe "%1" was closed on the other end.</source>
+        <translation>명명된 파이프 "%1"이(가) 반대편에서 닫혔습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
         <source>Pipe Error</source>
         <translation>Pipe 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
         <source>Could not open named pipe: %1</source>
         <translation>Named Pipe를 열 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="835"/>
         <source>Mode</source>
         <translation>모드</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
         <source>Launch Process</source>
         <translation>프로세스 실행</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
         <source>Named Pipe</source>
         <translation>명명된 파이프</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="843"/>
         <source>Executable</source>
         <translation>실행 파일</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="850"/>
         <source>Arguments</source>
         <translation>인수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
         <source>Working Directory</source>
         <translation>작업 디렉터리</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="800"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="864"/>
         <source>Pipe Path</source>
         <translation>파이프 경로</translation>
     </message>
@@ -12343,171 +12370,187 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="114"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="115"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="448"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="487"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="406"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="796"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
         <source>Even</source>
         <translation>짝수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="450"/>
         <source>Odd</source>
         <translation>홀수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="451"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="452"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="488"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="489"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
-        <source>&quot;%1&quot; is not a valid path</source>
-        <translation>&quot;%1&quot;은(는) 유효한 경로가 아닙니다</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="625"/>
+        <source>"%1" is not a valid path</source>
+        <translation>"%1"은(는) 유효한 경로가 아닙니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="626"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>사용자 정의 시리얼 장치를 등록하려면 다른 경로를 입력하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>지정한 장치를 찾을 수 없습니다. 연결을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>알 수 없는 오류가 발생했습니다. 장치를 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>장치가 열려 있지 않습니다. 이 작업을 시도하기 전에 장치를 여십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
-        <source>Failed to connect to serial port &quot;%1&quot;</source>
-        <translation>시리얼 포트 &quot;%1&quot;에 연결하지 못했습니다</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="320"/>
+        <source>Failed to connect to serial port "%1"</source>
+        <translation>시리얼 포트 "%1"에 연결하지 못했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="298"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="562"/>
+        <source>Failed to set baud rate</source>
+        <translation>보레이트 설정 실패</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="299"/>
+        <source>Baud rate %1 rejected for port "%2": %3</source>
+        <translation>포트 "%2"에 대한 보레이트 %1 거부됨: %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="563"/>
+        <source>Baud rate %1 rejected: %2</source>
+        <translation>보레이트 %1 거부됨: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
-        <source>Critical error on serial port &quot;%1&quot;</source>
-        <translation>시리얼 포트 &quot;%1&quot;에서 치명적 오류 발생</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <source>Critical error on serial port "%1"</source>
+        <translation>시리얼 포트 "%1"에서 치명적 오류 발생</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
         <source>No error occurred.</source>
         <translation>오류가 발생하지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>권한이 거부되었습니다. 애플리케이션이 장치에 대한 필요한 액세스 권한을 가지고 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>장치를 열지 못했습니다. 이미 사용 중이거나 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>장치에 데이터를 쓰는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>장치에서 데이터를 읽는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>치명적인 리소스 오류가 발생했습니다. 장치가 연결 해제되었거나 더 이상 액세스할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>요청한 작업은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>작업 시간이 초과되었습니다. 장치가 응답하지 않을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1081"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1089"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1097"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1105"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1113"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1121"/>
         <source>Flow Control</source>
         <translation>흐름 제어</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1129"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1136"/>
         <source>Auto-Reconnect</source>
         <translation>자동 재연결</translation>
     </message>
@@ -12515,26 +12558,26 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="161"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>USB Error</source>
         <translation>USB 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="162"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>USB 하위 시스템을 초기화하지 못했습니다. 시스템에 libusb가 설치되어 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="204"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="593"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1104"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="217"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1130"/>
         <source>USB Device Error</source>
         <translation>USB 장치 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="182"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="197"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -12543,40 +12586,40 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 Linux에서는 장치 노드에 대한 읽기/쓰기 권한이 있는지 확인하십시오(udev 규칙 추가 또는 root로 실행). macOS에서는 커널 드라이버를 먼저 분리해야 할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>USB 장치가 선택되지 않았습니다. 장치를 선택한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="190"/>
         <source>Unknown Device</source>
         <translation>알 수 없는 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>&quot;%1&quot;을(를) 열지 못했습니다</translation>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
+        <source>Failed to open "%1"</source>
+        <translation>"%1"을(를) 열지 못했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="816"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
         <translation>이 장치에서 아이소크로너스 IN 엔드포인트를 찾을 수 없지만 벌크 또는 인터럽트 엔드포인트는 사용 가능합니다.
 
-전송 모드를 &quot;벌크/인터럽트 스트림&quot;으로 전환한 후 다시 시도하십시오.</translation>
+전송 모드를 "벌크/인터럽트 스트림"으로 전환한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="821"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation>이 장치에서 벌크 또는 인터럽트 IN 엔드포인트를 찾을 수 없지만 아이소크로너스 엔드포인트는 사용 가능합니다.
 
-전송 모드를 &quot;아이소크로너스&quot;로 전환한 후 다시 시도하십시오.</translation>
+전송 모드를 "아이소크로너스"로 전환한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="825"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -12585,7 +12628,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 장치가 활성 구성에서 데이터 엔드포인트를 노출하지 않거나 전용 프로토콜을 사용할 수 있습니다. 프로토콜 어댑터(예: CAN 또는 Modbus 인터페이스)는 자체 드라이버를 통해 연결해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1105"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1119"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -12594,120 +12637,120 @@ Another driver or application may already have it open. On Linux, try unloading 
 다른 드라이버나 애플리케이션이 이미 사용 중일 수 있습니다. Linux에서는 커널 드라이버(예: cdc_acm)를 언로드하거나 udev 규칙을 추가해 보십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1131"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>인터페이스 %2에서 대체 설정 %1을 활성화할 수 없습니다. 선택한 엔드포인트에 접근할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1162"/>
         <source>USB Device Warning</source>
         <translation>USB 장치 경고</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1163"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>선택한 OUT 엔드포인트를 활성화할 수 없습니다. 읽기 전용 모드로 계속합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1395"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>고급 제어 모드에서 연결된 장치가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1386"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1400"/>
         <source>A control transfer is already in progress.</source>
         <translation>제어 전송이 이미 진행 중입니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1410"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>잘못된 설정 필드: 요청 유형, 요청, wValue 및 wIndex는 16진수여야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1406"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1420"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>잘못된 데이터 페이로드: 16진수 바이트 시퀀스가 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1412"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1426"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>잘못된 전송 길이 (0-%1 바이트).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1430"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1444"/>
         <source>Could not allocate the control transfer.</source>
         <translation>제어 전송을 할당할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1457"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1471"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>제어 전송 제출 실패: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1498"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>전송 완료: %1 바이트.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1491"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1505"/>
         <source>Control transfer failed: %1.</source>
         <translation>제어 전송 실패: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="360"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="373"/>
         <source>Select Device</source>
         <translation>장치 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="382"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="395"/>
         <source>No Usable IN Endpoints</source>
         <translation>사용 가능한 IN 엔드포인트 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="397"/>
         <source>Select IN Endpoint</source>
         <translation>IN 엔드포인트 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
         <source>None (Read-only)</source>
         <translation>없음(읽기 전용)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>고급 USB 제어 전송을 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="472"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="485"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>벌크 전송 외에 제어 전송을 활성화합니다. 잘못된 제어 요청을 전송하면 연결된 하드웨어가 손상되거나 충돌할 수 있습니다. 용도를 정확히 알고 있는 경우에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="476"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="489"/>
         <source>Advanced USB Mode</source>
         <translation>고급 USB 모드</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="594"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="607"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>USB 장치의 연결이 끊어졌거나 치명적인 읽기 오류가 발생했습니다.</translation>
     </message>
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk Stream" and try again.</source>
         <translation type="vanished">이 장치에서 아이소크로너스 IN 엔드포인트를 찾을 수 없지만 벌크 엔드포인트는 사용 가능합니다.
 
-전송 모드를 &quot;벌크 스트림&quot;으로 전환한 후 다시 시도하십시오.</translation>
+전송 모드를 "벌크 스트림"으로 전환한 후 다시 시도하십시오.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation type="vanished">이 장치에서 벌크 IN 엔드포인트를 찾을 수 없지만 아이소크로너스 엔드포인트는 사용 가능합니다.
 
-전송 모드를 &quot;아이소크로너스&quot;로 전환한 후 다시 시도하십시오.</translation>
+전송 모드를 "아이소크로너스"로 전환한 후 다시 시도하십시오.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -12718,12 +12761,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 장치가 활성 구성에서 데이터 엔드포인트를 노출하지 않거나 특정 드라이버가 필요할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1628"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1642"/>
         <source>USB Device</source>
         <translation>USB 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1636"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1650"/>
         <source>Transfer Mode</source>
         <translation>전송 모드</translation>
     </message>
@@ -12732,32 +12775,32 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">벌크 스트림</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Advanced Control</source>
         <translation>고급 제어</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Isochronous</source>
         <translation>동기식</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Bulk/Interrupt 스트림</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1644"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1658"/>
         <source>IN Endpoint</source>
         <translation>IN 엔드포인트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1652"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1666"/>
         <source>OUT Endpoint</source>
         <translation>OUT 엔드포인트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1660"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1674"/>
         <source>ISO Packet Size</source>
         <translation>ISO 패킷 크기</translation>
     </message>
@@ -13369,7 +13412,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>로컬 모델 서버. OpenAI 호환 엔드포인트(Ollama, llama.cpp의 llama-server, LM Studio, vLLM)와 작동합니다. 모든 데이터가 사용자 시스템에 남습니다. 모델 목록은 서버에서 실시간으로 조회됩니다.</translation>
     </message>
     <message>
@@ -13399,7 +13442,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider&apos;s console to create a new key</source>
+        <source>Open the provider's console to create a new key</source>
         <translation>공급자의 콘솔을 열어 새 키 생성</translation>
     </message>
     <message>
@@ -13612,129 +13655,129 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="559"/>
         <source>There was an issue validating your license.</source>
         <translation>라이선스 유효성 검사 중 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="771"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>제공된 라이선스 키는 Serial Studio에 속하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>공식 Serial Studio 스토어에서 라이선스를 구매했는지 다시 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="590"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
         <source>This license key was activated on a different device.</source>
         <translation>이 라이선스 키는 다른 장치에서 활성화되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>먼저 해당 장치에서 비활성화하거나 지원팀에 문의하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="602"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
         <source>This license is not currently active.</source>
         <translation>이 라이선스는 현재 활성 상태가 아닙니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>만료되었거나 비활성화되었을 수 있습니다(상태: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <source>Something went wrong on the server.</source>
         <translation>서버에서 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="803"/>
         <source>No activation ID was returned.</source>
         <translation>활성화 ID가 반환되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="624"/>
         <source>Could not validate your license at this time.</source>
         <translation>현재 라이선스를 유효성 검사할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="625"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="812"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Try again later.</source>
         <translation>나중에 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>공식 Serial Studio 스토어에서 라이선스를 구매했는지 다시 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="802"/>
         <source>Something went wrong on the server…</source>
         <translation>서버에서 문제가 발생했습니다…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="708"/>
         <source>Your license has been successfully activated.</source>
         <translation>라이선스가 성공적으로 활성화되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Serial Studio를 후원해 주셔서 감사합니다!
 이제 모든 프리미엄 기능을 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
         <source>There was an issue activating your license.</source>
         <translation>라이선스 활성화 중 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="811"/>
         <source>Could not activate your license at this time.</source>
         <translation>현재 라이선스를 활성화할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="883"/>
         <source>There was an issue deactivating your license.</source>
         <translation>라이선스 비활성화 중 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>현재 라이선스를 비활성화할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Your license has been deactivated.</source>
         <translation>라이선스가 비활성화되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro 기능에 대한 액세스가 제거되었습니다.
@@ -13839,7 +13882,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>파일의 데이터 섹션 일부를 읽을 수 없습니다. 기록이 잘렸을 수 있습니다.</translation>
     </message>
     <message>
@@ -13964,43 +14007,43 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
         <source>Optional (mutual TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>선택 사항 (상호 TLS)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
         <source>Browse…</source>
-        <translation type="unfinished">찾아보기…</translation>
+        <translation>찾아보기…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
         <source>Defaults to the certificate file</source>
-        <translation type="unfinished"></translation>
+        <translation>인증서 파일 기본값 사용</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
         <source>Key Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>키 암호문</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
         <source>ALPN</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN 프로토콜</translation>
     </message>
 </context>
 <context>
@@ -14102,7 +14145,7 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">MQTT 토픽이 설정되지 않음</translation>
     </message>
     <message>
-        <source>You won&apos;t receive any messages until a topic is configured.</source>
+        <source>You won't receive any messages until a topic is configured.</source>
         <translation type="vanished">토픽이 구성될 때까지 메시지를 수신할 수 없습니다.</translation>
     </message>
     <message>
@@ -14114,8 +14157,8 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">유효하지 않은 MQTT 토픽</translation>
     </message>
     <message>
-        <source>The topic &quot;%1&quot; is not valid.</source>
-        <translation type="vanished">토픽 &quot;%1&quot;이(가) 유효하지 않습니다.</translation>
+        <source>The topic "%1" is not valid.</source>
+        <translation type="vanished">토픽 "%1"이(가) 유효하지 않습니다.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -14126,8 +14169,8 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">구독 오류</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation type="vanished">토픽 &quot;%1&quot; 구독 실패.</translation>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation type="vanished">토픽 "%1" 구독 실패.</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -14222,10 +14265,10 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">MQTT 인증 필요</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
+        <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">MQTT 브로커가 &quot;%1&quot; 방식을 사용한 인증을 요구합니다.
+        <translation type="vanished">MQTT 브로커가 "%1" 방식을 사용한 인증을 요구합니다.
 
 필요한 자격 증명을 제공하십시오.</translation>
     </message>
@@ -14357,17 +14400,17 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>PEM 파일 (*.pem *.crt *.cer *.key);;모든 파일 (*)</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서 선택</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
         <source>Select Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키 선택</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
@@ -14393,7 +14436,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
         <source>MQTT Client Certificate Error</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT 클라이언트 인증서 오류</translation>
     </message>
 </context>
 <context>
@@ -15206,13 +15249,13 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin &quot;%1&quot; is not installed.</source>
-        <translation>플러그인 &quot;%1&quot;이(가) 설치되지 않았습니다.</translation>
+        <source>Plugin "%1" is not installed.</source>
+        <translation>플러그인 "%1"이(가) 설치되지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
-        <translation>확장 기능 &quot;%1&quot;은(는) 플러그인이 아닙니다 (유형: %2).</translation>
+        <source>Extension "%1" is not a plugin (type: %2).</source>
+        <translation>확장 기능 "%1"은(는) 플러그인이 아닙니다 (유형: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
@@ -15223,8 +15266,8 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
-        <translation>플러그인 &quot;%1&quot;은(는) GRPC가 필요하지만 이 빌드에는 GRPC 지원이 포함되어 있지 않습니다.</translation>
+        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
+        <translation>플러그인 "%1"은(는) GRPC가 필요하지만 이 빌드에는 GRPC 지원이 포함되어 있지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
@@ -15242,8 +15285,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
-        <translation>플러그인 &quot;%1&quot;의 info.json에 &apos;entry&apos; 필드가 없습니다.</translation>
+        <source>Plugin "%1" has no 'entry' field in info.json.</source>
+        <translation>플러그인 "%1"의 info.json에 'entry' 필드가 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -15254,8 +15297,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
-        <translation>플러그인 &quot;%1&quot;의 진입점 경로가 유효하지 않습니다.</translation>
+        <source>Plugin "%1" has an invalid entry point path.</source>
+        <translation>플러그인 "%1"의 진입점 경로가 유효하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1490"/>
@@ -15264,10 +15307,10 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
+        <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>이 플러그인은 &quot;%1&quot;이(가) 필요하지만 시스템에서 찾을 수 없습니다.
+        <translation>이 플러그인은 "%1"이(가) 필요하지만 시스템에서 찾을 수 없습니다.
 
 다운로드 페이지를 여시겠습니까?</translation>
     </message>
@@ -15493,8 +15536,8 @@ Would you like to open the download page?</source>
         <translation type="vanished">자동으로 업데이트를 확인하시겠습니까?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation type="vanished">%1이(가) 자동으로 업데이트를 확인하도록 하시겠습니까? &quot;정보&quot; 대화 상자에서 언제든지 수동으로 업데이트를 확인할 수 있습니다</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <translation type="vanished">%1이(가) 자동으로 업데이트를 확인하도록 하시겠습니까? "정보" 대화 상자에서 언제든지 수동으로 업데이트를 확인할 수 있습니다</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="192"/>
@@ -15937,22 +15980,22 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
         <source>Select the PEM client certificate for mutual TLS</source>
-        <translation type="unfinished"></translation>
+        <translation>상호 TLS를 위한 PEM 클라이언트 인증서 선택</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
         <source>Select the PEM private key for mutual TLS</source>
-        <translation type="unfinished"></translation>
+        <translation>상호 TLS를 위한 PEM 개인 키 선택</translation>
     </message>
 </context>
 <context>
@@ -16193,7 +16236,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two&apos;s-complement signed.</source>
+        <source>Interprets each value as two's-complement signed.</source>
         <translation>각 값을 2의 보수 부호 있는 값으로 해석합니다.</translation>
     </message>
     <message>
@@ -16270,7 +16313,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
+        <source>Interprets 16-bit registers as two's-complement signed values.</source>
         <translation>16비트 레지스터를 2의 보수 부호 있는 값으로 해석합니다.</translation>
     </message>
     <message>
@@ -16545,7 +16588,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>이 컴퓨터의 장치 파일을 저장합니다. 이 파일은 컴퓨터를 식별하며 개인 정보는 포함되지 않습니다.</translation>
     </message>
     <message>
@@ -17197,7 +17240,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
     </message>
 </context>
@@ -18326,7 +18369,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>입력 중 하나가 변경될 때만 데이터셋의 변환을 실행합니다. 대규모 테이블 기반 프로젝트의 속도를 향상시키며, 기본적으로 비활성화되어 있습니다.</translation>
     </message>
     <message>
@@ -18447,7 +18490,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
         <translation>브로커가 지원되지 않는 프로토콜 버전으로 인해 연결을 거부했습니다. 브로커의 MQTT 버전과 일치시킨 후 다시 시도하십시오.</translation>
     </message>
     <message>
@@ -18487,7 +18530,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
         <translation>MQTT 5 프로토콜 레벨 오류가 발생했습니다. 자세한 내용은 브로커의 이유 코드를 확인하십시오.</translation>
     </message>
     <message>
@@ -18498,7 +18541,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서가 구성되었습니다: 개인 키와 일치하는지, 브로커에서 활성화되었는지 확인하십시오.</translation>
     </message>
 </context>
 <context>
@@ -18509,34 +18552,34 @@ Click Refresh to update the list.</source>
         <translation>환영 텍스트를 불러오지 못했습니다 :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="279"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <source>Network error</source>
         <translation>네트워크 오류</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="293"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="310"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
         <translation>평가판 활성화 오류</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
         <source>Invalid server response</source>
         <translation>잘못된 서버 응답</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="296"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="308"/>
         <source>The server returned malformed data: %1</source>
         <translation>서버가 잘못된 형식의 데이터를 반환했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="327"/>
         <source>Unexpected server response</source>
         <translation>예상치 못한 서버 응답</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>The server response is missing required fields.</source>
         <translation>서버 응답에 필수 필드가 누락되었습니다.</translation>
     </message>
@@ -18551,22 +18594,22 @@ Click Refresh to update the list.</source>
         <translation>쓰기용 파일을 열 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1375"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>잘못된 Bluetooth 어댑터!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1378"/>
         <source>Unsuported platform or operating system</source>
         <translation>지원되지 않는 플랫폼 또는 운영 체제</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1381"/>
         <source>Unsupported discovery method</source>
         <translation>지원되지 않는 검색 방법</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1384"/>
         <source>General I/O error</source>
         <translation>일반 I/O 오류</translation>
     </message>
@@ -18621,11 +18664,11 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>스크립트에 &apos;parse&apos; 함수가 정의되지 않았습니다.
+        <translation>스크립트에 'parse' 함수가 정의되지 않았습니다.
 
 코드에 다음이 포함되어 있는지 확인하십시오:
 function parse(frame) ... end</translation>
@@ -18707,11 +18750,11 @@ Most likely cause: an infinite loop at the top level of the script.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>스크립트에 &apos;parse&apos; 함수가 정의되지 않았습니다.
+        <translation>스크립트에 'parse' 함수가 정의되지 않았습니다.
 
 코드에 다음을 포함해야 합니다:
 function parse(frame) { ... }</translation>
@@ -18736,12 +18779,12 @@ Please fix the error in the function body.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable &apos;parse&apos; export found.
+        <source>No callable 'parse' export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>호출 가능한 &apos;parse&apos; 내보내기를 찾을 수 없습니다.
+        <translation>호출 가능한 'parse' 내보내기를 찾을 수 없습니다.
 
 다음 중 하나를 정의하세요:
   function parse(frame) { ... }
@@ -18749,15 +18792,15 @@ Define one of:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
-        <translation>&apos;parse&apos; 함수는 최소 하나의 매개변수(프레임 페이로드)를 받아야 합니다.</translation>
+        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
+        <translation>'parse' 함수는 최소 하나의 매개변수(프레임 페이로드)를 받아야 합니다.</translation>
     </message>
     <message>
-        <source>No valid &apos;parse&apos; function declaration found.
+        <source>No valid 'parse' function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">유효한 &apos;parse&apos; 함수 선언을 찾을 수 없습니다.
+        <translation type="vanished">유효한 'parse' 함수 선언을 찾을 수 없습니다.
 
 예상 형식:
 function parse(frame) { ... }</translation>
@@ -18768,11 +18811,11 @@ function parse(frame) { ... }</translation>
         <translation>잘못된 함수 매개변수</translation>
     </message>
     <message>
-        <source>The &apos;parse&apos; function must have at least one parameter.
+        <source>The 'parse' function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">&apos;parse&apos; 함수는 최소 하나의 매개변수를 가져야 합니다.
+        <translation type="vanished">'parse' 함수는 최소 하나의 매개변수를 가져야 합니다.
 
 예상 형식:
 function parse(frame) { ... }</translation>
@@ -18784,13 +18827,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
+        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>&apos;parse&apos; 함수가 이전 두 매개변수 형식을 사용합니다: parse(%1, %2)
+        <translation>'parse' 함수가 이전 두 매개변수 형식을 사용합니다: parse(%1, %2)
 
 이 형식은 더 이상 지원되지 않습니다. 새로운 단일 매개변수 형식으로 업데이트하십시오:
 function parse(%1) { ... }
@@ -18908,13 +18951,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got &apos;%2&apos;</source>
-        <translation>%1이(가) 예상되었으나 &apos;%2&apos;을(를) 받았습니다.</translation>
+        <source>Expected %1, got '%2'</source>
+        <translation>%1이(가) 예상되었으나 '%2'을(를) 받았습니다.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after &apos;enum&apos;</source>
-        <translation>&apos;enum&apos; 뒤에 열거형 이름이 필요합니다</translation>
+        <source>Expected enum name after 'enum'</source>
+        <translation>'enum' 뒤에 열거형 이름이 필요합니다</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18923,8 +18966,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
-        <translation>필드 태그 &apos;%1&apos;이(가) 범위를 벗어났습니다 (1..%2)</translation>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>필드 태그 '%1'이(가) 범위를 벗어났습니다 (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18948,8 +18991,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got &apos;%1&apos;</source>
-        <translation>필드 타입이 필요하지만 &apos;%1&apos;을(를) 받았습니다</translation>
+        <source>Expected field type, got '%1'</source>
+        <translation>필드 타입이 필요하지만 '%1'을(를) 받았습니다</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18973,13 +19016,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token &apos;%1&apos; at file scope</source>
-        <translation>파일 범위에서 예기치 않은 토큰 &apos;%1&apos;</translation>
+        <source>Unexpected token '%1' at file scope</source>
+        <translation>파일 범위에서 예기치 않은 토큰 '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword &apos;%1&apos;</source>
-        <translation>지원되지 않는 최상위 키워드 &apos;%1&apos;</translation>
+        <source>Unsupported top-level keyword '%1'</source>
+        <translation>지원되지 않는 최상위 키워드 '%1'</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -19020,8 +19063,8 @@ function parse(%1) { ... }
         <translation type="vanished">네이티브 파서 구성이 유효한 JSON 객체가 아닙니다.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: &quot;%1&quot;.</source>
-        <translation type="vanished">알 수 없는 네이티브 파서 템플릿: &quot;%1&quot;.</translation>
+        <source>Unknown native parser template: "%1".</source>
+        <translation type="vanished">알 수 없는 네이티브 파서 템플릿: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -19030,8 +19073,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
-        <translation>알 수 없는 내장 파서 템플릿: &quot;%1&quot;.</translation>
+        <source>Unknown Built-In parser template: "%1".</source>
+        <translation>알 수 없는 내장 파서 템플릿: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -19048,32 +19091,32 @@ function parse(%1) { ... }
         <translation>오프라인 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1349"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1363"/>
         <source>timed out</source>
         <translation>시간 초과</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1351"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1365"/>
         <source>cancelled</source>
         <translation>취소됨</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1353"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1367"/>
         <source>stalled (request not supported)</source>
         <translation>정지됨 (요청이 지원되지 않음)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1355"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1369"/>
         <source>device disconnected</source>
         <translation>장치 연결 해제됨</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1357"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1371"/>
         <source>buffer overflow</source>
         <translation>버퍼 오버플로</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1359"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1373"/>
         <source>transfer error</source>
         <translation>전송 오류</translation>
     </message>
@@ -19211,7 +19254,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>네트워크를 통해 다른 Serial Studio 인스턴스의 대시보드를 봅니다. 보기는 읽기 전용입니다: 여기서 수행하는 작업은 원격 장치에 전달되지 않습니다.</translation>
     </message>
     <message>
@@ -19601,7 +19644,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn&apos;t reach your device.</source>
+        <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio가 장치에 연결할 수 없습니다.</translation>
     </message>
     <message>
@@ -19611,7 +19654,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>장치가 연결되어 있고 전원이 켜져 있으며 다른 앱에서 사용 중이 아닌지 확인하십시오. 다시 시도하거나 다른 장치를 선택하거나 종료할 수 있습니다.</translation>
     </message>
     <message>
@@ -20760,7 +20803,7 @@ function parse(%1) { ... }
         <translation>업데이트 및 소식</translation>
     </message>
     <message>
-        <source>Show What&apos;s New on Startup</source>
+        <source>Show What's New on Startup</source>
         <translation type="vanished">시작 시 새로운 기능 표시</translation>
     </message>
     <message>
@@ -21279,7 +21322,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>이 배포를 더블 클릭하면 이 프로젝트의 실시간 대시보드로 바로 이동합니다. 툴바나 설정 창 없이 데이터만 표시되며, 장치 연결이 끊어지는 즉시 Serial Studio가 종료됩니다.</translation>
     </message>
     <message>
@@ -21393,7 +21436,7 @@ function parse(%1) { ... }
         <translation>전체 화면</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">이 바로 가기를 더블 클릭하면 이 프로젝트의 실시간 대시보드로 바로 이동합니다. 툴바나 설정 창 없이 데이터만 표시되며, 장치 연결이 끊어지는 즉시 Serial Studio가 종료됩니다.</translation>
     </message>
     <message>
@@ -21401,7 +21444,7 @@ function parse(%1) { ... }
         <translation type="vanished">프로젝트 포함</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">이 바로가기를 더블클릭하면 해당 프로젝트의 실시간 대시보드로 바로 이동합니다. 툴바나 설정 패널 없이 데이터만 표시되며, 장치 연결이 해제되는 즉시 Serial Studio가 종료됩니다.
@@ -21738,8 +21781,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; 표시</translation>
+        <source>Show "%1"</source>
+        <translation>"%1" 표시</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -22476,38 +22519,38 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>TlsIdentity</name>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
-        <source>The file &quot;%1&quot; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <source>The file "%1" does not exist.</source>
+        <translation>"%1" 파일이 존재하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
-        <source>The file &quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <source>The file "%1" cannot be read.</source>
+        <translation>"%1" 파일을 읽을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
-        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is not a valid PEM certificate or key file.</source>
+        <translation>"%1"은(는) 유효한 PEM 인증서 또는 키 파일이 아닙니다.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
-        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is too large to be a PEM certificate or key file.</source>
+        <translation>"%1"이(가) 너무 커서 PEM 인증서 또는 키 파일이 될 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
         <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 키가 설정되었지만 클라이언트 인증서가 선택되지 않았습니다. 일치하는 인증서를 선택하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
-        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
-        <translation type="unfinished"></translation>
+        <source>The private key "%1" is encrypted. Enter its passphrase and try again.</source>
+        <translation>개인 키 "%1"이(가) 암호화되어 있습니다. 암호를 입력하고 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
-        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <source>The passphrase does not unlock the private key "%1".</source>
+        <translation>암호가 개인 키 "%1"을(를) 잠금 해제하지 못합니다.</translation>
     </message>
 </context>
 <context>
@@ -22866,15 +22909,20 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>라이선스 관리 및 Serial Studio Pro 활성화</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
         <source>Connect</source>
         <translation>연결</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <source>Connecting…</source>
+        <translation>연결 중…</translation>
     </message>
     <message>
         <source>Connect or disconnect from device or MQTT broker</source>
@@ -22962,7 +23010,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>타임베이스를 비워 두면 플롯의 시간 범위를 사용합니다. 빠른 신호를 확대하려면 낮추십시오. Holdoff는 각 트리거 후 잠시 동안 새 트리거를 무시합니다.</translation>
     </message>
     <message>
@@ -23028,7 +23076,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">타임베이스는 한 스윕이 표시하는 시간을 설정합니다. 비워 두면 플롯의 시간 범위를 사용합니다. 빠른 신호를 확대하려면 낮추십시오. Holdoff는 각 트리거 후 잠시 동안 새 트리거를 무시합니다.</translation>
     </message>
     <message>
@@ -23147,34 +23195,34 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2075"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2060"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2068"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2091"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2076"/>
         <source>Clock</source>
         <translation>시계</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2098"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
         <source>Stopwatch</source>
         <translation>스톱워치</translation>
     </message>
     <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="2137"/>
         <location filename="../../src/UI/Dashboard.cpp" line="2152"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2167"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (대체)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2189"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2268"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2174"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2253"/>
         <source>LED Panel (%1)</source>
         <translation>LED 패널 (%1)</translation>
     </message>
@@ -23550,7 +23598,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
     </message>
     <message>
@@ -23616,7 +23664,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
+        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>현재 %1 Pro의 모든 기능을 갖춘 평가판을 사용 중입니다. 개인 비상업적 용도로 14일간 유효합니다.</translation>
     </message>
     <message>
@@ -23631,13 +23679,13 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
-        <translation>사용 가능한 구독 플랜을 보려면 아래 &quot;지금 업그레이드&quot;를 클릭하세요.</translation>
+        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <translation>사용 가능한 구독 플랜을 보려면 아래 "지금 업그레이드"를 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don&apos;t nag me about the trial.
-I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>평가판에 대해 다시 알리지 않음.
 평가판 종료 시 라이선스를 구매하거나 GPLv3 버전을 빌드해야 함을 이해합니다.</translation>
     </message>
@@ -23699,7 +23747,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What&apos;s New in %1</source>
+        <source>What's New in %1</source>
         <translation type="vanished">%1의 새로운 기능</translation>
     </message>
     <message>
@@ -23835,7 +23883,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
         <translation type="vanished">%1에 오신 것을 환영합니다!</translation>
     </message>
     <message>
-        <source>Here&apos;s what&apos;s new in version %1.</source>
+        <source>Here's what's new in version %1.</source>
         <translation type="vanished">버전 %1의 새로운 기능입니다.</translation>
     </message>
     <message>
@@ -24044,7 +24092,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>ArcGIS API 키에 실제 비용이 발생하므로 무제한 액세스를 제공할 수 없습니다.</translation>
     </message>
 </context>

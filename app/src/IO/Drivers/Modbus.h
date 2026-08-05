@@ -28,7 +28,6 @@
 #include <QModbusDevice>
 #include <QModbusReply>
 #include <QObject>
-#include <QPointer>
 #include <QSettings>
 #include <QString>
 #include <QTimer>
@@ -208,25 +207,29 @@ private slots:
   void pollRegisters();
   void pollNextGroup();
   void refreshSerialPorts();
+  void onDialTimeout();
+  void startDialAttempt();
   void onStateChanged(QModbusDevice::State state);
   void onErrorOccurred(QModbusDevice::Error error);
 
 private:
   void doClose();
-  void pauseBetweenAttempts();
+  void handleDialSetback();
+  void failDial(const QString& error);
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] QString buildFrameParser() const;
   [[nodiscard]] bool configureTcpClient(QString& target);
   [[nodiscard]] bool configureRtuClient(QString& target);
   [[nodiscard]] bool finalizeAndConnect(const QString& target);
-  [[nodiscard]] bool connectWithRetry();
-  void awaitConnectState(QPointer<QModbusClient>& device);
   [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
   void appendTcpProperties(QList<IO::DriverProperty>& props) const;
   void appendRtuProperties(QList<IO::DriverProperty>& props) const;
 
   bool m_connecting;
-  bool m_abortConnect;
+  int m_dialAttempts;
+  QString m_dialTarget;
+  QTimer m_dialRetryTimer;
+  QTimer m_dialTimeoutTimer;
   QTimer* m_pollTimer;
   QModbusClient* m_device;
   QModbusReply* m_lastReply;

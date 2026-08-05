@@ -89,6 +89,9 @@ class ConnectionManager : public QObject {
   Q_PROPERTY(bool isConnected
              READ isConnected
              NOTIFY connectedChanged)
+  Q_PROPERTY(bool isConnecting
+             READ isConnecting
+             NOTIFY connectingChanged)
   Q_PROPERTY(bool paused
              READ paused
              WRITE setPaused
@@ -127,6 +130,7 @@ signals:
   void busTypeChanged();
   void busListChanged();
   void connectedChanged();
+  void connectingChanged();
   void contextsRebuilt();
   void writeEnabledChanged();
   void configurationChanged();
@@ -152,6 +156,7 @@ public:
   [[nodiscard]] bool readOnly() const;
   [[nodiscard]] bool readWrite() const;
   [[nodiscard]] bool isConnected() const;
+  [[nodiscard]] bool isConnecting() const;
   [[nodiscard]] bool configurationOk() const;
   [[nodiscard]] int connectedDeviceCount() const;
 
@@ -255,6 +260,7 @@ private:
   bool m_lastConnectedState;
   bool m_syncingFromProject;
   bool m_rebuildingDevices;
+  bool m_lastConnectingState;
   int m_lastConnectedCount;
   SerialStudio::BusType m_busType;
 

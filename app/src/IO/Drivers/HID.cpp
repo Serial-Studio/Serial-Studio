@@ -155,7 +155,8 @@ qint64 IO::Drivers::HID::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the selected HID device and starts the read thread.
+ * @brief Opens the selected HID device and starts the read thread. The failure box is queued
+ *        because a modal spins the event loop and would re-enter the open stack it was raised from.
  */
 bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 {
@@ -176,10 +177,11 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
     info += tr("\n\nCheck that your user is in the 'plugdev' group "
                "or that a udev rule grants access to this device.");
 #endif
-    Misc::Utilities::showMessageBox(
-      tr("Failed to open \"%1\"").arg(m_deviceLabels.value(m_deviceIndex)),
-      info,
-      QMessageBox::Warning);
+    const QString title = tr("Failed to open \"%1\"").arg(m_deviceLabels.value(m_deviceIndex));
+    QMetaObject::invokeMethod(
+      this,
+      [title, info] { Misc::Utilities::showMessageBox(title, info, QMessageBox::Warning); },
+      Qt::QueuedConnection);
     return false;
   }
 

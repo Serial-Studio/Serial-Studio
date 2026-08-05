@@ -1,18 +1,18 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1603,
+  "total": 1599,
   "files": 198,
   "buckets": {
     "root": 149,
     "accessor": 68,
     "ctor-capture": 93,
     "deferred": 20,
-    "static-cache": 1156,
+    "static-cache": 1152,
     "loose": 117
   },
   "per_class": {
-    "IO::ConnectionManager": 210,
+    "IO::ConnectionManager": 209,
     "DataModel::ProjectModel": 208,
     "AppState": 136,
     "CommandRegistry": 98,
@@ -29,8 +29,8 @@
     "Misc::Translator": 25,
     "API::CommandRegistry": 24,
     "Licensing::LemonSqueezy": 23,
-    "CSV::Player": 22,
-    "MDF4::Player": 21,
+    "CSV::Player": 21,
+    "MDF4::Player": 20,
     "Sessions::Export": 20,
     "CSV::Export": 19,
     "Sessions::DatabaseManager": 19,
@@ -39,8 +39,8 @@
     "DataModel::FrameParser": 17,
     "API::GRPC::GRPCServer": 16,
     "MQTT::Publisher": 16,
-    "Sessions::Player": 16,
     "AI::CommandRegistry": 15,
+    "Sessions::Player": 15,
     "Misc::ExtensionManager": 14,
     "DataModel::ControlScript": 13,
     "Misc::ProblemCenter": 13,
@@ -1941,13 +1941,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 40,
+      "total": 36,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 39,
+        "static-cache": 35,
         "loose": 0
       }
     },

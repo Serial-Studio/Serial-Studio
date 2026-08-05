@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE" sourcelanguage="en_US">
 <context>
-    <name></name>
+    <name/>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
         <source>Mixed</source>
@@ -11,62 +11,62 @@
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="343"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientcertifikat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="344"/>
         <source>Optional (mutual TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Valfritt (ömsesidig TLS)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="345"/>
         <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
-        <translation type="unfinished"></translation>
+        <translation>PEM-certifikat som presenteras för mäklare som kräver ömsesidig TLS (AWS IoT Core)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="356"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Privat Nyckel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="357"/>
         <source>Defaults to the certificate file</source>
-        <translation type="unfinished"></translation>
+        <translation>Använder certifikatfilen som standard</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="358"/>
         <source>PEM private key matching the client certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>PEM privat nyckel som matchar klientcertifikatet</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="368"/>
         <source>Key Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyckellösenfras</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="369"/>
         <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenfras för en krypterad privat nyckel (lagras i det krypterade valvet, aldrig i projektfilen)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="380"/>
         <source>ALPN (MQTT over port 443)</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN (MQTT över port 443)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="381"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
-        <translation type="unfinished"></translation>
+        <translation>Annonsera ett ALPN-protokoll så att mäklare kan tillhandahålla MQTT på port 443 bakom brandväggar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="395"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Alpn-protokoll</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="397"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokollnamn som annonseras under TLS-handskakningen (AWS IoT använder x-amzn-mqtt-ca)</translation>
     </message>
 </context>
 <context>
@@ -226,7 +226,7 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
     </message>
     <message>
         <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Modellen returnerade ett tomt svar. Försök omformulera, byt till en annan modell eller kontrollera att förfrågan tillåts av leverantörens säkerhetsfilter.)</translation>
     </message>
     <message>
@@ -374,7 +374,7 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote&apos;s dataset layout does not match its announced hash</source>
+        <source>The remote's dataset layout does not match its announced hash</source>
         <translation>Fjärrens datauppsättningslayout matchar inte dess annonserade hash</translation>
     </message>
     <message>
@@ -415,8 +415,8 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
-        <source>Program &quot;%1&quot; not found in PATH</source>
-        <translation>Program &quot;%1&quot; hittades inte i PATH</translation>
+        <source>Program "%1" not found in PATH</source>
+        <translation>Program "%1" hittades inte i PATH</translation>
     </message>
 </context>
 <context>
@@ -452,7 +452,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="708"/>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Ett program som använder Serial Studios lokala API begär att skicka data till den anslutna enheten. Tillåt API-klienter att skriva till enheten?</translation>
     </message>
     <message>
@@ -514,8 +514,8 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Denna programvara tillhandahålls &apos;i befintligt skick&apos; utan garanti av något slag, vare sig uttrycklig eller underförstådd, inklusive men inte begränsat till garantier om säljbarhet eller lämplighet för ett visst ändamål. Under inga omständigheter ska upphovsmannen hållas ansvarig för skador som uppstår vid användning av denna programvara.</translation>
+        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Denna programvara tillhandahålls 'i befintligt skick' utan garanti av något slag, vare sig uttrycklig eller underförstådd, inklusive men inte begränsat till garantier om säljbarhet eller lämplighet för ett visst ändamål. Under inga omständigheter ska upphovsmannen hållas ansvarig för skador som uppstår vid användning av denna programvara.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -538,7 +538,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Projektdemo</translation>
     </message>
     <message>
-        <source>What&apos;s New</source>
+        <source>What's New</source>
         <translation type="vanished">Vad Är Nytt</translation>
     </message>
     <message>
@@ -1065,7 +1065,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Tillämpa Förinställning</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
         <translation type="vanished">Ersätt de aktuella banden med den valda förinställningen, skalad till detta datasets område.</translation>
     </message>
     <message>
@@ -1273,7 +1273,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio&apos;s features</source>
+        <source>Help me discover Serial Studio's features</source>
         <translation>Hjälp mig upptäcka Serial Studios funktioner</translation>
     </message>
     <message>
@@ -1401,13 +1401,13 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder &quot;%1&quot; - readable this session</source>
-        <translation>Lade till mapp &quot;%1&quot; - läsbar denna session</translation>
+        <source>Added folder "%1" - readable this session</source>
+        <translation>Lade till mapp "%1" - läsbar denna session</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added &quot;%1&quot; - readable this session</source>
-        <translation>Lade till &quot;%1&quot; - läsbar denna session</translation>
+        <source>Added "%1" - readable this session</source>
+        <translation>Lade till "%1" - läsbar denna session</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1755,7 +1755,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>Titel ändras från &quot;%1&quot; till &quot;%2&quot;. Gruppstruktur oförändrad.</translation>
+        <translation>Titel ändras från "%1" till "%2". Gruppstruktur oförändrad.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1847,7 +1847,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Mäter hur snabbt denna dator kan extrahera, tolka och visualisera ramar genom Serial Studios datapipeline.</translation>
     </message>
     <message>
@@ -2303,7 +2303,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Vi uppdaterar Serial Studio för att fungera med detta operativsystem så snart QT officiellt stöder det</translation>
     </message>
 </context>
@@ -3659,7 +3659,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
+        <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Bevaka en annan Serial Studio-instans instrumentpanel över nätverket</translation>
     </message>
     <message>
@@ -3971,7 +3971,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler&apos;s number</source>
+        <source>Euler's number</source>
         <translation>Eulers tal</translation>
     </message>
     <message>
@@ -5243,11 +5243,11 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation type="vanished">Värde</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Ange ramdata ovan, aktivera HEX-läge vid behov och klicka sedan på &quot;Utvärdera&quot; för att köra ramtolken.
+        <translation type="vanished">Ange ramdata ovan, aktivera HEX-läge vid behov och klicka sedan på "Utvärdera" för att köra ramtolken.
 
 Exempel (Text): a,b,c,d,e,f
 Exempel (HEX):  48 65 6C 6C 6F</translation>
@@ -5487,10 +5487,10 @@ Alla osparade ändringar går förlorade. Fortsätt?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
-        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
+        <source>"%1" expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template&apos;s defaults?</source>
-        <translation>&quot;%1&quot; förväntar sig %2 dataset; den aktuella gruppen har %3.
+Add %4 dataset(s) using the template's defaults?</source>
+        <translation>"%1" förväntar sig %2 dataset; den aktuella gruppen har %3.
 
 Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
@@ -5982,7 +5982,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
-        <source>How strictly the broker&apos;s certificate chain is validated</source>
+        <source>How strictly the broker's certificate chain is validated</source>
         <translation>Hur strikt brokerns certifikatkedja valideras</translation>
     </message>
     <message>
@@ -6318,7 +6318,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Undertryck detta datasets fristående instrumentpanelspanel; painter-widgeten kan fortfarande läsa dess värden</translation>
     </message>
     <message>
@@ -7190,8 +7190,8 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="645"/>
-        <source>Alias &quot;%1&quot; is already in use</source>
-        <translation>Alias &quot;%1&quot; används redan</translation>
+        <source>Alias "%1" is already in use</source>
+        <translation>Alias "%1" används redan</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="646"/>
@@ -7205,13 +7205,13 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="659"/>
-        <source>Alias &quot;%1&quot; contains only digits</source>
-        <translation>Alias &quot;%1&quot; innehåller endast siffror</translation>
+        <source>Alias "%1" contains only digits</source>
+        <translation>Alias "%1" innehåller endast siffror</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="660"/>
-        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Skript måste citera det som en sträng, t.ex. getDataset(&quot;%1&quot;); ett numeriskt argument läses som ett uniqueId, inte detta alias.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Skript måste citera det som en sträng, t.ex. getDataset("%1"); ett numeriskt argument läses som ett uniqueId, inte detta alias.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="664"/>
@@ -7520,8 +7520,8 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation>Vill du ta bort datakälla &quot;%1&quot;?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation>Vill du ta bort datakälla "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
@@ -7609,13 +7609,13 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1102"/>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation>Ditt projekt använde en äldre frame-parser-funktion med ett &apos;separator&apos;-argument. Den har automatiskt migrerats till det nya formatet.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation>Ditt projekt använde en äldre frame-parser-funktion med ett 'separator'-argument. Den har automatiskt migrerats till det nya formatet.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation>Vill du ta bort grupp &quot;%1&quot;?</translation>
+        <source>Do you want to delete group "%1"?</source>
+        <translation>Vill du ta bort grupp "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
@@ -7627,13 +7627,13 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation>Vill du ta bort åtgärd &quot;%1&quot;?</translation>
+        <source>Do you want to delete action "%1"?</source>
+        <translation>Vill du ta bort åtgärd "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation>Vill du ta bort dataset &quot;%1&quot;?</translation>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation>Vill du ta bort dataset "%1"?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -7764,8 +7764,8 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation>Vill du ta bort utgångswidget &quot;%1&quot;?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation>Vill du ta bort utgångswidget "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
@@ -8061,8 +8061,8 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1195"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation>Ta Bort &quot;%1&quot;?</translation>
+        <source>Delete "%1"?</source>
+        <translation>Ta Bort "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
@@ -8153,8 +8153,8 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation>Ta Bort Mapp &quot;%1&quot;?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation>Ta Bort Mapp "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
@@ -8222,7 +8222,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="965"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Att stänga av Anpassa kasserar dina ändringar och återskapar arbetsytelistan från projektets grupper.</translation>
     </message>
     <message>
@@ -8757,7 +8757,7 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
         <translation>Definiera färgade värdeintervall med allvarlighetsnivåer för detta datasets mätare eller LED.</translation>
     </message>
     <message>
@@ -8799,7 +8799,7 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>Larmband</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
         <translation type="vanished">Definiera färgade värdeintervall med allvarlighetsnivåer för detta datasets mätare.</translation>
     </message>
     <message>
@@ -8917,8 +8917,8 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click &quot;OK&quot; to begin installing the update</source>
-        <translation>Klicka på &quot;OK&quot; för att börja installera uppdateringen</translation>
+        <source>Click "OK" to begin installing the update</source>
+        <translation>Klicka på "OK" för att börja installera uppdateringen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -8937,8 +8937,8 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation>Klicka på knappen &quot;Öppna&quot; för att tillämpa uppdateringen</translation>
+        <source>Click the "Open" button to apply the update</source>
+        <translation>Klicka på knappen "Öppna" för att tillämpa uppdateringen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -9215,7 +9215,7 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don&apos;t Allow</source>
+        <source>Don't Allow</source>
         <translation>Tillåt Inte</translation>
     </message>
     <message>
@@ -9550,7 +9550,7 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Ej tillgänglig vid fjärranslutning. Denna widget kräver fjärrenhetens råa sampelström, som instrumentpanelsspeglingen inte överför.</translation>
     </message>
     <message>
@@ -11028,99 +11028,102 @@ Giltigt format: 01 A2 FF 3C</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="314"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="315"/>
         <source>Network Socket</source>
         <translation>Nätverksuttag</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="316"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="337"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="318"/>
         <source>Audio</source>
         <translation>Ljud</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="338"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="319"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="339"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="320"/>
         <source>CAN Bus</source>
         <translation>CAN-buss</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="340"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
         <source>USB Device</source>
         <translation>USB-enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="341"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>HID Device</source>
         <translation>HID-enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="342"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
         <source>Process</source>
         <translation>Process</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="343"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-prenumerant</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="753"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="755"/>
         <source>Your trial period has ended.</source>
         <translation>Din provperiod har löpt ut.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="754"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="756"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>För att fortsätta använda Serial Studio, aktivera din licens.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1439"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1274"/>
+        <source>This connection type requires an active license or trial.</source>
+        <translation>Denna anslutningstyp kräver en aktiv licens eller provperiod.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1275"/>
+        <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
+        <translation>Aktivera Serial Studio Pro eller starta en provperiod för att använda denna enhetstyp.</translation>
+    </message>
+    <message>
         <source>Connection Lost</source>
-        <translation>Anslutning Förlorad</translation>
+        <translation type="vanished">Anslutning Förlorad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1440"/>
         <source>The connection was lost and could not be restored.</source>
-        <translation>Anslutningen förlorades och kunde inte återupprättas.</translation>
+        <translation type="vanished">Anslutningen förlorades och kunde inte återupprättas.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1459"/>
         <source>%1: link lost</source>
-        <translation>%1: länk förlorad</translation>
+        <translation type="vanished">%1: länk förlorad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1460"/>
         <source>Attempting to reconnect automatically</source>
-        <translation>Försöker återansluta automatiskt</translation>
+        <translation type="vanished">Försöker återansluta automatiskt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1466"/>
         <source>%1: link restored</source>
-        <translation>%1: länk återställd</translation>
+        <translation type="vanished">%1: länk återställd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1467"/>
         <source>The connection recovered automatically</source>
-        <translation>Anslutningen återställdes automatiskt</translation>
+        <translation type="vanished">Anslutningen återställdes automatiskt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1482"/>
         <source>Device %1</source>
-        <translation>Enhet %1</translation>
+        <translation type="vanished">Enhet %1</translation>
     </message>
 </context>
 <context>
@@ -11194,77 +11197,83 @@ Giltigt format: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="463"/>
         <source>BLE I/O Module Error</source>
         <translation>BLE I/o-modulfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="724"/>
+        <source>BLE connection error: %1</source>
+        <translation>BLE-anslutningsfel: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="804"/>
         <source>Select Device</source>
         <translation>Välj Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
         <source>Select Service</source>
         <translation>Välj Tjänst</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="826"/>
         <source>Select Characteristic</source>
         <translation>Välj Karakteristik</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1036"/>
         <source>Error while configuring BLE service</source>
         <translation>Fel vid konfigurering av BLE-tjänst</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1221"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1254"/>
         <source>Operation error</source>
         <translation>Operationsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1224"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1257"/>
         <source>Characteristic write error</source>
         <translation>Fel vid skrivning av karakteristik</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1227"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1260"/>
         <source>Descriptor write error</source>
         <translation>Fel vid skrivning av deskriptor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1230"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1263"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1233"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1266"/>
         <source>Characteristic read error</source>
         <translation>Karakteristikläsningsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1269"/>
         <source>Descriptor read error</source>
         <translation>Deskriptorläsningsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1472"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
         <source>BLE Device</source>
         <translation>BLE-enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1480"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1513"/>
         <source>Service</source>
         <translation>Tjänst</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1487"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
         <source>Notify Characteristic</source>
         <translation>Notifiera Karakteristik</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1494"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1527"/>
         <source>Characteristic</source>
         <translation>Karakteristik</translation>
     </message>
@@ -11272,15 +11281,15 @@ Giltigt format: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="325"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="337"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="342"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="353"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="359"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN-buss Ej Tillgänglig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="338"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="360"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -11289,37 +11298,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 CAN-buss-stöd på macOS är begränsat och kan kräva tredjepartshårdvarudrivrutiner.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Inga CAN-buss-plugins är tillgängliga på denna plattform.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
         <source>Invalid CAN Configuration</source>
         <translation>Ogiltig CAN-konfiguration</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="363"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="384"/>
         <source>Invalid Selection</source>
         <translation>Ogiltigt Val</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="393"/>
         <source>No Devices Available</source>
         <translation>Inga Enheter Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="281"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="305"/>
         <source>CAN Device Creation Failed</source>
         <translation>Misslyckades Att Skapa CAN-enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
         <source>CAN Connection Failed</source>
         <translation>CAN-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -11328,7 +11337,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 På Linux, säkerställ att SOCKETCAN-kärnmoduler är laddade.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="332"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -11337,103 +11346,101 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 På Windows, installera CAN-hårdvarudrivrutiner (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="356"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN-bus-konfigurationen är ofullständig. Välj ett giltigt plugin och gränssnitt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="385"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Det valda pluginet eller gränssnittet är inte längre tillgängligt. Uppdatera listorna och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Plugin- eller gränssnittslistan är tom. Uppdatera listorna och säkerställ att din CAN-hårdvara är ansluten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="282"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Kan inte skapa CAN-bus-enhet. Kontrollera din hårdvara och drivrutiner.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Kan inte ansluta till CAN-bus-enhet. Kontrollera din hårdvaruanslutning och inställningar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="705"/>
         <source>CAN Bus Error</source>
-        <translation>CAN-bussfel</translation>
+        <translation type="vanished">CAN-bussfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="706"/>
         <source>An error occurred but the CAN device is no longer available.</source>
-        <translation>Ett fel uppstod men CAN-enheten är inte längre tillgänglig.</translation>
+        <translation type="vanished">Ett fel uppstod men CAN-enheten är inte längre tillgänglig.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="713"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
         <source>Error code: %1</source>
         <translation>Felkod: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="716"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN-busskommunikationsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="846"/>
         <source>No CAN driver selected</source>
         <translation>Ingen CAN-drivrutin vald</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="786"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Ladda SOCKETCAN-kärnmoduler först</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="755"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Anslut en %1-adapter och uppdatera sedan</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="789"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Konfigurera ett virtuellt CAN-gränssnitt först</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="764"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="791"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="811"/>
         <source>No interfaces found for %1</source>
         <translation>Inga gränssnitt hittades för %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="768"/>
-        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Installera &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN-drivrutiner&lt;/a&gt;</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="795"/>
+        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Installera &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="772"/>
-        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Installera &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;VECTOR CAN-drivrutiner&lt;/a&gt;</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="799"/>
+        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Installera &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="776"/>
-        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Installera &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN-drivrutiner&lt;/a&gt;</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="803"/>
+        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Installera &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="806"/>
         <source>Install %1 drivers</source>
         <translation>Installera %1-drivrutiner</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="809"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Installera %1-drivrutiner för macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="823"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11444,32 +11451,32 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="903"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="930"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="938"/>
         <source>Interface</source>
         <translation>Gränssnitt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="946"/>
         <source>Bitrate</source>
         <translation>Bithastighet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="955"/>
         <source>CAN FD</source>
         <translation>CAN-FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="962"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="969"/>
         <source>Listen-Only</source>
         <translation>Endast Lyssning</translation>
     </message>
@@ -11545,41 +11552,41 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="173"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="174"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="177"/>
         <source>
 
-Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
-        <translation>Kontrollera att din användare är i gruppen &apos;plugdev&apos; eller att en udev-regel ger åtkomst till denna enhet.
+Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
+        <translation>Kontrollera att din användare är i gruppen 'plugdev' eller att en udev-regel ger åtkomst till denna enhet.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Misslyckades att öppna &quot;%1&quot;</translation>
+        <source>Failed to open "%1"</source>
+        <translation>Misslyckades att öppna "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="288"/>
         <source>HID Device Error</source>
         <translation>HID-enhetsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="287"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID-enheten kopplades från eller påträffade ett allvarligt läsfel.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="398"/>
         <source>Select Device</source>
         <translation>Välj Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="538"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="540"/>
         <source>HID Device</source>
         <translation>HID-enhet</translation>
     </message>
@@ -11652,7 +11659,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation>Autoverifiera Motpart</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="180"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT-Funktion Kräver Kommersiell Licens</translation>
     </message>
@@ -11661,241 +11668,241 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Prenumeration på en MQTT-broker är endast tillgänglig med en giltig kommersiell licens för Serial Studio (Hobbyist-nivå eller högre).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="181"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Prenumeration på en MQTT-broker är endast tillgänglig med en giltig Serial Studio-licens eller en aktiv provperiod.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="413"/>
         <source>Use System Database</source>
         <translation>Använd Systemdatabas</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="414"/>
         <source>Load From Folder…</source>
         <translation>Ladda från Mapp…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="429"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="447"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Välj Pem-certifikatkatalog</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="684"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="702"/>
         <source>Hostname</source>
         <translation>Värdnamn</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="709"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
         <source>Topic Filter</source>
         <translation>Ämnesfilter</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="707"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
         <source>Client ID</source>
         <translation>Klient-ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
         <source>Username</source>
         <translation>Användarnamn</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
         <source>Password</source>
         <translation>Lösenord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
         <source>MQTT Version</source>
         <translation>MQTT-version</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="754"/>
         <source>Clean Session</source>
         <translation>Rensa Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="761"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="770"/>
         <source>Auto Keep Alive</source>
         <translation>Automatisk Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="769"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Aktiverad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="797"/>
         <source>SSL Protocol</source>
         <translation>SSL-protokoll</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
         <source>Peer Verify Mode</source>
         <translation>Motpartsverifieringsläge</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="813"/>
         <source>Peer Verify Depth</source>
         <translation>Motpartsverifieringsdjup</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="822"/>
         <source>Client Certificate (PEM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientcertifikat (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="829"/>
         <source>Private Key (PEM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Privat Nyckel (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
         <source>ALPN (MQTT over port 443)</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN (MQTT över port 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="844"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Alpn-protokoll</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="969"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT-prenumerationsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="952"/>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation>Misslyckades prenumerera på ämne &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1198"/>
-        <source>MQTT Client Certificate Error</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation>Misslyckades prenumerera på ämne "%1".</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
+        <source>MQTT Client Certificate Error</source>
+        <translation>MQTT-klientcertifikatfel</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1235"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>PEM-filer (*.pem *.crt *.cer *.key);;Alla filer (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1261"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj Klientcertifikat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1250"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1269"/>
         <source>Select Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj Privat Nyckel</translation>
     </message>
     <message>
         <source>The broker closed the connection.</source>
         <translation type="vanished">Brokern stängde anslutningen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="997"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Ogiltig MQTT-protokollversion</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="998"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Mäklaren nekade den konfigurerade MQTT-protokollversionen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1001"/>
         <source>Client ID Rejected</source>
         <translation>Klient-ID Nekat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1002"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Mäklaren nekade klient-ID:t. Prova en annan identifierare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1005"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT-server Ej Tillgänglig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Brokern är för närvarande otillgänglig. Försök igen senare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
         <source>Authentication Error</source>
         <translation>Autentiseringsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>De angivna inloggningsuppgifterna avvisades av brokern.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
         <source>Authorization Error</source>
         <translation>Auktoriseringsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Kontot saknar behörighet för denna åtgärd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
         <source>Network or Transport Error</source>
         <translation>Nätverks- eller transportfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problem med nätverks-/transportlagret vid anslutning till brokern.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett klientcertifikat är konfigurerat: verifiera att det matchar den privata nyckeln och är aktiverat på broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT-protokollöverträdelse</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Brokern rapporterade en protokollöverträdelse och stängde anslutningen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1012"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5-Fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Ett MQTT 5-protokollfel inträffade.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1016"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
         <source>MQTT Error</source>
         <translation>MQTT-fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Ett oväntat MQTT-fel inträffade.</translation>
     </message>
@@ -11903,103 +11910,108 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="403"/>
         <source>Invalid Serial Port</source>
         <translation>Ogiltig Serieport</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="448"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus-initiering Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="460"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="512"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
-        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
-        <translation>Den valda serieporten &quot;%1&quot; är inte längre tillgänglig. Uppdatera portlistan och försök igen.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="404"/>
+        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <translation>Den valda serieporten "%1" är inte längre tillgänglig. Uppdatera portlistan och försök igen.</translation>
     </message>
     <message>
         <source>The Modbus client refused to start the connection.</source>
         <translation type="vanished">Modbus-klienten vägrade att starta anslutningen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="449"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Kan inte skapa Modbus-enhet. Kontrollera systemkonfigurationen och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="461"/>
-        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
-        <translation>Kan inte ansluta till &quot;%1&quot;. Kontrollera anslutningsinställningarna.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <translation>Kan inte ansluta till "%1". Kontrollera anslutningsinställningarna.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="464"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="515"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="525"/>
+        <source>Connection attempt timed out</source>
+        <translation>Anslutningsförsöket avbröts på grund av timeout</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
         <source>Even</source>
         <translation>Jämn</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
         <source>Odd</source>
         <translation>Udda</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding-register (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
         <source>Input Registers (0x04)</source>
         <translation>Input-register (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
         <source>Coils (0x01)</source>
         <translation>Coils (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="701"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Diskreta ingångar (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
         <source>No register groups configured</source>
         <translation>Inga registergrupper konfigurerade</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Lägg till minst en registergrupp innan du genererar ett projekt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="886"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="899"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus-projektgenerator</translation>
     </message>
@@ -12012,137 +12024,137 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Kontrollera skrivbehörigheter till den temporära katalogen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="891"/>
         <source>Failed to load generated project</source>
         <translation>Misslyckades att Ladda Genererat Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Det genererade projekt-JSON kunde inte laddas.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="914"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projektet genererades framgångsrikt med %1 grupper och %2 datamängder.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
         <source>The project editor is now open for customization.</source>
         <translation>Projektredigeraren är nu öppen för anpassning.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="932"/>
         <source>Modbus Project</source>
         <translation>Modbus-projekt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="937"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="957"/>
         <source>Holding Registers</source>
         <translation>Holding-register</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Input Registers</source>
         <translation>Ingångsregister</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="964"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
         <source>Coils</source>
         <translation>Spolar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="965"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
         <source>Discrete Inputs</source>
         <translation>Diskreta Ingångar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="974"/>
         <source>Unknown</source>
         <translation>Okänd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="987"/>
         <source>Register %1</source>
         <translation>Register %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
         <source>Coil %1</source>
         <translation>Spole %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="995"/>
         <source>Discrete %1</source>
         <translation>Diskret %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1428"/>
         <source>Error code: %1</source>
         <translation>Felkod: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1413"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1431"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus-kommunikationsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1443"/>
         <source>Select Port</source>
         <translation>Välj Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1578"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1596"/>
         <source>Protocol</source>
         <translation>Protokoll</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1586"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1604"/>
         <source>Slave Address</source>
         <translation>Slavadress</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1595"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1613"/>
         <source>Poll Interval (ms)</source>
         <translation>Pollintervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1635"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
         <source>Host / IP</source>
         <translation>Värd / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1660"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1657"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1675"/>
         <source>Serial Port</source>
         <translation>Serieport</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1665"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1683"/>
         <source>Baud Rate</source>
         <translation>Baudhastighet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1673"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1691"/>
         <source>Parity</source>
         <translation>Paritet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1681"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1699"/>
         <source>Data Bits</source>
         <translation>Databitar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1689"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1707"/>
         <source>Stop Bits</source>
         <translation>Stoppbitar</translation>
     </message>
@@ -12150,37 +12162,43 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="599"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="341"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
         <source>Network socket error</source>
         <translation>Nätverksuttag fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="342"/>
+        <source>Connection to %1:%2 timed out.</source>
+        <translation>Anslutning till %1:%2 avbröts på grund av timeout.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="732"/>
         <source>Socket Type</source>
         <translation>Uttagstyp</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
         <source>Remote Address</source>
         <translation>Fjärradress</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="748"/>
         <source>TCP Port</source>
         <translation>TCP-port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="757"/>
         <source>UDP Local Port</source>
         <translation>UDP Lokal Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="650"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="766"/>
         <source>UDP Remote Port</source>
         <translation>UDP Fjärrport</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="659"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="775"/>
         <source>UDP Multicast</source>
         <translation>UDP Multicast</translation>
     </message>
@@ -12188,98 +12206,107 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="225"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="217"/>
         <source>Failed to start process</source>
         <translation>Misslyckades att starta process</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="185"/>
-        <source>Executable &quot;%1&quot; not found in PATH.</source>
-        <translation>Körbar fil &quot;%1&quot; hittades inte i PATH.</translation>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="218"/>
+        <source>Executable "%1" not found in PATH.</source>
+        <translation>Körbar fil "%1" hittades inte i PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="369"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
         <source>Select Executable</source>
         <translation>Välj Körbar Fil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="416"/>
         <source>Select Working Directory</source>
         <translation>Välj Arbetskatalog</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="418"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="441"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Välj Named Pipe / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="539"/>
         <source>The process crashed.</source>
         <translation>Processen kraschade.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="516"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="540"/>
         <source>Exit code: %1</source>
         <translation>Avslutningskod: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="519"/>
-        <source>Process &quot;%1&quot; stopped</source>
-        <translation>Processen &quot;%1&quot; stoppades</translation>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="547"/>
+        <source>Process "%1" stopped</source>
+        <translation>Processen "%1" stoppades</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="559"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="565"/>
         <source>Process Error</source>
         <translation>Processfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="582"/>
+        <source>Pipe Closed</source>
+        <translation>Pipe Stängd</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="583"/>
+        <source>The named pipe "%1" was closed on the other end.</source>
+        <translation>Den namngivna pipen "%1" stängdes i andra änden.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
         <source>Pipe Error</source>
         <translation>Pipe-fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
         <source>Could not open named pipe: %1</source>
         <translation>Kunde inte öppna named pipe: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="835"/>
         <source>Mode</source>
         <translation>Läge</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
         <source>Launch Process</source>
         <translation>Starta Process</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
         <source>Named Pipe</source>
         <translation>Namngiven Pipe</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="843"/>
         <source>Executable</source>
         <translation>Körbar Fil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="850"/>
         <source>Arguments</source>
         <translation>Argument</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
         <source>Working Directory</source>
         <translation>Arbetskatalog</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="800"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="864"/>
         <source>Pipe Path</source>
         <translation>Pipe-sökväg</translation>
     </message>
@@ -12343,171 +12370,187 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="71"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="432"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="114"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="115"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="448"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="487"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="351"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="735"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="406"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="796"/>
         <source>Select Port</source>
         <translation>Välj Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
         <source>Even</source>
         <translation>Jämn</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="450"/>
         <source>Odd</source>
         <translation>Udda</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="451"/>
         <source>Space</source>
         <translation>Mellanslag</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="452"/>
         <source>Mark</source>
         <translation>Markering</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="488"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="489"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
-        <source>&quot;%1&quot; is not a valid path</source>
-        <translation>&quot;%1&quot; är inte en giltig sökväg</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="625"/>
+        <source>"%1" is not a valid path</source>
+        <translation>"%1" är inte en giltig sökväg</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="626"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Ange en annan sökväg för att registrera en anpassad serieenhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Den angivna enheten kunde inte hittas. Kontrollera anslutningen och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="837"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Ett okänt fel uppstod. Kontrollera enheten och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="839"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Enheten är inte öppen. Öppna enheten innan du försöker utföra denna åtgärd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
-        <source>Failed to connect to serial port &quot;%1&quot;</source>
-        <translation>Misslyckades att ansluta till serieport &quot;%1&quot;</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="320"/>
+        <source>Failed to connect to serial port "%1"</source>
+        <translation>Misslyckades att ansluta till serieport "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="298"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="562"/>
+        <source>Failed to set baud rate</source>
+        <translation>Misslyckades att ställa in baudhastighet</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="299"/>
+        <source>Baud rate %1 rejected for port "%2": %3</source>
+        <translation>Baudhastighet %1 avvisades för port "%2": %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="563"/>
+        <source>Baud rate %1 rejected: %2</source>
+        <translation>Baudhastighet %1 avvisad: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
         <source>Unknown</source>
         <translation>Okänd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
-        <source>Critical error on serial port &quot;%1&quot;</source>
-        <translation>Kritiskt fel på serieporten &quot;%1&quot;</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <source>Critical error on serial port "%1"</source>
+        <translation>Kritiskt fel på serieporten "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
         <source>No error occurred.</source>
         <translation>Inget fel uppstod.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="831"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Åtkomst nekad. Säkerställ att applikationen har nödvändiga åtkomsträttigheter till enheten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Misslyckades att öppna enheten. Den kan redan vara i bruk eller otillgänglig.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Ett fel uppstod vid skrivning av data till enheten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Ett fel uppstod vid läsning av data från enheten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="835"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Ett kritiskt resursfel uppstod. Enheten kan ha kopplats från eller är inte längre tillgänglig.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Den begärda operationen stöds inte på denna enhet.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="838"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Operationen avbröts på grund av timeout. Enheten svarar eventuellt inte.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1001"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1081"/>
         <source>Serial Port</source>
         <translation>Seriell Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1089"/>
         <source>Baud Rate</source>
         <translation>Baudhastighet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1097"/>
         <source>Parity</source>
         <translation>Paritet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1025"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1105"/>
         <source>Data Bits</source>
         <translation>Databitar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1113"/>
         <source>Stop Bits</source>
         <translation>Stoppbitar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1041"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1121"/>
         <source>Flow Control</source>
         <translation>Flödeskontroll</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1049"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1129"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1136"/>
         <source>Auto-Reconnect</source>
         <translation>Återanslut Automatiskt</translation>
     </message>
@@ -12515,26 +12558,26 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="161"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>USB Error</source>
         <translation>USB-fel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="162"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>Misslyckades att initiera USB-undersystemet. Kontrollera att libusb är tillgängligt på ditt system.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="204"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="593"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1104"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="217"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1130"/>
         <source>USB Device Error</source>
         <translation>USB-enhetsfel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="182"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="197"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -12543,40 +12586,40 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 På Linux, säkerställ att du har läs-/skrivbehörighet på enhetsnoden (lägg till en udev-regel eller kör som root). På macOS kan kärndrivrutinen behöva kopplas bort först.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>Ingen USB-enhet vald. Välj en enhet och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="190"/>
         <source>Unknown Device</source>
         <translation>Okänd Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Misslyckades att öppna &quot;%1&quot;</translation>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
+        <source>Failed to open "%1"</source>
+        <translation>Misslyckades att öppna "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="816"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
         <translation>Ingen isokron IN-ändpunkt hittades på denna enhet, men bulk- eller interrupt-ändpunkter är tillgängliga.
 
-Byt överföringsläge till &quot;Bulk/Interrupt Stream&quot; och försök igen.</translation>
+Byt överföringsläge till "Bulk/Interrupt Stream" och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="821"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation>Ingen bulk- eller interrupt IN-ändpunkt hittades på denna enhet, men isokrona ändpunkter är tillgängliga.
 
-Byt överföringsläge till &quot;Isokron&quot; och försök igen.</translation>
+Byt överföringsläge till "Isokron" och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="825"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -12585,7 +12628,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 Enheten kanske inte exponerar dataändpunkter i sin aktiva konfiguration, eller så använder den ett dedikerat protokoll. Protokolladaptrar (t.ex. CAN- eller Modbus-gränssnitt) bör anslutas via sin egen drivrutin.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1105"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1119"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -12594,120 +12637,120 @@ Another driver or application may already have it open. On Linux, try unloading 
 En annan drivrutin eller applikation kan redan ha den öppen. På Linux, försök att ta bort kärndrivrutinen (t.ex. cdc_acm) eller lägg till en udev-regel.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1131"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>Kunde inte aktivera alternativ inställning %1 på gränssnitt %2. Den valda slutpunkten är inte nåbar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1148"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1162"/>
         <source>USB Device Warning</source>
         <translation>USB-enhetsvarning</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1163"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>Den valda OUT-slutpunkten kunde inte aktiveras. Fortsätter i skrivskyddat läge.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1395"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>Ingen enhet ansluten i avancerat kontrollläge.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1386"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1400"/>
         <source>A control transfer is already in progress.</source>
         <translation>En kontrollöverföring pågår redan.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1410"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>Ogiltigt inställningsfält: förfrågningstyp, förfrågan, wValue och wIndex måste vara hex.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1406"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1420"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>Ogiltig datanyttolast: förväntade en sekvens av hex-bytes.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1412"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1426"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>Ogiltig överföringslängd (0-%1 byte).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1430"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1444"/>
         <source>Could not allocate the control transfer.</source>
         <translation>Kunde inte allokera kontrollöverföringen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1457"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1471"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>Misslyckades skicka kontrollöverföring: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1484"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1498"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>Överföring slutförd: %1 byte.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1491"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1505"/>
         <source>Control transfer failed: %1.</source>
         <translation>Kontrollöverföring misslyckades: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="360"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="373"/>
         <source>Select Device</source>
         <translation>Välj Enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="382"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="395"/>
         <source>No Usable IN Endpoints</source>
         <translation>Inga Användbara In-slutpunkter</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="397"/>
         <source>Select IN Endpoint</source>
         <translation>Välj In-slutpunkt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
         <source>None (Read-only)</source>
         <translation>Ingen (Skrivskyddad)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>Aktivera Avancerade USB-kontrollöverföringar?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="472"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="485"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>Detta aktiverar kontrollöverföringar utöver bulköverföringar. Att skicka felaktiga kontrollförfrågningar kan krascha eller skada ansluten hårdvara. Aktivera endast detta om du vet vad du gör.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="476"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="489"/>
         <source>Advanced USB Mode</source>
         <translation>Avancerat USB-läge</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="594"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="607"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>USB-enheten kopplades från eller påträffade ett allvarligt läsfel.</translation>
     </message>
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk Stream" and try again.</source>
         <translation type="vanished">Ingen isokron IN-ändpunkt hittades på denna enhet, men bulk-ändpunkter är tillgängliga.
 
-Byt överföringsläge till &quot;Bulk Stream&quot; och försök igen.</translation>
+Byt överföringsläge till "Bulk Stream" och försök igen.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation type="vanished">Ingen bulk IN-ändpunkt hittades på denna enhet, men isokrona ändpunkter är tillgängliga.
 
-Byt överföringsläge till &quot;Isokron&quot; och försök igen.</translation>
+Byt överföringsläge till "Isokron" och försök igen.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -12718,12 +12761,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 Enheten kanske inte exponerar dataändpunkter i sin aktiva konfiguration, eller så kan den kräva en specifik drivrutin.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1628"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1642"/>
         <source>USB Device</source>
         <translation>USB-enhet</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1636"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1650"/>
         <source>Transfer Mode</source>
         <translation>Överföringsläge</translation>
     </message>
@@ -12732,32 +12775,32 @@ Enheten kanske inte exponerar dataändpunkter i sin aktiva konfiguration, eller 
         <translation type="vanished">Bulk Stream</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Advanced Control</source>
         <translation>Avancerad Kontroll</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Isochronous</source>
         <translation>Isokron</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Bulk/interrupt-ström</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1644"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1658"/>
         <source>IN Endpoint</source>
         <translation>In-slutpunkt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1652"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1666"/>
         <source>OUT Endpoint</source>
         <translation>Out-slutpunkt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1660"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1674"/>
         <source>ISO Packet Size</source>
         <translation>ISO-paketstorlek</translation>
     </message>
@@ -13369,7 +13412,7 @@ Enheten kanske inte exponerar dataändpunkter i sin aktiva konfiguration, eller 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Lokal modellserver. Fungerar med alla OpenAI-kompatibla slutpunkter -- Ollama, llama.cpp:s llama-server, LM Studio eller vLLM. Ingenting lämnar din maskin. Modelllistan hämtas live från servern.</translation>
     </message>
     <message>
@@ -13399,7 +13442,7 @@ Enheten kanske inte exponerar dataändpunkter i sin aktiva konfiguration, eller 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider&apos;s console to create a new key</source>
+        <source>Open the provider's console to create a new key</source>
         <translation>Öppna leverantörens konsol för att skapa en ny nyckel</translation>
     </message>
     <message>
@@ -13612,129 +13655,129 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="542"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="559"/>
         <source>There was an issue validating your license.</source>
         <translation>Det uppstod ett problem vid validering av din licens.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="560"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="771"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Licensnyckeln du angav tillhör inte Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Kontrollera att du köpt din licens från den officiella Serial Studio-butiken.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="590"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
         <source>This license key was activated on a different device.</source>
         <translation>Denna licensnyckel aktiverades på en annan enhet.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Avaktivera den där först eller kontakta support för hjälp.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="602"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
         <source>This license is not currently active.</source>
         <translation>Denna licens är inte aktiv för närvarande.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Den kan ha gått ut eller avaktiverats (status: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <source>Something went wrong on the server.</source>
         <translation>Något gick fel på servern.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="803"/>
         <source>No activation ID was returned.</source>
         <translation>Inget aktiverings-ID returnerades.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="607"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="624"/>
         <source>Could not validate your license at this time.</source>
         <translation>Kunde inte validera din licens just nu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="625"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="812"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Try again later.</source>
         <translation>Försök igen senare.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="872"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Dubbelkolla att du köpte din licens från den officiella Serial Studio-butiken.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="802"/>
         <source>Something went wrong on the server…</source>
         <translation>Något gick fel på servern…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="688"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="708"/>
         <source>Your license has been successfully activated.</source>
         <translation>Din licens har aktiverats.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="689"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Tack för att du stödjer Serial Studio!
 Du har nu tillgång till alla premiumfunktioner.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
         <source>There was an issue activating your license.</source>
         <translation>Ett problem uppstod vid aktivering av din licens.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="811"/>
         <source>Could not activate your license at this time.</source>
         <translation>Kunde inte aktivera din licens just nu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="883"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Ett problem uppstod vid avaktivering av din licens.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Kunde inte avaktivera din licens just nu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Your license has been deactivated.</source>
         <translation>Din licens har avaktiverats.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Åtkomst till Pro-funktioner har tagits bort.
@@ -13839,7 +13882,7 @@ För att återanvända denna plats på en annan enhet, mejla alex@serial-studio.
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="484"/>
-        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>En del av filens datasektion kunde inte läsas; inspelningen kan vara trunkerad.</translation>
     </message>
     <message>
@@ -13964,43 +14007,43 @@ För att återanvända denna plats på en annan enhet, mejla alex@serial-studio.
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="358"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientcertifikat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="370"/>
         <source>Optional (mutual TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Valfritt (ömsesidig TLS)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="377"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="407"/>
         <source>Browse…</source>
-        <translation type="unfinished">Bläddra…</translation>
+        <translation>Bläddra…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="388"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Privat Nyckel</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
         <source>Defaults to the certificate file</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard är certifikatfilen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="418"/>
         <source>Key Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyckellösenfras</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="436"/>
         <source>ALPN</source>
-        <translation type="unfinished"></translation>
+        <translation>ALPN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="464"/>
         <source>ALPN Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Alpn-protokoll</translation>
     </message>
 </context>
 <context>
@@ -14102,7 +14145,7 @@ Aktivera din licens eller besök butiken för att låsa upp denna funktion.</tra
         <translation type="vanished">MQTT-ämne Ej Angivet</translation>
     </message>
     <message>
-        <source>You won&apos;t receive any messages until a topic is configured.</source>
+        <source>You won't receive any messages until a topic is configured.</source>
         <translation type="vanished">Inga meddelanden tas emot förrän ett ämne har konfigurerats.</translation>
     </message>
     <message>
@@ -14114,8 +14157,8 @@ Aktivera din licens eller besök butiken för att låsa upp denna funktion.</tra
         <translation type="vanished">Ogiltigt MQTT-ämne</translation>
     </message>
     <message>
-        <source>The topic &quot;%1&quot; is not valid.</source>
-        <translation type="vanished">Ämnet &quot;%1&quot; är inte giltigt.</translation>
+        <source>The topic "%1" is not valid.</source>
+        <translation type="vanished">Ämnet "%1" är inte giltigt.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -14126,8 +14169,8 @@ Aktivera din licens eller besök butiken för att låsa upp denna funktion.</tra
         <translation type="vanished">Prenumerationsfel</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation type="vanished">Misslyckades prenumerera på ämne &quot;%1&quot;.</translation>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation type="vanished">Misslyckades prenumerera på ämne "%1".</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -14222,10 +14265,10 @@ Aktivera din licens eller besök butiken för att låsa upp denna funktion.</tra
         <translation type="vanished">MQTT-autentisering Krävs</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
+        <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">MQTT-brokern kräver autentisering med metod: &quot;%1&quot;.
+        <translation type="vanished">MQTT-brokern kräver autentisering med metod: "%1".
 
 Ange nödvändiga inloggningsuppgifter.</translation>
     </message>
@@ -14357,17 +14400,17 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>PEM-filer (*.pem *.crt *.cer *.key);;Alla filer (*)</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj Klientcertifikat</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
         <source>Select Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj Privat Nyckel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
@@ -14393,7 +14436,7 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
         <source>MQTT Client Certificate Error</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT-fel för Klientcertifikat</translation>
     </message>
 </context>
 <context>
@@ -15206,13 +15249,13 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
-        <source>Plugin &quot;%1&quot; is not installed.</source>
-        <translation>Plugin &quot;%1&quot; är inte installerat.</translation>
+        <source>Plugin "%1" is not installed.</source>
+        <translation>Plugin "%1" är inte installerat.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1340"/>
-        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
-        <translation>Tillägg &quot;%1&quot; är inte ett plugin (typ: %2).</translation>
+        <source>Extension "%1" is not a plugin (type: %2).</source>
+        <translation>Tillägg "%1" är inte ett plugin (typ: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
@@ -15223,8 +15266,8 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
-        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
-        <translation>Plugin &quot;%1&quot; kräver GRPC men denna version inkluderar inte GRPC-stöd.</translation>
+        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
+        <translation>Plugin "%1" kräver GRPC men denna version inkluderar inte GRPC-stöd.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
@@ -15242,8 +15285,8 @@ Vill du aktivera den nu?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
-        <translation>Tillägget &quot;%1&quot; saknar fältet &apos;entry&apos; i info.json.</translation>
+        <source>Plugin "%1" has no 'entry' field in info.json.</source>
+        <translation>Tillägget "%1" saknar fältet 'entry' i info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
@@ -15254,8 +15297,8 @@ Vill du aktivera den nu?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
-        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
-        <translation>Tillägget &quot;%1&quot; har en ogiltig sökväg till startpunkt.</translation>
+        <source>Plugin "%1" has an invalid entry point path.</source>
+        <translation>Tillägget "%1" har en ogiltig sökväg till startpunkt.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1490"/>
@@ -15264,10 +15307,10 @@ Vill du aktivera den nu?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
-        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
+        <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Detta tillägg kräver &quot;%1&quot; men det hittades inte på ditt system.
+        <translation>Detta tillägg kräver "%1" men det hittades inte på ditt system.
 
 Vill du öppna nedladdningssidan?</translation>
     </message>
@@ -15493,8 +15536,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation type="vanished">Sök efter uppdateringar automatiskt?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation type="vanished">Ska %1 automatiskt söka efter uppdateringar? Du kan alltid söka efter uppdateringar manuellt från &quot;Om&quot;-dialogen</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <translation type="vanished">Ska %1 automatiskt söka efter uppdateringar? Du kan alltid söka efter uppdateringar manuellt från "Om"-dialogen</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="192"/>
@@ -15937,22 +15980,22 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="185"/>
         <source>Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientcertifikat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="191"/>
         <source>Select the PEM client certificate for mutual TLS</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj PEM-klientcertifikatet för ömsesidig TLS</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="202"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Privat Nyckel</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="209"/>
         <source>Select the PEM private key for mutual TLS</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj den privata PEM-nyckeln för ömsesidig TLS</translation>
     </message>
 </context>
 <context>
@@ -16193,7 +16236,7 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two&apos;s-complement signed.</source>
+        <source>Interprets each value as two's-complement signed.</source>
         <translation>Tolkar varje värde som tvåkomplementssignerat.</translation>
     </message>
     <message>
@@ -16270,7 +16313,7 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
+        <source>Interprets 16-bit registers as two's-complement signed values.</source>
         <translation>Tolkar 16-bitars register som tvåkomplementssignerade värden.</translation>
     </message>
     <message>
@@ -16545,7 +16588,7 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>Spara denna dators enhetsfil. Den identifierar denna maskin och innehåller ingen personlig information.</translation>
     </message>
     <message>
@@ -17197,7 +17240,7 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Ej tillgänglig vid fjärranslutning. Denna widget kräver fjärrenhetens råa sampelström, som instrumentpanelsspeglingen inte överför.</translation>
     </message>
 </context>
@@ -18326,7 +18369,7 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Kör en datamängds transformation endast när en av dess ingångar ändras. Snabbar upp stora tabelldrivna projekt; av som standard.</translation>
     </message>
     <message>
@@ -18447,7 +18490,7 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
         <translation>Brokern nekade anslutningen på grund av en protokollversion som inte stöds. Matcha brokerns MQTT-version och försök igen.</translation>
     </message>
     <message>
@@ -18487,7 +18530,7 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
         <translation>Ett MQTT 5-protokollnivåfel inträffade. Inspektera brokerns orsakskod för mer information.</translation>
     </message>
     <message>
@@ -18498,7 +18541,7 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
     <message>
         <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett klientcertifikat är konfigurerat: verifiera att det matchar den privata nyckeln och är aktiverat på brokern.</translation>
     </message>
 </context>
 <context>
@@ -18509,34 +18552,34 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation>Misslyckades att ladda välkomsttext :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="279"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <source>Network error</source>
         <translation>Nätverksfel</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="298"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="293"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="310"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
         <translation>Aktiveringsfel för Provperiod</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
         <source>Invalid server response</source>
         <translation>Ogiltigt serversvar</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="296"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="308"/>
         <source>The server returned malformed data: %1</source>
         <translation>Servern returnerade felformaterad data: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="327"/>
         <source>Unexpected server response</source>
         <translation>Oväntat serversvar</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>The server response is missing required fields.</source>
         <translation>Serversvaret saknar obligatoriska fält.</translation>
     </message>
@@ -18551,22 +18594,22 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation>Kan inte öppna fil för skrivning!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1342"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1375"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Ogiltig Bluetooth-adapter!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1345"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1378"/>
         <source>Unsuported platform or operating system</source>
         <translation>Plattform eller operativsystem stöds ej</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1348"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1381"/>
         <source>Unsupported discovery method</source>
         <translation>Upptäcktsmetod stöds ej</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1351"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1384"/>
         <source>General I/O error</source>
         <translation>Allmänt I/O-fel</translation>
     </message>
@@ -18621,11 +18664,11 @@ Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkrop
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>Funktionen &apos;parse&apos; är inte definierad i skriptet.
+        <translation>Funktionen 'parse' är inte definierad i skriptet.
 
 Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
@@ -18707,11 +18750,11 @@ Troligaste orsak: en oändlig loop på toppnivån i skriptet.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>Funktionen &apos;parse&apos; är inte definierad i skriptet.
+        <translation>Funktionen 'parse' är inte definierad i skriptet.
 
 Säkerställ att din kod inkluderar:
 function parse(frame) { ... }</translation>
@@ -18736,12 +18779,12 @@ Please fix the error in the function body.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable &apos;parse&apos; export found.
+        <source>No callable 'parse' export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>Ingen anropbar &apos;parse&apos;-export hittades.
+        <translation>Ingen anropbar 'parse'-export hittades.
 
 Definiera en av:
   function parse(frame) { ... }
@@ -18749,15 +18792,15 @@ Definiera en av:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
-        <translation>Funktionen &apos;parse&apos; måste acceptera minst en parameter (frame-payloaden).</translation>
+        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
+        <translation>Funktionen 'parse' måste acceptera minst en parameter (frame-payloaden).</translation>
     </message>
     <message>
-        <source>No valid &apos;parse&apos; function declaration found.
+        <source>No valid 'parse' function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Ingen giltig &apos;parse&apos;-funktionsdeklaration hittades.
+        <translation type="vanished">Ingen giltig 'parse'-funktionsdeklaration hittades.
 
 Förväntad format:
 function parse(frame) { ... }</translation>
@@ -18768,11 +18811,11 @@ function parse(frame) { ... }</translation>
         <translation>Ogiltig Funktionsparameter</translation>
     </message>
     <message>
-        <source>The &apos;parse&apos; function must have at least one parameter.
+        <source>The 'parse' function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Funktionen &apos;parse&apos; måste ha minst en parameter.
+        <translation type="vanished">Funktionen 'parse' måste ha minst en parameter.
 
 Förväntad format:
 function parse(frame) { ... }</translation>
@@ -18784,13 +18827,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
+        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>Funktionen &apos;parse&apos; använder det gamla tvåparametersformatet: parse(%1, %2)
+        <translation>Funktionen 'parse' använder det gamla tvåparametersformatet: parse(%1, %2)
 
 Detta format stöds inte längre. Uppdatera till det nya enparametersformatet:
 function parse(%1) { ... }
@@ -18908,13 +18951,13 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
-        <source>Expected %1, got &apos;%2&apos;</source>
-        <translation>Förväntade %1, fick &apos;%2&apos;</translation>
+        <source>Expected %1, got '%2'</source>
+        <translation>Förväntade %1, fick '%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="436"/>
-        <source>Expected enum name after &apos;enum&apos;</source>
-        <translation>Förväntade enum-namn efter &apos;enum&apos;</translation>
+        <source>Expected enum name after 'enum'</source>
+        <translation>Förväntade enum-namn efter 'enum'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="450"/>
@@ -18923,8 +18966,8 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="477"/>
-        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
-        <translation>Fälttagg &apos;%1&apos; utanför intervallet (1..%2)</translation>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>Fälttagg '%1' utanför intervallet (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="495"/>
@@ -18948,8 +18991,8 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="555"/>
-        <source>Expected field type, got &apos;%1&apos;</source>
-        <translation>Förväntade fälttyp, fick &apos;%1&apos;</translation>
+        <source>Expected field type, got '%1'</source>
+        <translation>Förväntade fälttyp, fick '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="574"/>
@@ -18973,13 +19016,13 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="718"/>
-        <source>Unexpected token &apos;%1&apos; at file scope</source>
-        <translation>Oväntat token &apos;%1&apos; i filomfång</translation>
+        <source>Unexpected token '%1' at file scope</source>
+        <translation>Oväntat token '%1' i filomfång</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="764"/>
-        <source>Unsupported top-level keyword &apos;%1&apos;</source>
-        <translation>Nyckelord &apos;%1&apos; på toppnivå stöds ej</translation>
+        <source>Unsupported top-level keyword '%1'</source>
+        <translation>Nyckelord '%1' på toppnivå stöds ej</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -19020,8 +19063,8 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Den inbyggda parserkonfigurationen är inte ett giltigt JSON-objekt.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: &quot;%1&quot;.</source>
-        <translation type="vanished">Okänd inbyggd parsermall: &quot;%1&quot;.</translation>
+        <source>Unknown native parser template: "%1".</source>
+        <translation type="vanished">Okänd inbyggd parsermall: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -19030,8 +19073,8 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
-        <translation>Okänd inbyggd parsermall: &quot;%1&quot;.</translation>
+        <source>Unknown Built-In parser template: "%1".</source>
+        <translation>Okänd inbyggd parsermall: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -19048,32 +19091,32 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Offline-aktivering</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1349"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1363"/>
         <source>timed out</source>
         <translation>avbröts på grund av timeout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1351"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1365"/>
         <source>cancelled</source>
         <translation>avbruten</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1353"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1367"/>
         <source>stalled (request not supported)</source>
         <translation>avstannad (begäran stöds ej)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1355"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1369"/>
         <source>device disconnected</source>
         <translation>enhet frånkopplad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1357"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1371"/>
         <source>buffer overflow</source>
         <translation>buffertöverskridning</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1359"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1373"/>
         <source>transfer error</source>
         <translation>överföringsfel</translation>
     </message>
@@ -19211,7 +19254,7 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Bevaka en annan Serial Studio-instans instrumentpanel över nätverket. Vyn är skrivskyddad: ingenting du gör här når fjärrenheten.</translation>
     </message>
     <message>
@@ -19601,7 +19644,7 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn&apos;t reach your device.</source>
+        <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio kunde inte nå enheten.</translation>
     </message>
     <message>
@@ -19611,7 +19654,7 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Kontrollera att den är inkopplad, påslagen och inte redan används av en annan app. Du kan försöka igen, välja en annan enhet eller avsluta.</translation>
     </message>
     <message>
@@ -20760,7 +20803,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Uppdateringar &amp; Nyheter</translation>
     </message>
     <message>
-        <source>Show What&apos;s New on Startup</source>
+        <source>Show What's New on Startup</source>
         <translation type="vanished">Visa Vad Är Nytt vid Uppstart</translation>
     </message>
     <message>
@@ -21279,7 +21322,7 @@ Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Dubbelklickning på denna distribution tar användaren direkt till den aktiva instrumentpanelen för detta projekt. Det finns ingen verktygsfält eller inställningspanel, bara data, och Serial Studio avslutas så snart enheten kopplas från.</translation>
     </message>
     <message>
@@ -21393,7 +21436,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Helskärm</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">Dubbelklickning på denna genväg tar användaren direkt till den aktiva instrumentpanelen för detta projekt. Det finns ingen verktygsfält eller inställningspanel, bara data, och Serial Studio avslutas så snart enheten kopplas från.</translation>
     </message>
     <message>
@@ -21401,7 +21444,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Bädda In Projekt</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">Dubbelklickning på denna genväg tar användaren direkt till den aktiva instrumentpanelen för detta projekt. Det finns ingen verktygsfält eller inställningspanel, bara data, och Serial Studio avslutas så snart enheten kopplas från.
@@ -21717,8 +21760,8 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show &quot;%1&quot;</source>
-        <translation>Visa &quot;%1&quot;</translation>
+        <source>Show "%1"</source>
+        <translation>Visa "%1"</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -22476,38 +22519,38 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     <name>TlsIdentity</name>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
-        <source>The file &quot;%1&quot; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <source>The file "%1" does not exist.</source>
+        <translation>Filen "%1" finns inte.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
-        <source>The file &quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <source>The file "%1" cannot be read.</source>
+        <translation>Filen "%1" kan inte läsas.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
-        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is not a valid PEM certificate or key file.</source>
+        <translation>"%1" är inte en giltig PEM-certifikat- eller nyckelfil.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
-        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is too large to be a PEM certificate or key file.</source>
+        <translation>"%1" är för stor för att vara en PEM-certifikat- eller nyckelfil.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
         <source>A private key is set, but no client certificate is selected. Select the certificate that matches it.</source>
-        <translation type="unfinished"></translation>
+        <translation>En privat nyckel är angiven, men inget klientcertifikat är valt. Välj certifikatet som matchar den.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
-        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
-        <translation type="unfinished"></translation>
+        <source>The private key "%1" is encrypted. Enter its passphrase and try again.</source>
+        <translation>Den privata nyckeln "%1" är krypterad. Ange dess lösenfras och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
-        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <source>The passphrase does not unlock the private key "%1".</source>
+        <translation>Lösenfrasen låser inte upp den privata nyckeln "%1".</translation>
     </message>
 </context>
 <context>
@@ -22866,15 +22909,20 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation>Hantera licens och aktivera Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
         <source>Disconnect</source>
         <translation>Koppla Från</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
         <source>Connect</source>
         <translation>Anslut</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <source>Connecting…</source>
+        <translation>Ansluter…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
@@ -22962,7 +23010,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Lämna tidsbas tom för att använda plottens tidsintervall; sänk den för att zooma in på en snabb signal. Holdoff ignorerar nya triggers ett ögonblick efter varje trigger.</translation>
     </message>
     <message>
@@ -23028,7 +23076,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">Tidsbas anger hur mycket tid ett svep visar; lämna tomt för att använda plottens tidsintervall. Sänk den för att zooma in på en snabb signal. Holdoff ignorerar nya triggers ett ögonblick efter varje trigger.</translation>
     </message>
     <message>
@@ -23147,34 +23195,34 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2075"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2060"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2068"/>
         <source>Notifications</source>
         <translation>Notifikationer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2091"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2076"/>
         <source>Clock</source>
         <translation>Klocka</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2098"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
     <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="2137"/>
         <location filename="../../src/UI/Dashboard.cpp" line="2152"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2167"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Reserv)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2189"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2268"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2174"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2253"/>
         <source>LED Panel (%1)</source>
         <translation>LED-panel (%1)</translation>
     </message>
@@ -23550,7 +23598,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Inte tillgängligt via fjärranslutning. Denna widget behöver fjärrens råa samplingsström, som instrumentpanelsspeglingen inte överför.</translation>
     </message>
     <message>
@@ -23616,7 +23664,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
+        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>Du använder för närvarande den fullt utrustade provversionen av %1 Pro. Den är giltig i 14 dagar för personligt, icke-kommersiellt bruk.</translation>
     </message>
     <message>
@@ -23631,13 +23679,13 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
-        <translation>Klicka på &quot;Uppgradera nu&quot; nedan för att se tillgängliga prenumerationsplaner.</translation>
+        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <translation>Klicka på "Uppgradera nu" nedan för att se tillgängliga prenumerationsplaner.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don&apos;t nag me about the trial.
-I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>Påminn mig inte om provperioden.
 Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv3-versionen.</translation>
     </message>
@@ -23699,7 +23747,7 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What&apos;s New in %1</source>
+        <source>What's New in %1</source>
         <translation type="vanished">Vad Är Nytt i %1</translation>
     </message>
     <message>
@@ -23835,7 +23883,7 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
         <translation type="vanished">Välkommen till %1!</translation>
     </message>
     <message>
-        <source>Here&apos;s what&apos;s new in version %1.</source>
+        <source>Here's what's new in version %1.</source>
         <translation type="vanished">Här är vad som är nytt i version %1.</translation>
     </message>
     <message>
@@ -24044,7 +24092,7 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Vi kan inte erbjuda obegränsad åtkomst eftersom ArcGIS API-nyckeln medför verkliga kostnader.</translation>
     </message>
 </context>

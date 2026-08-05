@@ -49,6 +49,18 @@ static QStringList enumerateCanPlugins()
   return list;
 }
 
+/**
+ * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
+ *        event loop, and raising one mid open()/error stack re-enters the stack it was raised from.
+ */
+static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+{
+  QMetaObject::invokeMethod(
+    context,
+    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
+    Qt::QueuedConnection);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -288,11 +300,11 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   }
 
   if (!m_device) {
-    Misc::Utilities::showMessageBox(
-      tr("CAN Device Creation Failed"),
-      error.isEmpty() ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
-                      : error,
-      QMessageBox::Critical);
+    queueErrorBox(this,
+                  tr("CAN Device Creation Failed"),
+                  error.isEmpty()
+                    ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
+                    : error);
     return false;
   }
 
@@ -316,9 +328,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
       error.isEmpty()
         ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
         : error;
-    Misc::Utilities::showMessageBox(tr("CAN Connection Failed"),
-                                    base + connectionErrorHint(plugin, interface),
-                                    QMessageBox::Critical);
+    queueErrorBox(this, tr("CAN Connection Failed"), base + connectionErrorHint(plugin, interface));
     return false;
   }
 
@@ -327,63 +337,62 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 }
 
 /**
- * @brief Shows a platform-specific dialog when no CAN bus plugins are available.
+ * @brief Queues a platform-specific error dialog when no CAN bus plugins are available.
  */
 void IO::Drivers::CANBus::showCanSupportError()
 {
 #if defined(Q_OS_LINUX)
-  Misc::Utilities::showMessageBox(
+  queueErrorBox(
+    this,
     tr("CAN Bus Not Available"),
     tr(
-      "No CAN bus plugins found on this system.\n\nOn Linux, ensure SocketCAN kernel modules are loaded."),
-    QMessageBox::Critical);
+      "No CAN bus plugins found on this system.\n\nOn Linux, ensure SocketCAN kernel modules are loaded."));
 #elif defined(Q_OS_WIN)
-  Misc::Utilities::showMessageBox(
+  queueErrorBox(
+    this,
     tr("CAN Bus Not Available"),
     tr(
-      "No CAN bus plugins found on this system.\n\nOn Windows, install CAN hardware drivers (PEAK, Vector, etc.)."),
-    QMessageBox::Critical);
+      "No CAN bus plugins found on this system.\n\nOn Windows, install CAN hardware drivers (PEAK, Vector, etc.)."));
 #elif defined(Q_OS_MAC)
-  Misc::Utilities::showMessageBox(
+  queueErrorBox(
+    this,
     tr("CAN Bus Not Available"),
     tr(
-      "No CAN bus plugins found on this system.\n\nCAN bus support on macOS is limited and may require third-party hardware drivers."),
-    QMessageBox::Critical);
+      "No CAN bus plugins found on this system.\n\nCAN bus support on macOS is limited and may require third-party hardware drivers."));
 #else
-  Misc::Utilities::showMessageBox(tr("CAN Bus Not Available"),
-                                  tr("No CAN bus plugins are available on this platform."),
-                                  QMessageBox::Critical);
+  queueErrorBox(
+    this, tr("CAN Bus Not Available"), tr("No CAN bus plugins are available on this platform."));
 #endif
 }
 
 /**
- * @brief Validates plugin/interface selection state; shows a dialog and returns false on error.
+ * @brief Validates plugin/interface selection state; queues a dialog and returns false on error.
  */
 bool IO::Drivers::CANBus::validateOpenPreconditions()
 {
   if (!configurationOk()) {
-    Misc::Utilities::showMessageBox(
+    queueErrorBox(
+      this,
       tr("Invalid CAN Configuration"),
-      tr("The CAN bus configuration is incomplete. Select a valid plugin and interface."),
-      QMessageBox::Critical);
+      tr("The CAN bus configuration is incomplete. Select a valid plugin and interface."));
     return false;
   }
 
   if (m_pluginIndex >= m_pluginList.count() || m_interfaceIndex >= m_interfaceList.count()) {
-    Misc::Utilities::showMessageBox(
+    queueErrorBox(
+      this,
       tr("Invalid Selection"),
       tr(
-        "The selected plugin or interface is no longer available. Refresh the lists and try again."),
-      QMessageBox::Critical);
+        "The selected plugin or interface is no longer available. Refresh the lists and try again."));
     return false;
   }
 
   if (m_pluginList.isEmpty() || m_interfaceList.isEmpty()) {
-    Misc::Utilities::showMessageBox(
+    queueErrorBox(
+      this,
       tr("No Devices Available"),
       tr(
-        "The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected."),
-      QMessageBox::Critical);
+        "The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected."));
     return false;
   }
 

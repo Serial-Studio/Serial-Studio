@@ -94,6 +94,7 @@ public:
   void close() override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -141,8 +142,9 @@ private:
   Mode m_mode;
   QProcess* m_process;
 
-  QThread m_pipeThread;
   std::atomic<bool> m_pipeRunning;
+  QThread m_pipeThread;
+  std::atomic<bool> m_pipeConnected;
 
   QSettings m_settings;
   QString m_executable;

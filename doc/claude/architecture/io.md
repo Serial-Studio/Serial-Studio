@@ -32,8 +32,8 @@ describe a design that is no longer in the tree.
   recover too — the timer belongs to the instance, not the UI driver's 1 Hz rescan), matches
   the returned port by name, and `close()` disarms both so a manual disconnect is always final.
   MQTT funnels every configuration change and error into `scheduleReconnectIfActive()`. Modbus
-  dials inside `open()`; Network TCP retries refusals itself (below). A new driver that needs
-  recovery adds it locally — there is no shared supervisor to inherit.
+  and Network TCP dial asynchronously with driver-local timer retries (below). A new driver
+  that needs recovery adds it locally — there is no shared supervisor to inherit.
 - **The connected state is published idempotently.** Every lifecycle path funnels into the
   private `notifyConnectedStateChanged()`, which emits `connectedChanged()` only when the
   `isConnected()` flag or the open-device count actually moved. Callers never reason about
@@ -42,9 +42,14 @@ describe a design that is no longer in the tree.
   settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
   "connected" so the button aborts instead of stacking a second attempt.
 - **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`).
-  Network (TCP), BluetoothLE, MQTT, Modbus and CANBus override it; `toggleConnection()` also
-  aborts when any device reports an in-flight dial. `linkState()` still reports only
-  `connected` or `idle`; an API client watching a flapping link polls `isConnected`.
+  Network (TCP), BluetoothLE, MQTT, Modbus, CANBus and Process override it;
+  `toggleConnection()` aborts when any device reports an in-flight dial, and
+  `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
+  idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
+  Network's timer-driven dial (10 refusal retries at 300 ms, 15 s timeout, `close()`
+  cancels; RTU gets one attempt). Process reports the launch phase and the pipe's
+  wait-for-writer window as connecting instead of faking an open channel. `linkState()`
+  still reports only `connected` or `idle`; an API client polls `isConnected`.
 - **Network TCP dials asynchronously.** `open()` starts `connectToHost()` and returns true
   ("attempt started"); a refused dial retries up to 10 times with a 300 ms backoff (a server a
   control-script onConnect() just launched needs seconds to listen), a 15 s per-attempt timer

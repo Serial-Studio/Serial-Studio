@@ -1149,6 +1149,7 @@ void UI::Dashboard::resetData(const bool notify)
 
   m_lastFrame = DataModel::Frame();
   m_sourceRawFrames.clear();
+  m_quarantinedSources.clear();
   m_updateRetryInProgress = false;
 
   if (appState.operationMode() == SerialStudio::ProjectFile) {
@@ -1880,42 +1881,25 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles the case where a dataset UID is not in m_datasetReferences.
+ * @brief Handles a frame that does not match the widget model: one rebuild retry, then the
+ *        (sourceId, structureGeneration) pair is quarantined and its frames dropped cheaply.
+ *        The link, session, and players stay alive because a dashboard build failure is a
+ *        rendering problem, never a reason to take the device away; a new generation retries.
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
   SS_ASSERT(!frame.groups.empty(), return);
   SS_ASSERT(frame.sourceId >= 0, return);
 
+  const quint64 generation = m_sourceStructureGen.value(frame.sourceId);
+  const auto qit           = m_quarantinedSources.constFind(frame.sourceId);
+  if (qit != m_quarantinedSources.cend() && qit.value() == generation)
+    return;
+
   if (m_updateRetryInProgress) {
     qWarning() << "[Dashboard] widget model build failed twice for source" << frame.sourceId
-               << "-- forcing disconnect";
-
-    static auto& connMgr = IO::ConnectionManager::instance();
-    if (connMgr.isConnected()) {
-      connMgr.disconnectDevice();
-      return;
-    }
-
-    static auto& csvPlayer = CSV::Player::instance();
-    if (csvPlayer.isOpen()) {
-      csvPlayer.closeFile();
-      return;
-    }
-
-    static auto& mdf4Player = MDF4::Player::instance();
-    if (mdf4Player.isOpen()) {
-      mdf4Player.closeFile();
-      return;
-    }
-
-#ifdef BUILD_COMMERCIAL
-    static auto& sessPlayer = Sessions::Player::instance();
-    if (sessPlayer.isOpen()) {
-      sessPlayer.closeFile();
-      return;
-    }
-#endif
+               << "-- dropping its frames until the structure changes";
+    m_quarantinedSources.insert(frame.sourceId, generation);
     return;
   }
 
