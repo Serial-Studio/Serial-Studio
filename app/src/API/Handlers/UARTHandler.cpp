@@ -28,6 +28,8 @@
 #include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
+static constexpr int kMaxBaudRate = 15000000;
+
 //--------------------------------------------------------------------------------------------------
 // Command registration
 //--------------------------------------------------------------------------------------------------
@@ -43,7 +45,7 @@ void API::Handlers::UARTHandler::registerLineSettings(CommandRegistry& registry)
     API::makeSchema({API::rangeProp(QStringLiteral("baudRate"),
                                     QStringLiteral("Baud rate in bits per second (1-15000000)"),
                                     1,
-                                    15000000)}),
+                                    kMaxBaudRate)}),
     &setBaudRate);
   registry.registerCommand(
     QStringLiteral("io.uart.setParity"),
@@ -214,9 +216,11 @@ API::CommandResponse API::Handlers::UARTHandler::setBaudRate(const QString& id,
   }
 
   const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
-  if (baudRate <= 0) {
+  if (baudRate <= 0 || baudRate > kMaxBaudRate) {
     return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("baudRate must be positive"));
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("baudRate must be between 1 and %1").arg(kMaxBaudRate));
   }
 
   static auto& connectionManager = IO::ConnectionManager::instance();

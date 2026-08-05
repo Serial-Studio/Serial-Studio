@@ -178,6 +178,7 @@ signals:
   void saveDialogCompleted(bool accepted);
   void importCompleted(bool accepted, const QString& savedPath);
   void projectHistoryChanged();
+  void historySnapshotApplied();
 
   void groupAdded(int groupId);
   void groupDeleted();

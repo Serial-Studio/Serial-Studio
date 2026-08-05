@@ -802,6 +802,8 @@ void IO::ConnectionManager::concludeConnectRequest()
  */
 void IO::ConnectionManager::notifyConnectedStateChanged()
 {
+  settlePendingDialVerdicts();
+
   const bool connecting = anyDeviceConnecting();
   if (m_lastConnectingState != connecting) {
     m_lastConnectingState = connecting;
@@ -816,6 +818,32 @@ void IO::ConnectionManager::notifyConnectedStateChanged()
   m_lastConnectedState = connected;
   m_lastConnectedCount = count;
   Q_EMIT connectedChanged();
+}
+
+/**
+ * @brief Reports the deferred open verdict of every async dial that has since landed: each id is
+ *        erased before reporting so the notify hop inside onDeviceOpenFinished cannot re-enter
+ *        this sweep on the same device. Failures never settle here: the driver-drop path reports
+ *        them, and an id whose driver vanished is dropped without a verdict.
+ */
+void IO::ConnectionManager::settlePendingDialVerdicts()
+{
+  if (m_pendingDialVerdicts.isEmpty())
+    return;
+
+  const auto pending = m_pendingDialVerdicts;
+  for (const int deviceId : pending) {
+    HAL_Driver* halDriver = driver(deviceId);
+    if (halDriver == nullptr) {
+      m_pendingDialVerdicts.remove(deviceId);
+      continue;
+    }
+
+    if (halDriver->isOpen()) {
+      m_pendingDialVerdicts.remove(deviceId);
+      onDeviceOpenFinished(deviceId, true, QString());
+    }
+  }
 }
 
 /**
@@ -1065,8 +1093,9 @@ void IO::ConnectionManager::shutdownDrivers()
 
 /**
  * @brief Connects the device with the given @p deviceId and reports the driver's verdict, which
- *        is what drives the connection diagnostics. The verdict is the open call's own return
- *        value, not `isOpen()`: a driver that dials asynchronously is not up yet when it returns.
+ *        is what drives the connection diagnostics. A driver still dialing when open() returns
+ *        gets a pending verdict instead of an immediate success: settlePendingDialVerdicts()
+ *        reports once the link is genuinely up, the driver-drop path reports the failure.
  */
 void IO::ConnectionManager::connectDevice(int deviceId)
 {
@@ -1078,16 +1107,27 @@ void IO::ConnectionManager::connectDevice(int deviceId)
   const bool ok                  = it->second->open(mode);
   setPaused(false);
 
+  HAL_Driver* halDriver = driver(deviceId);
+  if (ok && halDriver && halDriver->isConnecting()) {
+    m_pendingDialVerdicts.insert(deviceId);
+    concludeConnectRequest();
+    notifyConnectedStateChanged();
+    return;
+  }
+
   onDeviceOpenFinished(deviceId, ok, ok ? QString() : QStringLiteral("device did not open"));
 }
 
 /**
  * @brief Disconnects the device with the given @p deviceId. Closing cancels an open still in
  *        flight, so the pending request is settled here too: a device closed mid-open would
- *        otherwise strand the request flag and its wait cursor.
+ *        otherwise strand the request flag and its wait cursor. A pending dial verdict is
+ *        dropped without a report: a user cancel is not an open failure.
  */
 void IO::ConnectionManager::disconnectDevice(int deviceId)
 {
+  m_pendingDialVerdicts.remove(deviceId);
+
   auto it = m_devices.find(deviceId);
   if (it != m_devices.end() && it->second)
     it->second->close();
@@ -1117,6 +1157,9 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
 
   if (deviceId < 0)
     return;
+
+  if (m_pendingDialVerdicts.remove(deviceId))
+    onDeviceOpenFinished(deviceId, false, QStringLiteral("connection attempt failed"));
 
   qWarning() << "[ConnectionManager] device" << deviceId << "dropped ("
              << driver->metaObject()->className() << "); session continues";

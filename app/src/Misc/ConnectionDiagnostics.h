@@ -61,9 +61,10 @@ class ConnectionDiagnostics : public QObject {
   // clang-format on
 
 public:
-  using Bus     = Diagnostics::Bus;
-  using BusMask = Diagnostics::BusMask;
-  using Result  = Diagnostics::Result;
+  using Bus         = Diagnostics::Bus;
+  using BusMask     = Diagnostics::BusMask;
+  using Result      = Diagnostics::Result;
+  using ResultCache = std::array<QList<Diagnostics::Result>, Diagnostics::kBusCount>;
 
 signals:
   void runFinished();
@@ -94,7 +95,7 @@ public:
   [[nodiscard]] static int estimatedMsec(BusMask scope);
 
   void run(BusMask scope);
-  void runInstant(BusMask scope);
+  void runInstant(BusMask scope, bool preserveStanding);
   void onOpenFailed(Bus bus, const QString& reason);
   void onOpenSucceeded(Bus bus);
 
@@ -107,6 +108,7 @@ private:
   void publish();
   void clearScope(BusMask scope);
   void store(const Result& result);
+  void restoreStanding(BusMask scope, const ResultCache& standing);
   void appendCached(Bus bus, QList<ProblemCenter::Finding>& out) const;
   void addReachabilityProbe(Async::SequentialGroup* group, Bus bus);
   void onRunFinished(Async::Outcome outcome, const Async::StepError& error);
@@ -121,7 +123,7 @@ private:
   QDateTime m_lastRun;
   Async::TaskRunner m_runner;
   Misc::ProblemCenter* m_problems;
-  std::array<QList<Result>, Diagnostics::kBusCount> m_results;
+  ResultCache m_results;
   std::array<QElapsedTimer, Diagnostics::kBusCount> m_autoRunClocks;
 };
 

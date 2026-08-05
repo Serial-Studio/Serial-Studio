@@ -21,6 +21,7 @@
 
 #include "Misc/ConnectionDiagnostics.h"
 
+#include <algorithm>
 #include <functional>
 #include <QLocale>
 #include <utility>
@@ -302,7 +303,7 @@ void Misc::ConnectionDiagnostics::run(BusMask scope)
   if (m_running && (m_activeScope & scope) == scope)
     return;
 
-  runInstant(scope);
+  runInstant(scope, false);
 
   Async::Task* root = buildProbeTree(scope);
   if (root == nullptr)
@@ -317,13 +318,21 @@ void Misc::ConnectionDiagnostics::run(BusMask scope)
 
 /**
  * @brief Replaces the cached results of every bus in @p scope with what the instant checks report
- *        right now, and publishes them through the problem center.
+ *        right now, and publishes them through the problem center. With @p preserveStanding the
+ *        results the instant checks did not re-produce survive (deduplicated by code): the
+ *        rate-limited failure path must not erase a standing probe finding it cannot re-run.
  */
-void Misc::ConnectionDiagnostics::runInstant(BusMask scope)
+void Misc::ConnectionDiagnostics::runInstant(BusMask scope, bool preserveStanding)
 {
   scope &= supportedBuses();
   if (scope == kBusNone)
     return;
+
+  ResultCache standing;
+  if (preserveStanding)
+    for (int i = 0; i < kBusCount; ++i)
+      if (scopeCovers(scope, static_cast<Bus>(i)))
+        standing[static_cast<size_t>(i)] = m_results[static_cast<size_t>(i)];
 
   clearScope(scope);
 
@@ -348,8 +357,31 @@ void Misc::ConnectionDiagnostics::runInstant(BusMask scope)
   for (const auto& result : std::as_const(scratch))
     store(result);
 
+  if (preserveStanding)
+    restoreStanding(scope, standing);
+
   m_lastRun = QDateTime::currentDateTime();
   publish();
+}
+
+/**
+ * @brief Re-appends every standing result of @p scope whose code the fresh instant results do not
+ *        already carry, so a preserved finding is never duplicated.
+ */
+void Misc::ConnectionDiagnostics::restoreStanding(BusMask scope, const ResultCache& standing)
+{
+  for (int i = 0; i < kBusCount; ++i) {
+    if (!scopeCovers(scope, static_cast<Bus>(i)))
+      continue;
+
+    auto& fresh = m_results[static_cast<size_t>(i)];
+    for (const auto& result : standing[static_cast<size_t>(i)]) {
+      const bool duplicate = std::any_of(
+        fresh.cbegin(), fresh.cend(), [&result](const Result& r) { return r.code == result.code; });
+      if (!duplicate)
+        fresh.append(result);
+    }
+  }
 }
 
 /**
@@ -391,7 +423,7 @@ void Misc::ConnectionDiagnostics::onOpenFailed(Bus bus, const QString& reason)
     return;
   }
 
-  runInstant(scope);
+  runInstant(scope, true);
 }
 
 /**

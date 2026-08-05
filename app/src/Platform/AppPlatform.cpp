@@ -599,8 +599,7 @@ void installCrashDumpWriter()
   if (wide.size() >= MAX_PATH)
     return;
 
-  wcsncpy(s_dumpPath, wide.c_str(), MAX_PATH - 1);
-  s_dumpPath[MAX_PATH - 1] = L'\0';
+  wcsncpy_s(s_dumpPath, MAX_PATH, wide.c_str(), _TRUNCATE);
   SetUnhandledExceptionFilter(writeCrashDump);
 #endif
 }

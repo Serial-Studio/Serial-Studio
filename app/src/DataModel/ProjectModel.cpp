@@ -255,11 +255,12 @@ bool DataModel::ProjectModel::validateProject(const bool silent)
     return false;
   }
 
-  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
-    return g.widget == QLatin1String("image");
-  });
+  const bool hasDatasetlessGroup =
+    std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
+      return g.widget == QLatin1String("image") || g.widget == QLatin1String("painter");
+    });
 
-  if (datasetCount() <= 0 && !hasImageGroup) {
+  if (datasetCount() <= 0 && !hasDatasetlessGroup) {
     if (!silent) {
       Misc::Utilities::showMessageBox(
         tr("Project error"), tr("You need to add at least one dataset!"), QMessageBox::Warning);
@@ -282,11 +283,12 @@ DataModel::ProjectModel::SaveBlocker DataModel::ProjectModel::saveBlockerCode() 
   if (groupCount() <= 0)
     return SaveBlocker::MissingGroup;
 
-  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
-    return g.widget == QLatin1String("image");
-  });
+  const bool hasDatasetlessGroup =
+    std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
+      return g.widget == QLatin1String("image") || g.widget == QLatin1String("painter");
+    });
 
-  if (datasetCount() <= 0 && !hasImageGroup)
+  if (datasetCount() <= 0 && !hasDatasetlessGroup)
     return SaveBlocker::MissingDataset;
 
   return SaveBlocker::None;

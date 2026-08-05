@@ -241,6 +241,7 @@ private:
   void beginWaitCursor();
   void concludeConnectRequest();
   void notifyConnectedStateChanged();
+  void settlePendingDialVerdicts();
   void wireUiDriver(IO::HAL_Driver* driver);
   void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
 
@@ -271,6 +272,7 @@ private:
   QSettings m_settings;
   QTimer m_uiDriverSaveTimer;
 
+  QSet<int> m_pendingDialVerdicts;
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
 
   std::atomic<bool> m_replyCaptureArmed;

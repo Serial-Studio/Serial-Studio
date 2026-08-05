@@ -130,6 +130,9 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
       m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     }
   });
+  connect(&pm, &DataModel::ProjectModel::historySnapshotApplied, this, [this] {
+    m_seedExpansionFromModel = true;
+  });
   connect(&pm, &DataModel::ProjectModel::titleChanged, this, [this] {
     if (!m_treeModel)
       return;

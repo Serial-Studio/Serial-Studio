@@ -166,6 +166,19 @@ class SerialStudioClient:
                         error.get("message", "Unknown error"),
                     )
 
+            # Server-level rejections (rate/size/depth limits) are minted with
+            # an empty id; surface them instead of timing out silently.
+            if (
+                response.get("type") == "response"
+                and not response.get("id")
+                and not response.get("success", True)
+            ):
+                error = response.get("error", {})
+                raise APIError(
+                    error.get("code", "UNKNOWN"),
+                    error.get("message", "Server-level rejection"),
+                )
+
     def batch(
         self, commands: list[dict], timeout: Optional[float] = None
     ) -> list[dict] | dict:

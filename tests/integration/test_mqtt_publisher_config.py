@@ -83,7 +83,7 @@ class TestMqttPublisherSerialization:
         # MQTT::Publisher::toJson + applyProjectConfig).
         publisher = {
             "enabled": True,
-            "mode": 0,  # DashboardData
+            "mode": 3,  # DashboardDataJson
             "publishNotifications": True,
             "topicBase": "ss/test/dashboard",
             "notificationTopic": "ss/test/notifications",
@@ -124,19 +124,19 @@ class TestMqttPublisherSerialization:
         assert round_tripped["topicBase"] == "ss/test/dashboard"
         assert round_tripped["notificationTopic"] == "ss/test/notifications"
         assert round_tripped["clientId"] == "ss-test-client"
-        assert int(round_tripped["mode"]) == 0
+        assert int(round_tripped["mode"]) == 3
         assert bool(round_tripped["enabled"]) is True
         assert bool(round_tripped["publishNotifications"]) is True
         assert bool(round_tripped["sslEnabled"]) is True
 
     def test_raw_mode_publisher_round_trip(self, api_client, clean_state):
-        """Mode=1 (Raw RX Data) must persist correctly."""
+        """Mode=0 (Raw RX Data) must persist correctly."""
         if not _is_pro_build(api_client):
             pytest.skip("MQTT publisher requires a commercial build")
 
         publisher = {
             "enabled": True,
-            "mode": 1,
+            "mode": 0,
             "topicBase": "ss/raw",
             "hostname": "127.0.0.1",
             "port": 1883,
@@ -147,7 +147,7 @@ class TestMqttPublisherSerialization:
 
         exported = api_client.command("project.exportJson").get("config", {})
         round_tripped = exported.get("mqttPublisher", {})
-        assert int(round_tripped.get("mode", -1)) == 1
+        assert int(round_tripped.get("mode", -1)) == 0
         assert round_tripped.get("topicBase") == "ss/raw"
 
     def test_disabled_publisher_persists(self, api_client, clean_state):

@@ -168,9 +168,10 @@ void API::ServerWorker::closeResources()
 }
 
 /**
- * @brief Adds a socket to the worker thread, keyed to its immutable session id. The session id
- *        is the connection's real identity: socket pointers get reused by the allocator across
- *        connect/disconnect cycles, so every queued cross-thread hop must carry and verify it.
+ * @brief Adds a socket to the worker thread, keyed to its immutable session id (socket pointers
+ *        get reused across connect cycles, so every queued hop carries it). Bytes that landed
+ *        before this queued adoption ran are drained here: the notifier can buffer them and
+ *        emit readyRead with zero receivers, and it never re-fires for buffered data.
  */
 void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
 {
@@ -182,6 +183,9 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
   m_mutedSockets.remove(socket);
   connect(socket, &QTcpSocket::readyRead, this, &ServerWorker::onSocketReadyRead);
   connect(socket, &QTcpSocket::disconnected, this, &ServerWorker::onSocketDisconnected);
+
+  if (socket->bytesAvailable() > 0)
+    Q_EMIT dataReceived(socket, sessionId, socket->readAll());
 
   Q_EMIT clientCountChanged(m_sockets.count());
 }

@@ -340,8 +340,8 @@ class TestToolsList:
         assert "baudRate" in props, "setBaudRate schema must have baudRate property"
         baud_prop = props["baudRate"]
         assert baud_prop.get("type") == "integer"
-        assert "enum" in baud_prop
-        assert 115200 in baud_prop["enum"]
+        assert baud_prop.get("minimum") == 1
+        assert baud_prop.get("maximum") == 15000000
         assert schema.get("required") == ["baudRate"]
 
     def test_uart_set_port_index_schema(self, mcp):

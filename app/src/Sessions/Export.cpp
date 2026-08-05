@@ -596,9 +596,9 @@ Sessions::Export::Export()
   , m_rawBytesQueue(8192)
   , m_tableSnapshotQueue(1024)
   , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
-  , m_appState(nullptr)
-  , m_projectModel(nullptr)
-  , m_frameBuilder(nullptr)
+  , m_appState(&AppState::instance())
+  , m_projectModel(&DataModel::ProjectModel::instance())
+  , m_frameBuilder(&DataModel::FrameBuilder::instance())
 {
   initializeWorker();
 
@@ -672,10 +672,6 @@ void Sessions::Export::closeFile()
  */
 void Sessions::Export::setupExternalConnections()
 {
-  m_appState     = &AppState::instance();
-  m_projectModel = &DataModel::ProjectModel::instance();
-  m_frameBuilder = &DataModel::FrameBuilder::instance();
-
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     const auto mode = AppState::instance().operationMode();
     m_operationMode.store(static_cast<int>(mode), std::memory_order_relaxed);

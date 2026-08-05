@@ -1858,7 +1858,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
     genIt != m_sourceStructureGen.cend() && genIt.value() == frame->structureGeneration;
 
   const bool structureChanged =
-    !genKnown || !m_sourceRawFrames.contains(sid) || m_datasetReferences.isEmpty();
+    !genKnown || !m_sourceRawFrames.contains(sid) || m_valuePushes.isEmpty();
 
   if (structureChanged) [[unlikely]] {
     const bool hadProFeatures = containsCommercialFeatures();
@@ -1917,7 +1917,7 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 {
   SS_ASSERT_HOTPATH(!frame.groups.empty());
-  SS_ASSERT_HOTPATH(!m_datasetReferences.isEmpty());
+  SS_ASSERT_HOTPATH(frame.sourceId >= 0);
 
   if (!m_layoutValid) [[unlikely]]
     return;
@@ -2406,12 +2406,15 @@ UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
 }
 
 /**
- * @brief Pre-resolves the per-source value-propagation tables from m_datasetReferences.
+ * @brief Pre-resolves the per-source value-propagation tables from m_datasetReferences. A
+ *        zero-dataset layout (image/painter-only) still registers an empty table per source:
+ *        a legitimate datasetless frame must find its table instead of tripping the
+ *        missing-dataset quarantine on every frame.
  */
 void UI::Dashboard::buildValuePushes()
 {
-  SS_ASSERT(!m_datasetReferences.isEmpty(), return);
   SS_ASSERT(!m_lastFrame.groups.empty(), return);
+  SS_ASSERT_LOG(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
 
   m_valuePushes.clear();
 
