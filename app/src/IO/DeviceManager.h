@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QPointer>
 
-#include "Async/TaskTree.h"
 #include "IO/FrameConfig.h"
 #include "IO/FrameReader.h"
 #include "IO/HAL_Driver.h"
@@ -40,9 +39,6 @@ class DeviceManager : public QObject {
 
 signals:
   void frameReady(int deviceId, const IO::CapturedDataPtr& frame);
-  void linkLost(int deviceId, const QString& reason);
-  void linkStateChanged(int deviceId);
-  void openFinished(int deviceId, bool ok, const QString& reason);
   void rawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
 
 public:
@@ -54,10 +50,7 @@ public:
 
   [[nodiscard]] int deviceId() const noexcept;
   [[nodiscard]] bool isOpen() const;
-  [[nodiscard]] bool isOpening() const noexcept;
   [[nodiscard]] bool isWritable() const;
-  [[nodiscard]] bool hasActiveFlow() const noexcept;
-  [[nodiscard]] int reconnectAttempt() const;
   [[nodiscard]] HAL_Driver* driver() const noexcept;
 
   [[nodiscard]] inline FrameReader* frameReader() const noexcept { return m_frameReader.data(); }
@@ -67,28 +60,21 @@ public:
   void reconfigure(const FrameConfig& config);
 
 public slots:
-  void open(QIODevice::OpenMode mode = QIODevice::ReadWrite);
+  bool open(QIODevice::OpenMode mode = QIODevice::ReadWrite);
   void close();
 
 private slots:
   void onReadyRead();
-  void onDriverLinkDropped();
   void onRawDataReceived(const IO::CapturedDataPtr& data);
-  void onDriverOpenFinished(bool ok, const QString& reason);
-  void onFlowFinished(Async::Outcome outcome, const Async::StepError& error);
 
 private:
   void startFrameReader(const FrameConfig& config);
   void killFrameReader();
 
 private:
-  bool m_linkUp;
-  bool m_opening;
   int m_deviceId;
-  bool m_linkEstablished;
   FrameConfig m_frameConfig;
   std::unique_ptr<HAL_Driver> m_driver;
-  Async::TaskRunner m_runner;
   QPointer<FrameReader> m_frameReader;
   IO::CapturedDataPtr m_frameScratch;
 };

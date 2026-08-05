@@ -291,6 +291,10 @@ QVariantList API::ProcessLauncher::runningProcesses() const
  */
 void API::ProcessLauncher::onSessionClosed()
 {
+  if (!m_processes.isEmpty())
+    qWarning() << "[ProcessLauncher] sessionClosed -- stopping" << m_processes.size()
+               << "helper process(es)";
+
   killAll();
 }
 
@@ -303,6 +307,10 @@ void API::ProcessLauncher::onProjectFileChanged()
   const auto path = m_projectModel->jsonFilePath();
   if (path == m_lastProjectPath)
     return;
+
+  if (!m_processes.isEmpty())
+    qWarning() << "[ProcessLauncher] project changed to" << path << "-- stopping"
+               << m_processes.size() << "helper process(es)";
 
   m_lastProjectPath = path;
   killAll();

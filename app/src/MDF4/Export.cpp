@@ -464,8 +464,8 @@ MDF4::Export::Export()
   , m_isOpen(false)
   , m_exportEnabled(false)
   , m_persistSettings(true)
-  , m_appState(nullptr)
-  , m_frameBuilder(nullptr)
+  , m_appState(&AppState::instance())
+  , m_frameBuilder(&DataModel::FrameBuilder::instance())
 #else
   : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true)
 #endif
@@ -575,9 +575,6 @@ void MDF4::Export::refreshTemplateFrame()
 void MDF4::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
-  m_appState     = &AppState::instance();
-  m_frameBuilder = &DataModel::FrameBuilder::instance();
-
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected())

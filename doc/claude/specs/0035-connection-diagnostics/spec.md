@@ -1,7 +1,7 @@
 ---
 spec: 0035-connection-diagnostics
 title: Connection diagnostics
-status: draft        # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # implemented + CI-gated; maintainer ACs pending
 created: 2026-07-25
 author: Claude (roadmap R9, with Alex)
 ---

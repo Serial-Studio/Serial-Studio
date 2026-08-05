@@ -800,7 +800,7 @@ message IoUartSetAutoReconnectRequest {
 
 message IoUartSetBaudRateRequest {
   string id = 1;
-  int64 baudRate = 2;  // enum: 110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 256000, 460800, 576000, 921600
+  int64 baudRate = 2;
 }
 
 message IoUartSetDataBitsRequest {
@@ -2298,7 +2298,7 @@ service SerialStudioTypedAPI {
   // Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames. ageMs is the time elapsed since the frame was captured -- use it for staleness watchdogs instead of mixing clocks.
   rpc IoGetLatestFrame(IoGetLatestFrameRequest) returns (CommandResponse);
 
-  // Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags. Call this first when the user reports a connection issue. For a link that keeps dropping, read linkState (idle/connecting/retrying/connected), reconnectAttempt (open attempts in the sequence now running; 0 when the link is up or idle) and activeFlows (devices currently supervised by the reconnect engine -- steady while connected, and a value that grows across drops means flows are leaking).
+  // Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags and linkState (connected, connecting or idle; connecting means a dial is in flight). Call this first when the user reports a connection issue. Reconnection is each driver's own business, so no attempt counter is reported: poll isConnected to watch a link that keeps dropping.
   rpc IoGetStatus(IoGetStatusRequest) returns (CommandResponse);
 
   // Get complete HID driver configuration

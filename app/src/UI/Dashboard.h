@@ -544,6 +544,7 @@ private:
 
   // Subordinate to m_sourceRawFrames (validated by its contains(sid) check); never cleared alone.
   QHash<int, quint64> m_sourceStructureGen;
+  QHash<int, quint64> m_quarantinedSources;
 };
 }  // namespace UI
 

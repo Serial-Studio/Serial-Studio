@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QString>
+#include <QTimer>
 #include <QtSerialPort>
 
 #include "IO/HAL_Driver.h"
@@ -120,7 +121,6 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
   [[nodiscard]] QJsonObject deviceIdentifier() const override;
@@ -168,12 +168,12 @@ public slots:
 private slots:
   void onReadyRead();
   void populateErrors();
+  void pollAutoReconnect();
   void refreshSerialDevices();
   void handleError(QSerialPort::SerialPortError error);
 
 private:
   [[nodiscard]] QVector<QSerialPortInfo> validPorts() const;
-  [[nodiscard]] bool applyErrorPolicy(QSerialPort::SerialPortError error);
   void applyDeviceProperty(const QVariant& value);
   void applyBaudRateProperty(const QVariant& value);
   bool relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports);
@@ -185,9 +185,10 @@ private:
 
   bool m_dtrEnabled;
   bool m_autoReconnect;
+  bool m_pendingReconnect;
   bool m_usingCustomSerialPort;
 
-  int m_lastSerialDeviceIndex;
+  QString m_lastPortName;
 
   qint32 m_baudRate;
   QSerialPort::Parity m_parity;
@@ -200,6 +201,8 @@ private:
   quint8 m_dataBitsIndex;
   quint8 m_stopBitsIndex;
   quint8 m_flowControlIndex;
+
+  QTimer m_reconnectTimer;
 
   QSettings m_settings;
   QStringList m_deviceNames;

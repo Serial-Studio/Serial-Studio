@@ -51,6 +51,9 @@ class LemonSqueezy : public QObject {
   Q_PROPERTY(bool isActivated
              READ isActivated
              NOTIFY licenseDataChanged)
+  Q_PROPERTY(bool isOnlineActivated
+             READ isOnlineActivated
+             NOTIFY licenseDataChanged)
   Q_PROPERTY(QString appName
              READ appName
              NOTIFY licenseDataChanged)
@@ -117,6 +120,7 @@ public slots:
   void revalidateCachedLicense();
   void openCustomerPortal();
   void setLicense(const QString& license);
+  void notifyEntitlementMaybeChanged();
 
 private slots:
   void readSettings();
@@ -150,6 +154,7 @@ private:
   QString m_customerEmail;
   bool m_silentValidation;
   bool m_revalidatingCache;
+  bool m_lastNotifiedEntitled;
   QDateTime m_activationDate;
 
   int m_gracePeriod;

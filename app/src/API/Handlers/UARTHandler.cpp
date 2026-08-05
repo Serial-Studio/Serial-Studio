@@ -28,6 +28,8 @@
 #include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
+static constexpr int kMaxBaudRate = 15000000;
+
 //--------------------------------------------------------------------------------------------------
 // Command registration
 //--------------------------------------------------------------------------------------------------
@@ -37,30 +39,13 @@
  */
 void API::Handlers::UARTHandler::registerLineSettings(CommandRegistry& registry)
 {
-  static const QJsonArray kBaudRates = {110,
-                                        150,
-                                        300,
-                                        1200,
-                                        2400,
-                                        4800,
-                                        9600,
-                                        19200,
-                                        38400,
-                                        57600,
-                                        115200,
-                                        230400,
-                                        256000,
-                                        460800,
-                                        576000,
-                                        921600};
-
   registry.registerCommand(
     QStringLiteral("io.uart.setBaudRate"),
     QStringLiteral("Set baud rate (params: baudRate)"),
-    API::makeSchema({API::enumProp(QStringLiteral("baudRate"),
-                                   QStringLiteral("Baud rate in bits per second"),
-                                   kBaudRates,
-                                   9600)}),
+    API::makeSchema({API::rangeProp(QStringLiteral("baudRate"),
+                                    QStringLiteral("Baud rate in bits per second (1-15000000)"),
+                                    1,
+                                    kMaxBaudRate)}),
     &setBaudRate);
   registry.registerCommand(
     QStringLiteral("io.uart.setParity"),
@@ -231,9 +216,11 @@ API::CommandResponse API::Handlers::UARTHandler::setBaudRate(const QString& id,
   }
 
   const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
-  if (baudRate <= 0) {
+  if (baudRate <= 0 || baudRate > kMaxBaudRate) {
     return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("baudRate must be positive"));
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("baudRate must be between 1 and %1").arg(kMaxBaudRate));
   }
 
   static auto& connectionManager = IO::ConnectionManager::instance();

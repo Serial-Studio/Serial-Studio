@@ -120,12 +120,10 @@ def test_tools_list_payload_size_is_recorded(api_client):
 def test_sdk_wrapper_sets_every_declared_field(api_client, clean_state):
     """AC11 -- the SDK's options bag reaches every declared field and reads back."""
     api_client.create_new_project(title="SDK field sweep")
-    group = api_client.command("project.group.add", {"title": "G"})
-    group_id = group["groupId"]
-    dataset = api_client.command(
-        "project.dataset.add", {"groupId": group_id, "title": "D"}
-    )
-    dataset_id = dataset["datasetId"]
+    group_id = api_client.add_group("G")
+    api_client.add_dataset(group_id)
+    datasets = [d for d in api_client.list_datasets() if d["groupId"] == group_id]
+    dataset_id = datasets[-1]["datasetId"]
 
     params = {"groupId": group_id, "datasetId": dataset_id}
     samples = {"int": 3, "double": 1.5, "bool": True, "string": "x"}

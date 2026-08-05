@@ -122,8 +122,8 @@ accurate: an extension id is a legal value of a free-string field, not a member 
 domain.
 
 **Build registration is now load-bearing.** `PropertyHooks.cpp` includes `UI/WidgetExtensions.h` and
-calls into the catalog, so the pending `app/CMakeLists.txt` entries for `WidgetExtensions.cpp` /
-`WidgetExtensionManifest.cpp` are no longer optional for a link.
+calls into the catalog; the `app/CMakeLists.txt` entries for `WidgetExtensions.cpp` /
+`WidgetExtensionManifest.cpp` have landed (source and header lists), so the link is satisfied.
 
 ## Tasks
 

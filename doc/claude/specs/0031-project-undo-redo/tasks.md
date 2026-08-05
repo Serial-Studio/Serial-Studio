@@ -257,4 +257,4 @@ updated: 2026-07-24
 - [ ] `pytest tests/integration/test_project_undo.py` listed for the maintainer.
 - [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [ ] Diff is *what was asked, and only that* — no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

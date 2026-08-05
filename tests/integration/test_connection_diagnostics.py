@@ -337,7 +337,10 @@ def test_failed_open_diagnoses_only_the_failing_bus(api_client, clean_state):
             len(_findings(api_client, checker)) == count
         ), f"A network failure changed {checker} findings"
 
-    api_client.disconnect_device()
+    try:
+        api_client.disconnect_device()
+    except Exception:
+        pass
 
 
 @pytest.mark.network
@@ -364,7 +367,10 @@ def test_repeated_failures_do_not_accumulate_findings(api_client, clean_state):
     first = _codes(_findings(api_client, NETWORK_CHECKER))
     assert first, "The first failed open produced no finding"
 
-    api_client.disconnect_device()
+    try:
+        api_client.disconnect_device()
+    except Exception:
+        pass
     try:
         api_client.connect_device()
     except Exception:
@@ -375,4 +381,7 @@ def test_repeated_failures_do_not_accumulate_findings(api_client, clean_state):
 
     assert second == first, "Repeated failures accumulated findings"
 
-    api_client.disconnect_device()
+    try:
+        api_client.disconnect_device()
+    except Exception:
+        pass

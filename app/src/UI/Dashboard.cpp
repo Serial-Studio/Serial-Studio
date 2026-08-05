@@ -1149,6 +1149,7 @@ void UI::Dashboard::resetData(const bool notify)
 
   m_lastFrame = DataModel::Frame();
   m_sourceRawFrames.clear();
+  m_quarantinedSources.clear();
   m_updateRetryInProgress = false;
 
   if (appState.operationMode() == SerialStudio::ProjectFile) {
@@ -1857,7 +1858,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
     genIt != m_sourceStructureGen.cend() && genIt.value() == frame->structureGeneration;
 
   const bool structureChanged =
-    !genKnown || !m_sourceRawFrames.contains(sid) || m_datasetReferences.isEmpty();
+    !genKnown || !m_sourceRawFrames.contains(sid) || m_valuePushes.isEmpty();
 
   if (structureChanged) [[unlikely]] {
     const bool hadProFeatures = containsCommercialFeatures();
@@ -1880,41 +1881,25 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles the case where a dataset UID is not in m_datasetReferences.
+ * @brief Handles a frame that does not match the widget model: one rebuild retry, then the
+ *        (sourceId, structureGeneration) pair is quarantined and its frames dropped cheaply.
+ *        The link, session, and players stay alive because a dashboard build failure is a
+ *        rendering problem, never a reason to take the device away; a new generation retries.
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
   SS_ASSERT(!frame.groups.empty(), return);
   SS_ASSERT(frame.sourceId >= 0, return);
 
+  const quint64 generation = m_sourceStructureGen.value(frame.sourceId);
+  const auto qit           = m_quarantinedSources.constFind(frame.sourceId);
+  if (qit != m_quarantinedSources.cend() && qit.value() == generation)
+    return;
+
   if (m_updateRetryInProgress) {
-    qWarning() << "Failed to build dashboard widget model";
-
-    static auto& connMgr = IO::ConnectionManager::instance();
-    if (connMgr.isConnected()) {
-      connMgr.disconnectDevice();
-      return;
-    }
-
-    static auto& csvPlayer = CSV::Player::instance();
-    if (csvPlayer.isOpen()) {
-      csvPlayer.closeFile();
-      return;
-    }
-
-    static auto& mdf4Player = MDF4::Player::instance();
-    if (mdf4Player.isOpen()) {
-      mdf4Player.closeFile();
-      return;
-    }
-
-#ifdef BUILD_COMMERCIAL
-    static auto& sessPlayer = Sessions::Player::instance();
-    if (sessPlayer.isOpen()) {
-      sessPlayer.closeFile();
-      return;
-    }
-#endif
+    qWarning() << "[Dashboard] widget model build failed twice for source" << frame.sourceId
+               << "-- dropping its frames until the structure changes";
+    m_quarantinedSources.insert(frame.sourceId, generation);
     return;
   }
 
@@ -1932,7 +1917,7 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 {
   SS_ASSERT_HOTPATH(!frame.groups.empty());
-  SS_ASSERT_HOTPATH(!m_datasetReferences.isEmpty());
+  SS_ASSERT_HOTPATH(frame.sourceId >= 0);
 
   if (!m_layoutValid) [[unlikely]]
     return;
@@ -2421,12 +2406,15 @@ UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
 }
 
 /**
- * @brief Pre-resolves the per-source value-propagation tables from m_datasetReferences.
+ * @brief Pre-resolves the per-source value-propagation tables from m_datasetReferences. A
+ *        zero-dataset layout (image/painter-only) still registers an empty table per source:
+ *        a legitimate datasetless frame must find its table instead of tripping the
+ *        missing-dataset quarantine on every frame.
  */
 void UI::Dashboard::buildValuePushes()
 {
-  SS_ASSERT(!m_datasetReferences.isEmpty(), return);
   SS_ASSERT(!m_lastFrame.groups.empty(), return);
+  SS_ASSERT_LOG(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
 
   m_valuePushes.clear();
 

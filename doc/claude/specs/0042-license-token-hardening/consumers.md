@@ -16,9 +16,9 @@ OfflineLicense transitions are ctor-forwarded).
 | `UI/Widgets/Output/Base.cpp:147` | `sendValue` guard per send | sample | — |
 | `MDF4/Player.cpp:271` | `openFile` guard per open | sample | — |
 | `UI/Dashboard.cpp:1721,1753` | plot-sweep setter guards | sample | Dashboard's baked state (frozen) separately wired: `Dashboard.cpp:266` |
-| `IO/ConnectionManager.cpp:767` | `connectDevice` guard per attempt | sample | — |
-| `IO/ConnectionManager.cpp:1871-1913` | `createDriver` commercial-bus gates | **bakes** (device existence) | `ConnectionManager.cpp:973` `activatedChanged -> rebuildDevices` |
-| `IO/Drivers/MQTT.cpp:248,1402` | open request / message drop guards | sample | — |
+| `IO/ConnectionManager.cpp:741-742` | `connectDevice` guard per attempt (now also consults `trial.trialExpired()`) | sample | — |
+| `IO/ConnectionManager.cpp:1780-1822` | `createDriver` commercial-bus gates | **bakes** (device existence) | `ConnectionManager.cpp:951` `activatedChanged -> rebuildDevices` |
+| `IO/Drivers/MQTT.cpp:174-175,1049-1050` | open request (box now queued) / message drop guards | sample | — |
 | `MDF4/Export.cpp:407,617` | export enable per operation | sample | — |
 | `MDF4/Export.cpp:484` | re-derive on activation | **bakes** (export enable) | wired in place (lambda on `activatedChanged`) |
 | `Console/Export.cpp:122,312` | per-operation guards | sample | — |
@@ -37,3 +37,13 @@ Indirect consumers reaching the token through `SerialStudio::activated()` /
 **Result: no unwired bakes-state consumer found (T5 = no-op).** New-consumer rule going
 forward: sampling per operation needs nothing; deriving stored state from the token
 requires a `LemonSqueezy::activatedChanged` connection, recorded here.
+
+## Notes
+
+- `AI/Assistant.cpp` and `AI/Conversation.cpp` gate on `SS_LICENSE_GUARD()` alone by design
+  (build integrity, deliberately tier-free) and are excluded from the token-consumer table.
+- Table refreshed 2026-08-04 after the connection-flow removal (38c9ef66) and the 0043
+  reliability sweep.
+- `LemonSqueezy::activatedChanged` now fires only on real CommercialToken-validity
+  transitions via `notifyEntitlementMaybeChanged()` — consumers listed as re-deriving on
+  `activatedChanged` no longer see redundant emissions.

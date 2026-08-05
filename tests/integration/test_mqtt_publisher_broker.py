@@ -69,7 +69,7 @@ def _project_with_dashboard_publisher(
         "actions": [],
         "mqttPublisher": {
             "enabled": enabled,
-            "mode": 0,
+            "mode": 3,
             "publishNotifications": with_notifications,
             "topicBase": topic_base,
             "notificationTopic": f"{topic_base}/notify",

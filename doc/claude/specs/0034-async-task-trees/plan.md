@@ -1,11 +1,16 @@
 ---
 spec: 0034-async-task-trees
 phase: plan
-status: draft        # draft -> approved (gate before /ss-tasks)
-updated: 2026-07-25
+status: shelved      # reverted 2026-07-30; see spec.md
+updated: 2026-07-30
 ---
 
 # Plan 0034 — Declarative async orchestration for I/O flows
+
+> **Shelved 2026-07-30 (38c9ef66):** the connection-flow layer this plan designs was removed;
+> the design below describes code that no longer exists. Current contract:
+> doc/claude/architecture/io.md. The Async engine itself survives (MQTT::Publisher +
+> diagnostics probes).
 
 > **Phase 2 of 4 — the HOW.** The technical design that satisfies every requirement in
 > [`spec.md`](./spec.md). Read the relevant `doc/claude/` sub-docs and the *actual code*

@@ -198,11 +198,10 @@ def enum_domains():
 def make_dataset(api_client, title="Registry"):
     """Create a one-group, one-dataset project and return (groupId, datasetId)."""
     api_client.create_new_project(title=title)
-    group_id = api_client.command("project.group.add", {"title": "G"})["groupId"]
-    dataset = api_client.command(
-        "project.dataset.add", {"groupId": group_id, "title": "D"}
-    )
-    return group_id, dataset["datasetId"]
+    group_id = api_client.add_group("G")
+    api_client.add_dataset(group_id)
+    datasets = [d for d in api_client.list_datasets() if d["groupId"] == group_id]
+    return group_id, datasets[-1]["datasetId"]
 
 
 def exported_dataset(api_client, group_index=0, dataset_index=0):
@@ -352,7 +351,7 @@ def test_round_trip_matches_baseline(api_client, clean_state):
     """AC2: every corpus project re-exports identically to its baseline, once
     the deltas spec 0036 declares are excluded."""
     if not BASELINE_DIR.is_dir() or not any(BASELINE_DIR.glob("*.json")):
-        pytest.skip("no baselines captured yet (run with --capture-baselines)")
+        pytest.skip("no baselines captured yet (run with SS_CAPTURE_BASELINES=1)")
 
     mismatched = []
     for path in corpus_projects():

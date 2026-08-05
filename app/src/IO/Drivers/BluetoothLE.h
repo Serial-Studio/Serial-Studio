@@ -27,7 +27,6 @@
 #include <QLowEnergyController>
 #include <QLowEnergyService>
 
-#include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -72,11 +71,8 @@ class BluetoothLE : public HAL_Driver {
 
 signals:
   void gattReady();
-  void linkFailed();
   void devicesChanged();
   void servicesChanged();
-  void linkEstablished();
-  void servicesResolved();
   void deviceIndexChanged();
   void characteristicsChanged();
   void deviceConnectedChanged();
@@ -94,14 +90,11 @@ public:
   BluetoothLE& operator=(const BluetoothLE&) = delete;
 
   void close() override;
-  void abortOpen() override;
-  void beginOpen(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
-  [[nodiscard]] int openTimeoutMsec() const noexcept override;
-  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
@@ -112,7 +105,6 @@ public:
   [[nodiscard]] bool ignoreDataDelimeters() const;
   [[nodiscard]] bool operatingSystemSupported() const;
   [[nodiscard]] bool adapterAvailable() const;
-
   [[nodiscard]] static bool adapterPoweredOn();
 
   [[nodiscard]] qint64 writeCharacteristic(const QString& uuid, const QByteArray& data);
@@ -139,42 +131,27 @@ public slots:
 
 private slots:
   void configureCharacteristics();
-  void onControllerConnected();
-  void onControllerDisconnected();
   void onServiceDiscoveryFinished();
   void onControllerError(QLowEnergyController::Error controllerError);
   void onServiceError(QLowEnergyService::ServiceError serviceError);
   void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);
-  void onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error);
   void onCharacteristicChanged(const QLowEnergyCharacteristic& info, const QByteArray& value);
 
 private:
   void announceGattReady();
-  void inheritSiblingGatt();
-  void dialController(const quint64 epoch);
   static void initializeSharedState();
   static void onDeviceDiscovered(const QBluetoothDeviceInfo& device);
   static void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
   static void onHostModeStateChanged(QBluetoothLocalDevice::HostMode state);
 
-  [[nodiscard]] int discoveryWindowMs() const;
-  [[nodiscard]] bool dialSelectedDevice(QString& reason);
-  [[nodiscard]] Async::Task* makeGattStep();
-  [[nodiscard]] Async::Task* makeConnectStep();
-  [[nodiscard]] Async::Task* makeDiscoveryStep();
-  [[nodiscard]] Async::Task* buildOpenFlow();
-
 private:
   int m_deviceIndex;
   bool m_deviceConnected;
   bool m_gattReady;
-  bool m_connecting;
-  bool m_userWantsOpen;
-  quint64 m_openEpoch;
   int m_selectedCharacteristic;
+  int m_pendingServiceIndex;
   int m_pendingCharacteristicIndex;
   int m_probeServiceIndex;
-  QString m_openFailure;
   QString m_pendingServiceUuid;
   QString m_pendingNotifyUuid;
   QJsonObject m_pendingIdentifier;
@@ -187,8 +164,6 @@ private:
   QStringList m_characteristicNames;
 
   QList<QLowEnergyCharacteristic> m_characteristics;
-
-  Async::TaskRunner m_runner;
 
 private:
   static bool s_initialized;

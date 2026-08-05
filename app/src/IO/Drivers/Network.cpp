@@ -21,21 +21,26 @@
 
 #include "IO/Drivers/Network.h"
 
-#include <QDebug>
-#include <QMetaMethod>
-
-#include "IO/ConnectionFlows.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
-#include "SSAssert.h"
 
-//--------------------------------------------------------------------------------------------------
-// Constants: per-attempt windows only. The attempt count and the backoff between attempts are the
-// shared Async::RetryPolicy's, so the whole application retries on one schedule.
-//--------------------------------------------------------------------------------------------------
+static constexpr int kTcpConnectAttempts  = 10;
+static constexpr int kTcpConnectTimeoutMs = 15000;
+static constexpr int kTcpConnectBackoffMs = 300;
+static constexpr int kReopenDebounceMs    = 500;
 
-static constexpr int kLookupTimeoutMs     = 5000;
-static constexpr int kTcpConnectTimeoutMs = 600;
+/**
+ * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
+ *        event loop, and raising one from a connect or socket-error stack leaves the connection
+ *        stuck behind a dialog the user cannot disconnect from.
+ */
+static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+{
+  QMetaObject::invokeMethod(
+    context,
+    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
+    Qt::QueuedConnection);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -45,14 +50,23 @@ static constexpr int kTcpConnectTimeoutMs = 600;
  * @brief Constructs the Network driver and restores persisted socket settings.
  */
 IO::Drivers::Network::Network()
-  : m_lookupId(-1)
-  , m_hostExists(false)
-  , m_connecting(false)
+  : m_hostExists(false)
+  , m_dialInProgress(false)
   , m_udpMulticast(false)
   , m_lookupActive(false)
-  , m_userWantsOpen(false)
-  , m_runner(this)
+  , m_dialAttempts(0)
+  , m_dialMode(QIODevice::ReadWrite)
 {
+  m_reopenTimer.setSingleShot(true);
+  m_reopenTimer.setInterval(kReopenDebounceMs);
+  m_dialRetryTimer.setSingleShot(true);
+  m_dialRetryTimer.setInterval(kTcpConnectBackoffMs);
+  m_dialTimeoutTimer.setSingleShot(true);
+  m_dialTimeoutTimer.setInterval(kTcpConnectTimeoutMs);
+  connect(&m_reopenTimer, &QTimer::timeout, this, &IO::Drivers::Network::reopenAfterConfigChange);
+  connect(&m_dialRetryTimer, &QTimer::timeout, this, &IO::Drivers::Network::startTcpDialAttempt);
+  connect(&m_dialTimeoutTimer, &QTimer::timeout, this, &IO::Drivers::Network::onDialTimeout);
+
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
   auto remoteAddress = m_settings.value("NetworkDriver/address", "").toString();
@@ -78,13 +92,29 @@ IO::Drivers::Network::Network()
   connect(
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
+  connect(
+    &m_tcpSocket, &QAbstractSocket::stateChanged, this, &IO::Drivers::Network::onTcpStateChanged);
+  connect(&m_udpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
+    Q_EMIT configurationChanged();
+  });
+
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
   connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
 
+  connect(this,
+          &IO::Drivers::Network::addressChanged,
+          this,
+          &IO::Drivers::Network::scheduleReopenIfActive);
   connect(
-    &m_tcpSocket, &QTcpSocket::disconnected, this, &IO::Drivers::Network::onSocketDisconnected);
-
-  connect(&m_runner, &Async::TaskRunner::finished, this, &IO::Drivers::Network::onOpenFlowFinished);
+    this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::scheduleReopenIfActive);
+  connect(this,
+          &IO::Drivers::Network::socketTypeChanged,
+          this,
+          &IO::Drivers::Network::scheduleReopenIfActive);
+  connect(this,
+          &IO::Drivers::Network::udpMulticastChanged,
+          this,
+          &IO::Drivers::Network::scheduleReopenIfActive);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -92,14 +122,16 @@ IO::Drivers::Network::Network()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the current network connection and discards the socket signals/slots. The open
- *        flow is cancelled first so a pending attempt cannot re-arm the sockets behind the close.
+ * @brief Closes the current network connection and cancels an in-flight TCP dial. Stopping the
+ *        dial state and its timers first is what makes a user's disconnect final: nothing may
+ *        redial after close() returns.
  */
 void IO::Drivers::Network::close()
 {
-  m_connecting    = false;
-  m_userWantsOpen = false;
-  m_runner.cancel();
+  m_dialInProgress = false;
+  m_reopenTimer.stop();
+  m_dialRetryTimer.stop();
+  m_dialTimeoutTimer.stop();
 
   disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
   disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
@@ -117,20 +149,24 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
-  bool open  = false;
-  auto state = QAbstractSocket::UnconnectedState;
+  if (socketType() == QAbstractSocket::TcpSocket)
+    return m_tcpSocket.isOpen() && tcpLinkUp();
 
   if (socketType() == QAbstractSocket::UdpSocket) {
-    open  = m_udpSocket.isOpen();
-    state = m_udpSocket.state();
+    const auto state = m_udpSocket.state();
+    return m_udpSocket.isOpen()
+        && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
   }
 
-  else if (socketType() == QAbstractSocket::TcpSocket) {
-    open  = m_tcpSocket.isOpen() && m_tcpSocket.peerPort() != 0;
-    state = m_tcpSocket.state();
-  }
+  return false;
+}
 
-  return open && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
+/**
+ * @brief Returns true while a TCP dial started by open() has not yet connected or failed.
+ */
+bool IO::Drivers::Network::isConnecting() const noexcept
+{
+  return m_dialInProgress;
 }
 
 /**
@@ -193,152 +229,159 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
 }
 
 /**
- * @brief Returns true; the driver opens through an orchestrated, non-blocking flow.
- */
-bool IO::Drivers::Network::supportsAsyncOpen() const noexcept
-{
-  return true;
-}
-
-/**
- * @brief Starts an open attempt and reports whether one is now in flight. The outcome itself
- *        arrives through openFinished(), which is what callers of an async driver read.
+ * @brief Opens a network connection with the specified mode. TCP dials asynchronously: the true
+ *        verdict means the attempt started, the socket's own state change reports the outcome
+ *        (io.md "connectDevice(int) reports the outcome itself"). UDP binds synchronously.
  */
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
-  beginOpen(mode);
-  return isOpen() || m_runner.isRunning();
-}
-
-/**
- * @brief Starts the open sequence and returns immediately. Nothing here waits on the socket, so
- *        an unreachable address costs the interface nothing and a disconnect lands at once.
- */
-void IO::Drivers::Network::beginOpen(const QIODevice::OpenMode mode)
-{
-  SS_ASSERT(mode != QIODevice::NotOpen, {
-    Q_EMIT openFinished(false, QStringLiteral("invalid open mode"));
-    return;
-  });
-
   close();
+  m_dialMode = mode;
 
-  m_connecting    = true;
-  m_userWantsOpen = true;
-  m_runner.run(buildOpenFlow(mode));
-}
-
-/**
- * @brief Abandons an attempt in flight, releasing the sockets it half-opened.
- */
-void IO::Drivers::Network::abortOpen()
-{
-  close();
-}
-
-/**
- * @brief Composes the open sequence: resolve the host, reach the endpoint, then activate the
- *        socket. One attempt per run; the attempt count and the wait between attempts belong to
- *        the shared retry policy that wraps this flow.
- */
-Async::Task* IO::Drivers::Network::buildOpenFlow(const QIODevice::OpenMode mode)
-{
-  SS_ASSERT_LOG(mode != QIODevice::NotOpen);
-
-  auto* group = Async::sequential(QStringLiteral("network-open"));
-  group->addChild(makeLookupStep());
+  auto hostAddr = remoteAddress();
+  if (hostAddr.isEmpty())
+    hostAddr = defaultAddress();
 
   if (socketType() == QAbstractSocket::TcpSocket) {
-    auto host = remoteAddress();
-    if (host.isEmpty())
-      host = defaultAddress();
-
-    group->addChild(Flows::makeSocketConnect(
-      &m_tcpSocket, host, tcpPort(), kTcpConnectTimeoutMs, m_runner.clock()));
-  }
-
-  else
-    group->addChild(Async::invoke(QStringLiteral("udp-bind"),
-                                  [this](QString& reason) { return bindUdpSocket(reason); }));
-
-  group->addChild(Async::invoke(QStringLiteral("socket-activate"), [this, mode](QString& reason) {
-    return activateSocket(mode, reason);
-  }));
-
-  return group;
-}
-
-/**
- * @brief Builds the address-resolution step: a wait on the lookup already in flight, whose
- *        cancellation aborts the real lookup, or an immediate pass when nothing is pending.
- */
-Async::Task* IO::Drivers::Network::makeLookupStep()
-{
-  if (!m_lookupActive)
-    return Async::invoke(QStringLiteral("dns-lookup"), [](QString& reason) {
-      Q_UNUSED(reason);
-      return true;
-    });
-
-  auto* step = Async::awaitSignal(QStringLiteral("dns-lookup"));
-  step->onSuccess(this, &IO::Drivers::Network::lookupActiveChanged);
-  step->setAbortHandler([this]() { abortLookup(); });
-
-  return Async::timeout(step, kLookupTimeoutMs, m_runner.clock());
-}
-
-/**
- * @brief Binds the UDP socket, enlarges its receive buffer and joins the multicast group.
- */
-bool IO::Drivers::Network::bindUdpSocket(QString& reason)
-{
-  if (!m_udpSocket.bind(udpLocalPort(),
-                        QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
-    qWarning() << "UDP bind failed on port" << udpLocalPort() << ":" << m_udpSocket.errorString();
-    reason = m_udpSocket.errorString();
-    return false;
-  }
-
-  enlargeUdpReceiveBuffer();
-  if (!udpMulticast())
+    m_dialHost       = hostAddr;
+    m_dialAttempts   = 0;
+    m_dialInProgress = true;
+    connect(&m_tcpSocket,
+            &QTcpSocket::readyRead,
+            this,
+            &IO::Drivers::Network::onReadyRead,
+            Qt::UniqueConnection);
+    QMetaObject::invokeMethod(
+      this, &IO::Drivers::Network::startTcpDialAttempt, Qt::QueuedConnection);
     return true;
-
-  const QHostAddress group(m_address);
-  if (group.isNull() || !m_udpSocket.joinMulticastGroup(group)) {
-    qWarning() << "UDP multicast join failed for" << m_address << ":" << m_udpSocket.errorString();
-    reason = m_udpSocket.errorString();
-    return false;
   }
-
-  return true;
-}
-
-/**
- * @brief Opens the connected socket in the requested mode and wires it to the read path.
- */
-bool IO::Drivers::Network::activateSocket(const QIODevice::OpenMode mode, QString& reason)
-{
-  SS_ASSERT(mode != QIODevice::NotOpen, {
-    reason = QStringLiteral("invalid open mode");
-    return false;
-  });
 
   QIODevice* socket = nullptr;
-  if (socketType() == QAbstractSocket::TcpSocket)
-    socket = static_cast<QIODevice*>(&m_tcpSocket);
 
-  else if (socketType() == QAbstractSocket::UdpSocket)
+  if (socketType() == QAbstractSocket::UdpSocket) {
+    if (!m_udpSocket.bind(udpLocalPort(),
+                          QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
+      qWarning() << "UDP bind failed on port" << udpLocalPort() << ":" << m_udpSocket.errorString();
+      close();
+      return false;
+    }
+
+    enlargeUdpReceiveBuffer();
     socket = static_cast<QIODevice*>(&m_udpSocket);
-
-  if (!socket || !socket->open(mode)) {
-    reason = QStringLiteral("the socket could not be opened");
-    return false;
   }
 
-  connect(
-    socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead, Qt::UniqueConnection);
+  if (socketType() == QAbstractSocket::UdpSocket && udpMulticast()) {
+    const QHostAddress literal(m_address);
+    const QHostAddress group = literal.isNull() ? m_resolvedAddress : literal;
+    if (group.isNull() || !m_udpSocket.joinMulticastGroup(group)) {
+      qWarning() << "UDP multicast join failed for" << m_address << ":"
+                 << m_udpSocket.errorString();
+      close();
+      return false;
+    }
+  }
 
-  return true;
+  if (socket && socket->open(mode)) {
+    connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
+    return true;
+  }
+
+  close();
+  return false;
+}
+
+/**
+ * @brief Returns true only for a genuine established TCP link: a reused QTcpSocket can fake
+ *        ConnectedState with peerPort() == 0 when connectToHost() runs in the same event-loop
+ *        turn as an abort() (the 2026-07 phantom-connect pathology), so the state alone is
+ *        never trusted.
+ */
+bool IO::Drivers::Network::tcpLinkUp() const
+{
+  return m_tcpSocket.state() == QAbstractSocket::ConnectedState && m_tcpSocket.peerPort() != 0;
+}
+
+/**
+ * @brief Starts (or retries) one TCP connect attempt without blocking the GUI thread. A socket
+ *        not settled in UnconnectedState is aborted and the attempt re-queued (same-turn
+ *        abort + dial fakes a phantom connect); onErrorOccurred() picks retry vs failure.
+ */
+void IO::Drivers::Network::startTcpDialAttempt()
+{
+  if (!m_dialInProgress)
+    return;
+
+  if (m_tcpSocket.state() != QAbstractSocket::UnconnectedState) {
+    m_tcpSocket.abort();
+    QMetaObject::invokeMethod(
+      this, &IO::Drivers::Network::startTcpDialAttempt, Qt::QueuedConnection);
+    return;
+  }
+
+  ++m_dialAttempts;
+  m_tcpSocket.connectToHost(m_dialHost, tcpPort(), m_dialMode);
+  m_dialTimeoutTimer.start();
+}
+
+/**
+ * @brief Fails a dial that neither connected nor errored within the timeout window: aborts the
+ *        socket, reports once, and tears the device down so the connect button stays truthful.
+ */
+void IO::Drivers::Network::onDialTimeout()
+{
+  if (!m_dialInProgress)
+    return;
+
+  m_dialInProgress = false;
+  m_dialRetryTimer.stop();
+  m_tcpSocket.abort();
+
+  static auto& connectionManager = ConnectionManager::instance();
+  queueErrorBox(&connectionManager,
+                tr("Network socket error"),
+                tr("Connection to %1:%2 timed out.").arg(m_dialHost, QString::number(tcpPort())));
+  connectionManager.disconnectDevice(this);
+}
+
+/**
+ * @brief Debounces a reopen while the link is live so an endpoint edit (address, port, socket
+ *        type, multicast) takes effect without a manual disconnect/reconnect cycle. A closed
+ *        driver stays closed: configuration edits never dial on their own.
+ */
+void IO::Drivers::Network::scheduleReopenIfActive()
+{
+  if (!isOpen() && !isConnecting())
+    return;
+
+  m_reopenTimer.start();
+}
+
+/**
+ * @brief Applies a debounced endpoint change by redialing with the mode the link was opened in.
+ */
+void IO::Drivers::Network::reopenAfterConfigChange()
+{
+  if (!isOpen() && !isConnecting())
+    return;
+
+  const auto mode = m_dialMode;
+  close();
+  (void)open(mode);
+}
+
+/**
+ * @brief Tracks the TCP socket's state: a successful connect ends the dial and stops its timers,
+ *        and every transition is forwarded so ConnectionManager can refresh the connected state.
+ */
+void IO::Drivers::Network::onTcpStateChanged()
+{
+  if (tcpLinkUp()) {
+    m_dialInProgress = false;
+    m_dialRetryTimer.stop();
+    m_dialTimeoutTimer.stop();
+  }
+
+  Q_EMIT configurationChanged();
 }
 
 /**
@@ -499,7 +542,7 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 }
 
 /**
- * @brief Sets the IPv4 or IPv6 address, performing a DNS lookup if needed.
+ * @brief Sets the IPv4/IPv6 literal or host name, resolving names such as "localhost" through DNS.
  */
 void IO::Drivers::Network::setRemoteAddress(const QString& address)
 {
@@ -510,6 +553,7 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
   }
 
   else {
+    m_pendingLookup.clear();
     m_hostExists      = true;
     m_resolvedAddress = QHostAddress(address);
   }
@@ -520,32 +564,15 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
 }
 
 /**
- * @brief Performs a DNS lookup for the given host name, superseding any lookup still in flight so
- *        an older answer cannot land after a newer address was typed.
+ * @brief Starts a DNS lookup, recording the host it belongs to so an out-of-order result for a
+ *        host the user has already replaced cannot validate the current one.
  */
 void IO::Drivers::Network::lookup(const QString& host)
 {
-  abortLookup();
-
-  m_lookupActive = true;
+  m_pendingLookup = host.simplified();
+  m_lookupActive  = true;
   Q_EMIT lookupActiveChanged();
-  m_lookupId =
-    QHostInfo::lookupHost(host.simplified(), this, &IO::Drivers::Network::lookupFinished);
-}
-
-/**
- * @brief Aborts the lookup in flight, if any. Stopping the real lookup is what makes a cancelled
- *        resolution step release its resources instead of merely ignoring the answer.
- */
-void IO::Drivers::Network::abortLookup()
-{
-  if (m_lookupId < 0)
-    return;
-
-  QHostInfo::abortHostLookup(m_lookupId);
-  m_lookupId     = -1;
-  m_lookupActive = false;
-  Q_EMIT lookupActiveChanged();
+  QHostInfo::lookupHost(m_pendingLookup, this, &IO::Drivers::Network::lookupFinished);
 }
 
 /**
@@ -611,80 +638,70 @@ void IO::Drivers::Network::onReadyRead()
 }
 
 /**
- * @brief Sets the host IP address when the lookup finishes. An answer that belongs to a
- *        superseded lookup is dropped rather than allowed to stomp the current address state.
+ * @brief Stores the resolved address when the lookup finishes. UDP sends to the resolved literal,
+ *        so a name left unresolved here makes every datagram fail; a failed or superseded lookup
+ *        clears it and still reports, otherwise the UI keeps offering a host that cannot be dialed.
  */
 void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
-  if (m_lookupId >= 0 && info.lookupId() != m_lookupId)
+  if (!m_pendingLookup.isEmpty() && info.hostName() != m_pendingLookup)
     return;
 
-  m_lookupId     = -1;
+  m_pendingLookup.clear();
   m_lookupActive = false;
   Q_EMIT lookupActiveChanged();
 
-  if (info.error() == QHostInfo::NoError) {
-    auto addresses = info.addresses();
-    if (addresses.count() >= 1) {
-      m_hostExists = true;
-      Q_EMIT addressChanged();
-    }
-  }
-}
-
-/**
- * @brief Reports a link that went down without the application asking, which is what lets a
- *        supervised flow bring it back. A disconnect during an attempt is the attempt's own
- *        business and is not a drop.
- */
-void IO::Drivers::Network::onSocketDisconnected()
-{
-  if (!m_userWantsOpen || m_connecting)
-    return;
-
-  Q_EMIT linkDropped();
-}
-
-/**
- * @brief Reports the attempt's outcome. A cancel is a close the owner asked for and says nothing;
- *        a failure closes the sockets first, which is what the blocking path did on its way out.
- */
-void IO::Drivers::Network::onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error)
-{
-  if (outcome == Async::Outcome::Cancelled)
-    return;
-
-  m_connecting = false;
-  if (outcome == Async::Outcome::Success) {
-    Q_EMIT openFinished(true, QString());
+  const auto resolved = preferredAddress(info.addresses());
+  if (info.error() != QHostInfo::NoError || resolved.isNull()) {
+    m_hostExists = false;
+    m_resolvedAddress.clear();
+    Q_EMIT addressChanged();
     return;
   }
 
-  const QString reason = error.reason.isEmpty() ? QStringLiteral("open failed") : error.reason;
-  close();
-  Q_EMIT openFinished(false, reason);
+  m_hostExists      = true;
+  m_resolvedAddress = resolved;
+  Q_EMIT addressChanged();
 }
 
 /**
- * @brief Handles socket errors. While a supervised flow holds a TCP link that came up, the error
- *        is the drop itself: it feeds linkDropped() so the flow retries on the recovery schedule,
- *        and the teardown below is deferred to the supervisor's final give-up. UDP, and a link no
- *        flow is watching, keep the immediate teardown and its message box.
+ * @brief Picks the address to dial from a DNS result, preferring IPv4 because a dual-stack name
+ *        such as "localhost" resolves to ::1 first and most local test servers bind IPv4 only.
+ */
+QHostAddress IO::Drivers::Network::preferredAddress(const QList<QHostAddress>& addresses)
+{
+  for (const auto& address : addresses)
+    if (address.protocol() == QAbstractSocket::IPv4Protocol)
+      return address;
+
+  return addresses.isEmpty() ? QHostAddress() : addresses.first();
+}
+
+/**
+ * @brief Handles socket errors by disconnecting and reporting. A refused dial retries with a
+ *        short backoff before failing for real; the teardown destroys this driver, so the box is
+ *        queued on the connection manager: raising it here would outlive the object it was raised
+ *        from and block the very disconnect it is reporting.
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
-  if (m_connecting)
-    return;
+  if (m_dialInProgress && socketType() == QAbstractSocket::TcpSocket) {
+    m_dialTimeoutTimer.stop();
+    const bool retryable = socketError == QAbstractSocket::ConnectionRefusedError
+                        || socketError == QAbstractSocket::RemoteHostClosedError;
+    if (retryable && m_dialAttempts < kTcpConnectAttempts) {
+      m_dialRetryTimer.start();
+      return;
+    }
+
+    m_dialInProgress = false;
+    qWarning() << "[Network] TCP dial to" << m_dialHost << ":" << tcpPort() << "failed after"
+               << m_dialAttempts << "attempt(s):" << m_tcpSocket.errorString();
+  }
 
   if (socketType() == QAbstractSocket::UdpSocket
       && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
     return;
-
-  const auto dropped = QMetaMethod::fromSignal(&IO::HAL_Driver::linkDropped);
-  if (socketType() == QAbstractSocket::TcpSocket && m_userWantsOpen && isSignalConnected(dropped)) {
-    Q_EMIT linkDropped();
-    return;
-  }
 
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)
@@ -695,8 +712,8 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
     error = QString::number(socketError);
 
   static auto& connectionManager = ConnectionManager::instance();
+  queueErrorBox(&connectionManager, tr("Network socket error"), error);
   connectionManager.disconnectDevice(this);
-  Misc::Utilities::showMessageBox(tr("Network socket error"), error, QMessageBox::Critical);
 }
 
 //--------------------------------------------------------------------------------------------------

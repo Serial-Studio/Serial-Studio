@@ -182,13 +182,11 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
     QStringLiteral("Returns the current connection state: isConnected, paused, "
                    "busType + busTypeLabel, configurationOk (true when the active "
                    "bus has enough config to call io.connect), readOnly/readWrite "
-                   "capability flags. Call this first when the user reports a "
-                   "connection issue. For a link that keeps dropping, read "
-                   "linkState (idle/connecting/retrying/connected), "
-                   "reconnectAttempt (open attempts in the sequence now running; 0 "
-                   "when the link is up or idle) and activeFlows (devices currently "
-                   "supervised by the reconnect engine -- steady while connected, "
-                   "and a value that grows across drops means flows are leaking)."),
+                   "capability flags and linkState (connected, connecting or idle; "
+                   "connecting means a dial is in flight). Call this first when the "
+                   "user reports a connection issue. Reconnection is each driver's "
+                   "own business, so no attempt counter is reported: poll "
+                   "isConnected to watch a link that keeps dropping."),
     emptySchema,
     &getStatus);
 
@@ -392,24 +390,21 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
 
   static auto& manager = IO::ConnectionManager::instance();
   const int busInt     = static_cast<int>(manager.busType());
-  const int attempt    = manager.reconnectAttempt();
   const bool ok        = manager.configurationOk();
   const bool live      = manager.isConnected();
   const bool paused    = manager.paused();
   const QString link   = manager.linkState();
 
   QJsonObject result;
-  result[QStringLiteral("isConnected")]      = live;
-  result[QStringLiteral("paused")]           = paused;
-  result[Keys::BusType]                      = busInt;
-  result[QStringLiteral("busTypeLabel")]     = API::EnumLabels::busTypeLabel(busInt);
-  result[QStringLiteral("busTypeSlug")]      = API::EnumLabels::busTypeSlug(busInt);
-  result[QStringLiteral("configurationOk")]  = ok;
-  result[QStringLiteral("readOnly")]         = manager.readOnly();
-  result[QStringLiteral("readWrite")]        = manager.readWrite();
-  result[QStringLiteral("linkState")]        = link;
-  result[QStringLiteral("activeFlows")]      = manager.activeFlowCount();
-  result[QStringLiteral("reconnectAttempt")] = attempt;
+  result[QStringLiteral("isConnected")]     = live;
+  result[QStringLiteral("paused")]          = paused;
+  result[Keys::BusType]                     = busInt;
+  result[QStringLiteral("busTypeLabel")]    = API::EnumLabels::busTypeLabel(busInt);
+  result[QStringLiteral("busTypeSlug")]     = API::EnumLabels::busTypeSlug(busInt);
+  result[QStringLiteral("configurationOk")] = ok;
+  result[QStringLiteral("readOnly")]        = manager.readOnly();
+  result[QStringLiteral("readWrite")]       = manager.readWrite();
+  result[QStringLiteral("linkState")]       = link;
 
   const auto& availableBuses = manager.availableBuses();
   if (busInt >= 0 && busInt < availableBuses.count())
@@ -420,11 +415,9 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
     summary = QStringLiteral("Connected via %1%2.")
                 .arg(API::EnumLabels::busTypeLabel(busInt))
                 .arg(paused ? QStringLiteral(" (paused)") : QString());
-  else if (link == QStringLiteral("retrying") || link == QStringLiteral("connecting"))
-    summary = QStringLiteral("Not connected. %1 is %2 (open attempt %3); the link "
-                             "recovers on its own unless the attempt cap is reached.")
-                .arg(API::EnumLabels::busTypeLabel(busInt), link)
-                .arg(attempt);
+  else if (link == QStringLiteral("connecting"))
+    summary = QStringLiteral("Connecting via %1 (dial in flight).")
+                .arg(API::EnumLabels::busTypeLabel(busInt));
   else if (!ok)
     summary = QStringLiteral("Not connected. The %1 driver is not fully "
                              "configured yet.")

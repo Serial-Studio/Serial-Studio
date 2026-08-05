@@ -1,7 +1,7 @@
 ---
 spec: 0036-property-registry
 title: Property registry (declare once, derive everywhere)
-status: draft        # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # implemented + CI-gated; maintainer ACs pending
 created: 2026-07-25
 author: Claude (roadmap R2, with Alex)
 ---

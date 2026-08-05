@@ -104,6 +104,7 @@ def test_random_mutation_undo_redo_round_trip(api_client, clean_state):
     """N random mutations, undo all -> baseline; redo all -> final state."""
     rng = random.Random(20260725)
 
+    api_client.command("project.new")
     baseline = _export(api_client)
     issued = _random_mutations(api_client, rng, 50)
     assert issued == 50
@@ -158,9 +159,9 @@ def test_batch_undoes_as_single_step(api_client, clean_state):
     baseline = _export(api_client)
 
     ops = [
-        {"command": "project.group.add", "params": {"title": "A"}},
-        {"command": "project.group.add", "params": {"title": "B"}},
-        {"command": "project.dataset.add", "params": {"groupId": 0}},
+        {"command": "project.group.add", "params": {"title": "A", "widgetType": 0}},
+        {"command": "project.group.add", "params": {"title": "B", "widgetType": 0}},
+        {"command": "project.dataset.add", "params": {"groupId": 0, "options": 0}},
         {"command": "project.setTitle", "params": {"title": "Batched"}},
     ]
     result = api_client.command("project.batch", {"ops": ops})
@@ -182,6 +183,7 @@ def test_batch_undoes_as_single_step(api_client, clean_state):
 @pytest.mark.project
 def test_empty_history_responses_are_wellformed(api_client, clean_state):
     """undo/redo on empty history: success with performed:false, not errors."""
+    api_client.command("project.new")
     result = _undo(api_client)
     assert result.get("performed") is False
     assert result.get("reason")
@@ -244,6 +246,7 @@ def test_modified_flag_tracks_save_point(api_client, clean_state, tmp_path):
     """Undo past the save point re-dirties; redo back to it cleans."""
     api_client.add_group("Pre A")
     api_client.add_group("Pre B")
+    api_client.add_dataset(0)
 
     proj_path = tmp_path / "undo_savepoint.ssproj"
     save_result = api_client.command("project.save", {"filePath": str(proj_path)})

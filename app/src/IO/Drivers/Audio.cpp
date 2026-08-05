@@ -29,6 +29,8 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
+#include "Misc/Utilities.h"
+#include "SSAssert.h"
 
 // SPSC queue depth for audio in/out buffers; sized for ~24Hz drain vs ~10ms produce
 static constexpr std::size_t kAudioQueueCapacity = 1024;
@@ -304,6 +306,7 @@ IO::Drivers::Audio::Audio()
   , m_outputQueue(kAudioQueueCapacity)
   , m_inputWorkerTimer(nullptr)
   , m_sampleClockValid(false)
+  , m_stopNotifyArmed(false)
   , m_rtCaptureFormat(ma_format_unknown)
   , m_rtPlaybackFormat(ma_format_unknown)
   , m_rtCaptureChannels(0)
@@ -371,6 +374,7 @@ void IO::Drivers::Audio::closeDevice()
   if (!m_isOpen)
     return;
 
+  m_stopNotifyArmed.store(false, std::memory_order_release);
   ma_device_uninit(&m_device);
 
   if (m_inputWorkerTimer) {
@@ -507,6 +511,7 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   // clang-format off
   m_config.pUserData = this;
   m_config.dataCallback = &Audio::callback;
+  m_config.notificationCallback = &Audio::notificationCallback;
   m_config.sampleRate = m_inputCapabilities[m_selectedInputDevice].supportedSampleRates[m_selectedSampleRate];
   // clang-format on
 
@@ -539,8 +544,53 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 
   startInputWorker();
 
+  m_stopNotifyArmed.store(true, std::memory_order_release);
   m_isOpen = true;
   return true;
+}
+
+/**
+ * @brief Marshals a backend-initiated stop (device yanked, exclusive-mode steal, fatal xrun)
+ *        onto the main thread; a teardown-initiated stop is disarmed before ma_device_uninit
+ *        so only the backend's own stops reach onBackendStopped().
+ */
+void IO::Drivers::Audio::notificationCallback(const ma_device_notification* notification)
+{
+  SS_ASSERT(notification != nullptr, return);
+  SS_ASSERT(notification->pDevice != nullptr, return);
+
+  if (notification->type != ma_device_notification_type_stopped)
+    return;
+
+  auto* self = static_cast<Audio*>(notification->pDevice->pUserData);
+  if (!self || !self->m_stopNotifyArmed.exchange(false, std::memory_order_acq_rel))
+    return;
+
+  QMetaObject::invokeMethod(self, "onBackendStopped", Qt::QueuedConnection);
+}
+
+/**
+ * @brief Tears the session down after the audio backend stopped the stream on its own; the box
+ *        is queued after the teardown so the UI never shows a dead stream as connected.
+ */
+void IO::Drivers::Audio::onBackendStopped()
+{
+  if (!m_isOpen)
+    return;
+
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.disconnectDevice(this);
+
+  QMetaObject::invokeMethod(
+    this,
+    [] {
+      Misc::Utilities::showMessageBox(
+        tr("Audio Device Stopped"),
+        tr("The audio backend stopped the stream. The device may have been "
+           "unplugged or claimed by another application."),
+        QMessageBox::Warning);
+    },
+    Qt::QueuedConnection);
 }
 
 /**

@@ -219,11 +219,12 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
     return false;
   }
 
-  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
-    return g.widget == QLatin1String("image");
-  });
+  const bool hasDatasetlessGroup =
+    std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
+      return g.widget == QLatin1String("image") || g.widget == QLatin1String("painter");
+    });
 
-  if (datasetCount() <= 0 && !hasImageGroup) {
+  if (datasetCount() <= 0 && !hasDatasetlessGroup) {
     qWarning() << "[ProjectModel] Project needs at least one dataset";
     return false;
   }

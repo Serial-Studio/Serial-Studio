@@ -17,74 +17,109 @@
 - Live drivers may have empty device lists. UART/Modbus call `refreshSerialDevices()` /
   `refreshSerialPorts()` in `open()` if empty.
 
-## Async Orchestration — Task Trees & Connection Flows (spec 0034)
+## Opening a Link — Synchronous, Per-Driver
 
-Connection lifecycles are declared as task trees instead of per-driver boolean state machines.
-The engine is `app/src/Async/`: `TaskTree.{h,cpp}` (`Async::Task` base + `SequentialGroup`,
-`ParallelGroup`, `TimeoutTask`, `RetryTask`, `SignalTask`, `InvokeTask`, `TaskRunner`, plus the
-`sequential()` / `parallel()` / `timeout()` / `retry()` / `awaitSignal()` / `invoke()` builders),
-`RetryPolicy.{h,cpp}`, and `AsyncClock.h` (the timer indirection the unit tests drive with a
-virtual clock).
+`DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls
+`m_driver->open(mode)` directly. There is no orchestration layer: `HAL_Driver` declares no
+async-open hook, `DeviceManager` owns no task runner, and nothing sits between
+`ConnectionManager::connectDevice()` and the driver. The spec-0034 `IO::ConnectionFlows` layer
+and the `HAL_Driver` hooks it drove (`supportsAsyncOpen`, `beginOpen`, `abortOpen`,
+`openTimeoutMsec`, `openFinished`, `linkDropped`) were removed 2026-07-30; spec 0034's docs
+describe a design that is no longer in the tree.
+
+- **Drop recovery is each driver's own business.** UART arms `m_pendingReconnect` plus its own
+  1 s `m_reconnectTimer` in `handleError()` on a `QSerialPort::ResourceError` (live instances
+  recover too — the timer belongs to the instance, not the UI driver's 1 Hz rescan), matches
+  the returned port by name, and `close()` disarms both so a manual disconnect is always final.
+  MQTT funnels every configuration change and error into `scheduleReconnectIfActive()`. Modbus
+  and Network TCP dial asynchronously with driver-local timer retries (below). A new driver
+  that needs recovery adds it locally — there is no shared supervisor to inherit.
+- **The connected state is published idempotently.** Every lifecycle path funnels into the
+  private `notifyConnectedStateChanged()`, which emits `connectedChanged()` only when the
+  `isConnected()` flag or the open-device count actually moved. Callers never reason about
+  whether another path already reported; calling it twice is harmless. The
+  `m_connectPending` / `m_connectFanOut` pair and `concludeConnectRequest()` survive only to
+  settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
+  "connected" so the button aborts instead of stacking a second attempt.
+- **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`).
+  Network (TCP), BluetoothLE, MQTT, Modbus, CANBus and Process override it;
+  `toggleConnection()` aborts when any device reports an in-flight dial, and
+  `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
+  idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
+  Network's timer-driven dial (10 refusal retries at 300 ms, 15 s timeout, `close()`
+  cancels; RTU gets one attempt) and its 500 ms endpoint-edit reopen debounce (host, port,
+  protocol, serial parameters — a closed driver never dials on its own). Process reports
+  the launch phase and the pipe's wait-for-writer window as connecting instead of faking an
+  open channel. Audio arms miniaudio's stopped notification while open: a backend-initiated
+  stop (device yanked, exclusive-mode steal) disconnects the device instead of streaming
+  silence, and `closeDevice()` disarms it before `ma_device_uninit` so teardown's own stop
+  never re-enters. `linkState()` reports `connected`, `connecting` or `idle` (connected
+  wins when a live session and a dialing device coexist); `io.getStatus` mirrors it.
+- **Network TCP dials asynchronously.** `open()` starts `connectToHost()` and returns true
+  ("attempt started"); a refused dial retries up to 10 times with a 300 ms backoff (a server a
+  control-script onConnect() just launched needs seconds to listen), a 15 s per-attempt timer
+  bounds a hung dial, and `close()` cancels everything — nothing may redial after it returns.
+  Success reaches the UI via `stateChanged` → `configurationChanged` →
+  `refreshConnectedState()`; failure via a queued error box + `disconnectDevice(this)`.
+  **Writes flow during the dial**: `DeviceManager::write` accepts data while
+  `isConnecting()` and QTcpSocket buffers it until the connect lands, so a control script's
+  `io.connect()` + `writeData()` sequence works without waiting out the dial (the ISS example
+  broke silently without this). An endpoint edit (address/port/socket type/multicast) on a
+  live driver reopens it after a 500 ms debounce; a closed driver never dials on its own.
+- **`sessionClosed` means the USER (or an API client / player takeover) ended the session** —
+  it fires only from the explicit `disconnectDevice()` path. Driver-initiated drops,
+  `rebuildDevices` churn, and failed dials never emit it: `API::ProcessLauncher` reaps every
+  script-launched helper on this signal, and those helpers usually serve the very link that
+  is dropping or retrying (the dual-drone example died to a source-0 drop reaping the helper
+  while source 1 was still dialing). A drop is a link event; the session outlives it.
+- **`connectDevice(int)` reports the outcome itself.** `DeviceManager::open()` returns the
+  driver's verdict instead of discarding it, and `connectDevice(int)` passes that to
+  `onDeviceOpenFinished(deviceId, ok, reason)` — the only thing driving the spec-0035
+  diagnostics auto-trigger now that no signal reports an open. Use the open call's return value,
+  **never `isOpen()`**: MQTT, TCP and BLE dial asynchronously, so `isOpen()` is still false when
+  a perfectly good attempt returns, and diagnostics would probe on every connect. The
+  consequence is that a *later* async failure does not auto-trigger anything; the synchronous
+  refusals diagnostics care about most (missing port, permissions) do. The reason string is
+  never shown — diagnostics ignore it and the driver surfaces its own error.
+- **Nothing reports a drop centrally, but every drop must reach the UI.** A driver that loses
+  its link either calls `disconnectDevice(this)` with a **queued** error box (`UART` and
+  `Network` are the reference; a synchronous modal inside an open() or error stack spins a
+  nested event loop mid-emission) or guarantees a `configurationChanged` emission on the state
+  transition (`Modbus`, `CANBus`, `MQTT`). BLE hooks `QLowEnergyController::errorOccurred`
+  (a failed dial emits no `disconnected`); Process marshals a pipe-peer close to
+  `onPipeClosed()` from the read thread. CANBus rate-limits its error box (one per 5 s) so a
+  flapping bus cannot stack a modal storm.
+- **`rebuildDevices()` reacts to real transitions only.** It is wired to
+  `LemonSqueezy::activatedChanged`, which since 2026-08-04 fires only when
+  `CommercialToken` validity actually flipped (`notifyEntitlementMaybeChanged()`), and to the
+  project structure/operation-mode signals. It coalesces reentrant triggers into one queued
+  follow-up, and the connect/disconnect fan-outs iterate id snapshots because a close can spin
+  the event loop into another rebuild.
+
+## The Async Task-Tree Engine (`app/src/Async/`)
+
+The engine outlived the connection flows and is still built and unit-tested
+(`tst_async_engine`, `tst_async_combinators`): `TaskTree.{h,cpp}` (`Async::Task` base +
+`SequentialGroup`, `ParallelGroup`, `TimeoutTask`, `RetryTask`, `SignalTask`, `InvokeTask`,
+`TaskRunner`, plus the `sequential()` / `parallel()` / `timeout()` / `retry()` /
+`awaitSignal()` / `invoke()` builders), `RetryPolicy.{h,cpp}`, and `AsyncClock.h` (the timer
+indirection the unit tests drive with a virtual clock).
+
+Two consumers remain: `MQTT::Publisher` (its reconnect flow, runner built in
+`PublisherWorker::bootstrap()` on the worker thread) and the spec-0035 diagnostics probes
+(`Misc::ConnectionDiagnostics` + `Misc/Diagnostics/NetworkChecks`). No IO driver uses it.
 
 - **Thread-affine, never thread-safe.** A tree lives on the thread that created its
-  `TaskRunner` (asserted in the ctor); no mutex, no new thread, no cross-thread hop. The MQTT
-  publisher's runner is built in `PublisherWorker::bootstrap()` on the worker thread.
+  `TaskRunner` (asserted in the ctor); no mutex, no new thread, no cross-thread hop.
 - **A task emits `finished(Outcome, StepError)` exactly once.** `StepError` carries the step
-  identity plus a reason, which is what spec 0035's network checks read to tell *not resolved*
-  from *refused* from *timed out*.
+  identity plus a reason, which is what the network checks read to tell *not resolved* from
+  *refused* from *timed out*.
 - **`TaskRunner` is the only handle a caller holds.** `run()` cancels the previous root first;
   the destructor cancels silently (it disconnects before cancelling, so teardown notifies
   nobody).
 - **Retry/backoff constants live only in `RetryPolicy.cpp`** — `RetryPolicy::initialConnect()`
-  and `RetryPolicy::autoReconnect()`. No driver, flow, or protocol may carry its own interval
-  or attempt loop.
-
-Drivers opt in through `HAL_Driver`, whose defaults keep every unmigrated driver byte-identical
-to before: `supportsAsyncOpen()` returns `false`, `beginOpen(mode)` calls `open(mode)` and emits
-`openFinished(ok, reason)` synchronously, `abortOpen()` calls `close()`, `openTimeoutMsec()`
-returns `0` (take the shared 15 s per-attempt ceiling; a driver whose handshake legitimately runs
-longer returns its own). A migrated driver also emits `linkDropped()` when a link that was open
-goes down *without* a close request.
-
-`IO::ConnectionFlows` composes the trees: `DriverOpenTask` (one bounded open attempt),
-`SocketConnectTask` (dials from inside its own start, so a connect completing inside
-`connectToHost()` cannot be missed), `SupervisorTask` (arms the drop watch on success and
-re-runs the flow on `linkDropped()`), and the `Flows::makeOpenFlow()` / `makeSupervised()` /
-`makeSocketConnect()` composers.
-
-- `DeviceManager` owns one runner per device. `open()` runs
-  `Flows::makeSupervised(makeOpenFlow(...), RetryPolicy::initialConnect(),
-  RetryPolicy::autoReconnect())` when the driver opts in and otherwise keeps the literal
-  synchronous `open()` call, whose result is no longer discarded; `close()` cancels the runner
-  **before** `killFrameReader()`. The two policies are not interchangeable: the first sequence
-  runs short because the user waits behind it, and `SupervisorTask` moves the retry wrapper onto
-  the recovery schedule (`RetryTask::setPolicy()`) before re-running a dropped link.
-- **Retry attempts emit nothing.** A per-attempt failure is swallowed while the runner is
-  running, so only a flow's final verdict reaches the owner and a recovering link cannot
-  amplify connection-state churn (frame-pool generation, Dashboard stream availability).
-- `ConnectionManager::connectDevice()` no longer assumes the open completed: the wait cursor is
-  an idempotent `beginWaitCursor()` / `endWaitCursor()` pair and `concludeConnectRequest()`
-  emits `connectedChanged()` once, when no device reports `isOpening()`.
-- **Migrated in v1:** Network (TCP + UDP), the MQTT source driver, the MQTT publisher worker.
-  **Migrated in v2:** BLE — `sequential[ble-discovery, ble-dial, ble-connect,
-  parallel[ble-services, ble-subscribe]]`, per-phase windows in `BluetoothLE.cpp` (scan window
-  from the shared agent, 15 s each for connect/services/subscribe), `QLowEnergyController::
-  errorOccurred` wired into the flow, an `m_openEpoch` guard on the queued dial, and
-  `openTimeoutMsec()` widened to scan + connect + GATT. The GATT phase is *parallel* because the
-  driver announces `gattReady()` from inside its own service-discovery handler: a step armed
-  after that handler returned would wait on an edge that already passed. Shared static discovery
-  is unchanged — the flow asks for a scan, never restarts or stops one.
-  Also in v2: **UART**, whose auto-reconnect (the app's only pre-0034 drop recovery, previously
-  polled off the 1 Hz tick) is now `linkDropped()` + the supervisor, still gated on the user's
-  `autoReconnect` checkbox and still fed by the 1 Hz port rescan; and **Modbus**, whose blocking
-  `QEventLoop` connect loop became one bounded `modbus-connect` wait (800 ms per attempt) with
-  the five attempts and the 300 ms between them coming from `RetryPolicy::initialConnect()`.
-  **Not migrated:** CAN, Audio, USB, HID, Process, and the file-transfer protocols — they run
-  the base-class defaults untouched.
-- **Nothing here runs per frame.** Task trees exist at connection-lifecycle boundaries only.
-- Observable over the API: `io.getStatus` reports `linkState`
-  (`idle`/`connecting`/`retrying`/`connected`), `reconnectAttempt`, and `activeFlows`
-  (`ConnectionManager::linkState()` / `reconnectAttempt()` / `activeFlowCount()`).
+  and `RetryPolicy::autoReconnect()`. No consumer may carry its own interval or attempt loop.
+- **Nothing here runs per frame.** Trees exist at lifecycle boundaries only.
 
 ## Connection Diagnostics (spec 0035)
 
@@ -95,7 +130,7 @@ set up to connect?" without opening a link. Checks split in two:
   `access(R_OK|W_OK)` on the device node (the Linux group remedy is composed from the node's
   real `st_gid`), BLE adapter power via `BluetoothLE::adapterPoweredOn()`, audio backend +
   input devices, and host/port sanity. They answer inside the call.
-- **Probing** (`NetworkChecks`): `HostLookupTask` + `TcpProbeTask` on the spec-0034 task
+- **Probing** (`NetworkChecks`): `HostLookupTask` + `TcpProbeTask` on the `Async::` task
   tree under explicit timeouts (2 s lookup, 3 s connect). The probe connects, aborts, and
   never sends a byte. `StepError::step` — not an error string — picks between the
   *not resolved* / *refused* / *timed out* verdicts.
@@ -104,10 +139,11 @@ Results cache per bus; the five `diagnostics.<bus>` problem-center checkers only
 cache, because `ProblemCenter::Checker` must return findings synchronously. Diagnostics never
 touch a driver's configuration and start no discovery scan.
 
-`ConnectionManager::onDeviceOpenFinished(deviceId, ok, reason)` is the auto-trigger: on
-failure it resolves the failing device's bus and calls `onOpenFailed()` (instant checks
-always, probing run only outside the 30 s per-bus window); on success it calls
-`onOpenSucceeded()`, which clears that bus's cached results.
+`ConnectionManager::onDeviceOpenFinished(deviceId, ok, reason)` is the auto-trigger, called
+straight from `connectDevice(int)` once the synchronous open returns: on failure it resolves the
+failing device's bus and calls `onOpenFailed()` (instant checks always, probing run only outside
+the 30 s per-bus window); on success it calls `onOpenSucceeded()`, which clears that bus's cached
+results.
 
 ## File Transmission (Pro)
 

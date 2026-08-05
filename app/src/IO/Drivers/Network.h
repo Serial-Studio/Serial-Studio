@@ -27,9 +27,9 @@
 #include <QHostInfo>
 #include <QSettings>
 #include <QTcpSocket>
+#include <QTimer>
 #include <QUdpSocket>
 
-#include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -104,11 +104,9 @@ public:
   Network& operator=(const Network&) = delete;
 
   void close() override;
-  void abortOpen() override;
-  void beginOpen(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
-  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -159,40 +157,44 @@ public slots:
 
 private slots:
   void onReadyRead();
-  void onSocketDisconnected();
+  void onDialTimeout();
+  void onTcpStateChanged();
+  void startTcpDialAttempt();
+  void scheduleReopenIfActive();
+  void reopenAfterConfigChange();
   void lookupFinished(const QHostInfo& info);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
-  void onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error);
 
 private:
-  void abortLookup();
+  [[nodiscard]] bool tcpLinkUp() const;
+  [[nodiscard]] static QHostAddress preferredAddress(const QList<QHostAddress>& addresses);
   void enlargeUdpReceiveBuffer();
-
-  [[nodiscard]] Async::Task* makeLookupStep();
-  [[nodiscard]] bool bindUdpSocket(QString& reason);
-  [[nodiscard]] Async::Task* buildOpenFlow(const QIODevice::OpenMode mode);
-  [[nodiscard]] bool activateSocket(const QIODevice::OpenMode mode, QString& reason);
 
 private:
   QSettings m_settings;
 
   QString m_address;
+  QString m_dialHost;
+  QString m_pendingLookup;
   QHostAddress m_resolvedAddress;
   quint16 m_tcpPort;
-  int m_lookupId;
   bool m_hostExists;
-  bool m_connecting;
+  bool m_dialInProgress;
   bool m_udpMulticast;
   bool m_lookupActive;
-  bool m_userWantsOpen;
+  int m_dialAttempts;
   quint16 m_udpLocalPort;
   quint16 m_udpRemotePort;
+  QIODevice::OpenMode m_dialMode;
   QAbstractSocket::SocketType m_socketType;
+
+  QTimer m_reopenTimer;
+  QTimer m_dialRetryTimer;
+  QTimer m_dialTimeoutTimer;
 
   QTcpSocket m_tcpSocket;
   QUdpSocket m_udpSocket;
   QByteArray m_udpBuffer;
-  Async::TaskRunner m_runner;
 };
 }  // namespace Drivers
 }  // namespace IO

@@ -202,13 +202,20 @@ cached flags, benchmark mechanics) in
   construction; see [doc/claude/architecture/mirror.md](doc/claude/architecture/mirror.md)).
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
-- **Connection orchestration is task trees, not per-driver flags (spec 0034).** `app/src/Async/`
-  + `IO::ConnectionFlows`; `DeviceManager` owns one thread-affine `TaskRunner` per device;
-  drivers opt in via `HAL_Driver`'s `supportsAsyncOpen()`/`beginOpen()`/`abortOpen()`/
-  `linkDropped()` (defaults keep unmigrated drivers synchronous). Retry/backoff declared
-  **once** (`RetryPolicy::initialConnect()` / `autoReconnect()`) — never per-driver. Trees run
-  at connection boundaries only: nothing per frame, no mutex, no new thread, no
-  connection-state signal per retry. See [doc/claude/architecture/io.md](doc/claude/architecture/io.md).
+- **Driver opens are synchronous calls; several drivers dial asynchronously behind them.**
+  `DeviceManager::open()` calls `HAL_Driver::open(mode)` directly; there is no async-open hook
+  and no per-device task runner (the spec-0034 `IO::ConnectionFlows` layer was removed
+  2026-07-30). TCP/BLE/MQTT/CAN report an in-flight dial via `HAL_Driver::isConnecting()`
+  (default false) so `toggleConnection()` aborts instead of stacking; `connectedChanged` is
+  published only by the idempotent `notifyConnectedStateChanged()`. Drop recovery is
+  per-driver: UART retries off its own 1 s timer armed in `handleError()`, Network TCP retries
+  refusals with a bounded backoff, MQTT/Modbus schedule their own. Driver error boxes are
+  queued, never raised mid open()/error stack. The task-tree engine `app/src/Async/`
+  (`TaskTree`, `RetryPolicy`, `AsyncClock`) stays,
+  used only by `MQTT::Publisher` and the spec-0035 diagnostics probes — thread-affine, no
+  mutex, no new thread, nothing per frame; retry/backoff still declared **once** in
+  `RetryPolicy::initialConnect()` / `autoReconnect()`.
+  See [doc/claude/architecture/io.md](doc/claude/architecture/io.md).
 - **Diagnostics are pulled, never pushed (specs 0033/0035).** `FrameReader` / `FrameBuilder`
   counters are plain `quint64` increments polled on the 1 Hz tick — never signal, allocate,
   or lock per frame. A recreated `FrameReader` zeroes them: consumers work on deltas, treat a
@@ -256,10 +263,13 @@ cached flags, benchmark mechanics) in
   `activatedChanged`.** The licensing block (MachineID, LemonSqueezy, OfflineLicense, Trial)
   is the FIRST thing `instantiateCoreModules()` builds after Translator (spec 0042): their
   ctors install the CommercialToken, so entitlement is final-for-startup before any consumer
-  constructs. Anything baking `proWidgetsEnabled()` into derived state at load time still
-  needs a `LemonSqueezy::activatedChanged` hook (Trial/Offline transitions funnel into it;
-  consumer inventory: `doc/claude/specs/0042-license-token-hardening/consumers.md`), or
-  late/async activation ships fallback widgets (2026-07-09: Plot3D degraded to MultiPlot).
+  constructs. `activatedChanged` fires only on real token-validity transitions
+  (`LemonSqueezy::notifyEntitlementMaybeChanged()`, 2026-08-04) — redundant emissions used to
+  loop live-device rebuilds. Anything baking `SerialStudio::activated()` into derived state at
+  load time still needs a `LemonSqueezy::activatedChanged` hook (Trial/Offline transitions
+  funnel into it; consumer inventory:
+  `doc/claude/specs/0042-license-token-hardening/consumers.md`), or late/async activation
+  ships fallback widgets (2026-07-09: Plot3D degraded to MultiPlot).
 
 ## Project Layout — the god files are split
 

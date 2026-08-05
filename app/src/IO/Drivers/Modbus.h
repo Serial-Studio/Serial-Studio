@@ -32,7 +32,6 @@
 #include <QString>
 #include <QTimer>
 
-#include "Async/TaskTree.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -127,9 +126,7 @@ class Modbus : public HAL_Driver {
 signals:
   void portChanged();
   void hostChanged();
-  void deviceConnected();
   void baudRateChanged();
-  void deviceDisconnected();
   void parityIndexChanged();
   void dataBitsIndexChanged();
   void stopBitsIndexChanged();
@@ -152,13 +149,12 @@ public:
   Modbus& operator=(const Modbus&) = delete;
 
   void close() override;
-  void beginOpen(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] bool supportsAsyncOpen() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
   [[nodiscard]] QJsonObject deviceIdentifier() const override;
@@ -211,25 +207,33 @@ private slots:
   void pollRegisters();
   void pollNextGroup();
   void refreshSerialPorts();
+  void onDialTimeout();
+  void startDialAttempt();
+  void scheduleReopenIfActive();
+  void reopenAfterConfigChange();
   void onStateChanged(QModbusDevice::State state);
   void onErrorOccurred(QModbusDevice::Error error);
 
 private:
   void doClose();
+  void handleDialSetback();
+  void wireConfigurationSignals();
+  void failDial(const QString& error);
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] QString buildFrameParser() const;
   [[nodiscard]] bool configureTcpClient(QString& target);
   [[nodiscard]] bool configureRtuClient(QString& target);
-  [[nodiscard]] bool prepareDevice(QString& reason);
-  [[nodiscard]] Async::Task* makeConnectStep();
-  void showConnectionFailure(const QString& detail);
-  void finishOpen(const bool ok, const QString& reason);
-  void onOpenFlowFinished(Async::Outcome outcome, const Async::StepError& error);
+  [[nodiscard]] bool finalizeAndConnect(const QString& target);
   [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
   void appendTcpProperties(QList<IO::DriverProperty>& props) const;
   void appendRtuProperties(QList<IO::DriverProperty>& props) const;
 
   bool m_connecting;
+  int m_dialAttempts;
+  QString m_dialTarget;
+  QTimer m_reopenTimer;
+  QTimer m_dialRetryTimer;
+  QTimer m_dialTimeoutTimer;
   QTimer* m_pollTimer;
   QModbusClient* m_device;
   QModbusReply* m_lastReply;
@@ -245,12 +249,10 @@ private:
   quint8 m_protocolIndex;
   int m_currentGroupIndex;
   quint8 m_serialPortIndex;
-  QString m_connectionTarget;
   QStringList m_serialPortNames;
   QStringList m_serialPortLocations;
   QVector<ModbusRegisterGroup> m_registerGroups;
 
-  Async::TaskRunner m_runner;
   QSettings m_settings;
 };
 }  // namespace Drivers

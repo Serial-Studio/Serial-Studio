@@ -1,7 +1,9 @@
 {
     "actions": [
     ],
+    "changeDrivenTransforms": false,
     "controlScriptCode": "/**\n * IMU Simulator - Control Loop\n *\n * Launches the bundled Python data generator (imu_simulator.py) automatically when\n * the connection opens, so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/imu_simulator.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction setup() {\n  startHelper();\n}\n\nfunction loop() {\n  delay(1000);\n}\n",
+    "frozen": false,
     "groups": [
         {
             "datasets": [
@@ -14,6 +16,7 @@
                     "fftMin": 3,
                     "fftSamples": 1024,
                     "fftSamplingRate": -1,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 1,
@@ -41,6 +44,7 @@
                     "fftMin": 15,
                     "fftSamples": 1024,
                     "fftSamplingRate": -1,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 2,
@@ -75,6 +79,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 3,
@@ -102,6 +107,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 4,
@@ -129,6 +135,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 1,
                     "index": 5,
@@ -155,7 +162,10 @@
     ],
     "hexadecimalDelimiters": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -166,6 +176,7 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",
@@ -208,38 +219,38 @@
         "layout:1001": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1035,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 500,
+                        "height": 546,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 517,
+                        "width": 525,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 273,
                         "id": 6,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 10,
-                        "width": 519,
-                        "x": 516,
+                        "width": 527,
+                        "x": 524,
                         "y": 0
                     },
                     {
-                        "height": 250,
+                        "height": 273,
                         "id": 5,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 10,
-                        "width": 519,
-                        "x": 516,
-                        "y": 249
+                        "width": 527,
+                        "x": 524,
+                        "y": 272
                     }
                 ],
                 "userReordered": true,
@@ -267,27 +278,27 @@
         "layout:1002": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1058,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 500,
+                        "height": 546,
                         "id": 5,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 10,
-                        "width": 529,
+                        "width": 526,
                         "x": 0,
                         "y": 0
                     },
                     {
-                        "height": 500,
+                        "height": 546,
                         "id": 6,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 10,
-                        "width": 529,
-                        "x": 528,
+                        "width": 526,
+                        "x": 525,
                         "y": 0
                     }
                 ],
@@ -311,16 +322,16 @@
         "layout:1003": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 500,
-                "canvasWidth": 1035,
+                "canvasHeight": 546,
+                "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 500,
+                        "height": 546,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 1035,
+                        "width": 1051,
                         "x": 0,
                         "y": 0
                     }

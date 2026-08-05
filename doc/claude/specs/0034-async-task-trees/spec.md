@@ -1,12 +1,19 @@
 ---
 spec: 0034-async-task-trees
 title: Declarative async orchestration for I/O flows
-status: draft        # draft -> approved -> in-progress -> done | shelved
+status: shelved      # draft -> approved -> in-progress -> done | shelved
 created: 2026-07-25
 author: Claude (roadmap R10, with Alex)
 ---
 
 # Spec 0034 — Declarative async orchestration for I/O flows
+
+> **Shelved 2026-07-30 (commit 38c9ef66).** The flow layer shipped and was then removed:
+> `IO::ConnectionFlows` and the `HAL_Driver` async-open hooks are gone, driver opens are
+> synchronous again, and drop recovery is per-driver. Only the engine survives —
+> `app/src/Async/` (TaskTree, RetryPolicy, AsyncClock), used by `MQTT::Publisher` and the
+> spec-0035 diagnostics probes. Read this file as history, not as the current design; current
+> state is in [../../architecture/io.md](../../architecture/io.md).
 
 > **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
 > class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until

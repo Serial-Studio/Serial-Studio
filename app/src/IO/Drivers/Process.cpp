@@ -49,13 +49,30 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
+// File-local helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Queues a warning box so it opens once the current stack has returned: a modal spins the
+ *        event loop, and raising one mid open()/error stack re-enters the stack it was raised from.
+ */
+static void queueWarningBox(QObject* context, const QString& title, const QString& text)
+{
+  QMetaObject::invokeMethod(
+    context,
+    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Warning); },
+    Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the Process driver and restores persisted launch/pipe settings.
  */
-IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr), m_pipeRunning(false)
+IO::Drivers::Process::Process()
+  : m_mode(Mode::Launch), m_process(nullptr), m_pipeRunning(false), m_pipeConnected(false)
 {
   const int saved = m_settings.value("ProcessDriver/mode", 0).toInt();
   m_mode          = (saved == static_cast<int>(Mode::NamedPipe)) ? Mode::NamedPipe : Mode::Launch;
@@ -103,7 +120,8 @@ void IO::Drivers::Process::doClose()
     m_process = nullptr;
   }
 
-  m_pipeRunning = false;
+  m_pipeRunning   = false;
+  m_pipeConnected = false;
   if (m_pipeThread.isRunning()) {
     m_pipeThread.quit();
     m_pipeThread.wait();
@@ -111,14 +129,28 @@ void IO::Drivers::Process::doClose()
 }
 
 /**
- * @brief Returns true when the process or pipe channel is open.
+ * @brief Returns true when the process is running or the pipe endpoint is actually live: the
+ *        launch phase and the pipe's wait-for-writer window report through isConnecting()
+ *        instead of faking an open channel.
  */
 bool IO::Drivers::Process::isOpen() const noexcept
 {
   if (m_mode == Mode::Launch)
     return m_process && m_process->state() == QProcess::Running;
 
-  return m_pipeRunning.load();
+  return m_pipeRunning.load() && m_pipeConnected.load();
+}
+
+/**
+ * @brief Returns true while the launched process is still starting or the pipe read thread has
+ *        not yet opened its endpoint.
+ */
+bool IO::Drivers::Process::isConnecting() const noexcept
+{
+  if (m_mode == Mode::Launch)
+    return m_process && m_process->state() == QProcess::Starting;
+
+  return m_pipeRunning.load() && !m_pipeConnected.load();
 }
 
 /**
@@ -181,9 +213,9 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
   if (m_mode == Mode::Launch) {
     const QString resolved = resolveExecutable(m_executable);
     if (resolved.isEmpty()) {
-      Misc::Utilities::showMessageBox(tr("Failed to start process"),
-                                      tr("Executable \"%1\" not found in PATH.").arg(m_executable),
-                                      QMessageBox::Warning);
+      queueWarningBox(this,
+                      tr("Failed to start process"),
+                      tr("Executable \"%1\" not found in PATH.").arg(m_executable));
       return false;
     }
 
@@ -216,20 +248,11 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
       m_process->setWorkingDirectory(m_workingDir);
 
     m_process->start(resolved, args);
-
-    if (!m_process->waitForStarted(3000)) {
-      const QString detail = m_process->errorString();
-      m_process->deleteLater();
-      m_process = nullptr;
-
-      Misc::Utilities::showMessageBox(tr("Failed to start process"), detail, QMessageBox::Warning);
-      return false;
-    }
-
     return true;
   }
 
-  m_pipeRunning = true;
+  m_pipeConnected = false;
+  m_pipeRunning   = true;
   m_pipeThread.start();
   return true;
 }
@@ -502,7 +525,8 @@ void IO::Drivers::Process::onReadyRead()
 }
 
 /**
- * @brief Handles QProcess termination.
+ * @brief Handles QProcess termination. The teardown is queued before the box so the UI never
+ *        claims a dead process is a connected device while the modal is up.
  */
 void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus status)
 {
@@ -515,18 +539,17 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
   const QString reason = (status == QProcess::CrashExit) ? tr("The process crashed.")
                                                          : tr("Exit code: %1").arg(exitCode);
 
-  Misc::Utilities::showMessageBox(
-    tr("Process \"%1\" stopped").arg(QFileInfo(m_executable).fileName()),
-    reason,
-    QMessageBox::Warning);
-
   static auto& connectionManager = IO::ConnectionManager::instance();
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
+
+  queueWarningBox(
+    this, tr("Process \"%1\" stopped").arg(QFileInfo(m_executable).fileName()), reason);
 }
 
 /**
- * @brief Handles a QProcess-level error during execution.
+ * @brief Handles a QProcess-level error during execution. The teardown is queued before the box
+ *        so the UI never claims a failed process is a connected device while the modal is up.
  */
 void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 {
@@ -534,21 +557,50 @@ void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
     return;
 
   const QString detail = m_process ? m_process->errorString() : tr("Unknown error");
-  Misc::Utilities::showMessageBox(tr("Process Error"), detail, QMessageBox::Warning);
 
   static auto& connectionManager = IO::ConnectionManager::instance();
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
+
+  queueWarningBox(this, tr("Process Error"), detail);
 }
 
 /**
- * @brief Called on the main thread when pipeReadLoop() fails to open the pipe.
+ * @brief Called on the main thread when the pipe peer closed or the read loop died mid-stream.
+ *        The flag drops first so isOpen() turns false immediately: without this the UI kept
+ *        showing a connected device that could never produce data again.
+ */
+void IO::Drivers::Process::onPipeClosed()
+{
+  if (!m_pipeRunning.load())
+    return;
+
+  m_pipeRunning = false;
+  queuePipeTeardown();
+
+  Misc::Utilities::showMessageBox(
+    tr("Pipe Closed"),
+    tr("The named pipe \"%1\" was closed on the other end.").arg(m_pipePath),
+    QMessageBox::Warning);
+}
+
+/**
+ * @brief Called on the main thread when pipeReadLoop() fails to open the pipe. The teardown is
+ *        queued before the box so the UI never claims a dead pipe is a connected device.
  */
 void IO::Drivers::Process::onPipeError()
 {
+  queuePipeTeardown();
+
   Misc::Utilities::showMessageBox(
     tr("Pipe Error"), tr("Could not open named pipe: %1").arg(m_pipePath), QMessageBox::Warning);
+}
 
+/**
+ * @brief Queues the device teardown shared by the pipe failure paths.
+ */
+void IO::Drivers::Process::queuePipeTeardown()
+{
   static auto& connectionManager = IO::ConnectionManager::instance();
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
@@ -611,6 +663,8 @@ void IO::Drivers::Process::pipeReadLoopWindows()
     return;
   }
 
+  m_pipeConnected = true;
+
   char buf[4096];
   while (m_pipeRunning.load()) {
     DWORD avail = 0;
@@ -631,6 +685,10 @@ void IO::Drivers::Process::pipeReadLoopWindows()
   }
 
   CloseHandle(hPipe);
+  m_pipeConnected = false;
+
+  if (m_pipeRunning.load())
+    QMetaObject::invokeMethod(this, "onPipeClosed", Qt::QueuedConnection);
 #endif
 }
 
@@ -666,6 +724,8 @@ void IO::Drivers::Process::pipeReadLoopPosix()
     return;
   }
 
+  m_pipeConnected = true;
+
   char buf[4096];
   struct pollfd pfd{};
   pfd.fd     = fd;
@@ -698,6 +758,10 @@ void IO::Drivers::Process::pipeReadLoopPosix()
   }
 
   ::close(fd);
+  m_pipeConnected = false;
+
+  if (m_pipeRunning.load())
+    QMetaObject::invokeMethod(this, "onPipeClosed", Qt::QueuedConnection);
 #endif
 }
 

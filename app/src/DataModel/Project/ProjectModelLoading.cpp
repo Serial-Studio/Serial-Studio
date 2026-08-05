@@ -428,6 +428,7 @@ bool DataModel::ProjectModel::applyHistorySnapshot(const QByteArray& state)
     Q_EMIT widgetSettingsChanged();
 
   m_history.setApplying(false);
+  Q_EMIT historySnapshotApplied();
   return true;
 }
 
@@ -586,7 +587,8 @@ void DataModel::ProjectModel::loadProjectArrays(const QJsonObject& json,
     return;
   }
 
-  if (m_sources[0].frameParserCode.isEmpty())
+  if (m_sources[0].frameParserCode.isEmpty()
+      && m_sources[0].frameParserLanguage != SerialStudio::Native)
     m_sources[0].frameParserCode =
       legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
 }

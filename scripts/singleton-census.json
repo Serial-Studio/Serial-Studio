@@ -1,36 +1,36 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1607,
+  "total": 1600,
   "files": 198,
   "buckets": {
     "root": 149,
     "accessor": 68,
     "ctor-capture": 93,
     "deferred": 20,
-    "static-cache": 1160,
+    "static-cache": 1153,
     "loose": 117
   },
   "per_class": {
-    "IO::ConnectionManager": 212,
-    "DataModel::ProjectModel": 209,
+    "IO::ConnectionManager": 210,
+    "DataModel::ProjectModel": 208,
     "AppState": 136,
     "CommandRegistry": 98,
     "UI::Dashboard": 83,
-    "DataModel::FrameBuilder": 55,
+    "DataModel::FrameBuilder": 54,
     "Misc::IconRegistry": 48,
     "Misc::ThemeManager": 41,
     "Misc::TimerEvents": 30,
     "Console::Handler": 29,
     "API::Server": 28,
     "Misc::WorkspaceManager": 27,
-    "DataModel::NotificationCenter": 27,
+    "DataModel::NotificationCenter": 26,
     "Misc::CommonFonts": 26,
     "Misc::Translator": 25,
     "API::CommandRegistry": 24,
     "Licensing::LemonSqueezy": 23,
-    "CSV::Player": 22,
-    "MDF4::Player": 21,
+    "CSV::Player": 21,
+    "MDF4::Player": 20,
     "Sessions::Export": 20,
     "CSV::Export": 19,
     "Sessions::DatabaseManager": 19,
@@ -39,8 +39,8 @@
     "DataModel::FrameParser": 17,
     "API::GRPC::GRPCServer": 16,
     "MQTT::Publisher": 16,
-    "Sessions::Player": 16,
     "AI::CommandRegistry": 15,
+    "Sessions::Player": 15,
     "Misc::ExtensionManager": 14,
     "DataModel::ControlScript": 13,
     "Misc::ProblemCenter": 13,
@@ -57,10 +57,10 @@
     "API::CommandHandler": 7,
     "AI::FileSandbox": 6,
     "ProjectModel": 6,
+    "ConnectionManager": 6,
     "Licensing::OfflineLicense": 5,
     "Misc::ConnectionDiagnostics": 5,
     "IO::FileTransmission": 5,
-    "ConnectionManager": 5,
     "AI::Assistant": 4,
     "LemonSqueezy": 4,
     "UI::TaskbarSettings": 4,
@@ -1292,24 +1292,24 @@
       }
     },
     "app/src/IO/ConnectionManager.cpp": {
-      "total": 55,
+      "total": 52,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 48,
+        "static-cache": 45,
         "loose": 6
       }
     },
     "app/src/IO/Drivers/Audio.cpp": {
-      "total": 3,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 3,
+        "static-cache": 4,
         "loose": 0
       }
     },
@@ -1336,24 +1336,24 @@
       }
     },
     "app/src/IO/Drivers/Modbus.cpp": {
-      "total": 5,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 3,
+        "static-cache": 2,
         "loose": 2
       }
     },
     "app/src/IO/Drivers/Network.cpp": {
-      "total": 1,
+      "total": 2,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 2,
         "loose": 0
       }
     },
@@ -1369,13 +1369,13 @@
       }
     },
     "app/src/IO/Drivers/UART.cpp": {
-      "total": 5,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 3,
+        "static-cache": 2,
         "loose": 2
       }
     },
@@ -1941,13 +1941,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 40,
+      "total": 36,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 39,
+        "static-cache": 35,
         "loose": 0
       }
     },

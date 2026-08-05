@@ -218,8 +218,7 @@ updated: 2026-07-27
       confirms.
 - [x] Relevant `pytest` tests identified for the maintainer (existing
       `tests/integration/` MQTT suite for AC6).
-- [ ] `python scripts/sanitize-commit.py` deferred to commit time: the working tree carries
-      the maintainer's uncommitted ctest-coverage campaign and the pipeline would reformat
-      files outside this spec's lane. clang-format + code-verify were run on the lane files.
+- [x] `python scripts/sanitize-commit.py` ran at commit time; the spec landed as commit
+      b1929bdf. Only the maintainer ACs above remain open.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
 - [ ] `spec.md` status set to `done`.
