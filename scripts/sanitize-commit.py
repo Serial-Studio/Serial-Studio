@@ -22,6 +22,8 @@
 #  - registry-verify.py       -> spec-0028 icon/command registry + icon render-size lint,
 #                                spec-0037 assistant-corpus field/enum reference lint
 #  - build_search_index.py    -> refresh AI assistant BM25 index
+#  - baseline-manifest refresh -> re-hash the shipped .ssproj corpus into the spec-0036
+#                                baseline manifest so a resaved example never drifts from it
 #
 # Sanitize only: committing and pushing are left to the developer.
 #
@@ -34,6 +36,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 import shutil
 import subprocess
@@ -155,6 +159,51 @@ def run_python_step_quiet(label: str, script: Path, *args: str) -> None:
         print(f"{script.name} found issues")
 
 
+def refresh_baseline_manifest(root: Path) -> None:
+    """Re-hash the shipped .ssproj corpus into the spec-0036 baseline manifest.
+
+    Keeps test_corpus_files_unchanged green when an example project is resaved;
+    a material corpus change still surfaces in the live round-trip compare.
+    """
+    manifest_path = (
+        root
+        / "doc"
+        / "claude"
+        / "specs"
+        / "0036-property-registry"
+        / "baseline-manifest.json"
+    )
+    if not manifest_path.is_file():
+        return
+
+    globs = (
+        "examples/**/*.ssproj",
+        "app/rcc/demo/*.ssproj",
+        "app/rcc/templates/**/*.ssproj",
+    )
+    found = set()
+    for pattern in globs:
+        found.update(root.glob(pattern))
+
+    projects = [
+        {
+            "path": path.relative_to(root).as_posix(),
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        }
+        for path in sorted(found, key=lambda p: p.relative_to(root).as_posix())
+    ]
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("projects") == projects:
+        return
+
+    manifest["projects"] = projects
+    with manifest_path.open("w", encoding="utf-8", newline="\n") as handle:
+        json.dump(manifest, handle, indent=2, ensure_ascii=False)
+        handle.write("\n")
+    print("Refreshed the spec-0036 baseline manifest from the on-disk corpus.")
+
+
 def run_gate_step(label: str, script: Path, *args: str) -> bool:
     """Run a step whose failure stops the pipeline instead of being reported."""
     if not script.is_file():
@@ -238,6 +287,8 @@ def main() -> int:
         "Rebuilding AI search index",
         root / "app" / "rcc" / "ai" / "build_search_index.py",
     )
+
+    refresh_baseline_manifest(root)
 
     print("Checking for changes...")
     changed = capture(["git", "status", "--short"])

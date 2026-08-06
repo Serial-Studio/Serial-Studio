@@ -17,6 +17,7 @@ Copyright (C) 2020-2026 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
+import functools
 import socket
 import threading
 import time
@@ -43,6 +44,28 @@ BLACKHOLE_PORT = 9
 # Discard port on loopback: resolves instantly and refuses the connection.
 REFUSED_HOST = "127.0.0.1"
 REFUSED_PORT = 9
+
+
+@functools.lru_cache(maxsize=1)
+def refusal_is_observable() -> bool:
+    """Whether this host answers a closed loopback port with an RST.
+
+    Windows Firewall stealth mode (on by default, including on GitHub CI
+    runners) silently drops the SYN instead, so a refusal is indistinguishable
+    from a timeout and the connection-refused verdict cannot be produced.
+    """
+    probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    probe.settimeout(2.0)
+    try:
+        probe.connect((REFUSED_HOST, REFUSED_PORT))
+        return False
+    except ConnectionRefusedError:
+        return True
+    except OSError:
+        return False
+    finally:
+        probe.close()
+
 
 # Slack over the runner's declared worst case, for a loaded CI runner.
 SETTLE_SLACK_S = 4.0
@@ -175,6 +198,9 @@ def test_unresolvable_host_reports_a_name_resolution_failure(api_client, clean_s
 @pytest.mark.network
 def test_closed_port_reports_a_refused_connection(api_client, clean_state):
     """A resolvable host with nothing listening is reported as a refusal."""
+    if not refusal_is_observable():
+        pytest.skip("this host swallows the RST for closed loopback ports")
+
     _configure_and_probe(api_client, REFUSED_HOST, REFUSED_PORT)
 
     finding = _reachability_finding(api_client, "connection-refused")
@@ -213,15 +239,20 @@ def test_the_three_verdicts_carry_three_different_remedies(api_client, clean_sta
     """Each reachability failure states a different fix, not one generic line."""
     remedies = {}
 
-    for host, port, code in (
+    legs = [
         (UNRESOLVABLE_HOST, 9000, "host-not-resolved"),
-        (REFUSED_HOST, REFUSED_PORT, "connection-refused"),
         (BLACKHOLE_HOST, BLACKHOLE_PORT, "endpoint-timed-out"),
-    ):
+    ]
+    if refusal_is_observable():
+        legs.insert(1, (REFUSED_HOST, REFUSED_PORT, "connection-refused"))
+
+    for host, port, code in legs:
         _configure_and_probe(api_client, host, port)
         remedies[code] = _reachability_finding(api_client, code)["remedy"]
 
-    assert len(set(remedies.values())) == 3, f"Remedies are not distinct: {remedies}"
+    assert len(set(remedies.values())) == len(
+        legs
+    ), f"Remedies are not distinct: {remedies}"
 
 
 # ---------------------------------------------------------------------------

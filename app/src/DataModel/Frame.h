@@ -1361,15 +1361,9 @@ inline void normalizeDatasetRanges(Dataset& d)
   const auto gtVal     = ss_jsr(obj, Keys::GroupType, 0).toInt();
   const auto groupType = static_cast<GroupType>(qBound(0, gtVal, 1));
 
-  const bool isImageGroup   = (widget == QLatin1String("image"));
-  const bool isOutputGroup  = (groupType == GroupType::Output);
-  const bool isPainterGroup = (widget == QLatin1String("painter"));
-  const bool isWebViewGroup = (widget == QLatin1String("webview"));
+  const bool isImageGroup = (widget == QLatin1String("image"));
 
   if (title.isEmpty())
-    return false;
-
-  if (array.isEmpty() && !isImageGroup && !isOutputGroup && !isPainterGroup && !isWebViewGroup)
     return false;
 
   g.title          = title;

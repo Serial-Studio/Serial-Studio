@@ -93,7 +93,7 @@ private slots:
 
   void groupRoundTripsItsDatasets();
   void groupRequiresATitle();
-  void groupRequiresDatasetsUnlessItIsASpecialWidget();
+  void groupWithoutDatasetsRoundTrips();
   void groupRoundTripsOutputWidgets();
   void groupRoundTripsImagePainterAndWebViewFields();
 
@@ -1000,12 +1000,19 @@ void TstFrameSerialization::groupRequiresATitle()
   QVERIFY(destination.datasets.empty());
 }
 
-void TstFrameSerialization::groupRequiresDatasetsUnlessItIsASpecialWidget()
+/**
+ * @brief A dataset-less group is legal document state (the editor and API create groups before
+ *        their first dataset), so it must round-trip for undo snapshots and saved projects alike.
+ */
+void TstFrameSerialization::groupWithoutDatasetsRoundTrips()
 {
   Group plain;
-  plain.title  = QStringLiteral("Sensors");
-  plain.widget = QStringLiteral("datagrid");
-  QVERIFY(!fromJson<Group>(toJson(plain)).has_value());
+  plain.title              = QStringLiteral("Sensors");
+  plain.widget             = QStringLiteral("datagrid");
+  const auto restoredPlain = fromJson<Group>(toJson(plain));
+  QVERIFY(restoredPlain.has_value());
+  QCOMPARE(restoredPlain->title, plain.title);
+  QVERIFY(restoredPlain->datasets.empty());
 
   Group image;
   image.title  = QStringLiteral("Camera");

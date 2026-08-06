@@ -132,7 +132,13 @@ def test_sdk_wrapper_sets_every_declared_field(api_client, clean_state):
     for name, prop in fields.items():
         if name in domains:
             params[name] = domains[name][0]
-        elif name not in ("color", "alias", "transformCode", "widget"):
+        elif name in ("color", "alias", "transformCode", "widget"):
+            continue
+        elif prop.get("validate"):
+            # Validated fields reject arbitrary samples (e.g. transformLanguage
+            # only accepts -1/0/1); the declared default is always in-domain.
+            params[name] = prop["default"]
+        else:
             params[name] = samples[prop["type"]]
 
     result = api_client.command("project.dataset.update", params)

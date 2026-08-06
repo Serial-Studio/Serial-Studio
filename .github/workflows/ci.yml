@@ -2118,7 +2118,15 @@ jobs:
         QT_QPA_PLATFORM: offscreen
         SERIAL_STUDIO_API_AUTO_CONSENT: '1'
       run: |
-        [ "${{ matrix.os }}" = "windows" ] || ulimit -c unlimited
+        # The API path policy defaults to home + temp; the repo corpus that the
+        # round-trip baseline tests open lives in the workspace (outside home on
+        # the Windows runners), so allow all three explicitly.
+        if [ "${{ matrix.os }}" = "windows" ]; then
+          export SERIAL_STUDIO_API_ALLOWED_PATHS="$(cygpath -w "$GITHUB_WORKSPACE");$USERPROFILE;$(cygpath -w "$RUNNER_TEMP")"
+        else
+          ulimit -c unlimited
+          export SERIAL_STUDIO_API_ALLOWED_PATHS="$GITHUB_WORKSPACE:$HOME:/tmp:$RUNNER_TEMP"
+        fi
         "$SS_RUN" --headless --api-server &
         echo $! > ss_pid.txt
         for i in $(seq 1 30); do
