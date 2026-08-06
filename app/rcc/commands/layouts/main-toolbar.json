@@ -38,18 +38,12 @@
       "collapsedCommands": ["app.preferences"],
       "items": [
         { "type": "command", "id": "app.preferences" },
-        { "type": "grid", "rows": 3, "role": "drivers",
+        { "type": "grid", "rows": 3,
           "itemHints": { "iconSize": 16, "horizontalLayout": true },
           "items": [
-            { "type": "command", "id": "driver.uart" },
-            { "type": "command", "id": "driver.audio" },
-            { "type": "command", "id": "driver.usb" },
-            { "type": "command", "id": "driver.network" },
-            { "type": "command", "id": "driver.modbus" },
-            { "type": "command", "id": "driver.hid" },
-            { "type": "command", "id": "driver.bluetooth" },
-            { "type": "command", "id": "driver.canbus" },
-            { "type": "command", "id": "driver.process" }
+            { "type": "command", "id": "app.macros" },
+            { "type": "command", "id": "app.remoteAttach" },
+            { "type": "command", "id": "app.connectionDiagnostics" }
           ] }
       ]
     },

@@ -344,6 +344,25 @@ Widgets.SmartWindow {
   }
 
   //
+  // Return to the console view when a remote dashboard detaches; the restored local session
+  // has no live stream, so the mirrored layout would otherwise linger on screen.
+  //
+  Connections {
+    target: Cpp_API_Mirror
+
+    function onAttachedChanged() {
+      if (app.runtimeMode || Cpp_API_Mirror.attached)
+        return
+
+      root.showConsole()
+      root.firstValidFrame = false
+
+      if (root.visibility === Window.FullScreen)
+        root.showNormal()
+    }
+  }
+
+  //
   // Show the dashboard while the benchmark exercises it; reset to console when it ends so
   // repeated runs stay deterministic (no live stream drives the normal onUpdated auto-switch).
   //

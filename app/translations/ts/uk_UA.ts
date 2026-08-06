@@ -386,22 +386,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::MirrorSession</name>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="271"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="280"/>
         <source>Enter a host name and a port to attach</source>
         <translation>Введіть ім'я хоста та порт для підключення</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="278"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="287"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
         <translation>Від'єднайте локальний пристрій або закрийте відкритий запис перед підключенням до віддаленої панелі</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="467"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="491"/>
         <source>The remote sent a project this build cannot load</source>
         <translation>Віддалений вузол надіслав проєкт, який ця збірка не може завантажити</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="557"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="581"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>Ця збірка інтерпретує віддалений проєкт як іншу структуру наборів даних</translation>
     </message>
@@ -469,6 +469,30 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../src/API/Server.cpp" line="1602"/>
         <source>Invalid pending connection</source>
         <translation>Недійсне очікуване підключення</translation>
+    </message>
+</context>
+<context>
+    <name>API::TerminalBridge</name>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="83"/>
+        <location filename="../../src/API/TerminalBridge.cpp" line="115"/>
+        <source>Empty command line</source>
+        <translation>Порожній командний рядок</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="101"/>
+        <source>Invalid parameter JSON: %1</source>
+        <translation>Невірний JSON параметрів: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="105"/>
+        <source>Parameters must be a JSON object</source>
+        <translation>Параметри мають бути об'єктом JSON</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="122"/>
+        <source>Unknown exception while executing command</source>
+        <translation>Невідоме виключення під час виконання команди</translation>
     </message>
 </context>
 <context>
@@ -2241,7 +2265,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Вбудований + панель приладів (змішані)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="623"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="622"/>
         <source>%1 MiB</source>
         <translation>%1 Міб</translation>
     </message>
@@ -3225,196 +3249,201 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <source>Macros</source>
+        <translation>Макроси</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Керуйте своєю ліцензією Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Minimize Window</source>
         <translation>Згорнути Вікно</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Multi-Plot</source>
         <translation>Множинний Графік</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Navigate Back</source>
         <translation>Перейти Назад</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Navigate Forward</source>
         <translation>Перейти Вперед</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Network</source>
         <translation>Мережа</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>New</source>
         <translation>Новий</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>New Project</source>
         <translation>Новий Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Next Workspace</source>
         <translation>Наступний Робочий Простір</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Notifications</source>
         <translation>Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Open</source>
         <translation>Відкрити</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Open CSV</source>
         <translation>Відкрити CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Open MDF4</source>
         <translation>Відкрити MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Open Project</source>
         <translation>Відкрити Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Open a session file</source>
         <translation>Відкрити файл сесії</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Open an existing JSON project</source>
         <translation>Відкрити існуючий JSON-проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Open application settings and preferences</source>
         <translation>Відкрити налаштування та параметри програми</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Open the Assistant</source>
         <translation>Відкрити Асистент</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Open the Project Editor documentation</source>
         <translation>Відкрити документацію Редактора Проєктів</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Відкрити Редактор Проєктів для створення або зміни JSON-макета</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Output</source>
         <translation>Вихід</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Painter</source>
         <translation>Малювання</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Відтворити CSV-файл як дані датчиків у реальному часі</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Відтворити MDF4-файл як дані датчиків у реальному часі (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Plot</source>
         <translation>Графік</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Preferences</source>
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Previous Workspace</source>
         <translation>Попередній Робочий Простір</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Problem Center</source>
         <translation>Центр Проблем</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Process</source>
         <translation>Процес</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Project Editor</source>
         <translation>Редактор Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Project File Mode</source>
         <translation>Режим Файлу Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Quick Plot Mode</source>
         <translation>Режим Швидкого Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Quit</source>
         <translation>Вийти</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Redo</source>
         <translation>Повторити</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
         <source>Redo the last undone project edit</source>
         <translation>Повторити останню скасовану зміну проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Remote Dashboard</source>
         <translation>Віддалена Панель</translation>
     </message>
@@ -3423,247 +3452,252 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Відновити</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>Replay</source>
         <translation>Відтворити</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Відтворити вибрану сесію на панелі</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Reset</source>
         <translation>Скинути</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Restore</source>
         <translation>Відновити</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Restore Backup</source>
         <translation>Відновити Резервну Копію</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>Restore Project</source>
         <translation>Відновити Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Відновити останній автоматичний знімок поточного проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Restore the project file from this session file</source>
         <translation>Відновити файл проєкту з цього файлу сесії</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Resume</source>
         <translation>Продовжити</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Переглянути діагностику проєкту, посилань та скриптів</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <source>Run API commands and script macros interactively</source>
+        <translation>Інтерактивне виконання команд API та макросів скриптів</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>Save As</source>
         <translation>Зберегти Як</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Save Project</source>
         <translation>Зберегти Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Save Project As</source>
         <translation>Зберегти Проєкт Як</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Search</source>
         <translation>Пошук</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Вибрати зв'язок Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Вибрати зв'язок через CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Вибрати зв'язок через HID пристрій (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Вибрати зв'язок через MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Вибрати зв'язок через послідовний порт (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Вибрати зв'язок через мережу TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
         <source>Select audio input device (Pro)</source>
         <translation>Вибрати аудіо пристрій введення (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Вибрати зв'язок через канал процесу (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Вибрати прямий зв'язок через USB (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>Session Database</source>
         <translation>База Даних Сесій</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Встановити пароль і заблокувати Редактор Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Встановіть пароль, щоб запобігти видаленню сесій</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Show application info and license details</source>
         <translation>Показати інформацію про програму та деталі ліцензії</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>Show timestamps in the console</source>
         <translation>Показувати мітки часу в консолі</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>Slider</source>
         <translation>Повзунок</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Start Menu</source>
         <translation>Стартове Меню</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Stopwatch</source>
         <translation>Секундомір</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Перемкнутися в режим Тільки Консоль (без парсингу)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Перемкнутися в режим Файлу Проєкту (парсинг через проєкт)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Перемкнутися в режим Швидкого Графіка (значення, розділені комами)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Table</source>
         <translation>Таблиця</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Text Field</source>
         <translation>Текстове Поле</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Toggle</source>
         <translation>Перемикач</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Перемкнути шістнадцятковий режим консолі</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Tools</source>
         <translation>Інструменти</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Undo</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Undo the last project edit</source>
         <translation>Скасувати останню зміну проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Unlock</source>
         <translation>Розблокувати</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Переглянути детальну документацію та поставити запитання на DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Спостерігати за панеллю іншого екземпляра Serial Studio через мережу</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>Web View</source>
         <translation>Веб-перегляд</translation>
     </message>
@@ -5314,6 +5348,55 @@ Any unsaved changes are lost. Continue?</source>
         <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="525"/>
         <source>Choose a template to load:</source>
         <translation>Оберіть шаблон для завантаження:</translation>
+    </message>
+</context>
+<context>
+    <name>DataModel::MacroRunner</name>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="242"/>
+        <source>Failed to queue the macro onto the worker thread</source>
+        <translation>Не вдалося поставити макрос у чергу робочого потоку</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="257"/>
+        <source>Macro is empty</source>
+        <translation>Макрос порожній</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="269"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="383"/>
+        <source>Failed to create the Lua state</source>
+        <translation>Не вдалося створити стан Lua</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="316"/>
+        <source>Unknown Lua error</source>
+        <translation>Невідома помилка Lua</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="429"/>
+        <source>Select macro to load</source>
+        <translation>Виберіть макрос для завантаження</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="442"/>
+        <source>Cannot open %1</source>
+        <translation>Не вдається відкрити %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="465"/>
+        <source>Save macro</source>
+        <translation>Зберегти макрос</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="481"/>
+        <source>Cannot write %1</source>
+        <translation>Не вдається записати %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="487"/>
+        <source>Failed to save %1: %2</source>
+        <translation>Не вдалося зберегти %1: %2</translation>
     </message>
 </context>
 <context>
@@ -13843,12 +13926,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="646"/>
+        <location filename="../../src/MDF4/Export.cpp" line="648"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Експорт MDF4 — функція Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="647"/>
+        <location filename="../../src/MDF4/Export.cpp" line="649"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Ця функція потребує ліцензії. Будь ласка, придбайте її, щоб увімкнути експорт MDF4.</translation>
     </message>
@@ -14807,6 +14890,154 @@ Please provide the necessary credentials.</source>
     </message>
 </context>
 <context>
+    <name>Macros</name>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
+        <source>Macros</source>
+        <translation>Макроси</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
+        <source>[macro] finished</source>
+        <translation>[макрос] завершено</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="194"/>
+        <source>[macro] %1</source>
+        <translation>[макрос] %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="197"/>
+        <source>[macro] saved %1</source>
+        <translation>[макрос] збережено %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="202"/>
+        <source>[macro] loaded %1</source>
+        <translation>[макрос] завантажено %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="313"/>
+        <source>Search commands...</source>
+        <translation>Пошук команд...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="437"/>
+        <source>Parameters</source>
+        <translation>Параметри</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="438"/>
+        <source>No parameters</source>
+        <translation>Немає параметрів</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="499"/>
+        <source>Terminal</source>
+        <translation>Термінал</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="505"/>
+        <source>Script</source>
+        <translation>Скрипт</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="596"/>
+        <source>Type a command below to get started</source>
+        <translation>Введіть команду нижче, щоб почати</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="621"/>
+        <source>Copy</source>
+        <translation>Копіювати</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="627"/>
+        <source>Select All</source>
+        <translation>Вибрати Все</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="633"/>
+        <source>Clear</source>
+        <translation>Очистити</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="674"/>
+        <source>command.name { "parameter": value }</source>
+        <translation>command.name { "parameter": value }</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="816"/>
+        <source>Run command</source>
+        <translation>Виконати команду</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="831"/>
+        <source>Clear output</source>
+        <translation>Очистити вивід</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="864"/>
+        <source>[macro] verify: no syntax errors</source>
+        <translation>[макрос] перевірка: синтаксичних помилок немає</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="866"/>
+        <source>[macro] verify failed: %1</source>
+        <translation>[макрос] перевірка не вдалася: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="889"/>
+        <source>Discard changes?</source>
+        <translation>Відхилити зміни?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="902"/>
+        <source>The macro editor has unsaved changes.</source>
+        <translation>Редактор макросів має незбережені зміни.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="942"/>
+        <source>JavaScript</source>
+        <translation>Javascript</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="942"/>
+        <source>Lua</source>
+        <translation>Lua</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="960"/>
+        <source>Load macro</source>
+        <translation>Завантажити макрос</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="970"/>
+        <source>Save macro</source>
+        <translation>Зберегти макрос</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="981"/>
+        <source>Verify macro</source>
+        <translation>Перевірити Макрос</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="992"/>
+        <source>Run macro</source>
+        <translation>Запустити Макрос</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1005"/>
+        <source>Stop macro</source>
+        <translation>Зупинити Макрос</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1015"/>
+        <source>Clear editor</source>
+        <translation>Очистити Редактор</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="213"/>
@@ -14824,17 +15055,17 @@ Please provide the necessary credentials.</source>
         <translation>Порожній Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="711"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="730"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="719"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="738"/>
         <source>Waiting for data…</source>
         <translation>Очікування даних…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="720"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="739"/>
         <source>Connecting to device…</source>
         <translation>Підключення до пристрою…</translation>
     </message>
@@ -14843,7 +15074,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Застосунок</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="753"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="772"/>
         <source>Command Palette</source>
         <translation>Палітра Команд</translation>
     </message>
@@ -18851,22 +19082,22 @@ function parse(%1) { ... }
 Параметр роздільника більше не потрібен.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="223"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="226"/>
         <source>Critical</source>
         <translation>Критично</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="223"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="226"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="757"/>
+        <location filename="../../src/Misc/CLI.cpp" line="756"/>
         <source>Project file not found</source>
         <translation>Файл проєкту не знайдено</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="758"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -18875,17 +19106,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="761"/>
+        <location filename="../../src/Misc/CLI.cpp" line="760"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Видалити цей ярлик?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="765"/>
+        <location filename="../../src/Misc/CLI.cpp" line="764"/>
         <source>Delete Shortcut</source>
         <translation>Видалити Ярлик</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="767"/>
+        <location filename="../../src/Misc/CLI.cpp" line="766"/>
         <source>Quit</source>
         <translation>Вийти</translation>
     </message>
@@ -19238,92 +19469,90 @@ function parse(%1) { ... }
         <translation>Підключитися до Віддаленої Панелі Приладів</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="59"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="67"/>
         <source>Disconnect the local device or close the open recording first.</source>
         <translation>Спочатку відключіть локальний пристрій або закрийте відкритий запис.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="72"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="80"/>
         <source>Not attached.</source>
         <translation>Не підключено.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="75"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
         <source>Attached to %1 - no response, the link may be down.</source>
         <translation>Підключено до %1 — немає відповіді, з'єднання може бути розірване.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="79"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
         <translation>Підключено до %1 — з'єднання встановлено, віддалений пристрій не передає дані.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="82"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
         <source>Attached to %1 - live, %2 datasets at %3 Hz.</source>
         <translation>Підключено до %1 — активно, %2 наборів даних на %3 Гц.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
         <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Спостереження за панеллю приладів іншого екземпляра Serial Studio через мережу. Перегляд лише для читання: жодна дія тут не досягає віддаленого пристрою.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="138"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="147"/>
         <source>Recent</source>
         <translation>Нещодавні</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="159"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="170"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="168"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
         <source>Host name or IP address</source>
         <translation>Ім'я хоста або IP-адреса</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="172"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="187"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="200"/>
         <source>Token</source>
         <translation>Токен</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="197"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
         <source>Required only for connections from another machine</source>
         <translation>Потрібно лише для підключень з іншого комп'ютера</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="201"/>
         <source>Rate</source>
-        <translation>Частота</translation>
+        <translation type="vanished">Частота</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="213"/>
         <source>%1 Hz</source>
-        <translation>%1 Гц</translation>
+        <translation type="vanished">%1 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="265"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
         <translation>З'єднання не зашифроване. Токен авторизує підключення, але не захищає дані, що передаються, тому використовуйте це лише в довіреній мережі або через тунель.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="283"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="292"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
         <source>Detach</source>
         <translation>Від'єднати</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="302"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
         <source>Attach</source>
         <translation>Приєднати</translation>
     </message>
@@ -20109,103 +20338,103 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1229"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
         <source>Select logo image</source>
         <translation>Виберіть зображення логотипу</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1233"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>Зображення (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="613"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
         <source>Open Session File</source>
         <translation>Відкрити Файл Сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="617"/>
         <source>Session files (*.db)</source>
         <translation>Файли сесій (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1432"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1434"/>
         <source>Cannot open session file</source>
         <translation>Не вдається відкрити файл сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="840"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="842"/>
         <source>Delete session from %1?</source>
         <translation>Видалити сесію з %1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="845"/>
         <source>Delete Session</source>
         <translation>Видалити Сесію</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1293"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1295"/>
         <source>No project data</source>
         <translation>Немає даних проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="841"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Усі показники та необроблені дані цієї сесії буде остаточно видалено.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="671"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="680"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="673"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="682"/>
         <source>Lock Session File</source>
         <translation>Заблокувати Файл Сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="672"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="674"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Виберіть пароль для блокування файлу сесії:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="683"/>
         <source>Confirm the password:</source>
         <translation>Підтвердіть пароль:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="689"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="691"/>
         <source>Passwords do not match</source>
         <translation>Паролі не збігаються</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="690"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="692"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>Введені паролі не збігаються. Файл сесії не заблоковано.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="726"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="728"/>
         <source>Unlock Session File</source>
         <translation>Розблокувати Файл Сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="727"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="729"/>
         <source>Enter the session file password:</source>
         <translation>Введіть пароль файла сесії:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="737"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="739"/>
         <source>Incorrect password</source>
         <translation>Неправильний пароль</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="738"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="740"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Введений пароль не збігається з паролем, збереженим у файлі сесії.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="830"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="832"/>
         <source>Session file locked</source>
         <translation>Файл сесії заблоковано</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="831"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="833"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Розблокуйте файл сесії перед видаленням записаних сесій.</translation>
     </message>
@@ -20214,12 +20443,12 @@ function parse(%1) { ... }
         <translation type="vanished">Ця сесія не містить вбудованого файлу проєкту — панель приладів використовує швидкий макет графіків.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
         <source>Export Session to CSV</source>
         <translation>Експортувати сесію в CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
         <source>CSV files (*.csv)</source>
         <translation>Файли CSV (*.CSV)</translation>
     </message>
@@ -20238,19 +20467,19 @@ function parse(%1) { ... }
         <translation type="vanished">Підготовка експорту…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
         <source>Done</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1167"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1169"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
         <source>Failed</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1172"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1210"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1174"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1212"/>
         <source>Report Failed</source>
         <translation>Помилка Звіту</translation>
     </message>
@@ -20259,68 +20488,68 @@ function parse(%1) { ... }
         <translation type="vanished">Не вдалося створити звіт. Перевірте шлях збереження та спробуйте ще раз.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
         <source>Save PDF Report</source>
         <translation>Зберегти PDF-Звіт</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1064"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1066"/>
         <source>Loading session data…</source>
         <translation>Завантаження даних сесії…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
         <source>Save HTML Report</source>
         <translation>Зберегти HTML-Звіт</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF-файли (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
         <source>HTML files (*.html)</source>
         <translation>HTML-файли (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1173"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1211"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1175"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1213"/>
         <source>Could not generate the report.</source>
         <translation>Не вдалося створити звіт.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1294"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1296"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Цей файл сесії не містить вбудованого проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1303"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1305"/>
         <source>Invalid project data</source>
         <translation>Недійсні дані проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1304"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1306"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>Вбудований JSON проєкту пошкоджений і не може бути відновлений.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
         <source>Restore Project</source>
         <translation>Відновити Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Проєкти Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
         <source>Cannot write file</source>
         <translation>Не вдається записати файл</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
         <source>Check file permissions and try again.</source>
         <translation>Перевірте дозволи файлу та спробуйте ще раз.</translation>
     </message>
@@ -22959,7 +23188,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Перегляд детальної документації та запитання на DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="279"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Підключитися або відключитися від налаштованого пристрою</translation>
     </message>
@@ -23009,18 +23238,28 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Керування ліцензією та активація Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="257"/>
+        <source>Remote Dashboard</source>
+        <translation>Віддалена Панель Приладів</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="260"/>
+        <source>Manage the remote dashboard connection</source>
+        <translation>Керування підключенням до віддаленої панелі приладів</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
         <source>Disconnect</source>
         <translation>Від'єднатися</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
         <source>Connect</source>
         <translation>Під'єднатися</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
         <source>Connecting…</source>
         <translation>Підключення…</translation>
     </message>
@@ -24046,7 +24285,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>Не вдалося створити віджет.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="659"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="663"/>
         <source>Device Disconnected</source>
         <translation>Пристрій Від'єднано</translation>
     </message>

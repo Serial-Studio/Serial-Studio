@@ -187,7 +187,7 @@
     {
       "id": "app.connectionDiagnostics",
       "title": "Connection Diagnostics",
-      "icon": "commands/tools",
+      "icon": "commands/diagnostics",
       "tooltip": "Check device permissions, adapters, and host reachability",
       "kind": "action",
       "contexts": [
@@ -209,6 +209,19 @@
         "dashboard"
       ],
       "order": 12,
+      "category": "tools"
+    },
+    {
+      "id": "app.macros",
+      "title": "Macros",
+      "icon": "commands/macro",
+      "tooltip": "Run API commands and script macros interactively",
+      "kind": "action",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "order": 13,
       "category": "tools"
     },
     {

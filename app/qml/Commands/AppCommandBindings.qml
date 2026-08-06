@@ -57,6 +57,7 @@ QtObject {
     "app.problems": root.cmdAppProblems,
     "app.connectionDiagnostics": root.cmdAppConnectionDiagnostics,
     "app.remoteAttach": root.cmdAppRemoteAttach,
+    "app.macros": root.cmdAppMacros,
     "app.deepwiki": root.cmdAppDeepwiki,
     "app.quit": root.cmdAppQuit,
     "license.activate": root.cmdLicenseActivate,
@@ -152,6 +153,10 @@ QtObject {
     function run() { app.showRemoteAttach() }
   }
 
+  readonly property QtObject cmdAppMacros: QtObject {
+    function run() { app.showMacros() }
+  }
+
   readonly property QtObject cmdAppDeepwiki: QtObject {
     function run() { Qt.openUrlExternally("https://deepwiki.com/Serial-Studio/Serial-Studio") }
   }
@@ -197,6 +202,7 @@ QtObject {
         : true
     readonly property bool enabled: (Cpp_IO_Manager.isConnected || Cpp_IO_Manager.configurationOk)
         && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen && !app.sessionPlayerOpen
+        && !Cpp_API_Mirror.attached
     function run() {
       if (typeof mainWindow !== "undefined" && mainWindow.userToggleConnection)
         mainWindow.userToggleConnection()

@@ -382,22 +382,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::MirrorSession</name>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="271"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="280"/>
         <source>Enter a host name and a port to attach</source>
         <translation>הזן שם מארח ופורט כדי להתחבר</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="278"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="287"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
         <translation>נתק את ההתקן המקומי או סגור את ההקלטה הפתוחה לפני התחברות ללוח מחוונים מרוחק</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="467"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="491"/>
         <source>The remote sent a project this build cannot load</source>
         <translation>המרוחק שלח פרויקט שגרסה זו אינה יכולה לטעון</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="557"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="581"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>גרסה זו פותרת את הפרויקט המרוחק לפריסת dataset שונה</translation>
     </message>
@@ -465,6 +465,30 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../src/API/Server.cpp" line="1602"/>
         <source>Invalid pending connection</source>
         <translation>חיבור ממתין לא חוקי</translation>
+    </message>
+</context>
+<context>
+    <name>API::TerminalBridge</name>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="83"/>
+        <location filename="../../src/API/TerminalBridge.cpp" line="115"/>
+        <source>Empty command line</source>
+        <translation>שורת פקודה ריקה</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="101"/>
+        <source>Invalid parameter JSON: %1</source>
+        <translation>JSON של פרמטר לא תקין: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="105"/>
+        <source>Parameters must be a JSON object</source>
+        <translation>פרמטרים חייבים להיות אובייקט JSON</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/TerminalBridge.cpp" line="122"/>
+        <source>Unknown exception while executing command</source>
+        <translation>חריגה לא ידועה במהלך ביצוע הפקודה</translation>
     </message>
 </context>
 <context>
@@ -2229,7 +2253,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>מנתח מקורי + לוח בקרה (מעורב)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="623"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="622"/>
         <source>%1 MiB</source>
         <translation>%1 MiB</translation>
     </message>
@@ -3213,196 +3237,201 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <source>Macros</source>
+        <translation>מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>ניהול רישיון Serial Studio Pro שלך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Minimize Window</source>
         <translation>מזעור חלון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Multi-Plot</source>
         <translation>גרף מרובה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Navigate Back</source>
         <translation>ניווט אחורה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Navigate Forward</source>
         <translation>נווט קדימה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Network</source>
         <translation>רשת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>New</source>
         <translation>חדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>New Project</source>
         <translation>פרויקט חדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Next Workspace</source>
         <translation>מרחב עבודה הבא</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Open</source>
         <translation>פתח</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Open CSV</source>
         <translation>פתח CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Open MDF4</source>
         <translation>פתח MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Open Project</source>
         <translation>פתח פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Open a session file</source>
         <translation>פתח קובץ הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Open an existing JSON project</source>
         <translation>פתח פרויקט JSON קיים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Open application settings and preferences</source>
         <translation>פתח הגדרות והעדפות היישום</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Open the Assistant</source>
         <translation>פתח את העוזר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Open the Project Editor documentation</source>
         <translation>פתח את התיעוד של עורך הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>פתח את עורך הפרויקט כדי ליצור או לשנות את פריסת ה-JSON שלך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Output</source>
         <translation>פלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Painter</source>
         <translation>Painter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>הפעל קובץ CSV כאילו היה נתוני חיישן חיים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>הפעל קובץ MDF4 כאילו היה נתוני חיישן חיים (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Plot</source>
         <translation>גרף</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Preferences</source>
         <translation>העדפות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Previous Workspace</source>
         <translation>סביבת עבודה קודמת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Problem Center</source>
         <translation>מרכז בעיות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Process</source>
         <translation>תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Project Editor</source>
         <translation>עורך פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Project File Mode</source>
         <translation>מצב קובץ פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Quick Plot Mode</source>
         <translation>מצב גרף מהיר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Quit</source>
         <translation>יציאה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Redo</source>
         <translation>בצע שוב</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
         <source>Redo the last undone project edit</source>
         <translation>בצע שוב את עריכת הפרויקט האחרונה שבוטלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Remote Dashboard</source>
         <translation>לוח בקרה מרוחק</translation>
     </message>
@@ -3411,247 +3440,252 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">שחזר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>Replay</source>
         <translation>הפעל מחדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>Replay selected session on the dashboard</source>
         <translation>הפעל מחדש את הסשן הנבחר בלוח הבקרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Reset</source>
         <translation>אפס</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Restore</source>
         <translation>שחזור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Restore Backup</source>
         <translation>שחזור גיבוי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>Restore Project</source>
         <translation>שחזור פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>שחזור תמונת מצב אוטומטית אחרונה של הפרויקט הנוכחי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Restore the project file from this session file</source>
         <translation>שחזור קובץ הפרויקט מקובץ סשן זה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>סקור אבחון פרויקט, קישור וסקריפט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <source>Run API commands and script macros interactively</source>
+        <translation>הרצת פקודות API ומאקרו סקריפט באופן אינטראקטיבי</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>Save As</source>
         <translation>שמור בשם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Save Project</source>
         <translation>שמור פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Save Project As</source>
         <translation>שמור פרויקט בשם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Search</source>
         <translation>חיפוש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>בחר תקשורת Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>בחר תקשורת CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
         <source>Select HID device communication (Pro)</source>
         <translation>בחר תקשורת התקן HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>בחר תקשורת MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Select Serial port (UART) communication</source>
         <translation>בחר תקשורת יציאה טורית (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Select TCP/UDP network communication</source>
         <translation>בחר תקשורת רשת TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
         <source>Select audio input device (Pro)</source>
         <translation>בחר התקן קלט אודיו (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>בחר תקשורת צינור תהליך (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>בחר תקשורת USB גולמית (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>Session Database</source>
         <translation>מסד נתוני סשן</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Sessions</source>
         <translation>סשנים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>הגדרת סיסמה ונעילת עורך הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Set a password to prevent session deletions</source>
         <translation>הגדרת סיסמה למניעת מחיקת סשנים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Show application info and license details</source>
         <translation>הצגת מידע על האפליקציה ופרטי רישיון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>Show timestamps in the console</source>
         <translation>הצגת חותמות זמן בקונסולה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>Slider</source>
         <translation>סליידר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Start Menu</source>
         <translation>תפריט התחלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>מעבר למצב קונסולה בלבד (ללא ניתוח)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>מעבר למצב קובץ פרויקט (ניתוח באמצעות פרויקט)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>מעבר למצב תרשים מהיר (ערכים מופרדים בפסיקים)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Table</source>
         <translation>טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Text Field</source>
         <translation>שדה טקסט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Toggle</source>
         <translation>מתג</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Toggle hexadecimal console display</source>
         <translation>החלף תצוגת קונסול הקסדצימלית</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Tools</source>
         <translation>כלים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Undo</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Undo the last project edit</source>
         <translation>בטל את עריכת הפרויקט האחרונה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Unlock</source>
         <translation>בטל נעילה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>צפה בתיעוד מפורט ושאל שאלות ב-DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>צפה בלוח הבקרה של מופע Serial Studio אחר דרך הרשת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>Web View</source>
         <translation>תצוגת אינטרנט</translation>
     </message>
@@ -5238,6 +5272,55 @@ Any unsaved changes are lost. Continue?</source>
         <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="525"/>
         <source>Choose a template to load:</source>
         <translation>בחר תבנית לטעינה:</translation>
+    </message>
+</context>
+<context>
+    <name>DataModel::MacroRunner</name>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="242"/>
+        <source>Failed to queue the macro onto the worker thread</source>
+        <translation>הוספת המאקרו לתור של ה-worker thread נכשלה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="257"/>
+        <source>Macro is empty</source>
+        <translation>המאקרו ריק</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="269"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="383"/>
+        <source>Failed to create the Lua state</source>
+        <translation>יצירת מצב Lua נכשלה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="316"/>
+        <source>Unknown Lua error</source>
+        <translation>שגיאת Lua לא ידועה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="429"/>
+        <source>Select macro to load</source>
+        <translation>בחר מאקרו לטעינה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="442"/>
+        <source>Cannot open %1</source>
+        <translation>לא ניתן לפתוח %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="465"/>
+        <source>Save macro</source>
+        <translation>שמור מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="481"/>
+        <source>Cannot write %1</source>
+        <translation>לא ניתן לכתוב %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="487"/>
+        <source>Failed to save %1: %2</source>
+        <translation>שמירת %1 נכשלה: %2</translation>
     </message>
 </context>
 <context>
@@ -13723,12 +13806,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="646"/>
+        <location filename="../../src/MDF4/Export.cpp" line="648"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>ייצוא MDF4 הוא תכונת Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="647"/>
+        <location filename="../../src/MDF4/Export.cpp" line="649"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>תכונה זו דורשת רישיון. יש לרכוש רישיון כדי לאפשר ייצוא MDF4.</translation>
     </message>
@@ -14309,6 +14392,154 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
 </context>
 <context>
+    <name>Macros</name>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
+        <source>Macros</source>
+        <translation>מאקרואים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
+        <source>[macro] finished</source>
+        <translation>[מאקרו] הסתיים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="194"/>
+        <source>[macro] %1</source>
+        <translation>[מאקרו] %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="197"/>
+        <source>[macro] saved %1</source>
+        <translation>[מאקרו] נשמר %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="202"/>
+        <source>[macro] loaded %1</source>
+        <translation>[מאקרו] נטען %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="313"/>
+        <source>Search commands...</source>
+        <translation>חפש פקודות...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="437"/>
+        <source>Parameters</source>
+        <translation>פרמטרים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="438"/>
+        <source>No parameters</source>
+        <translation>אין פרמטרים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="499"/>
+        <source>Terminal</source>
+        <translation>מסוף</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="505"/>
+        <source>Script</source>
+        <translation>סקריפט</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="596"/>
+        <source>Type a command below to get started</source>
+        <translation>הקלד פקודה למטה כדי להתחיל</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="621"/>
+        <source>Copy</source>
+        <translation>העתק</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="627"/>
+        <source>Select All</source>
+        <translation>בחר הכל</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="633"/>
+        <source>Clear</source>
+        <translation>נקה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="674"/>
+        <source>command.name { "parameter": value }</source>
+        <translation>command.name { "parameter": value }</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="816"/>
+        <source>Run command</source>
+        <translation>הרץ פקודה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="831"/>
+        <source>Clear output</source>
+        <translation>נקה פלט</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="864"/>
+        <source>[macro] verify: no syntax errors</source>
+        <translation>[macro] אימות: אין שגיאות תחביר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="866"/>
+        <source>[macro] verify failed: %1</source>
+        <translation>[macro] אימות נכשל: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="889"/>
+        <source>Discard changes?</source>
+        <translation>לבטל את השינויים?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="902"/>
+        <source>The macro editor has unsaved changes.</source>
+        <translation>עורך המאקרו מכיל שינויים שלא נשמרו.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="942"/>
+        <source>JavaScript</source>
+        <translation>JavaScript</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="942"/>
+        <source>Lua</source>
+        <translation>Lua</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="960"/>
+        <source>Load macro</source>
+        <translation>טען מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="970"/>
+        <source>Save macro</source>
+        <translation>שמור מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="981"/>
+        <source>Verify macro</source>
+        <translation>אמת מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="992"/>
+        <source>Run macro</source>
+        <translation>הרץ מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1005"/>
+        <source>Stop macro</source>
+        <translation>עצור מאקרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1015"/>
+        <source>Clear editor</source>
+        <translation>נקה עורך</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="213"/>
@@ -14326,17 +14557,17 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>פרויקט ריק</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="711"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="730"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="719"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="738"/>
         <source>Waiting for data…</source>
         <translation>ממתין לנתונים…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="720"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="739"/>
         <source>Connecting to device…</source>
         <translation>מתחבר להתקן…</translation>
     </message>
@@ -14345,7 +14576,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation type="vanished">אפליקציה</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="753"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="772"/>
         <source>Command Palette</source>
         <translation>לוח פקודות</translation>
     </message>
@@ -18036,22 +18267,22 @@ Click Refresh to update the list.</source>
         <translation>טעינת טקסט הפתיחה נכשלה :(</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="223"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="226"/>
         <source>Critical</source>
         <translation>קריטי</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="223"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="226"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="757"/>
+        <location filename="../../src/Misc/CLI.cpp" line="756"/>
         <source>Project file not found</source>
         <translation>קובץ הפרויקט לא נמצא</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="758"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -18060,17 +18291,17 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="761"/>
+        <location filename="../../src/Misc/CLI.cpp" line="760"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>האם למחוק את קיצור הדרך?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="765"/>
+        <location filename="../../src/Misc/CLI.cpp" line="764"/>
         <source>Delete Shortcut</source>
         <translation>מחק קיצור דרך</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="767"/>
+        <location filename="../../src/Misc/CLI.cpp" line="766"/>
         <source>Quit</source>
         <translation>יציאה</translation>
     </message>
@@ -18712,92 +18943,90 @@ function parse(%1) { ... }
         <translation>התחבר ללוח בקרה מרוחק</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="59"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="67"/>
         <source>Disconnect the local device or close the open recording first.</source>
         <translation>נתק את ההתקן המקומי או סגור את ההקלטה הפתוחה תחילה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="72"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="80"/>
         <source>Not attached.</source>
         <translation>לא מחובר.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="75"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
         <source>Attached to %1 - no response, the link may be down.</source>
         <translation>מחובר אל %1 - אין תגובה, הקישור עשוי להיות מנותק.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="79"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
         <translation>מחובר אל %1 - מקושר, המרוחק אינו מייצר נתונים.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="82"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
         <source>Attached to %1 - live, %2 datasets at %3 Hz.</source>
         <translation>מחובר אל %1 - פעיל, %2 מערכי נתונים ב-%3 Hz.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="124"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
         <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>צפה בלוח המחוונים של מופע Serial Studio אחר דרך הרשת. התצוגה היא לקריאה בלבד: שום דבר שתעשה כאן לא מגיע להתקן המרוחק.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="138"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="147"/>
         <source>Recent</source>
         <translation>אחרונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="159"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="170"/>
         <source>Host</source>
         <translation>מארח</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="168"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
         <source>Host name or IP address</source>
         <translation>שם מארח או כתובת IP</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="172"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
         <source>Port</source>
         <translation>פורט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="187"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="200"/>
         <source>Token</source>
         <translation>אסימון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="197"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
         <source>Required only for connections from another machine</source>
         <translation>נדרש רק עבור חיבורים ממכונה אחרת</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="201"/>
         <source>Rate</source>
-        <translation>קצב</translation>
+        <translation type="vanished">קצב</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="213"/>
         <source>%1 Hz</source>
-        <translation>%1 Hz</translation>
+        <translation type="vanished">%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="265"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
         <translation>הקישור אינו מוצפן. האסימון מאשר את החיבור אך אינו מגן על מה שעובר דרכו, לכן יש להשתמש ברשת מהימנה או דרך מנהרה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="283"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="292"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
         <source>Detach</source>
         <translation>נתק</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="302"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
         <source>Attach</source>
         <translation>צרף</translation>
     </message>
@@ -19579,136 +19808,136 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="613"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
         <source>Open Session File</source>
         <translation>פתח קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="617"/>
         <source>Session files (*.db)</source>
         <translation>קבצי סשן (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="671"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="680"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="673"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="682"/>
         <source>Lock Session File</source>
         <translation>נעל קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="672"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="674"/>
         <source>Choose a password to lock the session file:</source>
         <translation>בחר סיסמה לנעילת קובץ הסשן:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="683"/>
         <source>Confirm the password:</source>
         <translation>אשר את הסיסמה:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="689"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="691"/>
         <source>Passwords do not match</source>
         <translation>הסיסמאות אינן תואמות</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="690"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="692"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>שתי הסיסמאות שהזנת אינן תואמות. קובץ הסשן לא ננעל.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="726"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="728"/>
         <source>Unlock Session File</source>
         <translation>בטל נעילת קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="727"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="729"/>
         <source>Enter the session file password:</source>
         <translation>הזן את סיסמת קובץ הסשן:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="737"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="739"/>
         <source>Incorrect password</source>
         <translation>סיסמה שגויה</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="738"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="740"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>הסיסמה שהזנת אינה תואמת לזו השמורה בקובץ הסשן.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="830"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="832"/>
         <source>Session file locked</source>
         <translation>קובץ הסשן נעול</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="831"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="833"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>בטל נעילת קובץ הסשן לפני מחיקת סשנים מוקלטים.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="840"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="842"/>
         <source>Delete session from %1?</source>
         <translation>למחוק סשן מ-%1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="841"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>כל הקריאות והנתונים הגולמיים של סשן זה יוסרו לצמיתות.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="845"/>
         <source>Delete Session</source>
         <translation>מחק סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
         <source>Export Session to CSV</source>
         <translation>ייצוא סשן ל-CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="984"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
         <source>CSV files (*.csv)</source>
         <translation>קבצי CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1064"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1066"/>
         <source>Loading session data…</source>
         <translation>טוען נתוני סשן…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
         <source>Save PDF Report</source>
         <translation>שמור דוח PDF</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1102"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
         <source>Save HTML Report</source>
         <translation>שמור דוח HTML</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
         <source>PDF files (*.pdf)</source>
         <translation>קבצי PDF (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
         <source>HTML files (*.html)</source>
         <translation>קבצי HTML (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1167"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1169"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
         <source>Failed</source>
         <translation>נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1172"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1210"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1174"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1212"/>
         <source>Report Failed</source>
         <translation>הדוח נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1173"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1211"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1175"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1213"/>
         <source>Could not generate the report.</source>
         <translation>לא ניתן ליצור את הדוח.</translation>
     </message>
@@ -19717,62 +19946,62 @@ function parse(%1) { ... }
         <translation type="vanished">לא ניתן ליצור את הדוח. בדוק את נתיב הפלט ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1201"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
         <source>Done</source>
         <translation>הושלם</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1229"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
         <source>Select logo image</source>
         <translation>בחירת תמונת לוגו</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1233"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>תמונות (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1293"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1295"/>
         <source>No project data</source>
         <translation>אין נתוני פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1294"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1296"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>קובץ סשן זה אינו מכיל פרויקט משובץ.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1303"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1305"/>
         <source>Invalid project data</source>
         <translation>נתוני פרויקט לא תקינים</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1304"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1306"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>ה-JSON המוטמע של הפרויקט פגום ולא ניתן לשחזרו.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
         <source>Restore Project</source>
         <translation>שחזור פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1314"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>פרויקטי Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
         <source>Cannot write file</source>
         <translation>לא ניתן לכתוב קובץ</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1322"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
         <source>Check file permissions and try again.</source>
         <translation>בדוק הרשאות קובץ ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1432"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1434"/>
         <source>Cannot open session file</source>
         <translation>לא ניתן לפתוח קובץ סשן</translation>
     </message>
@@ -22365,23 +22594,33 @@ function parse(%1) { ... }
         <translation>נהל רישיון והפעל את Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="257"/>
+        <source>Remote Dashboard</source>
+        <translation>לוח בקרה מרוחק</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="260"/>
+        <source>Manage the remote dashboard connection</source>
+        <translation>נהל את החיבור ללוח בקרה מרוחק</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
         <source>Disconnect</source>
         <translation>התנתק</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
         <source>Connect</source>
         <translation>התחבר</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
         <source>Connecting…</source>
         <translation>מתחבר…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="279"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>התחבר או התנתק מההתקן המוגדר</translation>
     </message>
@@ -23386,7 +23625,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>לא ניתן היה ליצור את ה-Widget.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="659"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="663"/>
         <source>Device Disconnected</source>
         <translation>התקן מנותק</translation>
     </message>

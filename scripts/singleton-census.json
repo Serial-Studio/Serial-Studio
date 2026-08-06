@@ -1,33 +1,33 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1613,
-  "files": 199,
+  "total": 1621,
+  "files": 203,
   "buckets": {
-    "root": 149,
+    "root": 151,
     "accessor": 68,
-    "ctor-capture": 96,
+    "ctor-capture": 103,
     "deferred": 17,
-    "static-cache": 1163,
-    "loose": 120
+    "static-cache": 1164,
+    "loose": 118
   },
   "per_class": {
     "IO::ConnectionManager": 210,
     "DataModel::ProjectModel": 209,
     "AppState": 137,
-    "CommandRegistry": 98,
+    "CommandRegistry": 99,
     "UI::Dashboard": 83,
-    "DataModel::FrameBuilder": 57,
+    "DataModel::FrameBuilder": 58,
     "Misc::IconRegistry": 48,
-    "Misc::ThemeManager": 41,
-    "Misc::TimerEvents": 30,
+    "Misc::ThemeManager": 43,
+    "Misc::TimerEvents": 31,
     "Console::Handler": 29,
     "API::Server": 28,
     "Misc::WorkspaceManager": 27,
+    "Misc::CommonFonts": 27,
     "DataModel::NotificationCenter": 26,
-    "Misc::CommonFonts": 26,
+    "API::CommandRegistry": 25,
     "Misc::Translator": 25,
-    "API::CommandRegistry": 24,
     "Sessions::Export": 24,
     "Licensing::LemonSqueezy": 23,
     "CSV::Player": 21,
@@ -97,6 +97,7 @@
     "Misc::Utilities": 2,
     "UI::CommandRegistry": 2,
     "UISessionRegistry": 2,
+    "CommandHandler": 1,
     "BenchmarkRunner": 1,
     "DataModel::JsWatchdogThread": 1,
     "Benchmark::BenchmarkRunner": 1,
@@ -741,6 +742,17 @@
         "loose": 0
       }
     },
+    "app/src/API/TerminalBridge.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
     "app/src/AppState.cpp": {
       "total": 3,
       "buckets": {
@@ -879,6 +891,17 @@
         "root": 0,
         "accessor": 0,
         "ctor-capture": 6,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "app/src/DataModel/Editors/MacroEditor.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
         "deferred": 0,
         "static-cache": 1,
         "loose": 0
@@ -1269,6 +1292,28 @@
         "loose": 0
       }
     },
+    "app/src/DataModel/Scripting/MacroRunner.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "app/src/DataModel/Scripting/MacroWorker.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
     "app/src/DataModel/Scripting/ScriptApiCall.cpp": {
       "total": 7,
       "buckets": {
@@ -1534,14 +1579,14 @@
       }
     },
     "app/src/Misc/CLI.cpp": {
-      "total": 45,
+      "total": 43,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 43,
-        "loose": 2
+        "loose": 0
       }
     },
     "app/src/Misc/CommonFonts.cpp": {
@@ -1699,9 +1744,9 @@
       }
     },
     "app/src/Misc/ModuleManager.cpp": {
-      "total": 143,
+      "total": 145,
       "buckets": {
-        "root": 143,
+        "root": 145,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,

@@ -270,6 +270,7 @@
         <file>icons/commands/16/database-export.svg</file>
         <file>icons/commands/16/deepwiki.svg</file>
         <file>icons/commands/16/deploy.svg</file>
+        <file>icons/commands/16/diagnostics.svg</file>
         <file>icons/commands/16/examples.svg</file>
         <file>icons/commands/16/extensions.svg</file>
         <file>icons/commands/16/file-transmission.svg</file>
@@ -281,6 +282,7 @@
         <file>icons/commands/16/invert.svg</file>
         <file>icons/commands/16/labels.svg</file>
         <file>icons/commands/16/left-view.svg</file>
+        <file>icons/commands/16/macro.svg</file>
         <file>icons/commands/16/map.svg</file>
         <file>icons/commands/16/mf4-log.svg</file>
         <file>icons/commands/16/mf4.svg</file>
@@ -313,6 +315,7 @@
         <file>icons/commands/24/console-log.svg</file>
         <file>icons/commands/24/console.svg</file>
         <file>icons/commands/24/crosshair.svg</file>
+        <file>icons/commands/24/diagnostics.svg</file>
         <file>icons/commands/24/export.svg</file>
         <file>icons/commands/24/external-window.svg</file>
         <file>icons/commands/24/file-transmission.svg</file>
@@ -323,6 +326,7 @@
         <file>icons/commands/24/interpolate-off.svg</file>
         <file>icons/commands/24/interpolate-on.svg</file>
         <file>icons/commands/24/left-view.svg</file>
+        <file>icons/commands/24/macro.svg</file>
         <file>icons/commands/24/map.svg</file>
         <file>icons/commands/24/mf4-log.svg</file>
         <file>icons/commands/24/mf4.svg</file>
@@ -359,6 +363,7 @@
         <file>icons/commands/32/database-export.svg</file>
         <file>icons/commands/32/deepwiki.svg</file>
         <file>icons/commands/32/deploy.svg</file>
+        <file>icons/commands/32/diagnostics.svg</file>
         <file>icons/commands/32/device-setup.svg</file>
         <file>icons/commands/32/disconnect.svg</file>
         <file>icons/commands/32/examples.svg</file>
@@ -369,6 +374,7 @@
         <file>icons/commands/32/freeze.svg</file>
         <file>icons/commands/32/full-screen.svg</file>
         <file>icons/commands/32/help.svg</file>
+        <file>icons/commands/32/macro.svg</file>
         <file>icons/commands/32/mf4-log.svg</file>
         <file>icons/commands/32/mf4.svg</file>
         <file>icons/commands/32/open-project.svg</file>

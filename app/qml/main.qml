@@ -60,6 +60,12 @@ Item {
                                       && CLI_RUNTIME_MODE === true
 
   //
+  // Session-scoped macro-editor draft, kept while the Macros window is closed
+  //
+  property string macroDraft: ""
+  property int macroDraftLanguage: 0
+
+  //
   // Per-deployment QSettings suffix injected by the C++ launcher
   //
   readonly property string settingsSuffix: runtimeMode
@@ -236,6 +242,7 @@ Item {
       runtimeReconfigureDialog.close()
       fileTransmissionDialog.close()
       remoteAttachDialog.close()
+      macrosLoader.close()
 
       if (csvPlayerLoader.item)
         csvPlayerLoader.item.close()
@@ -411,6 +418,15 @@ Item {
     id: dbExplorerLoader
 
     source: "qrc:/serial-studio.com/gui/qml/DatabaseExplorer/DatabaseExplorer.qml"
+  }
+
+  //
+  // Macros: interactive in-process command terminal + script macro editor
+  //
+  DialogLoader {
+    id: macrosLoader
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/Macros.qml"
   }
 
   //
@@ -750,6 +766,13 @@ Item {
     }
 
     dbExplorerLoader.activate()
+  }
+
+  //
+  // Macros window: available in every build variant
+  //
+  function showMacros() {
+    macrosLoader.activate()
   }
 
   //

@@ -47,6 +47,7 @@
 #include "API/Mirror/MirrorSession.h"
 #include "API/ProcessLauncher.h"
 #include "API/Server.h"
+#include "API/TerminalBridge.h"
 #include "AppInfo.h"
 #include "AppState.h"
 #include "Benchmark/BenchmarkRunner.h"
@@ -57,6 +58,7 @@
 #include "DataModel/Editors/ControlScriptEditor.h"
 #include "DataModel/Editors/FrameParserModel.h"
 #include "DataModel/Editors/JsCodeEditor.h"
+#include "DataModel/Editors/MacroEditor.h"
 #include "DataModel/Editors/OutputCodeEditor.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/Importers/ProtoImporter.h"
@@ -66,6 +68,7 @@
 #include "DataModel/RowFilterProxy.h"
 #include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/MacroRunner.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
 #include "MDF4/Export.h"
@@ -563,6 +566,9 @@ void Misc::ModuleManager::configureUpdater()
  */
 void Misc::ModuleManager::registerQmlTypes()
 {
+  qmlRegisterType<API::TerminalBridge>("SerialStudio", 1, 0, "ApiTerminalBridge");
+  qmlRegisterType<DataModel::MacroEditor>("SerialStudio", 1, 0, "MacroEditor");
+  qmlRegisterType<DataModel::MacroRunner>("SerialStudio", 1, 0, "MacroRunner");
   qmlRegisterType<DataModel::RowFilterProxy>("SerialStudio", 1, 0, "RowFilterProxy");
   qmlRegisterType<Widgets::Bar>("SerialStudio", 1, 0, "BarModel");
   qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");

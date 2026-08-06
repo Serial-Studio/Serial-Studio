@@ -269,6 +269,7 @@ set(SOURCES
   src/API/MCPHandler.cpp
   src/API/PathPolicy.cpp
   src/API/ProcessLauncher.cpp
+  src/API/TerminalBridge.cpp
   src/API/EnumLabels.cpp
   src/API/Handlers/IOManagerHandler.cpp
   src/API/Handlers/UARTHandler.cpp
@@ -317,6 +318,8 @@ set(SOURCES
   src/IO/FrameReader.cpp
   src/DataModel/Scripting/ControlScript.cpp
   src/DataModel/Scripting/ControlScriptWorker.cpp
+  src/DataModel/Scripting/MacroWorker.cpp
+  src/DataModel/Scripting/MacroRunner.cpp
   src/DataModel/Scripting/FrameParser.cpp
   src/DataModel/Scripting/FrameParserPipeline.cpp
   src/DataModel/Scripting/JsScriptEngine.cpp
@@ -336,6 +339,7 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
   src/DataModel/Editors/ControlScriptEditor.cpp
+  src/DataModel/Editors/MacroEditor.cpp
   src/DataModel/Editors/SerialStudioCompleter.cpp
   src/DataModel/Editors/FrameParserModel.cpp
   src/DataModel/Editors/CodeFormatter.cpp
@@ -453,6 +457,7 @@ set(HEADERS
   src/API/MCPHandler.h
   src/API/PathPolicy.h
   src/API/ProcessLauncher.h
+  src/API/TerminalBridge.h
   src/API/EnumLabels.h
   src/API/Handlers/IOManagerHandler.h
   src/API/Handlers/UARTHandler.h
@@ -510,6 +515,8 @@ set(HEADERS
   src/DataModel/Scripting/FrameParser.h
   src/DataModel/Scripting/ControlScript.h
   src/DataModel/Scripting/ControlScriptWorker.h
+  src/DataModel/Scripting/MacroWorker.h
+  src/DataModel/Scripting/MacroRunner.h
   src/DataModel/Scripting/FrameParserPipeline.h
   src/DataModel/Scripting/IScriptEngine.h
   src/DataModel/Scripting/JsScriptEngine.h
@@ -525,6 +532,7 @@ set(HEADERS
   src/DataModel/Scripting/NativeTemplates/NativeTemplate.h
   src/DataModel/Editors/JsCodeEditor.h
   src/DataModel/Editors/ControlScriptEditor.h
+  src/DataModel/Editors/MacroEditor.h
   src/DataModel/Editors/SerialStudioCompleter.h
   src/DataModel/Editors/FrameParserModel.h
   src/DataModel/Editors/CodeFormatter.h
@@ -575,6 +583,7 @@ set(QML_SOURCES
   qml/Dialogs/About.qml
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/AccelerometerConfigDialog.qml
+  qml/Dialogs/Macros.qml
   qml/Dialogs/AxisRangeDialog.qml
   qml/Dialogs/Benchmark.qml
   qml/Dialogs/TriggerDialog.qml

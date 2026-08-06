@@ -248,6 +248,20 @@ Rectangle {
     }
 
     //
+    // Remote dashboard button (shown instead of Connect while a mirror view is attached)
+    //
+    Widgets.ToolbarButton {
+      readonly property var entry: _tbModel.binding("app.remoteAttach")
+
+      onClicked: entry.run()
+      text: qsTr("Remote Dashboard")
+      visible: Cpp_API_Mirror.attached
+      Layout.alignment: Qt.AlignVCenter
+      ToolTip.text: qsTr("Manage the remote dashboard connection")
+      icon.source: Cpp_Misc_IconRegistry.iconById("commands/remote-attach", 32)
+    }
+
+    //
     // Connect/Disconnect button
     //
     Widgets.ToolbarButton {
@@ -266,8 +280,8 @@ Rectangle {
       text: connecting ? qsTr("Connecting…") : (checked ? qsTr("Disconnect") : qsTr("Connect"))
       icon.source: Cpp_Misc_IconRegistry.iconById(checked ? "commands/connect" : "commands/disconnect", 32)
 
-      visible: entry !== null && entry.visible !== false
       enabled: entry !== null && entry.enabled !== false
+      visible: !Cpp_API_Mirror.attached && entry !== null && entry.visible !== false
 
       onClicked: entry.run()
 
