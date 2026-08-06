@@ -39,14 +39,22 @@ Widgets.SmartDialog {
   //
   // Connection parameters
   //
-  property int rate: 20
   property int port: 7777
   property string host: "127.0.0.1"
 
   //
-  // Remote credential: held for this dialog only, never written to disk
+  // Remote credential: remembered per endpoint in the application settings
   //
   property string token: ""
+
+  //
+  // Reopen with the last used endpoint and its stored token filled in
+  //
+  Component.onCompleted: {
+    const recents = Cpp_API_Mirror.recentEndpoints
+    if (recents.length > 0)
+      applyEndpoint(String(recents[0]))
+  }
 
   //
   // Human-readable reason the Attach button is unavailable, empty when it is not
@@ -86,7 +94,7 @@ Widgets.SmartDialog {
   }
 
   //
-  // Splits a remembered "host:port" entry back into the two fields
+  // Splits a remembered "host:port" entry back into the fields, with its stored token
   //
   function applyEndpoint(text) {
     const cut = text.lastIndexOf(":")
@@ -95,13 +103,14 @@ Widgets.SmartDialog {
 
     root.host = text.substring(0, cut)
     root.port = parseInt(text.substring(cut + 1)) || 7777
+    root.token = Cpp_API_Mirror.tokenFor(text)
   }
 
   //
   // Starts the attach with the current field contents
   //
   function attachNow() {
-    Cpp_API_Mirror.attach(root.host, root.port, root.token, root.rate)
+    Cpp_API_Mirror.attach(root.host, root.port, root.token)
   }
 
   //
@@ -144,6 +153,8 @@ Widgets.SmartDialog {
         id: recentCombo
 
         Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        enabled: !Cpp_API_Mirror.attached
         model: Cpp_API_Mirror.recentEndpoints
         visible: Cpp_API_Mirror.recentEndpoints.length > 0
 
@@ -163,8 +174,9 @@ Widgets.SmartDialog {
       Widgets.LineField {
         text: root.host
         Layout.fillWidth: true
-        enabled: !Cpp_API_Mirror.attached
+        opacity: enabled ? 1 : 0.5
         onTextEdited: root.host = text
+        enabled: !Cpp_API_Mirror.attached
         placeholderText: qsTr("Host name or IP address")
       }
 
@@ -179,6 +191,7 @@ Widgets.SmartDialog {
         editable: true
         value: root.port
         Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
         enabled: !Cpp_API_Mirror.attached
         onValueModified: root.port = value
       }
@@ -191,26 +204,11 @@ Widgets.SmartDialog {
       Widgets.LineField {
         text: root.token
         Layout.fillWidth: true
-        enabled: !Cpp_API_Mirror.attached
+        opacity: enabled ? 1 : 0.5
         onTextEdited: root.token = text
+        enabled: !Cpp_API_Mirror.attached
         echoMode: TextInput.PasswordEchoOnEdit
         placeholderText: qsTr("Required only for connections from another machine")
-      }
-
-      Label {
-        text: qsTr("Rate") + ":"
-        color: Cpp_ThemeManager.colors["text"]
-      }
-
-      SpinBox {
-        to: 60
-        from: 1
-        editable: true
-        value: root.rate
-        Layout.fillWidth: true
-        enabled: !Cpp_API_Mirror.attached
-        onValueModified: root.rate = value
-        textFromValue: (value) => qsTr("%1 Hz").arg(value)
       }
     }
 

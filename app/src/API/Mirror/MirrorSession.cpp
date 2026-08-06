@@ -22,6 +22,7 @@
 #include "API/Mirror/MirrorSession.h"
 
 #include <algorithm>
+#include <iterator>
 #include <limits>
 #include <QDebug>
 #include <QJsonArray>
@@ -246,11 +247,21 @@ const QString& API::MirrorSession::lastErrorCode() const noexcept
 }
 
 /**
- * @brief Previously used endpoints, most recent first. Tokens are never persisted.
+ * @brief Previously used endpoints, most recent first.
  */
 QStringList API::MirrorSession::recentEndpoints() const
 {
   return m_settings.value(QStringLiteral("Mirror/RecentEndpoints")).toStringList();
+}
+
+/**
+ * @brief Remembered token for @p endpoint, empty when none was stored. Stored plaintext in the
+ *        application settings, the same protection the publisher gives its own token.
+ */
+QString API::MirrorSession::tokenFor(const QString& endpoint) const
+{
+  const auto map = m_settings.value(QStringLiteral("Mirror/EndpointTokens")).toMap();
+  return map.value(endpoint).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -260,12 +271,10 @@ QStringList API::MirrorSession::recentEndpoints() const
 /**
  * @brief Attaches to a remote dashboard. The local session is snapshotted before anything is
  *        written, and the attached flag is raised before the first frame can arrive so the
- *        dashboard's cached stream flag is already true when it does.
+ *        dashboard's cached stream flag is already true when it does. The rate is automatic:
+ *        the protocol maximum is requested and the publisher clamps to its own display refresh.
  */
-void API::MirrorSession::attach(const QString& host,
-                                const int port,
-                                const QString& token,
-                                const int hz)
+void API::MirrorSession::attach(const QString& host, const int port, const QString& token)
 {
   if (host.isEmpty() || port <= 0 || port > 65535) {
     setError(QStringLiteral("MIRROR_BAD_ENDPOINT"), tr("Enter a host name and a port to attach"));
@@ -287,8 +296,8 @@ void API::MirrorSession::attach(const QString& host,
   setError(QString(), QString());
   setAttached(true);
 
-  m_client->open(host, static_cast<quint16>(port), token, hz);
-  rememberEndpoint(QStringLiteral("%1:%2").arg(host, QString::number(port)));
+  m_client->open(host, static_cast<quint16>(port), token, Mirror::kHzMax);
+  rememberEndpoint(QStringLiteral("%1:%2").arg(host, QString::number(port)), token);
 }
 
 /**
@@ -396,10 +405,11 @@ void API::MirrorSession::restoreLocalState()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Moves @p endpoint to the front of the remembered list. Only the address is stored; a
- *        token is a credential and this viewer never writes one to disk.
+ * @brief Moves @p endpoint to the front of the remembered list and stores its token alongside it,
+ *        so reattaching to a known publisher needs no retyping. An empty token drops the stored
+ *        one, keeping a credential the user cleared from lingering on disk.
  */
-void API::MirrorSession::rememberEndpoint(const QString& endpoint)
+void API::MirrorSession::rememberEndpoint(const QString& endpoint, const QString& token)
 {
   SS_ASSERT(!endpoint.isEmpty(), return);
 
@@ -409,12 +419,22 @@ void API::MirrorSession::rememberEndpoint(const QString& endpoint)
   while (list.size() > kMaxRecentEndpoints)
     list.removeLast();
 
+  auto tokens = m_settings.value(QStringLiteral("Mirror/EndpointTokens")).toMap();
+  if (token.isEmpty())
+    tokens.remove(endpoint);
+  else
+    tokens.insert(endpoint, token);
+
+  for (auto it = tokens.begin(); it != tokens.end();)
+    it = list.contains(it.key()) ? std::next(it) : tokens.erase(it);
+
   m_settings.setValue(QStringLiteral("Mirror/RecentEndpoints"), list);
+  m_settings.setValue(QStringLiteral("Mirror/EndpointTokens"), tokens);
   Q_EMIT recentEndpointsChanged();
 }
 
 /**
- * @brief Drops one endpoint from the remembered list.
+ * @brief Drops one endpoint and its stored token from the remembered list.
  */
 void API::MirrorSession::forgetEndpoint(const QString& endpoint)
 {
@@ -422,7 +442,11 @@ void API::MirrorSession::forgetEndpoint(const QString& endpoint)
   if (list.removeAll(endpoint) <= 0)
     return;
 
+  auto tokens = m_settings.value(QStringLiteral("Mirror/EndpointTokens")).toMap();
+  tokens.remove(endpoint);
+
   m_settings.setValue(QStringLiteral("Mirror/RecentEndpoints"), list);
+  m_settings.setValue(QStringLiteral("Mirror/EndpointTokens"), tokens);
   Q_EMIT recentEndpointsChanged();
 }
 

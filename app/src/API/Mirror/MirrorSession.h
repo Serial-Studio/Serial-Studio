@@ -112,11 +112,13 @@ public:
   [[nodiscard]] const QString& lastErrorCode() const noexcept;
   [[nodiscard]] QStringList recentEndpoints() const;
 
+  Q_INVOKABLE [[nodiscard]] QString tokenFor(const QString& endpoint) const;
+
 public slots:
   void detach();
   void refreshCanAttach();
   void forgetEndpoint(const QString& endpoint);
-  void attach(const QString& host, const int port, const QString& token, const int hz);
+  void attach(const QString& host, const int port, const QString& token);
 
 private slots:
   void onLinkStatusChanged();
@@ -151,7 +153,7 @@ private:
   void captureLocalState();
   void restoreLocalState();
   void setAttached(const bool value);
-  void rememberEndpoint(const QString& address);
+  void rememberEndpoint(const QString& address, const QString& token);
   void publishFrames(const QJsonObject& snapshot);
   void assignValues(const QJsonObject& snapshot);
   void setError(const QString& code, const QString& message);

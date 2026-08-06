@@ -43,11 +43,10 @@ any machine that can reach port 7777 may connect after presenting the token.
 
 | Field | Meaning | Default |
 |-------|---------|---------|
-| Recent | Previously used `host:port` endpoints; selecting one fills both fields | shown once an endpoint has been used |
+| Recent | Previously used `host:port` endpoints; selecting one fills the fields below, including the token that was used with it | shown once an endpoint has been used |
 | Host | Host name or IP address of the publisher | `127.0.0.1` |
 | Port | The publisher's API server port | `7777` |
 | Token | The publisher's API access token; required only for connections from another machine | empty |
-| Rate | Requested update rate, 1-60 Hz | `20 Hz` |
 
 3. Press **Attach**. The status box reports the link state:
    - *Attached … live, N datasets at N Hz* — values are flowing.
@@ -62,9 +61,10 @@ operation mode, and connection state come back exactly as they were.
 A viewer cannot attach while its own device connection or a file recording is active; the
 dialog says so and the **Attach** button stays disabled until the local stream is closed.
 
-The requested rate is a ceiling, not a promise: the publisher never sends faster than its own
-display refresh, and slower rates cost proportionally less bandwidth. The token is held in
-memory for the dialog only and is never written to the viewer's disk.
+The update rate is automatic: the viewer receives values as fast as the publisher's own
+display refreshes, never faster, so there is nothing to tune. Endpoints and their tokens are
+remembered in the viewer's application settings; the dialog reopens with the last used
+publisher filled in.
 
 ## What travels, what does not
 
@@ -83,14 +83,17 @@ The v1 link has three limits to understand before opening it up:
 - **The token is the full API credential, not a viewer-only pass.** A holder can also issue
   API commands on the publisher, exactly as any API client can. There is no read-only token.
 - **Local connections skip the token.** Any process on the publisher's machine may attach.
+- **Remembered tokens are stored as plain text.** A token saved with a recent endpoint sits in
+  the viewer's application settings with the same protection as any other setting; anyone with
+  access to the viewer's user profile can read it.
 
 Use Remote Dashboard on a trusted network, or wrap the connection in a tunnel (SSH port
 forwarding or a VPN) when it must cross an untrusted one. Keep **Allow External API
 Connections** off when no remote viewer is expected.
 
-The number of simultaneous viewers is capped at the API server's client limit by default; the
-`API/MaxViewers` entry in the application settings lowers it (a value of `0` refuses viewers
-while leaving the rest of the API available).
+The number of simultaneous viewers is capped at the API server's client limit (32 connections)
+by default; the `API/MaxViewers` entry in the application settings lowers it (a value of `0`
+refuses viewers while leaving the rest of the API available).
 
 ## See also
 

@@ -549,6 +549,7 @@ Widgets.MiniWindow {
   function _refreshSourceConnection() {
     sourceDisconnected = !SerialStudio.isAnyPlayerOpen()
                          && !Cpp_Benchmark_Runner.running
+                         && !Cpp_API_Mirror.attached
                          && !Cpp_IO_Manager.isDeviceConnected(root.deviceIndex)
   }
   Component.onCompleted: {
@@ -562,6 +563,9 @@ Widgets.MiniWindow {
   } Connections {
     target: Cpp_IO_Manager
     function onConnectedChanged() { root._refreshSourceConnection() }
+  } Connections {
+    target: Cpp_API_Mirror
+    function onAttachedChanged() { root._refreshSourceConnection() }
   } Connections {
     target: Cpp_CSV_Player
     function onOpenChanged() { root._refreshSourceConnection() }

@@ -26,7 +26,9 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 - Strings and non-finite doubles ride sparse side maps (`strings`, `nonFinite` with
   `nan`/`inf`/`-inf`); the array slot holds `null`. Timestamps are relative ns per source
   (`monotonic-relative` + `originUnixMs`).
-- Bandwidth: per-viewer rate 1-60 Hz (default 20) capped by the local UI tick; snapshots
+- Bandwidth: per-viewer rate 1-60 Hz on the wire (default 20) capped by the local UI tick; the
+  in-app viewer always requests `kHzMax` and lets the publisher clamp (the RemoteAttach dialog
+  has no rate field — rate is automatic); snapshots
   encoded once per distinct precision (`roundSignificant`, 0-17), not per viewer; 1 s
   heartbeat when idle; structures base64-then-chunked at 512 KB / max 64 parts
   (`MIRROR_STRUCTURE_TOO_LARGE` beyond).
@@ -76,9 +78,16 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 - **No commercial gate today** — spec 0040 leaves publisher/viewer gating an open question;
   both ship in GPL and commercial builds. Access control is transport-level: API auth token +
   loopback binding, `--api-external` / `--api-token <hex>` for headless opt-in. The
-  RemoteAttach dialog keeps the token in memory only, never on disk.
+  RemoteAttach dialog remembers tokens per endpoint (`Mirror/EndpointTokens` QSettings map,
+  plaintext by design — same protection as the publisher's own token); `forgetEndpoint()`
+  drops the token with the endpoint, and an attach with an empty token clears any stored one.
 - Command surface: `app.remoteAttach` in `app/rcc/commands/app.json` (contexts app +
-  dashboard), icons `commands/{16,24,32}/remote-attach.svg`.
+  dashboard), icons `commands/{16,24,32}/remote-attach.svg`. While attached, the toolbar's
+  right-pinned Connect button hides and a "Remote Dashboard" button (same `app.remoteAttach`
+  entry) takes its place; per-widget disconnected overlays are suppressed via
+  `Cpp_API_Mirror.attached` in `WidgetDelegate.qml`. Detach pops the UI back to the console
+  view (`MainWindow.qml` watches `attachedChanged`, mirroring the `onDataReset` handler)
+  since the restored local session has no live stream.
 
 ## Tests
 
