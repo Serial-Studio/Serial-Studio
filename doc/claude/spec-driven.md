@@ -39,6 +39,15 @@ Artifacts live in `doc/claude/specs/NNNN-slug/` (see
 [specs/README.md](./specs/README.md) for numbering and the `status:` lifecycle). The templates
 the skills copy from are in `doc/claude/specs/templates/`.
 
+## Phase 0 — explore (optional, ungated)
+
+Before `/ss-spec`, throwaway prototyping is sanctioned: scratchpad sims (Node/Python), API
+experiments against a running app (`localhost:7777`), quick sketches of shapes that will be
+rejected. No artifact, no gate, no approval — the output is understanding, and anything worth
+keeping is restated inside `spec.md`. Nothing from phase 0 lands in the repo. The point is
+abductive: form the hypothesis by poking reality before writing it down, instead of speccing
+from armchair reasoning.
+
 ## Gate discipline
 
 The gates are the point. **Do not run the next phase until a human has approved the current

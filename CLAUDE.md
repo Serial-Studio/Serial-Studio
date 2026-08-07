@@ -16,9 +16,14 @@
   changed (and what's next) when you stop. Skip both on trivial edits.
   (The Context Canary line below is exempt — it is mandatory on every response.)
 - **Do not create markdown/doc files** unless asked. Share info conversationally.
-- **Don't build or run the app.** Never invoke `cmake`/`jom`/`clang`/the compiler — the
-  developer builds and runs it themselves. Verify changes by reading and with
-  `scripts/code-verify.py`; leave compilation and runtime testing to the user.
+- **Never compile.** Never invoke `cmake`/`jom`/`clang`/the compiler — the developer builds
+  the app themselves. Verify structure by reading and with `scripts/code-verify.py`.
+- **Runtime experiments are sanctioned.** Ground truth beats on-paper reasoning: drive a
+  *running* app through the API server (`localhost:7777`, `tests/utils/api_client.py`) to
+  probe hypotheses, not only to verify fixes; run `ctest` and already-built binaries
+  (`--selftest`, `--benchmark-hotpath`) against an existing build dir; prototype ideas as
+  throwaway Node/Python sims in the scratchpad. Launching the GUI app and compiling stay
+  the user's.
 - **Update CLAUDE.md** for any architectural change that future me would otherwise miss.
 - **`scripts/` is the style contract.** When in doubt, run it; don't restate it here.
 
@@ -110,15 +115,17 @@ Python/pytest suite under `tests/`. Full catalog — per-file coverage, fixtures
 delay/operation-mode tables, the C++ ctest tier + presets, the `--selftest` in-app tier —
 lives in [tests/README.md](tests/README.md); read it before writing a test. What binds you:
 
-- **You don't build or run the app, so you can't run the live-API tests.** Integration,
+- **You don't build or launch the app, but you may drive a running one.** Integration,
   security, and performance tests drive a running Serial Studio over TCP — they need the app
-  up with **Settings → Miscellaneous → Enable API Server** (`localhost:7777`). The user runs
-  those.
+  up with **Settings → Miscellaneous → Enable API Server** (`localhost:7777`). The user
+  launches it; once up, you may run those tests and poke the API directly
+  (`tests/utils/api_client.py`) to test hypotheses. Probe first: `nc -z 127.0.0.1 7777`.
 - **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh
   Node.js subprocess per case, no Qt, no app. `pip install -r tests/requirements.txt` once;
   `pytest.ini` registers all markers and a 30 s per-test timeout.
 - **C++ units under `app/tests/`** (spec 0032) run via `ctest` and the `CMakePresets.json`
-  presets — the maintainer's step, not yours. **`--selftest`** suites run inside
+  presets — the maintainer builds; you may run `ctest` against an existing build dir (never
+  configure or compile). **`--selftest`** suites run inside
   `CLI::process()` **before** the composition root: never touch an application singleton there.
 - The C++ hotpath has no pytest path — throughput is the user-run `--benchmark-hotpath` gate
   (see Threading & Hotpath), piece correctness the ctest tier; `ci.yml` runs both.
@@ -172,7 +179,10 @@ rules only steer an edit if *named at the point of action*, so:
 - **Counterfactual check at handoff.** Which rule does this diff most risk violating, and
   what concrete evidence says it doesn't? Name both.
 - **Diverge by naming.** Design/review work sketches named alternatives before recommending
-  (the human still gets one recommendation, per working-relationship.md).
+  (the human still gets one recommendation, per working-relationship.md). At least one
+  alternative must violate an assumed constraint — then check whether that constraint
+  actually binds: wrong answers usually hide in premises, not derivations. Wide design
+  spaces may fan out a judge-panel workflow of independent attempts.
 - **Externalize long state.** Write intermediate state into durable artifacts (spec/plan/
   tasks files, a chat checklist); re-name only what binds the current edit.
 

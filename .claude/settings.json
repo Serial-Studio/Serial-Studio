@@ -6,7 +6,12 @@
       "Bash(python3 scripts/documentation-verify.py *)",
       "Bash(python3 scripts/sanitize-commit.py *)",
       "Bash(otool *)",
-      "Bash(nm *)"
+      "Bash(nm *)",
+      "Bash(pytest *)",
+      "Bash(python3 -m pytest *)",
+      "Bash(node *)",
+      "Bash(ctest *)",
+      "Bash(nc -z *)"
     ],
     "ask": [
       "Bash(git commit *)",
