@@ -26,7 +26,8 @@
   `API::CommandRegistry::execute()`, multi-select fan-outs) are one atomic step by
   construction.
 - **Invariant: a new document-mutating slot must open a `ProjectUndoScope`.**
-  `code-verify.py:undo-scope-missing` (error) enforces it; the whitelist in that rule holds
+  `code-verify.py:undo-scope-missing` (error) enforces it, scanning the `ProjectModel*.cpp`
+  TUs (Editor TUs excluded); the whitelist in that rule holds
   the intentional exceptions — workspace CRUD, presentation-blob setters (`widgetSettings`,
   `widgetDisplay`, tree expansion, layouts), and the history machinery itself. Those stay
   outside undo history by spec; their edits fold into neighboring whole-document snapshots

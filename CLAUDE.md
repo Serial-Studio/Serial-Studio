@@ -88,26 +88,14 @@ on. Capability without predictability gets disabled.
 
 ## Scripts
 
-All scripts in `scripts/` are CWD-independent and write LF endings on every platform. Safe
-to run from any directory.
-
-| Script | Role |
-|--------|------|
-| `sanitize-commit.py` | Top-level driver: chmod (POSIX) → expand-doxygen → clang-format → code-verify --fix → clang-format → code-verify --check → singleton-census gate (blocking) → black → documentation-verify → generate-sdk → generate-command-strings → generate-property-registry (regen + --check + --check-snapshot) → registry-verify → search-index rebuild → spec-0036 corpus-manifest refresh → changed-file summary. Sanitize only — it never commits or pushes. **Run before every commit.** |
-| `code-verify.py` | Structural + tone linter for C++/QML/H. `--fix` rewrites in place; `--check` regenerates `.code-report`. Errors block CI; advisories are baseline-debt cleanup. |
-| `documentation-verify.py` | Markdown linter for AI-narration / marketing copy. Read-only; writes `.doc-report`. Targets `README.md`, `AGENTS.md`, `doc/help/**`, `examples/**/README.md` (CLAUDE.md is exempt). |
-| `expand-doxygen.py` | Rewrites single-line `/** text */` into the canonical 3-line block. |
-| `tu-cutter.py` | Deterministic TU splitter for god-class .cpp files; refuses to cut unless the block parse reconstructs the original exactly (spec 0002 holds the manifests + plan). |
-| `registry-verify.py` | Spec-0028/0036 registry lint: icon tree + command manifests + commercial-guard scan of `app/qml/Commands/` + QML icon render-size + property-manifest rules. Run after touching icons, manifests, or bindings; gated in `sanitize-commit.py`. |
-| `generate-command-strings.py` | Manifests -> `app/src/UI/CommandStrings.cpp` (lupdate stub, "Commands" context). Hooked into sanitize-commit; `--check` gates drift. |
-| `generate-legacy-icons.py` | icon-map.csv -> `Misc::legacyIconPath()` table mapping pre-0028 icon URLs persisted in user project files. Rerun only if the migration manifest changes. |
-
-Suppression: wrap a region in `// code-verify off` / `// code-verify on` (C++ and QML);
-`<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown). Suppressions are a
-code-review trigger — fix root cause when possible.
-
-`.code-report` and `.doc-report` are the cleanup checklists. If a rule appears as advisory,
-that means the existing codebase has baseline debt — new code should still clear it.
+All scripts in `scripts/` are CWD-independent and write LF endings; run from anywhere. The
+per-script table lives in [doc/claude/scripts.md](doc/claude/scripts.md). What binds you:
+**run `sanitize-commit.py` before every commit** (sanitize only — it never commits or
+pushes); `code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
+`.code-report`; errors block CI). Suppression: `// code-verify off` / `// code-verify on`
+(C++/QML), `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown) — suppressions
+are a code-review trigger. `.code-report` / `.doc-report` are the cleanup checklists;
+advisories are baseline debt, new code still clears them.
 
 ## Tests
 
@@ -160,6 +148,7 @@ not a substitute.
 | [doc/claude/common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup table — gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, scope creep, macOS file-dialog reentrancy, etc.). |
 | [doc/claude/code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten: formatting, naming, control flow, C++ headers, signals/connections, comments & Doxygen, QML, performance, licensing. The Code Style block below is the inline essentials — read this for the complete rules. |
 | [doc/claude/directory-map.md](doc/claude/directory-map.md) | The `app/src` / `app/qml` / `lib` tree with one-line role notes per subsystem. |
+| [doc/claude/scripts.md](doc/claude/scripts.md) | The full per-script table for `scripts/` — roles, pipelines, when each runs. The Scripts block above is the inline essentials. |
 | [doc/claude/working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning, surface tradeoffs as decisions, engage the "why." Read once per session if you haven't internalized it. |
 | [doc/claude/j-space.md](doc/claude/j-space.md) | The verbalization discipline and its grounding (the Transformer Circuits global-workspace paper): why naming the binding constraints right before an edit works, the six disciplines, and where each is wired into the skills. Read when tuning any AI-facing doc or skill. |
 | [doc/claude/repo-skills.md](doc/claude/repo-skills.md) | The project-scoped `/`-skills catalog (`ss-hotpath`, `ss-new-driver`, `ss-verify`, `qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`, `ss-docs`, and the `ss-spec`/`ss-plan`/`ss-tasks`/`ss-implement` workflow) and when each fires. Most auto-activate; this is the lookup when picking one deliberately. |
@@ -291,56 +280,33 @@ unchanged — QML/API contracts intact. Map in
 
 ## Project Undo History (spec 0031)
 
-Full detail: [doc/claude/architecture/project.md](doc/claude/architecture/project.md)
-"Undo History" (read before touching any `ProjectModel` mutator).
-
-- **`DataModel::ProjectHistory`**: scoped whole-document mementos, two-phase —
-  `ProjectUndoScope` **stages** a snapshot, the first `setModified(true)` **commits** it. A
-  guard-returning slot or a mutator that never calls `setModified(true)` silently records
-  nothing.
-- **Every new document-mutating `ProjectModel` slot opens a `ProjectUndoScope`**
-  (`undo-scope-missing` lint; Editor TUs excluded, workspace CRUD + presentation setters
-  whitelisted). Composites wrap in one `ProjectUndoFrame`; dialog-showing slots open their
-  scope *after* the dialog.
-- **The apply path never emits `jsonFileChanged`**; `project.undo`/`project.redo` never error
-  on empty history.
+Full contract: [doc/claude/architecture/project.md](doc/claude/architecture/project.md)
+"Undo History" (read before touching any `ProjectModel` mutator). Load-bearing: mementos are
+two-phase — `ProjectUndoScope` **stages**, the first `setModified(true)` **commits** (no
+`setModified(true)` = silently records nothing); every new document-mutating slot opens a
+scope (`undo-scope-missing` lint); composites wrap in one `ProjectUndoFrame`; dialog-showing
+slots open their scope *after* the dialog; the apply path never emits `jsonFileChanged`.
 
 ## Dataset Property Registry & Generated API Surfaces (specs 0036, 0037)
 
 Full detail: [doc/claude/architecture/project.md](doc/claude/architecture/project.md)
-(read before adding a dataset property or touching any API-surface generator).
-
-- **One declaration**: `app/rcc/properties/dataset.json`. `generate-property-registry.py`
-  emits six checked-in artifacts from it (C++ TUs under `*/Generated/`, the gRPC field-number
-  ledger `proto-fields.json`, the typed `.proto`). **Never hand-edit a generated file**; edit
-  the manifest and rerun.
-- **`schema_props_for()` is the only definition of a property's API schema.** Never re-derive
-  it anywhere else.
-- **gRPC field numbers are append-only released state.** Removing a parameter retires its
-  number to `reserved`; moving one is `code-verify`'s `proto-field-renumbered` error.
-  `api-schema.json` is maintainer-dumped; `--check-snapshot` warns locally, **fails in CI**.
-- **Gates** (`generate-property-registry.py --check`/`--check-snapshot`, `generate-sdk.py
-  --check`, `generate-command-strings.py --check`, `registry-verify.py`, `code-verify.py`)
-  all run in `sanitize-commit.py` and the CI `lint` job.
+(read before adding a dataset property or touching any API-surface generator). Load-bearing:
+one declaration (`app/rcc/properties/dataset.json`) generates six checked-in artifacts —
+**never hand-edit a generated file**, edit the manifest and rerun; `schema_props_for()` is
+the only definition of a property's API schema; gRPC field numbers are append-only released
+state (removed → `reserved`, moved = `proto-field-renumbered` error; `--check-snapshot`
+warns locally, **fails in CI**); all gates run in `sanitize-commit.py` and the CI `lint` job.
 
 ## Icon & Command Registry (spec 0028)
 
 Full detail + recipes: [doc/claude/architecture/commands-icons.md](doc/claude/architecture/commands-icons.md)
 (read before adding a toolbar button, palette entry, menu item, shortcut, or fixed icon).
-
-- **Icons**: `qrc:/icons/<category>/<tier>/<name>.svg` (tiers 16/24/32/48; `buttons/`
-  exempt). Resolve via `Misc::IconRegistry` — QML `Cpp_Misc_IconRegistry.icon(cat, name, px)`
-  / `iconById("cat/name", px)`, C++ `iconPath()` for QPixmap/QIcon. Nearest tier
-  at-or-above px; unknown ids warn once and serve `system/16/missing.svg`. Never hardcode a
-  path. Old URLs in saved projects remap via `Misc::legacyIconPath()`.
-- **Commands**: metadata declared once in `app/rcc/commands/*.json` (+ layout manifests in
-  `layouts/`), behavior bound per context in `app/qml/Commands/*CommandBindings.qml`, joined
-  by `CommandModel.qml`, rendered by `Widgets/CommandToolbar.qml`; loaded by
-  `UI::CommandRegistry` (`Cpp_UI_CommandRegistry`). **New command = one manifest entry + one
-  bindings entry**; palette, Start menu, toolbars, shortcuts follow. A command shows in a
-  palette only if its `contexts` includes that palette AND the context's model has a binding
-  for it (binding-set order `[app,dashboard]` main / `[dashboard,app]` dashboard). Commercial
-  bindings need a `Cpp_CommercialBuild` guard; run `scripts/registry-verify.py`.
+Load-bearing: icons resolve ONLY via `Misc::IconRegistry` — never hardcode a
+`qrc:/icons/...` path (legacy URLs remap via `Misc::legacyIconPath()`); **new command = one
+manifest entry (`app/rcc/commands/*.json`) + one bindings entry
+(`app/qml/Commands/*CommandBindings.qml`)** — palette, Start menu, toolbars, shortcuts
+follow; commercial bindings need a `Cpp_CommercialBuild` guard; run
+`scripts/registry-verify.py` after touching any of it.
 
 ## Widget Extensions (spec 0038)
 
@@ -352,15 +318,12 @@ trust model is consent, not containment — never call an extension sandboxed. R
 
 ## Remote Dashboard Mirror (spec 0040)
 
-One instance streams its dashboard to another over the API socket (NDJSON, top-level
-`"mirror"` key; FNV-1a-64 layout hash guards positional snapshots — any change to dataset
-ordering or `wireUniqueId` is a wire break: bump `kWireVersion`, regenerate
-`tests/fixtures/mirror/`). Publisher wakes on the display tick only while subscribed (never
-the frame path); viewer injects via `Dashboard::hotpathRxFrame` with
-`structureGeneration >= 1<<48`, never reaches the export fan-out.
-`ConnectionState::streamFrames` defaults `true`; only `mirror.subscribe` may flip it. Read
-[doc/claude/architecture/mirror.md](doc/claude/architecture/mirror.md) before touching
-`app/src/API/Mirror/` or `streamAvailable()`.
+Read [doc/claude/architecture/mirror.md](doc/claude/architecture/mirror.md) before touching
+`app/src/API/Mirror/` or `streamAvailable()`. Load-bearing: any change to dataset ordering
+or `wireUniqueId` is a wire break (bump `kWireVersion`, regenerate `tests/fixtures/mirror/`);
+publisher wakes on the display tick only while subscribed, never the frame path; viewer
+frames never reach the export fan-out; `ConnectionState::streamFrames` defaults `true` —
+only `mirror.subscribe` may flip it.
 
 ## Code Style — Essentials
 
