@@ -69,7 +69,7 @@ struct StableKey {
 }
 
 /**
- * @brief Tiling environment shared by every per-count auto-layout helper.
+ * @brief Tiling environment shared by the auto-layout tiling helpers.
  */
 struct TileEnv {
   int margin;
@@ -269,160 +269,45 @@ static void placeWindow(QQuickItem* win, int x, int y, int w, int h)
 }
 
 /**
- * @brief One window fills the available canvas area.
+ * @brief Picks the auto-layout column count for a window count: fixed choices
+ *        up to six windows, aspect-aware square-root fit beyond that.
  */
-static void tileOne(const QList<QQuickItem*>& wins, const TileEnv& env)
+[[nodiscard]] static int autoLayoutColumnCount(const int n, const TileEnv& env)
 {
-  placeWindow(wins[0], env.margin, env.margin, env.availW, env.availH);
-}
-
-/**
- * @brief Two windows split side-by-side or stacked depending on orientation.
- */
-static void tileTwo(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  if (env.isLandscape) {
-    const int w = (env.availW - env.spacing) / 2;
-    placeWindow(wins[0], env.margin, env.margin, w, env.availH);
-    placeWindow(wins[1], env.margin + w + env.spacing, env.margin, w, env.availH);
-    return;
-  }
-
-  const int h = (env.availH - env.spacing) / 2;
-  placeWindow(wins[0], env.margin, env.margin, env.availW, h);
-  placeWindow(wins[1], env.margin, env.margin + h + env.spacing, env.availW, h);
-}
-
-/**
- * @brief Three windows in a master + 2-stack arrangement.
- */
-static void tileThree(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  if (env.isLandscape) {
-    const int masterW = env.availW / 2;
-    const int stackW  = env.availW - masterW - env.spacing;
-    const int stackH  = (env.availH - env.spacing) / 2;
-    placeWindow(wins[0], env.margin, env.margin, masterW, env.availH);
-    placeWindow(wins[1], env.margin + masterW + env.spacing, env.margin, stackW, stackH);
-    placeWindow(wins[2],
-                env.margin + masterW + env.spacing,
-                env.margin + stackH + env.spacing,
-                stackW,
-                stackH);
-    return;
-  }
-
-  const int masterH = env.availH / 2;
-  const int stackH  = env.availH - masterH - env.spacing;
-  const int stackW  = (env.availW - env.spacing) / 2;
-  placeWindow(wins[0], env.margin, env.margin, env.availW, masterH);
-  placeWindow(wins[1], env.margin, env.margin + masterH + env.spacing, stackW, stackH);
-  placeWindow(
-    wins[2], env.margin + stackW + env.spacing, env.margin + masterH + env.spacing, stackW, stackH);
-}
-
-/**
- * @brief Four windows in a 2x2 grid.
- */
-static void tileFour(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  const int w = (env.availW - env.spacing) / 2;
-  const int h = (env.availH - env.spacing) / 2;
-  placeWindow(wins[0], env.margin, env.margin, w, h);
-  placeWindow(wins[1], env.margin + w + env.spacing, env.margin, w, h);
-  placeWindow(wins[2], env.margin, env.margin + h + env.spacing, w, h);
-  placeWindow(wins[3], env.margin + w + env.spacing, env.margin + h + env.spacing, w, h);
-}
-
-/**
- * @brief Five windows in an asymmetric 2+3 arrangement.
- */
-static void tileFive(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  if (env.isLandscape) {
-    const int topW = (env.availW - env.spacing) / 2;
-    const int botW = (env.availW - 2 * env.spacing) / 3;
-    const int h    = (env.availH - env.spacing) / 2;
-    placeWindow(wins[0], env.margin, env.margin, topW, h);
-    placeWindow(wins[1], env.margin + topW + env.spacing, env.margin, topW, h);
-    placeWindow(wins[2], env.margin, env.margin + h + env.spacing, botW, h);
-    placeWindow(wins[3], env.margin + botW + env.spacing, env.margin + h + env.spacing, botW, h);
-    placeWindow(
-      wins[4], env.margin + 2 * (botW + env.spacing), env.margin + h + env.spacing, botW, h);
-    return;
-  }
-
-  const int leftH  = (env.availH - env.spacing) / 2;
-  const int rightH = (env.availH - 2 * env.spacing) / 3;
-  const int w      = (env.availW - env.spacing) / 2;
-  placeWindow(wins[0], env.margin, env.margin, w, leftH);
-  placeWindow(wins[1], env.margin, env.margin + leftH + env.spacing, w, leftH);
-  placeWindow(wins[2], env.margin + w + env.spacing, env.margin, w, rightH);
-  placeWindow(wins[3], env.margin + w + env.spacing, env.margin + rightH + env.spacing, w, rightH);
-  placeWindow(
-    wins[4], env.margin + w + env.spacing, env.margin + 2 * (rightH + env.spacing), w, rightH);
-}
-
-/**
- * @brief Six windows in a 3x2 or 2x3 grid based on canvas orientation.
- */
-static void tileSix(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  const int cols = env.isLandscape ? 3 : 2;
-  const int rows = env.isLandscape ? 2 : 3;
-  const int w    = (env.availW - (cols - 1) * env.spacing) / cols;
-  const int h    = (env.availH - (rows - 1) * env.spacing) / rows;
-
-  for (int i = 0; i < 6; ++i) {
-    const int col = i % cols;
-    const int row = i / cols;
-    placeWindow(
-      wins[i], env.margin + col * (w + env.spacing), env.margin + row * (h + env.spacing), w, h);
-  }
-}
-
-/**
- * @brief Seven or more windows distributed in an aspect-aware optimal grid.
- */
-static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  const int n = wins.size();
-  if (n <= 0)
-    return;
+  static constexpr int kLandscapeCols[] = {1, 1, 2, 2, 2, 3, 3};
+  static constexpr int kPortraitCols[]  = {1, 1, 1, 1, 2, 2, 2};
+  if (n <= 6)
+    return env.isLandscape ? kLandscapeCols[n] : kPortraitCols[n];
 
   const double safeW = qMax(1, env.availW);
   const double safeH = qMax(1, env.availH);
 
-  int cols, rows;
+  int cols;
   if (env.isLandscape) {
     cols = qCeil(qSqrt(static_cast<double>(n) * safeW / safeH));
-    cols = qBound(1, cols, n);
-    rows = qCeil(static_cast<double>(n) / cols);
   } else {
-    rows = qCeil(qSqrt(static_cast<double>(n) * safeH / safeW));
-    rows = qBound(1, rows, n);
-    cols = qCeil(static_cast<double>(n) / rows);
+    const int rows = qBound(1, qCeil(qSqrt(static_cast<double>(n) * safeH / safeW)), n);
+    cols           = qCeil(static_cast<double>(n) / rows);
   }
 
-  cols = qBound(1, cols, n);
-  rows = qBound(1, rows, n);
+  return qBound(1, cols, n);
+}
 
-  for (int guard = 0; guard < 2 * n && cols * rows < n; ++guard)
-    if (env.isLandscape)
-      cols++;
-    else
-      rows++;
-
+/**
+ * @brief Lays out windows in a uniform cols x rows grid in row-major order;
+ *        requires the window count to be an exact multiple of cols.
+ */
+static void tileExactGrid(const QList<QQuickItem*>& wins, const TileEnv& env, const int cols)
+{
+  const int n                = wins.size();
+  const int rows             = n / cols;
   const int spacingForSizing = qMax(env.spacing, 0);
-  const int totalSpacingW    = (cols - 1) * spacingForSizing;
-  const int totalSpacingH    = (rows - 1) * spacingForSizing;
-  const int totalCellsW      = qMax(1, env.availW - totalSpacingW);
-  const int totalCellsH      = qMax(1, env.availH - totalSpacingH);
-
-  const int baseCellW = totalCellsW / cols;
-  const int baseCellH = totalCellsH / rows;
-  const int extraW    = totalCellsW % cols;
-  const int extraH    = totalCellsH % rows;
+  const int totalCellsW      = qMax(1, env.availW - (cols - 1) * spacingForSizing);
+  const int totalCellsH      = qMax(1, env.availH - (rows - 1) * spacingForSizing);
+  const int baseCellW        = totalCellsW / cols;
+  const int baseCellH        = totalCellsH / rows;
+  const int extraW           = totalCellsW % cols;
+  const int extraH           = totalCellsH % rows;
 
   QVector<int> colWidths(cols), colXs(cols);
   QVector<int> rowHeights(rows), rowYs(rows);
@@ -441,66 +326,62 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
     runningY      += rowHeights[r] + env.spacing;
   }
 
-  const int windowsInLastRow   = n - (rows - 1) * cols;
-  const bool hasPartialLastRow = windowsInLastRow > 0 && windowsInLastRow < cols;
-  QVector<int> lastRowWidths, lastRowXs;
+  for (int i = 0; i < n; ++i)
+    placeWindow(
+      wins[i], colXs[i % cols], rowYs[i / cols], colWidths[i % cols], rowHeights[i / cols]);
+}
 
-  if (hasPartialLastRow) {
-    const int totalSpacingLast = (windowsInLastRow - 1) * spacingForSizing;
-    const int totalCellsLast   = qMax(1, env.availW - totalSpacingLast);
-    const int baseLastW        = totalCellsLast / windowsInLastRow;
-    const int extraLastW       = totalCellsLast % windowsInLastRow;
+/**
+ * @brief Lays out windows in equal-width columns, column-major, when the count
+ *        does not fill a grid evenly: every widget keeps the same width, the
+ *        extra windows stack in the trailing columns, and each column's windows
+ *        split the full canvas height evenly.
+ */
+static void tileUnevenColumns(const QList<QQuickItem*>& wins, const TileEnv& env, const int cols)
+{
+  const int n                = wins.size();
+  const int spacingForSizing = qMax(env.spacing, 0);
+  const int totalCellsW      = qMax(1, env.availW - (cols - 1) * spacingForSizing);
+  const int baseCellW        = totalCellsW / cols;
+  const int extraW           = totalCellsW % cols;
+  const int baseCount        = n / cols;
+  const int extraCount       = n % cols;
 
-    lastRowWidths.resize(windowsInLastRow);
-    lastRowXs.resize(windowsInLastRow);
+  int index    = 0;
+  int runningX = env.margin;
+  for (int c = 0; c < cols; ++c) {
+    const int colW        = baseCellW + (c < extraW ? 1 : 0);
+    const int count       = baseCount + (c >= cols - extraCount ? 1 : 0);
+    const int totalCellsH = qMax(1, env.availH - (count - 1) * spacingForSizing);
+    const int baseCellH   = totalCellsH / count;
+    const int extraH      = totalCellsH % count;
 
-    int runningLastX = env.margin;
-    for (int c = 0; c < windowsInLastRow; ++c) {
-      lastRowWidths[c]  = baseLastW + (c < extraLastW ? 1 : 0);
-      lastRowXs[c]      = runningLastX;
-      runningLastX     += lastRowWidths[c] + env.spacing;
+    int runningY = env.margin;
+    for (int r = 0; r < count; ++r) {
+      const int cellH = baseCellH + (r < extraH ? 1 : 0);
+      placeWindow(wins[index++], runningX, runningY, colW, cellH);
+      runningY += cellH + env.spacing;
     }
-  }
 
-  for (int i = 0; i < n; ++i) {
-    const int row = i / cols;
-    const int col = i % cols;
-
-    if (hasPartialLastRow && row == rows - 1)
-      placeWindow(wins[i], lastRowXs[col], rowYs[row], lastRowWidths[col], rowHeights[row]);
-    else
-      placeWindow(wins[i], colXs[col], rowYs[row], colWidths[col], rowHeights[row]);
+    runningX += colW + env.spacing;
   }
 }
 
 /**
- * @brief Dispatches to the appropriate tiling helper based on window count.
+ * @brief Tiles windows into equal-width columns so every widget shares the
+ *        same width regardless of count; exact grids keep row-major order.
  */
 static void dispatchTile(const QList<QQuickItem*>& wins, const TileEnv& env)
 {
-  switch (wins.size()) {
-    case 1:
-      tileOne(wins, env);
-      return;
-    case 2:
-      tileTwo(wins, env);
-      return;
-    case 3:
-      tileThree(wins, env);
-      return;
-    case 4:
-      tileFour(wins, env);
-      return;
-    case 5:
-      tileFive(wins, env);
-      return;
-    case 6:
-      tileSix(wins, env);
-      return;
-    default:
-      tileGrid(wins, env);
-      return;
-  }
+  const int n = wins.size();
+  if (n <= 0)
+    return;
+
+  const int cols = autoLayoutColumnCount(n, env);
+  if (n % cols == 0)
+    tileExactGrid(wins, env, cols);
+  else
+    tileUnevenColumns(wins, env, cols);
 }
 
 //--------------------------------------------------------------------------------------------------
