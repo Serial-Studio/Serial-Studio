@@ -128,7 +128,7 @@ Item {
         }
       }
       ToolTip.text: qsTr("Plot Trajectory")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "poliline", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "poliline", 16)
     }
 
     DashboardToolButton {
@@ -144,7 +144,7 @@ Item {
         }
       }
       ToolTip.text: qsTr("Show Weather")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "weather", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "weather", 16)
     }
 
     DashboardToolButton {
@@ -160,7 +160,7 @@ Item {
         }
       }
       ToolTip.text: qsTr("NASA Weather Overlay")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "nasa", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "nasa", 16)
     }
 
     Rectangle {
@@ -189,7 +189,7 @@ Item {
           root.model.zoomLevel = root.model.zoomLevel + 1
       }
       ToolTip.text: qsTr("Zoom In")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-in", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-in", 16)
     }
 
     DashboardToolButton {
@@ -198,7 +198,7 @@ Item {
           root.model.zoomLevel = root.model.zoomLevel - 1
       }
       ToolTip.text: qsTr("Zoom Out")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-out", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-out", 16)
     }
 
     Item {
