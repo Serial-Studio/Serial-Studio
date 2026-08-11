@@ -290,7 +290,8 @@ int Sessions::Verifier::runRegression()
     m_notes.append(QStringLiteral("One or more value transforms differ between the recorded "
                                   "project and the current project."));
 
-  DataModel::ControlScript::instance().shutdown();
+  static auto& controlScript = DataModel::ControlScript::instance();
+  controlScript.shutdown();
 
   const QString replayError = replayBothSides();
   if (replayError == QLatin1String("chunk-budget-exceeded") || m_chunkBudgetExceeded)
