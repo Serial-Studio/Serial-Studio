@@ -1664,6 +1664,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     if (dep) {
       m_tableStore.setReadCaptureTarget(nullptr);
       dep->lastRunClock = m_tableStore.writeClock();
+      dep->hasRun       = true;
     }
 
     if (result.typeId() == QMetaType::Double) {
@@ -1740,6 +1741,7 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
     if (dep) {
       m_tableStore.setReadCaptureTarget(nullptr);
       dep->lastRunClock = m_tableStore.writeClock();
+      dep->hasRun       = true;
     }
 
     if (result.typeId() == QMetaType::Double) {
@@ -1841,10 +1843,18 @@ void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
 }
 
 /**
- * @brief Transform-only dataset pass for reprocessFrames(): re-applies every transform from
- *        the dataset's retained raw value instead of fresh channels, so table-driven (virtual)
+ * @brief Transform-only dataset pass for reprocessFrames(): re-applies transforms from the
+ *        dataset's retained raw value instead of fresh channels, so table-driven (virtual)
  *        datasets pick up the current store contents without a device frame. Returns true when
  *        any dataset value changed, so republishFrames() can skip sources with nothing new.
+ *
+ *        Under change-driven transforms this pass honors the same dependency skip as the live
+ *        lanes: a transform re-runs only when a store slot it reads has changed since its last
+ *        run. Channel-fed (non-virtual) datasets additionally skip once profiling shows their
+ *        transform reads no tables at all -- with an unchanged input a re-run cannot produce a
+ *        new value, but it would double-invoke stateful transforms (accumulators integrating
+ *        the same retained sample again) and mark their source frame changed, republishing
+ *        synthetic frames into plots and exports on every tick.
  */
 bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
 {
@@ -1867,6 +1877,17 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
       if (dataset.transformCode.isEmpty())
         continue;
 
+      DatasetDeps* dep = nullptr;
+      if (m_changeDriven) {
+        dep = &m_datasetDeps[dataset.uniqueId];
+        if (!dep->readSlots.empty()
+            && !m_tableStore.changedSince(dep->readSlots, dep->lastRunClock))
+          continue;
+
+        if (!dataset.virtual_ && dep->hasRun && dep->readSlots.empty())
+          continue;
+      }
+
       QVariant input(0.0);
       if (!dataset.virtual_) {
         bool numeric     = false;
@@ -1878,7 +1899,17 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
       const bool prev_is_numeric = dataset.isNumeric;
       const QString prev_value   = dataset.value;
 
+      if (dep)
+        m_tableStore.setReadCaptureTarget(&dep->readSlots);
+
       const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
+
+      if (dep) {
+        m_tableStore.setReadCaptureTarget(nullptr);
+        dep->lastRunClock = m_tableStore.writeClock();
+        dep->hasRun       = true;
+      }
+
       if (result.typeId() == QMetaType::Double) {
         dataset.numericValue = SerialStudio::toDouble(result);
         dataset.value        = QString::number(dataset.numericValue, 'g', 15);

@@ -195,13 +195,17 @@ private:
   };
 
   /**
-   * @brief Change-driven dependency state for one virtual dataset: the union-over-history set of
-   *        store slots its transform has read, and the write clock at its last run. Re-run only
-   *        when changedSince(readSlots, lastRunClock) is true.
+   * @brief Change-driven dependency state for one transform dataset: the union-over-history set
+   *        of store slots its transform has read, and the write clock at its last run. Re-run
+   *        only when changedSince(readSlots, lastRunClock) is true. hasRun distinguishes "never
+   *        profiled" (readSlots empty, must run once to capture) from "profiled and reads no
+   *        tables" (readSlots empty, safe to skip in the synthetic reprocess pass for
+   *        channel-fed datasets).
    */
   struct DatasetDeps {
     std::vector<int> readSlots;
     quint64 lastRunClock = 0;
+    bool hasRun          = false;
   };
 
   int m_quickPlotChannels;
