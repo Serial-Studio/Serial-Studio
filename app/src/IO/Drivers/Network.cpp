@@ -50,7 +50,7 @@ static void queueErrorBox(QObject* context, const QString& title, const QString&
 /**
  * @brief Constructs the Network driver and restores persisted socket settings.
  */
-IO::Drivers::Network::Network() : m_udpMulticast(false), m_lookupActive(false)
+IO::Drivers::Network::Network() : m_udpMulticast(false), m_lookupActive(false), m_lookupId(-1)
 {
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
@@ -521,10 +521,13 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
  */
 void IO::Drivers::Network::lookup(const QString& host)
 {
+  if (m_lookupActive)
+    QHostInfo::abortHostLookup(m_lookupId);
+
   m_pendingLookup = host.simplified();
   m_lookupActive  = true;
   Q_EMIT lookupActiveChanged();
-  QHostInfo::lookupHost(m_pendingLookup, this, &IO::Drivers::Network::lookupFinished);
+  m_lookupId = QHostInfo::lookupHost(m_pendingLookup, this, &IO::Drivers::Network::lookupFinished);
 }
 
 /**

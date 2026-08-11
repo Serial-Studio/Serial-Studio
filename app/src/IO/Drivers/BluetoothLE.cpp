@@ -692,8 +692,10 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
     Q_EMIT deviceConnectedChanged();
   });
 
-  connect(
-    m_controller, &QLowEnergyController::disconnected, this, &IO::Drivers::BluetoothLE::close);
+  connect(m_controller,
+          &QLowEnergyController::disconnected,
+          this,
+          &IO::Drivers::BluetoothLE::onControllerDisconnected);
 
   connect(m_controller,
           &QLowEnergyController::errorOccurred,
@@ -713,18 +715,38 @@ bool IO::Drivers::BluetoothLE::isConnecting() const noexcept
 }
 
 /**
- * @brief Reports a controller-level failure (dial refused, timeout, link error) and tears the
- *        connection down. Without this hook a failed dial died silently: Qt reports it via
- *        errorOccurred without a disconnected signal, so the connect button wedged forever.
+ * @brief Handles the controller's disconnected signal. A drop while the dial is still pending
+ *        reports the failure verdict BEFORE close() severs the controller's signals (backend
+ *        ordering of disconnected vs errorOccurred is platform-dependent); an established-link
+ *        drop keeps the historical close-only behavior.
+ */
+void IO::Drivers::BluetoothLE::onControllerDisconnected()
+{
+  reportOpenFinished(false, tr("The device disconnected before the connection completed"));
+  close();
+}
+
+/**
+ * @brief Reports a controller-level failure. A pending dial reports its verdict through
+ *        openFinished; an ESTABLISHED link that errors goes through the driver-drop path
+ *        instead, because the verdict latch is already spent and close() alone never
+ *        reaches the connection manager.
  */
 void IO::Drivers::BluetoothLE::onControllerError(QLowEnergyController::Error controllerError)
 {
   if (controllerError == QLowEnergyController::NoError)
     return;
 
-  Q_EMIT error(tr("BLE connection error: %1")
-                 .arg(m_controller ? m_controller->errorString() : tr("Unknown error")));
+  const QString reason = m_controller ? m_controller->errorString() : tr("Unknown error");
+  Q_EMIT error(tr("BLE connection error: %1").arg(reason));
+
+  const bool dialing = openReportArmed();
   close();
+
+  if (dialing) {
+    reportOpenFinished(false, reason);
+    return;
+  }
 
   static auto& connectionManager = ConnectionManager::instance();
   connectionManager.disconnectDevice(this);
@@ -892,6 +914,7 @@ void IO::Drivers::BluetoothLE::announceGattReady()
     return;
 
   m_gattReady = true;
+  reportOpenFinished(true);
   Q_EMIT gattReady();
   Q_EMIT configurationChanged();
 }
@@ -1266,6 +1289,8 @@ void IO::Drivers::BluetoothLE::onServiceError(QLowEnergyService::ServiceError se
     case QLowEnergyService::UnknownError:
       Q_EMIT error(tr("Unknown error"));
       break;
+    case QLowEnergyService::NoError:
+      return;
     case QLowEnergyService::CharacteristicReadError:
       Q_EMIT error(tr("Characteristic read error"));
       break;
@@ -1274,6 +1299,11 @@ void IO::Drivers::BluetoothLE::onServiceError(QLowEnergyService::ServiceError se
       break;
     default:
       break;
+  }
+
+  if (!m_gattReady && openReportArmed()) {
+    close();
+    reportOpenFinished(false, tr("BLE service error during connect"));
   }
 }
 

@@ -802,8 +802,6 @@ void IO::ConnectionManager::concludeConnectRequest()
  */
 void IO::ConnectionManager::notifyConnectedStateChanged()
 {
-  settlePendingDialVerdicts();
-
   const bool connecting = anyDeviceConnecting();
   if (m_lastConnectingState != connecting) {
     m_lastConnectingState = connecting;
@@ -821,29 +819,37 @@ void IO::ConnectionManager::notifyConnectedStateChanged()
 }
 
 /**
- * @brief Reports the deferred open verdict of every async dial that has since landed: each id is
- *        erased before reporting so the notify hop inside onDeviceOpenFinished cannot re-enter
- *        this sweep on the same device. Failures never settle here: the driver-drop path reports
- *        them, and an id whose driver vanished is dropped without a verdict.
+ * @brief Settles the pending verdict a driver reported through openFinished(): the id is erased
+ *        before reporting so the notify hop inside onDeviceOpenFinished cannot re-enter, and a
+ *        failed dial tears the device down quietly (never sessionClosed: helpers survive a
+ *        failed attempt). A report with no pending id (user already cancelled) is ignored.
  */
-void IO::ConnectionManager::settlePendingDialVerdicts()
+void IO::ConnectionManager::onDriverOpenFinished(bool ok, const QString& reason)
 {
-  if (m_pendingDialVerdicts.isEmpty())
+  SS_ASSERT_LOG(sender() != nullptr);
+
+  auto* halDriver = qobject_cast<HAL_Driver*>(sender());
+  if (halDriver == nullptr)
     return;
 
-  const auto pending = m_pendingDialVerdicts;
-  for (const int deviceId : pending) {
-    HAL_Driver* halDriver = driver(deviceId);
-    if (halDriver == nullptr) {
-      m_pendingDialVerdicts.remove(deviceId);
-      continue;
-    }
+  SS_ASSERT_LOG(!halDriver->openReportArmed());
 
-    if (halDriver->isOpen()) {
-      m_pendingDialVerdicts.remove(deviceId);
-      onDeviceOpenFinished(deviceId, true, QString());
+  int deviceId = -1;
+  for (const auto& [id, dm] : m_devices) {
+    if (dm && dm->driver() == halDriver) {
+      deviceId = id;
+      break;
     }
   }
+
+  if (deviceId < 0 || !m_pendingDialVerdicts.remove(deviceId))
+    return;
+
+  if (!ok)
+    disconnectDevice(deviceId);
+
+  onDeviceOpenFinished(
+    deviceId, ok, ok ? QString() : (reason.isEmpty() ? tr("connection attempt failed") : reason));
 }
 
 /**
@@ -1093,8 +1099,8 @@ void IO::ConnectionManager::shutdownDrivers()
 /**
  * @brief Connects the device with the given @p deviceId and reports the driver's verdict, which
  *        is what drives the connection diagnostics. A driver still dialing when open() returns
- *        gets a pending verdict instead of an immediate success: settlePendingDialVerdicts()
- *        reports once the link is genuinely up, the driver-drop path reports the failure.
+ *        keeps its verdict pending; the driver reports it exactly once through openFinished()
+ *        (the latch is armed here and disarmed for attempts that settle synchronously).
  */
 void IO::ConnectionManager::connectDevice(int deviceId)
 {
@@ -1102,17 +1108,23 @@ void IO::ConnectionManager::connectDevice(int deviceId)
   if (it == m_devices.end() || !it->second)
     return;
 
+  HAL_Driver* halDriver = driver(deviceId);
+  if (halDriver)
+    halDriver->armOpenReport();
+
   const QIODevice::OpenMode mode = m_writeEnabled ? QIODevice::ReadWrite : QIODevice::ReadOnly;
   const bool ok                  = it->second->open(mode);
   setPaused(false);
 
-  HAL_Driver* halDriver = driver(deviceId);
   if (ok && halDriver && halDriver->isConnecting()) {
     m_pendingDialVerdicts.insert(deviceId);
     concludeConnectRequest();
     notifyConnectedStateChanged();
     return;
   }
+
+  if (halDriver)
+    halDriver->disarmOpenReport();
 
   onDeviceOpenFinished(deviceId, ok, ok ? QString() : QStringLiteral("device did not open"));
 }
@@ -1126,6 +1138,10 @@ void IO::ConnectionManager::connectDevice(int deviceId)
 void IO::ConnectionManager::disconnectDevice(int deviceId)
 {
   m_pendingDialVerdicts.remove(deviceId);
+
+  HAL_Driver* halDriver = driver(deviceId);
+  if (halDriver)
+    halDriver->disarmOpenReport();
 
   auto it = m_devices.find(deviceId);
   if (it != m_devices.end() && it->second)
@@ -1284,6 +1300,12 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
             this,
             &IO::ConnectionManager::refreshConnectedState,
             Qt::QueuedConnection);
+
+    connect(driver.get(),
+            &IO::HAL_Driver::openFinished,
+            this,
+            &IO::ConnectionManager::onDriverOpenFinished,
+            Qt::UniqueConnection);
 
     if (type == SerialStudio::BusType::BluetoothLE) {
       auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(driver.get());
@@ -1562,6 +1584,12 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
           &IO::ConnectionManager::refreshConnectedState,
           static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
+  connect(rawDriver,
+          &IO::HAL_Driver::openFinished,
+          this,
+          &IO::ConnectionManager::onDriverOpenFinished,
+          Qt::UniqueConnection);
+
   wireDevice(dm.get());
   m_devices[src.sourceId] = std::move(dm);
 }
@@ -1616,7 +1644,11 @@ void IO::ConnectionManager::rebuildDevices()
       continue;
     }
 
+    m_pendingDialVerdicts.remove(it->first);
     if (it->second) {
+      if (it->second->driver())
+        it->second->driver()->disarmOpenReport();
+
       it->second->close();
       disconnect(it->second.get(), nullptr, this, nullptr);
     }

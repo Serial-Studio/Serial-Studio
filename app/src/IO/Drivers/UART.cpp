@@ -593,10 +593,11 @@ void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
   if (m_deviceNames.isEmpty())
     refreshSerialDevices();
 
-  if (portIndex < portList().count())
-    m_portIndex = portIndex;
-  else
-    m_portIndex = 0;
+  const quint8 clamped = (portIndex < portList().count()) ? portIndex : 0;
+  if (portIndex == m_portIndex && clamped == m_portIndex)
+    return;
+
+  m_portIndex = clamped;
 
   const auto name = portList().at(m_portIndex);
   if (!name.isEmpty() && m_portIndex > 0)

@@ -100,7 +100,7 @@ constexpr std::uint32_t kSlcanBitrates[] = {
  */
 IO::Drivers::CanBackends::Entry IO::Drivers::SlcanBackend::registration()
 {
-  return {pluginKey(), QStringLiteral("Serial CAN"), true, &availableInterfaces, &create};
+  return {pluginKey(), QStringLiteral("Serial CAN"), true, &availableInterfaces, &create, nullptr};
 }
 
 /**

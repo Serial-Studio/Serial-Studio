@@ -258,6 +258,10 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 1
       Component.onCompleted: text = Cpp_IO_Modbus.host
 
+      onTextEdited: {
+        if (Cpp_IO_Modbus.host !== text && text.length > 0)
+          Cpp_IO_Modbus.host = text
+      }
       onEditingFinished: {
         if (Cpp_IO_Modbus.host !== text)
           Cpp_IO_Modbus.host = text
@@ -283,6 +287,11 @@ Item {
       validator: IntValidator { bottom: 1; top: 65535 }
       Component.onCompleted: text = Cpp_IO_Modbus.port
 
+      onTextEdited: {
+        const value = parseInt(text)
+        if (!isNaN(value) && Cpp_IO_Modbus.port !== value)
+          Cpp_IO_Modbus.port = value
+      }
       onEditingFinished: {
         const value = parseInt(text)
         if (!isNaN(value) && Cpp_IO_Modbus.port !== value)
@@ -314,6 +323,11 @@ Item {
       validator: IntValidator { bottom: 1; top: 247 }
       Component.onCompleted: text = Cpp_IO_Modbus.slaveAddress
 
+      onTextEdited: {
+        const value = parseInt(text)
+        if (!isNaN(value) && Cpp_IO_Modbus.slaveAddress !== value)
+          Cpp_IO_Modbus.slaveAddress = value
+      }
       onEditingFinished: {
         const value = parseInt(text)
         if (!isNaN(value) && Cpp_IO_Modbus.slaveAddress !== value)
@@ -334,6 +348,11 @@ Item {
       validator: IntValidator { bottom: 50; top: 60000 }
       Component.onCompleted: text = Cpp_IO_Modbus.pollInterval
 
+      onTextEdited: {
+        const value = parseInt(text)
+        if (!isNaN(value) && Cpp_IO_Modbus.pollInterval !== value)
+          Cpp_IO_Modbus.pollInterval = value
+      }
       onEditingFinished: {
         const value = parseInt(text)
         if (!isNaN(value) && Cpp_IO_Modbus.pollInterval !== value)

@@ -20,12 +20,13 @@
 ## Opening a Link — Synchronous, Per-Driver
 
 `DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls
-`m_driver->open(mode)` directly. There is no orchestration layer: `HAL_Driver` declares no
-async-open hook, `DeviceManager` owns no task runner, and nothing sits between
-`ConnectionManager::connectDevice()` and the driver. The spec-0034 `IO::ConnectionFlows` layer
-and the `HAL_Driver` hooks it drove (`supportsAsyncOpen`, `beginOpen`, `abortOpen`,
-`openTimeoutMsec`, `openFinished`, `linkDropped`) were removed 2026-07-30; spec 0034's docs
-describe a design that is no longer in the tree.
+`m_driver->open(mode)` directly. There is no orchestration layer: `DeviceManager` owns no
+task runner, and nothing sits between `ConnectionManager::connectDevice()` and the driver.
+The spec-0034 `IO::ConnectionFlows` layer and the hook family it drove (`supportsAsyncOpen`,
+`beginOpen`, `abortOpen`, `openTimeoutMsec`, `linkDropped`) were removed 2026-07-30; spec
+0034's docs describe a design that is no longer in the tree. The only async-open surface
+today is spec 0050's bare `HAL_Driver::openFinished(bool, reason)` verdict signal — a
+namesake of a removed 0034 hook, but a different, much smaller thing (see below).
 
 - **Drop recovery is each driver's own business.** UART arms `m_pendingReconnect` plus its own
   1 s `m_reconnectTimer` in `handleError()` on a `QSerialPort::ResourceError` (live instances
@@ -85,15 +86,20 @@ describe a design that is no longer in the tree.
   script-launched helper on this signal, and those helpers usually serve the very link that
   is dropping or retrying (the dual-drone example died to a source-0 drop reaping the helper
   while source 1 was still dialing). A drop is a link event; the session outlives it.
-- **`connectDevice(int)` reports the outcome itself.** `DeviceManager::open()` returns the
-  driver's verdict instead of discarding it, and `connectDevice(int)` passes that to
-  `onDeviceOpenFinished(deviceId, ok, reason)` — the only thing driving the spec-0035
-  diagnostics auto-trigger now that no signal reports an open. Use the open call's return value,
-  **never `isOpen()`**: MQTT, TCP and BLE dial asynchronously, so `isOpen()` is still false when
-  a perfectly good attempt returns, and diagnostics would probe on every connect. The
-  consequence is that a *later* async failure does not auto-trigger anything; the synchronous
-  refusals diagnostics care about most (missing port, permissions) do. The reason string is
-  never shown — diagnostics ignore it and the driver surfaces its own error.
+- **The verdict has ONE owner per attempt (spec 0050).** Sync drivers: the `open()` return
+  value, passed by `connectDevice(int)` to `onDeviceOpenFinished(deviceId, ok, reason)`.
+  Async drivers (BLE, Modbus, MQTT, Process, async CAN plugins): the
+  `HAL_Driver::openFinished(ok, reason)` signal, emitted **exactly once per attempt**
+  through the base-class latch (`armOpenReport()` by the manager before `open()`;
+  `reportOpenFinished()` by the driver on BOTH outcomes; disarmed on first report, on a
+  synchronous settle, and on user cancel). `ConnectionManager::onDriverOpenFinished` settles
+  the pending id, quietly closes the device on a failed dial (never `sessionClosed`), and
+  forwards to `onDeviceOpenFinished` — so the spec-0035 diagnostics auto-trigger now sees
+  async failures too. There is NO polling sweep: `settlePendingDialVerdicts()` is gone;
+  never re-add a "check isOpen() later" settlement path. A driver that dials async and does
+  not report both outcomes wedges the connect button — that is the bug class this design
+  exists to kill. The reason string is never shown — diagnostics ignore it and the driver
+  surfaces its own error.
 - **Nothing reports a drop centrally, but every drop must reach the UI.** A driver that loses
   its link either calls `disconnectDevice(this)` with a **queued** error box (`UART` and
   `Network` are the reference; a synchronous modal inside an open() or error stack spins a

@@ -236,13 +236,13 @@ private slots:
   void onFrameReady(int deviceId, const IO::CapturedDataPtr& frame);
   void onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
   void onDeviceOpenFinished(int deviceId, bool ok, const QString& reason);
+  void onDriverOpenFinished(bool ok, const QString& reason);
 
 private:
   void endWaitCursor();
   void beginWaitCursor();
   void concludeConnectRequest();
   void notifyConnectedStateChanged();
-  void settlePendingDialVerdicts();
   void wireUiDriver(IO::HAL_Driver* driver);
   void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
 

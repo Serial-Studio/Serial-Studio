@@ -105,6 +105,11 @@ Item {
         Layout.fillWidth: true
         placeholderText: qsTr("Type 0 for automatic port")
         Component.onCompleted: text = Cpp_IO_Network.udpLocalPort
+        onTextEdited: {
+          const value = parseInt(text)
+          if (!isNaN(value) && Cpp_IO_Network.udpLocalPort !== value)
+            Cpp_IO_Network.udpLocalPort = value
+        }
         onEditingFinished: {
           if (Cpp_IO_Network.udpLocalPort !== text && text.length > 0)
             Cpp_IO_Network.udpLocalPort = text
@@ -138,6 +143,10 @@ Item {
         opacity: enabled ? 1 : 0.5
         placeholderText: Cpp_IO_Network.defaultAddress
         Component.onCompleted: text = Cpp_IO_Network.remoteAddress
+        onTextEdited: {
+          if (Cpp_IO_Network.remoteAddress !== text && text.length > 0)
+            Cpp_IO_Network.remoteAddress = text
+        }
         onEditingFinished: {
           if (Cpp_IO_Network.remoteAddress !== text && text.length > 0)
             Cpp_IO_Network.remoteAddress = text
@@ -163,6 +172,11 @@ Item {
         opacity: enabled ? 1 : 0.5
         placeholderText: Cpp_IO_Network.defaultTcpPort
         Component.onCompleted: text = Cpp_IO_Network.tcpPort
+        onTextEdited: {
+          const value = parseInt(text)
+          if (!isNaN(value) && Cpp_IO_Network.tcpPort !== value)
+            Cpp_IO_Network.tcpPort = value
+        }
         onEditingFinished: {
           if (Cpp_IO_Network.tcpPort !== text && text.length > 0)
             Cpp_IO_Network.tcpPort = text
@@ -198,6 +212,11 @@ Item {
         Component.onCompleted: text = Cpp_IO_Network.udpRemotePort
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
 
+        onTextEdited: {
+          const value = parseInt(text)
+          if (!isNaN(value) && Cpp_IO_Network.udpRemotePort !== value)
+            Cpp_IO_Network.udpRemotePort = value
+        }
         onEditingFinished: {
           if (Cpp_IO_Network.udpRemotePort !== text && text.length > 0)
             Cpp_IO_Network.udpRemotePort = text

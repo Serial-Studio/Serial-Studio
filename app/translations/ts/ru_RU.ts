@@ -7524,7 +7524,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="198"/>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="281"/>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="308"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="332"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="333"/>
         <source>Edit Device</source>
         <translation>Редактировать Устройство</translation>
     </message>
@@ -7535,32 +7535,32 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="244"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="342"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="346"/>
         <source>Change Bus Type</source>
         <translation>Изменить Тип Шины</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="266"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="359"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="490"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="360"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="491"/>
         <source>Edit Frame Parser</source>
         <translation>Редактировать Парсер Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="371"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="386"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="372"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="387"/>
         <source>Change Parser Language</source>
         <translation>Изменить Язык Парсера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="412"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="437"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="413"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="438"/>
         <source>Change Parser Template</source>
         <translation>Изменить Шаблон Парсера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="424"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="460"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="425"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="461"/>
         <source>Change Parser Parameters</source>
         <translation>Изменить Параметры Парсера</translation>
     </message>
@@ -11299,12 +11299,17 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Для продолжения работы с Serial Studio активируйте лицензию.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1319"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="852"/>
+        <source>connection attempt failed</source>
+        <translation>попытка подключения не удалась</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1341"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Этот тип подключения требует активной лицензии или пробной версии.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1320"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1342"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Активируйте Serial Studio Pro или начните пробный период для использования этого типа устройства.</translation>
     </message>
@@ -11424,77 +11429,87 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
+        <source>The device disconnected before the connection completed</source>
+        <translation>Устройство отключилось до завершения подключения</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="741"/>
         <source>BLE connection error: %1</source>
         <translation>Ошибка подключения BLE: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="830"/>
         <source>Select Device</source>
         <translation>Выбрать Устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="841"/>
         <source>Select Service</source>
         <translation>Выбрать Службу</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="852"/>
         <source>Select Characteristic</source>
         <translation>Выбрать Характеристику</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1040"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1063"/>
         <source>Error while configuring BLE service</source>
         <translation>Ошибка при настройке службы BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1258"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1281"/>
         <source>Operation error</source>
         <translation>Ошибка операции</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1261"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1284"/>
         <source>Characteristic write error</source>
         <translation>Ошибка записи характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1264"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1287"/>
         <source>Descriptor write error</source>
         <translation>Ошибка записи дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="726"/>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1267"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1290"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1270"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1295"/>
         <source>Characteristic read error</source>
         <translation>Ошибка Чтения Характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1273"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1298"/>
         <source>Descriptor read error</source>
         <translation>Ошибка Чтения Дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1509"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1306"/>
+        <source>BLE service error during connect</source>
+        <translation>Ошибка сервиса BLE при подключении</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1539"/>
         <source>BLE Device</source>
         <translation>Устройство BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1547"/>
         <source>Service</source>
         <translation>Служба</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1524"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1554"/>
         <source>Notify Characteristic</source>
         <translation>Характеристика Уведомлений</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1531"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1561"/>
         <source>Characteristic</source>
         <translation>Характеристика</translation>
     </message>
@@ -11600,68 +11615,68 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
         <translation type="vanished">Произошла ошибка, но устройство CAN больше недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="801"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="805"/>
         <source>Error code: %1</source>
         <translation>Код ошибки: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="813"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="817"/>
         <source>CAN Bus Communication Error</source>
         <translation>Ошибка Связи Шины CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="921"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="925"/>
         <source>No CAN driver selected</source>
         <translation>Драйвер CAN не выбран</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="858"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="862"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Сначала загрузите модули ядра SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="854"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="858"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Подключите адаптер %1, затем обновите</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="861"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="865"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Сначала настройте виртуальный интерфейс CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="863"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="887"/>
         <source>No interfaces found for %1</source>
         <translation>Интерфейсы для %1 не найдены</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="871"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Установите &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;драйверы PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="871"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="875"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Установите &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;драйверы VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="879"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Установите &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;драйверы SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="882"/>
         <source>Install %1 drivers</source>
         <translation>Установите драйверы %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="885"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Установите драйверы %1 для macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="899"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11672,37 +11687,37 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1035"/>
         <source>Plugin</source>
         <translation>Плагин</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1039"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1043"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1047"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1051"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1056"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1060"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1067"/>
         <source>Data Bitrate</source>
         <translation>Битрейт Данных</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1072"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1076"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1079"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1083"/>
         <source>Listen-Only</source>
         <translation>Только Прослушивание</translation>
     </message>
@@ -11710,93 +11725,93 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="486"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="492"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>Не удалось инициализировать libusb для адаптера CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="513"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="519"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>Не удалось перечислить USB-устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="533"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="539"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>Выбранный адаптер CANable больше не подключен, или другое приложение использует его. В Windows устройство должно использовать драйвер WinUSB (candleLight устанавливает его автоматически).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="546"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="552"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>Не удалось захватить USB-интерфейс CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="622"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>Адаптер CANable не открыт для записи.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="670"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="676"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>Не удалось передать кадр CAN на адаптер.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="686"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="692"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>Адаптер CANable сообщил об ошибке шины CAN.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="747"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>Кадр CAN не был подтвержден на шине.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="774"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="780"/>
         <source>The CANable adapter was disconnected.</source>
         <translation>Адаптер CANable был отключен.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="851"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="857"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>Адаптер CANable отклонил рукопожатие формата хоста.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="858"/>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="864"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="938"/>
         <source>Could not read CANable timing constants.</source>
         <translation>Не удалось прочитать временные константы CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="864"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="870"/>
         <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
         <translation>Прошивка адаптера не поддерживает CAN FD. Установите прошивку candleLight FD или отключите режим гибкой скорости передачи данных.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="878"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>Скорость передачи %1 бит/с не поддерживается данным адаптером CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="884"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>Адаптер CANable отклонил запрошенную скорость передачи.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="902"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="908"/>
         <source>Could not start the CANable channel.</source>
         <translation>Не удалось запустить канал CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="930"/>
         <source>Could not read CANable FD timing constants.</source>
         <translation>Не удалось прочитать временные константы CANable FD.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="944"/>
         <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>Скорость передачи данных %1 бит/с не поддерживается данным адаптером CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="945"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="951"/>
         <source>CANable adapter rejected the requested data bitrate.</source>
         <translation>Адаптер CANable отклонил запрошенную скорость передачи данных.</translation>
     </message>
@@ -12030,32 +12045,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Протокол ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="993"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="981"/>
+        <source>The broker closed the connection during the attempt</source>
+        <translation>Брокер закрыл соединение во время попытки</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
         <source>MQTT Subscription Error</source>
         <translation>Ошибка Подписки MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="994"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Не удалось подписаться на тему «%1».</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1247"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1257"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Ошибка Сертификата Клиента MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1266"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1276"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Файлы PEM (*.pem *.crt *.cer *.key);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1292"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1302"/>
         <source>Select Client Certificate</source>
         <translation>Выбрать Сертификат Клиента</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1300"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1310"/>
         <source>Select Private Key</source>
         <translation>Выбрать Приватный Ключ</translation>
     </message>
@@ -12064,97 +12084,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Брокер закрыл соединение.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Недопустимая Версия Протокола MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1028"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Брокер отклонил настроенную версию протокола MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1025"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
         <source>Client ID Rejected</source>
         <translation>Идентификатор Клиента Отклонён</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1032"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Брокер отклонил идентификатор клиента. Попробуйте другой идентификатор.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT-сервер Недоступен</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Брокер в данный момент недоступен. Повторите попытку позже.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
         <source>Authentication Error</source>
         <translation>Ошибка Аутентификации</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Предоставленные учётные данные были отклонены брокером.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1037"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
         <source>Authorization Error</source>
         <translation>Ошибка Авторизации</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1038"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Учётная запись не имеет разрешения для выполнения этой операции.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1041"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1047"/>
         <source>Network or Transport Error</source>
         <translation>Ошибка Сети или Транспортного Уровня</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1042"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1048"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Проблема сетевого/транспортного уровня при подключении к брокеру.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1051"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Сертификат клиента настроен: убедитесь, что он соответствует приватному ключу и активирован на брокере.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1050"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1056"/>
         <source>MQTT Protocol Violation</source>
         <translation>Нарушение Протокола MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1051"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1057"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Брокер сообщил о нарушении протокола и закрыл соединение.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1054"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1060"/>
         <source>MQTT 5 Error</source>
         <translation>Ошибка MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1055"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1061"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Произошла ошибка протокола MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1058"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1064"/>
         <source>MQTT Error</source>
         <translation>Ошибка MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1059"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1065"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Произошла непредвиденная ошибка MQTT.</translation>
     </message>
@@ -12162,27 +12182,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="391"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
         <source>Invalid Serial Port</source>
         <translation>Недействительный Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
         <source>Modbus Initialization Failed</source>
         <translation>Ошибка Инициализации Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="459"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="458"/>
         <source>Nothing is listening at %1</source>
         <translation>Ничего не прослушивается на %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="518"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="517"/>
         <source>Modbus Connection Failed</source>
         <translation>Ошибка Подключения Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="392"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="391"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>Выбранный последовательный порт "%1" больше недоступен. Обновите список портов и повторите попытку.</translation>
     </message>
@@ -12191,17 +12211,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Клиент Modbus отказался устанавливать соединение.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="437"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="436"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Не удалось создать устройство Modbus. Проверьте конфигурацию системы и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="520"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="519"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>Не удалось подключиться к "%1". Проверьте настройки подключения.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="521"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="520"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
@@ -12210,64 +12230,64 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Истекло время ожидания попытки подключения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="636"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
         <source>Even</source>
         <translation>Чётный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
         <source>Odd</source>
         <translation>Нечётный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
         <source>Space</source>
         <translation>Пробел</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
         <source>Mark</source>
         <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="692"/>
         <source>Holding Registers (0x03)</source>
         <translation>Регистры Хранения (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
         <source>Input Registers (0x04)</source>
         <translation>Входные Регистры (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
         <source>Coils (0x01)</source>
         <translation>Катушки (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="697"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Дискретные Входы (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="880"/>
         <source>No register groups configured</source>
         <translation>Группы регистров не настроены</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Добавьте хотя бы одну группу регистров перед созданием проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="882"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="920"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="921"/>
         <source>Modbus Project Generator</source>
         <translation>Генератор Проектов Modbus</translation>
     </message>
@@ -12280,137 +12300,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Проверьте права на запись во временный каталог.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
         <source>Failed to load generated project</source>
         <translation>Не удалось загрузить сгенерированный проект</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Не удалось загрузить сгенерированный JSON проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="916"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Проект успешно создан: групп — %1, наборов данных — %2.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
         <source>The project editor is now open for customization.</source>
         <translation>Редактор проекта открыт для настройки.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="934"/>
         <source>Modbus Project</source>
         <translation>Проект Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="939"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
         <source>Holding Registers</source>
         <translation>Holding-регистры</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
         <source>Input Registers</source>
         <translation>Регистры Ввода</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="961"/>
         <source>Coils</source>
         <translation>Катушки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="961"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные Входы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="975"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="976"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="989"/>
         <source>Register %1</source>
         <translation>Регистр %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="997"/>
         <source>Coil %1</source>
         <translation>Катушка %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="997"/>
         <source>Discrete %1</source>
         <translation>Дискретный %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1422"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1424"/>
         <source>Error code: %1</source>
         <translation>Код ошибки: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1426"/>
         <source>Modbus Communication Error</source>
         <translation>Ошибка Связи Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1436"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1438"/>
         <source>Select Port</source>
         <translation>Выбрать Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1589"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1591"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1597"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1599"/>
         <source>Slave Address</source>
         <translation>Адрес Устройства</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1606"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1608"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1648"/>
         <source>Host / IP</source>
         <translation>Хост / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1655"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1668"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1670"/>
         <source>Serial Port</source>
         <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1676"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1678"/>
         <source>Baud Rate</source>
         <translation>Скорость Передачи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1684"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1692"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1694"/>
         <source>Data Bits</source>
         <translation>Биты Данных</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1700"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1702"/>
         <source>Stop Bits</source>
         <translation>Стоповые Биты</translation>
     </message>
@@ -12418,9 +12438,9 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="301"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="312"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="649"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="298"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="309"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="648"/>
         <source>Network socket error</source>
         <translation>Ошибка сетевого сокета</translation>
     </message>
@@ -12429,38 +12449,38 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Истекло время ожидания подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="302"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="313"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="310"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Невозможно подключиться к %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="666"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="665"/>
         <source>Socket Type</source>
         <translation>Тип Сокета</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="674"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="673"/>
         <source>Remote Address</source>
         <translation>Удалённый Адрес</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="681"/>
         <source>TCP Port</source>
         <translation>TCP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="690"/>
         <source>UDP Local Port</source>
         <translation>Локальный UDP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="699"/>
         <source>UDP Remote Port</source>
         <translation>Удалённый UDP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="708"/>
         <source>UDP Multicast</source>
         <translation>UDP Multicast</translation>
     </message>
@@ -12478,97 +12498,108 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Исполняемый файл "%1" не найден в PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
         <source>Select Executable</source>
         <translation>Выбрать Исполняемый Файл</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="417"/>
         <source>Select Working Directory</source>
         <translation>Выбрать Рабочий Каталог</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="441"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="442"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Выбрать Именованный Канал / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="539"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="540"/>
         <source>The process crashed.</source>
         <translation>Процесс завершился аварийно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="540"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="541"/>
         <source>Exit code: %1</source>
         <translation>Код завершения: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="547"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
         <source>Process "%1" stopped</source>
         <translation>Процесс "%1" остановлен</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="559"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="560"/>
+        <source>Failed to start</source>
+        <translation>Не удалось запустить</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="564"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="571"/>
         <source>Process Error</source>
         <translation>Ошибка Процесса</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="582"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="585"/>
+        <source>The pipe closed before the peer attached.</source>
+        <translation>Канал закрылся до подключения узла.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="589"/>
         <source>Pipe Closed</source>
         <translation>Канал Закрыт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="583"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="590"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>Именованный канал "%1" был закрыт на другом конце.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="613"/>
         <source>Pipe Error</source>
         <translation>Ошибка Канала</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="609"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="613"/>
         <source>Could not open named pipe: %1</source>
         <translation>Не удалось открыть именованный канал: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="835"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="854"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
         <source>Launch Process</source>
         <translation>Запустить Процесс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="838"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
         <source>Named Pipe</source>
         <translation>Именованный Канал</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="862"/>
         <source>Executable</source>
         <translation>Исполняемый Файл</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="869"/>
         <source>Arguments</source>
         <translation>Аргументы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="876"/>
         <source>Working Directory</source>
         <translation>Рабочий Каталог</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="864"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="883"/>
         <source>Pipe Path</source>
         <translation>Путь к Каналу</translation>
     </message>
@@ -12576,27 +12607,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="206"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="207"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>Скорость передачи %1 бит/с не поддерживается анализатором USB-CAN.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="216"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="217"/>
         <source>Could not open serial port %1: %2</source>
         <translation>Не удалось открыть последовательный порт %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="227"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="228"/>
         <source>Failed to initialize the USB-CAN Analyzer.</source>
         <translation>Не удалось инициализировать анализатор USB-CAN.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="264"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="265"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>Анализатор USB-CAN не открыт для записи.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="310"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="311"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>Ошибка шины CAN, сообщённая анализатором USB-CAN.</translation>
     </message>
@@ -12641,7 +12672,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="406"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="797"/>
         <source>Select Port</source>
         <translation>Выбрать Порт</translation>
     </message>
@@ -12676,27 +12707,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="625"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="626"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1" не является допустимым путём</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="627"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Введите другой путь для регистрации пользовательского последовательного устройства</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Указанное устройство не найдено. Проверьте подключение и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Произошла неизвестная ошибка. Проверьте устройство и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="920"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Устройство не открыто. Откройте устройство перед выполнением этой операции.</translation>
     </message>
@@ -12722,97 +12753,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Скорость передачи %1 отклонена: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Критическая ошибка последовательного порта "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="884"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
         <source>No error occurred.</source>
         <translation>Ошибок не обнаружено.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Доступ запрещён. Убедитесь, что приложение имеет необходимые права доступа к устройству.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Не удалось открыть устройство. Возможно, оно уже используется или недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Произошла ошибка при записи данных на устройство.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Произошла ошибка при чтении данных с устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Произошла критическая ошибка ресурса. Возможно, устройство было отключено или более недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Запрошенная операция не поддерживается данным устройством.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Время ожидания операции истекло. Устройство может не отвечать.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1081"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1082"/>
         <source>Serial Port</source>
         <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1089"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1090"/>
         <source>Baud Rate</source>
         <translation>Скорость Передачи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1097"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1098"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1105"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1106"/>
         <source>Data Bits</source>
         <translation>Биты Данных</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1113"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1114"/>
         <source>Stop Bits</source>
         <translation>Стоповые Биты</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1121"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1122"/>
         <source>Flow Control</source>
         <translation>Управление Потоком</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1130"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1137"/>
         <source>Auto-Reconnect</source>
         <translation>Автоматическое Переподключение</translation>
     </message>
@@ -16091,52 +16122,52 @@ Would you like to open the download page?</source>
         <translation>IP-Адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="275"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
         <source>TCP Port</source>
         <translation>TCP-Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
         <source>Slave Address</source>
         <translation>Адрес Устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="361"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="380"/>
         <source>Configure Register Groups…</source>
         <translation>Настроить Группы Регистров…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="371"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="390"/>
         <source>Import Register Map…</source>
         <translation>Импортировать Карту Регистров…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="405"/>
         <source>%1 group(s) configured</source>
         <translation>Настроено групп: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="387"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="406"/>
         <source>No groups configured</source>
         <translation>Группы не настроены</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="328"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="347"/>
         <source>Polling interval</source>
         <translation>Интервал опроса</translation>
     </message>
@@ -16926,7 +16957,7 @@ Add groups above to poll multiple register types.</source>
         <translation>Тип Сокета</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="132"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="137"/>
         <source>Remote Address</source>
         <translation>Удалённый Адрес</translation>
     </message>
@@ -16941,13 +16972,13 @@ Add groups above to poll multiple register types.</source>
         <translation>Введите 0 для автоматического порта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="156"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="189"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="165"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="203"/>
         <source>Remote Port</source>
         <translation>Удалённый Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="238"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
@@ -17852,49 +17883,49 @@ Add groups above to poll multiple register types.</source>
         <translation>/путь/к/исполняемому/файлу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="133"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="209"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
         <source>Browse</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="149"/>
         <source>Arguments</source>
         <translation>Аргументы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="160"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--арг1 значение1 --арг2 значение2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="185"/>
         <source>Working Dir</source>
         <translation>Рабочий Каталог</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="200"/>
         <source>(optional) /working/directory</source>
         <translation>(необязательно) /рабочий/каталог</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="235"/>
         <source>Pipe Path</source>
         <translation>Путь к Каналу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
         <source>Pick Running Process…</source>
         <translation>Выбрать Запущенный Процесс…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="327"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Запустить дочерний процесс и захватить его stdout, или подключиться к именованному каналу, созданному существующим процессом.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="319"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="335"/>
         <source>Learn about named pipes</source>
         <translation>Узнать об именованных каналах</translation>
     </message>
@@ -19004,22 +19035,22 @@ Click Refresh to update the list.</source>
         <translation>Невозможно открыть файл для записи!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1379"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1409"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Недействительный адаптер Bluetooth!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1382"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1412"/>
         <source>Unsuported platform or operating system</source>
         <translation>Неподдерживаемая платформа или операционная система</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1385"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1415"/>
         <source>Unsupported discovery method</source>
         <translation>Неподдерживаемый метод обнаружения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1388"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1418"/>
         <source>General I/O error</source>
         <translation>Общая ошибка ввода-вывода</translation>
     </message>

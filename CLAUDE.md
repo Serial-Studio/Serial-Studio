@@ -211,10 +211,12 @@ cached flags, benchmark mechanics) in
   TCP wait for the endpoint with a THROWAWAY probe socket inside `open()` (5 s deadline,
   250 ms pace — covers a control-script helper's bind; never abort-and-redial a long-lived
   run-loop-registered socket, that crashed readFromSocket on macOS), then the real client
-  dials exactly once; every async dial failure MUST reach
-  `ConnectionManager::disconnectDevice(this)` so "connecting" always resolves (BLE, Modbus,
-  MQTT wired 2026-08-10). NO reopen-on-config-edit machinery exists: connection settings are
-  UI-locked while connected/dialing (BLE pickers exempt). Drop recovery: an established link
+  dials exactly once; the async dial verdict has ONE owner:
+  `HAL_Driver::openFinished(ok, reason)`, emitted exactly once per attempt via the base-class
+  latch — async drivers MUST report BOTH outcomes (spec 0050; no polling sweep exists, a
+  driver that reports only success wedges the connect button). NO reopen-on-config-edit
+  machinery exists: connection settings are UI-locked while connected/dialing (BLE pickers
+  exempt; text fields live-apply via onTextEdited). Drop recovery: an established link
   that drops reports once and stays down; UART's opt-in auto-reconnect checkbox is the only
   post-drop recovery. Driver error boxes are
   queued, never raised mid open()/error stack. The task-tree engine `app/src/Async/`

@@ -238,6 +238,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
     }
 
     connect(m_process, &QProcess::readyRead, this, &Process::onReadyRead);
+    connect(m_process, &QProcess::started, this, [this] { reportOpenFinished(true); });
     connect(m_process,
             QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this,
@@ -248,7 +249,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
       m_process->setWorkingDirectory(m_workingDir);
 
     m_process->start(resolved, args);
-    return true;
+    return m_process->state() != QProcess::NotRunning;
   }
 
   m_pipeConnected = false;
@@ -539,6 +540,8 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
   const QString reason = (status == QProcess::CrashExit) ? tr("The process crashed.")
                                                          : tr("Exit code: %1").arg(exitCode);
 
+  reportOpenFinished(false, reason);
+
   static auto& connectionManager = IO::ConnectionManager::instance();
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
@@ -553,10 +556,13 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
  */
 void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 {
-  if (error == QProcess::FailedToStart)
+  if (error == QProcess::FailedToStart) {
+    reportOpenFinished(false, m_process ? m_process->errorString() : tr("Failed to start"));
     return;
+  }
 
   const QString detail = m_process ? m_process->errorString() : tr("Unknown error");
+  reportOpenFinished(false, detail);
 
   static auto& connectionManager = IO::ConnectionManager::instance();
   QMetaObject::invokeMethod(
@@ -576,6 +582,7 @@ void IO::Drivers::Process::onPipeClosed()
     return;
 
   m_pipeRunning = false;
+  reportOpenFinished(false, tr("The pipe closed before the peer attached."));
   queuePipeTeardown();
 
   Misc::Utilities::showMessageBox(
@@ -585,11 +592,21 @@ void IO::Drivers::Process::onPipeClosed()
 }
 
 /**
+ * @brief Called on the main thread (queued from the pipe thread) when the peer attaches: the
+ *        dial verdict is reported here, never from the pipe thread.
+ */
+void IO::Drivers::Process::onPipeAttached()
+{
+  reportOpenFinished(true);
+}
+
+/**
  * @brief Called on the main thread when pipeReadLoop() fails to open the pipe. The teardown is
  *        queued before the box so the UI never claims a dead pipe is a connected device.
  */
 void IO::Drivers::Process::onPipeError()
 {
+  reportOpenFinished(false, tr("Could not open named pipe: %1").arg(m_pipePath));
   queuePipeTeardown();
 
   Misc::Utilities::showMessageBox(
@@ -664,6 +681,7 @@ void IO::Drivers::Process::pipeReadLoopWindows()
   }
 
   m_pipeConnected = true;
+  QMetaObject::invokeMethod(this, &Process::onPipeAttached, Qt::QueuedConnection);
 
   char buf[4096];
   while (m_pipeRunning.load()) {
@@ -725,6 +743,7 @@ void IO::Drivers::Process::pipeReadLoopPosix()
   }
 
   m_pipeConnected = true;
+  QMetaObject::invokeMethod(this, &Process::onPipeAttached, Qt::QueuedConnection);
 
   char buf[4096];
   struct pollfd pfd{};

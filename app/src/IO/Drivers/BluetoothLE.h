@@ -132,6 +132,7 @@ public slots:
 private slots:
   void configureCharacteristics();
   void onServiceDiscoveryFinished();
+  void onControllerDisconnected();
   void onControllerError(QLowEnergyController::Error controllerError);
   void onServiceError(QLowEnergyService::ServiceError serviceError);
   void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);

@@ -175,6 +175,7 @@ private:
   quint16 m_tcpPort;
   bool m_udpMulticast;
   bool m_lookupActive;
+  int m_lookupId;
   quint16 m_udpLocalPort;
   quint16 m_udpRemotePort;
   QAbstractSocket::SocketType m_socketType;

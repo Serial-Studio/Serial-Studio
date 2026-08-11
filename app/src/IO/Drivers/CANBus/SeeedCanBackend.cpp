@@ -140,7 +140,8 @@ enum class SeeedParse {
  */
 IO::Drivers::CanBackends::Entry IO::Drivers::SeeedCanBackend::registration()
 {
-  return {pluginKey(), QStringLiteral("Seeed / Waveshare"), true, &availableInterfaces, &create};
+  return {
+    pluginKey(), QStringLiteral("Seeed / Waveshare"), true, &availableInterfaces, &create, nullptr};
 }
 
 /**

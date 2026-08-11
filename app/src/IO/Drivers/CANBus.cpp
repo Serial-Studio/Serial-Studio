@@ -780,7 +780,11 @@ void IO::Drivers::CANBus::onFramesReceived()
  */
 void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
 {
-  Q_UNUSED(state)
+  if (state == QCanBusDevice::ConnectedState)
+    reportOpenFinished(true);
+  else if (state == QCanBusDevice::UnconnectedState)
+    reportOpenFinished(false, m_device ? m_device->errorString() : QString());
+
   Q_EMIT configurationChanged();
 }
 

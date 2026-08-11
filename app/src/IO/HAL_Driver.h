@@ -118,11 +118,18 @@ signals:
   void configurationChanged();
   void dataSent(const QByteArray& data);
   void dataReceived(const IO::CapturedDataPtr& data);
+  void openFinished(bool ok, const QString& reason);
 
 public:
-  explicit HAL_Driver(QObject* parent = nullptr) : QObject(parent) {}
+  explicit HAL_Driver(QObject* parent = nullptr) : QObject(parent), m_openReportArmed(false) {}
 
   virtual ~HAL_Driver() = default;
+
+  void armOpenReport() { m_openReportArmed = true; }
+
+  void disarmOpenReport() { m_openReportArmed = false; }
+
+  [[nodiscard]] bool openReportArmed() const { return m_openReportArmed; }
 
   virtual void close()                               = 0;
   [[nodiscard]] virtual bool isOpen() const noexcept = 0;
@@ -161,6 +168,20 @@ public slots:
   virtual void setDriverProperty(const QString& key, const QVariant& value) = 0;
 
 protected:
+  /**
+   * @brief Reports the outcome of the open attempt exactly once: the latch is armed by the
+   *        connection manager before open() and disarmed on the first report, so a later
+   *        established-link event can never masquerade as a dial verdict.
+   */
+  void reportOpenFinished(bool ok, const QString& reason = QString())
+  {
+    if (!m_openReportArmed)
+      return;
+
+    m_openReportArmed = false;
+    Q_EMIT openFinished(ok, reason);
+  }
+
   void publishReceivedData(
     const QByteArray& data,
     CapturedData::SteadyTimePoint timestamp = CapturedData::SteadyClock::now(),
@@ -178,6 +199,9 @@ protected:
   {
     Q_EMIT dataReceived(makeCapturedData(std::move(data), timestamp, frameStep, logicalFramesHint));
   }
+
+private:
+  bool m_openReportArmed;
 };
 
 }  // namespace IO

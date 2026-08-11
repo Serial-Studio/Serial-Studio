@@ -24,6 +24,12 @@
 
 #include <libusb.h>
 
+#ifdef _WIN32
+#  include <winsock2.h>
+#else
+#  include <sys/time.h>
+#endif
+
 #include <algorithm>
 #include <chrono>
 #include <cmath>

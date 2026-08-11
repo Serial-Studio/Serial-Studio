@@ -329,7 +329,8 @@ void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& se
   if (m_sources.empty() || m_sources[0].connectionSettings == settings)
     return;
 
-  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit Device"), QStringLiteral("connection-settings:0")};
   m_sources[0].connectionSettings = settings;
   setModified(true);
 }
@@ -339,10 +340,10 @@ void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& se
  */
 void DataModel::ProjectModel::setSource0BusType(int busType)
 {
-  const ProjectUndoScope undo_scope{*this, tr("Change Bus Type")};
-  if (m_sources.empty())
+  if (m_sources.empty() || m_sources[0].busType == busType)
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Change Bus Type")};
   m_sources[0].busType = busType;
   setModified(true);
 }

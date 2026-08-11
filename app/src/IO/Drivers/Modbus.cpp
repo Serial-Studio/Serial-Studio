@@ -43,7 +43,6 @@ static constexpr int kDialDeadlineMs = 5000;
 #include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
-#include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -520,8 +519,7 @@ void IO::Drivers::Modbus::failDial(const QString& error)
                   ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(target)
                   : tr("\"%1\": %2").arg(target, error));
 
-  static auto& connectionManager = IO::ConnectionManager::instance();
-  connectionManager.disconnectDevice(this);
+  reportOpenFinished(false, error);
 
   Q_EMIT configurationChanged();
 }
@@ -720,11 +718,12 @@ void IO::Drivers::Modbus::setHost(const QString& host)
  */
 void IO::Drivers::Modbus::setPort(const quint16 port)
 {
-  if (m_port == port)
+  const quint16 clamped = qMax<quint16>(1, port);
+  if (m_port == clamped)
     return;
 
-  m_port = port;
-  m_settings.setValue("ModbusDriver/port", port);
+  m_port = clamped;
+  m_settings.setValue("ModbusDriver/port", clamped);
   Q_EMIT portChanged();
 }
 
@@ -745,11 +744,12 @@ void IO::Drivers::Modbus::setProtocolIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setSlaveAddress(const quint8 address)
 {
-  if (m_slaveAddress == address)
+  const quint8 clamped = qBound<quint8>(1, address, 247);
+  if (m_slaveAddress == clamped)
     return;
 
-  m_slaveAddress = address;
-  m_settings.setValue("ModbusDriver/slaveAddress", address);
+  m_slaveAddress = clamped;
+  m_settings.setValue("ModbusDriver/slaveAddress", clamped);
   Q_EMIT slaveAddressChanged();
 }
 
@@ -758,11 +758,12 @@ void IO::Drivers::Modbus::setSlaveAddress(const quint8 address)
  */
 void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
 {
-  if (m_pollInterval == interval)
+  const quint16 clamped = qBound<quint16>(50, interval, 60000);
+  if (m_pollInterval == clamped)
     return;
 
-  m_pollInterval = interval;
-  m_settings.setValue("ModbusDriver/pollInterval", interval);
+  m_pollInterval = clamped;
+  m_settings.setValue("ModbusDriver/pollInterval", clamped);
 
   if (m_pollTimer->isActive()) {
     m_pollTimer->stop();
@@ -1379,6 +1380,7 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 
   if (state == QModbusDevice::ConnectedState) {
     m_connecting = false;
+    reportOpenFinished(true);
     if (m_pollTimer && !m_pollTimer->isActive())
       m_pollTimer->start(m_pollInterval);
   }

@@ -1752,6 +1752,83 @@ def find_undo_scope_violations(
     return violations
 
 
+# Driver configuration setters must be idempotent: re-applying the current value has to be a
+# complete no-op (no lookup, no emit). The UI/live/project sync fabric replays identical
+# settings constantly, and the one unguarded setter (Network::setRemoteAddress) turned that
+# echo into the 2026-08-10 reconnect loop that got an IP banned. A setter may instead gate on
+# isOpen() when the value cannot apply to a live device at all (Audio). setDriverProperty
+# dispatchers are exempt: they fan out to the concrete setters, which are the guarded surface.
+_DRIVER_SETTER_RE = re.compile(r"^(?:void|bool)\s+IO::Drivers::\w+::(set[A-Z]\w*)\s*\(")
+_DRIVER_SETTER_EXEMPT_PARAM_RE = re.compile(r"\b(?:QVariant|QJsonObject|QJsonValue)\b")
+_DRIVER_SETTER_GUARD_RE = re.compile(
+    r"\bm_\w+(?:\.\w+\(\))?\s*[=!]=[^=]|[=!]=\s*m_\w+|\bisOpen\s*\(\s*\)"
+)
+_DRIVER_SETTER_MUTATION_RE = re.compile(r"\bm_\w+\s*=[^=]|\bQ_EMIT\b")
+
+
+def find_driver_setter_guard_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag a concrete driver setter with a scalar/QString parameter whose body
+    has neither a same-value early return nor an isOpen() gate."""
+    if "IO/Drivers" not in path.as_posix():
+        return []
+
+    violations: list[Violation] = []
+    func_name = None
+    func_line = 0
+    body: list[str] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+
+        m = _DRIVER_SETTER_RE.match(line)
+        if m is not None:
+            name = m.group(1)
+            signature = line
+            for extra in raw_lines[i + 1 : i + 4]:
+                if ")" in signature:
+                    break
+                signature += " " + extra.strip()
+
+            params = signature[signature.find("(") + 1 :]
+            params = params[: params.find(")")] if ")" in params else params
+            if (
+                name != "setDriverProperty"
+                and params.strip()
+                and not _DRIVER_SETTER_EXEMPT_PARAM_RE.search(params)
+            ):
+                func_name = name
+                func_line = i + 1
+                body = []
+            continue
+
+        if func_name is None:
+            continue
+
+        body.append(line)
+        if line.startswith("}"):
+            joined = "\n".join(body)
+            mutates = _DRIVER_SETTER_MUTATION_RE.search(joined) is not None
+            guarded = _DRIVER_SETTER_GUARD_RE.search(joined) is not None
+            if mutates and not guarded:
+                violations.append(
+                    Violation(
+                        path,
+                        func_line,
+                        "driver-setter-guard",
+                        f"{func_name}() mutates or emits without a same-value "
+                        "comparison or isOpen() gate -- the settings sync "
+                        "fabric replays identical values, and an unguarded "
+                        "setter turns that echo into lookups/emits (spec 0050; "
+                        "the telehack reconnect loop). Guard it or gate it.",
+                    )
+                )
+            func_name = None
+
+    return violations
+
+
 # Every string-to-number parse goes through the SerialStudio::toDouble()
 # overload set (fast_float-backed). Qt's QString/QVariant toDouble() walks the
 # full locale + double-conversion pipeline even for plainly non-numeric text
@@ -1933,6 +2010,9 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
             find_hotpath_assert_scope_violations(raw_lines, path, fence_mask)
         )
         violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
+        violations.extend(
+            find_driver_setter_guard_violations(raw_lines, path, fence_mask)
+        )
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).
         # The rules module degrades gracefully when tree-sitter is missing.

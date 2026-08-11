@@ -974,6 +974,12 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
   qCInfo(lcMqttSub) << "state changed:" << state;
   Q_EMIT connectedChanged();
 
+  if (state == QMqttClient::Connected)
+    reportOpenFinished(true);
+
+  if (state == QMqttClient::Disconnected && !m_reconnectPending)
+    reportOpenFinished(false, tr("The broker closed the connection during the attempt"));
+
   if (state == QMqttClient::Disconnected && m_reconnectPending) {
     m_reconnectPending = false;
     if (m_userWantsOpen)
@@ -1061,10 +1067,14 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
   }
 
   if (isConnecting()) {
-    m_userWantsOpen                = false;
-    m_reconnectPending             = false;
-    static auto& connectionManager = ConnectionManager::instance();
-    connectionManager.disconnectDevice(this);
+    m_userWantsOpen    = false;
+    m_reconnectPending = false;
+    if (openReportArmed())
+      reportOpenFinished(false, message);
+    else {
+      static auto& connectionManager = ConnectionManager::instance();
+      connectionManager.disconnectDevice(this);
+    }
   }
 
   queueErrorBox(this, title, message);

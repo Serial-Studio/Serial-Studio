@@ -115,6 +115,10 @@ Item {
         text: Cpp_IO_Process.executable
         placeholderText: qsTr("/path/to/executable")
 
+        onTextEdited: {
+          if (enabled && text !== Cpp_IO_Process.executable)
+            Cpp_IO_Process.executable = text
+        }
         onEditingFinished: {
           if (enabled && text !== Cpp_IO_Process.executable)
             Cpp_IO_Process.executable = text
@@ -155,6 +159,10 @@ Item {
       visible: modeCombo.currentIndex === 0
       placeholderText: qsTr("--arg1 value1 --arg2 value2")
 
+      onTextEdited: {
+        if (enabled && text !== Cpp_IO_Process.arguments)
+          Cpp_IO_Process.arguments = text
+      }
       onEditingFinished: {
         if (enabled && text !== Cpp_IO_Process.arguments)
           Cpp_IO_Process.arguments = text
@@ -191,6 +199,10 @@ Item {
         text: Cpp_IO_Process.workingDir
         placeholderText: qsTr("(optional) /working/directory")
 
+        onTextEdited: {
+          if (enabled && text !== Cpp_IO_Process.workingDir)
+            Cpp_IO_Process.workingDir = text
+        }
         onEditingFinished: {
           if (enabled && text !== Cpp_IO_Process.workingDir)
             Cpp_IO_Process.workingDir = text
@@ -239,6 +251,10 @@ Item {
                          : "/tmp/myapp.fifo"
         text: Cpp_IO_Process.pipePath
 
+        onTextEdited: {
+          if (enabled && text !== Cpp_IO_Process.pipePath)
+            Cpp_IO_Process.pipePath = text
+        }
         onEditingFinished: {
           if (enabled && text !== Cpp_IO_Process.pipePath)
             Cpp_IO_Process.pipePath = text

@@ -41,8 +41,8 @@ class CanBackends {
 public:
   /**
    * @brief One synthetic CAN backend, identified by a plugin key. interfaceSupportsFD may be
-   *        null: the backend never offers CAN FD (aggregate rows omitting it value-initialize
-   *        the pointer, so classic-only backends need no touch).
+   *        null: the backend never offers CAN FD (classic-only backends pass an explicit
+   *        nullptr; omitting the field trips -Wmissing-field-initializers on Windows CI).
    */
   struct Entry {
     QString key;
