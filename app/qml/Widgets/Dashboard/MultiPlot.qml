@@ -376,7 +376,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: root.model.sweepEnabled
       ToolTip.text: qsTr("Trigger Settings")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "trigger", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "trigger", 16)
       onClicked: triggerDialog.openDialog(root.model, true)
     }
 
@@ -406,7 +406,7 @@ Item {
 
     DashboardToolButton {
       ToolTip.text: qsTr("Axis Range Settings")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 32)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 16)
       onClicked: axisRangeDialog.openDialog(plot, root.model)
     }
 

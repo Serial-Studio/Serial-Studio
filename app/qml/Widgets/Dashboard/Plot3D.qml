@@ -224,7 +224,7 @@ Item {
       }
       checked: model.orbitNavigation
       ToolTip.text: qsTr("Orbit Navigation")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "orbit", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "orbit", 16)
     }
 
     DashboardToolButton {
@@ -246,25 +246,25 @@ Item {
     DashboardToolButton {
       ToolTip.text: qsTr("Orthogonal View")
       onClicked: animateToView(300, 0, 225, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "orthogonal-view", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "orthogonal-view", 16)
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Top View")
       onClicked: animateToView(360, 0, 360, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "top-view", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "top-view", 16)
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Left View")
       onClicked: animateToView(270, 0, 270, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "left-view", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "left-view", 16)
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Front View")
       onClicked: animateToView(270, 0, 180, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "front-view", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "front-view", 16)
     }
 
     DashboardToolButton {
@@ -274,7 +274,7 @@ Item {
       }
       checked: model.autoCenter
       ToolTip.text: qsTr("Auto Center")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "center", 32)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "center", 16)
     }
 
     Rectangle {
@@ -290,7 +290,7 @@ Item {
       }
       checked: model.anaglyphEnabled
       ToolTip.text: qsTr("Anaglyph 3D")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "anaglyph", 24)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "anaglyph", 16)
     }
 
     DashboardToolButton {

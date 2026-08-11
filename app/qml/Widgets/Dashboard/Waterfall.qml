@@ -301,7 +301,7 @@ Item {
     DashboardToolButton {
       visible: Cpp_CommercialBuild
       ToolTip.text: qsTr("Record Audio")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "audio-file", 32)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "audio-file", 16)
       checked: Cpp_CommercialBuild && root.model && root.model.audioRecordingEnabled
       onClicked: {
         if (root.model)
@@ -315,7 +315,7 @@ Item {
     DashboardToolButton {
       visible: Cpp_CommercialBuild
       ToolTip.text: qsTr("Open Recordings Folder")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "sound-folder", 32)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "sound-folder", 16)
       onClicked: {
         if (root.model)
           Cpp_Misc_Utilities.revealFile(root.model.recordingsFolder())

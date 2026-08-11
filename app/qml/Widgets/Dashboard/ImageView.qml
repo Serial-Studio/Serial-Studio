@@ -209,7 +209,7 @@ Item {
 
       DashboardToolButton {
         ToolTip.text: qsTr("Zoom In")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-in", 24)
+        icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-in", 16)
         onClicked: {
           const oldZoom = root.zoom
           const newZoom = Math.min(root.maxZoom, oldZoom * 1.5)
@@ -222,7 +222,7 @@ Item {
 
       DashboardToolButton {
         ToolTip.text: qsTr("Zoom Out")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-out", 24)
+        icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-out", 16)
         onClicked: {
           const oldZoom = root.zoom
           const newZoom = Math.max(root.minZoom, oldZoom / 1.5)
@@ -242,7 +242,7 @@ Item {
       DashboardToolButton {
         ToolTip.text: qsTr("Export Images")
         checked: model && model.exportEnabled
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "camcoder", 32)
+        icon.source: Cpp_Misc_IconRegistry.icon("commands", "camcoder", 16)
         onClicked: {
           if (model)
             model.exportEnabled = !model.exportEnabled
@@ -251,7 +251,7 @@ Item {
 
       DashboardToolButton {
         ToolTip.text: qsTr("Open Export Folder")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "pictures-folder", 48)
+        icon.source: Cpp_Misc_IconRegistry.icon("commands", "pictures-folder", 16)
         onClicked: {
           if (model)
             Cpp_Misc_Utilities.revealFile(

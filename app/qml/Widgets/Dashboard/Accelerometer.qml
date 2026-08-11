@@ -184,7 +184,7 @@ Item {
       text: qsTr("Settings")
       ToolTip.text: qsTr("Settings")
       onClicked: configDialog.openDialog(root.model)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 32)
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 16)
     }
 
     Item {
