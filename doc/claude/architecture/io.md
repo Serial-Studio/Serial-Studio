@@ -55,17 +55,30 @@ describe a design that is no longer in the tree.
   silence, and `closeDevice()` disarms it before `ma_device_uninit` so teardown's own stop
   never re-enters. `linkState()` reports `connected`, `connecting` or `idle` (connected
   wins when a live session and a dialing device coexist); `io.getStatus` mirrors it.
-- **Network TCP dials asynchronously.** `open()` starts `connectToHost()` and returns true
-  ("attempt started"); a refused dial retries up to 10 times with a 300 ms backoff (a server a
-  control-script onConnect() just launched needs seconds to listen), a 15 s per-attempt timer
-  bounds a hung dial, and `close()` cancels everything — nothing may redial after it returns.
-  Success reaches the UI via `stateChanged` → `configurationChanged` →
-  `refreshConnectedState()`; failure via a queued error box + `disconnectDevice(this)`.
-  **Writes flow during the dial**: `DeviceManager::write` accepts data while
-  `isConnecting()` and QTcpSocket buffers it until the connect lands, so a control script's
-  `io.connect()` + `writeData()` sequence works without waiting out the dial (the ISS example
-  broke silently without this). An endpoint edit (address/port/socket type/multicast) on a
-  live driver reopens it after a 500 ms debounce; a closed driver never dials on its own.
+- **Spec-0050 dial doctrine (2026-08-10).** Network TCP connects synchronously: `open()`
+  blocks in `dialTcpBlocking()` under the connect fan-out's wait cursor and the return value
+  is the final verdict — no `isConnecting()` override, no dial timers, no pending-dial
+  verdicts. The endpoint wait uses a THROWAWAY probe socket per attempt (5 s deadline,
+  250 ms pace on refusal, covering a control-script helper's bind window); the driver's own
+  socket then connects exactly once, and its readyRead/errorOccurred handlers are wired only
+  on success. **Never abort-and-redial a long-lived run-loop-registered socket**: stale
+  CFSocket sources fire into the freed engine and crash `readFromSocket` on macOS (observed
+  2026-08-10; same family as the 2026-06 socket ABA race). Modbus TCP cannot block
+  (QModbusClient limitation) but runs the same throwaway pre-probe inside `open()`, then
+  `connectDevice()` dials once; a dial setback fails once for both protocols. **Every async
+  dial failure must reach `ConnectionManager::disconnectDevice(this)`** — BLE
+  (`onControllerError`), Modbus (`failDial`), MQTT (dial-window `onErrorChanged`) all do —
+  so a pending verdict settles and "connecting" always resolves; the earlier design stranded
+  those verdicts and wedged the connect button. The prior async retry/watchdog stack
+  (10x300 ms + 15 s + peerPort validation) bounced healthy links and earned a telehack.com
+  IP ban; do not reintroduce it. An ESTABLISHED link that errors reports once and stays
+  down — post-drop auto-recovery exists only as UART's opt-in auto-reconnect checkbox.
+  A control script's `io.connect()` + `writeData()` sequence just works: `open()` returns
+  with the link established. **There is no reopen-on-config-edit machinery** (removed
+  2026-08-10): connection settings are UI-locked while connected or dialing
+  (`SetupPanes/Hardware.qml` StackLayout gate; BLE's post-connect pickers exempt), and
+  `ProjectModel::setSource0ConnectionSettings` no-ops on identical settings so persistence
+  echoes cannot churn undo history or autosave.
 - **`sessionClosed` means the USER (or an API client / player takeover) ended the session** —
   it fires only from the explicit `disconnectDevice()` path. Driver-initiated drops,
   `rebuildDevices` churn, and failed dials never emit it: `API::ProcessLauncher` reaps every
@@ -88,7 +101,14 @@ describe a design that is no longer in the tree.
   transition (`Modbus`, `CANBus`, `MQTT`). BLE hooks `QLowEnergyController::errorOccurred`
   (a failed dial emits no `disconnected`); Process marshals a pipe-peer close to
   `onPipeClosed()` from the read thread. CANBus rate-limits its error box (one per 5 s) so a
-  flapping bus cannot stack a modal storm.
+  flapping bus cannot stack a modal storm. The CANable (gs_usb) backend negotiates CAN FD
+  when the firmware advertises it (spec 0049; wire vocabulary in `GsUsbProtocol.h`, shared
+  with `tst_gsusb_protocol`), detects mid-session unplug in its own read loop, and feeds a
+  process-lifetime libusb hot-plug callback (delivered by a dedicated event-pump thread on the
+  shared context — libusb only dispatches hot-plug from `libusb_handle_events()`) whose only
+  action is a queued, debounced interface-list refresh on the UI driver — never USB work or Qt
+  state on the callback thread; `~CANBus()` disarms the notifier via
+  `clearHotplugNotifier()` so a late callback never touches a freed driver.
 - **`rebuildDevices()` reacts to real transitions only.** It is wired to
   `LemonSqueezy::activatedChanged`, which since 2026-08-04 fires only when
   `CommercialToken` validity actually flipped (`notifyEntitlementMaybeChanged()`), and to the

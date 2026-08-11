@@ -878,9 +878,9 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 
     if (!m_autoReconnect || error != QSerialPort::ResourceError) {
       const auto name = serialPort ? serialPort->portName() : tr("Unknown");
-      Misc::Utilities::showMessageBox(tr("Critical error on serial port \"%1\"").arg(name),
-                                      m_errorDescriptions.value(error, tr("Unknown error")),
-                                      QMessageBox::Critical);
+      queueErrorBox(this,
+                    tr("Critical error on serial port \"%1\"").arg(name),
+                    m_errorDescriptions.value(error, tr("Unknown error")));
     }
 
     else {

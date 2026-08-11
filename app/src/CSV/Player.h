@@ -127,6 +127,7 @@ private:
   void updateTimestampDisplay();
   void processFrameBatch(int startFrame, int endFrame);
   bool promptUserForDateTimeOrInterval(QByteArrayView firstDataRow);
+  [[nodiscard]] double promptTimestampUnitScale();
 
 protected:
   bool eventFilter(QObject* obj, QEvent* event) override;
@@ -170,6 +171,8 @@ private:
 
   PlayerTimestampMode m_tsMode;
   int m_timestampColumn;
+  char m_separator;
+  double m_timeScale;
   double m_intervalSeconds;
   qint64 m_anchorMs;
   double m_startSeconds;

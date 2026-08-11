@@ -155,7 +155,7 @@ def test_diagnostics_command_manifest_entry():
     entry = entries[0]
     assert entry["kind"] == "action"
     assert entry["category"] == "tools"
-    assert entry["icon"] == "commands/tools"
+    assert entry["icon"] == "commands/diagnostics"
     assert sorted(entry["contexts"]) == ["app", "dashboard", "editor"]
 
 

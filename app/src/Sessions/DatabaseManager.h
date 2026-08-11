@@ -99,6 +99,12 @@ class DatabaseManager : public QObject {
   Q_PROPERTY(bool verificationBusy
              READ verificationBusy
              NOTIFY verificationBusyChanged)
+  Q_PROPERTY(bool regressionBusy
+             READ regressionBusy
+             NOTIFY regressionBusyChanged)
+  Q_PROPERTY(QVariantMap lastRegressionReport
+             READ lastRegressionReport
+             NOTIFY regressionReportChanged)
   // clang-format on
 
 signals:
@@ -119,6 +125,10 @@ signals:
   void sessionDatasetsReady(int sessionId, const QVariantList& datasets);
   void verificationBusyChanged();
   void verificationFinished(int sessionId, bool success, const QVariantMap& verdict);
+  void regressionBusyChanged();
+  void regressionReportChanged();
+  void regressionFinished(int sessionId, bool success, const QVariantMap& report);
+  void regressionSweepChanged();
 
 private:
   explicit DatabaseManager();
@@ -144,6 +154,8 @@ public:
   [[nodiscard]] double pdfExportProgress() const;
   [[nodiscard]] double csvExportProgress() const;
   [[nodiscard]] bool verificationBusy() const;
+  [[nodiscard]] bool regressionBusy() const;
+  [[nodiscard]] QVariantMap lastRegressionReport() const;
   [[nodiscard]] QVariantList sessionList() const;
   [[nodiscard]] QVariantList tagList() const;
   [[nodiscard]] QVariantList selectedSessionTags() const;
@@ -153,6 +165,7 @@ public:
   Q_INVOKABLE [[nodiscard]] QVariantMap sessionMetadata(int sessionId) const;
   Q_INVOKABLE [[nodiscard]] QVariantMap latestVerification(int sessionId) const;
   Q_INVOKABLE [[nodiscard]] QVariantMap latestVerdicts() const;
+  Q_INVOKABLE [[nodiscard]] QVariantMap regressionSweepStatus() const;
   Q_INVOKABLE [[nodiscard]] static QString canonicalDbPath(const QString& projectTitle);
   static void setDbPathOverride(const QString& path);
 
@@ -187,6 +200,8 @@ public slots:
   void removeTagFromSession(int sessionId, int tagId);
 
   void verifySession(int sessionId);
+  bool regressSession(int sessionId, const QString& candidatePath = QString());
+  bool regressSessionsByTag(const QString& tag, const QString& candidatePath = QString());
   void exportSessionToCsv(int sessionId);
   void exportSessionToPdf(int sessionId, const QVariantMap& options);
   void requestSessionDatasets(int sessionId);
@@ -220,6 +235,13 @@ private slots:
 private:
   void initWorker();
   void concludeVerification(int sessionId, bool success, const QVariantMap& verdict);
+  void concludeRegression(int sessionId, bool success, const QVariantMap& report);
+  void advanceRegressionSweep(int sessionId, const QVariantMap& report);
+  void finishRegressionSweep();
+  bool publishRegressStartFailure(int sessionId,
+                                  const QString& code,
+                                  const QString& error,
+                                  const QString& hint);
   [[nodiscard]] quint64 nextToken();
   void setBusy(bool busy);
   void renderReportFromPayload(const ReportPayloadPtr& payload);
@@ -265,6 +287,16 @@ private:
 
   // Spec-0044 verification child process
   QProcess* m_verifyProcess;
+  bool m_regressActive;
+  QString m_regressCandidateTemp;
+  QVariantMap m_lastRegressionReport;
+
+  bool m_sweepActive;
+  bool m_sweepOwnsCandidate;
+  QString m_sweepTag;
+  QString m_sweepCandidate;
+  QList<int> m_sweepQueue;
+  QVariantList m_sweepReports;
 
   // Outstanding mutation tokens awaiting worker confirmation
   quint64 m_nextToken;

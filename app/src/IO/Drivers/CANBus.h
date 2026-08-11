@@ -26,10 +26,12 @@
 #include <QCanBusDevice>
 #include <QCanBusFrame>
 #include <QElapsedTimer>
+#include <QList>
 #include <QObject>
 #include <QSet>
 #include <QSettings>
 #include <QString>
+#include <QTimer>
 
 #include "IO/HAL_Driver.h"
 
@@ -53,10 +55,17 @@ class CANBus : public HAL_Driver {
              READ bitrate
              WRITE setBitrate
              NOTIFY bitrateChanged)
+  Q_PROPERTY(quint32 dataBitrate
+             READ dataBitrate
+             WRITE setDataBitrate
+             NOTIFY dataBitrateChanged)
   Q_PROPERTY(bool canFD
              READ canFD
              WRITE setCanFD
              NOTIFY canFDChanged)
+  Q_PROPERTY(bool interfaceSupportsFD
+             READ interfaceSupportsFD
+             NOTIFY interfaceSupportsFDChanged)
   Q_PROPERTY(bool loopback
              READ loopback
              WRITE setLoopback
@@ -74,6 +83,9 @@ class CANBus : public HAL_Driver {
   Q_PROPERTY(QStringList bitrateList
              READ bitrateList
              CONSTANT)
+  Q_PROPERTY(QStringList dataBitrateList
+             READ dataBitrateList
+             CONSTANT)
   Q_PROPERTY(QString interfaceError
              READ interfaceError
              NOTIFY interfaceErrorChanged)
@@ -82,6 +94,8 @@ class CANBus : public HAL_Driver {
 signals:
   void canFDChanged();
   void bitrateChanged();
+  void dataBitrateChanged();
+  void interfaceSupportsFDChanged();
   void loopbackChanged();
   void listenOnlyChanged();
   void pluginIndexChanged();
@@ -116,13 +130,16 @@ public:
   [[nodiscard]] bool canFD() const;
   [[nodiscard]] bool loopback() const;
   [[nodiscard]] bool listenOnly() const;
+  [[nodiscard]] bool interfaceSupportsFD() const;
   [[nodiscard]] quint8 pluginIndex() const;
   [[nodiscard]] quint8 interfaceIndex() const;
   [[nodiscard]] quint32 bitrate() const;
+  [[nodiscard]] quint32 dataBitrate() const;
 
   [[nodiscard]] QStringList pluginList() const;
   [[nodiscard]] QStringList interfaceList() const;
   [[nodiscard]] QStringList bitrateList() const;
+  [[nodiscard]] QStringList dataBitrateList() const;
   [[nodiscard]] QString interfaceError() const;
 
   [[nodiscard]] Q_INVOKABLE QString pluginDisplayName(const QString& plugin) const;
@@ -134,6 +151,7 @@ public slots:
   void setLoopback(const bool enabled);
   void setListenOnly(const bool enabled);
   void setBitrate(const quint32 bitrate);
+  void setDataBitrate(const quint32 bitrate);
   void setPluginIndex(const quint8 index);
   void setInterfaceIndex(const quint8 index);
 
@@ -159,6 +177,7 @@ private:
 private:
   QCanBusDevice* m_device;
   QElapsedTimer m_errorBoxTimer;
+  QTimer m_hotplugDebounce;
 
   bool m_canFD;
   bool m_loopback;
@@ -166,6 +185,7 @@ private:
   quint8 m_pluginIndex;
   quint8 m_interfaceIndex;
   quint32 m_bitrate;
+  quint32 m_dataBitrate;
 
   bool m_hwStampAnchored;
   CapturedData::SteadyClock::duration m_hwStampOffset;
@@ -174,6 +194,7 @@ private:
   QString m_interfaceError;
   QStringList m_pluginList;
   QStringList m_interfaceList;
+  QList<bool> m_interfaceFdCapable;
   QSet<QString> m_loggedPluginErrors;
 };
 }  // namespace Drivers

@@ -937,8 +937,7 @@ void Sessions::Export::setupExternalConnections()
   refreshProjectSnapshot();
 
   const bool persisted = m_settings.value("SQLiteExport/Enabled", false).toBool();
-  const bool allow = persisted && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
-  m_exportEnabled.store(allow, std::memory_order_relaxed);
+  setExportEnabled(persisted);
 }
 
 /**

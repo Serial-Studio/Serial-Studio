@@ -409,12 +409,12 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../src/API/ProcessLauncher.cpp" line="88"/>
+        <location filename="../../src/API/ProcessLauncher.cpp" line="91"/>
         <source>No program specified</source>
         <translation>Nebyl zadán žádný program</translation>
     </message>
     <message>
-        <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
+        <location filename="../../src/API/ProcessLauncher.cpp" line="97"/>
         <source>Program "%1" not found in PATH</source>
         <translation>Program „%1" nebyl nalezen v PATH</translation>
     </message>
@@ -2364,27 +2364,37 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Flexibilní Datová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="243"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="242"/>
+        <source>The selected adapter does not support CAN FD</source>
+        <translation>Vybraný adaptér nepodporuje CAN FD</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="249"/>
+        <source>Data Bitrate</source>
+        <translation>Datová Přenosová Rychlost</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="304"/>
         <source>Loopback</source>
         <translation>Zpětná Smyčka</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="324"/>
         <source>Listen-Only</source>
         <translation>Pouze Naslouchání</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="344"/>
         <source>DBC Database</source>
         <translation>Databáze DBC</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="287"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="348"/>
         <source>Import DBC File…</source>
         <translation>Importovat Soubor DBC…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="381"/>
         <source>No CAN Interfaces Found</source>
         <translation>Nenalezena Žádná Rozhraní CAN</translation>
     </message>
@@ -2392,119 +2402,144 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="383"/>
+        <location filename="../../src/CSV/Player.cpp" line="492"/>
         <source>Select CSV file</source>
         <translation>Vybrat soubor CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="385"/>
+        <location filename="../../src/CSV/Player.cpp" line="494"/>
         <source>CSV files (*.csv)</source>
         <translation>Soubory CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="506"/>
+        <location filename="../../src/CSV/Player.cpp" line="617"/>
         <source>Device Connection Active</source>
         <translation>Aktivní Připojení k Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="507"/>
+        <location filename="../../src/CSV/Player.cpp" line="618"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pro použití této funkce je nutné odpojit zařízení. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="521"/>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="632"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
         <source>Check file permissions and location</source>
         <translation>Zkontrolovat oprávnění a umístění souboru</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="528"/>
-        <location filename="../../src/CSV/Player.cpp" line="610"/>
-        <location filename="../../src/CSV/Player.cpp" line="785"/>
+        <location filename="../../src/CSV/Player.cpp" line="639"/>
+        <location filename="../../src/CSV/Player.cpp" line="720"/>
+        <location filename="../../src/CSV/Player.cpp" line="905"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Nedostatečná Data v Souboru CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="521"/>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="632"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
         <source>Cannot read CSV file</source>
         <translation>Nelze přečíst soubor CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="529"/>
-        <location filename="../../src/CSV/Player.cpp" line="611"/>
-        <location filename="../../src/CSV/Player.cpp" line="786"/>
+        <location filename="../../src/CSV/Player.cpp" line="640"/>
+        <location filename="../../src/CSV/Player.cpp" line="721"/>
+        <location filename="../../src/CSV/Player.cpp" line="906"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Soubor CSV musí obsahovat alespoň jeden datový řádek. Zkontrolujte soubor a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="779"/>
+        <location filename="../../src/CSV/Player.cpp" line="899"/>
         <source>CSV Row Limit Reached</source>
         <translation>Dosažen Limit Řádků CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="780"/>
+        <location filename="../../src/CSV/Player.cpp" line="900"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Přehrávání je omezeno na %L1 řádků; zbytek souboru nebyl indexován.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1226"/>
+        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <source>Seconds (s)</source>
+        <translation>Sekundy (s)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <source>Milliseconds (ms)</source>
+        <translation>Milisekundy (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <source>Microseconds (us)</source>
+        <translation>Mikrosekundy (us)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1354"/>
+        <source>Timestamp Units</source>
+        <translation>Jednotky Časové Značky</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1355"/>
+        <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
+        <translation>Sloupec časové značky nedeklaruje jednotku. Jak má být interpretován?</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1380"/>
         <source>Invalid CSV</source>
         <translation>Neplatný CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1227"/>
+        <location filename="../../src/CSV/Player.cpp" line="1381"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Soubor CSV neobsahuje žádná data ani záhlaví.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1234"/>
+        <location filename="../../src/CSV/Player.cpp" line="1388"/>
         <source>Select a date/time column</source>
         <translation>Vyberte sloupec data/času</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1234"/>
-        <location filename="../../src/CSV/Player.cpp" line="1246"/>
+        <location filename="../../src/CSV/Player.cpp" line="1388"/>
+        <location filename="../../src/CSV/Player.cpp" line="1400"/>
         <source>Set interval manually</source>
         <translation>Nastavit interval ručně</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1236"/>
+        <location filename="../../src/CSV/Player.cpp" line="1390"/>
         <source>CSV Date/Time Selection</source>
         <translation>Výběr Data/času CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1237"/>
+        <location filename="../../src/CSV/Player.cpp" line="1391"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Zvolte způsob zpracování dat data/času:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1249"/>
+        <location filename="../../src/CSV/Player.cpp" line="1403"/>
         <source>Set Interval</source>
         <translation>Nastavit Interval</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1250"/>
+        <location filename="../../src/CSV/Player.cpp" line="1404"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Zadejte interval mezi řádky v milisekundách:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1267"/>
+        <location filename="../../src/CSV/Player.cpp" line="1421"/>
         <source>Select Date/Time Column</source>
         <translation>Vybrat Sloupec Data/času</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1268"/>
+        <location filename="../../src/CSV/Player.cpp" line="1422"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Vyberte sloupec, který obsahuje data data/času:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1278"/>
+        <location filename="../../src/CSV/Player.cpp" line="1432"/>
         <source>Invalid Selection</source>
         <translation>Neplatný Výběr</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1278"/>
+        <location filename="../../src/CSV/Player.cpp" line="1432"/>
         <source>The selected column is not valid.</source>
         <translation>Vybraný sloupec není platný.</translation>
     </message>
@@ -4452,7 +4487,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>API Server Vypnut</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="637"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="648"/>
         <source>Command Palette</source>
         <translation>Paleta Příkazů</translation>
     </message>
@@ -7489,7 +7524,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="198"/>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="281"/>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="308"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="329"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="332"/>
         <source>Edit Device</source>
         <translation>Upravit Zařízení</translation>
     </message>
@@ -8655,7 +8690,7 @@ Platný formát: 01 A2 FF 3C</translation>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="36"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
         <translation>Relace</translation>
     </message>
@@ -8736,12 +8771,12 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation type="vanished">Obnovit soubor projektu z tohoto souboru relace</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="288"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
         <source>Loading session…</source>
         <translation>Načítání relace…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="299"/>
         <source>Working…</source>
         <translation>Zpracovává Se…</translation>
     </message>
@@ -9113,6 +9148,99 @@ Platný formát: 01 A2 FF 3C</translation>
     <message>
         <source>Open</source>
         <translation type="vanished">Otevřít</translation>
+    </message>
+</context>
+<context>
+    <name>DriftReportDialog</name>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="29"/>
+        <source>Comparison Report</source>
+        <translation>Porovnávací Zpráva</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="48"/>
+        <source>The current project decodes this session exactly like the recorded one.</source>
+        <translation>Aktuální projekt dekóduje tuto relaci přesně stejně jako zaznamenanou.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="51"/>
+        <source>The current project produces different values from the same recording.</source>
+        <translation>Aktuální projekt vytváří odlišné hodnoty ze stejného záznamu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="54"/>
+        <source>The current project finds a different number of readings in the recording.</source>
+        <translation>Aktuální projekt nachází odlišný počet měření v záznamu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="57"/>
+        <source>The current project has a different set of datasets than the recording.</source>
+        <translation>Aktuální projekt má odlišnou sadu datových sad než záznam.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="60"/>
+        <source>This session cannot be compared mechanically.</source>
+        <translation>Tuto relaci nelze mechanicky porovnat.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
+        <source>The comparison could not be completed.</source>
+        <translation>Porovnání nebylo možné dokončit.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="115"/>
+        <source>Compared against: %1</source>
+        <translation>Porovnáno s: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="116"/>
+        <source>current project</source>
+        <translation>aktuální projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="155"/>
+        <source>No differences to show.</source>
+        <translation>Žádné rozdíly k zobrazení.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="196"/>
+        <source>Only exists in the current project.</source>
+        <translation>Existuje pouze v aktuálním projektu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="199"/>
+        <source>Only exists in the recorded project.</source>
+        <translation>Existuje pouze v zaznamenaném projektu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
+        <source>%1 of %2 values changed, %3 missing, %4 extra.</source>
+        <translation>%1 z %2 hodnot změněno, %3 chybí, %4 navíc.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="219"/>
+        <source>Time</source>
+        <translation>Čas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="226"/>
+        <source>Recorded project</source>
+        <translation>Zaznamenaný projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="233"/>
+        <source>Current project</source>
+        <translation>Aktuální projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="270"/>
+        <source>...and %1 more changed values.</source>
+        <translation>...a dalších %1 změněných hodnot.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="287"/>
+        <source>Close</source>
+        <translation>Zavřít</translation>
     </message>
 </context>
 <context>
@@ -11290,83 +11418,83 @@ Platný formát: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="463"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="464"/>
         <source>BLE I/O Module Error</source>
         <translation>Chyba BLE I/O Modulu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="724"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
         <source>BLE connection error: %1</source>
         <translation>Chyba BLE připojení: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="808"/>
         <source>Select Device</source>
         <translation>Vybrat Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="819"/>
         <source>Select Service</source>
         <translation>Vybrat Službu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="830"/>
         <source>Select Characteristic</source>
         <translation>Vybrat Charakteristiku</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1036"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1040"/>
         <source>Error while configuring BLE service</source>
         <translation>Chyba při konfiguraci BLE služby</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1254"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1258"/>
         <source>Operation error</source>
         <translation>Chyba operace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1257"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1261"/>
         <source>Characteristic write error</source>
         <translation>Chyba zápisu charakteristiky</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1260"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1264"/>
         <source>Descriptor write error</source>
         <translation>Chyba zápisu deskriptoru</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1263"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1267"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1266"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1270"/>
         <source>Characteristic read error</source>
         <translation>Chyba čtení charakteristiky</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1269"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1273"/>
         <source>Descriptor read error</source>
         <translation>Chyba čtení deskriptoru</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1509"/>
         <source>BLE Device</source>
         <translation>BLE Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
         <source>Service</source>
         <translation>Služba</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1524"/>
         <source>Notify Characteristic</source>
         <translation>Notifikační Charakteristika</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1527"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1531"/>
         <source>Characteristic</source>
         <translation>Charakteristika</translation>
     </message>
@@ -11374,15 +11502,15 @@ Platný formát: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="353"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="359"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="370"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="382"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="387"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Sběrnice Není Dostupná</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="360"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="383"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -11391,37 +11519,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Podpora CAN sběrnice v macOS je omezená a může vyžadovat ovladače hardwaru třetích stran.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="387"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Na této platformě nejsou dostupné žádné pluginy pro CAN sběrnici.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="399"/>
         <source>Invalid CAN Configuration</source>
         <translation>Neplatná Konfigurace CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="407"/>
         <source>Invalid Selection</source>
         <translation>Neplatný Výběr</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="416"/>
         <source>No Devices Available</source>
         <translation>Žádná Dostupná Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="304"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="322"/>
         <source>CAN Device Creation Failed</source>
         <translation>Vytvoření CAN Zařízení Selhalo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
         <source>CAN Connection Failed</source>
         <translation>CAN Připojení Selhalo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="371"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -11430,7 +11558,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 V Linuxu se ujistěte, že jsou načteny moduly jádra SOCKETCAN.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -11439,27 +11567,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Ve Windows nainstalujte ovladače CAN hardware (PEAK, VECTOR atd.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="400"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Konfigurace CAN sběrnice je neúplná. Vyberte platný modul a rozhraní.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="385"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="408"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Vybraný modul nebo rozhraní již není dostupné. Obnovte seznamy a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="417"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Seznam modulů nebo rozhraní je prázdný. Obnovte seznamy a ujistěte se, že je CAN hardware připojen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Nelze vytvořit CAN zařízení. Zkontrolujte hardware a ovladače.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="352"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Nelze se připojit k CAN zařízení. Zkontrolujte hardwarové připojení a nastavení.</translation>
     </message>
@@ -11472,68 +11600,68 @@ Ve Windows nainstalujte ovladače CAN hardware (PEAK, VECTOR atd.).</translation
         <translation type="vanished">Došlo k chybě, ale zařízení CAN již není dostupné.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="801"/>
         <source>Error code: %1</source>
         <translation>Kód chyby: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="813"/>
         <source>CAN Bus Communication Error</source>
         <translation>Chyba Komunikace Sběrnice CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="846"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="921"/>
         <source>No CAN driver selected</source>
         <translation>Nebyl vybrán žádný ovladač CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="858"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Nejprve načtěte moduly jádra SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="854"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Připojte adaptér %1 a poté obnovte</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="861"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Nejprve nastavte virtuální rozhraní CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="791"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="863"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="883"/>
         <source>No interfaces found for %1</source>
         <translation>Pro %1 nebyla nalezena žádná rozhraní</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="867"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Nainstalujte &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;ovladače PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="799"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="871"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Nainstalujte &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;ovladače VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="875"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Nainstalujte &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;ovladače SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="878"/>
         <source>Install %1 drivers</source>
         <translation>Nainstalujte ovladače %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="881"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Nainstalujte ovladače %1 pro macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="823"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="895"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11544,32 +11672,37 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="930"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1031"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1039"/>
         <source>Interface</source>
         <translation>Rozhraní</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1047"/>
         <source>Bitrate</source>
         <translation>Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="955"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1056"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1063"/>
+        <source>Data Bitrate</source>
+        <translation>Datová Přenosová Rychlost</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1072"/>
         <source>Loopback</source>
         <translation>Zpětná Smyčka</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="969"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1079"/>
         <source>Listen-Only</source>
         <translation>Pouze Naslouchání</translation>
     </message>
@@ -11577,69 +11710,95 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="486"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>Inicializace knihovny libusb pro adaptér CANable se nezdařila.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="513"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>Nelze vytvořit výčet USB zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="443"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="533"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>Vybraný adaptér CANable již není připojen, nebo jej má otevřený jiná aplikace. Na Windows musí zařízení používat ovladač WinUSB (candleLight jej instaluje automaticky).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="456"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="546"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>Nelze získat USB rozhraní CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="520"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="616"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>Adaptér CANable není otevřen pro zápis.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="555"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="670"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>Nepodařilo se odeslat CAN rámec do adaptéru.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="571"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="686"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>Chyba sběrnice CAN hlášená adaptérem CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="741"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>CAN rámec nebyl potvrzen na sběrnici.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="774"/>
+        <source>The CANable adapter was disconnected.</source>
+        <translation>Adaptér CANable byl odpojen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="851"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>Adaptér CANable odmítl handshake formátu hostitele.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="858"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
         <source>Could not read CANable timing constants.</source>
         <translation>Nelze přečíst časové konstanty CANable.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="864"/>
+        <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
+        <translation>Firmware adaptéru nepodporuje CAN FD. Nahrajte firmware candleLight FD nebo zakažte režim flexibilní přenosové rychlosti.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>Přenosová rychlost %1 bps není tímto adaptérem CANable podporována.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="744"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="878"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>Adaptér CANable odmítl požadovanou přenosovou rychlost.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="902"/>
         <source>Could not start the CANable channel.</source>
         <translation>Nelze spustit kanál CANable.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="924"/>
+        <source>Could not read CANable FD timing constants.</source>
+        <translation>Nelze přečíst časové konstanty CANable FD.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="938"/>
+        <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
+        <translation>Datová přenosová rychlost %1 bps není tímto adaptérem CANable podporována.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="945"/>
+        <source>CANable adapter rejected the requested data bitrate.</source>
+        <translation>Adaptér CANable odmítl požadovanou datovou přenosovou rychlost.</translation>
     </message>
 </context>
 <context>
@@ -11687,72 +11846,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
         <source>Any Protocol</source>
         <translation>Jakýkoliv Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="81"/>
         <source>Secure Protocols Only</source>
         <translation>Pouze Zabezpečené Protokoly</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="83"/>
         <source>None</source>
         <translation>Žádné</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="84"/>
         <source>Query Peer</source>
         <translation>Dotázat Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Verify Peer</source>
         <translation>Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Auto Verify Peer</source>
         <translation>Automaticky Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="180"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="194"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Funkce MQTT Vyžaduje Komerční Licenci</translation>
     </message>
@@ -11761,142 +11920,142 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Přihlášení k MQTT brokeru je dostupné pouze s platnou komerční licencí Serial Studio (úroveň Hobbyist nebo vyšší).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="181"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="195"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Přihlášení k MQTT brokeru je dostupné pouze s platnou licencí Serial Studio nebo aktivní zkušební verzí.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="413"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="427"/>
         <source>Use System Database</source>
         <translation>Použít Systémovou Databázi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="414"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="428"/>
         <source>Load From Folder…</source>
         <translation>Načíst Ze Složky…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="447"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="461"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Vybrat Adresář Certifikátů PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="702"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="716"/>
         <source>Hostname</source>
         <translation>Název Hostitele</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="723"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
         <source>Topic Filter</source>
         <translation>Filtr Tématu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
         <source>Client ID</source>
         <translation>ID Klienta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
         <source>Username</source>
         <translation>Uživatelské Jméno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="753"/>
         <source>Password</source>
         <translation>Heslo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="760"/>
         <source>MQTT Version</source>
         <translation>Verze MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="754"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="768"/>
         <source>Clean Session</source>
         <translation>Vyčistit Relaci</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="761"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="775"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="770"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
         <source>Auto Keep Alive</source>
         <translation>Automatický Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="801"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Povoleno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="797"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
         <source>SSL Protocol</source>
         <translation>Protokol SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="819"/>
         <source>Peer Verify Mode</source>
         <translation>Režim Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="813"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="827"/>
         <source>Peer Verify Depth</source>
         <translation>Hloubka Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Client Certificate (PEM)</source>
         <translation>Klientský Certifikát (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Private Key (PEM)</source>
         <translation>Soukromý Klíč (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="850"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT přes port 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="844"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="858"/>
         <source>ALPN Protocol</source>
         <translation>ALPN Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="978"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="993"/>
         <source>MQTT Subscription Error</source>
         <translation>Chyba Odběru MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="994"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Nepodařilo se odebírat téma "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1225"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1247"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Chyba Klientského Certifikátu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1244"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1266"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Soubory PEM (*.pem *.crt *.cer *.key);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1270"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1292"/>
         <source>Select Client Certificate</source>
         <translation>Vybrat Certifikát Klienta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1278"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1300"/>
         <source>Select Private Key</source>
         <translation>Vybrat Soukromý Klíč</translation>
     </message>
@@ -11905,97 +12064,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Broker ukončil připojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Neplatná Verze Protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1007"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Broker odmítl nakonfigurovanou verzi protokolu MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1025"/>
         <source>Client ID Rejected</source>
         <translation>ID Klienta Odmítnuto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1011"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Broker odmítl ID klienta. Zkuste jiný identifikátor.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1029"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT Server Nedostupný</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1015"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Broker je momentálně nedostupný. Opakujte akci později.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1033"/>
         <source>Authentication Error</source>
         <translation>Chyba Autentizace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1019"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Poskytnuté přihlašovací údaje byly brokerem odmítnuty.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1037"/>
         <source>Authorization Error</source>
         <translation>Chyba Autorizace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1023"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1038"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Účet nemá oprávnění pro tuto operaci.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1041"/>
         <source>Network or Transport Error</source>
         <translation>Chyba Sítě nebo Transportní Vrstvy</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1042"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problém síťové/transportní vrstvy při připojování k brokeru.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1045"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Certifikát klienta je nakonfigurován: ověřte, že odpovídá soukromému klíči a je aktivován na brokeru.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1050"/>
         <source>MQTT Protocol Violation</source>
         <translation>Porušení Protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1051"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Broker nahlásil porušení protokolu a ukončil spojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1054"/>
         <source>MQTT 5 Error</source>
         <translation>Chyba MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1055"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Došlo k chybě protokolu MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1058"/>
         <source>MQTT Error</source>
         <translation>Chyba MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1059"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Došlo k neočekávané chybě MQTT.</translation>
     </message>
@@ -12003,22 +12162,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="405"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="391"/>
         <source>Invalid Serial Port</source>
         <translation>Neplatný Sériový Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="436"/>
         <source>Modbus Initialization Failed</source>
         <translation>Inicializace Modbus Selhala</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="459"/>
+        <source>Nothing is listening at %1</source>
+        <translation>Na adrese %1 nic nenaslouchá</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="518"/>
         <source>Modbus Connection Failed</source>
         <translation>Připojení Modbus Selhalo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="406"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="392"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>Vybraný sériový port „%1" již není dostupný. Obnovte seznam portů a zkuste to znovu.</translation>
     </message>
@@ -12027,84 +12191,83 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Modbus klient odmítl zahájit připojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="437"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Nelze vytvořit zařízení Modbus. Zkontrolujte konfiguraci systému a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="516"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="520"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>Nelze se připojit k „%1". Zkontrolujte nastavení připojení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="517"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="521"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="527"/>
         <source>Connection attempt timed out</source>
-        <translation>Časový limit pokusu o připojení vypršel</translation>
+        <translation type="vanished">Časový limit pokusu o připojení vypršel</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="663"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
         <source>None</source>
         <translation>Žádná</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="664"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
         <source>Even</source>
         <translation>Sudá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="665"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
         <source>Odd</source>
         <translation>Lichá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="666"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
         <source>Space</source>
         <translation>Mezera</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="667"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
         <source>Mark</source>
         <translation>Značka</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="719"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding Registry (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="720"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
         <source>Input Registers (0x04)</source>
         <translation>Input Registry (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
         <source>Coils (0x01)</source>
         <translation>Cívky (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="722"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="697"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Diskrétní Vstupy (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="904"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
         <source>No register groups configured</source>
         <translation>Nejsou nakonfigurovány žádné skupiny registrů</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="905"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="880"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Před vygenerováním projektu přidejte alespoň jednu skupinu registrů.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="907"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="920"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="945"/>
         <source>Modbus Project Generator</source>
         <translation>Generátor Projektů Modbus</translation>
     </message>
@@ -12117,137 +12280,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Zkontrolujte oprávnění k zápisu do dočasného adresáře.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný projekt JSON se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="940"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="915"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projekt úspěšně vygenerován s %1 skupinami a %2 datovými sadami.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
         <source>Modbus Project</source>
         <translation>Projekt Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="938"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Holding Registers</source>
         <translation>Holding Registry</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
         <source>Input Registers</source>
         <translation>Vstupní Registry</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
         <source>Coils</source>
         <translation>Cívky</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="961"/>
         <source>Discrete Inputs</source>
         <translation>Diskrétní Vstupy</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="975"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
         <source>Register %1</source>
         <translation>Registr %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="996"/>
         <source>Coil %1</source>
         <translation>Cívka %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="996"/>
         <source>Discrete %1</source>
         <translation>Diskrétní %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1454"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1422"/>
         <source>Error code: %1</source>
         <translation>Kód chyby: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1457"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1424"/>
         <source>Modbus Communication Error</source>
         <translation>Chyba Komunikace Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1469"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1436"/>
         <source>Select Port</source>
         <translation>Vybrat Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1622"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1589"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1630"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1597"/>
         <source>Slave Address</source>
         <translation>Adresa Slave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1606"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Dotazování (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1679"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1646"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1701"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1668"/>
         <source>Serial Port</source>
         <translation>Sériový Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1709"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1676"/>
         <source>Baud Rate</source>
         <translation>Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1717"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1684"/>
         <source>Parity</source>
         <translation>Parita</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1725"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1692"/>
         <source>Data Bits</source>
         <translation>Datové Bity</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1733"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1700"/>
         <source>Stop Bits</source>
         <translation>Stop Bity</translation>
     </message>
@@ -12255,43 +12418,49 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="341"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="312"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="649"/>
         <source>Network socket error</source>
         <translation>Chyba síťového socketu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="342"/>
         <source>Connection to %1:%2 timed out.</source>
-        <translation>Časový limit připojení k %1:%2 vypršel.</translation>
+        <translation type="vanished">Časový limit připojení k %1:%2 vypršel.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="302"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="313"/>
+        <source>Cannot connect to %1:%2 (%3)</source>
+        <translation>Nelze se připojit k %1:%2 (%3)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="666"/>
         <source>Socket Type</source>
         <translation>Typ Socketu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="674"/>
         <source>Remote Address</source>
         <translation>Vzdálená Adresa</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="682"/>
         <source>TCP Port</source>
         <translation>TCP Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="691"/>
         <source>UDP Local Port</source>
         <translation>UDP Lokální Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="700"/>
         <source>UDP Remote Port</source>
         <translation>UDP Vzdálený Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="709"/>
         <source>UDP Multicast</source>
         <translation>UDP Multicast</translation>
     </message>
@@ -12558,12 +12727,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Neznámá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Kritická chyba na sériovém portu „%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
@@ -18835,22 +19004,22 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Nelze otevřít soubor pro zápis!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1375"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1379"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Neplatný Bluetooth adaptér!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1378"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1382"/>
         <source>Unsuported platform or operating system</source>
         <translation>Nepodporovaná platforma nebo operační systém</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1385"/>
         <source>Unsupported discovery method</source>
         <translation>Nepodporovaná metoda zjišťování</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1384"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1388"/>
         <source>General I/O error</source>
         <translation>Obecná chyba I/O</translation>
     </message>
@@ -19092,12 +19261,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="756"/>
+        <location filename="../../src/Misc/CLI.cpp" line="818"/>
         <source>Project file not found</source>
         <translation>Soubor projektu nenalezen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="757"/>
+        <location filename="../../src/Misc/CLI.cpp" line="819"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -19106,17 +19275,17 @@ Parametr oddělovače již není potřeba.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="760"/>
+        <location filename="../../src/Misc/CLI.cpp" line="822"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Chcete tento zástupce smazat?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="764"/>
+        <location filename="../../src/Misc/CLI.cpp" line="826"/>
         <source>Delete Shortcut</source>
         <translation>Smazat Zástupce</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="766"/>
+        <location filename="../../src/Misc/CLI.cpp" line="828"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
     </message>
@@ -20122,147 +20291,242 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Podrobnosti Relace</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="39"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="47"/>
         <source>Reproduced</source>
         <translation>Reprodukováno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="42"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="50"/>
         <source>Diverged</source>
         <translation>Odchýleno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="45"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
         <source>Partially verified</source>
         <translation>Částečně Ověřeno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="56"/>
         <source>Not mechanically verifiable</source>
         <translation>Nelze Mechanicky Ověřit</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="59"/>
         <source>Verification error</source>
         <translation>Chyba Ověření</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
         <source>Never verified</source>
         <translation>Nikdy Neověřeno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="69"/>
+        <source>Identical</source>
+        <translation>Identické</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="72"/>
+        <source>Value drift</source>
+        <translation>Odchylka hodnot</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="75"/>
+        <source>Coverage drift</source>
+        <translation>Odchylka Pokrytí</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="78"/>
+        <source>Structural drift</source>
+        <translation>Strukturální Odchylka</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="81"/>
+        <source>Not mechanically comparable</source>
+        <translation>Mechanicky Neporovnatelné</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
+        <source>Check failed</source>
+        <translation>Kontrola Selhala</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="163"/>
         <source>Select a session to view details.</source>
         <translation>Vyberte relaci pro zobrazení podrobností.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="164"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="205"/>
         <source>Project:</source>
         <translation>Projekt:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="177"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="218"/>
         <source>Started:</source>
         <translation>Zahájeno:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="190"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="231"/>
         <source>Ended:</source>
         <translation>Ukončeno:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="196"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="237"/>
         <source>(in progress)</source>
         <translation>(probíhá)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="203"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="244"/>
         <source>Frames:</source>
         <translation>Rámce:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="219"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="260"/>
         <source>Notes</source>
         <translation>Poznámky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="275"/>
         <source>Add session notes…</source>
         <translation>Přidat poznámky k relaci…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="276"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Poznámky jsou u dokončených relací pouze pro čtení.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="361"/>
         <source>New tag…</source>
         <translation>Nový štítek…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="344"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="385"/>
         <source>Reproducibility</source>
         <translation>Reprodukovatelnost</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="372"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
         <source>Checked %1 with version %2</source>
         <translation>Zkontrolováno %1 s verzí %2</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="383"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="456"/>
         <source>Re-runs the archived raw data through the current build and compares it against the recorded values. This proves the archive is reproducible; it is not a determinism guarantee, a safety function, or a calibration authority.</source>
         <translation>Znovu zpracuje archivovaná surová data aktuální verzí a porovná je se zaznamenanými hodnotami. Toto dokazuje reprodukovatelnost archivu; není to záruka determinismu, bezpečnostní funkce ani kalibrační autorita.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="430"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="468"/>
+        <source>Drift vs Current Project</source>
+        <translation>Odchylka Oproti Aktuálnímu Projektu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="489"/>
+        <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
+        <translation>Porovnává dekódované hodnoty této relace s projektem aktuálně otevřeným v editoru. Výsledek odráží přechodného kandidáta a není uložen s relací.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="511"/>
+        <source>Candidate: %1 (%2)</source>
+        <translation>Kandidát: %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="512"/>
+        <source>untitled</source>
+        <translation>bez názvu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="523"/>
+        <source>Archived-configuration reproduction status: %1</source>
+        <translation>Stav reprodukce archivované konfigurace: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="577"/>
+        <source>%1: only in the current project</source>
+        <translation>%1: pouze v aktuálním projektu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="580"/>
+        <source>%1: only in the recorded project</source>
+        <translation>%1: pouze v zaznamenaném projektu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="582"/>
+        <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
+        <translation>%1: %2 z %3 hodnot změněno, %4 chybí, %5 navíc</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
+        <source>…and %1 more datasets are affected.</source>
+        <translation>…a %1 dalších datových sad je ovlivněno.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="645"/>
         <source>Only completed sessions can be verified</source>
         <translation>Ověřit lze pouze dokončené relace</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="649"/>
         <source>Verifying…</source>
         <translation>Ověřování…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="650"/>
         <source>Verify</source>
         <translation>Ověřit</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="447"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="657"/>
+        <source>Only completed sessions can be checked against a project</source>
+        <translation>Kontrolovat proti projektu lze pouze dokončené relace</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <source>Checking…</source>
+        <translation>Kontrola…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <source>Check Project</source>
+        <translation>Kontrolovat Projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
+        <source>View Report</source>
+        <translation>Zobrazit Zprávu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="681"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>Odemkněte soubor relace pro mazání relací</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="256"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="297"/>
         <source>Tags</source>
         <translation>Štítky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="368"/>
         <source>Add</source>
         <translation>Přidat</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="620"/>
         <source>Replay</source>
         <translation>Přehrát</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="628"/>
         <source>Export CSV</source>
         <translation>Exportovat CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="420"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="635"/>
         <source>Generate Report</source>
         <translation>Vygenerovat Sestavu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="441"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="675"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
@@ -20338,103 +20602,103 @@ Parametr oddělovače již není potřeba.</translation>
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1625"/>
         <source>Select logo image</source>
         <translation>Vybrat obrázek loga</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1233"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1627"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>Obrázky (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1009"/>
         <source>Open Session File</source>
         <translation>Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="617"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1011"/>
         <source>Session files (*.db)</source>
         <translation>Soubory relací (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1434"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1828"/>
         <source>Cannot open session file</source>
         <translation>Nelze otevřít soubor relace</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="842"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1236"/>
         <source>Delete session from %1?</source>
         <translation>Odstranit relaci z %1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="845"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1239"/>
         <source>Delete Session</source>
         <translation>Odstranit Relaci</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1295"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1689"/>
         <source>No project data</source>
         <translation>Žádná data projektu</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1237"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Všechna měření a nezpracovaná data této relace budou trvale odstraněna.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="673"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="682"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1067"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1076"/>
         <source>Lock Session File</source>
         <translation>Zamknout Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="674"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1068"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Zvolte heslo pro zamknutí souboru relace:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="683"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1077"/>
         <source>Confirm the password:</source>
         <translation>Potvrďte heslo:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="691"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1085"/>
         <source>Passwords do not match</source>
         <translation>Hesla se neshodují</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="692"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1086"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>Zadaná hesla se neshodují. Soubor relace nebyl zamknut.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="728"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1122"/>
         <source>Unlock Session File</source>
         <translation>Odemknout Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="729"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1123"/>
         <source>Enter the session file password:</source>
         <translation>Zadejte heslo souboru relace:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="739"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1133"/>
         <source>Incorrect password</source>
         <translation>Nesprávné heslo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="740"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1134"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Zadané heslo neodpovídá heslu uloženému v souboru relace.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="832"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1226"/>
         <source>Session file locked</source>
         <translation>Soubor relace zamknut</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="833"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1227"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Před odstraněním zaznamenaných relací odemkněte soubor relace.</translation>
     </message>
@@ -20443,12 +20707,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Tato relace neobsahuje vložený soubor projektu — dashboard se vrací k rychlému rozložení grafů.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1380"/>
         <source>Export Session to CSV</source>
         <translation>Exportovat Relaci do CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1380"/>
         <source>CSV files (*.csv)</source>
         <translation>Soubory CSV (*.CSV)</translation>
     </message>
@@ -20467,19 +20731,19 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Příprava exportu…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1597"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1169"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1563"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1597"/>
         <source>Failed</source>
         <translation>Selhalo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1174"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1212"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1568"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1606"/>
         <source>Report Failed</source>
         <translation>Sestava Selhala</translation>
     </message>
@@ -20488,68 +20752,68 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Nelze vygenerovat sestavu. Zkontrolujte výstupní cestu a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1498"/>
         <source>Save PDF Report</source>
         <translation>Uložit PDF Zprávu</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1066"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1460"/>
         <source>Loading session data…</source>
         <translation>Načítání dat relace…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1498"/>
         <source>Save HTML Report</source>
         <translation>Uložit HTML Zprávu</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1499"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF soubory (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1499"/>
         <source>HTML files (*.html)</source>
         <translation>HTML soubory (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1175"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1213"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1569"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1607"/>
         <source>Could not generate the report.</source>
         <translation>Nelze vygenerovat sestavu.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1296"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1690"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Tento soubor relace neobsahuje vložený projekt.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1305"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1699"/>
         <source>Invalid project data</source>
         <translation>Neplatná data projektu</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1306"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1700"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>Vložený JSON projektu je poškozený a nelze jej obnovit.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1710"/>
         <source>Restore Project</source>
         <translation>Obnovit Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1710"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Projekty Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1718"/>
         <source>Cannot write file</source>
         <translation>Nelze zapsat soubor</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1718"/>
         <source>Check file permissions and try again.</source>
         <translation>Zkontrolujte oprávnění souboru a zkuste to znovu.</translation>
     </message>

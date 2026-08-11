@@ -89,6 +89,12 @@ Rectangle {
       StackLayout {
         id: layout
 
+        //
+        // Settings lock while connected/dialing (no auto-reapply exists); BLE picks post-connect.
+        //
+        enabled: (!Cpp_IO_Manager.isConnected && !Cpp_IO_Manager.isConnecting)
+                 || Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
+
         Layout.fillWidth: true
         currentIndex: Cpp_IO_Manager.busType
         Layout.preferredHeight: implicitHeight

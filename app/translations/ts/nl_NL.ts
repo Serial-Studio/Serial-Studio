@@ -409,12 +409,12 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../src/API/ProcessLauncher.cpp" line="88"/>
+        <location filename="../../src/API/ProcessLauncher.cpp" line="91"/>
         <source>No program specified</source>
         <translation>Geen programma opgegeven</translation>
     </message>
     <message>
-        <location filename="../../src/API/ProcessLauncher.cpp" line="94"/>
+        <location filename="../../src/API/ProcessLauncher.cpp" line="97"/>
         <source>Program "%1" not found in PATH</source>
         <translation>Programma "%1" niet gevonden in PATH</translation>
     </message>
@@ -2364,27 +2364,37 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation>Flexibele Datasnelheid</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="243"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="242"/>
+        <source>The selected adapter does not support CAN FD</source>
+        <translation>De geselecteerde adapter ondersteunt geen CAN-FD</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="249"/>
+        <source>Data Bitrate</source>
+        <translation>Gegevensbitsnelheid</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="304"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="324"/>
         <source>Listen-Only</source>
         <translation>Alleen-luisteren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="344"/>
         <source>DBC Database</source>
         <translation>DBC-database</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="287"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="348"/>
         <source>Import DBC File…</source>
         <translation>DBC-bestand Importeren…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="381"/>
         <source>No CAN Interfaces Found</source>
         <translation>Geen CAN-interfaces Gevonden</translation>
     </message>
@@ -2392,119 +2402,144 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="383"/>
+        <location filename="../../src/CSV/Player.cpp" line="492"/>
         <source>Select CSV file</source>
         <translation>Selecteer CSV-bestand</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="385"/>
+        <location filename="../../src/CSV/Player.cpp" line="494"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-bestanden (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="506"/>
+        <location filename="../../src/CSV/Player.cpp" line="617"/>
         <source>Device Connection Active</source>
         <translation>Apparaatverbinding Actief</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="507"/>
+        <location filename="../../src/CSV/Player.cpp" line="618"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Om deze functie te gebruiken moet de verbinding met het apparaat worden verbroken. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="521"/>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="632"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
         <source>Check file permissions and location</source>
         <translation>Controleer bestandsrechten en locatie</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="528"/>
-        <location filename="../../src/CSV/Player.cpp" line="610"/>
-        <location filename="../../src/CSV/Player.cpp" line="785"/>
+        <location filename="../../src/CSV/Player.cpp" line="639"/>
+        <location filename="../../src/CSV/Player.cpp" line="720"/>
+        <location filename="../../src/CSV/Player.cpp" line="905"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Onvoldoende Gegevens in CSV-Bestand</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="521"/>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="632"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
         <source>Cannot read CSV file</source>
         <translation>Kan CSV-bestand niet lezen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="529"/>
-        <location filename="../../src/CSV/Player.cpp" line="611"/>
-        <location filename="../../src/CSV/Player.cpp" line="786"/>
+        <location filename="../../src/CSV/Player.cpp" line="640"/>
+        <location filename="../../src/CSV/Player.cpp" line="721"/>
+        <location filename="../../src/CSV/Player.cpp" line="906"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Het CSV-bestand moet ten minste één gegevensrij bevatten om door te gaan. Controleer het bestand en probeer het opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="779"/>
+        <location filename="../../src/CSV/Player.cpp" line="899"/>
         <source>CSV Row Limit Reached</source>
         <translation>CSV-rijlimiet Bereikt</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="780"/>
+        <location filename="../../src/CSV/Player.cpp" line="900"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Afspelen is beperkt tot %L1 rijen; de rest van het bestand is niet geïndexeerd.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1226"/>
+        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <source>Seconds (s)</source>
+        <translation>Seconden (s)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <source>Milliseconds (ms)</source>
+        <translation>Milliseconden (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <source>Microseconds (us)</source>
+        <translation>Microseconden (us)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1354"/>
+        <source>Timestamp Units</source>
+        <translation>Tijdstempeleenheden</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1355"/>
+        <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
+        <translation>De tijdstempelkolom declareert geen eenheid. Hoe moet deze worden geïnterpreteerd?</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="1380"/>
         <source>Invalid CSV</source>
         <translation>Ongeldig CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1227"/>
+        <location filename="../../src/CSV/Player.cpp" line="1381"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Het CSV-bestand bevat geen gegevens of headers.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1234"/>
+        <location filename="../../src/CSV/Player.cpp" line="1388"/>
         <source>Select a date/time column</source>
         <translation>Selecteer een datum/tijd-kolom</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1234"/>
-        <location filename="../../src/CSV/Player.cpp" line="1246"/>
+        <location filename="../../src/CSV/Player.cpp" line="1388"/>
+        <location filename="../../src/CSV/Player.cpp" line="1400"/>
         <source>Set interval manually</source>
         <translation>Interval handmatig instellen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1236"/>
+        <location filename="../../src/CSV/Player.cpp" line="1390"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV Datum/tijd-selectie</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1237"/>
+        <location filename="../../src/CSV/Player.cpp" line="1391"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Kies hoe de datum/tijd-gegevens moeten worden verwerkt:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1249"/>
+        <location filename="../../src/CSV/Player.cpp" line="1403"/>
         <source>Set Interval</source>
         <translation>Interval Instellen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1250"/>
+        <location filename="../../src/CSV/Player.cpp" line="1404"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Voer het interval tussen rijen in milliseconden in:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1267"/>
+        <location filename="../../src/CSV/Player.cpp" line="1421"/>
         <source>Select Date/Time Column</source>
         <translation>Selecteer Datum/tijd-kolom</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1268"/>
+        <location filename="../../src/CSV/Player.cpp" line="1422"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Selecteer de kolom die de datum/tijd-gegevens bevat:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1278"/>
+        <location filename="../../src/CSV/Player.cpp" line="1432"/>
         <source>Invalid Selection</source>
         <translation>Ongeldige Selectie</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1278"/>
+        <location filename="../../src/CSV/Player.cpp" line="1432"/>
         <source>The selected column is not valid.</source>
         <translation>De geselecteerde kolom is niet geldig.</translation>
     </message>
@@ -4452,7 +4487,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation>API-server Uit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="637"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="648"/>
         <source>Command Palette</source>
         <translation>Opdrachtpalet</translation>
     </message>
@@ -7489,7 +7524,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="198"/>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="281"/>
         <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="308"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="329"/>
+        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="332"/>
         <source>Edit Device</source>
         <translation>Apparaat Bewerken</translation>
     </message>
@@ -8655,7 +8690,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="36"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
@@ -8736,12 +8771,12 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation type="vanished">Herstel het projectbestand uit dit sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="288"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
         <source>Loading session…</source>
         <translation>Sessie laden…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="299"/>
         <source>Working…</source>
         <translation>Bezig…</translation>
     </message>
@@ -9113,6 +9148,99 @@ Geldig formaat: 01 A2 FF 3C</translation>
     <message>
         <source>Open</source>
         <translation type="vanished">Openen</translation>
+    </message>
+</context>
+<context>
+    <name>DriftReportDialog</name>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="29"/>
+        <source>Comparison Report</source>
+        <translation>Vergelijkingsrapport</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="48"/>
+        <source>The current project decodes this session exactly like the recorded one.</source>
+        <translation>Het huidige project decodeert deze sessie exact zoals de opgenomen sessie.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="51"/>
+        <source>The current project produces different values from the same recording.</source>
+        <translation>Het huidige project produceert andere waarden uit dezelfde opname.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="54"/>
+        <source>The current project finds a different number of readings in the recording.</source>
+        <translation>Het huidige project vindt een ander aantal metingen in de opname.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="57"/>
+        <source>The current project has a different set of datasets than the recording.</source>
+        <translation>Het huidige project heeft een andere set datasets dan de opname.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="60"/>
+        <source>This session cannot be compared mechanically.</source>
+        <translation>Deze sessie kan niet mechanisch worden vergeleken.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
+        <source>The comparison could not be completed.</source>
+        <translation>De vergelijking kon niet worden voltooid.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="115"/>
+        <source>Compared against: %1</source>
+        <translation>Vergeleken met: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="116"/>
+        <source>current project</source>
+        <translation>huidig project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="155"/>
+        <source>No differences to show.</source>
+        <translation>Geen verschillen om te tonen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="196"/>
+        <source>Only exists in the current project.</source>
+        <translation>Bestaat alleen in het huidige project.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="199"/>
+        <source>Only exists in the recorded project.</source>
+        <translation>Bestaat alleen in het opgenomen project.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
+        <source>%1 of %2 values changed, %3 missing, %4 extra.</source>
+        <translation>%1 van %2 waarden gewijzigd, %3 ontbrekend, %4 extra.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="219"/>
+        <source>Time</source>
+        <translation>Tijd</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="226"/>
+        <source>Recorded project</source>
+        <translation>Opgenomen project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="233"/>
+        <source>Current project</source>
+        <translation>Huidig project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="270"/>
+        <source>...and %1 more changed values.</source>
+        <translation>...en %1 meer gewijzigde waarden.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="287"/>
+        <source>Close</source>
+        <translation>Sluiten</translation>
     </message>
 </context>
 <context>
@@ -11290,83 +11418,83 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="463"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="464"/>
         <source>BLE I/O Module Error</source>
         <translation>BLE I/o-modulefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="724"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
         <source>BLE connection error: %1</source>
         <translation>BLE-verbindingsfout: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="808"/>
         <source>Select Device</source>
         <translation>Selecteer Apparaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="819"/>
         <source>Select Service</source>
         <translation>Selecteer Service</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="830"/>
         <source>Select Characteristic</source>
         <translation>Selecteer Characteristic</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1036"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1040"/>
         <source>Error while configuring BLE service</source>
         <translation>Fout bij configureren van BLE-service</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1254"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1258"/>
         <source>Operation error</source>
         <translation>Bewerkingsfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1257"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1261"/>
         <source>Characteristic write error</source>
         <translation>Characteristic-schrijffout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1260"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1264"/>
         <source>Descriptor write error</source>
         <translation>Descriptor-schrijffout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1263"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1267"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1266"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1270"/>
         <source>Characteristic read error</source>
         <translation>Characteristic-leesfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1269"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1273"/>
         <source>Descriptor read error</source>
         <translation>Descriptor-leesfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1505"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1509"/>
         <source>BLE Device</source>
         <translation>BLE-apparaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1517"/>
         <source>Service</source>
         <translation>Service</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1524"/>
         <source>Notify Characteristic</source>
         <translation>Notify Characteristic</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1527"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1531"/>
         <source>Characteristic</source>
         <translation>Characteristic</translation>
     </message>
@@ -11374,15 +11502,15 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="347"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="353"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="359"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="370"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="382"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="387"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN-bus Niet Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="360"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="383"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -11391,37 +11519,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 CAN-bus-ondersteuning op macOS is beperkt en kan hardware-drivers van derden vereisen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="387"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Geen CAN-bus-plugins beschikbaar op dit platform.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="399"/>
         <source>Invalid CAN Configuration</source>
         <translation>Ongeldige CAN-configuratie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="407"/>
         <source>Invalid Selection</source>
         <translation>Ongeldige Selectie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="416"/>
         <source>No Devices Available</source>
         <translation>Geen Apparaten Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="304"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="322"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN-apparaat Aanmaken Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
         <source>CAN Connection Failed</source>
         <translation>CAN-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="371"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -11430,7 +11558,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Zorg er op Linux voor dat SOCKETCAN-kernelmodules zijn geladen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="354"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -11439,27 +11567,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Installeer op Windows CAN-hardwarestuurprogramma's (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="400"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>De CAN-busconfiguratie is onvolledig. Selecteer een geldige plugin en interface.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="385"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="408"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>De geselecteerde plugin of interface is niet meer beschikbaar. Ververs de lijsten en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="417"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>De plugin- of interfacelijst is leeg. Ververs de lijsten en controleer of de CAN-hardware is aangesloten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Kan CAN-busapparaat niet aanmaken. Controleer de hardware en stuurprogramma's.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="329"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="352"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Kan geen verbinding maken met CAN-busapparaat. Controleer de hardwareverbinding en instellingen.</translation>
     </message>
@@ -11472,68 +11600,68 @@ Installeer op Windows CAN-hardwarestuurprogramma's (PEAK, VECTOR, etc.).</transl
         <translation type="vanished">Er is een fout opgetreden, maar het CAN-apparaat is niet meer beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="801"/>
         <source>Error code: %1</source>
         <translation>Foutcode: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="813"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN-buscommunicatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="846"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="921"/>
         <source>No CAN driver selected</source>
         <translation>Geen CAN-stuurprogramma geselecteerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="858"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Laad eerst de SOCKETCAN-kernelmodules</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="854"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Sluit een %1-adapter aan en vernieuw</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="861"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Stel eerst een virtuele CAN-interface in</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="791"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="863"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="883"/>
         <source>No interfaces found for %1</source>
         <translation>Geen interfaces gevonden voor %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="867"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Installeer &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN-stuurprogramma's&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="799"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="871"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Installeer &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN-stuurprogramma's&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="875"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Installeer &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN-stuurprogramma's&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="878"/>
         <source>Install %1 drivers</source>
         <translation>Installeer %1-stuurprogramma's</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="881"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Installeer %1-stuurprogramma's voor macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="823"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="895"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11544,32 +11672,37 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="930"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1031"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1039"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1047"/>
         <source>Bitrate</source>
         <translation>Bitsnelheid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="955"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1056"/>
         <source>CAN FD</source>
         <translation>CAN-FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1063"/>
+        <source>Data Bitrate</source>
+        <translation>Gegevensbitsnelheid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1072"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="969"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1079"/>
         <source>Listen-Only</source>
         <translation>Alleen-luisteren</translation>
     </message>
@@ -11577,69 +11710,95 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="486"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>Initialisatie van libusb voor de CANable-adapter is mislukt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="513"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>Kan USB-apparaten niet opsommen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="443"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="533"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>De geselecteerde CANable-adapter is niet langer verbonden, of een andere toepassing heeft deze geopend. Op Windows moet het apparaat de WinUSB-driver gebruiken (candleLight installeert deze automatisch).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="456"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="546"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>Kon de CANable USB-interface niet claimen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="520"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="616"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>CANable-adapter is niet geopend voor schrijven.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="555"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="670"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>Verzenden van CAN-frame naar de adapter mislukt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="571"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="686"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>CAN-busfout gerapporteerd door de CANable-adapter.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="741"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>Een CAN-frame werd niet bevestigd op de bus.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="774"/>
+        <source>The CANable adapter was disconnected.</source>
+        <translation>De CANable-adapter is losgekoppeld.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="851"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>CANable-adapter heeft de host-format handshake afgewezen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="858"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
         <source>Could not read CANable timing constants.</source>
         <translation>Kon CANable-timingconstanten niet lezen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="864"/>
+        <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
+        <translation>De adapterfirmware ondersteunt geen CAN-FD. Flash candleLight FD-firmware of schakel de flexible data-rate optie uit.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>De bitsnelheid %1 bps wordt niet ondersteund door deze CANable-adapter.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="744"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="878"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>CANable-adapter heeft de gevraagde bitsnelheid afgewezen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="902"/>
         <source>Could not start the CANable channel.</source>
         <translation>Kan het CANable-kanaal niet starten.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="924"/>
+        <source>Could not read CANable FD timing constants.</source>
+        <translation>Kon CANable FD-timingconstanten niet lezen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="938"/>
+        <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
+        <translation>De databitsnelheid %1 bps wordt niet ondersteund door deze CANable-adapter.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="945"/>
+        <source>CANable adapter rejected the requested data bitrate.</source>
+        <translation>CANable-adapter heeft de gevraagde databitsnelheid afgewezen.</translation>
     </message>
 </context>
 <context>
@@ -11687,72 +11846,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 of Later</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 of Later</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
         <source>Any Protocol</source>
         <translation>Elk Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="81"/>
         <source>Secure Protocols Only</source>
         <translation>Alleen Beveiligde Protocollen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="83"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="84"/>
         <source>Query Peer</source>
         <translation>Peer Opvragen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Verify Peer</source>
         <translation>Peer Verifiëren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Auto Verify Peer</source>
         <translation>Peer Automatisch Verifiëren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="180"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="194"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT-Functie Vereist een Commerciële Licentie</translation>
     </message>
@@ -11761,142 +11920,142 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Abonneren op een MQTT-broker is alleen beschikbaar met een geldige commerciële licentie van Serial Studio (Hobbyist-tier of hoger).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="181"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="195"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Abonneren op een MQTT-broker is alleen beschikbaar met een geldige Serial Studio-licentie of een actieve proefperiode.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="413"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="427"/>
         <source>Use System Database</source>
         <translation>Systeemdatabase Gebruiken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="414"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="428"/>
         <source>Load From Folder…</source>
         <translation>Laden Uit Map…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="447"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="461"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Selecteer Pem-certificatenmap</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="702"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="716"/>
         <source>Hostname</source>
         <translation>Hostnaam</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="723"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="718"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
         <source>Topic Filter</source>
         <translation>Topicfilter</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
         <source>Client ID</source>
         <translation>Client-ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
         <source>Username</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="753"/>
         <source>Password</source>
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="760"/>
         <source>MQTT Version</source>
         <translation>MQTT-versie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="754"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="768"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="761"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="775"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="770"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
         <source>Auto Keep Alive</source>
         <translation>Automatische Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="787"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="801"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="797"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
         <source>SSL Protocol</source>
         <translation>SSL-protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="819"/>
         <source>Peer Verify Mode</source>
         <translation>Peer-verificatiemodus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="813"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="827"/>
         <source>Peer Verify Depth</source>
         <translation>Peer-verificatiediepte</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Client Certificate (PEM)</source>
         <translation>Clientcertificaat (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Private Key (PEM)</source>
         <translation>Privésleutel (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="850"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT over poort 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="844"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="858"/>
         <source>ALPN Protocol</source>
         <translation>Alpn-protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="978"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="993"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT-abonnementsfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="979"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="994"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Abonneren op topic "%1" mislukt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1225"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1247"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT-clientcertificaatfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1244"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1266"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM-bestanden (*.pem *.crt *.cer *.key);;Alle bestanden (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1270"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1292"/>
         <source>Select Client Certificate</source>
         <translation>Selecteer Clientcertificaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1278"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1300"/>
         <source>Select Private Key</source>
         <translation>Selecteer Privésleutel</translation>
     </message>
@@ -11905,97 +12064,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">De broker heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1021"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Ongeldige MQTT-protocolversie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1007"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>De broker heeft de geconfigureerde MQTT-protocolversie geweigerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1010"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1025"/>
         <source>Client ID Rejected</source>
         <translation>Client-ID Geweigerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1011"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>De broker heeft de client-ID geweigerd. Probeer een andere identificatie.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1014"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1029"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT-server Niet Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1015"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>De broker is momenteel niet beschikbaar. Probeer het later opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1018"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1033"/>
         <source>Authentication Error</source>
         <translation>Authenticatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1019"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1034"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>De opgegeven inloggegevens zijn geweigerd door de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1022"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1037"/>
         <source>Authorization Error</source>
         <translation>Autorisatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1023"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1038"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Account heeft geen toestemming voor deze bewerking.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1041"/>
         <source>Network or Transport Error</source>
         <translation>Netwerk- of Transportfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1042"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Netwerk-/transportlaagprobleem tijdens verbinding met de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1045"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Een clientcertificaat is geconfigureerd: controleer of het overeenkomt met de privésleutel en geactiveerd is op de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1050"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT-protocolschending</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1051"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>De broker meldde een protocolschending en sloot de verbinding.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1054"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5-Fout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1055"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Er is een MQTT 5-protocolfout opgetreden.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1058"/>
         <source>MQTT Error</source>
         <translation>MQTT-fout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1059"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Er is een onverwachte MQTT-fout opgetreden.</translation>
     </message>
@@ -12003,22 +12162,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="405"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="391"/>
         <source>Invalid Serial Port</source>
         <translation>Ongeldige Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="436"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus-initialisatie Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="459"/>
+        <source>Nothing is listening at %1</source>
+        <translation>Er luistert niets op %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="518"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="406"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="392"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>De geselecteerde seriële poort "%1" is niet langer beschikbaar. Ververs de poortenlijst en probeer opnieuw.</translation>
     </message>
@@ -12027,84 +12191,83 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">De Modbus-client weigerde de verbinding te starten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="451"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="437"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Kan Modbus-apparaat niet aanmaken. Controleer de systeemconfiguratie en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="516"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="520"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>Kan geen verbinding maken met "%1". Controleer de verbindingsinstellingen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="517"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="521"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="527"/>
         <source>Connection attempt timed out</source>
-        <translation>Verbindingspoging verlopen</translation>
+        <translation type="vanished">Verbindingspoging verlopen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="663"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="664"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
         <source>Even</source>
         <translation>Even</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="665"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
         <source>Odd</source>
         <translation>Oneven</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="666"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="641"/>
         <source>Space</source>
         <translation>Spatie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="667"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="642"/>
         <source>Mark</source>
         <translation>Markering</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="719"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding Registers (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="720"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
         <source>Input Registers (0x04)</source>
         <translation>Input Registers (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="696"/>
         <source>Coils (0x01)</source>
         <translation>Coils (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="722"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="697"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Discrete Inputs (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="904"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
         <source>No register groups configured</source>
         <translation>Geen registergroepen geconfigureerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="905"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="880"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Voeg minimaal één registergroep toe voordat een project wordt gegenereerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="907"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="920"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="945"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus Projectgenerator</translation>
     </message>
@@ -12117,137 +12280,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Controleer schrijfrechten voor de tijdelijke map.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
         <source>Failed to load generated project</source>
         <translation>Gegenereerd project laden mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>De gegenereerde project-JSON kon niet worden geladen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="940"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="915"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Project succesvol gegenereerd met %1 groepen en %2 datasets.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="918"/>
         <source>The project editor is now open for customization.</source>
         <translation>De projecteditor is nu geopend voor aanpassing.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
         <source>Modbus Project</source>
         <translation>Modbus Project</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="938"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Holding Registers</source>
         <translation>Holding Registers</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
         <source>Input Registers</source>
         <translation>Invoerregisters</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
         <source>Coils</source>
         <translation>Spoelen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="961"/>
         <source>Discrete Inputs</source>
         <translation>Discrete Ingangen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="975"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="988"/>
         <source>Register %1</source>
         <translation>Register %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="996"/>
         <source>Coil %1</source>
         <translation>Spoel %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="996"/>
         <source>Discrete %1</source>
         <translation>Discrete %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1454"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1422"/>
         <source>Error code: %1</source>
         <translation>Foutcode: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1457"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1424"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus Communicatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1469"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1436"/>
         <source>Select Port</source>
         <translation>Selecteer Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1622"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1589"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1630"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1597"/>
         <source>Slave Address</source>
         <translation>Slave-adres</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1606"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll-Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1679"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1646"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1653"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1701"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1668"/>
         <source>Serial Port</source>
         <translation>Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1709"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1676"/>
         <source>Baud Rate</source>
         <translation>Baudrate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1717"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1684"/>
         <source>Parity</source>
         <translation>Pariteit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1725"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1692"/>
         <source>Data Bits</source>
         <translation>Databits</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1733"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1700"/>
         <source>Stop Bits</source>
         <translation>Stopbits</translation>
     </message>
@@ -12255,43 +12418,49 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="341"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="312"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="649"/>
         <source>Network socket error</source>
         <translation>Netwerksocketfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="342"/>
         <source>Connection to %1:%2 timed out.</source>
-        <translation>Verbinding met %1:%2 verlopen.</translation>
+        <translation type="vanished">Verbinding met %1:%2 verlopen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="302"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="313"/>
+        <source>Cannot connect to %1:%2 (%3)</source>
+        <translation>Kan geen verbinding maken met %1:%2 (%3)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="666"/>
         <source>Socket Type</source>
         <translation>Sockettype</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="740"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="674"/>
         <source>Remote Address</source>
         <translation>Extern Adres</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="682"/>
         <source>TCP Port</source>
         <translation>TCP-poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="691"/>
         <source>UDP Local Port</source>
         <translation>UDP Lokale Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="700"/>
         <source>UDP Remote Port</source>
         <translation>UDP Externe Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="709"/>
         <source>UDP Multicast</source>
         <translation>UDP Multicast</translation>
     </message>
@@ -12558,12 +12727,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Kritieke fout op seriële poort "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
@@ -18835,22 +19004,22 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
         <translation>Kan bestand niet openen voor schrijven!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1375"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1379"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Ongeldige Bluetooth-adapter!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1378"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1382"/>
         <source>Unsuported platform or operating system</source>
         <translation>Niet-ondersteund platform of besturingssysteem</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1385"/>
         <source>Unsupported discovery method</source>
         <translation>Niet-ondersteunde detectiemethode</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1384"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1388"/>
         <source>General I/O error</source>
         <translation>Algemene I/O-fout</translation>
     </message>
@@ -19092,12 +19261,12 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="756"/>
+        <location filename="../../src/Misc/CLI.cpp" line="818"/>
         <source>Project file not found</source>
         <translation>Projectbestand niet gevonden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="757"/>
+        <location filename="../../src/Misc/CLI.cpp" line="819"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -19106,17 +19275,17 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="760"/>
+        <location filename="../../src/Misc/CLI.cpp" line="822"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Wilt u deze snelkoppeling verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="764"/>
+        <location filename="../../src/Misc/CLI.cpp" line="826"/>
         <source>Delete Shortcut</source>
         <translation>Snelkoppeling Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="766"/>
+        <location filename="../../src/Misc/CLI.cpp" line="828"/>
         <source>Quit</source>
         <translation>Afsluiten</translation>
     </message>
@@ -20122,147 +20291,242 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Sessiedetails</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="39"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="47"/>
         <source>Reproduced</source>
         <translation>Gereproduceerd</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="42"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="50"/>
         <source>Diverged</source>
         <translation>Afgeweken</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="45"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
         <source>Partially verified</source>
         <translation>Gedeeltelijk geverifieerd</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="56"/>
         <source>Not mechanically verifiable</source>
         <translation>Niet machinaal verifieerbaar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="59"/>
         <source>Verification error</source>
         <translation>Verificatiefout</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
         <source>Never verified</source>
         <translation>Nooit geverifieerd</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="69"/>
+        <source>Identical</source>
+        <translation>Identiek</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="72"/>
+        <source>Value drift</source>
+        <translation>Waardenverschil</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="75"/>
+        <source>Coverage drift</source>
+        <translation>Dekking drift</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="78"/>
+        <source>Structural drift</source>
+        <translation>Structurele drift</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="81"/>
+        <source>Not mechanically comparable</source>
+        <translation>Niet mechanisch vergelijkbaar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
+        <source>Check failed</source>
+        <translation>Controle mislukt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="163"/>
         <source>Select a session to view details.</source>
         <translation>Selecteer een sessie om details te bekijken.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="164"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="205"/>
         <source>Project:</source>
         <translation>Project:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="177"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="218"/>
         <source>Started:</source>
         <translation>Gestart:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="190"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="231"/>
         <source>Ended:</source>
         <translation>Beëindigd:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="196"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="237"/>
         <source>(in progress)</source>
         <translation>(bezig)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="203"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="244"/>
         <source>Frames:</source>
         <translation>Frames:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="219"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="260"/>
         <source>Notes</source>
         <translation>Notities</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="275"/>
         <source>Add session notes…</source>
         <translation>Sessienotities toevoegen…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="276"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Notities zijn alleen-lezen voor voltooide sessies.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="361"/>
         <source>New tag…</source>
         <translation>Nieuwe tag…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="344"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="385"/>
         <source>Reproducibility</source>
         <translation>Reproduceerbaarheid</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="372"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
         <source>Checked %1 with version %2</source>
         <translation>Gecontroleerd %1 met versie %2</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="383"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="456"/>
         <source>Re-runs the archived raw data through the current build and compares it against the recorded values. This proves the archive is reproducible; it is not a determinism guarantee, a safety function, or a calibration authority.</source>
         <translation>Voert de gearchiveerde ruwe data opnieuw uit met de huidige build en vergelijkt deze met de opgenomen waarden. Dit bewijst dat het archief reproduceerbaar is; het is geen determinisme-garantie, veiligheidsfunctie of kalibratie-autoriteit.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="430"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="468"/>
+        <source>Drift vs Current Project</source>
+        <translation>Drift vs Huidig Project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="489"/>
+        <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
+        <translation>Vergelijkt de gedecodeerde waarden van deze sessie met het project dat momenteel geopend is in de editor. Het resultaat weerspiegelt een tijdelijke kandidaat en wordt niet opgeslagen bij de sessie.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="511"/>
+        <source>Candidate: %1 (%2)</source>
+        <translation>Kandidaat: %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="512"/>
+        <source>untitled</source>
+        <translation>naamloos</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="523"/>
+        <source>Archived-configuration reproduction status: %1</source>
+        <translation>Gearchiveerde-configuratie reproductiestatus: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="577"/>
+        <source>%1: only in the current project</source>
+        <translation>%1: alleen in het huidige project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="580"/>
+        <source>%1: only in the recorded project</source>
+        <translation>%1: alleen in het opgenomen project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="582"/>
+        <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
+        <translation>%1: %2 van %3 waarden gewijzigd, %4 ontbrekend, %5 extra</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
+        <source>…and %1 more datasets are affected.</source>
+        <translation>…en %1 meer datasets zijn beïnvloed.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="645"/>
         <source>Only completed sessions can be verified</source>
         <translation>Alleen voltooide sessies kunnen worden geverifieerd</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="649"/>
         <source>Verifying…</source>
         <translation>Verifiëren…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="433"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="650"/>
         <source>Verify</source>
         <translation>Verifiëren</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="447"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="657"/>
+        <source>Only completed sessions can be checked against a project</source>
+        <translation>Alleen voltooide sessies kunnen worden gecontroleerd tegen een project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <source>Checking…</source>
+        <translation>Controleren…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <source>Check Project</source>
+        <translation>Controleer Project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
+        <source>View Report</source>
+        <translation>Bekijk Rapport</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="681"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>Ontgrendel het sessiebestand om sessies te verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="256"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="297"/>
         <source>Tags</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="368"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="620"/>
         <source>Replay</source>
         <translation>Afspelen</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="628"/>
         <source>Export CSV</source>
         <translation>Exporteer CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="420"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="635"/>
         <source>Generate Report</source>
         <translation>Genereer Rapport</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="441"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="675"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
@@ -20338,103 +20602,103 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1231"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1625"/>
         <source>Select logo image</source>
         <translation>Selecteer logo-afbeelding</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1233"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1627"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>Afbeeldingen (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="615"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1009"/>
         <source>Open Session File</source>
         <translation>Open Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="617"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1011"/>
         <source>Session files (*.db)</source>
         <translation>Sessiebestanden (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1434"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1828"/>
         <source>Cannot open session file</source>
         <translation>Kan sessiebestand niet openen</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="842"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1236"/>
         <source>Delete session from %1?</source>
         <translation>Sessie van %1 verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="845"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1239"/>
         <source>Delete Session</source>
         <translation>Sessie Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1295"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1689"/>
         <source>No project data</source>
         <translation>Geen projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="843"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1237"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Alle metingen en ruwe gegevens voor deze sessie worden permanent verwijderd.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="673"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="682"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1067"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1076"/>
         <source>Lock Session File</source>
         <translation>Sessiebestand Vergrendelen</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="674"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1068"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Kies een wachtwoord om het sessiebestand te vergrendelen:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="683"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1077"/>
         <source>Confirm the password:</source>
         <translation>Bevestig het wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="691"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1085"/>
         <source>Passwords do not match</source>
         <translation>Wachtwoorden komen niet overeen</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="692"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1086"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>De twee ingevoerde wachtwoorden komen niet overeen. Het sessiebestand is niet vergrendeld.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="728"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1122"/>
         <source>Unlock Session File</source>
         <translation>Ontgrendel Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="729"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1123"/>
         <source>Enter the session file password:</source>
         <translation>Voer het sessiebestandwachtwoord in:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="739"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1133"/>
         <source>Incorrect password</source>
         <translation>Onjuist wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="740"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1134"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Het ingevoerde wachtwoord komt niet overeen met het wachtwoord in het sessiebestand.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="832"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1226"/>
         <source>Session file locked</source>
         <translation>Sessiebestand vergrendeld</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="833"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1227"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Ontgrendel het sessiebestand voordat opgenomen sessies worden verwijderd.</translation>
     </message>
@@ -20443,12 +20707,12 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation type="vanished">Deze sessie bevat geen ingesloten projectbestand — het dashboard valt terug op een snelle-plot-indeling.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1380"/>
         <source>Export Session to CSV</source>
         <translation>Exporteer Sessie naar CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="986"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1380"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-bestanden (*.CSV)</translation>
     </message>
@@ -20467,19 +20731,19 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation type="vanished">Export voorbereiden…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1597"/>
         <source>Done</source>
         <translation>Voltooid</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1169"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1203"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1563"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1597"/>
         <source>Failed</source>
         <translation>Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1174"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1212"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1568"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1606"/>
         <source>Report Failed</source>
         <translation>Rapport Mislukt</translation>
     </message>
@@ -20488,68 +20752,68 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation type="vanished">Kan het rapport niet genereren. Controleer het uitvoerpad en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1498"/>
         <source>Save PDF Report</source>
         <translation>PDF-rapport Opslaan</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1066"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1460"/>
         <source>Loading session data…</source>
         <translation>Sessiegegevens laden…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1104"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1498"/>
         <source>Save HTML Report</source>
         <translation>HTML-rapport Opslaan</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1499"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF-bestanden (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1105"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1499"/>
         <source>HTML files (*.html)</source>
         <translation>HTML-bestanden (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1175"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1213"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1569"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1607"/>
         <source>Could not generate the report.</source>
         <translation>Kan het rapport niet genereren.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1296"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1690"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Dit sessiebestand bevat geen ingesloten project.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1305"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1699"/>
         <source>Invalid project data</source>
         <translation>Ongeldige projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1306"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1700"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>De ingesloten project-JSON is onjuist geformatteerd en kan niet worden hersteld.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1710"/>
         <source>Restore Project</source>
         <translation>Project Herstellen</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1316"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1710"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio-projecten (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1718"/>
         <source>Cannot write file</source>
         <translation>Kan bestand niet schrijven</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1324"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1718"/>
         <source>Check file permissions and try again.</source>
         <translation>Controleer bestandsrechten en probeer opnieuw.</translation>
     </message>

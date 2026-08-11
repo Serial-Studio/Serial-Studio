@@ -77,7 +77,10 @@ void API::ProcessLauncher::setupExternalConnections()
 }
 
 /**
- * @brief Spawns a helper process; returns its id, or -1 with @p error set on failure.
+ * @brief Spawns a helper process; returns its id, or -1 with @p error set on failure. A helper
+ *        identical to one still running (same executable, arguments, and working directory) is
+ *        not spawned again: reconnects re-run the script's onConnect() hook, and a duplicate
+ *        server helper only steals the first one's port and dies on bind.
  */
 int API::ProcessLauncher::launch(const QString& program,
                                  const QStringList& arguments,
@@ -93,6 +96,15 @@ int API::ProcessLauncher::launch(const QString& program,
   if (resolved.isEmpty()) {
     error = tr("Program \"%1\" not found in PATH").arg(program);
     return -1;
+  }
+
+  for (auto it = m_processes.constBegin(); it != m_processes.constEnd(); ++it) {
+    auto* existing = it.value();
+    if (existing && existing->state() != QProcess::NotRunning && existing->program() == resolved
+        && existing->arguments() == arguments && existing->workingDirectory() == workingDirectory) {
+      logLine(it.key(), QFileInfo(program).fileName(), QStringLiteral("already running"));
+      return it.key();
+    }
   }
 
   auto* process = new QProcess(this);

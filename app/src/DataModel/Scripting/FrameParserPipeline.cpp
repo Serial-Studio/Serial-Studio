@@ -425,7 +425,10 @@ using detail::RewrittenCells;
  *        after the final append, so a reallocation cannot strand an emitted view; the reserve
  *        only keeps the append loop allocation-free.
  */
-void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QByteArray& scratch)
+void DataModel::splitReplayRowSpans(QByteArrayView row,
+                                    ReplayCellViews& out,
+                                    QByteArray& scratch,
+                                    char separator)
 {
   out.clear();
   scratch.resize(0);
@@ -486,7 +489,7 @@ void DataModel::splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QB
       continue;
     }
 
-    if (c == ',') {
+    if (c == separator) {
       finalize(i);
       cell_start = i + 1;
       continue;

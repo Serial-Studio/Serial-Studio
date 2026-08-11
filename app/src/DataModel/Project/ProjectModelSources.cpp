@@ -326,10 +326,10 @@ void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
  */
 void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& settings)
 {
-  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
-  if (m_sources.empty())
+  if (m_sources.empty() || m_sources[0].connectionSettings == settings)
     return;
 
+  const ProjectUndoScope undo_scope{*this, tr("Edit Device")};
   m_sources[0].connectionSettings = settings;
   setModified(true);
 }

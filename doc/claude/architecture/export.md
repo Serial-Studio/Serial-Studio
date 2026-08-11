@@ -113,3 +113,54 @@
   drop/overflow stats — never silently realigned. Known gap: `FrameConsumer::enqueueData`
   drops (consumer queue full at capture time) are invisible; only FrameReader-level
   drops/overflow are persisted.
+- **Structured errors (spec 0047 addendum).** Every child-side failure carries `errorCode`
+  (stable slug), `stage`, and `hint` in the report; `reparseSession()` failures are split
+  (stored-project-invalid / stored-project-rejected / export-not-licensed via an explicit
+  `SerialStudio::activated()` check / export-start-failed / feed-failed) and mapped to
+  prose by `Verifier::reparseFailureText`. Parent-side, `childFailureReport` (file-local in
+  `DatabaseManager.cpp`) synthesizes `child-spawn-failed` / `child-crashed` /
+  `child-output-invalid` reports with the exit code and a stderr tail — no failure path
+  concludes with an empty verdict map.
+
+## Golden-Session Regression (spec 0047)
+
+- **What it answers.** "Does my *edited* project still decode old telemetry the same?" —
+  the inverse of 0044. `Sessions::Verifier` runs in `Mode::Regress`
+  (`--regress-session <db> --regress-project <file> [--regress-session-id N]
+  [--regress-keep-regen]`, `CLI::runSessionRegression()`, same bootstrap/teardown as
+  verification; regression flow lives in `VerifierRegression.cpp`, a second TU of the same
+  class).
+- **Dual replay with injected provenance timestamps.** The archive replays twice through
+  the untouched pipeline — baseline = archived `project_json`, candidate = the supplied
+  file — each into its own temp re-record. Both feeds inject
+  `CapturedData::timestamp = epoch + raw_index * kChunkStepNs` (1 ms; `FrameReader` spaces
+  intra-chunk frames 1 ns apart), so `readings.timestamp_ns` decodes to a
+  (chunk, rank) provenance key: `chunk = ns / kChunkStepNs + firstFrameChunk` (the
+  first-drained-frame chunk is recorded per side). This survives frames dropped inside
+  `FrameBuilder` and unarchived driver `frameStep`; ordinal pairing is explicitly
+  non-conforming (one dropped frame would poison every later comparison). >10^6 frames
+  from one chunk exceeds the rank budget → verdict `error`, never a silent misjoin.
+  **Verify mode never injects** — its stamps, temp DB, and verdicts stay bit-identical to
+  0044.
+- **Diff & verdicts.** Per-uid merge-join on the provenance key across the two regen DBs:
+  `structural-drift` (uid sets differ, or archived devices absent from a side's source
+  list — excluded from that side's feed explicitly, never left to `buildFrameConfig()`'s
+  silent `/* */` fallback) > `coverage-drift` (one-sided keys) > `value-drift` (bit-exact
+  compare fails) > `identical`. Console-only archives are `not_verifiable`;
+  virtual/table-fed datasets classified, never compared. **Control-script sessions compare
+  normally** (unlike 0044 verify): both replays are script-free by construction —
+  `ControlScript::shouldRun()` needs `setupExternalConnections()` (never wired headless)
+  plus a live connection (never opened in the child), and `runRegression()` latches
+  `ControlScript::shutdown()` as a hard guarantee; script-fed values ride the per-dataset
+  classification. The report also carries `codeChanges` (textual control-script /
+  frame-parser / transform comparison between archived and candidate projects). First
+  divergences map back to the archived chunk's real `timestamp_ns`.
+- **Ephemeral by contract.** Regression writes NOTHING to the archive (no verifications
+  row; `appendVerificationRecord()` no-ops in Regress mode). Parent side
+  (`DatabaseManager::regressSession`) serializes the current `ProjectModel` to a temp file
+  when no candidate is given, shares the single child slot with verification (never
+  concurrent), and publishes `regressionBusy` / `lastRegressionReport` /
+  `regressionFinished` only in memory. `regressSessionsByTag` chains sessions sequentially
+  (golden tag = plain session tag) and aggregates via `regressionSweepStatus()`. API:
+  `sessions.regress` / `sessions.getRegression`; UI: SessionDetail "Check Project" action
+  + drift panel, visually separate from the stored 0044 verdict.

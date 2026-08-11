@@ -65,7 +65,9 @@
 #  include "MDF4/Export.h"
 #  include "Misc/ShortcutGenerator.h"
 #  include "Misc/ThemeManager.h"
+#  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
+#  include "Sessions/Player.h"
 #  include "Sessions/Verifier.h"
 #endif
 
@@ -139,6 +141,10 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.verifySessionOpt);
   m_parser.addOption(m_opts.verifySessionIdOpt);
   m_parser.addOption(m_opts.verifyKeepRegenOpt);
+  m_parser.addOption(m_opts.regressSessionOpt);
+  m_parser.addOption(m_opts.regressSessionIdOpt);
+  m_parser.addOption(m_opts.regressProjectOpt);
+  m_parser.addOption(m_opts.regressKeepRegenOpt);
   m_parser.addOption(m_opts.validateGuardsOpt);
   m_parser.addOption(m_opts.modbusRtuOpt);
   m_parser.addOption(m_opts.modbusTcpOpt);
@@ -199,6 +205,7 @@ bool CLI::isCliEarlyExit(int argc, char** argv)
                                        "--selftest-offline-license",
                                        "--validate-guards",
                                        "--verify-session",
+                                       "--regress-session",
                                        "--dump-api-schema"};
 
   for (const char* flag : kFlags)
@@ -261,6 +268,9 @@ CLI::ProcessResult CLI::process(QApplication& app)
 #ifdef BUILD_COMMERCIAL
   if (m_parser.isSet(m_opts.verifySessionOpt))
     return runSessionVerification();
+
+  if (m_parser.isSet(m_opts.regressSessionOpt))
+    return runSessionRegression();
 #endif
 
 #ifdef BUILD_COMMERCIAL
@@ -356,9 +366,10 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
 
 #ifdef BUILD_COMMERCIAL
 /**
- * @brief Runs the spec-0044 verifier and exits: builds the pinned module order (benchmark
- *        pattern) plus the headless session wiring, since the GUI wiring phase never runs
- *        here. Exit code is binary (0 = reproduced); the verdict is in the JSON.
+ * @brief Runs the spec-0044 verifier and exits: builds the pinned module order plus the
+ *        headless session wiring, since the GUI wiring phase never runs here. Exit code is
+ *        binary (0 = reproduced); the verdict lives in the JSON. Sessions modules tear down
+ *        before returning, while qApp is still alive.
  */
 CLI::ProcessResult CLI::runSessionVerification()
 {
@@ -386,6 +397,57 @@ CLI::ProcessResult CLI::runSessionVerification()
 
   std::fputs(QJsonDocument(verifier.report()).toJson(QJsonDocument::Indented).constData(), stdout);
   std::fflush(stdout);
+
+  Misc::ModuleManager::teardownHeadlessSessionModules();
+
+  return code == Sessions::Verifier::kExitReproduced ? ProcessResult::ExitSuccess
+                                                     : ProcessResult::ExitFailure;
+}
+
+/**
+ * @brief Runs the spec-0047 regression pass and exits: same headless bootstrap and Sessions
+ *        teardown discipline as runSessionVerification(). Exit code is binary (0 = identical);
+ *        the drift verdict and report live in the JSON on stdout.
+ */
+CLI::ProcessResult CLI::runSessionRegression()
+{
+  Sessions::Verifier::Options options;
+  options.mode                 = Sessions::Verifier::Mode::Regress;
+  options.dbPath               = m_parser.value(m_opts.regressSessionOpt).trimmed();
+  options.candidateProjectPath = m_parser.value(m_opts.regressProjectOpt).trimmed();
+  options.keepRegenerated      = m_parser.isSet(m_opts.regressKeepRegenOpt);
+
+  if (options.candidateProjectPath.isEmpty()) {
+    std::fputs("{\"verdict\":\"error\",\"errorCode\":\"regress-candidate-unreadable\","
+               "\"error\":\"missing --regress-project\",\"hint\":\"Pass the candidate project "
+               "file to compare the archived session against.\"}\n",
+               stdout);
+    std::fflush(stdout);
+    return ProcessResult::ExitFailure;
+  }
+
+  if (m_parser.isSet(m_opts.regressSessionIdOpt)) {
+    bool ok       = false;
+    const int val = m_parser.value(m_opts.regressSessionIdOpt).toInt(&ok);
+    if (!ok || val < 0) {
+      std::fputs("{\"verdict\":\"error\",\"error\":\"invalid --regress-session-id\"}\n", stdout);
+      std::fflush(stdout);
+      return ProcessResult::ExitFailure;
+    }
+
+    options.sessionId = val;
+  }
+
+  Misc::ModuleManager::instantiateCoreModules();
+  Misc::ModuleManager::setupHeadlessSessionConnections();
+
+  Sessions::Verifier verifier(options);
+  const int code = verifier.run();
+
+  std::fputs(QJsonDocument(verifier.report()).toJson(QJsonDocument::Indented).constData(), stdout);
+  std::fflush(stdout);
+
+  Misc::ModuleManager::teardownHeadlessSessionModules();
 
   return code == Sessions::Verifier::kExitReproduced ? ProcessResult::ExitSuccess
                                                      : ProcessResult::ExitFailure;

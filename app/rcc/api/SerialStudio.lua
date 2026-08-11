@@ -2093,9 +2093,20 @@ function sessions.getDbPath(projectTitle)
   return apiCall('sessions.getDbPath', p)
 end
 
+function sessions.getRegression()
+  local p = {}
+  return apiCall('sessions.getRegression', p)
+end
+
 function sessions.getStatus()
   local p = {}
   return apiCall('sessions.getStatus', p)
+end
+
+function sessions.getVerification(sessionId)
+  local p = {}
+  p['sessionId'] = sessionId
+  return apiCall('sessions.getVerification', p)
 end
 
 function sessions.list()
@@ -2112,6 +2123,12 @@ function sessions.openDatabase(filePath)
   local p = {}
   p['filePath'] = filePath
   return apiCall('sessions.openDatabase', p)
+end
+
+function sessions.regress(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('sessions.regress', p)
 end
 
 function sessions.removeTag(sessionId, tagId)
@@ -2145,6 +2162,12 @@ function sessions.setNotes(sessionId, notes)
   p['sessionId'] = sessionId
   p['notes'] = notes
   return apiCall('sessions.setNotes', p)
+end
+
+function sessions.verify(sessionId)
+  local p = {}
+  p['sessionId'] = sessionId
+  return apiCall('sessions.verify', p)
 end
 
 function system.exec(program, options)

@@ -140,6 +140,7 @@ QtObject {
   }
 
   readonly property QtObject cmdAppConnectionDiagnostics: QtObject {
+    readonly property bool visible: !app.runtimeMode
     readonly property bool enabled: !Cpp_Misc_ConnectionDiagnostics.running
     function run() { app.runConnectionDiagnostics() }
   }
@@ -154,6 +155,7 @@ QtObject {
   }
 
   readonly property QtObject cmdAppMacros: QtObject {
+    readonly property bool visible: !app.runtimeMode
     function run() { app.showMacros() }
   }
 

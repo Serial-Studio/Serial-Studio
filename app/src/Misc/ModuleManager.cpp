@@ -390,12 +390,8 @@ void Misc::ModuleManager::onQuit()
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
   MDF4::Export::instance().closeFile();
+  teardownHeadlessSessionModules();
 #ifdef BUILD_COMMERCIAL
-  Sessions::Export::instance().closeFile();
-  Sessions::Player::instance().closeFile();
-  Sessions::Player::instance().shutdown();
-  Sessions::DatabaseManager::instance().closeDatabase(false);
-  Sessions::DatabaseManager::instance().shutdown();
   Widgets::AudioExport::instance().closeAllSessions();
 #endif
   IO::ConnectionManager::instance().disconnectAllDevices();
@@ -721,6 +717,22 @@ void Misc::ModuleManager::setupHeadlessSessionConnections()
   DataModel::FrameBuilder::instance().setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().setupExternalConnections();
+#endif
+}
+
+/**
+ * @brief Tears down the Sessions modules while qApp is still alive, in the pinned order
+ *        (exporter file, player file, player worker, database), so the static dtors never
+ *        meet a running worker thread. Shared by onQuit() and the headless CLI runs.
+ */
+void Misc::ModuleManager::teardownHeadlessSessionModules()
+{
+#ifdef BUILD_COMMERCIAL
+  Sessions::Export::instance().closeFile();
+  Sessions::Player::instance().closeFile();
+  Sessions::Player::instance().shutdown();
+  Sessions::DatabaseManager::instance().closeDatabase(false);
+  Sessions::DatabaseManager::instance().shutdown();
 #endif
 }
 

@@ -15,6 +15,9 @@
 
 #  include "API/Handlers/SessionsHandler.h"
 
+#  include <QCoreApplication>
+#  include <QDir>
+#  include <QFile>
 #  include <QJsonArray>
 #  include <QJsonObject>
 
@@ -34,6 +37,7 @@ void API::Handlers::SessionsHandler::registerCommands()
 {
   registerLifecycleCommands();
   registerBrowsingCommands();
+  registerRegressionCommands();
   registerTagCommands();
 }
 
@@ -194,6 +198,57 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
       QStringLiteral("Set free-form notes on a stored session (params: sessionId, notes)"),
       schema,
       &setNotes);
+  }
+}
+
+/**
+ * @brief Register the spec-0047 regression commands (regress, getRegression).
+ */
+void API::Handlers::SessionsHandler::registerRegressionCommands()
+{
+  static auto& registry = CommandRegistry::instance();
+
+  {
+    QJsonObject props;
+    props[QStringLiteral("sessionId")] = QJsonObject{
+      {       QStringLiteral("type"),                           QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Session id (exclusive with 'tag')")}
+    };
+    props[QStringLiteral("tag")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("string")                                     },
+      {QStringLiteral("description"),
+       QStringLiteral("Regress every completed session carrying this tag (golden sweep)")}
+    };
+    props[QStringLiteral("projectPath")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("string")                                     },
+      {QStringLiteral("description"),
+       QStringLiteral("Candidate project file path (default: current editor project)")}
+    };
+    props[QStringLiteral("projectJson")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("string")                                     },
+      {QStringLiteral("description"),
+       QStringLiteral("Candidate project JSON content (alternative to projectPath)")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+
+    registry.registerCommand(
+      QStringLiteral("sessions.regress"),
+      QStringLiteral("Compare a stored session (or every session with a tag) against a "
+                     "candidate project in a child process (async; poll "
+                     "sessions.getRegression; params: sessionId | tag, projectPath?, "
+                     "projectJson?)"),
+      schema,
+      &regress);
+    registry.registerCommand(
+      QStringLiteral("sessions.getRegression"),
+      QStringLiteral("Return the running flag, last regression drift report, and sweep "
+                     "status (no params)"),
+      QJsonObject{
+        {QStringLiteral("type"), QStringLiteral("object")}
+    },
+      &getRegression);
   }
 }
 
@@ -598,6 +653,109 @@ API::CommandResponse API::Handlers::SessionsHandler::getVerification(const QStri
   result[QStringLiteral("verifying")] = db.verificationBusy();
   result[QStringLiteral("verification")] =
     QJsonObject::fromVariantMap(db.latestVerification(sessionId));
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Start a spec-0047 regression pass (async; poll sessions.getRegression). One session
+ *        via sessionId, or a golden-tag sweep via tag. The candidate is projectPath,
+ *        projectJson (written to one per-process scratch file, overwritten per call), or the
+ *        current editor project when neither is given.
+ */
+API::CommandResponse API::Handlers::SessionsHandler::regress(const QString& id,
+                                                             const QJsonObject& params)
+{
+  static auto& db = Sessions::DatabaseManager::instance();
+  if (!db.isOpen())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No database open. Call sessions.openDatabase first."));
+
+  if (db.verificationBusy() || db.regressionSweepStatus().value(QStringLiteral("active")).toBool())
+    return CommandResponse::makeError(id,
+                                      ErrorCode::ExecutionError,
+                                      QStringLiteral("A verification or regression is already "
+                                                     "running."));
+
+  const bool hasSession = params.contains(QStringLiteral("sessionId"));
+  const bool hasTag     = params.contains(QStringLiteral("tag"));
+  if (hasSession == hasTag)
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Pass exactly one of 'sessionId' or 'tag'."));
+
+  const QString tag  = params.value(QStringLiteral("tag")).toString();
+  const auto idValue = params.value(QStringLiteral("sessionId"));
+  if (hasTag && tag.trimmed().isEmpty())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("tag must be a non-empty string"));
+
+  if (hasSession && (!idValue.isDouble() || idValue.toInt() < 1))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("sessionId must be a positive integer"));
+
+  QString candidate = params.value(QStringLiteral("projectPath")).toString();
+  if (!candidate.isEmpty() && params.contains(QStringLiteral("projectJson")))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Pass at most one of 'projectPath' or 'projectJson'."));
+
+  if (candidate.isEmpty() && params.contains(QStringLiteral("projectJson"))) {
+    const QByteArray json = params.value(QStringLiteral("projectJson")).toString().toUtf8();
+    const QString path    = QDir::temp().filePath(
+      QStringLiteral("ss-regress-api-%1.json").arg(QCoreApplication::applicationPid()));
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate) || file.write(json) != json.size())
+      return CommandResponse::makeError(
+        id, ErrorCode::ExecutionError, QStringLiteral("Cannot write candidate scratch file."));
+
+    file.close();
+    candidate = path;
+  }
+
+  QJsonObject result;
+  if (hasTag) {
+    if (!db.regressSessionsByTag(tag, candidate))
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::ExecutionError,
+        QStringLiteral("Sweep did not start; sessions.getRegression carries the failure "
+                       "report."));
+
+    result[QStringLiteral("tag")]      = tag;
+    result[QStringLiteral("sweeping")] = true;
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  if (!db.regressSession(idValue.toInt(), candidate))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("Regression did not start; sessions.getRegression carries the failure "
+                     "report."));
+
+  result[QStringLiteral("sessionId")]  = idValue.toInt();
+  result[QStringLiteral("regressing")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Return the regression state: running flag, last drift report, and sweep status.
+ */
+API::CommandResponse API::Handlers::SessionsHandler::getRegression(const QString& id,
+                                                                   const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  static auto& db  = Sessions::DatabaseManager::instance();
+  const auto sweep = db.regressionSweepStatus();
+
+  QJsonObject result;
+  result[QStringLiteral("running")] =
+    db.regressionBusy() || sweep.value(QStringLiteral("active")).toBool();
+  result[QStringLiteral("report")] = QJsonObject::fromVariantMap(db.lastRegressionReport());
+  result[QStringLiteral("sweep")]  = QJsonObject::fromVariantMap(sweep);
   return CommandResponse::makeSuccess(id, result);
 }
 

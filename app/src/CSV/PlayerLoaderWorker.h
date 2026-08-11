@@ -73,6 +73,8 @@ struct PlayerIndexRequest {
   double intervalSeconds    = 0.0;
   qint64 anchorMsSinceEpoch = 0;
   quint64 generation        = 0;
+  char separator            = ',';
+  double timeScale          = 1.0;
   PlayerTimestampMode mode  = PlayerTimestampMode::Numeric;
 };
 

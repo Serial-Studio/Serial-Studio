@@ -26,10 +26,15 @@
 #include <QCanBus>
 #include <QLoggingCategory>
 #include <stdexcept>
+#include <utility>
 
 #include "IO/Drivers/CANBus/CanBackends.h"
+#include "IO/Drivers/CANBus/GsUsbCanBackend.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
+
+// Default CAN FD data-phase bitrate (the gs_usb backend applies the same fallback)
+static constexpr quint32 kDefaultDataBitrate = 2000000;
 
 //--------------------------------------------------------------------------------------------------
 // Synthetic (libusb/serial) CAN backend plugin helpers
@@ -76,6 +81,7 @@ IO::Drivers::CANBus::CANBus()
   , m_pluginIndex(0)
   , m_interfaceIndex(0)
   , m_bitrate(500000)
+  , m_dataBitrate(kDefaultDataBitrate)
   , m_hwStampAnchored(false)
   , m_hwStampOffset(CapturedData::SteadyClock::duration::zero())
 {
@@ -85,11 +91,16 @@ IO::Drivers::CANBus::CANBus()
   m_loopback       = m_settings.value("CanBusDriver/loopback", false).toBool();
   m_listenOnly     = m_settings.value("CanBusDriver/listenOnly", false).toBool();
   m_bitrate        = m_settings.value("CanBusDriver/bitrate", 500000).toUInt();
+  m_dataBitrate    = m_settings.value("CanBusDriver/dataBitrate", kDefaultDataBitrate).toUInt();
   m_pluginIndex    = m_settings.value("CanBusDriver/pluginIndex", 0).toUInt();
   m_interfaceIndex = m_settings.value("CanBusDriver/interfaceIndex", 0).toUInt();
 
   if (!m_pluginList.isEmpty() && m_pluginIndex < m_pluginList.count())
     refreshInterfaces();
+
+  m_hotplugDebounce.setInterval(200);
+  m_hotplugDebounce.setSingleShot(true);
+  connect(&m_hotplugDebounce, &QTimer::timeout, this, &IO::Drivers::CANBus::refreshInterfaces);
 
   connect(this,
           &IO::Drivers::CANBus::pluginIndexChanged,
@@ -101,6 +112,10 @@ IO::Drivers::CANBus::CANBus()
           &IO::Drivers::CANBus::configurationChanged);
   connect(
     this, &IO::Drivers::CANBus::bitrateChanged, this, &IO::Drivers::CANBus::configurationChanged);
+  connect(this,
+          &IO::Drivers::CANBus::dataBitrateChanged,
+          this,
+          &IO::Drivers::CANBus::configurationChanged);
   connect(
     this, &IO::Drivers::CANBus::canFDChanged, this, &IO::Drivers::CANBus::configurationChanged);
   connect(
@@ -114,10 +129,11 @@ IO::Drivers::CANBus::CANBus()
 }
 
 /**
- * @brief Closes the CAN bus device.
+ * @brief Closes the CAN bus device and disarms the hot-plug notifier before this object dies.
  */
 IO::Drivers::CANBus::~CANBus()
 {
+  GsUsbCanBackend::clearHotplugNotifier(this);
   doClose();
 }
 
@@ -240,8 +256,10 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
     } else
       can_id = ((static_cast<quint8>(data[0]) & 0x07) << 8) | static_cast<quint8>(data[1]);
 
+    const bool fd_active = m_canFD && interfaceSupportsFD();
+
     quint8 dlc     = static_cast<quint8>(data[dlc_index]);
-    quint8 max_dlc = m_canFD ? 64 : 8;
+    quint8 max_dlc = fd_active ? 64 : 8;
 
     if (dlc > max_dlc)
       dlc = max_dlc;
@@ -253,7 +271,7 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
     if (extended || can_id > 0x7FF)
       frame.setExtendedFrameFormat(true);
 
-    if (m_canFD)
+    if (fd_active)
       frame.setFlexibleDataRateFormat(true);
 
     if (m_device->writeFrame(frame)) {
@@ -309,8 +327,13 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   }
 
   m_device->setConfigurationParameter(QCanBusDevice::BitRateKey, m_bitrate);
-  if (m_canFD)
+  if (m_canFD && interfaceSupportsFD()) {
     m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
+    m_device->setConfigurationParameter(QCanBusDevice::DataBitRateKey, m_dataBitrate);
+  } else if (m_canFD) {
+    qWarning() << "CAN FD requested but"
+               << interface << "reports no FD support; opening in classic mode";
+  }
 
   if (m_loopback)
     m_device->setConfigurationParameter(QCanBusDevice::LoopbackKey, true);
@@ -442,6 +465,17 @@ bool IO::Drivers::CANBus::loopback() const
 }
 
 /**
+ * @brief Returns true when the currently selected interface reports CAN FD capability.
+ */
+bool IO::Drivers::CANBus::interfaceSupportsFD() const
+{
+  if (m_interfaceIndex < m_interfaceFdCapable.count())
+    return m_interfaceFdCapable.at(m_interfaceIndex);
+
+  return false;
+}
+
+/**
  * @brief Returns true if listen-only (silent) mode is enabled
  */
 bool IO::Drivers::CANBus::listenOnly() const
@@ -471,6 +505,14 @@ quint8 IO::Drivers::CANBus::interfaceIndex() const
 quint32 IO::Drivers::CANBus::bitrate() const
 {
   return m_bitrate;
+}
+
+/**
+ * @brief Returns the current CAN FD data-phase bitrate
+ */
+quint32 IO::Drivers::CANBus::dataBitrate() const
+{
+  return m_dataBitrate;
 }
 
 /**
@@ -512,6 +554,20 @@ QStringList IO::Drivers::CANBus::bitrateList() const
   list << "500000";
   list << "800000";
   list << "1000000";
+  return list;
+}
+
+/**
+ * @brief Returns the list of standard CAN FD data-phase bitrates
+ */
+QStringList IO::Drivers::CANBus::dataBitrateList() const
+{
+  QStringList list;
+  list << "1000000";
+  list << "2000000";
+  list << "4000000";
+  list << "5000000";
+  list << "8000000";
   return list;
 }
 
@@ -604,6 +660,19 @@ void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
 }
 
 /**
+ * @brief Sets the CAN FD data-phase bitrate.
+ */
+void IO::Drivers::CANBus::setDataBitrate(const quint32 bitrate)
+{
+  if (m_dataBitrate == bitrate)
+    return;
+
+  m_dataBitrate = bitrate;
+  m_settings.setValue("CanBusDriver/dataBitrate", bitrate);
+  Q_EMIT dataBitrateChanged();
+}
+
+/**
  * @brief Sets the plugin index and refreshes available interfaces.
  */
 void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
@@ -625,11 +694,12 @@ void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
     m_interfaceIndex = index;
     m_settings.setValue("CanBusDriver/interfaceIndex", index);
     Q_EMIT interfaceIndexChanged();
+    Q_EMIT interfaceSupportsFDChanged();
   }
 }
 
 /**
- * @brief Sets up external connections for timer events.
+ * @brief Sets up external connections for timer events and USB hot-plug notifications.
  */
 void IO::Drivers::CANBus::setupExternalConnections()
 {
@@ -637,6 +707,8 @@ void IO::Drivers::CANBus::setupExternalConnections()
           &Misc::TimerEvents::timeout1Hz,
           this,
           &IO::Drivers::CANBus::refreshPlugins);
+
+  GsUsbCanBackend::setHotplugNotifier(this, [this] { m_hotplugDebounce.start(); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -839,13 +911,19 @@ QString IO::Drivers::CANBus::connectionErrorHint(const QString& plugin,
  */
 void IO::Drivers::CANBus::refreshInterfaces()
 {
+  const QString previous_error = m_interfaceError;
+
   m_interfaceList.clear();
+  m_interfaceFdCapable.clear();
   m_interfaceError.clear();
 
   if (m_pluginList.isEmpty() || m_pluginIndex >= m_pluginList.count()) {
     m_interfaceError = tr("No CAN driver selected");
-    Q_EMIT interfaceErrorChanged();
+    if (m_interfaceError != previous_error)
+      Q_EMIT interfaceErrorChanged();
+
     Q_EMIT availableInterfacesChanged();
+    Q_EMIT interfaceSupportsFDChanged();
     return;
   }
 
@@ -853,6 +931,9 @@ void IO::Drivers::CANBus::refreshInterfaces()
 
   if (const auto* backend = IO::Drivers::CanBackends::find(plugin)) {
     m_interfaceList = backend->availableInterfaces();
+    for (const QString& name : std::as_const(m_interfaceList))
+      m_interfaceFdCapable.append(backend->interfaceSupportsFD
+                                  && backend->interfaceSupportsFD(name));
   } else {
     QString error;
     static auto* canBus                       = QCanBus::instance();
@@ -864,25 +945,32 @@ void IO::Drivers::CANBus::refreshInterfaces()
       qWarning() << "CAN plugin error:" << plugin << error;
     }
 
-    for (const QCanBusDeviceInfo& info : interfaces)
+    for (const QCanBusDeviceInfo& info : interfaces) {
       m_interfaceList.append(info.name());
+      m_interfaceFdCapable.append(info.hasFlexibleDataRate());
+    }
   }
 
-  if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty()) {
+  if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty())
     m_interfaceError = noInterfacesHint(plugin);
-    Q_EMIT interfaceErrorChanged();
-  }
 
-  if (m_interfaceIndex >= m_interfaceList.count()) {
+  if (m_interfaceError != previous_error)
+    Q_EMIT interfaceErrorChanged();
+
+  if (m_interfaceIndex >= m_interfaceList.count() && m_interfaceIndex != 0) {
     m_interfaceIndex = 0;
     m_settings.setValue("CanBusDriver/interfaceIndex", 0);
+    Q_EMIT interfaceIndexChanged();
   }
 
   Q_EMIT availableInterfacesChanged();
+  Q_EMIT interfaceSupportsFDChanged();
 }
 
 /**
- * @brief Refreshes the list of available CAN bus plugins.
+ * @brief Refreshes the list of available CAN bus plugins, plus the interface list of the
+ *        serial-port backends (cheap port diff; gs_usb refreshes via hot-plug events instead,
+ *        because its enumeration opens every adapter to read serial strings).
  */
 void IO::Drivers::CANBus::refreshPlugins()
 {
@@ -903,7 +991,20 @@ void IO::Drivers::CANBus::refreshPlugins()
 
     if (!m_pluginList.isEmpty() && m_pluginIndex < m_pluginList.count())
       refreshInterfaces();
+
+    return;
   }
+
+  if (m_pluginIndex >= m_pluginList.count())
+    return;
+
+  const QString plugin = m_pluginList[m_pluginIndex];
+  if (plugin == IO::Drivers::GsUsbCanBackend::pluginKey())
+    return;
+
+  const auto* backend = IO::Drivers::CanBackends::find(plugin);
+  if (backend && backend->availableInterfaces() != m_interfaceList)
+    refreshInterfaces();
 }
 
 /**
@@ -957,6 +1058,15 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
   canFd.value = m_canFD;
   props.append(canFd);
 
+  IO::DriverProperty dataBitrate;
+  dataBitrate.key   = QStringLiteral("dataBitrate");
+  dataBitrate.label = tr("Data Bitrate");
+  dataBitrate.type  = IO::DriverProperty::IntField;
+  dataBitrate.value = m_dataBitrate;
+  dataBitrate.min   = 100000;
+  dataBitrate.max   = 8000000;
+  props.append(dataBitrate);
+
   IO::DriverProperty loopback;
   loopback.key   = QStringLiteral("loopback");
   loopback.label = tr("Loopback");
@@ -993,6 +1103,11 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
 
   if (key == QLatin1String("canFD")) {
     setCanFD(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("dataBitrate")) {
+    setDataBitrate(value.toUInt());
     return;
   }
 

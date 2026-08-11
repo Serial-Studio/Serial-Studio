@@ -24,9 +24,11 @@ Widgets.SmartWindow {
   id: root
 
   //
-  // Window geometry & title
+  // Window geometry & title. The width floor tracks the detail pane's own
+  // minimum so the action buttons can never be resized out of view.
   //
-  minimumWidth: 880
+  property real detailPaneMinWidth: 360
+  minimumWidth: Math.max(880, 300 + 12 + detailPaneMinWidth)
   minimumHeight: 560
   category: "DatabaseExplorer"
   property alias preferredWidth: layout.implicitWidth
@@ -236,9 +238,9 @@ Widgets.SmartWindow {
 
         Widgets.PaneSplitter {
           minLeftWidth: 300
-          minRightWidth: 360
           anchors.fill: parent
           settingsKey: "DatabaseExplorer"
+          minRightWidth: root.detailPaneMinWidth
           captionSeparatorVisible: !root.operatorMode
 
           leftPanel: Component {
@@ -246,7 +248,15 @@ Widgets.SmartWindow {
           }
 
           rightPanel: Component {
-            SessionDetail {}
+            SessionDetail {
+              id: detailPane
+
+              Binding {
+                target: root
+                property: "detailPaneMinWidth"
+                value: Math.max(360, detailPane.minimumUsableWidth)
+              }
+            }
           }
         }
 

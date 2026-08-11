@@ -30,6 +30,14 @@ Widgets.Pane {
   property var verification: sessionId >= 0
                              ? Cpp_Sessions_Manager.latestVerification(sessionId)
                              : ({})
+  property var regression: ({})
+  property int regressionAffectedCount: 0
+
+  //
+  // Narrowest width at which the action row stays fully visible; the explorer
+  // window derives its minimum size from this so buttons can never be clipped
+  //
+  readonly property real minimumUsableWidth: actionRow.implicitWidth + 32 + 18
 
   //
   // Maps a stored verdict string to user-facing text
@@ -51,6 +59,28 @@ Widgets.Pane {
       return qsTr("Verification error")
 
     return qsTr("Never verified")
+  }
+
+  //
+  // Maps a regression drift verdict to user-facing text
+  //
+  function driftLabel(verdict) {
+    if (verdict === "identical")
+      return qsTr("Identical")
+
+    if (verdict === "value-drift")
+      return qsTr("Value drift")
+
+    if (verdict === "coverage-drift")
+      return qsTr("Coverage drift")
+
+    if (verdict === "structural-drift")
+      return qsTr("Structural drift")
+
+    if (verdict === "not_verifiable")
+      return qsTr("Not mechanically comparable")
+
+    return qsTr("Check failed")
   }
 
   //
@@ -89,6 +119,10 @@ Widgets.Pane {
                           ? Cpp_Sessions_Manager.latestVerification(root.sessionId)
                           : {}
     }
+
+    function onRegressionReportChanged() {
+      root.regression = Cpp_Sessions_Manager.lastRegressionReport
+    }
   }
 
   //
@@ -96,6 +130,13 @@ Widgets.Pane {
   //
   ReportOptionsDialog {
     id: _reportDialog
+  }
+
+  //
+  // Side-by-side drift comparison window (spec 0047)
+  //
+  DriftReportDialog {
+    id: _driftDialog
   }
 
   //
@@ -375,6 +416,38 @@ Widgets.Pane {
           }
 
           Label {
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            visible: root.verification.verdict === "error" && !!(root.verification.detail || {}).error
+            color: Cpp_ThemeManager.colors["alarm"]
+            font: Cpp_Misc_CommonFonts.uiFont
+            text: (root.verification.detail || {}).error || ""
+          }
+
+          Label {
+            opacity: 0.8
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            visible: root.verification.verdict === "error" && !!(root.verification.detail || {}).hint
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: (root.verification.detail || {}).hint || ""
+          }
+
+          Repeater {
+            model: (root.verification.detail || {}).notes || []
+
+            delegate: Label {
+              opacity: 0.8
+              wrapMode: Text.Wrap
+              Layout.fillWidth: true
+              text: modelData
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            }
+          }
+
+          Label {
             opacity: 0.6
             wrapMode: Text.Wrap
             Layout.fillWidth: true
@@ -384,6 +457,146 @@ Widgets.Pane {
                        + "it against the recorded values. This proves the archive is "
                        + "reproducible; it is not a determinism guarantee, a safety function, "
                        + "or a calibration authority.")
+          }
+        }
+
+        //
+        // Drift vs current project (spec 0047; ephemeral, never stored with the session)
+        //
+        Label {
+          visible: !root.operatorMode
+          text: qsTr("Drift vs Current Project")
+          color: Cpp_ThemeManager.colors["text"]
+          font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+          Component.onCompleted: font.capitalization = Font.AllUppercase
+        }
+
+        //
+        // Regression drift report
+        //
+        ColumnLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          visible: !root.operatorMode
+
+          Label {
+            opacity: 0.6
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            visible: !root.regression.verdict
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Compares this session's decoded values against the project currently "
+                       + "open in the editor. The result reflects a transient candidate and "
+                       + "is not stored with the session.")
+          }
+
+          Label {
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            visible: !!root.regression.verdict
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.boldUiFont
+            text: root.driftLabel(root.regression.verdict)
+          }
+
+          Label {
+            opacity: 0.6
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            visible: !!(root.regression.candidate || {}).title
+                     || !!(root.regression.candidate || {}).sha256
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.monoFont
+            text: qsTr("Candidate: %1 (%2)").arg(
+                    (root.regression.candidate || {}).title || qsTr("untitled"))
+                  .arg(((root.regression.candidate || {}).sha256 || "").substring(0, 12))
+          }
+
+          Label {
+            opacity: 0.6
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            visible: !!root.regression.baselineReproduction
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Archived-configuration reproduction status: %1").arg(
+                    root.regression.baselineReproduction || "")
+          }
+
+          Label {
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            visible: root.regression.verdict === "error" && !!root.regression.error
+            color: Cpp_ThemeManager.colors["alarm"]
+            font: Cpp_Misc_CommonFonts.uiFont
+            text: root.regression.error || ""
+          }
+
+          Label {
+            opacity: 0.8
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            visible: root.regression.verdict === "error" && !!root.regression.hint
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: root.regression.hint || ""
+          }
+
+          Repeater {
+            model: root.regression.notes || []
+
+            delegate: Label {
+              opacity: 0.8
+              wrapMode: Text.Wrap
+              Layout.fillWidth: true
+              text: modelData
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            }
+          }
+
+          Repeater {
+            model: {
+              const all = (root.regression.datasets || []).filter(function(d) {
+                return !!d.structural || (d.changed || 0) > 0
+                    || (d.onlyBaseline || 0) > 0 || (d.onlyCandidate || 0) > 0
+              })
+              root.regressionAffectedCount = all.length
+              return all.slice(0, 20)
+            }
+
+            delegate: Label {
+              opacity: 0.8
+              Layout.fillWidth: true
+              elide: Text.ElideRight
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.monoFont
+              text: {
+                if (modelData.structural === "added")
+                  return qsTr("%1: only in the current project").arg(modelData.title || modelData.uniqueId)
+
+                if (modelData.structural === "removed")
+                  return qsTr("%1: only in the recorded project").arg(modelData.title || modelData.uniqueId)
+
+                return qsTr("%1: %2 of %3 values changed, %4 missing, %5 extra")
+                    .arg(modelData.title || modelData.uniqueId)
+                    .arg(modelData.changed || 0)
+                    .arg(modelData.compared || 0)
+                    .arg(modelData.onlyBaseline || 0)
+                    .arg(modelData.onlyCandidate || 0)
+              }
+            }
+          }
+
+          Label {
+            opacity: 0.6
+            Layout.fillWidth: true
+            visible: root.regressionAffectedCount > 20
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("…and %1 more datasets are affected.")
+                    .arg(root.regressionAffectedCount - 20)
           }
         }
 
@@ -398,6 +611,8 @@ Widgets.Pane {
         // Action buttons
         //
         RowLayout {
+          id: actionRow
+
           spacing: 8
           Layout.fillWidth: true
 
@@ -430,7 +645,26 @@ Widgets.Pane {
             ToolTip.text: qsTr("Only completed sessions can be verified")
             onClicked: Cpp_Sessions_Manager.verifySession(root.sessionId)
             enabled: !!root.metadata.ended_at && !Cpp_Sessions_Manager.verificationBusy
-            text: Cpp_Sessions_Manager.verificationBusy ? qsTr("Verifying…") : qsTr("Verify")
+            text: Cpp_Sessions_Manager.verificationBusy && !Cpp_Sessions_Manager.regressionBusy
+                  ? qsTr("Verifying…")
+                  : qsTr("Verify")
+          }
+
+          Widgets.IconButton {
+            visible: !root.operatorMode
+            icon.source: "qrc:/icons/buttons/test.svg"
+            ToolTip.visible: hovered && !root.metadata.ended_at
+            ToolTip.text: qsTr("Only completed sessions can be checked against a project")
+            onClicked: Cpp_Sessions_Manager.regressSession(root.sessionId)
+            enabled: !!root.metadata.ended_at && !Cpp_Sessions_Manager.verificationBusy
+            text: Cpp_Sessions_Manager.regressionBusy ? qsTr("Checking…") : qsTr("Check Project")
+          }
+
+          Widgets.IconButton {
+            text: qsTr("View Report")
+            icon.source: "qrc:/icons/buttons/report.svg"
+            visible: !root.operatorMode && !!root.regression.verdict
+            onClicked: _driftDialog.openFor(root.regression)
           }
 
           Item {

@@ -627,6 +627,17 @@ Widgets.Pane {
     toolActions: _paletteTools
   }
 
+  //
+  // Registry palette shortcut fires here too: MainWindow only instantiates its own
+  // window-scoped shortcuts, so pop-out dashboards must wire Ctrl+K themselves.
+  //
+  Shortcut {
+    context: Qt.WindowShortcut
+    enabled: root.isExternalWindow
+    sequences: Cpp_UI_CommandRegistry.command("palette.open").sequences
+    onActivated: root.openWorkspaceSwitcher()
+  }
+
   Loader {
     id: _switcherLoader
 

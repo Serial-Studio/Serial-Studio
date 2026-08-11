@@ -40,7 +40,9 @@ inline constexpr auto kListenOnlyConfigKey =
 class CanBackends {
 public:
   /**
-   * @brief One synthetic CAN backend, identified by a plugin key.
+   * @brief One synthetic CAN backend, identified by a plugin key. interfaceSupportsFD may be
+   *        null: the backend never offers CAN FD (aggregate rows omitting it value-initialize
+   *        the pointer, so classic-only backends need no touch).
    */
   struct Entry {
     QString key;
@@ -48,6 +50,7 @@ public:
     bool supported;
     QStringList (*availableInterfaces)();
     QCanBusDevice* (*create)(const QString& interfaceName);
+    bool (*interfaceSupportsFD)(const QString& interfaceName);
   };
 
   [[nodiscard]] static const QList<Entry>& all();

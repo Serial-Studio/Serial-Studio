@@ -2386,9 +2386,20 @@ sessions.getDbPath = function(projectTitle) {
   return apiCall('sessions.getDbPath', p);
 };
 
+sessions.getRegression = function() {
+  var p = {};
+  return apiCall('sessions.getRegression', p);
+};
+
 sessions.getStatus = function() {
   var p = {};
   return apiCall('sessions.getStatus', p);
+};
+
+sessions.getVerification = function(sessionId) {
+  var p = {};
+  p['sessionId'] = sessionId;
+  return apiCall('sessions.getVerification', p);
 };
 
 sessions.list = function() {
@@ -2405,6 +2416,12 @@ sessions.openDatabase = function(filePath) {
   var p = {};
   p['filePath'] = filePath;
   return apiCall('sessions.openDatabase', p);
+};
+
+sessions.regress = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('sessions.regress', p);
 };
 
 sessions.removeTag = function(sessionId, tagId) {
@@ -2438,6 +2455,12 @@ sessions.setNotes = function(sessionId, notes) {
   p['sessionId'] = sessionId;
   p['notes'] = notes;
   return apiCall('sessions.setNotes', p);
+};
+
+sessions.verify = function(sessionId) {
+  var p = {};
+  p['sessionId'] = sessionId;
+  return apiCall('sessions.verify', p);
 };
 
 system.exec = function(program, options) {

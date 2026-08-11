@@ -5049,11 +5049,32 @@
         ]
     },
     {
+        "description": "Return the running flag, last regression drift report, and sweep status (no params)",
+        "name": "sessions.getRegression",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Return the session-recording flags (exportEnabled, isOpen)",
         "name": "sessions.getStatus",
         "properties": {
         },
         "required": [
+        ]
+    },
+    {
+        "description": "Return the latest stored verification verdict for a session (params: sessionId)",
+        "name": "sessions.getVerification",
+        "properties": {
+            "sessionId": {
+                "description": "Session id (from sessions.list)",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "sessionId"
         ]
     },
     {
@@ -5083,6 +5104,30 @@
         },
         "required": [
             "filePath"
+        ]
+    },
+    {
+        "description": "Compare a stored session (or every session with a tag) against a candidate project in a child process (async; poll sessions.getRegression; params: sessionId | tag, projectPath?, projectJson?)",
+        "name": "sessions.regress",
+        "properties": {
+            "projectJson": {
+                "description": "Candidate project JSON content (alternative to projectPath)",
+                "type": "string"
+            },
+            "projectPath": {
+                "description": "Candidate project file path (default: current editor project)",
+                "type": "string"
+            },
+            "sessionId": {
+                "description": "Session id (exclusive with 'tag')",
+                "type": "integer"
+            },
+            "tag": {
+                "description": "Regress every completed session carrying this tag (golden sweep)",
+                "type": "string"
+            }
+        },
+        "required": [
         ]
     },
     {
@@ -5163,6 +5208,19 @@
         "required": [
             "sessionId",
             "notes"
+        ]
+    },
+    {
+        "description": "Verify a stored session's reproducibility in a child process (async; poll sessions.getVerification; params: sessionId)",
+        "name": "sessions.verify",
+        "properties": {
+            "sessionId": {
+                "description": "Session id (from sessions.list)",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "sessionId"
         ]
     },
     {

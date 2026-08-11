@@ -597,6 +597,7 @@ set(QML_SOURCES
   qml/DatabaseExplorer/DatabaseExplorer.qml
   qml/DatabaseExplorer/SessionList.qml
   qml/DatabaseExplorer/SessionDetail.qml
+  qml/DatabaseExplorer/DriftReportDialog.qml
   qml/DatabaseExplorer/ReportOptionsDialog.qml
   qml/DatabaseExplorer/ReportProgressDialog.qml
   qml/Dialogs/Donate.qml
@@ -748,6 +749,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/CANBus/CanBackends.h
     src/IO/Drivers/CANBus/GsUsbCanBackend.h
+    src/IO/Drivers/CANBus/GsUsbProtocol.h
     src/IO/Drivers/CANBus/SlcanBackend.h
     src/IO/Drivers/CANBus/SeeedCanBackend.h
     src/IO/Drivers/Modbus.h
@@ -881,6 +883,7 @@ if(BUILD_COMMERCIAL)
     src/Sessions/PlayerLoaderWorker.cpp
     src/Sessions/ReportData.cpp
     src/Sessions/Verifier.cpp
+    src/Sessions/VerifierRegression.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp

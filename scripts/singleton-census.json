@@ -1,23 +1,23 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1621,
-  "files": 203,
+  "total": 1629,
+  "files": 206,
   "buckets": {
     "root": 151,
     "accessor": 68,
     "ctor-capture": 103,
     "deferred": 17,
-    "static-cache": 1164,
+    "static-cache": 1172,
     "loose": 118
   },
   "per_class": {
-    "IO::ConnectionManager": 210,
-    "DataModel::ProjectModel": 209,
-    "AppState": 137,
-    "CommandRegistry": 99,
+    "IO::ConnectionManager": 211,
+    "DataModel::ProjectModel": 210,
+    "AppState": 136,
+    "CommandRegistry": 100,
     "UI::Dashboard": 83,
-    "DataModel::FrameBuilder": 58,
+    "DataModel::FrameBuilder": 59,
     "Misc::IconRegistry": 48,
     "Misc::ThemeManager": 43,
     "Misc::TimerEvents": 31,
@@ -30,8 +30,8 @@
     "Misc::Translator": 25,
     "Sessions::Export": 24,
     "Licensing::LemonSqueezy": 23,
+    "Sessions::DatabaseManager": 23,
     "CSV::Player": 21,
-    "Sessions::DatabaseManager": 21,
     "MDF4::Player": 20,
     "CSV::Export": 19,
     "MDF4::Export": 18,
@@ -40,8 +40,8 @@
     "API::GRPC::GRPCServer": 16,
     "MQTT::Publisher": 16,
     "AI::CommandRegistry": 15,
+    "DataModel::ControlScript": 15,
     "Sessions::Player": 15,
-    "DataModel::ControlScript": 14,
     "Misc::ExtensionManager": 14,
     "Misc::ProblemCenter": 13,
     "DataModel::ProjectEditor": 13,
@@ -51,13 +51,13 @@
     "Misc::CrashTracker": 10,
     "MachineID": 9,
     "Licensing::Trial": 8,
+    "ConnectionManager": 8,
     "Widgets::AudioExport": 8,
     "Assistant": 7,
     "Licensing::MachineID": 7,
     "API::CommandHandler": 7,
     "AI::FileSandbox": 6,
     "ProjectModel": 6,
-    "ConnectionManager": 6,
     "Licensing::OfflineLicense": 5,
     "Misc::ConnectionDiagnostics": 5,
     "IO::FileTransmission": 5,
@@ -611,13 +611,13 @@
       }
     },
     "app/src/API/Handlers/SessionsHandler.cpp": {
-      "total": 21,
+      "total": 24,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 21,
+        "static-cache": 24,
         "loose": 0
       }
     },
@@ -1358,6 +1358,17 @@
         "loose": 0
       }
     },
+    "app/src/IO/Drivers/BluetoothLE.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
     "app/src/IO/Drivers/CANBus.cpp": {
       "total": 4,
       "buckets": {
@@ -1380,14 +1391,25 @@
         "loose": 0
       }
     },
-    "app/src/IO/Drivers/Modbus.cpp": {
-      "total": 4,
+    "app/src/IO/Drivers/MQTT.cpp": {
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "app/src/IO/Drivers/Modbus.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
         "loose": 2
       }
     },
@@ -1931,25 +1953,25 @@
       }
     },
     "app/src/Sessions/DatabaseManager.cpp": {
-      "total": 8,
+      "total": 9,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 4,
-        "static-cache": 1,
+        "static-cache": 2,
         "loose": 2
       }
     },
     "app/src/Sessions/Export.cpp": {
-      "total": 19,
+      "total": 18,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 4,
         "deferred": 2,
         "static-cache": 2,
-        "loose": 10
+        "loose": 9
       }
     },
     "app/src/Sessions/Player.cpp": {
@@ -1972,6 +1994,17 @@
         "deferred": 0,
         "static-cache": 8,
         "loose": 0
+      }
+    },
+    "app/src/Sessions/VerifierRegression.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 1
       }
     },
     "app/src/UI/AlarmMonitor.cpp": {

@@ -2352,10 +2352,22 @@
       "reserved": [],
       "next": 3
     },
+    "sessions.getRegression": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
     "sessions.getStatus": {
       "fields": {},
       "reserved": [],
       "next": 2
+    },
+    "sessions.getVerification": {
+      "fields": {
+        "sessionId": 2
+      },
+      "reserved": [],
+      "next": 3
     },
     "sessions.list": {
       "fields": {},
@@ -2373,6 +2385,16 @@
       },
       "reserved": [],
       "next": 3
+    },
+    "sessions.regress": {
+      "fields": {
+        "projectJson": 2,
+        "projectPath": 3,
+        "sessionId": 4,
+        "tag": 5
+      },
+      "reserved": [],
+      "next": 6
     },
     "sessions.removeTag": {
       "fields": {
@@ -2411,6 +2433,13 @@
       },
       "reserved": [],
       "next": 4
+    },
+    "sessions.verify": {
+      "fields": {
+        "sessionId": 2
+      },
+      "reserved": [],
+      "next": 3
     },
     "system.exec": {
       "fields": {

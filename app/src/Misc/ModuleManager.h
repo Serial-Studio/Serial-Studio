@@ -62,6 +62,7 @@ public:
   ModuleManager();
   static void instantiateCoreModules();
   static void setupHeadlessSessionConnections();
+  static void teardownHeadlessSessionModules();
   [[nodiscard]] bool performanceMode() const noexcept;
   [[nodiscard]] bool inhibitIdleSleep() const noexcept;
   [[nodiscard]] bool autoUpdaterEnabled() const noexcept;

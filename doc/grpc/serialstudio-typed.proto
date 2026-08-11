@@ -1840,8 +1840,17 @@ message SessionsGetDbPathRequest {
   string projectTitle = 2;
 }
 
+message SessionsGetRegressionRequest {
+  string id = 1;
+}
+
 message SessionsGetStatusRequest {
   string id = 1;
+}
+
+message SessionsGetVerificationRequest {
+  string id = 1;
+  int64 sessionId = 2;
 }
 
 message SessionsListRequest {
@@ -1855,6 +1864,14 @@ message SessionsListTagsRequest {
 message SessionsOpenDatabaseRequest {
   string id = 1;
   string filePath = 2;
+}
+
+message SessionsRegressRequest {
+  string id = 1;
+  string projectJson = 2;
+  string projectPath = 3;
+  int64 sessionId = 4;
+  string tag = 5;
 }
 
 message SessionsRemoveTagRequest {
@@ -1883,6 +1900,11 @@ message SessionsSetNotesRequest {
   string id = 1;
   string notes = 2;
   int64 sessionId = 3;
+}
+
+message SessionsVerifyRequest {
+  string id = 1;
+  int64 sessionId = 2;
 }
 
 message SystemExecRequest {
@@ -3024,8 +3046,14 @@ service SerialStudioTypedAPI {
   // Return the canonical .db path for a given project title
   rpc SessionsGetDbPath(SessionsGetDbPathRequest) returns (CommandResponse);
 
+  // Return the running flag, last regression drift report, and sweep status (no params)
+  rpc SessionsGetRegression(SessionsGetRegressionRequest) returns (CommandResponse);
+
   // Return the session-recording flags (exportEnabled, isOpen)
   rpc SessionsGetStatus(SessionsGetStatusRequest) returns (CommandResponse);
+
+  // Return the latest stored verification verdict for a session (params: sessionId)
+  rpc SessionsGetVerification(SessionsGetVerificationRequest) returns (CommandResponse);
 
   // List all sessions stored in the currently open database
   rpc SessionsList(SessionsListRequest) returns (CommandResponse);
@@ -3035,6 +3063,9 @@ service SerialStudioTypedAPI {
 
   // Open a session database file for browsing (params: filePath)
   rpc SessionsOpenDatabase(SessionsOpenDatabaseRequest) returns (CommandResponse);
+
+  // Compare a stored session (or every session with a tag) against a candidate project in a child process (async; poll sessions.getRegression; params: sessionId | tag, projectPath?, projectJson?)
+  rpc SessionsRegress(SessionsRegressRequest) returns (CommandResponse);
 
   // Remove a tag from a session (params: sessionId, tagId)
   rpc SessionsRemoveTag(SessionsRemoveTagRequest) returns (CommandResponse);
@@ -3050,6 +3081,9 @@ service SerialStudioTypedAPI {
 
   // Set free-form notes on a stored session (params: sessionId, notes)
   rpc SessionsSetNotes(SessionsSetNotesRequest) returns (CommandResponse);
+
+  // Verify a stored session's reproducibility in a child process (async; poll sessions.getVerification; params: sessionId)
+  rpc SessionsVerify(SessionsVerifyRequest) returns (CommandResponse);
 
   // Launch a helper process (e.g. "python" with a script path). Control script only -- rejected over the network/SDK. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.
   rpc SystemExec(SystemExecRequest) returns (CommandResponse);

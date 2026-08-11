@@ -46,6 +46,8 @@
 
 static constexpr quint64 kFlushEveryFrames = 4096;
 
+static const IO::CapturedData::SteadyTimePoint kInjectionEpoch{};
+
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
 //--------------------------------------------------------------------------------------------------
@@ -84,6 +86,12 @@ Sessions::Verifier::Verifier(const Options& options)
   , m_readingsIntegrity(QStringLiteral("missing"))
   , m_controlScriptSeen(false)
   , m_finalsVerifiable(true)
+  , m_firstFrameChunk(-1)
+  , m_lastFeedChunks(0)
+  , m_lastFeedFrames(0)
+  , m_chunkBudgetExceeded(false)
+  , m_baselineFirstChunk(-1)
+  , m_candidateFirstChunk(-1)
 {}
 
 /**
@@ -98,28 +106,90 @@ Sessions::Verifier::~Verifier()
 }
 
 /**
+ * @brief Maps a re-parse failure code to its user-facing reason and remediation hint.
+ */
+void Sessions::Verifier::reparseFailureText(const QString& code, QString& reason, QString& hint)
+{
+  static const struct {
+    const char* code;
+    const char* reason;
+    const char* hint;
+  } kFailures[] = {
+    { "stored-project-invalid",
+     "The project settings saved with this session are damaged.",   "The session cannot be checked. Restore the session file from a backup copy."},
+    {"stored-project-rejected",
+     "The project settings saved with this session cannot be loaded by this version of "
+     "Serial Studio.",                                                  "Update Serial Studio to a version at least as new as the one that recorded the "
+                                                  "session, then try again."                                               },
+    {    "export-not-licensed",
+     "Session recording is not activated on this computer.",                                                           "Checking a session requires a Pro license. Activate a license or start a trial, "
+                                                           "then try again."         },
+    {    "export-start-failed",
+     "A temporary working file could not be created.",                   "Check that there is enough free disk space, then try again."           },
+    {            "feed-failed",
+     "The recorded data in this session could not be replayed.", "The session file may be incomplete or damaged. Restore it from a backup copy." },
+  };
+
+  for (const auto& entry : kFailures) {
+    if (code == QLatin1String(entry.code)) {
+      reason = QString::fromLatin1(entry.reason);
+      hint   = QString::fromLatin1(entry.hint);
+      return;
+    }
+  }
+
+  reason = QStringLiteral("The session could not be checked.");
+  hint   = QStringLiteral("Try again. If this keeps happening, the session file may be "
+                          "damaged.");
+}
+
+/**
  * @brief Runs every verification stage and returns the process exit code.
  */
 int Sessions::Verifier::run()
 {
+  if (m_options.mode == Mode::Regress)
+    return runRegression();
+
   if (!openArchive())
-    return fail(QStringLiteral("cannot open archive: %1").arg(m_options.dbPath));
+    return fail(QStringLiteral("open-archive-failed"),
+                QStringLiteral("open-archive"),
+                QStringLiteral("The session file could not be opened."),
+                QStringLiteral("Check that the file still exists and that you have "
+                               "permission to read it, then try again."));
 
   if (!loadSession())
-    return fail(QStringLiteral("session not found in archive"));
+    return fail(QStringLiteral("session-not-found"),
+                QStringLiteral("load-session"),
+                QStringLiteral("That session could not be found in this file."),
+                QStringLiteral("Choose a completed session from the list and try again."));
 
   if (!verifyIntegrity())
-    return fail(QStringLiteral("archive raw_bytes/readings tables are unreadable"));
+    return fail(QStringLiteral("archive-unreadable"),
+                QStringLiteral("integrity"),
+                QStringLiteral("The session file could not be read."),
+                QStringLiteral("The file may be incomplete or damaged. Restore it from a "
+                               "backup copy."));
 
   classifySession();
 
   const bool consoleOnly = sessionIsConsoleOnly();
   if (!consoleOnly && !m_controlScriptSeen) {
-    if (!reparseSession())
-      return fail(QStringLiteral("re-parse failed (project load or export not licensed)"));
+    const QString regenPath = QDir::temp().filePath(
+      QStringLiteral("ss-verify-regen-%1.db").arg(QCoreApplication::applicationPid()));
+    const QString reparseError = reparseSession(m_projectJson, regenPath, false);
+    if (!reparseError.isEmpty()) {
+      QString reason, hint;
+      reparseFailureText(reparseError, reason, hint);
+      return fail(reparseError, QStringLiteral("reparse"), reason, hint);
+    }
 
     if (!diffReadings())
-      return fail(QStringLiteral("regenerated database diff failed"));
+      return fail(QStringLiteral("diff-failed"),
+                  QStringLiteral("diff"),
+                  QStringLiteral("The results could not be compared."),
+                  QStringLiteral("Try again. If this keeps happening, the session file may "
+                                 "be damaged."));
   }
 
   const int code = settleVerdict();
@@ -137,15 +207,22 @@ const QJsonObject& Sessions::Verifier::report() const noexcept
 }
 
 /**
- * @brief Builds an error report, persists it as a verification record when the session id is
- *        known (so polling API clients observe the failure), and returns the error code.
+ * @brief Builds a structured error report (code, stage, reason, remediation hint), persists it
+ *        as a verification record when the session id is known (so polling API clients observe
+ *        the failure), and returns the error exit code.
  */
-int Sessions::Verifier::fail(const QString& reason)
+int Sessions::Verifier::fail(const QString& code,
+                             const QString& stage,
+                             const QString& reason,
+                             const QString& hint)
 {
   m_verdict = QStringLiteral("error");
   m_report  = QJsonObject{
      {  QStringLiteral("verdict"),        m_verdict},
      {    QStringLiteral("error"),           reason},
+     {QStringLiteral("errorCode"),             code},
+     {    QStringLiteral("stage"),            stage},
+     {     QStringLiteral("hint"),             hint},
      {  QStringLiteral("archive"), m_options.dbPath},
      {QStringLiteral("sessionId"),      m_sessionId}
   };
@@ -298,6 +375,8 @@ bool Sessions::Verifier::verifyIntegrity()
   if (!m_storedReadingsSha256.isEmpty())
     m_readingsIntegrity = readingsHex == m_storedReadingsSha256 ? QStringLiteral("verified")
                                                                 : QStringLiteral("mismatch");
+
+  return true;
 }
 
 /**
@@ -323,16 +402,21 @@ void Sessions::Verifier::classifySession()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads the archived project into the real pipeline and re-records the archived raw
- *        bytes into a temporary session database via the untouched Sessions::Export path.
+ * @brief Loads @p projectJson into the real pipeline and re-records the archived raw bytes
+ *        into @p regenPath via the untouched Sessions::Export path; empty string on success,
+ *        else the failure code for run()/runRegression(). Parse budget disabled around the
+ *        feed (benchmark precedent): a headless flat-out replay must never skip frames.
  */
-bool Sessions::Verifier::reparseSession()
+QString Sessions::Verifier::reparseSession(const QString& projectJson,
+                                           const QString& regenPath,
+                                           bool injectTimestamps)
 {
-  SS_ASSERT(!m_projectJson.isEmpty(), return false);
+  SS_ASSERT(!projectJson.isEmpty(), return QStringLiteral("stored-project-invalid"));
+  SS_ASSERT(!regenPath.isEmpty(), return QStringLiteral("export-start-failed"));
 
-  const auto doc = QJsonDocument::fromJson(m_projectJson.toUtf8());
+  const auto doc = QJsonDocument::fromJson(projectJson.toUtf8());
   if (!doc.isObject())
-    return false;
+    return QStringLiteral("stored-project-invalid");
 
   static auto& appState = AppState::instance();
   appState.setOperationMode(SerialStudio::ProjectFile);
@@ -340,7 +424,7 @@ bool Sessions::Verifier::reparseSession()
   static auto& project = DataModel::ProjectModel::instance();
   project.setSuppressMessageBoxes(true);
   if (!project.loadFromJsonDocument(doc))
-    return false;
+    return QStringLiteral("stored-project-rejected");
 
   static auto& parser = DataModel::FrameParser::instance();
   parser.setSuppressMessageBoxes(true);
@@ -348,33 +432,40 @@ bool Sessions::Verifier::reparseSession()
 
   static auto& builder = DataModel::FrameBuilder::instance();
   builder.syncFromProjectModel();
+  builder.setParseBudgetEnabled(false);
+  builder.resetFrameCounters();
 
-  m_regenPath = QDir::temp().filePath(
-    QStringLiteral("ss-verify-regen-%1.db").arg(QCoreApplication::applicationPid()));
+  m_regenPath = regenPath;
+  m_regenPaths.push_back(regenPath);
   QFile::remove(m_regenPath);
   DatabaseManager::setDbPathOverride(m_regenPath);
+
+  if (!SerialStudio::activated())
+    return QStringLiteral("export-not-licensed");
 
   static auto& exporter = Sessions::Export::instance();
   exporter.setSettingsPersistent(false);
   exporter.setExportEnabled(true);
   if (!exporter.exportEnabled())
-    return false;
+    return QStringLiteral("export-start-failed");
 
-  const bool fed = feedArchivedBytes();
+  const bool fed = feedArchivedBytes(injectTimestamps);
 
   exporter.flushWorker();
   exporter.closeFile();
   exporter.setExportEnabled(false);
+  builder.setParseBudgetEnabled(true);
   DatabaseManager::setDbPathOverride(QString());
-  return fed;
+  return fed ? QString() : QStringLiteral("feed-failed");
 }
 
 /**
  * @brief Streams the archived raw chunks per device through FrameReader extraction into
  *        FrameBuilder, mirroring ConnectionManager::onFrameReady routing. Blocking worker
- *        flushes bound the export queue so the re-record never drops frames.
+ *        flushes bound the export queue so the re-record never drops frames. Regression mode
+ *        injects chunk-indexed timestamps so readings carry a deterministic provenance key.
  */
-bool Sessions::Verifier::feedArchivedBytes()
+bool Sessions::Verifier::feedArchivedBytes(bool injectTimestamps)
 {
   SS_ASSERT(m_db.isOpen(), return false);
   SS_ASSERT(m_sessionId >= 0, return false);
@@ -389,22 +480,48 @@ bool Sessions::Verifier::feedArchivedBytes()
   static auto& builder  = DataModel::FrameBuilder::instance();
   static auto& exporter = Sessions::Export::instance();
 
+  m_firstFrameChunk = -1;
+  m_lastFeedChunks  = 0;
+  m_lastFeedFrames  = 0;
+
+  qint64 chunkIndex  = -1;
   quint64 sinceFlush = 0;
   IO::CapturedDataPtr drained;
   while (rows.next()) {
+    ++chunkIndex;
     const int deviceId = rows.value(0).toInt();
+    if (m_feedExcludedDevices.contains(deviceId))
+      continue;
+
     if (!m_readers.contains(deviceId)
         && m_readers.size() >= static_cast<size_t>(kMaxArchiveDevices))
       return false;
 
     auto& reader = readerForDevice(deviceId);
-    reader.processData(IO::makeCapturedData(rows.value(1).toByteArray()));
+    if (injectTimestamps)
+      reader.processData(IO::makeCapturedData(
+        rows.value(1).toByteArray(),
+        kInjectionEpoch + std::chrono::nanoseconds(chunkIndex * kChunkStepNs)));
+    else
+      reader.processData(IO::makeCapturedData(rows.value(1).toByteArray()));
 
-    auto& queue = reader.queue();
+    ++m_lastFeedChunks;
+
+    qint64 chunkFrames = 0;
+    auto& queue        = reader.queue();
     while (queue.try_dequeue(drained)) {
       builder.hotpathRxSourceFrame(deviceId, drained);
       ++sinceFlush;
+      ++chunkFrames;
     }
+
+    m_lastFeedFrames += chunkFrames;
+
+    if (m_firstFrameChunk < 0 && chunkFrames > 0)
+      m_firstFrameChunk = chunkIndex;
+
+    if (chunkFrames > kMaxFramesPerChunk)
+      m_chunkBudgetExceeded = true;
 
     if (sinceFlush >= kFlushEveryFrames) {
       exporter.flushWorker();
@@ -630,8 +747,9 @@ int Sessions::Verifier::decideVerdict(bool diverged, bool anySkipped, bool conso
 {
   if (m_controlScriptSeen && !diverged) {
     m_verdict = QStringLiteral("not_verifiable");
-    m_notes.append(QStringLiteral("control script ran during capture: interpretation state "
-                                  "could change mid-session, re-parse would be misleading"));
+    m_notes.append(QStringLiteral("This session used a control script while recording. Its "
+                                  "results can change between runs, so they cannot be "
+                                  "checked mechanically."));
     return kExitNotVerifiable;
   }
 
@@ -643,15 +761,16 @@ int Sessions::Verifier::decideVerdict(bool diverged, bool anySkipped, bool conso
   if (consoleOnly) {
     const bool verified = m_rawIntegrity == QStringLiteral("verified");
     m_verdict = verified ? QStringLiteral("reproduced") : QStringLiteral("not_verifiable");
-    m_notes.append(QStringLiteral("console-only session: raw-integrity check only, no "
-                                  "interpretation pipeline to re-run"));
+    m_notes.append(QStringLiteral("This session contains raw console data only, so there is "
+                                  "nothing to re-interpret. Only the stored data itself was "
+                                  "checked."));
     return verified ? kExitReproduced : kExitNotVerifiable;
   }
 
   if (anySkipped) {
     m_verdict = QStringLiteral("partial");
-    m_notes.append(QStringLiteral("reproduced except datasets whose inputs are not archived "
-                                  "(see skipped / finalsCompared entries)"));
+    m_notes.append(QStringLiteral("Verified, except for values that depend on data that is "
+                                  "not stored in the session."));
     return kExitNotVerifiable;
   }
 
@@ -669,6 +788,19 @@ int Sessions::Verifier::settleVerdict()
   bool diverged = m_rawIntegrity == QStringLiteral("mismatch")
                || m_readingsIntegrity == QStringLiteral("mismatch");
 
+  if (m_rawIntegrity == QStringLiteral("mismatch"))
+    m_notes.append(QStringLiteral("The recorded data no longer matches the way it was "
+                                  "originally saved. The session file was changed after "
+                                  "recording."));
+
+  if (m_readingsIntegrity == QStringLiteral("mismatch"))
+    m_notes.append(QStringLiteral("The stored values no longer match the way they were "
+                                  "originally saved. The session file was changed after "
+                                  "recording.%1")
+                     .arg(m_rawIntegrity == QStringLiteral("verified")
+                            ? QStringLiteral(" The raw recorded data is intact.")
+                            : QString()));
+
   bool anyError   = false;
   bool anySkipped = false;
   for (const auto& entryRef : std::as_const(m_datasetReports)) {
@@ -685,17 +817,18 @@ int Sessions::Verifier::settleVerdict()
       anySkipped = true;
   }
 
-  int code = decideVerdict(diverged, anySkipped, sessionIsConsoleOnly());
-  if (anyError && !diverged) {
+  int code                      = decideVerdict(diverged, anySkipped, sessionIsConsoleOnly());
+  const bool datasetQueryFailed = anyError && !diverged;
+  if (datasetQueryFailed) {
     m_verdict = QStringLiteral("error");
-    m_notes.append(QStringLiteral("one or more dataset queries failed: verification is "
-                                  "inconclusive, not a verdict on the data"));
+    m_notes.append(QStringLiteral("Some values could not be checked, so no conclusion was "
+                                  "reached about the data."));
     code = kExitError;
   }
 
   if (m_legacyCapture)
-    m_notes.append(QStringLiteral("legacy capture: no fingerprints or classification stored; "
-                                  "verdict is best-effort (spec 0044 R8)"));
+    m_notes.append(QStringLiteral("This session was recorded by an older version of Serial "
+                                  "Studio, so the check is best-effort."));
 
   QJsonObject integrity;
   integrity.insert(QStringLiteral("rawBytes"), m_rawIntegrity);
@@ -716,6 +849,14 @@ int Sessions::Verifier::settleVerdict()
   m_report.insert(QStringLiteral("datasets"), m_datasetReports);
   m_report.insert(QStringLiteral("notes"), m_notes);
 
+  if (datasetQueryFailed) {
+    m_report.insert(QStringLiteral("errorCode"), QStringLiteral("dataset-query-failed"));
+    m_report.insert(QStringLiteral("stage"), QStringLiteral("diff"));
+    m_report.insert(QStringLiteral("hint"),
+                    QStringLiteral("Try again. If this keeps happening, the session file "
+                                   "may be damaged."));
+  }
+
   if (m_options.keepRegenerated && !m_regenPath.isEmpty())
     m_report.insert(QStringLiteral("regeneratedDb"), m_regenPath);
 
@@ -725,9 +866,13 @@ int Sessions::Verifier::settleVerdict()
 /**
  * @brief Appends one verifications row to the archive: the only write verification ever makes.
  *        Legacy archives get the verifications table created, nothing else is migrated.
+ *        Regression mode (spec 0047) is ephemeral and never writes to the archive at all.
  */
 void Sessions::Verifier::appendVerificationRecord()
 {
+  if (m_options.mode == Mode::Regress)
+    return;
+
   if (m_sessionId < 0)
     return;
 
@@ -760,19 +905,23 @@ void Sessions::Verifier::appendVerificationRecord()
 }
 
 /**
- * @brief Clears the DB-path override on every terminal path, then removes the temporary
- *        regenerated database unless --verify-keep-regen was given.
+ * @brief Clears the DB-path override on every terminal path, then removes every temporary
+ *        regenerated database unless --verify-keep-regen / --regress-keep-regen was given.
  */
 void Sessions::Verifier::cleanupRegenerated()
 {
   DatabaseManager::setDbPathOverride(QString());
 
-  if (m_options.keepRegenerated || m_regenPath.isEmpty())
+  if (m_options.keepRegenerated)
     return;
 
-  QFile::remove(m_regenPath);
-  QFile::remove(m_regenPath + QStringLiteral("-wal"));
-  QFile::remove(m_regenPath + QStringLiteral("-shm"));
+  for (const auto& path : m_regenPaths) {
+    QFile::remove(path);
+    QFile::remove(path + QStringLiteral("-wal"));
+    QFile::remove(path + QStringLiteral("-shm"));
+  }
+
+  m_regenPaths.clear();
   m_regenPath.clear();
 }
 

@@ -120,8 +120,13 @@ using ReplayCellViews = QVarLengthArray<QByteArrayView, 64>;
  *        documented divergence from QString::trimmed for exotic Unicode spaces. Views stay
  *        valid while @p row's bytes and @p scratch are alive and untouched; scratch-backed
  *        cells are resolved after the final append, so they survive a scratch reallocation.
+ *        @p separator swaps the cell boundary (CSV player sniffing, spec 0048); quoting,
+ *        trimming and guard semantics are separator-independent.
  */
-void splitReplayRowSpans(QByteArrayView row, ReplayCellViews& out, QByteArray& scratch);
+void splitReplayRowSpans(QByteArrayView row,
+                         ReplayCellViews& out,
+                         QByteArray& scratch,
+                         char separator = ',');
 
 /**
  * @brief Replay twin of splitQuickPlotChannels: one quote-aware row per non-empty line.

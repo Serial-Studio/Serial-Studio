@@ -23,6 +23,7 @@
 #include "IO/Drivers/Modbus.h"
 
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -31,17 +32,18 @@
 #include <QModbusTcpClient>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QTcpSocket>
+#include <QThread>
 #include <QTimer>
 #include <stdexcept>
 
-static constexpr int kTcpConnectAttempts  = 10;
-static constexpr int kTcpConnectTimeoutMs = 15000;
-static constexpr int kTcpConnectBackoffMs = 300;
-static constexpr int kReopenDebounceMs    = 500;
+static constexpr int kDialPaceMs     = 250;
+static constexpr int kDialDeadlineMs = 5000;
 
 #include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -142,7 +144,6 @@ static void queueErrorBox(QObject* context, const QString& title, const QString&
  */
 IO::Drivers::Modbus::Modbus()
   : m_connecting(false)
-  , m_dialAttempts(0)
   , m_pollTimer(new QTimer(this))
   , m_device(nullptr)
   , m_lastReply(nullptr)
@@ -189,22 +190,12 @@ IO::Drivers::Modbus::Modbus()
 
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
-  m_reopenTimer.setSingleShot(true);
-  m_reopenTimer.setInterval(kReopenDebounceMs);
-  m_dialRetryTimer.setSingleShot(true);
-  m_dialRetryTimer.setInterval(kTcpConnectBackoffMs);
-  m_dialTimeoutTimer.setSingleShot(true);
-  m_dialTimeoutTimer.setInterval(kTcpConnectTimeoutMs);
-  connect(&m_reopenTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::reopenAfterConfigChange);
-  connect(&m_dialRetryTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::startDialAttempt);
-  connect(&m_dialTimeoutTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::onDialTimeout);
-
   wireConfigurationSignals();
 }
 
 /**
- * @brief Forwards every setting signal into configurationChanged, and the endpoint-affecting
- *        subset (host, port, protocol, serial parameters) into the live-reopen debounce.
+ * @brief Forwards every setting signal into configurationChanged. Settings never touch a live
+ *        link: connection edits are disabled while connected, and no timer redials on a change.
  */
 void IO::Drivers::Modbus::wireConfigurationSignals()
 {
@@ -217,10 +208,8 @@ void IO::Drivers::Modbus::wireConfigurationSignals()
                                                             &Modbus::protocolIndexChanged,
                                                             &Modbus::serialPortIndexChanged};
 
-  for (const auto signal : kEndpointSignals) {
-    connect(this, signal, this, &IO::Drivers::Modbus::scheduleReopenIfActive);
+  for (const auto signal : kEndpointSignals)
     connect(this, signal, this, &IO::Drivers::Modbus::configurationChanged);
-  }
 
   connect(this,
           &IO::Drivers::Modbus::slaveAddressChanged,
@@ -251,9 +240,6 @@ IO::Drivers::Modbus::~Modbus()
 void IO::Drivers::Modbus::close()
 {
   m_connecting = false;
-  m_reopenTimer.stop();
-  m_dialRetryTimer.stop();
-  m_dialTimeoutTimer.stop();
   doClose();
 
   Q_EMIT configurationChanged();
@@ -466,31 +452,51 @@ bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
           &IO::Drivers::Modbus::onErrorOccurred,
           Qt::UniqueConnection);
 
-  m_dialTarget   = target;
-  m_dialAttempts = 0;
-  m_connecting   = true;
-  startDialAttempt();
+  m_dialTarget = target;
+  m_connecting = true;
+
+  if (m_protocolIndex == 1 && !waitForModbusTcpEndpoint(m_host, m_port)) {
+    failDial(tr("Nothing is listening at %1").arg(target));
+    return false;
+  }
+
+  if (!m_device->connectDevice()) {
+    failDial(m_device->errorString());
+    return false;
+  }
 
   Q_EMIT configurationChanged();
   return m_connecting || isOpen();
 }
 
 /**
- * @brief Starts (or retries) one connect attempt without blocking the GUI thread; the outcome
- *        arrives through onStateChanged(), which picks between retry and failure.
+ * @brief Waits inside the deadline for the Modbus TCP endpoint to accept, re-pacing refused
+ *        attempts with a throwaway probe socket (a script-launched simulator needs a moment to
+ *        bind). QModbusClient cannot block, so the wait happens here and connectDevice() dials
+ *        once; timer-churned connectDevice() crashed the run loop and wedged "connecting".
  */
-void IO::Drivers::Modbus::startDialAttempt()
+bool IO::Drivers::Modbus::waitForModbusTcpEndpoint(const QString& host, quint16 port)
 {
-  if (!m_connecting || !m_device)
-    return;
+  QElapsedTimer deadline;
+  deadline.start();
 
-  ++m_dialAttempts;
-  if (!m_device->connectDevice()) {
-    failDial(m_device->errorString());
-    return;
+  while (deadline.elapsed() < kDialDeadlineMs) {
+    QTcpSocket probe;
+    probe.connectToHost(host, port);
+    const bool up = probe.waitForConnected(kDialDeadlineMs - int(deadline.elapsed()));
+    const QAbstractSocket::SocketError err = probe.error();
+    probe.abort();
+
+    if (up)
+      return true;
+
+    if (err != QAbstractSocket::ConnectionRefusedError)
+      return false;
+
+    QThread::msleep(kDialPaceMs);
   }
 
-  m_dialTimeoutTimer.start();
+  return false;
 }
 
 /**
@@ -504,8 +510,6 @@ void IO::Drivers::Modbus::failDial(const QString& error)
     return;
 
   m_connecting = false;
-  m_dialRetryTimer.stop();
-  m_dialTimeoutTimer.stop();
 
   const QString target = m_dialTarget;
   doClose();
@@ -516,39 +520,10 @@ void IO::Drivers::Modbus::failDial(const QString& error)
                   ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(target)
                   : tr("\"%1\": %2").arg(target, error));
 
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.disconnectDevice(this);
+
   Q_EMIT configurationChanged();
-}
-
-/**
- * @brief Fails a dial that neither connected nor errored within the timeout window.
- */
-void IO::Drivers::Modbus::onDialTimeout()
-{
-  failDial(tr("Connection attempt timed out"));
-}
-
-/**
- * @brief Debounces a reopen while the link is live so an endpoint edit (host, port, protocol,
- *        serial parameters) takes effect without a manual disconnect/reconnect cycle. A closed
- *        driver stays closed: configuration edits never dial on their own.
- */
-void IO::Drivers::Modbus::scheduleReopenIfActive()
-{
-  if (!isOpen() && !isConnecting())
-    return;
-
-  m_reopenTimer.start();
-}
-
-/**
- * @brief Applies a debounced endpoint change by redialing with the new configuration.
- */
-void IO::Drivers::Modbus::reopenAfterConfigChange()
-{
-  if (!isOpen() && !isConnecting())
-    return;
-
-  (void)open(QIODevice::ReadWrite);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1404,8 +1379,6 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 
   if (state == QModbusDevice::ConnectedState) {
     m_connecting = false;
-    m_dialRetryTimer.stop();
-    m_dialTimeoutTimer.stop();
     if (m_pollTimer && !m_pollTimer->isActive())
       m_pollTimer->start(m_pollInterval);
   }
@@ -1421,21 +1394,16 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 }
 
 /**
- * @brief Retries or fails a dial whose attempt fell back to UnconnectedState: refused attempts
- *        back off and redial (a script-launched server needs time to listen), exhausted ones
- *        report through failDial(). RTU gets a single attempt (no server race to wait out).
+ * @brief Fails a dial whose attempt fell back to UnconnectedState. The endpoint pre-probe has
+ *        already waited out any server-bind race, so a setback here is a real failure for both
+ *        protocols: report once, never re-dial on a timer.
  */
 void IO::Drivers::Modbus::handleDialSetback()
 {
   if (!m_connecting)
     return;
 
-  m_dialTimeoutTimer.stop();
-  const int max_attempts = (m_protocolIndex == 1) ? kTcpConnectAttempts : 1;
-  if (m_dialAttempts < max_attempts)
-    m_dialRetryTimer.start();
-  else
-    failDial(m_device ? m_device->errorString() : QString());
+  failDial(m_device ? m_device->errorString() : QString());
 }
 
 /**
@@ -1453,8 +1421,7 @@ void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
   if (errorString.isEmpty())
     errorString = tr("Error code: %1").arg(static_cast<int>(error));
 
-  Misc::Utilities::showMessageBox(
-    tr("Modbus Communication Error"), errorString, QMessageBox::Warning);
+  queueErrorBox(this, tr("Modbus Communication Error"), errorString);
 }
 
 /**

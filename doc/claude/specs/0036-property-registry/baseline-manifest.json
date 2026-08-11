@@ -66,7 +66,7 @@
     },
     {
       "path": "examples/OBD-II/OBD-II.ssproj",
-      "sha256": "4f16bbdda5f8632297030c61ca869b3eaf8221238d82234968f6628d701f0341"
+      "sha256": "e1e44102f83d0b7254a053cc03c01f2a6e4ac287065748d58fa3143c418cc2f3"
     },
     {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",

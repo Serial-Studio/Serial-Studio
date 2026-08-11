@@ -221,6 +221,7 @@ Item {
       //
       Label {
         text: qsTr("Flexible Data-Rate") + ":"
+        opacity: Cpp_IO_CANBus.interfaceSupportsFD ? 1 : 0.5
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
         id: _canFDCheck
@@ -228,11 +229,71 @@ Item {
         Layout.leftMargin: -8
         Layout.maximumHeight: 18
         checked: Cpp_IO_CANBus.canFD
+        enabled: Cpp_IO_CANBus.interfaceSupportsFD
         visible: Cpp_IO_CANBus.interfaceList.length > 0
         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
         onCheckedChanged: {
           if (Cpp_IO_CANBus.canFD !== checked)
             Cpp_IO_CANBus.canFD = checked
+        }
+
+        ToolTip.delay: 500
+        ToolTip.visible: hovered && !Cpp_IO_CANBus.interfaceSupportsFD
+        ToolTip.text: qsTr("The selected adapter does not support CAN FD")
+      }
+
+      //
+      // Data bitrate selector (FD data phase)
+      //
+      Label {
+        text: qsTr("Data Bitrate") + ":"
+        visible: _dataBitrateCombo.visible
+      } ComboBox {
+        id: _dataBitrateCombo
+
+        editable: true
+        Layout.fillWidth: true
+        model: Cpp_IO_CANBus.dataBitrateList
+        visible: Cpp_IO_CANBus.interfaceList.length > 0 && Cpp_IO_CANBus.canFD
+                 && Cpp_IO_CANBus.interfaceSupportsFD
+
+        validator: IntValidator { bottom: 1 }
+
+        function syncFromDriver() {
+          const current = String(Cpp_IO_CANBus.dataBitrate)
+          const rates = Cpp_IO_CANBus.dataBitrateList
+          const idx = rates.indexOf(current)
+          if (idx !== -1) {
+            _dataBitrateCombo.currentIndex = idx
+            _dataBitrateCombo.editText = current
+          } else {
+            _dataBitrateCombo.currentIndex = -1
+            _dataBitrateCombo.editText = current
+          }
+        }
+
+        Component.onCompleted: Qt.callLater(syncFromDriver)
+
+        Connections {
+          target: Cpp_IO_CANBus
+          function onDataBitrateChanged() {
+            _dataBitrateCombo.syncFromDriver()
+          }
+        }
+
+        onAccepted: {
+          const value = parseInt(editText)
+          if (!isNaN(value) && value > 0 && Cpp_IO_CANBus.dataBitrate !== value)
+            Cpp_IO_CANBus.dataBitrate = value
+        }
+
+        onActivated: (index) => {
+          if (index < 0 || index >= model.length)
+            return
+
+          const value = parseInt(model[index])
+          if (!isNaN(value) && Cpp_IO_CANBus.dataBitrate !== value)
+            Cpp_IO_CANBus.dataBitrate = value
         }
       }
 

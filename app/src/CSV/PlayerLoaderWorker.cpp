@@ -161,7 +161,7 @@ double CSV::PlayerLoaderWorker::secondsForRow(const PlayerIndexRequest& request,
     case PlayerTimestampMode::Numeric: {
       bool ok            = false;
       const double value = SerialStudio::toDouble(cells.first(), &ok);
-      return (ok && value >= 0.0 && std::isfinite(value)) ? value : -1.0;
+      return (ok && value >= 0.0 && std::isfinite(value)) ? value * request.timeScale : -1.0;
     }
 
     case PlayerTimestampMode::DateTime:
@@ -207,7 +207,10 @@ void CSV::PlayerLoaderWorker::processRow(const PlayerIndexRequest& request,
   }
 
   DataModel::splitReplayRowSpans(
-    QByteArrayView(request.data + begin, static_cast<qsizetype>(end - begin)), cells, scratch);
+    QByteArrayView(request.data + begin, static_cast<qsizetype>(end - begin)),
+    cells,
+    scratch,
+    request.separator);
 
   const bool valid = std::any_of(
     cells.cbegin(), cells.cend(), [](const QByteArrayView& cell) { return !cell.isEmpty(); });

@@ -29,11 +29,25 @@
 #include <QRandomGenerator>
 #include <QStandardPaths>
 
+#include "IO/ConnectionManager.h"
 #include "Licensing/CommercialToken.h"
 #include "Misc/Utilities.h"
 #include "SSAssert.h"
 
 Q_LOGGING_CATEGORY(lcMqttSub, "serialstudio.mqtt.subscriber", QtCriticalMsg)
+
+/**
+ * @brief Queues an error box so it opens after the current stack returns: a modal spins a nested
+ *        event loop, and raising one inside a client signal emission re-enters the socket stack
+ *        (the 2026-08-10 Modbus readFromSocket crash).
+ */
+static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+{
+  QMetaObject::invokeMethod(
+    context,
+    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
+    Qt::QueuedConnection);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -975,9 +989,9 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
     auto* sub = m_client.subscribe(filter, 0);
     if (!sub || sub->state() == QMqttSubscription::Error) {
       qCCritical(lcMqttSub) << "subscribe failed for filter" << m_topicFilter;
-      Misc::Utilities::showMessageBox(tr("MQTT Subscription Error"),
-                                      tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
-                                      QMessageBox::Critical);
+      queueErrorBox(this,
+                    tr("MQTT Subscription Error"),
+                    tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter));
       return;
     }
 
@@ -990,7 +1004,8 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
 }
 
 /**
- * @brief Surfaces broker errors to the user.
+ * @brief Surfaces broker errors to the user. An error during a dial also tears the device down
+ *        so the connect state resolves instead of reading "connecting" forever.
  */
 void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
 {
@@ -1045,7 +1060,14 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
       break;
   }
 
-  Misc::Utilities::showMessageBox(title, message, QMessageBox::Critical);
+  if (isConnecting()) {
+    m_userWantsOpen                = false;
+    m_reconnectPending             = false;
+    static auto& connectionManager = ConnectionManager::instance();
+    connectionManager.disconnectDevice(this);
+  }
+
+  queueErrorBox(this, title, message);
 }
 
 /**

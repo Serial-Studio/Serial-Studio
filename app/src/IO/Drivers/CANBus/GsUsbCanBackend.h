@@ -25,6 +25,7 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <QByteArray>
 #include <QCanBusDevice>
 #include <QCanBusFrame>
@@ -64,6 +65,9 @@ public:
   [[nodiscard]] static bool supported();
   [[nodiscard]] static QStringList availableInterfaces();
   [[nodiscard]] static QCanBusDevice* create(const QString& interfaceName);
+  [[nodiscard]] static bool interfaceSupportsFD(const QString& interfaceName);
+  static void setHotplugNotifier(QObject* context, std::function<void()> notifier);
+  static void clearHotplugNotifier(QObject* context);
 
 protected:
   [[nodiscard]] bool open() override;
@@ -80,6 +84,7 @@ private:
   void readLoop();
   void stopReadThread();
   [[nodiscard]] bool configureDevice(quint32 bitrate);
+  [[nodiscard]] bool configureFdDataTiming(quint32 feature);
   [[nodiscard]] bool claimGsUsbInterface();
   [[nodiscard]] int controlOut(std::uint8_t request,
                                std::uint16_t value,
@@ -99,6 +104,11 @@ private:
   std::uint8_t m_inEndpoint;
   std::uint8_t m_outEndpoint;
   std::uint32_t m_echoCounter;
+
+  bool m_fdActive;
+  bool m_padTxToMaxPacket;
+  int m_rxFrameSize;
+  int m_outMaxPacket;
 
   QByteArray m_rxCarry;
 

@@ -24,6 +24,7 @@
 #include <cmath>
 #include <cstring>
 #include <limits>
+#include <optional>
 #include <QApplication>
 #include <QDateTime>
 #include <QDeadlineTimer>
@@ -108,10 +109,10 @@ static void fillSeekGaps(QVector<double>& values)
 }
 
 /**
- * @brief Index of the first top-level comma of a raw row (quote-aware, mirroring the replay
- *        splitter's machine), or -1 when the row has a single cell.
+ * @brief Index of the first top-level @p separator of a raw row (quote-aware, mirroring the
+ *        replay splitter's machine), or -1 when the row has a single cell.
  */
-[[nodiscard]] static qsizetype firstTopLevelComma(QByteArrayView row)
+[[nodiscard]] static qsizetype firstTopLevelSeparator(QByteArrayView row, char separator)
 {
   bool in_quotes       = false;
   bool was_quoted      = false;
@@ -134,7 +135,7 @@ static void fillSeekGaps(QVector<double>& values)
       continue;
     }
 
-    if (c == ',')
+    if (c == separator)
       return i;
 
     if (c == '"' && !was_quoted && only_space_seen) {
@@ -148,6 +149,112 @@ static void fillSeekGaps(QVector<double>& values)
   }
 
   return -1;
+}
+
+/**
+ * @brief Top-level occurrences of @p separator in @p row using a cell-position-independent
+ *        quote scanner (any double quote toggles quoted mode, "" escapes): unlike the RFC
+ *        splitter's machine, quoted content never scores for ANY candidate, so a quoted cell
+ *        cannot leak separators into the sniff of a differently-separated file.
+ */
+[[nodiscard]] static qsizetype topLevelSeparatorCount(QByteArrayView row, char separator)
+{
+  SS_ASSERT(separator != '"', return 0);
+  SS_ASSERT_LOG(!row.isEmpty());
+
+  bool in_quotes         = false;
+  qsizetype count        = 0;
+  const qsizetype length = row.size();
+  for (qsizetype i = 0; i < length; ++i) {
+    const char c = row.at(i);
+
+    if (c == '"') {
+      const bool escaped = in_quotes && i + 1 < length && row.at(i + 1) == '"';
+      if (escaped) {
+        ++i;
+        continue;
+      }
+
+      in_quotes = !in_quotes;
+      continue;
+    }
+
+    if (!in_quotes && c == separator)
+      ++count;
+  }
+
+  return count;
+}
+
+/**
+ * @brief Detects the row separator (spec 0048): candidates scored by summed top-level
+ *        occurrence count over header + first data row, comma scored first and winning
+ *        ties. A non-comma winner needs a data-row hit AND header count == data count,
+ *        so text-cell separators ("1,a;b;c") never re-interpret a comma file.
+ */
+[[nodiscard]] static char sniffSeparator(QByteArrayView headerRow, QByteArrayView dataRow)
+{
+  SS_ASSERT(!headerRow.isEmpty(), return ',');
+  SS_ASSERT(!dataRow.isEmpty(), return ',');
+
+  constexpr char kCandidates[] = {',', ';', '\t', '|'};
+
+  char best           = ',';
+  qsizetype bestScore = -1;
+  for (const char candidate : kCandidates) {
+    const qsizetype data_count   = topLevelSeparatorCount(dataRow, candidate);
+    const qsizetype header_count = topLevelSeparatorCount(headerRow, candidate);
+    const qsizetype score        = header_count + data_count;
+
+    const bool eligible = (candidate == ',') || (data_count >= 1 && header_count == data_count);
+    if (eligible && score > bestScore) {
+      best      = candidate;
+      bestScore = score;
+    }
+  }
+
+  return best;
+}
+
+/**
+ * @brief Seconds-per-tick for a numeric timestamp header (spec 0048 R7): a bracketed unit
+ *        ("time(ms)", "t [us]") or a "_unit" suffix ("time_ms") selects the scale; a
+ *        header naming no recognizable unit returns nullopt so the caller can ask.
+ */
+[[nodiscard]] static std::optional<double> timestampUnitScale(const QString& header)
+{
+  const QString text = header.trimmed().toLower();
+  SS_ASSERT(!text.isEmpty(), return std::nullopt);
+
+  QString unit;
+  const qsizetype paren   = text.lastIndexOf(QChar('('));
+  const qsizetype bracket = text.lastIndexOf(QChar('['));
+  if (paren >= 0 && text.endsWith(QChar(')')))
+    unit = text.mid(paren + 1, text.size() - paren - 2).trimmed();
+  else if (bracket >= 0 && text.endsWith(QChar(']')))
+    unit = text.mid(bracket + 1, text.size() - bracket - 2).trimmed();
+  else if (text.lastIndexOf(QChar('_')) >= 0)
+    unit = text.mid(text.lastIndexOf(QChar('_')) + 1).trimmed();
+
+  SS_ASSERT_LOG(unit.size() <= text.size());
+
+  if (unit == QStringLiteral("ms") || unit == QStringLiteral("msec")
+      || unit == QStringLiteral("millis") || unit == QStringLiteral("milliseconds"))
+    return 1e-3;
+
+  if (unit == QStringLiteral("us") || unit == QStringLiteral("\u00b5s")
+      || unit == QStringLiteral("usec") || unit == QStringLiteral("microseconds"))
+    return 1e-6;
+
+  if (unit == QStringLiteral("ns") || unit == QStringLiteral("nsec")
+      || unit == QStringLiteral("nanoseconds"))
+    return 1e-9;
+
+  if (unit == QStringLiteral("s") || unit == QStringLiteral("sec") || unit == QStringLiteral("secs")
+      || unit == QStringLiteral("seconds"))
+    return 1.0;
+
+  return std::nullopt;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,6 +279,8 @@ CSV::Player::Player()
   , m_playbackEpoch(0)
   , m_tsMode(PlayerTimestampMode::Numeric)
   , m_timestampColumn(0)
+  , m_separator(',')
+  , m_timeScale(1.0)
   , m_intervalSeconds(0.0)
   , m_anchorMs(0)
   , m_startSeconds(-1.0)
@@ -431,6 +540,8 @@ void CSV::Player::closeFile()
   m_timestamp        = "--.--";
   m_tsMode           = PlayerTimestampMode::Numeric;
   m_timestampColumn  = 0;
+  m_separator        = ',';
+  m_timeScale        = 1.0;
   m_intervalSeconds  = 0.0;
   m_anchorMs         = 0;
   m_startSeconds     = -1.0;
@@ -571,6 +682,7 @@ bool CSV::Player::runQuickPass()
     pos = 3;
 
   bool have_header = false;
+  QByteArrayView header_row;
   QByteArrayView first_data_row;
   qint64 header_end = pos;
 
@@ -584,7 +696,7 @@ bool CSV::Player::runQuickPass()
 
     bool valid = false;
     if (!row.isEmpty() && row.size() <= kMaxCsvRowBytes) {
-      DataModel::splitReplayRowSpans(row, m_cells, m_splitScratch);
+      DataModel::splitReplayRowSpans(row, m_cells, m_splitScratch, m_separator);
       valid = std::any_of(
         m_cells.cbegin(), m_cells.cend(), [](const QByteArrayView& c) { return !c.isEmpty(); });
     }
@@ -592,9 +704,7 @@ bool CSV::Player::runQuickPass()
     if (valid && !have_header) {
       have_header = true;
       header_end  = next;
-      m_headerCells.clear();
-      for (const auto& cell : m_cells)
-        m_headerCells.append(QString::fromUtf8(cell));
+      header_row  = row;
     } else if (valid) {
       first_data_row = row;
       break;
@@ -615,15 +725,23 @@ bool CSV::Player::runQuickPass()
   }
 
   m_dataOffset = header_end;
+  m_separator  = sniffSeparator(header_row, first_data_row);
 
-  DataModel::splitReplayRowSpans(first_data_row, m_cells, m_splitScratch);
+  DataModel::splitReplayRowSpans(header_row, m_cells, m_splitScratch, m_separator);
+  m_headerCells.clear();
+  for (const auto& cell : m_cells)
+    m_headerCells.append(QString::fromUtf8(cell));
+
+  DataModel::splitReplayRowSpans(first_data_row, m_cells, m_splitScratch, m_separator);
   SS_ASSERT(!m_cells.isEmpty(), return false);
   const QByteArrayView first_cell = m_cells.first();
 
   bool is_number     = false;
   const double value = SerialStudio::toDouble(first_cell, &is_number);
   if (is_number && value >= 0.0 && std::isfinite(value)) {
-    m_tsMode = PlayerTimestampMode::Numeric;
+    m_tsMode         = PlayerTimestampMode::Numeric;
+    const auto scale = timestampUnitScale(m_headerCells.first());
+    m_timeScale      = scale ? *scale : promptTimestampUnitScale();
     return true;
   }
 
@@ -672,6 +790,8 @@ void CSV::Player::startIndexing()
   request->intervalSeconds    = m_intervalSeconds;
   request->anchorMsSinceEpoch = m_anchorMs;
   request->generation         = m_indexGeneration;
+  request->separator          = m_separator;
+  request->timeScale          = m_timeScale;
   request->mode               = m_tsMode;
 
   m_indexing         = true;
@@ -1006,7 +1126,7 @@ void CSV::Player::updateTimestampDisplay()
   else {
     const qsizetype column =
       (m_tsMode == PlayerTimestampMode::DateTimeColumn) ? m_timestampColumn : 0;
-    DataModel::splitReplayRowSpans(rawRow(m_framePos), m_cells, m_splitScratch);
+    DataModel::splitReplayRowSpans(rawRow(m_framePos), m_cells, m_splitScratch, m_separator);
     if (column >= 0 && column < m_cells.size())
       m_timestamp = QString::fromUtf8(m_cells.at(column));
   }
@@ -1217,6 +1337,40 @@ void CSV::Player::sendHeaderFrame()
 }
 
 /**
+ * @brief Asks for the numeric timestamp unit when the header names none (spec 0048 R7);
+ *        seconds is preselected and cancel keeps it, so Enter/Escape preserve the legacy
+ *        plain-seconds reading.
+ */
+double CSV::Player::promptTimestampUnitScale()
+{
+  SS_ASSERT_LOG(m_tsMode == PlayerTimestampMode::Numeric);
+  SS_ASSERT_LOG(!m_headerCells.isEmpty());
+
+  QStringList options;
+  options << tr("Seconds (s)") << tr("Milliseconds (ms)") << tr("Microseconds (us)");
+
+  bool ok              = false;
+  const QString choice = QInputDialog::getItem(nullptr,
+                                               tr("Timestamp Units"),
+                                               tr("The timestamp column does not declare a "
+                                                  "unit. How should it be interpreted?"),
+                                               options,
+                                               0,
+                                               false,
+                                               &ok);
+  if (!ok)
+    return 1.0;
+
+  if (choice == options.at(1))
+    return 1e-3;
+
+  if (choice == options.at(2))
+    return 1e-6;
+
+  return 1.0;
+}
+
+/**
  * @brief Prompts the user to pick a date/time column or a manual row interval; configures the
  *        virtual timestamp mode instead of rewriting rows (spec 0022).
  */
@@ -1282,7 +1436,7 @@ bool CSV::Player::promptUserForDateTimeOrInterval(QByteArrayView firstDataRow)
       m_tsMode          = PlayerTimestampMode::DateTimeColumn;
       m_timestampColumn = columnIndex;
 
-      DataModel::splitReplayRowSpans(firstDataRow, m_cells, m_splitScratch);
+      DataModel::splitReplayRowSpans(firstDataRow, m_cells, m_splitScratch, m_separator);
       qint64 anchor_ms = 0;
       if (columnIndex < m_cells.size() && parseLegacyDateTimeMs(m_cells.at(columnIndex), anchor_ms))
         m_anchorMs = anchor_ms;
@@ -1323,7 +1477,7 @@ QByteArrayView CSV::Player::rawRow(int row) const
  */
 qsizetype CSV::Player::splitDataCells(int row)
 {
-  DataModel::splitReplayRowSpans(rawRow(row), m_cells, m_splitScratch);
+  DataModel::splitReplayRowSpans(rawRow(row), m_cells, m_splitScratch, m_separator);
 
   m_dataSpans.clear();
   switch (m_tsMode) {
@@ -1353,8 +1507,9 @@ qsizetype CSV::Player::splitDataCells(int row)
 
 /**
  * @brief Builds the QuickPlot byte payload for @p row: the raw row minus the timestamp cell,
- *        sliced verbatim from the map where possible (the rare date-time-column mode rebuilds
- *        through the joiner).
+ *        sliced verbatim from the map where possible. Date-time-column mode and non-comma
+ *        files (spec 0048) rebuild through the joiner, so injected payloads are always
+ *        RFC-4180 comma rows for the downstream comma-only splitters.
  */
 QByteArray CSV::Player::quickPlotPayload(int row)
 {
@@ -1365,13 +1520,7 @@ QByteArray CSV::Player::quickPlotPayload(int row)
   if (view.endsWith('\r'))
     view.chop(1);
 
-  if (m_tsMode == PlayerTimestampMode::Interval) {
-    QByteArray frame(view.constData(), view.size());
-    frame.append('\n');
-    return frame;
-  }
-
-  if (m_tsMode == PlayerTimestampMode::DateTimeColumn) {
+  if (m_separator != ',' || m_tsMode == PlayerTimestampMode::DateTimeColumn) {
     const qsizetype count = splitDataCells(row);
     QStringList cells;
     cells.reserve(count);
@@ -1383,7 +1532,13 @@ QByteArray CSV::Player::quickPlotPayload(int row)
     return frame;
   }
 
-  const qsizetype comma = firstTopLevelComma(view);
+  if (m_tsMode == PlayerTimestampMode::Interval) {
+    QByteArray frame(view.constData(), view.size());
+    frame.append('\n');
+    return frame;
+  }
+
+  const qsizetype comma = firstTopLevelSeparator(view, m_separator);
   if (comma < 0)
     return QByteArray();
 

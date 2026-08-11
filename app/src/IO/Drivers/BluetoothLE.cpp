@@ -25,6 +25,7 @@
 #include <QJsonObject>
 #include <QOperatingSystemVersion>
 
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -724,6 +725,9 @@ void IO::Drivers::BluetoothLE::onControllerError(QLowEnergyController::Error con
   Q_EMIT error(tr("BLE connection error: %1")
                  .arg(m_controller ? m_controller->errorString() : tr("Unknown error")));
   close();
+
+  static auto& connectionManager = ConnectionManager::instance();
+  connectionManager.disconnectDevice(this);
 }
 
 /**

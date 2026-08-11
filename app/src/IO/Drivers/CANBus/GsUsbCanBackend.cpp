@@ -27,15 +27,21 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstddef>
 #include <cstring>
+#include <mutex>
 #include <QMetaObject>
 #include <QScopeGuard>
 #include <QVariant>
+#include <thread>
 
+#include "IO/Drivers/CANBus/GsUsbProtocol.h"
 #include "SSAssert.h"
 
+using namespace IO::Drivers::GsUsb;
+
 //--------------------------------------------------------------------------------------------------
-// gs_usb wire protocol (candleLight firmware / Linux kernel gs_usb driver)
+// gs_usb device identity & transfer geometry
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -54,36 +60,7 @@ constexpr GsUsbId kGsUsbIds[] = {
   {0x1209, 0x1234}, // generic gs_usb clones
 };
 
-// gs_usb control requests (bRequest)
-constexpr std::uint8_t kBreqHostFormat = 0;
-constexpr std::uint8_t kBreqBitTiming  = 1;
-constexpr std::uint8_t kBreqMode       = 2;
-constexpr std::uint8_t kBreqBtConst    = 4;
-
-// gs_usb mode values
-constexpr std::uint32_t kModeReset = 0;
-constexpr std::uint32_t kModeStart = 1;
-
-// gs_can_mode flags from Linux kernel drivers/net/can/usb/gs_usb.c (GS_CAN_MODE_* = BIT(n))
-constexpr std::uint32_t kModeListenOnly    = 1u << 0;
-constexpr std::uint32_t kModeLoopBack      = 1u << 1;
-constexpr std::uint32_t kModeBerrReporting = 1u << 12;
-
-// SocketCAN-style CAN ID flags carried in gs_host_frame::can_id
-constexpr std::uint32_t kCanEffFlag = 0x80000000u;
-constexpr std::uint32_t kCanRtrFlag = 0x40000000u;
-constexpr std::uint32_t kCanErrFlag = 0x20000000u;
-constexpr std::uint32_t kCanEffMask = 0x1fffffffu;
-constexpr std::uint32_t kCanSffMask = 0x000007ffu;
-
-// Sentinel echo_id marking a received (non-echo) frame
-constexpr std::uint32_t kHostFrameRx = 0xffffffffu;
-
-// Host byte-order marker requesting little-endian framing from the device
-constexpr std::uint32_t kHostFormatLE = 0x0000beefu;
-
 // Transfer geometry
-constexpr int kClassicFrameSize       = 20;
 constexpr int kBulkReadBufSize        = 2048;
 constexpr unsigned int kReadTimeoutMs = 100;
 constexpr unsigned int kCtrlTimeoutMs = 1000;
@@ -92,52 +69,6 @@ constexpr unsigned int kWriteTimeout  = 1000;
 // TX echo confirmation: poll cadence and the deadline after which an un-echoed transmit fails
 constexpr int kTxTimeoutPollMs       = 250;
 constexpr qint64 kTxConfirmTimeoutMs = 1000;
-
-#pragma pack(push, 1)
-
-struct GsHostConfig {
-  std::uint32_t byteOrder;
-};
-
-struct GsDeviceMode {
-  std::uint32_t mode;
-  std::uint32_t flags;
-};
-
-struct GsDeviceBitTiming {
-  std::uint32_t propSeg;
-  std::uint32_t phaseSeg1;
-  std::uint32_t phaseSeg2;
-  std::uint32_t sjw;
-  std::uint32_t brp;
-};
-
-struct GsDeviceBtConst {
-  std::uint32_t feature;
-  std::uint32_t fclkCan;
-  std::uint32_t tseg1Min;
-  std::uint32_t tseg1Max;
-  std::uint32_t tseg2Min;
-  std::uint32_t tseg2Max;
-  std::uint32_t sjwMax;
-  std::uint32_t brpMin;
-  std::uint32_t brpMax;
-  std::uint32_t brpInc;
-};
-
-struct GsHostFrame {
-  std::uint32_t echoId;
-  std::uint32_t canId;
-  std::uint8_t canDlc;
-  std::uint8_t channel;
-  std::uint8_t flags;
-  std::uint8_t reserved;
-  std::uint8_t data[8];
-};
-
-#pragma pack(pop)
-
-static_assert(sizeof(GsHostFrame) == kClassicFrameSize, "gs_host_frame must be 20 bytes");
 
 /**
  * @brief Returns true when the given descriptor matches a known gs_usb adapter.
@@ -205,54 +136,11 @@ static_assert(sizeof(GsHostFrame) == kClassicFrameSize, "gs_host_frame must be 2
 }
 
 /**
- * @brief Solves gs_usb bit-timing segments for a target bitrate from BT_CONST limits.
+ * @brief Decodes a received host frame (classic or FD slot); returns false for TX echoes that
+ *        must be dropped. FD flag handling is gated on @p fdMode so the classic decode path
+ *        stays bit-identical to the pre-FD behavior.
  */
-[[nodiscard]] static bool solveBitTiming(const GsDeviceBtConst& bt,
-                                         std::uint32_t bitrate,
-                                         GsDeviceBitTiming& out)
-{
-  if (bitrate == 0 || bt.fclkCan == 0)
-    return false;
-
-  const std::uint32_t step = std::max<std::uint32_t>(1, bt.brpInc);
-  for (std::uint32_t brp = bt.brpMin; brp <= bt.brpMax; brp += step) {
-    const std::uint32_t divisor = bitrate * brp;
-    if (divisor == 0 || (bt.fclkCan % divisor) != 0)
-      continue;
-
-    const std::uint32_t total = bt.fclkCan / divisor;
-    if (total < 1 + bt.tseg1Min + bt.tseg2Min || total > 1 + bt.tseg1Max + bt.tseg2Max)
-      continue;
-
-    std::uint32_t tseg2 = static_cast<std::uint32_t>(std::lround(total * 0.125));
-    tseg2               = std::clamp(tseg2, std::max<std::uint32_t>(1, bt.tseg2Min), bt.tseg2Max);
-    if (total <= 1 + tseg2)
-      continue;
-
-    const std::uint32_t tseg1 = total - 1 - tseg2;
-    if (tseg1 < bt.tseg1Min || tseg1 > bt.tseg1Max)
-      continue;
-
-    out.phaseSeg2 = tseg2;
-    out.phaseSeg1 = std::max<std::uint32_t>(1, tseg1 / 2);
-    out.propSeg   = tseg1 - out.phaseSeg1;
-    if (out.propSeg == 0) {
-      out.propSeg   = 1;
-      out.phaseSeg1 = tseg1 - 1;
-    }
-
-    out.sjw = std::min(bt.sjwMax, tseg2);
-    out.brp = brp;
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * @brief Decodes a received gs_host_frame; returns false for TX echoes that must be dropped.
- */
-[[nodiscard]] static bool decodeRxFrame(const GsHostFrame& host, QCanBusFrame& out)
+[[nodiscard]] static bool decodeRxFrame(const GsHostFrameFd& host, bool fdMode, QCanBusFrame& out)
 {
   if (host.echoId != kHostFrameRx)
     return false;
@@ -261,10 +149,18 @@ static_assert(sizeof(GsHostFrame) == kClassicFrameSize, "gs_host_frame must be 2
   const bool remote      = (host.canId & kCanRtrFlag) != 0;
   const bool errored     = (host.canId & kCanErrFlag) != 0;
   const std::uint32_t id = host.canId & (extended ? kCanEffMask : kCanSffMask);
-  const int dlc          = std::min<int>(host.canDlc, sizeof(host.data));
 
-  out = QCanBusFrame(id, QByteArray(reinterpret_cast<const char*>(host.data), dlc));
+  const bool fdFrame = fdMode && (host.flags & kFrameFlagFd) != 0;
+  const int length   = fdFrame ? dlc2len(host.canDlc) : std::min<int>(host.canDlc, 8);
+
+  out = QCanBusFrame(id, QByteArray(reinterpret_cast<const char*>(host.data), length));
   out.setExtendedFrameFormat(extended);
+  if (fdFrame) {
+    out.setFlexibleDataRateFormat(true);
+    out.setBitrateSwitch((host.flags & kFrameFlagBrs) != 0);
+    out.setErrorStateIndicator((host.flags & kFrameFlagEsi) != 0);
+  }
+
   if (errored)
     out.setFrameType(QCanBusFrame::ErrorFrame);
   else if (remote)
@@ -282,7 +178,12 @@ static_assert(sizeof(GsHostFrame) == kClassicFrameSize, "gs_host_frame must be 2
  */
 IO::Drivers::CanBackends::Entry IO::Drivers::GsUsbCanBackend::registration()
 {
-  return {pluginKey(), QStringLiteral("CANable USB"), supported(), &availableInterfaces, &create};
+  return {pluginKey(),
+          QStringLiteral("CANable USB"),
+          supported(),
+          &availableInterfaces,
+          &create,
+          &interfaceSupportsFD};
 }
 
 /**
@@ -300,6 +201,47 @@ const QString& IO::Drivers::GsUsbCanBackend::pluginKey()
 bool IO::Drivers::GsUsbCanBackend::supported()
 {
   return sharedUsbContext() != nullptr;
+}
+
+/**
+ * @brief Per-label FD capability cache: filled for new labels and pruned to the enumerated
+ *        set on every availableInterfaces() pass, so it is self-bounding and a present
+ *        (possibly claimed) adapter is never re-probed. Main-thread only.
+ */
+[[nodiscard]] static QHash<QString, bool>& fdCapabilityCache()
+{
+  static QHash<QString, bool> cache;
+  return cache;
+}
+
+/**
+ * @brief Reads BT_CONST from an unclaimed device and reports the FD feature bit; any failure
+ *        degrades to "not FD-capable" so a busy or odd device never blocks classic use.
+ */
+[[nodiscard]] static bool probeFdCapability(libusb_device* device)
+{
+  SS_ASSERT(device != nullptr, return false);
+
+  libusb_device_handle* handle = nullptr;
+  if (libusb_open(device, &handle) < 0)
+    return false;
+
+  GsDeviceBtConst bt{};
+  const std::uint8_t type =
+    static_cast<std::uint8_t>(static_cast<unsigned>(LIBUSB_REQUEST_TYPE_VENDOR)
+                              | static_cast<unsigned>(LIBUSB_RECIPIENT_INTERFACE)
+                              | static_cast<unsigned>(LIBUSB_ENDPOINT_IN));
+  const int rc = libusb_control_transfer(handle,
+                                         type,
+                                         kBreqBtConst,
+                                         0,
+                                         0,
+                                         reinterpret_cast<unsigned char*>(&bt),
+                                         sizeof(bt),
+                                         kCtrlTimeoutMs);
+  libusb_close(handle);
+
+  return rc == static_cast<int>(sizeof(bt)) && (bt.feature & kFeatureFd) != 0;
 }
 
 /**
@@ -323,12 +265,156 @@ QStringList IO::Drivers::GsUsbCanBackend::availableInterfaces()
     if (libusb_get_device_descriptor(devices[i], &desc) < 0)
       continue;
 
-    if (isGsUsbDevice(desc))
-      interfaces.append(deviceLabel(devices[i], desc));
+    if (!isGsUsbDevice(desc))
+      continue;
+
+    const QString label = deviceLabel(devices[i], desc);
+    interfaces.append(label);
+    if (!fdCapabilityCache().contains(label))
+      fdCapabilityCache().insert(label, probeFdCapability(devices[i]));
   }
 
   libusb_free_device_list(devices, 1);
+
+  QHash<QString, bool>& cache = fdCapabilityCache();
+  for (auto it = cache.begin(); it != cache.end();)
+    if (interfaces.contains(it.key()))
+      ++it;
+    else
+      it = cache.erase(it);
+
   return interfaces;
+}
+
+/**
+ * @brief Reports the cached FD capability of a previously enumerated interface label.
+ */
+bool IO::Drivers::GsUsbCanBackend::interfaceSupportsFD(const QString& interfaceName)
+{
+  return fdCapabilityCache().value(interfaceName, false);
+}
+
+/**
+ * @brief Hot-plug notifier target. The mutex is the lifecycle boundary between the pumping
+ *        thread delivering the libusb callback and the main thread registering/clearing the
+ *        target; it is never touched per frame.
+ */
+struct HotplugNotifier {
+  std::mutex lock;
+  QObject* context;
+  std::function<void()> notify;
+};
+
+[[nodiscard]] static HotplugNotifier& hotplugNotifier()
+{
+  static HotplugNotifier notifier;
+  return notifier;
+}
+
+/**
+ * @brief libusb hot-plug callback: runs on whichever thread pumps libusb events (the dedicated
+ *        pump thread, or any thread inside a sync transfer). Non-gs_usb devices are filtered on
+ *        the cached descriptor; the rest of the body is one queued invoke under the notifier
+ *        lock -- no other Qt state, no USB I/O here.
+ */
+static int LIBUSB_CALL onGsUsbHotplug(libusb_context* context,
+                                      libusb_device* device,
+                                      libusb_hotplug_event event,
+                                      void* user_data)
+{
+  Q_UNUSED(context)
+  Q_UNUSED(event)
+  Q_UNUSED(user_data)
+
+  libusb_device_descriptor desc{};
+  if (libusb_get_device_descriptor(device, &desc) < 0 || !isGsUsbDevice(desc))
+    return 0;
+
+  HotplugNotifier& notifier = hotplugNotifier();
+  const std::lock_guard<std::mutex> guard(notifier.lock);
+  if (notifier.context && notifier.notify)
+    QMetaObject::invokeMethod(notifier.context, notifier.notify, Qt::QueuedConnection);
+
+  return 0;
+}
+
+/**
+ * @brief Starts the process-lifetime event pump for the shared context. libusb delivers
+ *        hot-plug callbacks only from libusb_handle_events(); without this thread nothing
+ *        pumps the shared context while no gs_usb transfer is in flight, and arrival events
+ *        would sit undelivered. Never joined, mirroring the never-exit context invariant.
+ */
+static void startHotplugPump(libusb_context* ctx)
+{
+  static std::once_flag once;
+  std::call_once(once, [ctx] {
+    std::thread([ctx] {
+      timeval timeout{1, 0};
+      // code-verify off
+      // Intentional process-lifetime service loop, like the readLoop worker: the thread dies
+      // with the process, mirroring the never-libusb_exit shared-context invariant.
+      while (true)
+        libusb_handle_events_timeout(ctx, &timeout);
+      // code-verify on
+    }).detach();
+  });
+}
+
+/**
+ * @brief Registers @p notifier for gs_usb arrive/left events. The libusb callback and pump
+ *        thread persist for the process lifetime; only the notifier target is mutable, and
+ *        clearHotplugNotifier() must disarm it before the context object is destroyed.
+ */
+void IO::Drivers::GsUsbCanBackend::setHotplugNotifier(QObject* context,
+                                                      std::function<void()> notifier)
+{
+  SS_ASSERT(context != nullptr, return);
+
+  libusb_context* ctx = sharedUsbContext();
+  if (!ctx || !libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG))
+    return;
+
+  static const bool registered = [ctx] {
+    libusb_hotplug_callback_handle handle = 0;
+    return libusb_hotplug_register_callback(
+             ctx,
+             static_cast<libusb_hotplug_event>(LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED
+                                               | LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT),
+             static_cast<libusb_hotplug_flag>(0),
+             LIBUSB_HOTPLUG_MATCH_ANY,
+             LIBUSB_HOTPLUG_MATCH_ANY,
+             LIBUSB_HOTPLUG_MATCH_ANY,
+             &onGsUsbHotplug,
+             nullptr,
+             &handle)
+        == LIBUSB_SUCCESS;
+  }();
+  if (!registered)
+    return;
+
+  {
+    const std::lock_guard<std::mutex> guard(hotplugNotifier().lock);
+    SS_ASSERT(hotplugNotifier().context == nullptr, return);
+    hotplugNotifier().context = context;
+    hotplugNotifier().notify  = std::move(notifier);
+  }
+
+  startHotplugPump(ctx);
+}
+
+/**
+ * @brief Disarms the hot-plug notifier when @p context owns it; called from the registering
+ *        object's destructor so a late callback finds a null target instead of freed memory.
+ */
+void IO::Drivers::GsUsbCanBackend::clearHotplugNotifier(QObject* context)
+{
+  HotplugNotifier& notifier = hotplugNotifier();
+  const std::lock_guard<std::mutex> guard(notifier.lock);
+  if (notifier.context != context)
+    return;
+
+  notifier.context = nullptr;
+  notifier.notify  = nullptr;
 }
 
 /**
@@ -355,6 +441,10 @@ IO::Drivers::GsUsbCanBackend::GsUsbCanBackend(const QString& interfaceName, QObj
   , m_inEndpoint(0)
   , m_outEndpoint(0)
   , m_echoCounter(0)
+  , m_fdActive(false)
+  , m_padTxToMaxPacket(false)
+  , m_rxFrameSize(kClassicFrameSize)
+  , m_outMaxPacket(0)
   , m_running(false)
 {
   m_txTimeoutTimer.setInterval(kTxTimeoutPollMs);
@@ -503,16 +593,22 @@ void IO::Drivers::GsUsbCanBackend::close()
 
   m_ctx = nullptr;
 
-  m_interfaceNumber = -1;
-  m_inEndpoint      = 0;
-  m_outEndpoint     = 0;
+  m_interfaceNumber  = -1;
+  m_inEndpoint       = 0;
+  m_outEndpoint      = 0;
+  m_fdActive         = false;
+  m_padTxToMaxPacket = false;
+  m_rxFrameSize      = kClassicFrameSize;
+  m_outMaxPacket     = 0;
   m_rxCarry.clear();
 
   setState(QCanBusDevice::UnconnectedState);
 }
 
 /**
- * @brief Encodes a QCanBusFrame as a gs_host_frame and writes it via bulk OUT.
+ * @brief Encodes a QCanBusFrame as a gs_host_frame and writes it via bulk OUT. BRS is forced
+ *        on FD frames on purpose: the app-level producer has no per-frame BRS control, and a
+ *        configured data bitrate implies switching.
  */
 bool IO::Drivers::GsUsbCanBackend::writeFrame(const QCanBusFrame& frame)
 {
@@ -524,7 +620,7 @@ bool IO::Drivers::GsUsbCanBackend::writeFrame(const QCanBusFrame& frame)
   if (!frame.isValid())
     return false;
 
-  GsHostFrame host{};
+  GsHostFrameFd host{};
   host.echoId   = m_echoCounter;
   m_echoCounter = (m_echoCounter + 1) % kHostFrameRx;
   host.channel  = 0;
@@ -541,17 +637,36 @@ bool IO::Drivers::GsUsbCanBackend::writeFrame(const QCanBusFrame& frame)
   host.canId = id;
 
   const QByteArray payload = frame.payload();
-  host.canDlc = static_cast<std::uint8_t>(std::min<int>(payload.size(), sizeof(host.data)));
-  std::memcpy(host.data, payload.constData(), host.canDlc);
+  int wireSize             = m_fdActive ? kFdFrameSize : kClassicFrameSize;
+  if (m_fdActive && frame.hasFlexibleDataRateFormat()) {
+    const int capped = std::min<int>(payload.size(), kFdPayloadMax);
+    host.canDlc      = len2dlc(capped);
+    host.flags       = kFrameFlagFd | kFrameFlagBrs;
+    std::memcpy(host.data, payload.constData(), static_cast<std::size_t>(capped));
+  } else {
+    host.canDlc = static_cast<std::uint8_t>(std::min<qsizetype>(payload.size(), 8));
+    std::memcpy(host.data, payload.constData(), host.canDlc);
+  }
 
   int transferred = 0;
-  const int rc    = libusb_bulk_transfer(m_handle,
-                                      m_outEndpoint,
-                                      reinterpret_cast<unsigned char*>(&host),
-                                      kClassicFrameSize,
-                                      &transferred,
-                                      kWriteTimeout);
-  if (rc < 0 || transferred != kClassicFrameSize) {
+  int rc          = 0;
+  if (m_padTxToMaxPacket && m_outMaxPacket > wireSize) {
+    unsigned char padded[kMaxBulkPacketSize] = {};
+    SS_ASSERT(m_outMaxPacket <= static_cast<int>(sizeof(padded)), return false);
+    std::memcpy(padded, &host, static_cast<std::size_t>(wireSize));
+    wireSize = m_outMaxPacket;
+    rc =
+      libusb_bulk_transfer(m_handle, m_outEndpoint, padded, wireSize, &transferred, kWriteTimeout);
+  } else {
+    rc = libusb_bulk_transfer(m_handle,
+                              m_outEndpoint,
+                              reinterpret_cast<unsigned char*>(&host),
+                              wireSize,
+                              &transferred,
+                              kWriteTimeout);
+  }
+
+  if (rc < 0 || transferred != wireSize) {
     setError(tr("Failed to transmit CAN frame to the adapter."), QCanBusDevice::WriteError);
     return false;
   }
@@ -637,6 +752,9 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
 {
   unsigned char buffer[kBulkReadBufSize];
 
+  const bool fdMode   = m_fdActive;
+  const int frameSize = m_rxFrameSize;
+
   while (m_running.load(std::memory_order_relaxed)) {
     int transferred = 0;
     const int rc    = libusb_bulk_transfer(
@@ -646,7 +764,15 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
       continue;
 
     if (rc < 0) {
-      const QString reason = QString::fromUtf8(libusb_strerror(static_cast<libusb_error>(rc)));
+      bool removed = rc == LIBUSB_ERROR_NO_DEVICE;
+      if (!removed && rc == LIBUSB_ERROR_IO) {
+        int configuration = 0;
+        removed = libusb_get_configuration(m_handle, &configuration) == LIBUSB_ERROR_NO_DEVICE;
+      }
+
+      const QString reason = removed
+                             ? tr("The CANable adapter was disconnected.")
+                             : QString::fromUtf8(libusb_strerror(static_cast<libusb_error>(rc)));
       QMetaObject::invokeMethod(
         this, "handleReadError", Qt::QueuedConnection, Q_ARG(QString, reason));
       break;
@@ -663,10 +789,10 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
 
     QList<quint32> echoIds;
     QList<QCanBusFrame> received;
-    while (m_rxCarry.size() >= kClassicFrameSize) {
-      GsHostFrame host{};
-      std::memcpy(&host, m_rxCarry.constData(), sizeof(host));
-      m_rxCarry.remove(0, kClassicFrameSize);
+    while (m_rxCarry.size() >= frameSize) {
+      GsHostFrameFd host{};
+      std::memcpy(&host, m_rxCarry.constData(), static_cast<std::size_t>(frameSize));
+      m_rxCarry.remove(0, frameSize);
 
       if (host.echoId != kHostFrameRx) {
         echoIds.append(host.echoId);
@@ -674,7 +800,7 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
       }
 
       QCanBusFrame canFrame;
-      if (decodeRxFrame(host, canFrame)) {
+      if (decodeRxFrame(host, fdMode, canFrame)) {
         canFrame.setTimeStamp(QCanBusFrame::TimeStamp::fromMicroSeconds(arrivalUsec));
         received.append(canFrame);
       }
@@ -721,15 +847,23 @@ bool IO::Drivers::GsUsbCanBackend::configureDevice(quint32 bitrate)
   SS_ASSERT(m_handle != nullptr, return false);
 
   GsHostConfig config{kHostFormatLE};
-  if (controlOut(kBreqHostFormat, 1, &config, sizeof(config)) < 0) {
+  if (controlOut(kBreqHostFormat, 1, &config, sizeof(config)) != static_cast<int>(sizeof(config))) {
     setError(tr("CANable adapter rejected the host-format handshake."),
              QCanBusDevice::ConfigurationError);
     return false;
   }
 
   GsDeviceBtConst bt{};
-  if (controlIn(kBreqBtConst, 0, &bt, sizeof(bt)) < 0) {
+  if (controlIn(kBreqBtConst, 0, &bt, sizeof(bt)) != static_cast<int>(sizeof(bt))) {
     setError(tr("Could not read CANable timing constants."), QCanBusDevice::ConfigurationError);
+    return false;
+  }
+
+  const bool fdRequested = configurationParameter(QCanBusDevice::CanFdKey).toBool();
+  if (fdRequested && (bt.feature & kFeatureFd) == 0) {
+    setError(tr("The adapter firmware does not support CAN FD. Flash candleLight FD firmware "
+                "or disable the flexible data-rate option."),
+             QCanBusDevice::ConfigurationError);
     return false;
   }
 
@@ -740,13 +874,23 @@ bool IO::Drivers::GsUsbCanBackend::configureDevice(quint32 bitrate)
     return false;
   }
 
-  if (controlOut(kBreqBitTiming, 0, &timing, sizeof(timing)) < 0) {
+  if (controlOut(kBreqBitTiming, 0, &timing, sizeof(timing)) != static_cast<int>(sizeof(timing))) {
     setError(tr("CANable adapter rejected the requested bitrate."),
              QCanBusDevice::ConfigurationError);
     return false;
   }
 
+  if (fdRequested && !configureFdDataTiming(bt.feature))
+    return false;
+
+  m_fdActive         = fdRequested;
+  m_rxFrameSize      = fdRequested ? kFdFrameSize : kClassicFrameSize;
+  m_padTxToMaxPacket = fdRequested && (bt.feature & kFeaturePadPkts) != 0;
+
   std::uint32_t modeFlags = kModeBerrReporting;
+  if (m_fdActive)
+    modeFlags |= kModeFd;
+
   if (configurationParameter(QCanBusDevice::LoopbackKey).toBool())
     modeFlags |= kModeLoopBack;
 
@@ -754,8 +898,52 @@ bool IO::Drivers::GsUsbCanBackend::configureDevice(quint32 bitrate)
     modeFlags |= kModeListenOnly;
 
   GsDeviceMode mode{kModeStart, modeFlags};
-  if (controlOut(kBreqMode, 0, &mode, sizeof(mode)) < 0) {
+  if (controlOut(kBreqMode, 0, &mode, sizeof(mode)) != static_cast<int>(sizeof(mode))) {
     setError(tr("Could not start the CANable channel."), QCanBusDevice::ConfigurationError);
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Solves and programs the FD data-phase bit timing; limits come from BT_CONST_EXT when
+ *        the firmware advertises it, else fall back to the classic limits (kernel behavior).
+ */
+bool IO::Drivers::GsUsbCanBackend::configureFdDataTiming(quint32 feature)
+{
+  SS_ASSERT(m_handle != nullptr, return false);
+
+  const auto configured  = configurationParameter(QCanBusDevice::DataBitRateKey).toUInt();
+  const quint32 dataRate = configured == 0 ? kDefaultFdDataBitrate : configured;
+
+  GsDeviceBtConst limits{};
+  if ((feature & kFeatureBtConstExt) != 0) {
+    GsDeviceBtConstExt ext{};
+    if (controlIn(kBreqBtConstExt, 0, &ext, sizeof(ext)) != static_cast<int>(sizeof(ext))) {
+      setError(tr("Could not read CANable FD timing constants."),
+               QCanBusDevice::ConfigurationError);
+      return false;
+    }
+
+    limits = timingLimits(ext, true);
+  } else if (controlIn(kBreqBtConst, 0, &limits, sizeof(limits))
+             != static_cast<int>(sizeof(limits))) {
+    setError(tr("Could not read CANable timing constants."), QCanBusDevice::ConfigurationError);
+    return false;
+  }
+
+  GsDeviceBitTiming timing{};
+  if (!solveBitTiming(limits, dataRate, timing)) {
+    setError(tr("The data bitrate %1 bps is not supported by this CANable adapter.").arg(dataRate),
+             QCanBusDevice::ConfigurationError);
+    return false;
+  }
+
+  if (controlOut(kBreqDataBitTiming, 0, &timing, sizeof(timing))
+      != static_cast<int>(sizeof(timing))) {
+    setError(tr("CANable adapter rejected the requested data bitrate."),
+             QCanBusDevice::ConfigurationError);
     return false;
   }
 
@@ -775,10 +963,14 @@ bool IO::Drivers::GsUsbCanBackend::claimGsUsbInterface()
     return false;
 
   for (int i = 0; i < cfg->bNumInterfaces && m_interfaceNumber < 0; ++i) {
+    if (cfg->interface[i].num_altsetting < 1)
+      continue;
+
     const libusb_interface_descriptor& alt = cfg->interface[i].altsetting[0];
 
     std::uint8_t inEp  = 0;
     std::uint8_t outEp = 0;
+    int outMax         = 0;
     for (int e = 0; e < alt.bNumEndpoints; ++e) {
       const libusb_endpoint_descriptor& ep = alt.endpoint[e];
       const bool isBulk =
@@ -788,14 +980,17 @@ bool IO::Drivers::GsUsbCanBackend::claimGsUsbInterface()
 
       if (ep.bEndpointAddress & LIBUSB_ENDPOINT_IN)
         inEp = ep.bEndpointAddress;
-      else
-        outEp = ep.bEndpointAddress;
+      else {
+        outEp  = ep.bEndpointAddress;
+        outMax = ep.wMaxPacketSize;
+      }
     }
 
     if (inEp != 0 && outEp != 0) {
       m_interfaceNumber = alt.bInterfaceNumber;
       m_inEndpoint      = inEp;
       m_outEndpoint     = outEp;
+      m_outMaxPacket    = std::min(outMax, kMaxBulkPacketSize);
     }
   }
 

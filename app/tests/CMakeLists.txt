@@ -317,6 +317,16 @@ if(TARGET tst_tls_identity)
   target_compile_definitions(tst_tls_identity PRIVATE BUILD_COMMERCIAL)
 endif()
 
+#
+# Header-only suite (MirrorProtocol.h precedent): GsUsbProtocol.h carries the gs_usb wire
+# vocabulary the CANable backend compiles against, so the solver and DLC tables test without
+# linking libusb or QtSerialBus.
+#
+ss_add_unit_test(tst_gsusb_protocol
+  SOURCES tst_gsusb_protocol.cpp
+  LIBS    Qt6::Core
+)
+
 ss_add_unit_test(tst_lua_compat
   SOURCES tst_lua_compat.cpp
           ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp

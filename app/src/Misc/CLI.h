@@ -155,6 +155,19 @@ struct CliOptions {
     "id"};
   QCommandLineOption verifyKeepRegenOpt{
     "verify-keep-regen", "Keep the temporary regenerated database for inspection (Pro)"};
+  QCommandLineOption regressSessionOpt{
+    "regress-session",
+    "Compare an archived session against a candidate project and exit; prints a JSON drift "
+    "report (spec 0047, Pro). Pair with --headless for offscreen operation",
+    "file"};
+  QCommandLineOption regressSessionIdOpt{
+    "regress-session-id",
+    "Session id inside the --regress-session archive (default: latest completed session)",
+    "id"};
+  QCommandLineOption regressProjectOpt{
+    "regress-project", "Candidate project file for --regress-session (Pro)", "file"};
+  QCommandLineOption regressKeepRegenOpt{
+    "regress-keep-regen", "Keep both temporary regenerated databases for inspection (Pro)"};
   QCommandLineOption validateGuardsOpt{
     "validate-guards", "Verify all embedded license guards pass in this binary and exit (Pro)"};
   QCommandLineOption modbusRtuOpt{
@@ -233,6 +246,7 @@ private:
 
 #ifdef BUILD_COMMERCIAL
   ProcessResult runSessionVerification();
+  ProcessResult runSessionRegression();
 #endif
 
 #ifdef SS_INAPP_TESTS

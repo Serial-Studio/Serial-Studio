@@ -204,11 +204,19 @@ cached flags, benchmark mechanics) in
 - **Driver opens are synchronous calls; several drivers dial asynchronously behind them.**
   `DeviceManager::open()` calls `HAL_Driver::open(mode)` directly; there is no async-open hook
   and no per-device task runner (the spec-0034 `IO::ConnectionFlows` layer was removed
-  2026-07-30). TCP/BLE/MQTT/CAN report an in-flight dial via `HAL_Driver::isConnecting()`
-  (default false) so `toggleConnection()` aborts instead of stacking; `connectedChanged` is
-  published only by the idempotent `notifyConnectedStateChanged()`. Drop recovery is
-  per-driver: UART retries off its own 1 s timer armed in `handleError()`, Network TCP retries
-  refusals with a bounded backoff, MQTT/Modbus schedule their own. Driver error boxes are
+  2026-07-30). BLE/MQTT/CAN/Modbus/Process report an in-flight dial via
+  `HAL_Driver::isConnecting()` (default false) so `toggleConnection()` aborts instead of
+  stacking; `connectedChanged` is published only by the idempotent
+  `notifyConnectedStateChanged()`. Spec-0050 doctrine (2026-08-10): Network TCP and Modbus
+  TCP wait for the endpoint with a THROWAWAY probe socket inside `open()` (5 s deadline,
+  250 ms pace — covers a control-script helper's bind; never abort-and-redial a long-lived
+  run-loop-registered socket, that crashed readFromSocket on macOS), then the real client
+  dials exactly once; every async dial failure MUST reach
+  `ConnectionManager::disconnectDevice(this)` so "connecting" always resolves (BLE, Modbus,
+  MQTT wired 2026-08-10). NO reopen-on-config-edit machinery exists: connection settings are
+  UI-locked while connected/dialing (BLE pickers exempt). Drop recovery: an established link
+  that drops reports once and stays down; UART's opt-in auto-reconnect checkbox is the only
+  post-drop recovery. Driver error boxes are
   queued, never raised mid open()/error stack. The task-tree engine `app/src/Async/`
   (`TaskTree`, `RetryPolicy`, `AsyncClock`) stays,
   used only by `MQTT::Publisher` and the spec-0035 diagnostics probes — thread-affine, no

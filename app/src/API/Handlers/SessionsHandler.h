@@ -30,6 +30,7 @@ public:
 private:
   static void registerLifecycleCommands();
   static void registerBrowsingCommands();
+  static void registerRegressionCommands();
   static void registerTagCommands();
 
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
@@ -46,6 +47,8 @@ private:
   static CommandResponse exportToCsv(const QString& id, const QJsonObject& params);
   static CommandResponse verify(const QString& id, const QJsonObject& params);
   static CommandResponse getVerification(const QString& id, const QJsonObject& params);
+  static CommandResponse regress(const QString& id, const QJsonObject& params);
+  static CommandResponse getRegression(const QString& id, const QJsonObject& params);
   static CommandResponse listTags(const QString& id, const QJsonObject& params);
   static CommandResponse addTag(const QString& id, const QJsonObject& params);
   static CommandResponse deleteTag(const QString& id, const QJsonObject& params);

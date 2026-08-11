@@ -22,6 +22,7 @@
 #  include <QSet>
 #  include <QSqlDatabase>
 #  include <QString>
+#  include <vector>
 
 namespace IO {
 class FrameReader;
@@ -37,8 +38,15 @@ namespace Sessions {
  */
 class Verifier {
 public:
+  enum class Mode {
+    Verify,
+    Regress
+  };
+
   struct Options {
     QString dbPath;
+    QString candidateProjectPath;
+    Mode mode            = Mode::Verify;
     int sessionId        = -1;
     bool keepRegenerated = false;
   };
@@ -61,6 +69,9 @@ public:
 
   static constexpr int kMaxArchiveDevices = 64;
 
+  static constexpr qint64 kChunkStepNs       = 1'000'000;
+  static constexpr qint64 kMaxFramesPerChunk = kChunkStepNs;
+
   [[nodiscard]] int run();
   [[nodiscard]] const QJsonObject& report() const noexcept;
 
@@ -70,8 +81,26 @@ private:
   [[nodiscard]] bool sessionIsConsoleOnly() const;
   [[nodiscard]] bool verifyIntegrity();
   void classifySession();
-  [[nodiscard]] bool reparseSession();
-  [[nodiscard]] bool feedArchivedBytes();
+  [[nodiscard]] int runRegression();
+  [[nodiscard]] QString loadCandidate();
+  [[nodiscard]] QString replayBothSides();
+  [[nodiscard]] bool regressDiff();
+  [[nodiscard]] bool reportOneSidedStructural(const QString& regenPath, bool sideIsBaseline);
+  [[nodiscard]] bool diffRegenPair(QSqlDatabase& baseDb,
+                                   QSqlDatabase& candDb,
+                                   int baseSession,
+                                   int candSession);
+  [[nodiscard]] QSet<int> archivedDeviceIds(bool& ok);
+  [[nodiscard]] std::vector<qint64> chunkTimestamps();
+  [[nodiscard]] QString latestStoredVerdict();
+  [[nodiscard]] QJsonObject replaySideStats() const;
+  [[nodiscard]] int settleRegressVerdict();
+  [[nodiscard]] int failRegress(const QString& code, const QString& reason, const QString& hint);
+  static void reparseFailureText(const QString& code, QString& reason, QString& hint);
+  [[nodiscard]] QString reparseSession(const QString& projectJson,
+                                       const QString& regenPath,
+                                       bool injectTimestamps);
+  [[nodiscard]] bool feedArchivedBytes(bool injectTimestamps);
   [[nodiscard]] IO::FrameReader& readerForDevice(int deviceId);
   [[nodiscard]] bool diffReadings();
   [[nodiscard]] QJsonObject diffDataset(QSqlDatabase& regen,
@@ -82,7 +111,10 @@ private:
   [[nodiscard]] int settleVerdict();
   void appendVerificationRecord();
   void cleanupRegenerated();
-  [[nodiscard]] int fail(const QString& reason);
+  [[nodiscard]] int fail(const QString& code,
+                         const QString& stage,
+                         const QString& reason,
+                         const QString& hint);
 
 private:
   Options m_options;
@@ -112,6 +144,22 @@ private:
   QJsonArray m_datasetReports;
   QJsonArray m_notes;
   QJsonObject m_report;
+
+  qint64 m_firstFrameChunk;
+  qint64 m_lastFeedChunks;
+  qint64 m_lastFeedFrames;
+  bool m_chunkBudgetExceeded;
+  std::vector<QString> m_regenPaths;
+
+  QString m_candidateJson;
+  QString m_candidateSha256;
+  QString m_candidateTitle;
+  QJsonObject m_codeChanges;
+  QJsonObject m_replayStats;
+  QSet<int> m_feedExcludedDevices;
+  QList<int> m_candidateRemovedDevices;
+  qint64 m_baselineFirstChunk;
+  qint64 m_candidateFirstChunk;
 
   std::map<int, std::unique_ptr<IO::FrameReader>> m_readers;
 };
