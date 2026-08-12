@@ -95,8 +95,8 @@ It loads a project via `ProjectModel::loadFromJsonDocument` and drives the real 
 code (the release gate) fails if any gated tier misses.
 
 **Nine gated runs**, all tiered off `--min-fps` (so a `--min-fps 1` PGO training run stays
-effectively ungated). The seven parser gates disable the parse-budget guard (an interactive
-throttle a 100%-duty benchmark would trip every window) and run no exporters/dashboard, so
+effectively ungated). The seven parser gates disable the parse-budget guard (the spec-0051
+fair-share governor, which a 100%-duty benchmark would engage) and run no exporters/dashboard, so
 they measure pure parse capacity; the two Lua reference floors run with consumers on and
 exist to catch a consumer-path collapse, not to measure parsing:
 

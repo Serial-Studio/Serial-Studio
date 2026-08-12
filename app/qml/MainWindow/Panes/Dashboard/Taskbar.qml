@@ -881,6 +881,30 @@ Item {
     }
 
     //
+    // Passive parse-thinning indicator: visible while the fair-share governor decimates any
+    // source; details live in the problem center (spec 0051)
+    //
+    Rectangle {
+      id: _thinningBadge
+
+      radius: 5
+      Layout.preferredWidth: 10
+      Layout.preferredHeight: 10
+      visible: Cpp_UI_Dashboard.thinningActive
+      color: Cpp_ThemeManager.colors["alarm"]
+      Layout.alignment: Qt.AlignVCenter
+
+      ToolTip.delay: 700
+      ToolTip.visible: _thinningHover.hovered
+      ToolTip.text: qsTr("Data is arriving faster than scripts can process it; some frames " +
+                         "are being thinned. See the problem center for details.")
+
+      HoverHandler {
+        id: _thinningHover
+      }
+    }
+
+    //
     // Freeze dashboard button + passive frozen indicator (Pro)
     //
     Widgets.IconButton {

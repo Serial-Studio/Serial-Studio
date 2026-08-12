@@ -5042,54 +5042,54 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2106"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2224"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2103"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2221"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2235"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2232"/>
         <source>Audio Input</source>
         <translation>音频输入</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2115"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2240"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2112"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2237"/>
         <source>Quick Plot</source>
         <translation>快速绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1813"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1792"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 转换超出预算</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1814"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1793"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>某个数据集转换耗时超过 %1 毫秒；该帧中其余数据集已回退为原始值，直到下一个帧。请对转换代码进行分析或简化。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="283"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="276"/>
         <source>Frame pool exhausted</source>
         <translation>帧池已耗尽</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="285"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="278"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>下游消费者（仪表盘、CSV/MDF4 导出、会话数据库或 API 订阅者）处理帧的速度不够快。Serial Studio 正回退为每帧分配，直到积压清除。请禁用高负载消费者或降低数据速率。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2066"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2063"/>
         <source>Device A</source>
         <translation>设备 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2122"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2119"/>
         <source>Quick Plot Data</source>
         <translation>快速绘图数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2134"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2131"/>
         <source>Multiple Plots</source>
         <translation>多重绘图</translation>
     </message>
@@ -10725,32 +10725,32 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>GPS</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="190"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="182"/>
         <source>Auto Center</source>
         <translation>自动居中</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="132"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="130"/>
         <source>Plot Trajectory</source>
         <translation>绘制轨迹</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="201"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="191"/>
         <source>Zoom In</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="212"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="200"/>
         <source>Zoom Out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="150"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="146"/>
         <source>Show Weather</source>
         <translation>显示天气</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="168"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="162"/>
         <source>NASA Weather Overlay</source>
         <translation>NASA 天气叠加层</translation>
     </message>
@@ -19381,14 +19381,12 @@ function parse(%1) { ... }
         <translation>未设置 Groq API 密钥。打开管理密钥以添加。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1529"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
-        <translation>帧解析器占用超过 %1% 的 CPU 时间。</translation>
+        <translation type="vanished">帧解析器占用超过 %1% 的 CPU 时间。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1531"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
-        <translation>Serial Studio 正在丢弃帧以保持应用程序响应。请简化或优化帧解析器脚本以减少其工作负载。</translation>
+        <translation type="vanished">Serial Studio 正在丢弃帧以保持应用程序响应。请简化或优化帧解析器脚本以减少其工作负载。</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="387"/>
@@ -22790,62 +22788,67 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>搜索… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="906"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="899"/>
+        <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
+        <translation>数据到达速度超过脚本处理能力;部分帧正在被精简。请查看问题中心以获取详情。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="930"/>
         <source>Unfreeze Dashboard</source>
         <translation>解冻仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="907"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="931"/>
         <source>Freeze Dashboard</source>
         <translation>冻结仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="965"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT：已连接到 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT：未连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1014"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1000"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1024"/>
         <source>Status:</source>
         <translation>状态:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1008"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
         <source>Connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1033"/>
         <source>Disconnected</source>
         <translation>已断开</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1040"/>
         <source>Broker:</source>
         <translation>代理:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1029"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
         <source>Mode:</source>
         <translation>模式:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1042"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1066"/>
         <source>Messages sent:</source>
         <translation>已发送消息:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1056"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
         <source>Open MQTT Settings</source>
         <translation>打开 MQTT 设置</translation>
     </message>
@@ -22859,7 +22862,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">搜索控件…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1102"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1126"/>
         <source>Remove from Workspace</source>
         <translation>从工作区移除</translation>
     </message>
@@ -23829,34 +23832,34 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2060"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2086"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2068"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2094"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2076"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2102"/>
         <source>Clock</source>
         <translation>时钟</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2083"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2109"/>
         <source>Stopwatch</source>
         <translation>秒表</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2137"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2152"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2163"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2178"/>
         <source>%1 (Fallback)</source>
         <translation>%1(备用)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2174"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2253"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2200"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2279"/>
         <source>LED Panel (%1)</source>
         <translation>LED 面板 (%1)</translation>
     </message>
@@ -23877,12 +23880,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1171"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1052"/>
         <source>Select Background Image</source>
         <translation>选择背景图像</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1173"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1054"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>图像 (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>

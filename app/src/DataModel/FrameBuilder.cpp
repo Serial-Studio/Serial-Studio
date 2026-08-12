@@ -38,7 +38,6 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDebug>
-#include <QMessageBox>
 #include <stdexcept>
 
 #include "API/Server.h"
@@ -58,7 +57,6 @@
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
-#include "Misc/Utilities.h"
 #include "SessionContext.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
@@ -126,10 +124,7 @@
 DataModel::FrameBuilder::FrameBuilder()
   : m_quickPlotChannels(-1)
   , m_quickPlotHasHeader(false)
-  , m_parseBudgetSkipping(false)
-  , m_parseBudgetWarned(false)
   , m_parseBudgetEnabled(true)
-  , m_parseBudgetEpisodeActive(false)
   , m_lastConnectedState(false)
   , m_playerOpen(false)
   , m_anyAsyncSink(false)
@@ -141,8 +136,6 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_shuttingDown(false)
   , m_seenEngineEpoch(-1)
   , m_operationMode(SerialStudio::ProjectFile)
-  , m_parseBudgetUsedNs(0)
-  , m_parseBudgetWindowStart(BudgetClock::time_point{})
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
   , m_transformErrors(0)
@@ -524,6 +517,10 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &Misc::TimerEvents::timeout1Hz,
           this,
           &DataModel::FrameBuilder::collectTransformEngineGarbage);
+
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this, [this] {
+    m_parseBudget.maintain(BudgetClock::now());
+  });
 
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
     m_playerOpen        = SerialStudio::isAnyPlayerOpen();
@@ -1027,7 +1024,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
   if (m_frame.groups.empty()) [[unlikely]]
     return;
 
-  if (parseBudgetSkipFrame()) [[unlikely]]
+  if (parseBudgetSkipFrame(0)) [[unlikely]]
     return;
 
   const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
@@ -1035,7 +1032,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
   const int published = trySpanLane(0, false, m_frame, data);
   if (published >= 0) {
     m_parsedFrameCount += static_cast<quint64>(published);
-    parseBudgetAccount(t0);
+    parseBudgetAccount(0, t0);
     return;
   }
 
@@ -1066,7 +1063,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
     ++m_parsedFrameCount;
   }
 
-  parseBudgetAccount(t0);
+  parseBudgetAccount(0, t0);
 }
 
 /**
@@ -1081,7 +1078,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   if (m_frame.groups.empty()) [[unlikely]]
     return;
 
-  if (parseBudgetSkipFrame()) [[unlikely]]
+  if (parseBudgetSkipFrame(sourceId)) [[unlikely]]
     return;
 
   const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
@@ -1089,7 +1086,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   const int published = trySpanLane(sourceId, true, ensureSourceFrame(sourceId), data);
   if (published >= 0) {
     m_parsedFrameCount += static_cast<quint64>(published);
-    parseBudgetAccount(t0);
+    parseBudgetAccount(sourceId, t0);
     return;
   }
 
@@ -1121,7 +1118,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
     ++m_parsedFrameCount;
   }
 
-  parseBudgetAccount(t0);
+  parseBudgetAccount(sourceId, t0);
 }
 
 /**
@@ -1461,77 +1458,45 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns true if the parser should skip this frame to keep the GUI responsive.
+ * @brief Returns true when the fair-share governor thins this frame; counts the skip. Sources at
+ *        N=1 (the steady state) pass with a lookup and a compare.
  */
-bool DataModel::FrameBuilder::parseBudgetSkipFrame()
+bool DataModel::FrameBuilder::parseBudgetSkipFrame(int sourceId)
 {
   if (!m_parseBudgetEnabled) [[unlikely]]
     return false;
 
-  const auto now = BudgetClock::now();
-
-  if (m_parseBudgetWindowStart == BudgetClock::time_point{}) [[unlikely]] {
-    m_parseBudgetWindowStart = now;
-    m_parseBudgetUsedNs      = 0;
-    m_parseBudgetSkipping    = false;
+  if (!m_parseBudget.skipFrame(sourceId)) [[likely]]
     return false;
-  }
 
-  const auto windowNs =
-    std::chrono::duration_cast<std::chrono::nanoseconds>(now - m_parseBudgetWindowStart).count();
-  if (windowNs >= static_cast<qint64>(kParseBudgetWindowMs) * 1'000'000LL) {
-    if (!m_parseBudgetSkipping)
-      m_parseBudgetEpisodeActive = false;
-
-    m_parseBudgetWindowStart = now;
-    m_parseBudgetUsedNs      = 0;
-    m_parseBudgetSkipping    = false;
-  }
-
-  if (m_parseBudgetSkipping)
-    ++m_skippedFrameCount;
-
-  return m_parseBudgetSkipping;
+  ++m_skippedFrameCount;
+  return true;
 }
 
 /**
- * @brief Updates the parse-time accumulator and trips the breaker past the warn limit.
+ * @brief Charges the governor with this frame's parse time; logs once when thinning engages
+ *        (the live numbers are pulled by the 1 Hz diagnostics, never pushed from here).
  */
-void DataModel::FrameBuilder::parseBudgetAccount(BudgetClock::time_point startedAt)
+void DataModel::FrameBuilder::parseBudgetAccount(int sourceId, BudgetClock::time_point startedAt)
 {
   if (!m_parseBudgetEnabled) [[unlikely]]
     return;
 
-  const auto elapsed =
-    std::chrono::duration_cast<std::chrono::nanoseconds>(BudgetClock::now() - startedAt).count();
-  m_parseBudgetUsedNs += elapsed;
+  if (m_parseBudget.account(sourceId, startedAt, BudgetClock::now())) [[unlikely]]
+    noteParseBudgetThinning(sourceId);
+}
 
-  if (m_parseBudgetSkipping)
-    return;
-
-  const auto limitNs = static_cast<qint64>(kParseBudgetWarnLimitMs) * 1'000'000LL;
-  if (m_parseBudgetUsedNs <= limitNs)
-    return;
-
-  m_parseBudgetSkipping = true;
-
-  if (m_parseBudgetEpisodeActive)
-    return;
-
-  m_parseBudgetEpisodeActive = true;
-  qWarning() << "[FrameBuilder] Parser load exceeded budget (" << m_parseBudgetUsedNs / 1'000'000LL
-             << "ms /" << kParseBudgetWindowMs << "ms)"
-             << "...dropping frames until parse load recovers.";
-
-  if (!m_parseBudgetWarned) {
-    m_parseBudgetWarned = true;
-    Misc::Utilities::showMessageBox(
-      QObject::tr("The frame parser is using more than %1% of CPU time.")
-        .arg(100 * kParseBudgetWarnLimitMs / kParseBudgetWindowMs),
-      QObject::tr("Serial Studio is dropping frames to keep the application responsive. "
-                  "Please simplify or optimize the frame parser script to reduce its workload."),
-      QMessageBox::Warning);
-  }
+/**
+ * @brief One-shot console note when thinning first engages, with the offender's snapshot row.
+ */
+SS_COLD void DataModel::FrameBuilder::noteParseBudgetThinning(int sourceId)
+{
+  const auto loads = m_parseBudget.snapshot();
+  for (const auto& load : loads)
+    if (load.sourceId == sourceId)
+      qWarning() << "[FrameBuilder] Parse load over fair share for source" << sourceId << "(duty"
+                 << load.duty << ") -- keeping every" << load.decimateN
+                 << "th frame until load recovers.";
 }
 
 /**
@@ -1539,11 +1504,23 @@ void DataModel::FrameBuilder::parseBudgetAccount(BudgetClock::time_point started
  */
 void DataModel::FrameBuilder::parseBudgetReset() noexcept
 {
-  m_parseBudgetWindowStart   = BudgetClock::time_point{};
-  m_parseBudgetUsedNs        = 0;
-  m_parseBudgetSkipping      = false;
-  m_parseBudgetWarned        = false;
-  m_parseBudgetEpisodeActive = false;
+  m_parseBudget.reset();
+}
+
+/**
+ * @brief Returns whether any source is currently decimated (polled by the dashboard indicator).
+ */
+bool DataModel::FrameBuilder::parseBudgetThinning() const noexcept
+{
+  return m_parseBudget.thinning();
+}
+
+/**
+ * @brief Snapshots every tracked source's parse load for the 1 Hz diagnostics pull (cold path).
+ */
+std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::parseLoadSnapshot() const
+{
+  return m_parseBudget.snapshot();
 }
 
 /**

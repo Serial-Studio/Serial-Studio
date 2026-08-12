@@ -101,6 +101,9 @@ class Dashboard : public QObject {
   Q_PROPERTY(bool frozen
              READ frozen
              NOTIFY frozenChanged)
+  Q_PROPERTY(bool thinningActive
+             READ thinningActive
+             NOTIFY thinningActiveChanged)
   Q_PROPERTY(bool containsCommercialFeatures
              READ containsCommercialFeatures
              NOTIFY containsCommercialFeaturesChanged)
@@ -129,6 +132,7 @@ signals:
   void autoLayoutSpacingChanged();
   void plotTimeRangeChanged();
   void frozenChanged();
+  void thinningActiveChanged();
   void displayTitlesChanged();
   void containsCommercialFeaturesChanged();
 
@@ -167,6 +171,7 @@ public:
   [[nodiscard]] bool autoHideToolbar() const noexcept;
   [[nodiscard]] bool showAlignmentGuides() const noexcept;
   [[nodiscard]] bool frozen() const;
+  [[nodiscard]] bool thinningActive() const noexcept;
   [[nodiscard]] double plotTimeRange() const noexcept;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const noexcept;
@@ -280,6 +285,7 @@ public slots:
 
   void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
   void updateStreamAvailable();
+  void pollThinningState();
   void refreshDisplayTitles();
 
 private:
@@ -463,6 +469,7 @@ private:
   int m_points;
   int m_widgetCount;
   bool m_updateRequired;
+  bool m_thinningActive;
   bool m_showActionPanel;
   bool m_terminalEnabled;
   bool m_notificationLogEnabled;

@@ -219,6 +219,12 @@ ss_add_unit_test(tst_ring_wrap
   LIBS    Qt6::Core
 )
 
+ss_add_unit_test(tst_parse_budget
+  SOURCES tst_parse_budget.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
 ss_add_unit_test(tst_enum_labels
   SOURCES tst_enum_labels.cpp
           ${SS_APP_SRC}/API/EnumLabels.cpp

@@ -1,15 +1,15 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1628,
+  "total": 1632,
   "files": 206,
   "buckets": {
     "root": 151,
     "accessor": 68,
     "ctor-capture": 103,
     "deferred": 17,
-    "static-cache": 1172,
-    "loose": 117
+    "static-cache": 1175,
+    "loose": 118
   },
   "per_class": {
     "DataModel::ProjectModel": 210,
@@ -17,10 +17,10 @@
     "AppState": 136,
     "CommandRegistry": 100,
     "UI::Dashboard": 83,
-    "DataModel::FrameBuilder": 59,
+    "DataModel::FrameBuilder": 62,
     "Misc::IconRegistry": 48,
     "Misc::ThemeManager": 43,
-    "Misc::TimerEvents": 31,
+    "Misc::TimerEvents": 32,
     "Console::Handler": 29,
     "API::Server": 28,
     "Misc::WorkspaceManager": 27,
@@ -225,17 +225,6 @@
         "loose": 0
       }
     },
-    "app/src/API/Generated/DatasetApiFields.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
     "app/src/API/GRPC/GRPCServer.cpp": {
       "total": 12,
       "buckets": {
@@ -248,6 +237,17 @@
       }
     },
     "app/src/API/GRPC/ProtoGenerator.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "app/src/API/Generated/DatasetApiFields.cpp": {
       "total": 1,
       "buckets": {
         "root": 0,
@@ -302,28 +302,6 @@
         "loose": 0
       }
     },
-    "app/src/API/Handlers/ConsoleHandler.cpp": {
-      "total": 22,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 22,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ControlScriptHandler.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
     "app/src/API/Handlers/CSVExportHandler.cpp": {
       "total": 5,
       "buckets": {
@@ -343,6 +321,28 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ConsoleHandler.cpp": {
+      "total": 22,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 22,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ControlScriptHandler.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
         "loose": 0
       }
     },
@@ -786,28 +786,6 @@
         "loose": 0
       }
     },
-    "app/src/Console/Export.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 2
-      }
-    },
-    "app/src/Console/Handler.cpp": {
-      "total": 15,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 4,
-        "static-cache": 4,
-        "loose": 6
-      }
-    },
     "app/src/CSV/Export.cpp": {
       "total": 11,
       "buckets": {
@@ -828,6 +806,28 @@
         "deferred": 0,
         "static-cache": 18,
         "loose": 0
+      }
+    },
+    "app/src/Console/Export.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 2
+      }
+    },
+    "app/src/Console/Handler.cpp": {
+      "total": 15,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 4,
+        "static-cache": 4,
+        "loose": 6
       }
     },
     "app/src/DataModel/DataTable.cpp": {
@@ -930,14 +930,14 @@
       }
     },
     "app/src/DataModel/FrameBuilder.cpp": {
-      "total": 62,
+      "total": 63,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 42,
-        "loose": 19
+        "loose": 20
       }
     },
     "app/src/DataModel/Generated/DatasetForm.cpp": {
@@ -1391,17 +1391,6 @@
         "loose": 0
       }
     },
-    "app/src/IO/Drivers/Modbus.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 2
-      }
-    },
     "app/src/IO/Drivers/MQTT.cpp": {
       "total": 1,
       "buckets": {
@@ -1411,6 +1400,17 @@
         "deferred": 0,
         "static-cache": 1,
         "loose": 0
+      }
+    },
+    "app/src/IO/Drivers/Modbus.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 2
       }
     },
     "app/src/IO/Drivers/Network.cpp": {
@@ -1534,17 +1534,6 @@
         "loose": 0
       }
     },
-    "app/src/main.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 6,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
     "app/src/MDF4/Export.cpp": {
       "total": 14,
       "buckets": {
@@ -1564,6 +1553,39 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 18,
+        "loose": 0
+      }
+    },
+    "app/src/MQTT/CredentialVault.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "app/src/MQTT/Publisher.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 4
+      }
+    },
+    "app/src/MQTT/PublisherScriptEditor.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
         "loose": 0
       }
     },
@@ -1777,13 +1799,13 @@
       }
     },
     "app/src/Misc/Problems/LinkCheckers.cpp": {
-      "total": 4,
+      "total": 6,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 4,
+        "static-cache": 6,
         "loose": 0
       }
     },
@@ -1872,39 +1894,6 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/MQTT/CredentialVault.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/MQTT/Publisher.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 4
-      }
-    },
-    "app/src/MQTT/PublisherScriptEditor.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
         "loose": 0
       }
     },
@@ -2041,13 +2030,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 36,
+      "total": 37,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 35,
+        "static-cache": 36,
         "loose": 0
       }
     },
@@ -2367,6 +2356,17 @@
         "ctor-capture": 2,
         "deferred": 0,
         "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "app/src/main.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 6,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
         "loose": 0
       }
     }

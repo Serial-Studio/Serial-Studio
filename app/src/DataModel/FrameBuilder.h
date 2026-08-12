@@ -43,6 +43,7 @@
 
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "DataModel/ParseBudget.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
@@ -96,8 +97,12 @@ public:
   [[nodiscard]] DataModel::DataTableStore& tableStore() noexcept;
   [[nodiscard]] const LatestFrameInfo* latestFrame(int sourceId) const noexcept;
 
+  using ParseLoad = DataModel::ParseBudget::Load;
+
   void resetFrameCounters() noexcept;
   void setParseBudgetEnabled(bool enabled) noexcept;
+  [[nodiscard]] bool parseBudgetThinning() const noexcept;
+  [[nodiscard]] std::vector<ParseLoad> parseLoadSnapshot() const;
   [[nodiscard]] quint64 parsedFrameCount() const noexcept;
   [[nodiscard]] quint64 skippedFrameCount() const noexcept;
   [[nodiscard]] quint64 transformErrorCount() const noexcept;
@@ -148,11 +153,9 @@ private slots:
   void onOperationModeChanged();
 
 private:
-  using BudgetClock                             = std::chrono::steady_clock;
+  using BudgetClock                             = DataModel::ParseBudget::Clock;
   static constexpr int kTransformWatchdogMs     = 100;
   static constexpr int kTransformHookInstrCount = 10000;
-  static constexpr int kParseBudgetWindowMs     = 1000;
-  static constexpr int kParseBudgetWarnLimitMs  = 800;
 
   struct TransformEntry {
     int uniqueId;
@@ -210,10 +213,7 @@ private:
 
   int m_quickPlotChannels;
   bool m_quickPlotHasHeader;
-  bool m_parseBudgetSkipping;
-  bool m_parseBudgetWarned;
   bool m_parseBudgetEnabled;
-  bool m_parseBudgetEpisodeActive;
   bool m_lastConnectedState;
   bool m_playerOpen;
   bool m_anyAsyncSink;
@@ -225,8 +225,7 @@ private:
   bool m_shuttingDown;
   int m_seenEngineEpoch;
   SerialStudio::OperationMode m_operationMode;
-  qint64 m_parseBudgetUsedNs;
-  BudgetClock::time_point m_parseBudgetWindowStart;
+  DataModel::ParseBudget m_parseBudget;
 
   quint64 m_parsedFrameCount;
   quint64 m_skippedFrameCount;
@@ -360,8 +359,9 @@ private:
                                     const TransformFrameInfo& info);
 
   // Parser-load budget guard
-  bool parseBudgetSkipFrame();
-  void parseBudgetAccount(BudgetClock::time_point startedAt);
+  [[nodiscard]] bool parseBudgetSkipFrame(int sourceId);
+  void parseBudgetAccount(int sourceId, BudgetClock::time_point startedAt);
+  SS_COLD void noteParseBudgetThinning(int sourceId);
   void parseBudgetReset() noexcept;
 
   // Transform compile + dispatch

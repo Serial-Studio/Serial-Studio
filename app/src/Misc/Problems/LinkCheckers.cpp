@@ -333,6 +333,83 @@ static void reportDroppedFrames(QList<Finding>& out)
 }
 
 /**
+ * @brief Maps an EWMA parse duty onto a coarse band, for the same text-stability reason as
+ *        bucketLabel().
+ */
+[[nodiscard]] static QString dutyBand(double duty)
+{
+  if (duty >= 0.9)
+    return trProblem("almost all");
+
+  if (duty >= 0.5)
+    return trProblem("more than half");
+
+  if (duty >= 0.25)
+    return trProblem("more than a quarter");
+
+  return trProblem("a significant share");
+}
+
+/**
+ * @brief Maps a keep-every-Nth decimation factor onto a coarse band so the finding text stays
+ *        stable while the governor fine-tunes N.
+ */
+[[nodiscard]] static QString thinningBand(int decimateN)
+{
+  if (decimateN >= 10)
+    return trProblem("most of its frames are being dropped");
+
+  if (decimateN >= 4)
+    return trProblem("roughly one in several frames is processed");
+
+  return trProblem("every second or third frame is processed");
+}
+
+/**
+ * @brief Returns the project title for @p sourceId, falling back to a numbered label.
+ */
+[[nodiscard]] static QString sourceLabel(int sourceId)
+{
+  static auto& builder = DataModel::FrameBuilder::instance();
+  const auto& sources  = builder.frame().sources;
+  for (const auto& source : sources)
+    if (source.sourceId == sourceId && !source.title.isEmpty())
+      return source.title;
+
+  return trProblem("Source %1").arg(sourceId);
+}
+
+/**
+ * @brief Reports every source the fair-share parse governor is currently thinning (spec 0051):
+ *        one finding per offender, banded so the text stays stable while the condition holds.
+ */
+static void reportParseThinning(QList<Finding>& out)
+{
+  static auto& builder = DataModel::FrameBuilder::instance();
+  if (!builder.parseBudgetThinning())
+    return;
+
+  const auto loads = builder.parseLoadSnapshot();
+  for (const auto& load : loads) {
+    if (load.decimateN <= 1)
+      continue;
+
+    auto finding = makeFinding(
+      Misc::ProblemCenter::Warning,
+      "parse-thinning",
+      trProblem("Dashboard data from \"%1\" is being thinned").arg(sourceLabel(load.sourceId)),
+      trProblem("Scripts for this source are using %1 of the available parse "
+                "capacity, so %2 until its load falls back under the fair share.")
+        .arg(dutyBand(load.duty), thinningBand(load.decimateN)),
+      trProblem("Simplify or batch the source's parser and transform scripts, lower "
+                "its data rate, or move heavy math into native pre-processing."));
+
+    finding.entityUniqueId = load.sourceId;
+    out.append(finding);
+  }
+}
+
+/**
  * @brief Reports bytes lost because the receive buffer filled up before it could be drained.
  */
 static void reportBufferOverflow(QList<Finding>& out)
@@ -371,6 +448,7 @@ static void checkLinkStatistics(QList<Finding>& out)
   reportChecksumFailures(out);
   reportDroppedFrames(out);
   reportBufferOverflow(out);
+  reportParseThinning(out);
 }
 
 /**

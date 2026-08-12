@@ -159,6 +159,7 @@ UI::Dashboard::Dashboard()
   : m_points(kDefaultPlotPoints)
   , m_widgetCount(0)
   , m_updateRequired(false)
+  , m_thinningActive(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
   , m_notificationLogEnabled(false)
@@ -251,6 +252,8 @@ UI::Dashboard::Dashboard()
       Q_EMIT updated();
     }
   });
+
+  connect(&timerEvents, &Misc::TimerEvents::timeout1Hz, this, &UI::Dashboard::pollThinningState);
 
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 
@@ -349,6 +352,29 @@ bool UI::Dashboard::frozen() const
   static auto& projectModel = DataModel::ProjectModel::instance();
   return projectModel.frozen() && SerialStudio::activated()
       && appState.operationMode() == SerialStudio::ProjectFile;
+}
+
+/**
+ * @brief Returns whether the parse governor is thinning any source, polled at 1 Hz for the
+ *        taskbar badge; never read or refreshed on the frame path.
+ */
+bool UI::Dashboard::thinningActive() const noexcept
+{
+  return m_thinningActive;
+}
+
+/**
+ * @brief 1 Hz poll of the parse governor's thinning latch; emits only on transitions so QML
+ *        bindings stay quiet while the state is stable.
+ */
+void UI::Dashboard::pollThinningState()
+{
+  static auto& builder    = DataModel::FrameBuilder::instance();
+  const bool now_thinning = builder.parseBudgetThinning();
+  if (now_thinning != m_thinningActive) {
+    m_thinningActive = now_thinning;
+    Q_EMIT thinningActiveChanged();
+  }
 }
 
 /**

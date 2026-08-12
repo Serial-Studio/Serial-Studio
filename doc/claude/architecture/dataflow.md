@@ -153,6 +153,19 @@ once per second.
 None of these counters is an input to a cached hotpath flag, and none of them gates frame
 processing.
 
+## Parse-Load Governor (spec 0051)
+
+`FrameBuilder` owns one `DataModel::ParseBudget` (header-only, `ParseBudget.h`): parse time is
+charged **per source** into EWMA duty estimates (leaky integrator, tau 250 ms) plus a shared
+total. While total duty stays under 90% of one core nobody is thinned; past it, only sources
+above their fair share (`0.90 / active sources`) are decimated — every Nth frame processed, N
+proportional to the overrun, recovering continuously as the EWMA decays. There is no fixed
+window, no global latch, and no message box: a light source can never be starved by a heavy
+one. Diagnostics follow spec 0033 — `parseLoadSnapshot()` / `parseBudgetThinning()` are pulled
+by the 1 Hz `link.statistics` checker (`Misc/Problems/LinkCheckers.cpp`, banded text) and the
+Dashboard taskbar badge poll; nothing on the frame path signals, allocates, or locks.
+`setParseBudgetEnabled(false)` (benchmark) bypasses both the skip gate and the accounting.
+
 ## Replay Ingestion (spec 0020)
 
 ProjectFile replay does not travel the byte pipeline: players call
@@ -187,8 +200,8 @@ training, and an ungated **Lua + dashboard** pipeline that loads an all-widget-t
 `HotpathBenchmark::active()` (which `Dashboard::streamAvailable()` honors so headless frames are
 accepted with no live device), arms every plot/FFT/multiplot/waterfall/GPS/3D widget, and trains
 the per-frame dashboard sub-hotpaths + a dashboard-slowdown readout. The gated runs disable the
-`FrameBuilder` parse-budget guard (an interactive 80%-duty throttle that a 100%-duty benchmark
-would trip every window) via `setParseBudgetEnabled(false)` and run **no** exporters or dashboard,
+`FrameBuilder` parse-budget guard (the spec-0051 fair-share governor, which a 100%-duty benchmark
+would engage) via `setParseBudgetEnabled(false)` and run **no** exporters or dashboard,
 so the gate measures pure parse capacity; the exporter and dashboard phases are deliberately *not*
 gated (their consumers can't drain faster than a flat-out producer, so the 8192-slot pool exhausts
 into the heap-fallback path — that penalty is the point of the readout). Each run lasts until both
