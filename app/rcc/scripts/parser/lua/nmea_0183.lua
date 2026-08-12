@@ -68,7 +68,7 @@ local function validateChecksum(sentence)
 
   local calculated = 0
   for i = 1, #data do
-    calculated = calculated ~ data:byte(i)
+    calculated = bit.bxor(calculated, data:byte(i))
   end
 
   return calculated == expected

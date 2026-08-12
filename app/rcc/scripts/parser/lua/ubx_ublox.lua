@@ -38,7 +38,7 @@ for i = 1, numItems do parsedValues[i] = 0 end
 local function extractUint16LE(bytes, offset)
   local b0 = bytes[offset + 1] or 0
   local b1 = bytes[offset + 2] or 0
-  return b0 | (b1 << 8)
+  return bit.bor(b0, bit.lshift(b1, 8))
 end
 
 -- Extracts a 32-bit unsigned integer from a byte table (little-endian).
@@ -47,7 +47,7 @@ local function extractUint32LE(bytes, offset)
   local b1 = bytes[offset + 2] or 0
   local b2 = bytes[offset + 3] or 0
   local b3 = bytes[offset + 4] or 0
-  return b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+  return bit.bor(b0, bit.lshift(b1, 8), bit.lshift(b2, 16), bit.lshift(b3, 24)) % 4294967296
 end
 
 -- Extracts a 32-bit signed integer from a byte table (little-endian).
@@ -62,14 +62,15 @@ end
 local function validateChecksum(msgClass, msgId, length, payload, ckA, ckB)
   local calcA, calcB = 0, 0
 
-  calcA = (calcA + msgClass) & 0xFF;           calcB = (calcB + calcA) & 0xFF
-  calcA = (calcA + msgId)    & 0xFF;           calcB = (calcB + calcA) & 0xFF
-  calcA = (calcA + (length & 0xFF)) & 0xFF;    calcB = (calcB + calcA) & 0xFF
-  calcA = (calcA + ((length >> 8) & 0xFF)) & 0xFF; calcB = (calcB + calcA) & 0xFF
+  calcA = bit.band(calcA + msgClass, 0xFF);           calcB = bit.band(calcB + calcA, 0xFF)
+  calcA = bit.band(calcA + msgId, 0xFF);              calcB = bit.band(calcB + calcA, 0xFF)
+  calcA = bit.band(calcA + bit.band(length, 0xFF), 0xFF); calcB = bit.band(calcB + calcA, 0xFF)
+  calcA = bit.band(calcA + bit.band(bit.rshift(length, 8), 0xFF), 0xFF)
+  calcB = bit.band(calcB + calcA, 0xFF)
 
   for i = 1, #payload do
-    calcA = (calcA + payload[i]) & 0xFF
-    calcB = (calcB + calcA) & 0xFF
+    calcA = bit.band(calcA + payload[i], 0xFF)
+    calcB = bit.band(calcB + calcA, 0xFF)
   end
 
   return (calcA == ckA) and (calcB == ckB)
@@ -152,7 +153,7 @@ function parse(frame)
   -- Extract header fields
   local msgClass      = frame[1]
   local msgId         = frame[2]
-  local payloadLength = frame[3] | (frame[4] << 8)
+  local payloadLength = bit.bor(frame[3], bit.lshift(frame[4], 8))
 
   -- Validate frame is long enough for declared payload + checksum
   if #frame < 4 + payloadLength + 2 then

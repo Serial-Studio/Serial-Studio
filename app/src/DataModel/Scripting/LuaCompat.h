@@ -21,7 +21,11 @@
 
 #pragma once
 
+// clang-format off
+extern "C" {
 #include <lua.h>
+}
+// clang-format on
 
 namespace DataModel {
 

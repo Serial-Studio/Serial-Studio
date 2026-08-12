@@ -42,7 +42,7 @@ local RAD_TO_DEG = 180.0 / math.pi
 local function extractUint16LE(bytes, offset)
   local b0 = bytes[offset + 1] or 0
   local b1 = bytes[offset + 2] or 0
-  return b0 | (b1 << 8)
+  return bit.bor(b0, bit.lshift(b1, 8))
 end
 
 -- Extracts a 16-bit signed integer from a byte table (little-endian).
@@ -58,7 +58,7 @@ local function extractUint32LE(bytes, offset)
   local b1 = bytes[offset + 2] or 0
   local b2 = bytes[offset + 3] or 0
   local b3 = bytes[offset + 4] or 0
-  return b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+  return bit.bor(b0, bit.lshift(b1, 8), bit.lshift(b2, 16), bit.lshift(b3, 24)) % 4294967296
 end
 
 -- Extracts a 32-bit signed integer from a byte table (little-endian).
@@ -71,17 +71,17 @@ end
 -- Extracts the PGN from a 29-bit CAN identifier.
 -- NMEA 2000 uses extended CAN IDs with PGN encoded in bits 8-25.
 local function extractPGN(canId)
-  local pf = (canId >> 16) & 0xFF
-  local ps = (canId >> 8)  & 0xFF
-  local dp = (canId >> 24) & 0x01
+  local pf = bit.band(bit.rshift(canId, 16), 0xFF)
+  local ps = bit.band(bit.rshift(canId, 8),  0xFF)
+  local dp = bit.band(bit.rshift(canId, 24), 0x01)
 
   -- PDU1 (PF < 240): destination-specific, PGN excludes PS field
   if pf < 240 then
-    return (dp << 16) | (pf << 8)
+    return bit.bor(bit.lshift(dp, 16), bit.lshift(pf, 8))
   end
 
   -- PDU2 (PF >= 240): broadcast, PGN includes PS field
-  return (dp << 16) | (pf << 8) | ps
+  return bit.bor(bit.lshift(dp, 16), bit.lshift(pf, 8), ps)
 end
 
 --------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ end
 
 -- PGN 129026 COG & SOG Rapid Update: course radians → degrees, speed m/s → knots.
 local function parseCogSog(data)
-  local cogRef = (data[2] or 0) & 0x03
+  local cogRef = bit.band(data[2] or 0, 0x03)
   local cog    = extractUint16LE(data, 2) * 0.0001 * RAD_TO_DEG
   local sog    = extractUint16LE(data, 4) * 0.01 * 1.94384
   return {cog, sog, cogRef}
@@ -165,7 +165,8 @@ function parse(frame)
   end
 
   -- Reconstruct the 29-bit CAN ID from the first four little-endian bytes
-  local canId = frame[1] | (frame[2] << 8) | (frame[3] << 16) | (frame[4] << 24)
+  local canId = bit.bor(frame[1], bit.lshift(frame[2], 8), bit.lshift(frame[3], 16),
+                        bit.lshift(frame[4], 24))
 
   -- Clamp payload length to the 8-byte CAN frame maximum
   local dataLength = frame[5]

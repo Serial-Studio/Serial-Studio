@@ -248,6 +248,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   json.insert(Keys::PlotTimeRange, m_plotTimeRange);
   json.insert(Keys::Frozen, m_frozen);
   json.insert(Keys::ChangeDrivenTransforms, m_changeDrivenTransforms);
+  json.insert(Keys::LuaFastMode, m_luaFastMode);
   json.insert(Keys::HexadecimalDelimiters, m_hexadecimalDelimiters);
 
   const QString writer  = DataModel::current_writer_version();

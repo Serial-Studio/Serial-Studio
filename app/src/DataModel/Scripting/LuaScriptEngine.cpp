@@ -21,9 +21,14 @@
 
 #include "DataModel/Scripting/LuaScriptEngine.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
+#include <luajit.h>
 #include <lualib.h>
+}
+// clang-format on
 
 #include <QDebug>
 #include <QMessageBox>
@@ -31,9 +36,11 @@
 
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -44,16 +51,18 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sandboxed subset of Lua standard libraries.
+ * @brief Sandboxed subset of Lua standard libraries. On LuaJIT the coroutine functions ship
+ *        inside the base library and there is no utf8 module (unused by the shipped script
+ *        corpus); bit is LuaJIT's native bitwise library, the compat layer's foundation.
+ *        ffi and jit are deliberately absent in every mode: sandbox escape.
  */
 static const luaL_Reg kSafeLibs[] = {
-  {       "_G",      luaopen_base},
-  {    "table",     luaopen_table},
-  {   "string",    luaopen_string},
-  {     "math",      luaopen_math},
-  {     "utf8",      luaopen_utf8},
-  {"coroutine", luaopen_coroutine},
-  {    nullptr,           nullptr}
+  {    "_G",   luaopen_base},
+  { "table",  luaopen_table},
+  {"string", luaopen_string},
+  {  "math",   luaopen_math},
+  {   "bit",    luaopen_bit},
+  { nullptr,        nullptr}
 };
 
 /**
@@ -112,6 +121,77 @@ static void openSafeLibs(lua_State* L)
   }
   lua_pop(L, 1);
   // code-verify on
+}
+
+/**
+ * @brief Everything a fresh engine state needs installed, bundled for the protected bootstrap.
+ */
+struct EngineBootstrapCtx {
+  DataModel::LuaScriptEngine* self;
+  int sourceId;
+};
+
+/**
+ * @brief Runs the whole sandbox/library/API installation under lua_pcall protection: on LuaJIT
+ *        any raw API call outside a protected frame can reach the panic handler on allocation
+ *        failure, and the never-aborts-host contract requires the panic to be unreachable.
+ */
+static int bootstrapEngineState(lua_State* L)
+{
+  auto* ctx = static_cast<EngineBootstrapCtx*>(lua_touserdata(L, 1));
+
+  openSafeLibs(L);
+
+  DataModel::installLuaConsole(L);
+  DataModel::installLuaCompat(L);
+  DataModel::NotificationCenter::installScriptApi(L);
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  frameBuilder.injectTableApiLua(L);
+
+  DataModel::DeviceWriteApi::installLua(L, ctx->sourceId);
+  DataModel::ActionFireApi::installLua(L);
+  DataModel::DashboardApi::installLua(L);
+  DataModel::ScriptApiCall::installLua(L, ctx->sourceId);
+
+  lua_pushlightuserdata(L, ctx->self);
+  lua_setfield(L, LUA_REGISTRYINDEX, "__ss_engine__");
+  return 0;
+}
+
+/**
+ * @brief Appends an actionable migration hint when a compile error looks like Lua 5.3-only
+ *        bitwise/floor-division syntax, which LuaJIT's 5.1 grammar rejects (spec 0051 R22):
+ *        the raw "unexpected symbol" is useless to a user whose script worked on the old
+ *        runtime, so the construct and its bit.* replacement are named explicitly.
+ */
+[[nodiscard]] static QString enrichSyntaxError(const QString& error, const QString& script)
+{
+  static const struct {
+    const char* needle;
+    const char* hint;
+  } kConstructs[] = {
+    {"<<",             "'<<' -> bit.lshift(a, b)"},
+    {">>",             "'>>' -> bit.rshift(a, b)"},
+    { "&",                "'&' -> bit.band(a, b)"},
+    { "|",                 "'|' -> bit.bor(a, b)"},
+    { "~", "'~' -> bit.bxor(a, b) or bit.bnot(a)"},
+    {"//",            "'//' -> math.floor(a / b)"},
+  };
+
+  QStringList hints;
+  for (const auto& construct : kConstructs)
+    if (script.contains(QLatin1String(construct.needle)))
+      hints.append(QLatin1String(construct.hint));
+
+  if (hints.isEmpty())
+    return error;
+
+  return error
+       + QObject::tr("\n\nThis script may use Lua 5.3 bitwise syntax, which this runtime "
+                     "does not support. Replace: %1. The bit and bit32 libraries are "
+                     "available in every script.")
+           .arg(hints.join(QLatin1String("; ")));
 }
 
 /**
@@ -175,29 +255,27 @@ void DataModel::LuaScriptEngine::createState()
 
   lua_atpanic(m_state, luaPanicHandler);
 
-  openSafeLibs(m_state);
+  EngineBootstrapCtx ctx{this, m_sourceId};
+  lua_pushcfunction(m_state, bootstrapEngineState);
+  lua_pushlightuserdata(m_state, &ctx);
+  const int status = guardedPcall(m_state, 1, 0, 0);
+  if (status != LUA_OK) [[unlikely]] {
+    qWarning() << "[LuaScriptEngine] Engine bootstrap failed:"
+               << QString::fromUtf8(lua_tostring(m_state, -1));
+    closeLuaState(m_state);
+    m_state    = nullptr;
+    m_loaded   = false;
+    m_disabled = true;
+    return;
+  }
 
-  DataModel::installLuaConsole(m_state);
-
-  DataModel::installLuaCompat(m_state);
-
-  DataModel::NotificationCenter::installScriptApi(m_state);
-
-  static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  frameBuilder.injectTableApiLua(m_state);
-
-  DataModel::DeviceWriteApi::installLua(m_state, m_sourceId);
-
-  DataModel::ActionFireApi::installLua(m_state);
-
-  DataModel::DashboardApi::installLua(m_state);
-
-  DataModel::ScriptApiCall::installLua(m_state, m_sourceId);
-
-  lua_pushlightuserdata(m_state, this);
-  lua_setfield(m_state, LUA_REGISTRYINDEX, "__ss_engine__");
-
-  lua_sethook(m_state, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  if (projectModel.luaFastMode()) {
+    luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
+  } else {
+    luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
+    lua_sethook(m_state, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
+  }
 
   m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
   m_loaded              = false;
@@ -239,7 +317,7 @@ int DataModel::LuaScriptEngine::language() const noexcept
 void DataModel::LuaScriptEngine::collectGarbage()
 {
   if (m_state)
-    lua_gc(m_state, LUA_GCCOLLECT);
+    lua_gc(m_state, LUA_GCCOLLECT, 0);
 }
 
 /**
@@ -401,7 +479,8 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     const int status =
       luaL_loadbuffer(m_state, utf8.constData(), utf8.size(), fileName.constData());
     if (status != LUA_OK) {
-      const QString errorMsg = QString::fromUtf8(lua_tostring(m_state, -1));
+      const QString errorMsg =
+        enrichSyntaxError(QString::fromUtf8(lua_tostring(m_state, -1)), script);
       lua_pop(m_state, 1);
       if (showMessageBoxes) {
         Misc::Utilities::showMessageBox(

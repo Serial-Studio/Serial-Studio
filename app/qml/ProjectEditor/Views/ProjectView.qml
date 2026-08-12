@@ -258,6 +258,32 @@ Widgets.Pane {
 
                   onToggled: Cpp_JSON_ProjectModel.changeDrivenTransforms = checked
                 }
+
+                Label {
+                  Layout.alignment: Qt.AlignVCenter
+                  text: qsTr("Fast Lua Execution:")
+                }
+
+                Switch {
+                  id: fastLuaSwitch
+
+                  Layout.leftMargin: -9
+                  checked: Cpp_JSON_ProjectModel.luaFastMode
+                  Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+
+                  ToolTip.delay: 700
+                  ToolTip.visible: hovered
+                  ToolTip.text: qsTr("Run Lua scripts with the JIT compiler for maximum "
+                                     + "throughput. Disables the runaway-script watchdog; "
+                                     + "off by default.")
+
+                  onToggled: {
+                    Cpp_JSON_ProjectModel.requestLuaFastMode(checked)
+                    checked = Qt.binding(function() {
+                      return Cpp_JSON_ProjectModel.luaFastMode
+                    })
+                  }
+                }
               }
             }
           }

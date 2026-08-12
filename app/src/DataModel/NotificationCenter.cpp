@@ -21,8 +21,12 @@
 
 #include "DataModel/NotificationCenter.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
+}
+// clang-format on
 
 #include <QCoreApplication>
 #include <QDateTime>

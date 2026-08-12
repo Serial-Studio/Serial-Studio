@@ -196,6 +196,7 @@ inline constexpr KeyView PlotTimeRange("plotTimeRange");
 
 // Transform execution
 inline constexpr KeyView ChangeDrivenTransforms("changeDrivenTransforms");
+inline constexpr KeyView LuaFastMode("luaFastMode");
 inline constexpr KeyView kActiveGroupSubKey("activeGroup");
 inline constexpr KeyView kDashboardWindowsSubKey("dashboardWindows");
 inline constexpr KeyView HiddenGroups("hiddenGroups");

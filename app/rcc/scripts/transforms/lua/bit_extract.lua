@@ -15,5 +15,5 @@ local bitIndex = 0
 
 function transform(value)
   local v = math.floor(value)
-  return (v >> bitIndex) & 1
+  return bit.band(bit.rshift(v, bitIndex), 1)
 end

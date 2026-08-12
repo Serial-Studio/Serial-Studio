@@ -27,9 +27,9 @@ local function extractFloat32LE(bytes, offset)
   local b2 = bytes[offset + 2]
   local b3 = bytes[offset + 3]
 
-  local sign = (b3 & 0x80) ~= 0 and -1 or 1
-  local exponent = ((b3 & 0x7F) << 1) | (b2 >> 7)
-  local mantissa = ((b2 & 0x7F) << 16) | (b1 << 8) | b0
+  local sign = bit.band(b3, 0x80) ~= 0 and -1 or 1
+  local exponent = bit.bor(bit.lshift(bit.band(b3, 0x7F), 1), bit.rshift(b2, 7))
+  local mantissa = bit.bor(bit.lshift(bit.band(b2, 0x7F), 16), bit.lshift(b1, 8), b0)
 
   if exponent == 0 then
     return sign * mantissa * 2.0 ^ (-149)
@@ -39,22 +39,22 @@ local function extractFloat32LE(bytes, offset)
     return mantissa ~= 0 and (0/0) or sign * math.huge
   end
 
-  return sign * (mantissa | 0x800000) * 2.0 ^ (exponent - 150)
+  return sign * bit.bor(mantissa, 0x800000) * 2.0 ^ (exponent - 150)
 end
 
 local function extractInt16LE(bytes, offset)
-  local value = bytes[offset] | (bytes[offset + 1] << 8)
+  local value = bit.bor(bytes[offset], bit.lshift(bytes[offset + 1], 8))
   if value > 32767 then value = value - 65536 end
   return value
 end
 
 local function extractUint16LE(bytes, offset)
-  return bytes[offset] | (bytes[offset + 1] << 8)
+  return bit.bor(bytes[offset], bit.lshift(bytes[offset + 1], 8))
 end
 
 local function extractInt32LE(bytes, offset)
-  local value = bytes[offset] | (bytes[offset + 1] << 8)
-                | (bytes[offset + 2] << 16) | (bytes[offset + 3] << 24)
+  local value = bit.bor(bytes[offset], bit.lshift(bytes[offset + 1], 8),
+                        bit.lshift(bytes[offset + 2], 16), bit.lshift(bytes[offset + 3], 24))
   if value > 2147483647 then value = value - 4294967296 end
   return value
 end

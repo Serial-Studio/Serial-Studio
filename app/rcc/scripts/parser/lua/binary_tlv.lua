@@ -48,7 +48,7 @@ function parse(frame)
     -- Read the value bytes and combine big-endian into a number
     local value = 0
     for j = 0, length - 1 do
-      value = (value << 8) | frame[i]
+      value = value * 256 + frame[i]
       i = i + 1
     end
 

@@ -21,8 +21,12 @@
 
 #include "DataModel/Scripting/ScriptApiCall.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
+}
+// clang-format on
 
 #include <cmath>
 #include <QByteArray>
@@ -42,6 +46,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
+#include "DataModel/Scripting/LuaCompatJIT.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
 

@@ -35,7 +35,7 @@ function transform(value)
     local old = fifo[idx]
     local lo, hi = 1, count
     while lo < hi do
-      local mid = (lo + hi) // 2
+      local mid = math.floor((lo + hi) / 2)
       if sorted[mid] < old then
         lo = mid + 1
       else
@@ -51,7 +51,7 @@ function transform(value)
   -- Insert the new value into the sorted view at the correct position
   local lo, hi = 1, count + 1
   while lo < hi do
-    local mid = (lo + hi) // 2
+    local mid = math.floor((lo + hi) / 2)
     if sorted[mid] < value then
       lo = mid + 1
     else
@@ -69,5 +69,5 @@ function transform(value)
   idx = idx % N + 1
 
   -- Median: middle element for odd N, lower-middle for even N
-  return sorted[(count + 1) // 2]
+  return sorted[math.floor((count + 1) / 2)]
 end

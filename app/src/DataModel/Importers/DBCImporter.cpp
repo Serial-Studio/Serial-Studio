@@ -494,31 +494,34 @@ std::vector<DataModel::TableDef> DataModel::DBCImporter::generateTables(
 -- table of byte values. Motorola (big-endian) walks the in-byte bit index
 -- down and jumps +15 across byte boundaries (the DBC sawtooth); Intel
 -- (little-endian) reads LSB-first runs. Bytes past the frame read 0.
+-- Byte-level masking uses the 32-bit bit library; the VALUE accumulates in
+-- plain arithmetic, which stays exact to 53-bit signals (the display
+-- pipeline is double-precision anyway; 5.3 bitwise ops would cap at 32).
 local function extract(frame, base, sig)
   local value = 0
   if sig.be then
     local bit_pos = sig.start
     for _ = 1, sig.len do
-      local byte = frame[base + (bit_pos // 8)] or 0
-      value = (value << 1) | ((byte >> (bit_pos % 8)) & 1)
+      local byte = frame[base + math.floor(bit_pos / 8)] or 0
+      value = value * 2 + bit.band(bit.rshift(byte, bit_pos % 8), 1)
       bit_pos = (bit_pos % 8 == 0) and (bit_pos + 15) or (bit_pos - 1)
     end
   else
     local bits_read = 0
     local bit_shift = sig.start % 8
-    local byte_idx = sig.start // 8
+    local byte_idx = math.floor(sig.start / 8)
     while bits_read < sig.len do
       local byte = frame[base + byte_idx] or 0
       local take = math.min(8 - bit_shift, sig.len - bits_read)
-      value = value | (((byte >> bit_shift) & ((1 << take) - 1)) << bits_read)
+      value = value + bit.band(bit.rshift(byte, bit_shift), 2 ^ take - 1) * 2 ^ bits_read
       bits_read = bits_read + take
       bit_shift = 0
       byte_idx = byte_idx + 1
     end
   end
 
-  if sig.signed and (value & (1 << (sig.len - 1))) ~= 0 then
-    value = value - (1 << sig.len)
+  if sig.signed and value >= 2 ^ (sig.len - 1) then
+    value = value - 2 ^ sig.len
   end
 
   return value
@@ -528,17 +531,17 @@ end
 -- of byte 1 selects the extended (29-bit, 4-byte id) header form.
 local function frame_id(frame)
   local b1 = frame[1]
-  if (b1 & 0x80) ~= 0 then
+  if bit.band(b1, 0x80) ~= 0 then
     if #frame < 5 then
       return nil
     end
 
-    local id = ((b1 & 0x1F) << 24) | (frame[2] << 16)
-             | (frame[3] << 8) | frame[4]
+    local id = bit.band(b1, 0x1F) * 16777216 + frame[2] * 65536
+             + frame[3] * 256 + frame[4]
     return id, 6
   end
 
-  return ((b1 << 8) | frame[2]), 4
+  return (b1 * 256 + frame[2]), 4
 end
 
 function parse(frame)

@@ -38,7 +38,7 @@ for i = 1, numItems do parsedValues[i] = 0 end
 local function extractUint16BE(bytes, offset)
   local b0 = bytes[offset + 1] or 0
   local b1 = bytes[offset + 2] or 0
-  return (b0 << 8) | b1
+  return bit.bor(bit.lshift(b0, 8), b1)
 end
 
 -- Extracts a 16-bit signed integer from a byte table (big-endian).
@@ -54,7 +54,7 @@ local function extractUint32BE(bytes, offset)
   local b1 = bytes[offset + 2] or 0
   local b2 = bytes[offset + 3] or 0
   local b3 = bytes[offset + 4] or 0
-  return (b0 << 24) | (b1 << 16) | (b2 << 8) | b3
+  return bit.bor(bit.lshift(b0, 24), bit.lshift(b1, 16), bit.lshift(b2, 8), b3) % 4294967296
 end
 
 -- Extracts a 32-bit signed integer from a byte table (big-endian).
@@ -70,7 +70,7 @@ local function validateChecksum(payload, receivedChecksum)
   for i = 1, #payload do
     sum = sum + payload[i]
   end
-  return (sum & 0x7FFF) == receivedChecksum
+  return bit.band(sum, 0x7FFF) == receivedChecksum
 end
 
 --------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ function parse(frame)
   end
 
   -- Parse 15-bit payload length from first two bytes
-  local payloadLength = ((frame[1] & 0x7F) << 8) | frame[2]
+  local payloadLength = bit.bor(bit.lshift(bit.band(frame[1], 0x7F), 8), frame[2])
 
   -- Validate frame is long enough for declared payload + checksum
   if #frame < 2 + payloadLength + 2 then
@@ -162,7 +162,7 @@ function parse(frame)
   -- Parse checksum as 15-bit big-endian value
   local checksumOffset = 2 + payloadLength
   local receivedChecksum =
-      ((frame[checksumOffset + 1] & 0x7F) << 8) | frame[checksumOffset + 2]
+      bit.bor(bit.lshift(bit.band(frame[checksumOffset + 1], 0x7F), 8), frame[checksumOffset + 2])
 
   -- Validate SiRF checksum over the full payload
   if not validateChecksum(payload, receivedChecksum) then

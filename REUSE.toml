@@ -154,8 +154,8 @@ SPDX-FileCopyrightText = "2003-2010 Mark Borgerding"
 SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
-path = ["lib/lua/**"]
-SPDX-FileCopyrightText = "1994-2024 Lua.org, PUC-Rio"
+path = ["lib/luajit/**"]
+SPDX-FileCopyrightText = "2005-2026 Mike Pall"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]

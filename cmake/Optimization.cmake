@@ -50,15 +50,16 @@ include_guard(GLOBAL)
 # flags) so our inlining and per-target /W4 win without a flood of D9025 "overriding" diagnostics.
 #
 # Non-MSVC builds force -fexceptions + -funwind-tables + -fasynchronous-unwind-tables on every TU:
-# Lua is compiled as C++ and throws across the VM stack on any runtime error, so every linked object
-# must carry unwind metadata, or --gc-sections/-dead_strip + LTO can drop a personality routine and
-# turn a routine Lua type error into a std::terminate. On macOS, Xcode 26's ld (ld-1267) drops DWARF
+# the LuaJIT runtime (spec 0051; replaced the Lua-5.4-as-C++ design) delivers Lua errors through
+# external frame unwinding on the unwind-external targets and interoperates with C++ exceptions
+# there, so every linked object must still carry unwind metadata for the error path to walk out
+# of the VM into the host's pcall/catch guards. On macOS, Xcode 26's ld (ld-1267) drops DWARF
 # (__eh_frame) exception unwind under -flto for functions that fall back from compact unwind
 # (llvm/llvm-project#135888, open upstream). With pac-ret gated off Apple (Hardening.cmake) the app
-# rides compact unwind, so that fallback population is tiny; the lua54 target additionally compiles
-# with -fno-lto and DWARF-only unwind (lib/lua/CMakeLists.txt), keeping every frame of the Lua throw
-# path independent of LTO codegen. Remaining guards: per-TU unwind tables here plus a C++ try/catch
-# around every Lua entry.
+# rides compact unwind, so that fallback population is tiny; the luajit target additionally opts
+# out of LTO entirely (lib/luajit/CMakeLists.txt: assembly VM + generated tables). Remaining
+# guards: per-TU unwind tables here, protected bootstraps around every VM setup path, and pcall
+# around every script entry.
 #
 # Architecture baselines: x86-64 -> -march=x86-64-v2 (SSE4.2, 2012+ CPUs); aarch64 -> armv8-a (plus
 # -latomic); armv7l -> armv7-a -mfpu=neon -mfloat-abi=hard (hardfloat pinned so a soft-float
@@ -238,9 +239,9 @@ if(PRODUCTION_OPTIMIZATION)
       message(STATUS "Production branch: AppleClang (macOS)")
 
       # LTO is on: Xcode's ld drops DWARF exception unwind under -flto for compact-unwind
-      # fallback functions (llvm/llvm-project#135888), but the throw-across-LTO hazard is
-      # confined to Lua, and the lua54 target opts out of LTO with DWARF-only unwind
-      # (lib/lua/CMakeLists.txt). The 2026-07 CI hang that once implicated LTO was
+      # fallback functions (llvm/llvm-project#135888), but the unwind-across-LTO hazard is
+      # confined to the Lua error path, and the luajit target opts out of LTO entirely
+      # (lib/luajit/CMakeLists.txt). The 2026-07 CI hang that once implicated LTO was
       # root-caused to an API::Server socket ABA race, so the blanket disable is gone.
       # Frame pointers stay on: the Apple arm64 ABI walks x29 chains — but only
       # non-leaf frames must keep them, so -momit-leaf-frame-pointer frees x29 in leaf loops

@@ -25,11 +25,11 @@ local function b64decode(input)
   for i = 1, #input do
     local val = b64lookup[input:byte(i)]
     if val then
-      buffer = (buffer << 6) | val
+      buffer = bit.bor(bit.lshift(buffer, 6), val)
       bits = bits + 6
       if bits >= 8 then
         bits = bits - 8
-        result[#result + 1] = (buffer >> bits) & 0xFF
+        result[#result + 1] = bit.band(bit.rshift(buffer, bits), 0xFF)
       end
     end
   end

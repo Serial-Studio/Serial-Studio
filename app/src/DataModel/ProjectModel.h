@@ -87,6 +87,10 @@ class ProjectModel : public QObject {
              READ changeDrivenTransforms
              WRITE setChangeDrivenTransforms
              NOTIFY changeDrivenTransformsChanged)
+  Q_PROPERTY(bool luaFastMode
+             READ luaFastMode
+             WRITE setLuaFastMode
+             NOTIFY luaFastModeChanged)
   Q_PROPERTY(int frameParserLanguage
              READ  frameParserLanguage
              WRITE setFrameParserLanguage
@@ -147,6 +151,7 @@ signals:
   void plotTimeRangeChanged();
   void frozenChanged();
   void changeDrivenTransformsChanged();
+  void luaFastModeChanged();
   void jsonFileChanged();
   void projectFileChangedOnDisk();
   void modifiedChanged();
@@ -253,6 +258,7 @@ public:
   [[nodiscard]] double plotTimeRange() const noexcept;
   [[nodiscard]] bool frozen() const noexcept;
   [[nodiscard]] bool changeDrivenTransforms() const noexcept;
+  [[nodiscard]] bool luaFastMode() const noexcept;
   [[nodiscard]] int groupCount() const noexcept;
   [[nodiscard]] int datasetCount() const;
   [[nodiscard]] int sourceCount() const noexcept;
@@ -344,6 +350,8 @@ public slots:
   void setPlotTimeRange(const double seconds);
   void setFrozen(const bool frozen);
   void setChangeDrivenTransforms(const bool enabled);
+  void setLuaFastMode(const bool enabled);
+  void requestLuaFastMode(const bool enabled);
   void clearJsonFilePath();
 
   Q_INVOKABLE QString addTable(const QString& name, int parentFolderId = -1);
@@ -602,6 +610,7 @@ private:
   void loadPlotTimeRange(const QJsonObject& json);
   void loadFrozen(const QJsonObject& json);
   void loadChangeDrivenTransforms(const QJsonObject& json);
+  void loadLuaFastMode(const QJsonObject& json);
   void migrateLegacyLayoutKeys();
   void migrateLegacyDashboardLayout(const QJsonObject& json);
   bool migrateLegacySeparator(const QJsonObject& json);
@@ -661,6 +670,7 @@ private:
   double m_plotTimeRange;
   bool m_frozen;
   bool m_changeDrivenTransforms;
+  bool m_luaFastMode;
   int m_nextUniqueId;
   bool m_modified;
   bool m_initialized;

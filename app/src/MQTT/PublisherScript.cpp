@@ -13,14 +13,20 @@
 
 #  include "MQTT/PublisherScript.h"
 
+// clang-format off
+extern "C" {
 #  include <lauxlib.h>
 #  include <lua.h>
+#  include <luajit.h>
 #  include <lualib.h>
+}
+// clang-format on
 
 #  include <QDebug>
 #  include <stdexcept>
 
 #  include "DataModel/Scripting/LuaCompat.h"
+#  include "DataModel/Scripting/LuaCompatJIT.h"
 
 /**
  * @brief Calls lua_pcall under a C++ try/catch -- escaped exceptions become LUA_ERRRUN.
@@ -61,6 +67,7 @@ static void openSafeLibs(lua_State* L)
     { "table",  luaopen_table},
     {"string", luaopen_string},
     {  "math",   luaopen_math},
+    {   "bit",    luaopen_bit},
     { nullptr,        nullptr}
   };
 
@@ -132,6 +139,7 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
 
     lua_pushlightuserdata(m_luaState, this);
     lua_setfield(m_luaState, LUA_REGISTRYINDEX, "__ss_publisher__");
+    luaJIT_setmode(m_luaState, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
     lua_sethook(m_luaState, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
 
     const QByteArray utf8 = source.toUtf8();

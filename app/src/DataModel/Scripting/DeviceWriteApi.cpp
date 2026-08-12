@@ -21,8 +21,12 @@
 
 #include "DataModel/Scripting/DeviceWriteApi.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
+}
+// clang-format on
 
 #include <QByteArray>
 #include <QDebug>

@@ -21,9 +21,14 @@
 
 #include "DataModel/Scripting/MacroRunner.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
+#include <luajit.h>
 #include <lualib.h>
+}
+// clang-format on
 
 #include <QCoreApplication>
 #include <QDeadlineTimer>
@@ -42,6 +47,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/MacroWorker.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "SerialStudio.h"
@@ -68,6 +74,29 @@ struct MacroLuaContext {
   DataModel::MacroRunner* runner;
   QDeadlineTimer deadline;
 };
+
+/**
+ * @brief Removes the ffi and jit modules LuaJIT's luaL_openlibs installs: ffi is a full
+ *        sandbox escape and jit is engine control, and neither is exposed to user scripts in
+ *        any execution mode (spec 0051 constraint) -- macros included.
+ */
+static void stripJitOnlyLibs(lua_State* L)
+{
+  for (const char* name : {"ffi", "jit"}) {
+    lua_pushnil(L);
+    lua_setglobal(L, name);
+    lua_getglobal(L, "package");
+    if (lua_istable(L, -1)) {
+      lua_getfield(L, -1, "loaded");
+      if (lua_istable(L, -1)) {
+        lua_pushnil(L);
+        lua_setfield(L, -2, name);
+      }
+      lua_pop(L, 1);
+    }
+    lua_pop(L, 1);
+  }
+}
 
 /**
  * @brief Lua atpanic handler that throws so abort() is never reached.
@@ -281,6 +310,8 @@ void DataModel::MacroRunner::runLua(const QString& source)
   bool ok = false;
   try {
     luaL_openlibs(state);
+    stripJitOnlyLibs(state);
+    luaJIT_setmode(state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
     DataModel::installLuaConsole(state);
     DataModel::installLuaCompat(state);
     DataModel::ScriptApiCall::installAll(state, 0);

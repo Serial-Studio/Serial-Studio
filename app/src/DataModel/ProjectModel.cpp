@@ -88,6 +88,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_plotTimeRange(10.0)
   , m_frozen(false)
   , m_changeDrivenTransforms(false)
+  , m_luaFastMode(false)
   , m_nextUniqueId(1)
   , m_modified(false)
   , m_initialized(false)
@@ -991,6 +992,14 @@ bool DataModel::ProjectModel::changeDrivenTransforms() const noexcept
 }
 
 /**
+ * @brief Returns whether Fast Lua execution (JIT on, watchdog off) is enabled for this project.
+ */
+bool DataModel::ProjectModel::luaFastMode() const noexcept
+{
+  return m_luaFastMode;
+}
+
+/**
  * @brief Returns the number of groups in the project.
  */
 int DataModel::ProjectModel::groupCount() const noexcept
@@ -1505,6 +1514,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_plotTimeRange            = 10.0;
   m_frozen                   = false;
   m_changeDrivenTransforms   = false;
+  m_luaFastMode              = false;
   m_nextUniqueId             = 1;
   m_controlScriptCode        = "";
   static auto& controlScript = DataModel::ControlScript::instance();
@@ -1557,6 +1567,7 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT plotTimeRangeChanged();
   Q_EMIT frozenChanged();
   Q_EMIT changeDrivenTransformsChanged();
+  Q_EMIT luaFastModeChanged();
 
   if (wasLocked)
     Q_EMIT lockedChanged();
@@ -1688,6 +1699,53 @@ void DataModel::ProjectModel::setChangeDrivenTransforms(const bool enabled)
   m_changeDrivenTransforms = enabled;
   setModified(true);
   Q_EMIT changeDrivenTransformsChanged();
+}
+
+/**
+ * @brief Toggles Fast Lua execution (spec 0051 R20): one mode switch, because JIT-compiled
+ *        traces never fire the count hook -- a "watchdog" alongside an active JIT would be a
+ *        silently dead safety control. Engines re-read the flag on their next (re)compile.
+ */
+void DataModel::ProjectModel::setLuaFastMode(const bool enabled)
+{
+  if (m_luaFastMode == enabled)
+    return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Toggle Fast Lua Execution")};
+
+  m_luaFastMode = enabled;
+  setModified(true);
+  Q_EMIT luaFastModeChanged();
+}
+
+/**
+ * @brief UI entry point for the Fast-mode toggle: enabling walks through the native consent
+ *        box that names the traded-away watchdog (spec 0051 R20) before the property flips.
+ *        Programmatic callers (API handlers, tests) use setLuaFastMode directly and never see
+ *        a modal.
+ */
+void DataModel::ProjectModel::requestLuaFastMode(const bool enabled)
+{
+  if (!enabled || m_luaFastMode == enabled) {
+    setLuaFastMode(enabled);
+    return;
+  }
+
+  const int choice = Misc::Utilities::showMessageBox(
+    tr("Enable Fast Lua Execution?"),
+    tr("Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x "
+       "faster), but the runaway-script watchdog cannot operate: a script stuck in an "
+       "infinite loop will stall its data source until you disconnect.\n\n"
+       "Enable it only for scripts you trust and have tested in Safe mode first."),
+    QMessageBox::Warning,
+    tr("Fast Lua Execution"),
+    QMessageBox::Ok | QMessageBox::Cancel,
+    QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Ok)
+    setLuaFastMode(true);
+  else
+    Q_EMIT luaFastModeChanged();
 }
 
 /**

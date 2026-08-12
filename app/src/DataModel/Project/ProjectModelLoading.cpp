@@ -393,6 +393,7 @@ DataModel::ProjectModel::DocumentLoadFlags DataModel::ProjectModel::applyJsonDoc
   loadPlotTimeRange(json);
   loadFrozen(json);
   loadChangeDrivenTransforms(json);
+  loadLuaFastMode(json);
   migrateLegacyLayoutKeys();
   migrateLegacyDashboardLayout(json);
 
@@ -1022,6 +1023,14 @@ void DataModel::ProjectModel::loadChangeDrivenTransforms(const QJsonObject& json
 }
 
 /**
+ * @brief Reads the Fast-Lua-execution flag from the project document (absent key = Safe).
+ */
+void DataModel::ProjectModel::loadLuaFastMode(const QJsonObject& json)
+{
+  m_luaFastMode = json.value(Keys::LuaFastMode).toBool(false);
+}
+
+/**
  * @brief Rewrites legacy "__layout__:N__" widgetSettings keys into canonical "layout:N" form.
  */
 void DataModel::ProjectModel::migrateLegacyLayoutKeys()
@@ -1138,6 +1147,7 @@ void DataModel::ProjectModel::emitProjectLoadedSignals(const bool includeJsonFil
   Q_EMIT plotTimeRangeChanged();
   Q_EMIT frozenChanged();
   Q_EMIT changeDrivenTransformsChanged();
+  Q_EMIT luaFastModeChanged();
 
   if (!m_silentReload)
     Q_EMIT sourceStructureChanged();

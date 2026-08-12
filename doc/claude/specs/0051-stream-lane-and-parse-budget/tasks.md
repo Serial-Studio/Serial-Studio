@@ -136,7 +136,12 @@ the AC3 badge visual check.
 - **Verify:** cmake files read-back against LuaJIT's canonical build; maintainer build on
   macOS first (unwind history).
 - **Deps:** none (parallel to M1)
-- [ ] done
+- [x] done (structure) — 2026-08-11; LuaJIT v2.1 vendored at pin 1edc3e52b67 (2026-08-03);
+  lib/luajit/CMakeLists.txt ports Makefile+msvcbuild two-stage build (native x64/arm64,
+  -dM probe on non-MSVC, hardcoded msvcbuild recipe on MSVC, LUA52COMPAT on, UNWIND_EXTERNAL
+  per-OS, no-LTO + no-stack-protector target policy); lib/ + app link switched lua54→luajit
+  (lua54 tree kept until T13); REUSE annotation added. App WON'T COMPILE until T8/T9 shims —
+  expected; maintainer smoke-CONFIGURE recommended early.
 
 ### T8 — API-drift compat header + protected bootstrap
 
@@ -150,7 +155,15 @@ the AC3 badge visual check.
 - **Verify:** code-verify; grep confirms zero unprotected `lua_*` state-setup outside
   bootstrap in touched files.
 - **Deps:** T7
-- [ ] done
+- [x] done — 2026-08-11; `LuaCompatJIT.h` shims (same-name: lua_isinteger integral-probe,
+  lua_rawlen/geti/seti, luaL_len/requiref, pushglobaltable, absindex, luacompatSetChunkEnv
+  for the 5.1 setfenv idiom); LuaScriptEngine: protected bootstrap (EngineBootstrapCtx via
+  pcall'd C fn, panic unreachable during setup), sandbox libs → base/table/string/math/bit
+  (utf8/coroutine modules gone: LuaJIT ships coroutine in base, utf8 unused by corpus);
+  ScriptApiCall include-only (drift resolved by shims). KEY FINDINGS: LuaJIT supports
+  lua_Debug.nparams (arity probe survives); luaL_loadbufferx/LUA_OK/MASKCOUNT present;
+  string.pack/unpack unused anywhere; enable_language(C) was missing in lib/luajit cmake
+  (user-reported configure error, fixed).
 
 ### T9 — Engine call-sites on LuaJIT
 
@@ -161,7 +174,13 @@ the AC3 badge visual check.
   sites unchanged (Safe mode).
 - **Verify:** code-verify; error-path ctest lands in T12.
 - **Deps:** T8
-- [ ] done
+- [x] done — 2026-08-11; FrameBuilder: transform-engine protected bootstrap (lambda C fn +
+  pcall), setupvalue→luacompatSetChunkEnv, sandbox libs swapped (+bit); MacroRunner:
+  stripJitOnlyLibs after luaL_openlibs (LuaJIT's openlibs loads ffi+jit — sandbox
+  constraint applies to macros too) + compat include; PublisherScript editors' safe-lib
+  tables were already 5.1-shaped, gained bit + include. Catch-walls kept (LuaJIT
+  unwind-external platforms deliver Lua errors as catchable C++ exceptions — backstop
+  still functional on every shipped platform).
 
 ### T10 — LuaCompat inversion + editor/validation surfaces
 
@@ -175,7 +194,11 @@ the AC3 badge visual check.
   same bootstrap.
 - **Verify:** code-verify; sandbox grep (`ffi`, `luaopen_jit`) returns nothing exposed.
 - **Deps:** T8
-- [ ] done
+- [x] done — 2026-08-11; LuaCompat.cpp: fast bit32-over-native-bit path added ahead of the
+  (already operator-free, still-valid) arithmetic fallback, signed→unsigned normalization,
+  shift-count branching (bit.* masks counts mod 32); table.unpack back-fill alias; compat
+  include. Guarded math shims all no-op on LuaJIT (5.1 has log10/atan2/frexp natively).
+  NOTE for T12: ModbusMapImporter ALSO generates 5.3-syntax Lua (sweep hit), not just DBC.
 
 ### T11 — Project property `luaExecutionMode` + consent UI
 
@@ -190,7 +213,12 @@ the AC3 badge visual check.
   tradeoff.
 - **Verify:** code-verify; load/save round-trip read-back; AC18 flow deferred to T14.
 - **Deps:** T9
-- [ ] done
+- [x] done — 2026-08-11; `luaFastMode` bool via full 10-site pattern (undo-scoped setter,
+  absent-key→Safe); ProjectView.qml Switch + modal consent Dialog (Cancel reverts, binding
+  restored); engines read at (re)compile: Safe = `luaJIT_setmode OFF` + count hook, Fast =
+  `ON` + no hook; `luaFastModeChanged` → `compileTransforms()` (parser applies on next
+  readCode/connect); MacroRunner + PublisherScript PINNED Safe always (macro Lua runs on
+  the GUI thread — an unhookable runaway would freeze the app; outside R20's mode scope).
 
 ### T12 — Shipped-script migration + load-error UX + error-path ctest
 
@@ -205,7 +233,19 @@ the AC3 badge visual check.
 - **Verify:** golden-vector runner (T13) green on all 28 shipped scripts; ctest suite;
   enriched-error unit case.
 - **Deps:** T9
-- [ ] done
+- [x] done — 2026-08-12; scope grew and shifted, all verified: 10 parsers migrated (agent,
+  luajit parse-gated; arithmetic accumulation where values exceed bit.*'s 32-bit range,
+  targeted %2^32 normalizations, `bit` shadow rename in modbus.lua) + 2 transform templates
+  in the previously-unmapped `transforms/lua/` dir; independent sweep 62/62 parse OK.
+  DBC generator rewritten (double-arithmetic accumulation, 400/400 differential vs 5.4
+  original); Modbus generator's string.unpack DEPENDENCY (5.3 library, absent in LuaJIT —
+  earlier "unused" sweep missed generator-embedded strings) replaced with pure-Lua BE +
+  IEEE-754 decoders, verified vs struct (16/17, sole diff = negative-zero display).
+  bit32 compat wrapper differential: 24/24. Load-error enrichment in LuaScriptEngine
+  (construct + bit.* replacement named). AMENDMENT: error-path ctest can't link
+  LuaScriptEngine into the unit tier (whole-app link set, same wall as T2) — coverage
+  moves to the integration tier (runaway parser via API, AC17), same assertions.
+  KNOWN CAVEAT: RTCM 64-bit satellite-mask popcount exact only to 2^53 (double ceiling).
 
 ### T13 ◆ — Golden vectors, 5.4 removal, benchmark re-baseline
 
@@ -220,7 +260,17 @@ the AC3 badge visual check.
   AC18 consent/persistence observation.
 - **Verify:** `pytest tests/scripts/` green; benchmark report archived as new baseline.
 - **Deps:** T7–T12
-- [ ] done
+- [x] done (code+vectors) — 2026-08-12; GOLDEN DIFFERENTIAL executed BEFORE deletion:
+  10 migrated parsers x ~63 frames (valid-checksum protocol fixtures via CRC24Q/Fletcher/
+  NMEA-XOR/SiRF builders + fuzz), HEAD-on-lua5.4 vs migrated-on-luajit with stubbed
+  sandbox capturing tableSet writes: **0 diffs across ~635 frames**; both transform
+  templates 83 values each, 0 diffs; DBC extractor 400/400; bit32 wrapper 24/24
+  (harness in session scratchpad: lua_golden_runner.lua). lib/lua DELETED (git rm);
+  REUSE lua54 annotation removed; cmake carve-outs retired as COMMENT rewrites only —
+  pac-ret Apple gate behavior deliberately unchanged (re-enabling = separate measured
+  hardening change); scripting.md gained the "Lua Runtime — LuaJIT" section.
+  MAINTAINER REMAINING: rebuild → `--benchmark-hotpath` re-baseline (AC4/Lua tiers),
+  AC17 runaway Safe/Fast integration run, AC18 consent observation, AC19 derated bench.
 
 ## M3 — Frame pipeline off the GUI thread (ACs 14, 15, 4)
 

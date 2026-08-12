@@ -904,34 +904,92 @@ QString DataModel::ModbusMapImporter::luaEntryType(const RegisterEntry& entry, b
 [[nodiscard]] static QString modbusLuaParserBody()
 {
   return QStringLiteral(R"LUA(
--- string.unpack formats per entry type: Modbus payloads are big-endian.
-local FORMATS = {
-  uint16 = ">I2", int16 = ">i2",
-  uint32 = ">I4", int32 = ">i4",
-  uint64 = ">I8", int64 = ">i8",
-  float32 = ">f", float64 = ">d",
-  bool = ">I2",
+-- Byte widths per entry type: Modbus payloads are big-endian. Decoding is pure
+-- arithmetic plus 8-bit-safe bit ops (LuaJIT has no string.unpack); 64-bit
+-- integers stay exact to 53 bits, the pipeline's double-precision ceiling.
+local SIZES = {
+  uint16 = 2, int16 = 2,
+  uint32 = 4, int32 = 4,
+  uint64 = 8, int64 = 8,
+  float32 = 4, float64 = 8,
+  bool = 2,
 }
+
+local function read_uint(frame, first, n)
+  local v = 0
+  for i = 0, n - 1 do
+    v = v * 256 + string.byte(frame, first + i)
+  end
+  return v
+end
+
+local function to_signed(v, n)
+  if v >= 2 ^ (8 * n - 1) then
+    v = v - 2 ^ (8 * n)
+  end
+  return v
+end
+
+local function read_float32(frame, first)
+  local b1, b2, b3, b4 = string.byte(frame, first, first + 3)
+  local sign = bit.band(b1, 0x80) ~= 0 and -1 or 1
+  local expo = bit.band(b1, 0x7F) * 2 + bit.rshift(b2, 7)
+  local mant = bit.band(b2, 0x7F) * 65536 + b3 * 256 + b4
+  if expo == 0 then
+    return sign * mant * 2 ^ (-126 - 23)
+  elseif expo == 255 then
+    if mant == 0 then return sign * math.huge end
+    return 0 / 0
+  end
+  return sign * (1 + mant / 2 ^ 23) * 2 ^ (expo - 127)
+end
+
+local function read_float64(frame, first)
+  local b1, b2 = string.byte(frame, first, first + 1)
+  local sign = bit.band(b1, 0x80) ~= 0 and -1 or 1
+  local expo = bit.band(b1, 0x7F) * 16 + bit.rshift(b2, 4)
+  local mant = bit.band(b2, 0x0F)
+  for i = 2, 7 do
+    mant = mant * 256 + string.byte(frame, first + i)
+  end
+  if expo == 0 then
+    return sign * mant * 2 ^ (-1022 - 52)
+  elseif expo == 2047 then
+    if mant == 0 then return sign * math.huge end
+    return 0 / 0
+  end
+  return sign * (1 + mant / 2 ^ 52) * 2 ^ (expo - 1023)
+end
 
 -- Decodes one entry; "bit" reads an LSB-first packed coil/discrete bit,
 -- "bool" reads a whole 16-bit register as 0/1 truthiness.
 local function decode(frame, limit, entry)
   if entry.type == "bit" then
-    local byte_idx = 4 + (entry.offset // 8)
+    local byte_idx = 4 + math.floor(entry.offset / 8)
     if byte_idx > limit then
       return nil
     end
 
-    return (string.byte(frame, byte_idx) >> (entry.offset % 8)) & 1
+    return bit.band(bit.rshift(string.byte(frame, byte_idx), entry.offset % 8), 1)
   end
 
-  local fmt = FORMATS[entry.type] or ">I2"
+  local size = SIZES[entry.type] or 2
   local first = 4 + entry.offset * 2
-  if first + string.packsize(fmt) - 1 > limit then
+  if first + size - 1 > limit then
     return nil
   end
 
-  local raw = string.unpack(fmt, frame, first)
+  local raw
+  if entry.type == "float32" then
+    raw = read_float32(frame, first)
+  elseif entry.type == "float64" then
+    raw = read_float64(frame, first)
+  elseif entry.type == "int16" or entry.type == "int32" or entry.type == "int64" then
+    raw = to_signed(read_uint(frame, first, size), size)
+  else
+    raw = read_uint(frame, first, size)
+  end
+
   if entry.type == "bool" then
     return (raw ~= 0) and 1 or 0
   end

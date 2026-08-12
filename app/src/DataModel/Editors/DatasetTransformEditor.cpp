@@ -21,9 +21,13 @@
 
 #include "DataModel/Editors/DatasetTransformEditor.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
 #include <lualib.h>
+}
+// clang-format on
 
 #include <QDir>
 #include <QFile>
@@ -42,6 +46,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "DataModel/Scripting/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
@@ -623,6 +628,7 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
       { "table",  luaopen_table},
       {"string", luaopen_string},
       {  "math",   luaopen_math},
+      {   "bit",    luaopen_bit},
       { nullptr,        nullptr}
     };
 
@@ -704,6 +710,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       { "table",  luaopen_table},
       {"string", luaopen_string},
       {  "math",   luaopen_math},
+      {   "bit",    luaopen_bit},
       { nullptr,        nullptr}
     };
 

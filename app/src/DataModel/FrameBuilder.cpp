@@ -21,14 +21,21 @@
 
 #include "DataModel/FrameBuilder.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
+#include <luajit.h>
 #include <lualib.h>
+}
+// clang-format on
 
 #include <algorithm>
 #include <charconv>
 #include <cmath>
 #include <cstdio>
+
+#include "DataModel/Scripting/LuaCompatJIT.h"
 
 #if defined(__APPLE__) && defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) \
   && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 130300
@@ -512,6 +519,11 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &DataModel::ProjectModel::changeDrivenTransformsChanged,
           this,
           [this] { m_captureFlagsDirty = true; });
+
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::luaFastModeChanged,
+          this,
+          [this] { compileTransforms(); });
 
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::timeout1Hz,
@@ -2330,17 +2342,18 @@ void DataModel::FrameBuilder::publishReplayFrame(const DataModel::TimestampedFra
 /**
  * @brief Opens the safe Lua libraries needed by transforms and strips dangerous globals, including
  *        string.dump whose bytecode serialization paired with a loader is a sandbox-escape vector.
+ *        LuaJIT ships coroutine inside base and has no utf8 module; bit is its native bitwise
+ *        library. ffi and jit are never opened: sandbox escape.
  */
 static void openSafeLibsForTransform(lua_State* L)
 {
   static const luaL_Reg kSafeLibs[] = {
-    {       "_G",      luaopen_base},
-    {    "table",     luaopen_table},
-    {   "string",    luaopen_string},
-    {     "math",      luaopen_math},
-    {     "utf8",      luaopen_utf8},
-    {"coroutine", luaopen_coroutine},
-    {    nullptr,           nullptr}
+    {    "_G",   luaopen_base},
+    { "table",  luaopen_table},
+    {"string", luaopen_string},
+    {  "math",   luaopen_math},
+    {   "bit",    luaopen_bit},
+    { nullptr,        nullptr}
   };
 
   for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
@@ -2359,6 +2372,32 @@ static void openSafeLibsForTransform(lua_State* L)
     lua_setfield(L, -2, "dump");
   }
   lua_pop(L, 1);
+}
+
+/**
+ * @brief Compile-time arity probe for the transform at stack top: LuaJIT's public lua_Debug
+ *        carries no nparams field, so the count comes from debug.getinfo (whose library-side
+ *        path fills the extended record). The debug module is loaded unpublished and the
+ *        global luaopen_debug registers is nilled out, so the sandbox never gains it.
+ */
+[[nodiscard]] static bool luaTransformAcceptsInfo(lua_State* L)
+{
+  bool accepts = false;
+
+  luaL_requiref(L, LUA_DBLIBNAME, luaopen_debug, 0);
+  lua_getfield(L, -1, "getinfo");
+  lua_pushvalue(L, -3);
+  lua_pushliteral(L, "u");
+  if (lua_pcall(L, 2, 1, 0) == LUA_OK && lua_istable(L, -1)) {
+    lua_getfield(L, -1, "nparams");
+    accepts = lua_tointeger(L, -1) >= 2;
+    lua_pop(L, 1);
+  }
+
+  lua_pop(L, 2);
+  lua_pushnil(L);
+  lua_setglobal(L, "debug");
+  return accepts;
 }
 
 /**
@@ -2481,28 +2520,48 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
     throw std::runtime_error(msg ? msg : "lua transform panic");
   });
 
-  openSafeLibsForTransform(L);
+  struct BootstrapCtx {
+    FrameBuilder* self;
+    TransformEngine* engine;
+    int sourceId;
+  };
 
-  DataModel::installLuaConsole(L);
+  const auto bootstrap = [](lua_State* state) -> int {
+    auto* ctx = static_cast<BootstrapCtx*>(lua_touserdata(state, 1));
 
-  DataModel::installLuaCompat(L);
+    openSafeLibsForTransform(state);
+    DataModel::installLuaConsole(state);
+    DataModel::installLuaCompat(state);
+    ctx->self->injectTableApiLua(state);
+    DataModel::DeviceWriteApi::installLua(state, ctx->sourceId);
+    DataModel::ActionFireApi::installLua(state);
+    DataModel::DashboardApi::installLua(state);
+    DataModel::ScriptApiCall::installLua(state, ctx->sourceId);
+    DataModel::NotificationCenter::installScriptApi(state);
 
-  injectTableApiLua(L);
+    lua_pushlightuserdata(state, ctx->engine);
+    lua_setfield(state, LUA_REGISTRYINDEX, "__ss_transform__");
+    return 0;
+  };
 
-  DataModel::DeviceWriteApi::installLua(L, sourceId);
+  BootstrapCtx ctx{this, &engine, sourceId};
+  lua_pushcfunction(L, bootstrap);
+  lua_pushlightuserdata(L, &ctx);
+  if (lua_pcall(L, 1, 0, 0) != LUA_OK) [[unlikely]] {
+    qWarning() << "[FrameBuilder] Transform engine bootstrap failed for source" << sourceId << ":"
+               << lua_tostring(L, -1);
+    lua_close(L);
+    return;
+  }
 
-  DataModel::ActionFireApi::installLua(L);
-
-  DataModel::DashboardApi::installLua(L);
-
-  DataModel::ScriptApiCall::installLua(L, sourceId);
-
-  DataModel::NotificationCenter::installScriptApi(L);
-
-  lua_pushlightuserdata(L, &engine);
-  lua_setfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
-
-  lua_sethook(L, &FrameBuilder::transformLuaWatchdogHook, LUA_MASKCOUNT, kTransformHookInstrCount);
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  if (projectModel.luaFastMode()) {
+    luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
+  } else {
+    luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
+    lua_sethook(
+      L, &FrameBuilder::transformLuaWatchdogHook, LUA_MASKCOUNT, kTransformHookInstrCount);
+  }
 
   engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
 
@@ -2540,7 +2599,7 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
     }
 
     lua_pushvalue(L, -2);
-    lua_setupvalue(L, -2, 1);
+    luacompatSetChunkEnv(L);
 
     if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
       qWarning() << "[FrameBuilder] Transform runtime error for dataset" << entry.uniqueId << ":"
@@ -2557,11 +2616,7 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
       return;
     }
 
-    bool acceptsInfo = false;
-    lua_pushvalue(L, -1);
-    lua_Debug ar;
-    if (lua_getinfo(L, ">u", &ar) != 0) [[likely]]
-      acceptsInfo = (ar.nparams >= 2);
+    const bool acceptsInfo = luaTransformAcceptsInfo(L);
 
     auto existingIt = engine.luaRefs.find(entry.uniqueId);
     if (existingIt != engine.luaRefs.end()) [[unlikely]]
@@ -2635,7 +2690,7 @@ void DataModel::FrameBuilder::collectTransformEngineGarbage()
 
   for (auto& [id, engine] : m_transformEngines) {
     if (engine.luaState)
-      lua_gc(engine.luaState, LUA_GCCOLLECT);
+      lua_gc(engine.luaState, LUA_GCCOLLECT, 0);
 
     if (engine.jsEngine)
       engine.jsEngine->collectGarbage();

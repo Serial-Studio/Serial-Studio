@@ -40,19 +40,19 @@ local function readBits(bytes, bitPos, numBits, signed)
   local value = 0
 
   for i = 0, numBits - 1 do
-    local byteIndex = ((bitPos + i) // 8) + 1
+    local byteIndex = math.floor((bitPos + i) / 8) + 1
     local bitIndex  = 7 - ((bitPos + i) % 8)
 
     if byteIndex <= #bytes then
-      value = (value << 1) | ((bytes[byteIndex] >> bitIndex) & 1)
+      value = value * 2 + bit.band(bit.rshift(bytes[byteIndex], bitIndex), 1)
     end
   end
 
   -- Apply two's complement for signed values
   if signed and numBits > 0 then
-    local signBit = 1 << (numBits - 1)
-    if (value & signBit) ~= 0 then
-      value = value - (1 << numBits)
+    local signBit = 2 ^ (numBits - 1)
+    if value >= signBit then
+      value = value - 2 ^ numBits
     end
   end
 
@@ -64,8 +64,8 @@ end
 local function countBits(value)
   local count = 0
   while value ~= 0 do
-    count = count + (value & 1)
-    value = value >> 1
+    count = count + (value % 2)
+    value = math.floor(value / 2)
   end
   return count
 end
@@ -80,20 +80,20 @@ local function validateCRC24(data)
 
   -- Walk every byte except the 3 trailing CRC bytes
   for i = 1, #data - 3 do
-    crc = crc ~ (data[i] << 16)
+    crc = bit.bxor(crc, bit.lshift(data[i], 16))
     for _ = 1, 8 do
-      crc = crc << 1
-      if (crc & 0x1000000) ~= 0 then
-        crc = crc ~ crcPolynomial
+      crc = bit.lshift(crc, 1)
+      if bit.band(crc, 0x1000000) ~= 0 then
+        crc = bit.bxor(crc, crcPolynomial)
       end
     end
   end
 
-  crc = crc & 0xFFFFFF
+  crc = bit.band(crc, 0xFFFFFF)
 
-  local receivedCRC = (data[#data - 2] << 16)
-                    | (data[#data - 1] << 8)
-                    | data[#data]
+  local receivedCRC = bit.bor(bit.lshift(data[#data - 2], 16),
+                              bit.lshift(data[#data - 1], 8),
+                              data[#data])
 
   return crc == receivedCRC
 end
@@ -157,7 +157,7 @@ function parse(frame)
   end
 
   -- Extract 10-bit message length
-  local msgLength = ((frame[2] & 0x03) << 8) | frame[3]
+  local msgLength = bit.bor(bit.lshift(bit.band(frame[2], 0x03), 8), frame[3])
 
   -- Validate frame is long enough for declared payload + CRC
   if #frame < 3 + msgLength + 3 then

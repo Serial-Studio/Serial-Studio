@@ -137,10 +137,12 @@ if(ENABLE_HARDENING)
       endforeach()
       # pac-ret is Linux-only: on macOS arm64 (not arm64e) compact unwind cannot encode
       # RA signing, so ld falls back to DWARF for every function and the system unwinder
-      # fails to authenticate the PACIASP-signed return addresses during a C++ throw. Any
-      # routine Lua error (thrown lua_longjmp*) then escapes luaD_rawrunprotected's catch
-      # and aborts via std::terminate. Apple's supported pointer-auth ABI is arm64e, which
-      # distributed apps cannot target; keep branch protection for non-Apple ARM only.
+      # fails to authenticate PACIASP-signed return addresses during unwinding. The LuaJIT
+      # error path (spec 0051) unwinds externally on macOS, so the hazard class persists;
+      # the gate stays as-is deliberately — re-enabling pac-ret on Apple is a separate,
+      # measured hardening change, not a rider on the runtime swap. Apple's supported
+      # pointer-auth ABI is arm64e, which distributed apps cannot target; keep branch
+      # protection for non-Apple ARM only.
       if(_hardening_arm AND NOT _hardening_x86 AND NOT APPLE)
          add_compile_options(-mbranch-protection=standard)
       endif()

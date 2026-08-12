@@ -42,7 +42,7 @@ local function readUint16()
   local hi = data[pos]
   local lo = data[pos + 1]
   pos = pos + 2
-  return (hi << 8) | lo
+  return bit.bor(bit.lshift(hi, 8), lo)
 end
 
 local function readUint32()
@@ -51,7 +51,7 @@ local function readUint32()
   local b2 = data[pos + 2]
   local b3 = data[pos + 3]
   pos = pos + 4
-  return (b0 << 24) | (b1 << 16) | (b2 << 8) | b3
+  return bit.bor(bit.lshift(b0, 24), bit.lshift(b1, 16), bit.lshift(b2, 8), b3) % 4294967296
 end
 
 local function readString(len)
@@ -67,12 +67,12 @@ local function readFloat32()
   local b0 = data[pos]; local b1 = data[pos+1]
   local b2 = data[pos+2]; local b3 = data[pos+3]
   pos = pos + 4
-  local sign = (b0 & 0x80) ~= 0 and -1 or 1
-  local exp  = ((b0 & 0x7F) << 1) | (b1 >> 7)
-  local mant = ((b1 & 0x7F) << 16) | (b2 << 8) | b3
+  local sign = bit.band(b0, 0x80) ~= 0 and -1 or 1
+  local exp  = bit.bor(bit.lshift(bit.band(b0, 0x7F), 1), bit.rshift(b1, 7))
+  local mant = bit.bor(bit.lshift(bit.band(b1, 0x7F), 16), bit.lshift(b2, 8), b3)
   if exp == 0 then return sign * mant * 2.0^(-149) end
   if exp == 0xFF then return mant ~= 0 and (0/0) or sign * math.huge end
-  return sign * (mant | 0x800000) * 2.0^(exp - 150)
+  return sign * bit.bor(mant, 0x800000) * 2.0^(exp - 150)
 end
 
 local decode  -- forward declaration
@@ -89,12 +89,12 @@ function decode()
 
   -- Fixstr (0xa0-0xbf)
   if b >= 0xa0 and b <= 0xbf then
-    return readString(b & 0x1f)
+    return readString(bit.band(b, 0x1f))
   end
 
   -- Fixarray (0x90-0x9f)
   if b >= 0x90 and b <= 0x9f then
-    local n = b & 0x0f
+    local n = bit.band(b, 0x0f)
     local arr = {}
     for i = 1, n do arr[i] = decode() end
     return arr
@@ -102,7 +102,7 @@ function decode()
 
   -- Fixmap (0x80-0x8f)
   if b >= 0x80 and b <= 0x8f then
-    local n = b & 0x0f
+    local n = bit.band(b, 0x0f)
     local map = {}
     for _ = 1, n do
       local key = decode()

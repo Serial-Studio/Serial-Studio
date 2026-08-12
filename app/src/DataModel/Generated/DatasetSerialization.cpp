@@ -23,12 +23,11 @@
 
 // Regenerate with: python3 scripts/generate-property-registry.py
 
-#include "DataModel/Frame.h"
-
 #include <QJsonArray>
 
-#include "SerialStudio.h"
+#include "DataModel/Frame.h"
 #include "DataModel/Project/PropertyHooks.h"
+#include "SerialStudio.h"
 
 // clang-format off
 

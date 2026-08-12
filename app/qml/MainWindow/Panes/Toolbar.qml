@@ -162,8 +162,16 @@ Rectangle {
     }
 
     height: 1
-    visible: !app.runtimeMode
+    visible: !app.runtimeMode && opacity > 0
+    opacity: root.showContent ? 1 : 0
     color: Cpp_ThemeManager.colors["toolbar_border"]
+
+    Behavior on opacity {
+      NumberAnimation {
+        duration: 250
+        easing.type: Easing.OutCubic
+      }
+    }
   }
 
   //

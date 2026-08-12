@@ -152,7 +152,7 @@ function parse(frame)
   -- Exception Response (FC >= 0x80)
   ------------------------------------------------------------------------------
   if functionCode >= 0x80 then
-    local originalFC    = functionCode & 0x7F
+    local originalFC    = bit.band(functionCode, 0x7F)
     local exceptionCode = frame[3]
     local exception     = MODBUS_EXCEPTIONS[exceptionCode]
                        or { name = "UNKNOWN", desc = "Unknown exception" }
@@ -182,9 +182,9 @@ function parse(frame)
     for byteIdx = 0, byteCount - 1 do
       if bitIndex >= CONFIG.numItems then break end
       local dataByte = frame[4 + byteIdx]
-      for bit = 0, 7 do
+      for b = 0, 7 do
         if bitIndex >= CONFIG.numItems then break end
-        parsedValues[bitIndex + 1] = (dataByte >> bit) & 0x01
+        parsedValues[bitIndex + 1] = bit.band(bit.rshift(dataByte, b), 0x01)
         bitIndex = bitIndex + 1
       end
     end
@@ -194,7 +194,7 @@ function parse(frame)
   ------------------------------------------------------------------------------
   elseif functionCode == 0x03 or functionCode == 0x04 then
     local byteCount     = frame[3]
-    local registerCount = byteCount // 2
+    local registerCount = math.floor(byteCount / 2)
 
     debugLog("Reading " .. registerCount .. " registers (" .. byteCount .. " bytes)")
 
@@ -202,7 +202,7 @@ function parse(frame)
       if i >= CONFIG.numItems then break end
       local offset = 4 + (i * 2)
       if offset + 1 <= #frame then
-        local rawValue = (frame[offset] << 8) | frame[offset + 1]
+        local rawValue = bit.bor(bit.lshift(frame[offset], 8), frame[offset + 1])
         parsedValues[i + 1] = processValue(i, rawValue)
 
         if CONFIG.debug then
@@ -220,8 +220,8 @@ function parse(frame)
   ------------------------------------------------------------------------------
   elseif functionCode == 0x05 then
     if #frame >= 6 then
-      local coilAddress = (frame[3] << 8) | frame[4]
-      local coilValue   = (frame[5] << 8) | frame[6]
+      local coilAddress = bit.bor(bit.lshift(frame[3], 8), frame[4])
+      local coilValue   = bit.bor(bit.lshift(frame[5], 8), frame[6])
       local index       = coilAddress - CONFIG.registerOffset
 
       if index >= 0 and index < CONFIG.numItems then
@@ -235,8 +235,8 @@ function parse(frame)
   ------------------------------------------------------------------------------
   elseif functionCode == 0x06 then
     if #frame >= 6 then
-      local registerAddress = (frame[3] << 8) | frame[4]
-      local rawValue        = (frame[5] << 8) | frame[6]
+      local registerAddress = bit.bor(bit.lshift(frame[3], 8), frame[4])
+      local rawValue        = bit.bor(bit.lshift(frame[5], 8), frame[6])
       local index           = registerAddress - CONFIG.registerOffset
 
       if index >= 0 and index < CONFIG.numItems then
@@ -250,8 +250,8 @@ function parse(frame)
   ------------------------------------------------------------------------------
   elseif functionCode == 0x0F then
     if #frame >= 6 then
-      local startAddress = (frame[3] << 8) | frame[4]
-      local quantity     = (frame[5] << 8) | frame[6]
+      local startAddress = bit.bor(bit.lshift(frame[3], 8), frame[4])
+      local quantity     = bit.bor(bit.lshift(frame[5], 8), frame[6])
       debugLog("Write Multiple Coils: addr=" .. startAddress .. " qty=" .. quantity)
     end
 
@@ -260,8 +260,8 @@ function parse(frame)
   ------------------------------------------------------------------------------
   elseif functionCode == 0x10 then
     if #frame >= 6 then
-      local startAddress = (frame[3] << 8) | frame[4]
-      local quantity     = (frame[5] << 8) | frame[6]
+      local startAddress = bit.bor(bit.lshift(frame[3], 8), frame[4])
+      local quantity     = bit.bor(bit.lshift(frame[5], 8), frame[6])
       debugLog("Write Multiple Registers: addr=" .. startAddress .. " qty=" .. quantity)
     end
 

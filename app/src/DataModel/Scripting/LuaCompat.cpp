@@ -21,13 +21,18 @@
 
 #include "DataModel/Scripting/LuaCompat.h"
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
 #include <lualib.h>
+}
+// clang-format on
 
 #include <cstring>
 #include <QDebug>
 
+#include "DataModel/Scripting/LuaCompatJIT.h"
 #include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -80,6 +85,58 @@ end end
 
 -- globals: 5.1 had global unpack, moved to table.unpack in 5.2
 if unpack == nil and table.unpack ~= nil then unpack = table.unpack end
+if table.unpack == nil and unpack ~= nil then table.unpack = unpack end
+
+-- bit32 over LuaJIT's native bit library (signed results normalized to bit32's
+-- unsigned contract; shift counts branch because bit.* masks them mod 32)
+if bit32 == nil and bit ~= nil then
+  local function u32(x) return x % 4294967296 end
+  bit32 = {}
+  bit32.band = function(...)
+    if select('#', ...) == 0 then return 0xFFFFFFFF end
+    return u32(bit.band(...))
+  end
+  bit32.bor = function(...)
+    if select('#', ...) == 0 then return 0 end
+    return u32(bit.bor(...))
+  end
+  bit32.bxor = function(...)
+    if select('#', ...) == 0 then return 0 end
+    return u32(bit.bxor(...))
+  end
+  bit32.bnot = function(a) return u32(bit.bnot(a)) end
+  bit32.lshift = function(a, n)
+    n = math.floor(n)
+    if n <= -32 or n >= 32 then return 0 end
+    if n < 0 then return bit32.rshift(a, -n) end
+    return u32(bit.lshift(a, n))
+  end
+  bit32.rshift = function(a, n)
+    n = math.floor(n)
+    if n <= -32 or n >= 32 then return 0 end
+    if n < 0 then return bit32.lshift(a, -n) end
+    return u32(bit.rshift(a, n))
+  end
+  bit32.arshift = function(a, n)
+    n = math.floor(n)
+    if n < 0 then return bit32.lshift(a, -n) end
+    if n >= 32 then return (u32(a) >= 0x80000000) and 0xFFFFFFFF or 0 end
+    return u32(bit.arshift(a, n))
+  end
+  bit32.lrotate = function(a, n) return u32(bit.rol(a, n)) end
+  bit32.rrotate = function(a, n) return u32(bit.ror(a, n)) end
+  bit32.extract = function(a, field, width)
+    width = width or 1
+    return bit32.band(bit32.rshift(a, field), bit32.lshift(1, width) - 1)
+  end
+  bit32.replace = function(a, v, field, width)
+    width = width or 1
+    local mask = bit32.lshift(bit32.lshift(1, width) - 1, field)
+    return bit32.bor(bit32.band(a, bit32.bnot(mask)),
+                     bit32.band(bit32.lshift(v, field), mask))
+  end
+  bit32.btest = function(...) return bit32.band(...) ~= 0 end
+end
 
 -- bit32 was removed in 5.3; provide a portable replacement (32-bit unsigned)
 if bit32 == nil then

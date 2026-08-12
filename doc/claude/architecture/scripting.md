@@ -4,6 +4,26 @@
 > before touching the JS/Lua/Native parser engines, per-dataset transforms, the data-table
 > store, the control script, or the code-editor QML.
 
+## Lua Runtime — LuaJIT (spec 0051)
+
+The vendored runtime is **LuaJIT 2.1** (`lib/luajit/`, pinned via `.relver`; replaced Lua 5.4
+2026-08). The user-facing script surface is **Lua 5.1 + shims**: `LUAJIT_ENABLE_LUA52COMPAT`
+is on, `LuaCompat.cpp` restores 5.2-era names plus a `bit32` table over the native `bit`
+library, and `LuaCompatJIT.h` restores the newer C-API subset (`lua_rawlen`, `lua_isinteger`,
+`lua_geti/seti`, `luaL_len/requiref/tolstring`, `lua_pushglobaltable`) under canonical names —
+include it after the Lua headers in every VM TU, and wrap those Lua includes in `extern "C"`
+(LuaJIT is C; the old 5.4 tree was compiled as C++). **5.3 bitwise/floor-division syntax
+(`<< >> & | ~ //`) does not parse**: shipped scripts and both importer generators were
+migrated to `bit.*`/`math.floor` (values wider than 32 bits accumulate in plain arithmetic —
+exact to 2^53, the pipeline's double ceiling), and a user script that fails compilation with
+that syntax gets an enriched error naming the replacement. `string.pack/unpack` do not exist.
+Per-project **Safe/Fast** mode (`ProjectModel::luaFastMode`, consent-gated in the UI):
+Safe = interpreter + count-hook watchdog (default); Fast = JIT on, watchdog structurally off
+(hooks never fire inside compiled traces — measured, which is why it is one mode switch, not
+two flags). Macros and the MQTT publisher are pinned Safe regardless (macro Lua runs on the
+GUI thread). `ffi` and `jit` modules are never opened in any sandbox, and every state-setup
+path runs under a protected bootstrap so `lua_atpanic` is unreachable.
+
 ## Frame Parser — Three Languages (JS + Lua + Native)
 
 - `IScriptEngine` is the abstraction. Three impls:

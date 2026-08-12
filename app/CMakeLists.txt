@@ -1228,7 +1228,7 @@ target_link_libraries(
 
   ${QT_LIBS}
 
-  lua54
+  luajit
   kissfft
   QCodeEditor
   QSimpleUpdater
