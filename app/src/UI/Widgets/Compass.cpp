@@ -134,7 +134,7 @@ int Widgets::Compass::decimalPoints() const noexcept
  */
 void Widgets::Compass::updateData()
 {
-  if (!isEnabled())
+  if (!isEnabled() || !isVisible())
     return;
 
   if (!VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
@@ -191,4 +191,16 @@ QString Widgets::Compass::cardinalDirection(double angle) const
     return tr("NW");
 
   return tr("N");
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::Compass::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

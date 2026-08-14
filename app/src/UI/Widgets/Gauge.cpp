@@ -59,6 +59,9 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
  */
 void Widgets::Gauge::updateData()
 {
+  if (!isVisible())
+    return;
+
   if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
     if (!std::isfinite(dataset.numericValue))

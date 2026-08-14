@@ -57,6 +57,9 @@ public:
   [[nodiscard]] double roll() const;
   [[nodiscard]] double pitch() const;
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
 

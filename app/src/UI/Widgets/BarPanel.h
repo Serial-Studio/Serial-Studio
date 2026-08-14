@@ -56,26 +56,8 @@ class BarPanel : public QQuickItem {
   Q_PROPERTY(QVariantList bands
              READ bands
              CONSTANT)
-  Q_PROPERTY(QStringList valueTexts
-             READ valueTexts
-             NOTIFY updated)
-  Q_PROPERTY(QVector<bool> numeric
-             READ numeric
-             NOTIFY updated)
-  Q_PROPERTY(QVector<double> fracs
-             READ fracs
-             NOTIFY updated)
-  Q_PROPERTY(QVector<int> severities
-             READ severities
-             NOTIFY updated)
-  Q_PROPERTY(QVector<bool> extremesValid
-             READ extremesValid
-             NOTIFY updated)
-  Q_PROPERTY(QVector<double> minSeenFracs
-             READ minSeenFracs
-             NOTIFY updated)
-  Q_PROPERTY(QVector<double> maxSeenFracs
-             READ maxSeenFracs
+  Q_PROPERTY(int revision
+             READ revision
              NOTIFY updated)
   // clang-format on
 
@@ -86,18 +68,23 @@ public:
   explicit BarPanel(const int index = -1, QQuickItem* parent = nullptr);
 
   [[nodiscard]] int count() const noexcept;
+  [[nodiscard]] int revision() const noexcept;
   [[nodiscard]] const QString& styleMode() const noexcept;
   [[nodiscard]] const QStringList& titles() const noexcept;
   [[nodiscard]] const QStringList& units() const noexcept;
   [[nodiscard]] const QVector<bool>& ranged() const noexcept;
   [[nodiscard]] const QVariantList& bands() const noexcept;
-  [[nodiscard]] const QStringList& valueTexts() const noexcept;
-  [[nodiscard]] const QVector<bool>& numeric() const noexcept;
-  [[nodiscard]] const QVector<double>& fracs() const noexcept;
-  [[nodiscard]] const QVector<int>& severities() const noexcept;
-  [[nodiscard]] const QVector<bool>& extremesValid() const noexcept;
-  [[nodiscard]] const QVector<double>& minSeenFracs() const noexcept;
-  [[nodiscard]] const QVector<double>& maxSeenFracs() const noexcept;
+
+  Q_INVOKABLE [[nodiscard]] double frac(int row) const;
+  Q_INVOKABLE [[nodiscard]] int severity(int row) const;
+  Q_INVOKABLE [[nodiscard]] bool isNumeric(int row) const;
+  Q_INVOKABLE [[nodiscard]] QString valueText(int row) const;
+  Q_INVOKABLE [[nodiscard]] bool hasExtremes(int row) const;
+  Q_INVOKABLE [[nodiscard]] double minSeenFrac(int row) const;
+  Q_INVOKABLE [[nodiscard]] double maxSeenFrac(int row) const;
+
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
 
 private slots:
   void updateData();
@@ -127,6 +114,7 @@ private:
   bool refreshRow(int index, const DataModel::Dataset& dataset);
 
   int m_index;
+  int m_revision;
   QString m_styleMode;
   QStringList m_titles;
   QStringList m_units;

@@ -170,7 +170,7 @@ void Widgets::Gyroscope::applyEmaUpdate(
  */
 void Widgets::Gyroscope::updateData()
 {
-  if (!isEnabled())
+  if (!isEnabled() || !isVisible())
     return;
 
   if (!VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
@@ -211,4 +211,16 @@ void Widgets::Gyroscope::updateData()
   const bool pitchChanged = DSP::notEqual(m_pitch, previousPitch);
   if (yawChanged || rollChanged || pitchChanged)
     Q_EMIT updated();
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::Gyroscope::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

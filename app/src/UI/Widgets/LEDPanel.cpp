@@ -206,7 +206,7 @@ void Widgets::LEDPanel::refreshDisplayState(int index)
  */
 void Widgets::LEDPanel::updateData()
 {
-  if (!isEnabled())
+  if (!isEnabled() || !isVisible())
     return;
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index)) {
@@ -276,4 +276,16 @@ void Widgets::LEDPanel::onThemeChanged()
   }
 
   Q_EMIT updated();
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::LEDPanel::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

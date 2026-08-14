@@ -114,6 +114,9 @@ public slots:
   void setPlotTrajectory(const bool enabled);
   void setShowNasaWeather(const bool enabled);
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
   void updateTiles();

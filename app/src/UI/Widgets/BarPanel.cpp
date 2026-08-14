@@ -37,7 +37,7 @@
  * @brief Constructs a BarPanel widget.
  */
 Widgets::BarPanel::BarPanel(const int index, QQuickItem* parent)
-  : QQuickItem(parent), m_index(index), m_dashboard(UI::Dashboard::instance())
+  : QQuickItem(parent), m_index(index), m_revision(0), m_dashboard(UI::Dashboard::instance())
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardBarPanel, m_index)) {
     buildRows();
@@ -189,59 +189,72 @@ const QVariantList& Widgets::BarPanel::bands() const noexcept
 }
 
 /**
- * @brief Returns the formatted value text per row ("--" before data arrives).
+ * @brief Monotonic change counter bumped on every applied update. QML bindings reference it as
+ *        their sole notify dependency and read row state through the scalar accessors below, so
+ *        a tick converts a handful of scalars instead of every per-row list.
  */
-const QStringList& Widgets::BarPanel::valueTexts() const noexcept
+int Widgets::BarPanel::revision() const noexcept
 {
-  return m_valueTexts;
+  return m_revision;
 }
 
 /**
- * @brief Returns per-row flags: true while the latest value parsed as a finite number.
+ * @brief Returns the normalized fill fraction of one row; 0.0 when out of range.
  */
-const QVector<bool>& Widgets::BarPanel::numeric() const noexcept
+double Widgets::BarPanel::frac(int row) const
 {
-  return m_numeric;
+  return m_fracs.value(row, 0.0);
 }
 
 /**
- * @brief Returns the normalized fill fraction per row.
+ * @brief Returns one row's active band severity (-1 = no bands defined or unknown row).
  */
-const QVector<double>& Widgets::BarPanel::fracs() const noexcept
+int Widgets::BarPanel::severity(int row) const
 {
-  return m_fracs;
+  return m_severities.value(row, -1);
 }
 
 /**
- * @brief Returns the active band severity per row (-1 = no bands defined).
+ * @brief Returns true while one row's latest value parsed as a finite number.
  */
-const QVector<int>& Widgets::BarPanel::severities() const noexcept
+bool Widgets::BarPanel::isNumeric(int row) const
 {
-  return m_severities;
+  return m_numeric.value(row, false);
 }
 
 /**
- * @brief Returns per-row flags: true when min/max hold markers hold at least one sample.
+ * @brief Returns one row's formatted value text ("--" before data arrives).
  */
-const QVector<bool>& Widgets::BarPanel::extremesValid() const noexcept
+QString Widgets::BarPanel::valueText(int row) const
 {
-  return m_extremesOk;
+  if (row < 0 || row >= m_valueTexts.size())
+    return QStringLiteral("--");
+
+  return m_valueTexts.at(row);
 }
 
 /**
- * @brief Returns the normalized position of the lowest observed value per row.
+ * @brief Returns true when one row's min/max hold markers hold at least one sample.
  */
-const QVector<double>& Widgets::BarPanel::minSeenFracs() const noexcept
+bool Widgets::BarPanel::hasExtremes(int row) const
 {
-  return m_minSeenFracs;
+  return m_extremesOk.value(row, false);
 }
 
 /**
- * @brief Returns the normalized position of the highest observed value per row.
+ * @brief Returns the normalized position of one row's lowest observed value.
  */
-const QVector<double>& Widgets::BarPanel::maxSeenFracs() const noexcept
+double Widgets::BarPanel::minSeenFrac(int row) const
 {
-  return m_maxSeenFracs;
+  return m_minSeenFracs.value(row, 0.0);
+}
+
+/**
+ * @brief Returns the normalized position of one row's highest observed value.
+ */
+double Widgets::BarPanel::maxSeenFrac(int row) const
+{
+  return m_maxSeenFracs.value(row, 0.0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,11 +353,12 @@ bool Widgets::BarPanel::refreshRow(int index, const DataModel::Dataset& dataset)
 }
 
 /**
- * @brief Updates the bar panel data from the Dashboard.
+ * @brief Updates the bar panel data from the Dashboard; hidden panels (any inactive workspace
+ *        page) skip the pass entirely and itemChange() refreshes on the next show.
  */
 void Widgets::BarPanel::updateData()
 {
-  if (!isEnabled())
+  if (!isEnabled() || !isVisible())
     return;
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardBarPanel, m_index)) {
@@ -354,7 +368,21 @@ void Widgets::BarPanel::updateData()
     for (size_t i = 0; i < n; ++i)
       changed |= refreshRow(static_cast<int>(i), group.datasets[i]);
 
-    if (changed)
+    if (changed) {
+      ++m_revision;
       Q_EMIT updated();
+    }
   }
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a panel on
+ *        a just-activated workspace page never shows the values from when it was last shown.
+ */
+void Widgets::BarPanel::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

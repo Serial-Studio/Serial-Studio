@@ -170,7 +170,7 @@ void Widgets::Accelerometer::resetPeakG()
  */
 void Widgets::Accelerometer::updateData()
 {
-  if (!isEnabled())
+  if (!isEnabled() || !isVisible())
     return;
 
   if (!VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
@@ -290,4 +290,16 @@ void Widgets::Accelerometer::setInputInG(const bool enabled)
     Q_EMIT configChanged();
     Q_EMIT updated();
   }
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::Accelerometer::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

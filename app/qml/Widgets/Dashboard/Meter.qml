@@ -514,14 +514,16 @@ Item {
         // observed since the last data reset
         //
         Repeater {
-          model: root.model.extremesValid ? [root.model.minSeenFrac, root.model.maxSeenFrac]
-                                          : []
+          model: 2
           delegate: Item {
-            required property var modelData
+            required property int index
+            visible: root.model.extremesValid
+            readonly property real markerFrac: index === 0 ? root.model.minSeenFrac
+                                                           : root.model.maxSeenFrac
             readonly property real markOuter: meterArea.scaleOuterR
             readonly property real angleRad: angleDeg * Math.PI / 180
             readonly property real markInner: markOuter - meterArea.arcBand
-            readonly property real angleDeg: startAngleDeg + modelData * angleRangeDeg
+            readonly property real angleDeg: startAngleDeg + markerFrac * angleRangeDeg
             readonly property real midX: meterArea.faceCx + Math.sin(angleRad) * (markOuter + markInner) / 2
             readonly property real midY: meterArea.faceCy - Math.cos(angleRad) * (markOuter + markInner) / 2
 

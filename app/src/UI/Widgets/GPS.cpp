@@ -480,7 +480,7 @@ void Widgets::GPS::setShowNasaWeather(const bool enabled)
  */
 void Widgets::GPS::updateData()
 {
-  if (!isEnabled())
+  if (!isEnabled() || !isVisible())
     return;
 
   if (!VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
@@ -1246,4 +1246,16 @@ void Widgets::GPS::mouseReleaseEvent(QMouseEvent* event)
   ungrabMouse();
   ungrabTouchPoints();
   event->accept();
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::GPS::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickPaintedItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

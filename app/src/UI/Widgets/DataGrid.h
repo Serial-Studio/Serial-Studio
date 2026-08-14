@@ -25,6 +25,7 @@
 #include <QQuickItem>
 #include <QVariant>
 #include <QVector>
+#include <vector>
 
 #include "DataModel/Frame.h"
 #include "UI/Dashboard.h"
@@ -105,10 +106,19 @@ public:
 public slots:
   void setPaused(const bool paused);
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
 
 private:
+  struct RowValueCache {
+    bool isNumeric = false;
+    QString raw;
+    QString formatted;
+  };
+
   [[nodiscard]] QString formatValue(const DataModel::Dataset& dataset) const;
   [[nodiscard]] QVariantList datasetWidgets(const DataModel::Dataset& dataset) const;
   void rebuildRows();
@@ -120,6 +130,8 @@ private:
   QString m_valueHeader;
   DataGridRowsModel* m_rowsModel;
   int m_lastRowCount;
+
+  std::vector<RowValueCache> m_valueCache;
 
   UI::Dashboard& m_dashboard;
 };

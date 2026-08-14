@@ -145,6 +145,9 @@ public:
   [[nodiscard]] double maxValue() const noexcept;
   [[nodiscard]] double normalizedValue() const noexcept;
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 protected slots:
   virtual void updateData();
 

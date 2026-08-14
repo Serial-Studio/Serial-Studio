@@ -321,6 +321,9 @@ bool Widgets::Bar::refreshExtremes(const DataModel::Dataset& dataset)
  */
 void Widgets::Bar::updateData()
 {
+  if (!isVisible())
+    return;
+
   if (VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
     if (!std::isfinite(dataset.numericValue))
@@ -337,4 +340,16 @@ void Widgets::Bar::updateData()
     if ((valueChanged || extremesChanged) && isEnabled())
       Q_EMIT updated();
   }
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::Bar::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }

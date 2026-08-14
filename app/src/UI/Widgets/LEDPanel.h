@@ -70,6 +70,9 @@ public:
   [[nodiscard]] const QStringList& labels() const noexcept;
   [[nodiscard]] const QStringList& titles() const noexcept;
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
   void onThemeChanged();

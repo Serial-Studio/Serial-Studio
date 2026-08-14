@@ -44,6 +44,12 @@ Item {
                                                                         : ""
 
   //
+  // Change counter: the sole notify dependency of every per-row binding below. Rows are read
+  // through the model's scalar accessors, so one tick converts scalars, never whole lists.
+  //
+  readonly property int rev: model ? model.revision : 0
+
+  //
   // Orientation: the persisted style wins, auto picks columns only when every channel
   // gets a usable column width on a panel that is clearly wider than tall
   //
@@ -70,7 +76,7 @@ Item {
   // alarmColorForSeverity(-1) resolves to WARNING, so the -1 gate must stay explicit.
   //
   function fillColor(index) {
-    const severity = model.severities[index]
+    const severity = model.severity(index)
     if (severity >= 0)
       return Cpp_ThemeManager.alarmColorForSeverity(severity)
 
@@ -78,7 +84,7 @@ Item {
   }
 
   function valueColor(index) {
-    const severity = model.severities[index]
+    const severity = model.severity(index)
     if (severity >= 2)
       return Cpp_ThemeManager.alarmColorForSeverity(severity)
 
@@ -124,7 +130,7 @@ Item {
           id: barRow
 
           required property int index
-          property real frac: root.model.fracs[index]
+          property real frac: (root.rev, root.model.frac(index))
 
           Behavior on frac { SpringAnimation { spring: 4.5; damping: 0.4; epsilon: 0.001 } }
 
@@ -204,9 +210,9 @@ Item {
               y: hWell.y + 1
               antialiasing: true
               height: hWell.height - 2
-              color: root.fillColor(barRow.index)
-              visible: root.model.numeric[barRow.index]
+              color: (root.rev, root.fillColor(barRow.index))
               width: Math.max(0, barRow.frac * (hWell.width - 2))
+              visible: (root.rev, root.model.isNumeric(barRow.index))
 
               //
               // Cylindrical sheen across the juice (highlight top, shade bottom)
@@ -232,20 +238,21 @@ Item {
             }
 
             Repeater {
-              model: root.model.extremesValid[barRow.index]
-                     ? [root.model.minSeenFracs[barRow.index],
-                        root.model.maxSeenFracs[barRow.index]]
-                     : []
+              model: 2
 
               delegate: Rectangle {
-                required property var modelData
+                required property int index
+                readonly property real markerFrac:
+                    (root.rev, index === 0 ? root.model.minSeenFrac(barRow.index)
+                                           : root.model.maxSeenFrac(barRow.index))
                 width: 2
                 opacity: 0.9
                 y: hWell.y - 2
                 antialiasing: true
                 height: hWell.height + 4
                 color: Cpp_ThemeManager.colors["widget_text"]
-                x: hWell.x + 1 + modelData * (hWell.width - 2) - 1
+                visible: (root.rev, root.model.hasExtremes(barRow.index))
+                x: hWell.x + 1 + markerFrac * (hWell.width - 2) - 1
               }
             }
 
@@ -270,12 +277,12 @@ Item {
 
           Text {
             elide: Text.ElideLeft
-            color: root.valueColor(barRow.index)
             horizontalAlignment: Text.AlignRight
             Layout.minimumWidth: root.valueWidth
             Layout.maximumWidth: root.valueWidth
             Layout.preferredWidth: root.valueWidth
-            text: root.model.valueTexts[barRow.index]
+            color: (root.rev, root.valueColor(barRow.index))
+            text: (root.rev, root.model.valueText(barRow.index))
             font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
           }
         }
@@ -300,7 +307,7 @@ Item {
           id: barColumn
 
           required property int index
-          property real frac: root.model.fracs[index]
+          property real frac: (root.rev, root.model.frac(index))
           Behavior on frac { SpringAnimation { spring: 4.5; damping: 0.4; epsilon: 0.001 } }
 
           spacing: 2
@@ -317,10 +324,10 @@ Item {
             elide: Text.ElideRight
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            color: root.valueColor(barColumn.index)
             horizontalAlignment: Text.AlignHCenter
-            text: root.model.valueTexts[barColumn.index]
+            color: (root.rev, root.valueColor(barColumn.index))
             font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+            text: (root.rev, root.model.valueText(barColumn.index))
           }
 
           Item {
@@ -385,9 +392,9 @@ Item {
               x: vWell.x + 1
               antialiasing: true
               width: vWell.width - 2
-              color: root.fillColor(barColumn.index)
-              visible: root.model.numeric[barColumn.index]
+              color: (root.rev, root.fillColor(barColumn.index))
               height: Math.max(0, barColumn.frac * (vWell.height - 2))
+              visible: (root.rev, root.model.isNumeric(barColumn.index))
               y: vWell.y + 1 + (1 - barColumn.frac) * (vWell.height - 2)
 
               //
@@ -415,20 +422,21 @@ Item {
             }
 
             Repeater {
-              model: root.model.extremesValid[barColumn.index]
-                     ? [root.model.minSeenFracs[barColumn.index],
-                        root.model.maxSeenFracs[barColumn.index]]
-                     : []
+              model: 2
 
               delegate: Rectangle {
-                required property var modelData
+                required property int index
+                readonly property real markerFrac:
+                    (root.rev, index === 0 ? root.model.minSeenFrac(barColumn.index)
+                                           : root.model.maxSeenFrac(barColumn.index))
                 height: 2
                 opacity: 0.9
                 x: vWell.x - 2
                 antialiasing: true
                 width: vWell.width + 4
                 color: Cpp_ThemeManager.colors["widget_text"]
-                y: vWell.y + 1 + (1 - modelData) * (vWell.height - 2) - 1
+                visible: (root.rev, root.model.hasExtremes(barColumn.index))
+                y: vWell.y + 1 + (1 - markerFrac) * (vWell.height - 2) - 1
               }
             }
 

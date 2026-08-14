@@ -492,16 +492,18 @@ Item {
             // observed since the last data reset
             //
             Repeater {
-              model: root.model.extremesValid ? [root.model.minSeenFrac, root.model.maxSeenFrac]
-                                              : []
+              model: 2
               delegate: Item {
                 z: 1
-                required property var modelData
+                required property int index
+                visible: root.model.extremesValid
+                readonly property real markerFrac: index === 0 ? root.model.minSeenFrac
+                                                               : root.model.maxSeenFrac
                 readonly property real markOuter: gaugeFace.scaleOuterR
                 readonly property real markRadius: (markOuter + markInner) / 2
                 readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
                 readonly property real markInner: markOuter - gaugeFace.ringDepth
-                readonly property real angleDeg: startAngleDeg + modelData * angleRangeDeg
+                readonly property real angleDeg: startAngleDeg + markerFrac * angleRangeDeg
 
                 Rectangle {
                   width: 2.5

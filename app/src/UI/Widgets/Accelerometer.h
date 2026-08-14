@@ -91,6 +91,9 @@ public:
 public slots:
   void resetPeakG();
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
   void setMaxG(const double maxG);

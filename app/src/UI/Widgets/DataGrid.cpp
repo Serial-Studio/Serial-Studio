@@ -205,11 +205,14 @@ void Widgets::DataGrid::setPaused(const bool paused)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reads the dashboard's current dataset values and pushes them into the model.
+ * @brief Reads the dashboard's current dataset values and pushes them into the model. Hidden
+ *        grids (any inactive workspace page) skip the pass entirely; itemChange() refreshes on
+ *        the next show. The per-row cache keys on the raw value (a CoW pointer compare in the
+ *        unchanged steady state), so static rows never re-format or allocate per tick.
  */
 void Widgets::DataGrid::updateData()
 {
-  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index) || m_paused)
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index) || m_paused || !isVisible())
     return;
 
   const auto& group  = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
@@ -220,10 +223,36 @@ void Widgets::DataGrid::updateData()
     return;
   }
 
+  SS_ASSERT_LOG(m_valueCache.size() == static_cast<size_t>(rowCount));
+  if (m_valueCache.size() != static_cast<size_t>(rowCount)) [[unlikely]] {
+    rebuildRows();
+    return;
+  }
+
   for (int i = 0; i < rowCount; ++i) {
     const auto& dataset = group.datasets[static_cast<size_t>(i)];
-    m_rowsModel->updateRow(i, dataset.title, formatValue(dataset));
+    auto& cache         = m_valueCache[static_cast<size_t>(i)];
+
+    if (cache.isNumeric != dataset.isNumeric || cache.raw != dataset.value) {
+      cache.isNumeric = dataset.isNumeric;
+      cache.raw       = dataset.value;
+      cache.formatted = formatValue(dataset);
+    }
+
+    m_rowsModel->updateRow(i, dataset.title, cache.formatted);
   }
+}
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a grid on a
+ *        just-activated workspace page never shows the values from when it was last shown.
+ */
+void Widgets::DataGrid::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -231,22 +260,32 @@ void Widgets::DataGrid::updateData()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reseeds the row model from scratch when the dataset count or set changes.
+ * @brief Reseeds the row model and the per-row value cache from scratch when the dataset count
+ *        or set changes.
  */
 void Widgets::DataGrid::rebuildRows()
 {
   if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index)) {
     m_rowsModel->reset({});
     m_lastRowCount = 0;
+    m_valueCache.clear();
     return;
   }
 
   const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
   QVector<DataGridRow> rows;
   rows.reserve(static_cast<int>(group.datasets.size()));
+  m_valueCache.clear();
+  m_valueCache.reserve(group.datasets.size());
 
-  for (const auto& dataset : group.datasets)
-    rows.append({dataset.title, formatValue(dataset), datasetWidgets(dataset)});
+  for (const auto& dataset : group.datasets) {
+    RowValueCache cache;
+    cache.isNumeric = dataset.isNumeric;
+    cache.raw       = dataset.value;
+    cache.formatted = formatValue(dataset);
+    rows.append({dataset.title, cache.formatted, datasetWidgets(dataset)});
+    m_valueCache.push_back(std::move(cache));
+  }
 
   m_rowsModel->reset(rows);
   m_lastRowCount = rows.size();

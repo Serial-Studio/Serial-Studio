@@ -363,15 +363,17 @@ Item {
             // observed since the last data reset, spanning the full track breadth
             //
             Repeater {
-              model: root.model.extremesValid ? [root.model.minSeenFrac, root.model.maxSeenFrac]
-                                              : []
+              model: 2
               delegate: Rectangle {
-                required property var modelData
+                required property int index
+                readonly property real markerFrac: index === 0 ? root.model.minSeenFrac
+                                                               : root.model.maxSeenFrac
                 opacity: 0.9
                 antialiasing: true
+                visible: root.model.extremesValid
                 color: Cpp_ThemeManager.colors["widget_text"]
-                x: isHorizontal ? progressBar.posFor(modelData) - 1 : -2
-                y: isHorizontal ? -2 : progressBar.posFor(modelData) - 1
+                x: isHorizontal ? progressBar.posFor(markerFrac) - 1 : -2
+                y: isHorizontal ? -2 : progressBar.posFor(markerFrac) - 1
                 width: isHorizontal ? 2 : progressBar.width + 4
                 height: isHorizontal ? progressBar.height + 4 : 2
               }

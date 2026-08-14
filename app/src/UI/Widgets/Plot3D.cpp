@@ -577,6 +577,9 @@ void Widgets::Plot3D::setInterpolationEnabled(const bool enabled)
  */
 void Widgets::Plot3D::updateData()
 {
+  if (!isVisible())
+    return;
+
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index))
     return;
 
@@ -678,6 +681,9 @@ void Widgets::Plot3D::itemChange(ItemChange change, const ItemChangeData& value)
 {
   if (change == ItemDevicePixelRatioHasChanged)
     updateSize();
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
 
   QQuickPaintedItem::itemChange(change, value);
 }

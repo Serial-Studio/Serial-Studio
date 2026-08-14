@@ -377,6 +377,9 @@ void Widgets::Painter::updateData()
   if (m_index < 0)
     return;
 
+  if (!isVisible())
+    return;
+
   const auto count = m_dashboard.widgetCount(SerialStudio::DashboardPainter);
   if (m_index >= count)
     return;
@@ -858,3 +861,15 @@ void Widgets::Painter::setLastError(const QString& error)
 }
 
 #endif  // BUILD_COMMERCIAL
+
+/**
+ * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
+ *        on a just-activated workspace page never shows values from when it was last shown.
+ */
+void Widgets::Painter::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickPaintedItem::itemChange(change, value);
+
+  if (change == ItemVisibleHasChanged && value.boolValue)
+    updateData();
+}

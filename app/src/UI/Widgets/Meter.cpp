@@ -59,6 +59,9 @@ Widgets::Meter::Meter(const int index, QQuickItem* parent) : Bar(index, parent, 
  */
 void Widgets::Meter::updateData()
 {
+  if (!isVisible())
+    return;
+
   if (VALIDATE_WIDGET(SerialStudio::DashboardMeter, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardMeter, m_index);
     if (!std::isfinite(dataset.numericValue))

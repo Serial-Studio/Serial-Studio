@@ -73,6 +73,9 @@ public:
   [[nodiscard]] const QString& displayFormat() const noexcept;
   [[nodiscard]] int decimalPoints() const noexcept;
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
 

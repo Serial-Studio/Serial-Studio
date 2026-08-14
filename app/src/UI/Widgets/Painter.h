@@ -82,6 +82,9 @@ public slots:
   void setSimulatedDatasets(const QVariantList& datasets);
   void setPreviewGroupTitle(const QString& title);
 
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
+
 private slots:
   void updateData();
   void tickPreview();
