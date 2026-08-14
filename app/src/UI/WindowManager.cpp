@@ -348,7 +348,7 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
   connect(this, &UI::WindowManager::widthChanged, this, &UI::WindowManager::triggerLayoutUpdate);
   connect(this, &UI::WindowManager::heightChanged, this, &UI::WindowManager::triggerLayoutUpdate);
 
-  connect(&m_dashboard, &UI::Dashboard::manualLayoutSpacingChanged, this, [this] {
+  connect(&m_dashboard, &UI::Dashboard::layoutSpacingChanged, this, [this] {
     if (!m_autoLayoutEnabled)
       weldManualSeams(static_cast<int>(width()), static_cast<int>(height()));
   });
@@ -846,7 +846,9 @@ void UI::WindowManager::loadLayout()
 }
 
 /**
- * @brief Automatically tiles visible windows using a smart grid-based layout.
+ * @brief Automatically tiles visible windows using a smart grid-based layout. The layout
+ *        margin is not applied here: the QML canvas insets this item by it, so both layout
+ *        modes share one application point.
  */
 void UI::WindowManager::autoLayout()
 {
@@ -869,10 +871,10 @@ void UI::WindowManager::autoLayout()
     return;
 
   Layouts::LayoutEnv env;
-  env.margin      = qMax(0, m_dashboard.autoLayoutMargin());
-  env.spacing     = qMax(-1, m_dashboard.autoLayoutSpacing());
-  env.availW      = canvasW - 2 * env.margin;
-  env.availH      = canvasH - 2 * env.margin;
+  env.margin      = 0;
+  env.spacing     = qMax(-1, m_dashboard.layoutSpacing());
+  env.availW      = canvasW;
+  env.availH      = canvasH;
   env.isLandscape = env.availW >= env.availH;
   env.minWidth    = kAutoLayoutMinWidth;
   env.minHeight   = kAutoLayoutMinHeight;
@@ -1334,7 +1336,7 @@ void UI::WindowManager::weldManualSeams(const int canvasWidth, const int canvasH
 
   const auto xMap   = clusterEdges(xs, canvasWidth, kSeamWeldTolerance);
   const auto yMap   = clusterEdges(ys, canvasHeight, kSeamWeldTolerance);
-  const int spacing = m_dashboard.manualLayoutSpacing();
+  const int spacing = m_dashboard.layoutSpacing();
 
   for (auto* win : std::as_const(windows)) {
     const QRect geometry = extractGeometry(win);
@@ -1945,7 +1947,7 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
                                0,
                                m_gridEnabled,
                                m_gridSize,
-                               m_dashboard.manualLayoutSpacing(),
+                               m_dashboard.layoutSpacing(),
                                m_dashboard.showAlignmentGuides()};
       const Snap::SnapResult res = Snap::resolveMoveSnap(in);
       rect                       = res.rect;
@@ -2071,7 +2073,7 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
                              minSize,
                              m_gridEnabled,
                              m_gridSize,
-                             m_dashboard.manualLayoutSpacing(),
+                             m_dashboard.layoutSpacing(),
                              m_dashboard.showAlignmentGuides()};
     const Snap::SnapResult res = Snap::resolveResizeSnap(in, movingEdgesFor(m_resizeEdge));
     geometry                   = res.rect;

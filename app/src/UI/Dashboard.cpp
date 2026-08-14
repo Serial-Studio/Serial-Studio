@@ -176,9 +176,8 @@ UI::Dashboard::Dashboard()
   , m_autoHideToolbar(false)
   , m_showAlignmentGuides(false)
   , m_persistSettings(true)
-  , m_autoLayoutMargin(0)
-  , m_autoLayoutSpacing(-1)
-  , m_manualLayoutSpacing(-1)
+  , m_layoutMargin(0)
+  , m_layoutSpacing(-1)
   , m_updateRetryInProgress(false)
   , m_layoutValid(false)
   , m_streamAvailable(false)
@@ -659,9 +658,14 @@ void UI::Dashboard::restorePersistedSettings()
   m_plotTimeRange =
     qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
 
-  m_autoLayoutMargin    = qMax(0, m_settings.value("Dashboard/AutoLayoutMargin", 0).toInt());
-  m_autoLayoutSpacing   = qMax(-1, m_settings.value("Dashboard/AutoLayoutSpacing", -1).toInt());
-  m_manualLayoutSpacing = qMax(-1, m_settings.value("Dashboard/ManualLayoutSpacing", -1).toInt());
+  m_layoutMargin = qMax(
+    0,
+    m_settings.value("Dashboard/LayoutMargin", m_settings.value("Dashboard/AutoLayoutMargin", 0))
+      .toInt());
+  m_layoutSpacing = qMax(
+    -1,
+    m_settings.value("Dashboard/LayoutSpacing", m_settings.value("Dashboard/AutoLayoutSpacing", -1))
+      .toInt());
 }
 
 /**
@@ -758,27 +762,21 @@ double UI::Dashboard::plotTimeRange() const noexcept
 }
 
 /**
- * @brief Returns the auto-layout margin (px) reserved between tiled windows and the canvas edges.
+ * @brief Returns the margin (px) reserved between the widget canvas and the pane edges,
+ *        shared by the auto and manual layout modes.
  */
-int UI::Dashboard::autoLayoutMargin() const noexcept
+int UI::Dashboard::layoutMargin() const noexcept
 {
-  return m_autoLayoutMargin;
+  return m_layoutMargin;
 }
 
 /**
- * @brief Returns the auto-layout spacing (px) between adjacent tiled windows (-1 = flush borders).
+ * @brief Returns the spacing (px) between adjacent windows in both layout modes: the auto
+ *        tiler inserts it, manual gestures snap and weld to it (-1 = shared border).
  */
-int UI::Dashboard::autoLayoutSpacing() const noexcept
+int UI::Dashboard::layoutSpacing() const noexcept
 {
-  return m_autoLayoutSpacing;
-}
-
-/**
- * @brief Returns the border spacing manual layouts snap and weld to (-1 = shared border).
- */
-int UI::Dashboard::manualLayoutSpacing() const noexcept
-{
-  return m_manualLayoutSpacing;
+  return m_layoutSpacing;
 }
 
 /**
@@ -1879,52 +1877,37 @@ void UI::Dashboard::setShowAlignmentGuides(const bool enabled)
 }
 
 /**
- * @brief Sets the auto-layout edge margin (px); clamped to >= 0 and persisted.
+ * @brief Sets the canvas edge margin (px) shared by both layout modes; clamped to >= 0 and
+ *        persisted.
  */
-void UI::Dashboard::setAutoLayoutMargin(const int margin)
+void UI::Dashboard::setLayoutMargin(const int margin)
 {
   const int clamped = qMax(0, margin);
-  if (m_autoLayoutMargin == clamped)
+  if (m_layoutMargin == clamped)
     return;
 
-  m_autoLayoutMargin = clamped;
+  m_layoutMargin = clamped;
   if (m_persistSettings)
-    m_settings.setValue("Dashboard/AutoLayoutMargin", m_autoLayoutMargin);
+    m_settings.setValue("Dashboard/LayoutMargin", m_layoutMargin);
 
-  Q_EMIT autoLayoutMarginChanged();
+  Q_EMIT layoutMarginChanged();
 }
 
 /**
- * @brief Sets the auto-layout inter-window spacing (px); clamped to >= -1 and persisted.
+ * @brief Sets the inter-window spacing (px) shared by both layout modes; clamped to >= -1
+ *        (the default, which overlaps two borders into one shared line) and persisted.
  */
-void UI::Dashboard::setAutoLayoutSpacing(const int spacing)
+void UI::Dashboard::setLayoutSpacing(const int spacing)
 {
   const int clamped = qMax(-1, spacing);
-  if (m_autoLayoutSpacing == clamped)
+  if (m_layoutSpacing == clamped)
     return;
 
-  m_autoLayoutSpacing = clamped;
+  m_layoutSpacing = clamped;
   if (m_persistSettings)
-    m_settings.setValue("Dashboard/AutoLayoutSpacing", m_autoLayoutSpacing);
+    m_settings.setValue("Dashboard/LayoutSpacing", m_layoutSpacing);
 
-  Q_EMIT autoLayoutSpacingChanged();
-}
-
-/**
- * @brief Sets the border spacing manual layouts snap and weld to; clamped to >= -1 (the
- *        default, which overlaps two borders into one shared line) and persisted.
- */
-void UI::Dashboard::setManualLayoutSpacing(const int spacing)
-{
-  const int clamped = qMax(-1, spacing);
-  if (m_manualLayoutSpacing == clamped)
-    return;
-
-  m_manualLayoutSpacing = clamped;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/ManualLayoutSpacing", m_manualLayoutSpacing);
-
-  Q_EMIT manualLayoutSpacingChanged();
+  Q_EMIT layoutSpacingChanged();
 }
 
 /**

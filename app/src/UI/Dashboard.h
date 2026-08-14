@@ -88,18 +88,14 @@ class Dashboard : public QObject {
              READ  showAlignmentGuides
              WRITE setShowAlignmentGuides
              NOTIFY showAlignmentGuidesChanged)
-  Q_PROPERTY(int autoLayoutMargin
-             READ  autoLayoutMargin
-             WRITE setAutoLayoutMargin
-             NOTIFY autoLayoutMarginChanged)
-  Q_PROPERTY(int autoLayoutSpacing
-             READ  autoLayoutSpacing
-             WRITE setAutoLayoutSpacing
-             NOTIFY autoLayoutSpacingChanged)
-  Q_PROPERTY(int manualLayoutSpacing
-             READ  manualLayoutSpacing
-             WRITE setManualLayoutSpacing
-             NOTIFY manualLayoutSpacingChanged)
+  Q_PROPERTY(int layoutMargin
+             READ  layoutMargin
+             WRITE setLayoutMargin
+             NOTIFY layoutMarginChanged)
+  Q_PROPERTY(int layoutSpacing
+             READ  layoutSpacing
+             WRITE setLayoutSpacing
+             NOTIFY layoutSpacingChanged)
   Q_PROPERTY(double plotTimeRange
              READ  plotTimeRange
              WRITE setPlotTimeRange
@@ -134,9 +130,8 @@ signals:
   void stopwatchEnabledChanged();
   void autoHideToolbarChanged();
   void showAlignmentGuidesChanged();
-  void autoLayoutMarginChanged();
-  void autoLayoutSpacingChanged();
-  void manualLayoutSpacingChanged();
+  void layoutMarginChanged();
+  void layoutSpacingChanged();
   void plotTimeRangeChanged();
   void frozenChanged();
   void thinningActiveChanged();
@@ -196,9 +191,8 @@ public:
   [[nodiscard]] int points() const noexcept;
   [[nodiscard]] int actionCount() const;
   [[nodiscard]] int totalWidgetCount() const noexcept;
-  [[nodiscard]] int autoLayoutMargin() const noexcept;
-  [[nodiscard]] int autoLayoutSpacing() const noexcept;
-  [[nodiscard]] int manualLayoutSpacing() const noexcept;
+  [[nodiscard]] int layoutMargin() const noexcept;
+  [[nodiscard]] int layoutSpacing() const noexcept;
 
   [[nodiscard]] Q_INVOKABLE bool frameValid() const;
   [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
@@ -270,9 +264,8 @@ public slots:
   void setStopwatchEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
   void setShowAlignmentGuides(const bool enabled);
-  void setAutoLayoutMargin(const int margin);
-  void setAutoLayoutSpacing(const int spacing);
-  void setManualLayoutSpacing(const int spacing);
+  void setLayoutMargin(const int margin);
+  void setLayoutSpacing(const int spacing);
   void setFrozen(const bool frozen);
   void setPlotTimeRange(const double seconds);
   void setSettingsPersistent(const bool persistent);
@@ -543,9 +536,8 @@ private:
   bool m_showAlignmentGuides;
   bool m_persistSettings;
 
-  int m_autoLayoutMargin;
-  int m_autoLayoutSpacing;
-  int m_manualLayoutSpacing;
+  int m_layoutMargin;
+  int m_layoutSpacing;
 
   bool m_updateRetryInProgress;
 

@@ -978,76 +978,51 @@ Widgets.SmartDialog {
           }
 
           Label {
-            text: qsTr("Auto-Layout Margin")
+            text: qsTr("Layout Margin")
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
-            id: _autoLayoutMargin
+            id: _layoutMargin
 
             from: 0
             stepSize: 1
             editable: true
             to: 2147483647
             Layout.fillWidth: true
-            value: Cpp_UI_Dashboard.autoLayoutMargin
+            value: Cpp_UI_Dashboard.layoutMargin
             onValueChanged: {
-              if (value !== Cpp_UI_Dashboard.autoLayoutMargin)
-                Cpp_UI_Dashboard.autoLayoutMargin = value
+              if (value !== Cpp_UI_Dashboard.layoutMargin)
+                Cpp_UI_Dashboard.layoutMargin = value
             }
 
             Connections {
               target: Cpp_UI_Dashboard
-              function onAutoLayoutMarginChanged() {
-                _autoLayoutMargin.value = Cpp_UI_Dashboard.autoLayoutMargin
+              function onLayoutMarginChanged() {
+                _layoutMargin.value = Cpp_UI_Dashboard.layoutMargin
               }
             }
           }
 
           Label {
-            text: qsTr("Auto-Layout Spacing")
+            text: qsTr("Layout Spacing")
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
-            id: _autoLayoutSpacing
+            id: _layoutSpacing
 
             from: -1
             stepSize: 1
             editable: true
             to: 2147483647
             Layout.fillWidth: true
-            value: Cpp_UI_Dashboard.autoLayoutSpacing
+            value: Cpp_UI_Dashboard.layoutSpacing
             onValueChanged: {
-              if (value !== Cpp_UI_Dashboard.autoLayoutSpacing)
-                Cpp_UI_Dashboard.autoLayoutSpacing = value
+              if (value !== Cpp_UI_Dashboard.layoutSpacing)
+                Cpp_UI_Dashboard.layoutSpacing = value
             }
 
             Connections {
               target: Cpp_UI_Dashboard
-              function onAutoLayoutSpacingChanged() {
-                _autoLayoutSpacing.value = Cpp_UI_Dashboard.autoLayoutSpacing
-              }
-            }
-          }
-
-          Label {
-            text: qsTr("Manual-Layout Spacing")
-            color: Cpp_ThemeManager.colors["text"]
-          } SpinBox {
-            id: _manualLayoutSpacing
-
-            from: -1
-            stepSize: 1
-            editable: true
-            to: 2147483647
-            Layout.fillWidth: true
-            value: Cpp_UI_Dashboard.manualLayoutSpacing
-            onValueChanged: {
-              if (value !== Cpp_UI_Dashboard.manualLayoutSpacing)
-                Cpp_UI_Dashboard.manualLayoutSpacing = value
-            }
-
-            Connections {
-              target: Cpp_UI_Dashboard
-              function onManualLayoutSpacingChanged() {
-                _manualLayoutSpacing.value = Cpp_UI_Dashboard.manualLayoutSpacing
+              function onLayoutSpacingChanged() {
+                _layoutSpacing.value = Cpp_UI_Dashboard.layoutSpacing
               }
             }
           }
@@ -2120,8 +2095,8 @@ Widgets.SmartDialog {
           Cpp_UI_Dashboard.autoHideToolbar = false
           Cpp_UI_Dashboard.showActionPanel = true
           Cpp_UI_Dashboard.showAlignmentGuides = false
-          Cpp_UI_Dashboard.autoLayoutMargin = 0
-          Cpp_UI_Dashboard.autoLayoutSpacing = -1
+          Cpp_UI_Dashboard.layoutMargin = 0
+          Cpp_UI_Dashboard.layoutSpacing = -1
           Cpp_UI_TaskbarSettings.resetToDefaults()
           Cpp_Console_Handler.fontFamily = Cpp_Misc_CommonFonts.monoFont.family
           Cpp_Console_Handler.fontSize = Cpp_Misc_CommonFonts.monoFont.pointSize

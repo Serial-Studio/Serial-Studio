@@ -492,7 +492,7 @@ Item {
     Canvas {
       id: _gridCanvas
 
-      anchors.fill: parent
+      anchors.fill: _wm
       visible: _wm.gridEnabled && !_wm.autoLayoutEnabled && !_wm.frozen
       onWidthChanged: requestPaint()
       onHeightChanged: requestPaint()
@@ -544,6 +544,7 @@ Item {
 
       anchors.fill: parent
       frozen: Cpp_UI_Dashboard.frozen
+      anchors.margins: Cpp_UI_Dashboard.layoutMargin
       onRightClicked: (x, y) => contextMenu.popup(x, y)
 
       //
@@ -572,12 +573,12 @@ Item {
       }
 
       //
-      // Re-tile when the auto-layout margin/spacing preferences change
+      // Re-tile when the layout spacing preference changes; margin changes re-lay-out on
+      // their own through the canvas inset resize
       //
       Connections {
         target: Cpp_UI_Dashboard
-        function onAutoLayoutMarginChanged()  { if (_wm.autoLayoutEnabled) _wm.loadLayout() }
-        function onAutoLayoutSpacingChanged() { if (_wm.autoLayoutEnabled) _wm.loadLayout() }
+        function onLayoutSpacingChanged() { if (_wm.autoLayoutEnabled) _wm.loadLayout() }
       }
     }
 
@@ -629,15 +630,15 @@ Item {
       id: _snapIndicator
 
       z: _wm.zCounter + 9999
-      x: _wm.snapIndicator.x
-      y: _wm.snapIndicator.y
+      x: _wm.x + _wm.snapIndicator.x
+      y: _wm.y + _wm.snapIndicator.y
       width: _wm.snapIndicator.width
       height: _wm.snapIndicator.height
       visible: _wm.snapIndicatorVisible
 
-      readonly property bool touchesTop: y <= 0
-      readonly property bool touchesLeft: x <= 0
-      readonly property bool touchesRight: x + width >= windowCanvas.width
+      readonly property bool touchesTop: _wm.snapIndicator.y <= 0
+      readonly property bool touchesLeft: _wm.snapIndicator.x <= 0
+      readonly property bool touchesRight: _wm.snapIndicator.x + width >= _wm.width
 
       Rectangle {
         border.width: 1
@@ -657,7 +658,7 @@ Item {
     Item {
       id: _gestureOverlay
 
-      anchors.fill: parent
+      anchors.fill: _wm
       z: _wm.zCounter + 9999
       visible: _wm.manualGestureActive && !_wm.autoLayoutEnabled && !_wm.frozen
 
