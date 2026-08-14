@@ -296,12 +296,6 @@ ss_add_unit_test(tst_async_combinators
 )
 
 #
-# HAL_Driver.h is header-only, so AUTOMOC's same-basename rule never reaches it and the driver's
-# meta-object (openFinished, linkDropped, the vtable) goes undefined at link. Listing the header as
-# a source is what gets moc_HAL_Driver.cpp generated for this suite.
-#
-
-#
 # Protocol.h is a header-only Q_OBJECT (the abstract sender base): with no Protocol.cpp to pair it
 # with, AUTOMOC only emits its meta-object if the header itself is a target source. Dropping it
 # surfaces as an undefined vtable for IO::Protocols::Protocol, not as a missing-file error.
@@ -369,12 +363,22 @@ ss_add_unit_test(tst_js_watchdog
           Qt6::Qml
 )
 
+#
+# HAL_Driver.h is header-only, so AUTOMOC's same-basename rule never reaches it and the driver's
+# meta-object (openFinished, linkDropped, the vtable) goes undefined at link. Listing the header as
+# a source is what gets moc_HAL_Driver.cpp generated for this suite. Qt6::Gui covers the QColor
+# include that StreamWorker.cpp pulls in through FrameBuilder.h -> ... -> SerialStudio.h; the two
+# FrameBuilder table-API injectors it references are stubbed inside tst_stream_worker.cpp so the
+# suite links without the FrameBuilder dependency web.
+#
 ss_add_unit_test(tst_stream_worker
   SOURCES tst_stream_worker.cpp
+          ${SS_APP_SRC}/IO/HAL_Driver.h
           ${SS_APP_SRC}/IO/StreamWorker.cpp
           ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          Qt6::Gui
           Qt6::Qml
           luajit
 )

@@ -296,10 +296,10 @@ API::CommandResponse API::Handlers::CANBusHandler::getInterfaceList(const QStrin
 
   QJsonArray interfaces;
   for (int i = 0; i < interfaceList.count(); ++i) {
-    QJsonObject interface;
-    interface[QStringLiteral("index")] = i;
-    interface[QStringLiteral("name")]  = interfaceList.at(i);
-    interfaces.append(interface);
+    QJsonObject interface_obj;
+    interface_obj[QStringLiteral("index")] = i;
+    interface_obj[QStringLiteral("name")]  = interfaceList.at(i);
+    interfaces.append(interface_obj);
   }
 
   QJsonObject result;

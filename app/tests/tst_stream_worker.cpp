@@ -21,7 +21,18 @@
 
 #include <QTest>
 
+#include "DataModel/FrameBuilder.h"
 #include "IO/StreamWorker.h"
+
+/**
+ * StreamWorker.cpp references these two FrameBuilder members when a frame builder is injected;
+ * every suite construction passes the default nullptr, so the calls never execute here. Defining
+ * them as stubs satisfies the linker without dragging FrameBuilder.cpp's dependency web into the
+ * lean test tier (they are the only FrameBuilder symbols this link set may reference).
+ */
+void DataModel::FrameBuilder::injectTableApiLua(lua_State*) {}
+
+void DataModel::FrameBuilder::injectTableApiJS(QJSEngine*) {}
 
 using IO::SampleBlock;
 using IO::SampleBlockPtr;

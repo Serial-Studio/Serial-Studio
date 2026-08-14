@@ -306,15 +306,15 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   if (!validateOpenPreconditions())
     return false;
 
-  QString plugin    = m_pluginList.at(m_pluginIndex);
-  QString interface = m_interfaceList.at(m_interfaceIndex);
+  QString plugin         = m_pluginList.at(m_pluginIndex);
+  QString interface_name = m_interfaceList.at(m_interfaceIndex);
 
   QString error;
   if (const auto* backend = IO::Drivers::CanBackends::find(plugin))
-    m_device = backend->create(interface);
+    m_device = backend->create(interface_name);
   else {
     static auto* canBus = QCanBus::instance();
-    m_device            = canBus->createDevice(plugin, interface, &error);
+    m_device            = canBus->createDevice(plugin, interface_name, &error);
   }
 
   if (!m_device) {
@@ -331,8 +331,8 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
     m_device->setConfigurationParameter(QCanBusDevice::DataBitRateKey, m_dataBitrate);
   } else if (m_canFD) {
-    qWarning() << "CAN FD requested but"
-               << interface << "reports no FD support; opening in classic mode";
+    qWarning() << "CAN FD requested but" << interface_name
+               << "reports no FD support; opening in classic mode";
   }
 
   if (m_loopback)
@@ -351,7 +351,8 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
       error.isEmpty()
         ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
         : error;
-    queueErrorBox(this, tr("CAN Connection Failed"), base + connectionErrorHint(plugin, interface));
+    queueErrorBox(
+      this, tr("CAN Connection Failed"), base + connectionErrorHint(plugin, interface_name));
     return false;
   }
 
@@ -892,17 +893,17 @@ QString IO::Drivers::CANBus::noInterfacesHint(const QString& plugin) const
  * @brief Returns a platform-specific hint to append when connecting to a CAN interface fails.
  */
 QString IO::Drivers::CANBus::connectionErrorHint(const QString& plugin,
-                                                 const QString& interface) const
+                                                 const QString& interface_name) const
 {
 #if defined(Q_OS_LINUX)
   if (plugin == "socketcan")
     return tr("\n\nIf the interface is down, bring it up first:\n"
               "sudo ip link set %1 up type can bitrate %2")
-      .arg(interface)
+      .arg(interface_name)
       .arg(m_bitrate);
 #else
   Q_UNUSED(plugin)
-  Q_UNUSED(interface)
+  Q_UNUSED(interface_name)
 #endif
 
   return QString();

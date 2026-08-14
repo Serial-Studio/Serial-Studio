@@ -166,7 +166,8 @@ private:
   void refreshInterfaces();
   [[nodiscard]] bool canSupportAvailable() const;
   [[nodiscard]] QString noInterfacesHint(const QString& plugin) const;
-  [[nodiscard]] QString connectionErrorHint(const QString& plugin, const QString& interface) const;
+  [[nodiscard]] QString connectionErrorHint(const QString& plugin,
+                                            const QString& interface_name) const;
 
   void showCanSupportError();
   [[nodiscard]] bool validateOpenPreconditions();
