@@ -81,6 +81,13 @@ extern "C" {
 #  include "API/GRPC/GRPCServer.h"
 #endif
 
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Reserve hint only: luaL_len honours __len, so an untrusted length must never size an allocation
+static constexpr lua_Integer kLuaHandleBatchHint = 1024;
+
 /**
  * @brief Returns the per-frame cadence carried by a captured chunk, clamped to >=1 ns.
  */
@@ -143,14 +150,26 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_shuttingDown(false)
   , m_seenEngineEpoch(-1)
   , m_operationMode(SerialStudio::ProjectFile)
+  , m_projectDecoderMethod(SerialStudio::PlainText)
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
   , m_transformErrors(0)
   , m_lastTransformDatasetUniqueId(-1)
   , m_lastTransformError()
   , m_jsTransformTimedOut(false)
+  , m_publishedTableGeneration(-1)
+  , m_publishedTableClock(0)
+  , m_guiTableApiUsers(false)
+  , m_tableSnapshotRequested(false)
+  , m_tableMirrorRing(kTableMirrorSlots)
+  , m_streamValuesDirty(false)
   , m_latestFrameSourceId(-1)
   , m_latestFrameSeq(0)
+  , m_publishedLatestFrameSeq(0)
+  , m_guiLatestFrameUsers(false)
+  , m_latestFrameSnapshotRequested(false)
+  , m_latestFrameMirrorRing(kLatestFrameMirrorSlots)
+  , m_parseLoadMirrorRing(kParseLoadMirrorSlots)
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
   , m_jsEngineForSource(nullptr)
@@ -159,6 +178,10 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_framePoolHint(0)
   , m_framePoolGeneration(1)
 {
+  m_luaTableContext.store  = &m_tableStore;
+  m_luaTableContext.owner  = this;
+  m_luaTableContext.mirror = &m_guiTableSnapshot;
+
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
@@ -171,10 +194,19 @@ DataModel::FrameBuilder::FrameBuilder()
 #endif
 
   if (auto* app = qApp)
-    connect(app, &QCoreApplication::aboutToQuit, this, [this]() {
-      m_shuttingDown = true;
-      destroyTransformEngines();
-    });
+    connect(app, &QCoreApplication::aboutToQuit, this, &DataModel::FrameBuilder::prepareShutdown);
+}
+
+/**
+ * @brief Latches shutdown and tears the script engines down on the frame builder's own thread.
+ *        Runs queued ahead of the pipeline thread's quit() (PipelineHost::shutdown) so the Lua
+ *        states and QJSEngines die on the thread that owns them; idempotent for the aboutToQuit
+ *        fallback on paths that never start the pipeline.
+ */
+void DataModel::FrameBuilder::prepareShutdown()
+{
+  m_shuttingDown = true;
+  destroyTransformEngines();
 }
 
 /**
@@ -431,8 +463,13 @@ const QString& DataModel::FrameBuilder::lastTransformError() const noexcept
 /**
  * @brief Zeroes the parsed/skipped frame counters (used by the throughput benchmark).
  */
-void DataModel::FrameBuilder::resetFrameCounters() noexcept
+void DataModel::FrameBuilder::resetFrameCounters()
 {
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this] { resetFrameCounters(); });
+    return;
+  }
+
   m_parsedFrameCount  = 0;
   m_skippedFrameCount = 0;
 }
@@ -440,8 +477,13 @@ void DataModel::FrameBuilder::resetFrameCounters() noexcept
 /**
  * @brief Enables/disables the parse-load budget guard (disabled by the throughput benchmark).
  */
-void DataModel::FrameBuilder::setParseBudgetEnabled(bool enabled) noexcept
+void DataModel::FrameBuilder::setParseBudgetEnabled(bool enabled)
 {
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this, enabled] { setParseBudgetEnabled(enabled); });
+    return;
+  }
+
   m_parseBudgetEnabled = enabled;
 }
 
@@ -516,6 +558,11 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &DataModel::FrameBuilder::onSourceRemoved);
 
   connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::sourceChanged,
+          this,
+          &DataModel::FrameBuilder::refreshProjectSourceSnapshot);
+
+  connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::changeDrivenTransformsChanged,
           this,
           [this] { m_captureFlagsDirty = true; });
@@ -532,25 +579,23 @@ void DataModel::FrameBuilder::setupExternalConnections()
 
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this, [this] {
     m_parseBudget.maintain(BudgetClock::now());
+    publishParseLoads();
   });
 
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::uiTimeout,
+          this,
+          &DataModel::FrameBuilder::refreshStreamDrivenFrames);
+
+  const auto onPlayerOpenChanged = [this] {
     m_playerOpen        = SerialStudio::isAnyPlayerOpen();
     m_captureFlagsDirty = true;
     rebuildTransformsForPlayback();
-  });
-  connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [this] {
-    m_playerOpen        = SerialStudio::isAnyPlayerOpen();
-    m_captureFlagsDirty = true;
-    rebuildTransformsForPlayback();
-  });
-
+  };
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, onPlayerOpenChanged);
+  connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, onPlayerOpenChanged);
 #ifdef BUILD_COMMERCIAL
-  connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, [this] {
-    m_playerOpen        = SerialStudio::isAnyPlayerOpen();
-    m_captureFlagsDirty = true;
-    rebuildTransformsForPlayback();
-  });
+  connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, onPlayerOpenChanged);
 #endif
 
   connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this, [this] {
@@ -646,21 +691,41 @@ void DataModel::FrameBuilder::refreshLatestFrameCapture()
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
-  static auto& pm = DataModel::ProjectModel::instance();
-  SS_ASSERT_LOG(!pm.title().isEmpty());
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this] { syncFromProjectModel(); });
+    return;
+  }
+
+  QString title;
+  std::vector<DataModel::Group> groups;
+  std::vector<DataModel::Action> actions;
+  std::vector<DataModel::Source> sources;
+  auto decoder = SerialStudio::PlainText;
+  IO::PipelineHost::runOnGuiThreadBlocking([&] {
+    static auto& pm = DataModel::ProjectModel::instance();
+    SS_ASSERT_LOG(!pm.title().isEmpty());
+    title   = pm.title();
+    groups  = buildEnabledGroups(pm.groups());
+    actions = pm.actions();
+    sources = pm.sources();
+    decoder = pm.decoderMethod();
+  });
 
   clear_frame(m_frame);
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
   m_republishedSourceIds.clear();
+  m_streamDatasetIds.clear();
+  m_streamValuesDirty = false;
 
   m_externalTableApiUsers = false;
   m_captureFlagsDirty     = true;
 
-  m_frame.title   = pm.title();
-  m_frame.groups  = buildEnabledGroups(pm.groups());
-  m_frame.actions = pm.actions();
-  m_frame.sources = pm.sources();
+  m_frame.title          = std::move(title);
+  m_frame.groups         = std::move(groups);
+  m_frame.actions        = std::move(actions);
+  m_frame.sources        = std::move(sources);
+  m_projectDecoderMethod = decoder;
 
   finalize_frame(m_frame);
   invalidateFramePool();
@@ -682,6 +747,11 @@ void DataModel::FrameBuilder::syncFromProjectModel()
  */
 void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& headers)
 {
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this, headers] { registerQuickPlotHeaders(headers); });
+    return;
+  }
+
   if (!headers.isEmpty()) {
     m_quickPlotHasHeader    = true;
     m_quickPlotChannelNames = headers;
@@ -762,11 +832,6 @@ void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
 {
   SS_ASSERT_HOTPATH(data);
   SS_ASSERT_HOTPATH(!data->data.isEmpty());
-  // code-verify off
-  // Debug-only cache-coherence probe: polling AppState::instance() per frame in release is exactly
-  // the singleton read the cached m_operationMode exists to avoid (spec 0001).
-  Q_ASSERT(m_operationMode == AppState::instance().operationMode());
-  // code-verify on
 
   if (m_captureLatestFrame) [[unlikely]]
     captureLatestChunk(0, data);
@@ -824,16 +889,17 @@ void DataModel::FrameBuilder::onSourceRemoved()
  */
 void DataModel::FrameBuilder::onOperationModeChanged()
 {
-  static auto& appState = AppState::instance();
-  SS_ASSERT(appState.operationMode() >= SerialStudio::ProjectFile
-              && appState.operationMode() <= SerialStudio::QuickPlot,
-            return);
+  static auto& pipeline = IO::PipelineHost::instance();
+  const auto mode       = pipeline.operationMode();
+  SS_ASSERT(mode >= SerialStudio::ProjectFile && mode <= SerialStudio::QuickPlot, return);
 
-  m_operationMode     = appState.operationMode();
+  m_operationMode     = mode;
   m_quickPlotChannels = -1;
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
   m_republishedSourceIds.clear();
+  m_streamDatasetIds.clear();
+  m_streamValuesDirty = false;
   m_latestFrames.clear();
   m_latestFrameSourceId = -1;
   invalidateFramePool();
@@ -863,6 +929,107 @@ void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source
 }
 
 /**
+ * @brief Publishes the dashboard template frame for one stream source (spec 0051 T25): widget
+ *        models build from this structure; live values then arrive only through the stream
+ *        display path. Runs on the builder thread (marshaled by ConnectionManager).
+ */
+void DataModel::FrameBuilder::publishSourceTemplate(int sourceId)
+{
+  SS_ASSERT(sourceId >= 0, return);
+
+  if (m_operationMode != SerialStudio::ProjectFile || m_frame.groups.empty())
+    return;
+
+  for (const auto& src : m_frame.sources)
+    if (src.sourceId == sourceId) {
+      publishSourceTemplateFrame(src);
+      return;
+    }
+}
+
+/**
+ * @brief Builds and publishes the QuickPlot audio structure for a stream-lane session (spec
+ *        0051 T25): the text path no longer runs, so the frame is synthesized here once at
+ *        connect from the channel count.
+ */
+void DataModel::FrameBuilder::publishQuickPlotAudioTemplate(int channels)
+{
+  SS_ASSERT(channels > 0, return);
+
+  if (m_operationMode != SerialStudio::QuickPlot)
+    return;
+
+  QStringList channelValues;
+  channelValues.reserve(channels);
+  for (int i = 0; i < channels; ++i)
+    channelValues.append(QStringLiteral("0"));
+
+  invalidateFramePool();
+  buildQuickPlotAudioFrame(channelValues);
+  m_quickPlotChannels = channels;
+
+  if (!m_quickPlotFrame.groups.empty())
+    hotpathTxFrame(acquireFrame(m_quickPlotFrame));
+}
+
+/**
+ * @brief Writes a stream source's per-block latest values into the data-table store at block
+ *        rate (spec 0051 R13). Queued from the stream workers, executes on the builder thread,
+ *        so the store's single-writer invariant holds and change-driven versioning works
+ *        unchanged; per-sample store writes never happen.
+ */
+void DataModel::FrameBuilder::ingestStreamValues(int sourceId,
+                                                 const QList<QPair<int, double>>& values)
+{
+  SS_ASSERT(sourceId >= 0, return);
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
+
+  if (!m_tableStore.isInitialized() || values.isEmpty())
+    return;
+
+  for (const auto& [uniqueId, value] : values) {
+    m_tableStore.setDatasetRaw(uniqueId, value, QString(), true);
+    m_tableStore.setDatasetFinal(uniqueId, value, QString(), true);
+    m_streamDatasetIds.insert(uniqueId);
+  }
+
+  m_streamValuesDirty = true;
+}
+
+/**
+ * @brief Records which sources feed the stream lane, so the frame-lane republish paths skip
+ *        their template frames (their live values are the Dashboard's stream-ingest copies).
+ */
+void DataModel::FrameBuilder::setStreamSourceIds(const QSet<int>& sourceIds)
+{
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this, sourceIds] { setStreamSourceIds(sourceIds); });
+    return;
+  }
+
+  m_streamSourceIds = sourceIds;
+  m_streamDatasetIds.clear();
+}
+
+/**
+ * @brief Re-runs the frame-lane transforms after stream values land in the table store (spec
+ *        0051 R13/AC11): without it a virtual dataset reading a stream slot only recomputes
+ *        when a frame-lane source publishes, i.e. at the slowest source's rate. Runs on the UI
+ *        refresh tick, gated on the dirty flag, so an all-frame-lane session pays nothing.
+ */
+void DataModel::FrameBuilder::refreshStreamDrivenFrames()
+{
+  if (!m_streamValuesDirty)
+    return;
+
+  m_streamValuesDirty = false;
+  if (m_operationMode != SerialStudio::ProjectFile)
+    return;
+
+  (void)republishFrames(false);
+}
+
+/**
  * @brief Re-runs every dataset transform from the last raw values and republishes the live
  *        frames: dashboard only with @p feedExports false, hotpathTxFrame() fan-out with it
  *        true. A frame republishes only on a changed dataset value or its first publish, so a
@@ -873,7 +1040,7 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
   if (m_operationMode != SerialStudio::ProjectFile)
     return false;
 
-  static auto& dashboard           = UI::Dashboard::instance();
+  static auto& pipeline            = IO::PipelineHost::instance();
   constexpr int combined_frame_key = -1;
 
   bool published  = false;
@@ -881,6 +1048,16 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
   for (auto& frame : m_sourceFrames) {
     if (frame.groups.empty() || frame.title.isEmpty())
       continue;
+
+    // code-verify off
+    // A stream source's channel values are drawn from the Dashboard's stream ingest, so its
+    // frame is recomputed (virtual datasets read the store) but never published: publishing
+    // would overwrite those widget copies and double-push its plot rings.
+    // code-verify on
+    if (m_streamSourceIds.contains(frame.sourceId)) {
+      (void)reprocessDatasetValues(frame);
+      continue;
+    }
 
     any_source         = true;
     const bool changed = reprocessDatasetValues(frame);
@@ -891,7 +1068,7 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
     if (feedExports)
       hotpathTxFrame(acquireFrame(frame));
     else
-      dashboard.hotpathRxFrame(acquireFrame(frame));
+      pipeline.publishFrameToDashboard(acquireFrame(frame));
 
     published = true;
   }
@@ -903,7 +1080,7 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
       if (feedExports)
         hotpathTxFrame(acquireFrame(m_frame));
       else
-        dashboard.hotpathRxFrame(acquireFrame(m_frame));
+        pipeline.publishFrameToDashboard(acquireFrame(m_frame));
 
       published = true;
     }
@@ -915,21 +1092,44 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
 /**
  * @brief Re-runs transforms from the last received values and republishes to the dashboard only,
  *        with no export fan-out, so a synthetic refresh never re-records frames that were already
- *        exported on arrival. Returns false when no frame structure is available to publish.
+ *        exported on arrival. Returns false when no frame structure is available to publish, and
+ *        when a GUI caller queued the pass instead of waiting for it.
  */
 bool DataModel::FrameBuilder::reprocessFrames()
 {
+  if (QThread::currentThread() != thread()) {
+    if (qApp && QThread::currentThread() == qApp->thread()) {
+      invokeOnBuilderThread([this] { (void)reprocessFrames(); });
+      return false;
+    }
+
+    bool published = false;
+    invokeOnBuilderThreadBlocking([this, &published] { published = reprocessFrames(); });
+    return published;
+  }
+
   return republishFrames(false);
 }
 
 /**
  * @brief Forces a render from the current table/dataset state even when the device is silent:
- *        seeds each source frame from the template if missing, runs the transform-only pass, and
- *        publishes through hotpathTxFrame so table-driven datasets both render and feed the
- *        CSV/MDF4/session/MQTT/API exports. Works from the first loop().
+ *        seeds each source frame from the template, runs the transform-only pass and publishes
+ *        through hotpathTxFrame, so table-driven datasets render and feed the exports. A GUI
+ *        caller queues the pass and reports false; waiting would park it behind the pipeline.
  */
 bool DataModel::FrameBuilder::dashboardTick()
 {
+  if (QThread::currentThread() != thread()) {
+    if (qApp && QThread::currentThread() == qApp->thread()) {
+      invokeOnBuilderThread([this] { (void)dashboardTick(); });
+      return false;
+    }
+
+    bool published = false;
+    invokeOnBuilderThreadBlocking([this, &published] { published = dashboardTick(); });
+    return published;
+  }
+
   if (m_operationMode != SerialStudio::ProjectFile)
     return false;
 
@@ -944,6 +1144,80 @@ bool DataModel::FrameBuilder::dashboardTick()
 }
 
 /**
+ * @brief GUI-side half of the data-table mirror (spec 0051 M5): adopts the newest snapshot the
+ *        builder thread published, then requests the next. Runs once per display tick before
+ *        updated() reaches painter and output-widget scripts, so their tableGet/datasetGet calls
+ *        read a GUI-local copy instead of parking the tick behind the pipeline thread.
+ */
+void DataModel::FrameBuilder::drainTableSnapshot()
+{
+  SS_ASSERT(qApp != nullptr, return);
+  SS_ASSERT(QThread::currentThread() == qApp->thread(), return);
+
+  if (!m_guiTableApiUsers.load(std::memory_order_relaxed)) [[likely]]
+    return;
+
+  DataModel::DataTableSnapshotPtr snapshot;
+  // code-verify off
+  // Ring drain: bounded by the mirror ring capacity (4), provably finite per tick.
+  while (m_tableMirrorRing.try_dequeue(snapshot))
+    if (snapshot)
+      m_guiTableSnapshot = snapshot;
+  // code-verify on
+
+  snapshot.reset();
+
+  if (!m_tableSnapshotRequested.exchange(true, std::memory_order_acq_rel))
+    invokeOnBuilderThread([this] { publishTableSnapshot(); });
+}
+
+/**
+ * @brief Arms the mirror when a script engine is wired up on the GUI thread. Engines injected on
+ *        the pipeline thread (the parser and every dataset transform) read the live store
+ *        directly, so they must not make the builder pay for a snapshot nobody reads.
+ */
+void DataModel::FrameBuilder::noteGuiTableApiUser()
+{
+  if (qApp && QThread::currentThread() == qApp->thread())
+    m_guiTableApiUsers.store(true, std::memory_order_relaxed);
+}
+
+/**
+ * @brief Table-API context for callers that reach the store through readTableView/writeTableStore,
+ *        arming the GUI mirror on the way so an API handler serving a script gets a snapshot to
+ *        read instead of a marshal that would park the GUI behind the pipeline.
+ */
+const DataModel::TableApiContext& DataModel::FrameBuilder::guiTableApiContext()
+{
+  noteGuiTableApiUser();
+  return m_luaTableContext;
+}
+
+/**
+ * @brief Builder-thread half of the mirror: publishes a fresh copy of the store when its layout
+ *        generation or write clock moved since the last one. Runs on request at display-tick
+ *        rate, never per frame -- the copy is O(registers), which the hotpath must not pay. A
+ *        full ring leaves the bookkeeping untouched so the next request retries the same state.
+ */
+void DataModel::FrameBuilder::publishTableSnapshot()
+{
+  SS_ASSERT(QThread::currentThread() == thread(), return);
+
+  m_tableSnapshotRequested.store(false, std::memory_order_release);
+
+  const int generation = m_tableStore.isInitialized() ? m_tableStore.generation() : -1;
+  const quint64 clock  = m_tableStore.writeClock();
+  if (generation == m_publishedTableGeneration && clock == m_publishedTableClock)
+    return;
+
+  if (!m_tableMirrorRing.try_enqueue(m_tableStore.makeSnapshot())) [[unlikely]]
+    return;
+
+  m_publishedTableGeneration = generation;
+  m_publishedTableClock      = clock;
+}
+
+/**
  * @brief Handles connection transitions: recompiles transforms, reloads parser, fires
  *        auto-actions. The latest-frame store clears on both edges so io.getLatestFrame can
  *        never serve a previous connection's frame. No-op after aboutToQuit: a connection
@@ -954,13 +1228,12 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (m_shuttingDown) [[unlikely]]
     return;
 
-  static auto& appState  = AppState::instance();
-  static auto& ioManager = IO::ConnectionManager::instance();
-  SS_ASSERT(appState.operationMode() >= SerialStudio::ProjectFile
-              && appState.operationMode() <= SerialStudio::QuickPlot,
+  static auto& pipeline = IO::PipelineHost::instance();
+  SS_ASSERT(m_operationMode >= SerialStudio::ProjectFile
+              && m_operationMode <= SerialStudio::QuickPlot,
             return);
 
-  const bool nowConnected = ioManager.isConnected();
+  const bool nowConnected = pipeline.pipelineConnected();
   if (nowConnected == m_lastConnectedState)
     return;
 
@@ -975,6 +1248,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
     m_sourceFrames.clear();
     m_sourceFrameCounters.clear();
     m_republishedSourceIds.clear();
+    m_streamDatasetIds.clear();
+    m_streamValuesDirty = false;
     m_latestFrames.clear();
     m_latestFrameSourceId = -1;
     destroyTransformEngines();
@@ -985,7 +1260,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   m_latestFrames.clear();
   m_latestFrameSourceId = -1;
 
-  if (appState.operationMode() != SerialStudio::ProjectFile)
+  if (m_operationMode != SerialStudio::ProjectFile)
     return;
 
   SS_ASSERT_LOG(!m_frame.title.isEmpty());
@@ -994,16 +1269,24 @@ void DataModel::FrameBuilder::onConnectedChanged()
   parser.readCode();
   compileTransforms();
 
-  const auto& actions = m_frame.actions;
+  static auto& ioManager = IO::ConnectionManager::instance();
+  const auto& actions    = m_frame.actions;
   for (const auto& action : actions)
     if (action.autoExecuteOnConnect) {
-      const qint64 written = ioManager.writeDataToDevice(action.sourceId, get_tx_bytes(action));
-      if (written < 0) [[unlikely]]
-        qWarning() << "[FrameBuilder] Auto-execute write failed for action:" << action.title;
+      const int actionSource  = action.sourceId;
+      const QByteArray txData = get_tx_bytes(action);
+      const QString title     = action.title;
+      QMetaObject::invokeMethod(
+        &ioManager,
+        [actionSource, txData, title] {
+          const qint64 written = ioManager.writeDataToDevice(actionSource, txData);
+          if (written < 0) [[unlikely]]
+            qWarning() << "[FrameBuilder] Auto-execute write failed for action:" << title;
+        },
+        Qt::QueuedConnection);
     }
 
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  const auto& sources       = projectModel.sources();
+  const auto& sources = m_frame.sources;
   if (sources.size() > 1) {
     for (const auto& src : sources)
       publishSourceTemplateFrame(src);
@@ -1144,6 +1427,14 @@ void DataModel::FrameBuilder::replayChannels(
   const QStringList& channels,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(
+      this,
+      [this, sourceId, &channels, &timestamp] { replayChannels(sourceId, channels, timestamp); },
+      Qt::BlockingQueuedConnection);
+    return;
+  }
+
   SS_ASSERT_HOTPATH(sourceId >= 0);
   SS_ASSERT_HOTPATH(m_playerOpen);
   SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::ProjectFile);
@@ -1325,6 +1616,16 @@ void DataModel::FrameBuilder::replayChannelSpans(
   qsizetype count,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(
+      this,
+      [this, sourceId, cells, count, &timestamp] {
+        replayChannelSpans(sourceId, cells, count, timestamp);
+      },
+      Qt::BlockingQueuedConnection);
+    return;
+  }
+
   SS_ASSERT_HOTPATH(sourceId >= 0);
   SS_ASSERT_HOTPATH(cells != nullptr || count == 0);
   SS_ASSERT_HOTPATH(m_playerOpen);
@@ -1366,6 +1667,16 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   qsizetype count,
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(
+      this,
+      [this, sourceId, cells, count, &timestamp] {
+        replayChannelsTyped(sourceId, cells, count, timestamp);
+      },
+      Qt::BlockingQueuedConnection);
+    return;
+  }
+
   SS_ASSERT_HOTPATH(sourceId >= 0);
   SS_ASSERT_HOTPATH(cells != nullptr || count == 0);
   SS_ASSERT_HOTPATH(m_playerOpen);
@@ -1529,27 +1840,190 @@ bool DataModel::FrameBuilder::parseBudgetThinning() const noexcept
 
 /**
  * @brief Snapshots every tracked source's parse load for the 1 Hz diagnostics pull (cold path).
+ *        The budget's hash rehashes on first sight of a source, so the GUI reads the mirror the
+ *        builder publishes on its own 1 Hz tick and other threads marshal: a GUI marshal spins a
+ *        nested loop, which macOS runs re-entrantly and which swallows window resize steps.
  */
-std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::parseLoadSnapshot() const
+std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::parseLoadSnapshot()
 {
+  if (QThread::currentThread() != thread()) {
+    if (qApp && QThread::currentThread() == qApp->thread())
+      return guiParseLoads();
+
+    std::vector<ParseLoad> loads;
+    invokeOnBuilderThreadBlocking([this, &loads] { loads = m_parseBudget.snapshot(); });
+    return loads;
+  }
+
   return m_parseBudget.snapshot();
 }
 
 /**
- * @brief Resolves the decoder method, optionally honoring a per-source override.
+ * @brief Builder-thread half of the parse-load mirror, published on the same 1 Hz tick the
+ *        diagnostics sample at, so the GUI reader never marshals.
+ */
+void DataModel::FrameBuilder::publishParseLoads()
+{
+  SS_ASSERT(QThread::currentThread() == thread(), return);
+
+  auto sample = std::make_shared<const std::vector<ParseLoad>>(m_parseBudget.snapshot());
+  (void)m_parseLoadMirrorRing.try_enqueue(std::move(sample));
+}
+
+/**
+ * @brief GUI-thread read of the parse loads: adopts the newest published sample and serves it.
+ *        One tick of staleness is inherent to a 1 Hz diagnostic.
+ */
+std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::guiParseLoads()
+{
+  ParseLoadsPtr sample;
+  // code-verify off
+  // Ring drain: bounded by the mirror ring capacity (4), provably finite per call.
+  while (m_parseLoadMirrorRing.try_dequeue(sample))
+    if (sample)
+      m_guiParseLoads = sample;
+  // code-verify on
+
+  sample.reset();
+  return m_guiParseLoads ? *m_guiParseLoads : std::vector<ParseLoad>();
+}
+
+/**
+ * @brief Value copy of the latest captured frame for cross-thread consumers (API handlers): the
+ *        internal hash rehashes per frame on the builder thread, so pointers must not escape.
+ *        A negative @p sourceId selects the newest source; an empty snapshot has sequence 0.
+ */
+DataModel::FrameBuilder::LatestFrameInfo DataModel::FrameBuilder::latestFrameSnapshot(int sourceId)
+{
+  if (QThread::currentThread() == thread()) {
+    const auto* info = latestFrame(sourceId);
+    return info ? *info : LatestFrameInfo();
+  }
+
+  if (qApp && QThread::currentThread() == qApp->thread())
+    return guiLatestFrame(sourceId);
+
+  LatestFrameInfo copy;
+  invokeOnBuilderThreadBlocking([this, sourceId, &copy] {
+    const auto* info = latestFrame(sourceId);
+    if (info)
+      copy = *info;
+  });
+
+  return copy;
+}
+
+/**
+ * @brief GUI-thread read of the latest capture: serves the mirror the builder publishes on the
+ *        display tick and arms it on first use. Marshaling here would spin a nested event loop
+ *        inside the API dispatch and park the GUI behind the pipeline (spec 0051 M5 rule), which
+ *        is what made a polling control script freeze the window's OS event handling.
+ */
+DataModel::FrameBuilder::LatestFrameInfo DataModel::FrameBuilder::guiLatestFrame(int sourceId)
+{
+  m_guiLatestFrameUsers.store(true, std::memory_order_relaxed);
+
+  const auto mirror = m_guiLatestFrameMirror;
+  if (!mirror)
+    return LatestFrameInfo();
+
+  const int key = (sourceId >= 0) ? sourceId : mirror->newestSourceId;
+  if (key < 0)
+    return LatestFrameInfo();
+
+  const auto it = mirror->frames.constFind(key);
+  return (it != mirror->frames.constEnd()) ? it.value() : LatestFrameInfo();
+}
+
+/**
+ * @brief Builder-thread half of the latest-frame mirror: copies the capture map for the GUI when
+ *        a new frame landed since the last publish. Runs at display-tick rate, never per frame.
+ */
+void DataModel::FrameBuilder::publishLatestFrameSnapshot()
+{
+  SS_ASSERT(QThread::currentThread() == thread(), return);
+
+  m_latestFrameSnapshotRequested.store(false, std::memory_order_release);
+
+  if (m_latestFrameSeq == m_publishedLatestFrameSeq)
+    return;
+
+  auto mirror            = std::make_shared<LatestFrameMirror>();
+  mirror->newestSourceId = m_latestFrameSourceId;
+  mirror->frames         = m_latestFrames;
+
+  if (!m_latestFrameMirrorRing.try_enqueue(LatestFrameMirrorPtr(std::move(mirror)))) [[unlikely]]
+    return;
+
+  m_publishedLatestFrameSeq = m_latestFrameSeq;
+}
+
+/**
+ * @brief GUI-side half of the latest-frame mirror: adopts the newest published copy, then
+ *        requests the next. Gated on a GUI-thread reader having asked at least once, so a session
+ *        without a polling script or API client never makes the builder pay for the copy.
+ */
+void DataModel::FrameBuilder::drainLatestFrameSnapshot()
+{
+  SS_ASSERT(qApp != nullptr, return);
+  SS_ASSERT(QThread::currentThread() == qApp->thread(), return);
+
+  if (!m_guiLatestFrameUsers.load(std::memory_order_relaxed)) [[likely]]
+    return;
+
+  LatestFrameMirrorPtr mirror;
+  // code-verify off
+  // Ring drain: bounded by the mirror ring capacity (4), provably finite per tick.
+  while (m_latestFrameMirrorRing.try_dequeue(mirror))
+    if (mirror)
+      m_guiLatestFrameMirror = mirror;
+  // code-verify on
+
+  mirror.reset();
+
+  if (!m_latestFrameSnapshotRequested.exchange(true, std::memory_order_acq_rel))
+    invokeOnBuilderThread([this] { publishLatestFrameSnapshot(); });
+}
+
+/**
+ * @brief Resolves the decoder method from the builder-local project snapshot (m_frame.sources +
+ *        the cached project default), never the live ProjectModel: this runs per frame on the
+ *        pipeline thread while the GUI may be editing the project (spec 0051 M3).
  */
 SerialStudio::DecoderMethod DataModel::FrameBuilder::resolveDecoderMethod(
   int sourceId, bool applyPerSourceOverride) const
 {
-  static auto& project = DataModel::ProjectModel::instance();
   if (!applyPerSourceOverride)
-    return project.decoderMethod();
+    return m_projectDecoderMethod;
 
-  for (const auto& src : project.sources())
+  for (const auto& src : m_frame.sources)
     if (src.sourceId == sourceId)
       return static_cast<SerialStudio::DecoderMethod>(src.decoderMethod);
 
-  return project.decoderMethod();
+  return m_projectDecoderMethod;
+}
+
+/**
+ * @brief Refreshes the builder-local source snapshot after a live per-source edit (decoder,
+ *        framing): snapshots on the GUI thread, applies on the builder thread.
+ */
+void DataModel::FrameBuilder::refreshProjectSourceSnapshot()
+{
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this] { refreshProjectSourceSnapshot(); });
+    return;
+  }
+
+  std::vector<DataModel::Source> sources;
+  auto decoder = SerialStudio::PlainText;
+  IO::PipelineHost::runOnGuiThreadBlocking([&] {
+    static auto& pm = DataModel::ProjectModel::instance();
+    sources         = pm.sources();
+    decoder         = pm.decoderMethod();
+  });
+
+  m_frame.sources        = std::move(sources);
+  m_projectDecoderMethod = decoder;
 }
 
 /**
@@ -1858,6 +2332,13 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
       if (dataset.transformCode.isEmpty())
         continue;
 
+      // code-verify off
+      // A channel-bound stream dataset already ran its transform on the stream worker; running
+      // it again here would double-apply it to a value that is already post-transform.
+      // code-verify on
+      if (m_streamDatasetIds.contains(dataset.uniqueId))
+        continue;
+
       DatasetDeps* dep = m_changeDriven ? &m_datasetDeps[dataset.uniqueId] : nullptr;
       if (dep && !dep->readSlots.empty()
           && !m_tableStore.changedSince(dep->readSlots, dep->lastRunClock))
@@ -2153,26 +2634,12 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
   finalize_frame(m_quickPlotFrame);
 }
 
-/**
- * @brief Builds an audio-specific Quick Plot frame with FFT configuration.
- */
-void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channels)
-{
-  SS_ASSERT(!channels.isEmpty(), return);
-  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
-
 #ifdef BUILD_COMMERCIAL
-  static auto& ioManager = IO::ConnectionManager::instance();
-  const auto* audioPtr   = ioManager.audio();
-  if (!audioPtr)
-    return;
-
-  const auto& audio     = *audioPtr;
-  const auto format     = audio.config().capture.format;
-  const auto sampleRate = audio.config().sampleRate;
-
-  double maxValue = 1.0;
-  double minValue = 0.0;
+/**
+ * @brief Returns the numeric display range of a miniaudio capture format.
+ */
+static void audioFormatRange(ma_format format, double& minValue, double& maxValue)
+{
   switch (format) {
     case ma_format_u8:
       maxValue = 255;
@@ -2195,8 +2662,42 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
       minValue = -1.0;
       break;
     default:
+      maxValue = 1.0;
+      minValue = 0.0;
       break;
   }
+}
+#endif
+
+/**
+ * @brief Builds an audio-specific Quick Plot frame with FFT configuration.
+ */
+void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channels)
+{
+  SS_ASSERT(!channels.isEmpty(), return);
+  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
+
+#ifdef BUILD_COMMERCIAL
+  ma_format format = ma_format_unknown;
+  quint32 sampleRate{};
+  bool haveAudio = false;
+  IO::PipelineHost::runOnGuiThreadBlocking([&] {
+    static auto& ioManager = IO::ConnectionManager::instance();
+    const auto* audioPtr   = ioManager.audio();
+    if (!audioPtr)
+      return;
+
+    format     = audioPtr->config().capture.format;
+    sampleRate = audioPtr->config().sampleRate;
+    haveAudio  = true;
+  });
+
+  if (!haveAudio)
+    return;
+
+  double maxValue = 1.0;
+  double minValue = 0.0;
+  audioFormatRange(format, minValue, maxValue);
 
   const int targetSamples = static_cast<int>(sampleRate * 0.05);
   int fftSamples          = 256;
@@ -2261,8 +2762,9 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 
 /**
  * @brief Publishes a fully constructed DataModel frame to all registered output modules. The
- *        dashboard draws the pooled slot directly; async sinks (gated on the cached m_anyAsyncSink
- *        flag) get one detached copy so a slow-export backlog can never pin the pool.
+ *        dashboard receives the pooled slot through the PipelineHost SPSC ring drained on the UI
+ *        tick (spec 0051 M3); async sinks (gated on the cached m_anyAsyncSink flag) get one
+ *        detached copy so a slow-export backlog can never pin the pool.
  */
 void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
@@ -2270,8 +2772,8 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   SS_ASSERT_HOTPATH(!frame->data.groups.empty());
   SS_ASSERT_HOTPATH(!frame->data.title.isEmpty());
 
-  static auto& dashboard = UI::Dashboard::instance();
-  dashboard.hotpathRxFrame(frame);
+  static auto& pipeline = IO::PipelineHost::instance();
+  pipeline.publishFrameToDashboard(frame);
 
   if (!m_anyAsyncSink)
     return;
@@ -2303,9 +2805,10 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
 }
 
 /**
- * @brief Replay twin of hotpathTxFrame: the dashboard draws the pooled slot, and one detached
- *        copy goes to the read-only observers (API/gRPC, only with a client connected). The
- *        recording sinks are deliberately absent -- replay must never feed an exporter.
+ * @brief Replay twin of hotpathTxFrame: the dashboard receives the pooled slot through the
+ *        PipelineHost ring, and one detached copy goes to the read-only observers (API/gRPC,
+ *        only with a client connected). The recording sinks are deliberately absent -- replay
+ *        must never feed an exporter.
  */
 void DataModel::FrameBuilder::publishReplayFrame(const DataModel::TimestampedFramePtr& frame)
 {
@@ -2313,8 +2816,8 @@ void DataModel::FrameBuilder::publishReplayFrame(const DataModel::TimestampedFra
   SS_ASSERT_HOTPATH(m_playerOpen);
   SS_ASSERT_HOTPATH(!frame->data.groups.empty());
 
-  static auto& dashboard = UI::Dashboard::instance();
-  dashboard.hotpathRxFrame(frame);
+  static auto& pipeline = IO::PipelineHost::instance();
+  pipeline.publishFrameToDashboard(frame);
 
   static auto& pluginsServer = API::Server::instance();
   bool observers             = pluginsServer.enabled() && pluginsServer.clientCount() > 0;
@@ -2427,8 +2930,7 @@ void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* 
  */
 void DataModel::FrameBuilder::rebuildTransformsForPlayback()
 {
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() != SerialStudio::ProjectFile || m_frame.title.isEmpty())
+  if (m_operationMode != SerialStudio::ProjectFile || m_frame.title.isEmpty())
     return;
 
   if (m_compileGuard > 0) [[unlikely]] {
@@ -2446,6 +2948,12 @@ void DataModel::FrameBuilder::rebuildTransformsForPlayback()
 void DataModel::FrameBuilder::setReplayColumnMap(
   std::unordered_map<int, std::unordered_map<int, int>> map)
 {
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(
+      this, [this, &map] { m_replayColumnMap = std::move(map); }, Qt::BlockingQueuedConnection);
+    return;
+  }
+
   m_replayColumnMap = std::move(map);
 }
 
@@ -2956,8 +3464,10 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
  */
 void DataModel::FrameBuilder::initializeTableStore()
 {
-  static auto& pm = DataModel::ProjectModel::instance();
-  m_tableStore.initialize(pm.tables(), pm.editorTableFolders(), m_frame);
+  IO::PipelineHost::runOnGuiThreadBlocking([this] {
+    static auto& pm = DataModel::ProjectModel::instance();
+    m_tableStore.initialize(pm.tables(), pm.editorTableFolders(), m_frame);
+  });
   m_captureFlagsDirty = true;
 }
 
@@ -2969,18 +3479,64 @@ void DataModel::FrameBuilder::initializeTableStore()
  */
 void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
 {
-  static auto& ioManager = IO::ConnectionManager::instance();
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this] { refreshTableStoreFromProjectModel(); });
+    return;
+  }
 
-  const bool session_live = ioManager.isConnected() || SerialStudio::isAnyPlayerOpen();
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  const bool session_live = pipeline.pipelineConnected() || m_playerOpen;
   if (m_tableStore.isInitialized() && session_live)
     return;
 
-  static auto& pm = DataModel::ProjectModel::instance();
-  DataModel::Frame scratch;
-  scratch.title  = pm.title();
-  scratch.groups = pm.groups();
-  m_tableStore.initialize(pm.tables(), pm.editorTableFolders(), scratch);
+  IO::PipelineHost::runOnGuiThreadBlocking([this] {
+    static auto& pm = DataModel::ProjectModel::instance();
+    DataModel::Frame scratch;
+    scratch.title  = pm.title();
+    scratch.groups = pm.groups();
+    m_tableStore.initialize(pm.tables(), pm.editorTableFolders(), scratch);
+  });
   m_captureFlagsDirty = true;
+}
+
+/**
+ * @brief Pushes a register value (nil when absent) onto the Lua stack. Lua-thread only: every
+ *        closure below resolves its value first and calls this after, because a lua_State must
+ *        never be touched from inside a cross-thread marshal.
+ */
+static void luaPushRegister(lua_State* L, const DataModel::RegisterValue* val)
+{
+  if (!val) {
+    lua_pushnil(L);
+    return;
+  }
+
+  if (val->isNumeric) {
+    lua_pushnumber(L, val->numericValue);
+    return;
+  }
+
+  const auto utf8 = val->stringValue.toUtf8();
+  lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
+}
+
+/**
+ * @brief Returns the table-API context a closure carries as its upvalue.
+ */
+[[nodiscard]] static DataModel::TableApiContext* luaTableContext(lua_State* L)
+{
+  return static_cast<DataModel::TableApiContext*>(lua_touserdata(L, lua_upvalueindex(1)));
+}
+
+/**
+ * @brief True when this Lua state runs on the thread that owns the store, i.e. the parser and
+ *        dataset-transform engines. The interned-pointer caches are valid only here: they key on
+ *        raw lua_State string pointers, which are meaningless across states on other threads.
+ */
+[[nodiscard]] static bool luaOnStoreThread(const DataModel::TableApiContext* ctx)
+{
+  return QThread::currentThread() == ctx->owner->thread();
 }
 
 /**
@@ -2988,8 +3544,8 @@ void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
  */
 static int luaTableGet(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, {
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, {
     lua_pushnil(L);
     return 1;
   });
@@ -2997,19 +3553,24 @@ static int luaTableGet(lua_State* L)
   const char* table = luaL_checkstring(L, 1);
   const char* reg   = luaL_checkstring(L, 2);
 
-  const auto* val = store->getByInternedKey(table, reg);
-  if (!val) {
-    lua_pushnil(L);
+  if (luaOnStoreThread(ctx)) [[likely]] {
+    luaPushRegister(L, ctx->store->getByInternedKey(table, reg));
     return 1;
   }
 
-  if (val->isNumeric) {
-    lua_pushnumber(L, val->numericValue);
-  } else {
-    const auto utf8 = val->stringValue.toUtf8();
-    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-  }
+  const QString t = QString::fromUtf8(table);
+  const QString r = QString::fromUtf8(reg);
 
+  bool found = false;
+  DataModel::RegisterValue value;
+  DataModel::readTableView(*ctx, [&](const auto& view) {
+    if (const auto* val = view.get(t, r)) {
+      value = *val;
+      found = true;
+    }
+  });
+
+  luaPushRegister(L, found ? &value : nullptr);
   return 1;
 }
 
@@ -3019,8 +3580,8 @@ static int luaTableGet(lua_State* L)
  */
 static int luaTableSet(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, return 0);
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, return 0);
 
   const char* table = luaL_checkstring(L, 1);
   const char* reg   = luaL_checkstring(L, 2);
@@ -3037,7 +3598,15 @@ static int luaTableSet(lua_State* L)
     rv.isNumeric   = false;
   }
 
-  store->setByInternedKey(table, reg, rv);
+  if (luaOnStoreThread(ctx)) [[likely]] {
+    (void)ctx->store->setByInternedKey(table, reg, rv);
+    return 0;
+  }
+
+  const QString t = QString::fromUtf8(table);
+  const QString r = QString::fromUtf8(reg);
+  DataModel::writeTableStore(*ctx,
+                             [ctx, t, r, rv = std::move(rv)] { (void)ctx->store->set(t, r, rv); });
   return 0;
 }
 
@@ -3046,15 +3615,17 @@ static int luaTableSet(lua_State* L)
  */
 static int luaTableHandle(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, {
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, {
     lua_pushnil(L);
     return 1;
   });
 
-  const char* table   = luaL_checkstring(L, 1);
-  const char* reg     = luaL_checkstring(L, 2);
-  const qint64 handle = store->handleOf(QString::fromUtf8(table), QString::fromUtf8(reg));
+  const QString table = QString::fromUtf8(luaL_checkstring(L, 1));
+  const QString reg   = QString::fromUtf8(luaL_checkstring(L, 2));
+
+  qint64 handle = -1;
+  DataModel::readTableView(*ctx, [&](const auto& view) { handle = view.handleOf(table, reg); });
 
   lua_pushnumber(L, static_cast<lua_Number>(handle));
   return 1;
@@ -3062,12 +3633,13 @@ static int luaTableHandle(lua_State* L)
 
 /**
  * @brief Lua C closure for tableHandleMany(table, regs) -> handles; one handle per name, -1 if
- *        unknown.
+ *        unknown. Every name is collected before the store is reached so the whole batch costs
+ *        one thread crossing instead of one per name.
  */
 static int luaTableHandleMany(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, {
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, {
     lua_pushnil(L);
     return 1;
   });
@@ -3076,13 +3648,25 @@ static int luaTableHandleMany(lua_State* L)
   luaL_checktype(L, 2, LUA_TTABLE);
 
   const lua_Integer n = luaL_len(L, 2);
-  lua_newtable(L);
+  QStringList names;
+  names.reserve(static_cast<qsizetype>(std::min<lua_Integer>(n, kLuaHandleBatchHint)));
   for (lua_Integer i = 1; i <= n; ++i) {
     lua_geti(L, 2, i);
-    const qint64 handle = store->handleOf(table, QString::fromUtf8(luaL_checkstring(L, -1)));
+    names.append(QString::fromUtf8(luaL_checkstring(L, -1)));
     lua_pop(L, 1);
-    lua_pushnumber(L, static_cast<lua_Number>(handle));
-    lua_seti(L, -2, i);
+  }
+
+  std::vector<qint64> handles;
+  handles.reserve(names.size());
+  DataModel::readTableView(*ctx, [&](const auto& view) {
+    for (const auto& reg : names)
+      handles.push_back(view.handleOf(table, reg));
+  });
+
+  lua_newtable(L);
+  for (std::size_t i = 0; i < handles.size(); ++i) {
+    lua_pushnumber(L, static_cast<lua_Number>(handles[i]));
+    lua_seti(L, -2, static_cast<lua_Integer>(i + 1));
   }
 
   return 1;
@@ -3093,26 +3677,24 @@ static int luaTableHandleMany(lua_State* L)
  */
 static int luaTableGetH(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, {
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, {
     lua_pushnil(L);
     return 1;
   });
 
   const qint64 handle = static_cast<qint64>(luaL_checknumber(L, 1));
-  const auto* val     = store->getByHandle(handle);
-  if (!val) {
-    lua_pushnil(L);
-    return 1;
-  }
 
-  if (val->isNumeric) {
-    lua_pushnumber(L, val->numericValue);
-  } else {
-    const auto utf8 = val->stringValue.toUtf8();
-    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-  }
+  bool found = false;
+  DataModel::RegisterValue value;
+  DataModel::readTableView(*ctx, [&](const auto& view) {
+    if (const auto* val = view.getByHandle(handle)) {
+      value = *val;
+      found = true;
+    }
+  });
 
+  luaPushRegister(L, found ? &value : nullptr);
   return 1;
 }
 
@@ -3123,8 +3705,8 @@ static int luaTableGetH(lua_State* L)
  */
 static int luaTableSetH(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, return 0);
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, return 0);
 
   const qint64 handle = static_cast<qint64>(luaL_checknumber(L, 1));
 
@@ -3140,69 +3722,97 @@ static int luaTableSetH(lua_State* L)
     rv.isNumeric   = false;
   }
 
-  store->setByHandle(handle, rv);
+  DataModel::writeTableStore(
+    *ctx, [ctx, handle, rv = std::move(rv)] { (void)ctx->store->setByHandle(handle, rv); });
   return 0;
 }
 
 /**
- * @brief Lua C closure for datasetGetRaw(uniqueIdOrAlias). A string arg is always an alias, a
+ * @brief Resolves a datasetGet* argument on the Lua thread: a string arg is always an alias, a
  *        number always a uniqueId -- never coerce one to the other (lua_type, not lua_isnumber).
+ *        Reading it here also keeps luaL_checkinteger's error longjmp on the Lua state's thread.
+ */
+[[nodiscard]] static const char* luaDatasetSelector(lua_State* L, int* uniqueId)
+{
+  if (lua_type(L, 1) == LUA_TSTRING)
+    return lua_tostring(L, 1);
+
+  *uniqueId = static_cast<int>(luaL_checkinteger(L, 1));
+  return nullptr;
+}
+
+/**
+ * @brief Lua C closure for datasetGetRaw(uniqueIdOrAlias).
  */
 static int luaDatasetGetRaw(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, {
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, {
     lua_pushnil(L);
     return 1;
   });
 
-  const auto* val = (lua_type(L, 1) == LUA_TSTRING)
-                    ? store->getDatasetRawByAliasInterned(lua_tostring(L, 1))
-                    : store->getDatasetRaw(static_cast<int>(luaL_checkinteger(L, 1)));
+  int uniqueId      = -1;
+  const char* alias = luaDatasetSelector(L, &uniqueId);
 
-  if (!val) {
-    lua_pushnil(L);
+  if (luaOnStoreThread(ctx)) [[likely]] {
+    luaPushRegister(L,
+                    alias ? ctx->store->getDatasetRawByAliasInterned(alias)
+                          : ctx->store->getDatasetRaw(uniqueId));
     return 1;
   }
 
-  if (val->isNumeric) {
-    lua_pushnumber(L, val->numericValue);
-  } else {
-    const auto utf8 = val->stringValue.toUtf8();
-    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-  }
+  const QString aliasStr = alias ? QString::fromUtf8(alias) : QString();
 
+  bool found = false;
+  DataModel::RegisterValue value;
+  DataModel::readTableView(*ctx, [&](const auto& view) {
+    const auto* val = alias ? view.getDatasetRawByAlias(aliasStr) : view.getDatasetRaw(uniqueId);
+    if (val) {
+      value = *val;
+      found = true;
+    }
+  });
+
+  luaPushRegister(L, found ? &value : nullptr);
   return 1;
 }
 
 /**
- * @brief Lua C closure for datasetGetFinal(uniqueIdOrAlias). A string arg is always an alias, a
- *        number always a uniqueId -- never coerce one to the other (lua_type, not lua_isnumber).
+ * @brief Lua C closure for datasetGetFinal(uniqueIdOrAlias).
  */
 static int luaDatasetGetFinal(lua_State* L)
 {
-  auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
-  SS_ASSERT(store, {
+  auto* ctx = luaTableContext(L);
+  SS_ASSERT(ctx && ctx->store, {
     lua_pushnil(L);
     return 1;
   });
 
-  const auto* val = (lua_type(L, 1) == LUA_TSTRING)
-                    ? store->getDatasetFinalByAliasInterned(lua_tostring(L, 1))
-                    : store->getDatasetFinal(static_cast<int>(luaL_checkinteger(L, 1)));
+  int uniqueId      = -1;
+  const char* alias = luaDatasetSelector(L, &uniqueId);
 
-  if (!val) {
-    lua_pushnil(L);
+  if (luaOnStoreThread(ctx)) [[likely]] {
+    luaPushRegister(L,
+                    alias ? ctx->store->getDatasetFinalByAliasInterned(alias)
+                          : ctx->store->getDatasetFinal(uniqueId));
     return 1;
   }
 
-  if (val->isNumeric) {
-    lua_pushnumber(L, val->numericValue);
-  } else {
-    const auto utf8 = val->stringValue.toUtf8();
-    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-  }
+  const QString aliasStr = alias ? QString::fromUtf8(alias) : QString();
 
+  bool found = false;
+  DataModel::RegisterValue value;
+  DataModel::readTableView(*ctx, [&](const auto& view) {
+    const auto* val =
+      alias ? view.getDatasetFinalByAlias(aliasStr) : view.getDatasetFinal(uniqueId);
+    if (val) {
+      value = *val;
+      found = true;
+    }
+  });
+
+  luaPushRegister(L, found ? &value : nullptr);
   return 1;
 }
 
@@ -3243,38 +3853,42 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 {
   SS_ASSERT(L, return);
 
-  m_externalTableApiUsers = true;
-  m_captureFlagsDirty     = true;
+  invokeOnBuilderThreadBlocking([this] {
+    m_externalTableApiUsers = true;
+    m_captureFlagsDirty     = true;
+  });
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  noteGuiTableApiUser();
+
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaTableGet, 1);
   lua_setglobal(L, "tableGet");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaTableSet, 1);
   lua_setglobal(L, "tableSet");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaTableHandle, 1);
   lua_setglobal(L, "tableHandle");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaTableHandleMany, 1);
   lua_setglobal(L, "tableHandleMany");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaTableGetH, 1);
   lua_setglobal(L, "tableGetH");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaTableSetH, 1);
   lua_setglobal(L, "tableSetH");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaDatasetGetRaw, 1);
   lua_setglobal(L, "datasetGetRaw");
 
-  lua_pushlightuserdata(L, &m_tableStore);
+  lua_pushlightuserdata(L, &m_luaTableContext);
   lua_pushcclosure(L, luaDatasetGetFinal, 1);
   lua_setglobal(L, "datasetGetFinal");
 
@@ -3291,11 +3905,15 @@ void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {
   SS_ASSERT(js, return);
 
-  m_externalTableApiUsers = true;
-  m_captureFlagsDirty     = true;
+  invokeOnBuilderThreadBlocking([this] {
+    m_externalTableApiUsers = true;
+    m_captureFlagsDirty     = true;
+  });
 
-  auto* bridge  = new DataModel::TableApiBridge(js);
-  bridge->store = &m_tableStore;
+  noteGuiTableApiUser();
+
+  auto* bridge    = new DataModel::TableApiBridge(js);
+  bridge->context = m_luaTableContext;
 
   auto global    = js->globalObject();
   auto bridgeVal = js->newQObject(bridge);

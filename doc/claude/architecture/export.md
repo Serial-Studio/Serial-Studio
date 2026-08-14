@@ -20,6 +20,17 @@
   mostly-forward-filled rows/s; MDF4/Sessions stay full-rate and sparse and are the right home
   for sample-rate data). Applies live to an open recording. The `csvExport.setInterval` API and
   the Preferences → Export tab both drive `exportInterval`.
+- **Typed stream sinks (spec 0051 M5)**: a stream-lane source never reaches the frame
+  exporters. `CSV::StreamExport` / `MDF4::StreamExport` (each a `FrameConsumer<StreamBlockItemPtr>`
+  with its own worker thread) write **one file per stream source**
+  (`*_stream_sourceN.csv` / `.mf4`) carrying the **full-rate post-transform** samples, with
+  per-sample times derived as `t0 + i * dt` — never the `monotonicFrameNs` bump, which exists
+  only to break same-ns collisions on the frame lane. Their enable state follows the parent
+  exporter (`setExportEnabled`), they close with it, and they stop in
+  `stopFrameConsumerWorkers()`. The single-producer invariant is kept by fan-in: every
+  `StreamProcessor::blockReady` is queued to the GUI-affine `ingestBlock`, so each sink's SPSC
+  queue still has exactly one producer no matter how many stream workers exist. Block payloads
+  are only built while some sink (CSV, MDF4 or an API subscriber) is live.
 - **Session DB lives in `app/src/Sessions/`** (NOT `app/src/SQLite/`):
   - `Sessions::DatabaseManager` — singleton owning the open `.db`; backs `app/qml/DatabaseExplorer/`.
   - `Sessions::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based; tables

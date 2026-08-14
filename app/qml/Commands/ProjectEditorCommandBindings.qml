@@ -52,6 +52,7 @@ QtObject {
     "editor.addWebView": root.cmdEditorAddWebView,
     "editor.addPainter": root.cmdEditorAddPainter,
     "editor.addDataGrid": root.cmdEditorAddDataGrid,
+    "editor.addBarPanel": root.cmdEditorAddBarPanel,
     "editor.addMultiPlot": root.cmdEditorAddMultiPlot,
     "editor.addPlot3D": root.cmdEditorAddPlot3D,
     "editor.addAccelerometer": root.cmdEditorAddAccelerometer,
@@ -176,6 +177,10 @@ QtObject {
 
   readonly property QtObject cmdEditorAddDataGrid: QtObject {
     function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid) }
+  }
+
+  readonly property QtObject cmdEditorAddBarPanel: QtObject {
+    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Bar Panel"), SerialStudio.BarPanel) }
   }
 
   readonly property QtObject cmdEditorAddMultiPlot: QtObject {

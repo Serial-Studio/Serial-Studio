@@ -39,6 +39,7 @@
 #include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/ScriptsHandler.h"
 #include "API/Handlers/SourceHandler.h"
+#include "API/Handlers/StreamHandler.h"
 #include "API/Handlers/SystemHandler.h"
 #include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/WindowHandler.h"
@@ -255,6 +256,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::AssistantHandler::registerCommands();
   Handlers::ProblemsHandler::registerCommands();
   Handlers::DiagnosticsHandler::registerCommands();
+  Handlers::StreamHandler::registerCommands();
   Handlers::MirrorHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL

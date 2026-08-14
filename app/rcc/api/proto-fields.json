@@ -1655,6 +1655,7 @@
         "decimalPoints": 6,
         "displayFormat": 7,
         "displayTickCount": 8,
+        "extremeHold": 41,
         "fft": 9,
         "fftBallistics": 10,
         "fftBallisticsRelease": 11,
@@ -1690,7 +1691,7 @@
         "xAxisId": 40
       },
       "reserved": [],
-      "next": 41
+      "next": 42
     },
     "project.dryRun.endToEnd": {
       "fields": {
@@ -2440,6 +2441,16 @@
       },
       "reserved": [],
       "next": 3
+    },
+    "stream.getInfo": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "stream.getSources": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
     },
     "system.exec": {
       "fields": {

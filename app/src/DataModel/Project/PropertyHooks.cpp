@@ -521,7 +521,8 @@ bool DataModel::PropertyHooks::widgetSelectable(const Dataset& d, const ProjectM
   const auto& groups = pm.groups();
   if (d.groupId >= 0 && static_cast<size_t>(d.groupId) < groups.size()) {
     const auto& widget = groups[d.groupId].widget;
-    if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter")
+    if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter"
+        && widget != "barpanel")
       return false;
   }
 
@@ -537,6 +538,22 @@ bool DataModel::PropertyHooks::widgetRangeApplicable(const Dataset& d, const Pro
     return false;
 
   return d.widget == "bar" || d.widget == "gauge" || d.widget == "meter";
+}
+
+/**
+ * @brief Returns true when the dataset can show min/max hold markers: it draws an analog
+ *        dataset widget, or its owning group renders a bar panel.
+ */
+bool DataModel::PropertyHooks::extremeHoldApplicable(const Dataset& d, const ProjectModel& pm)
+{
+  if (widgetRangeApplicable(d, pm))
+    return true;
+
+  const auto& groups = pm.groups();
+  if (d.groupId < 0 || static_cast<size_t>(d.groupId) >= groups.size())
+    return false;
+
+  return groups[d.groupId].widget == QLatin1String("barpanel");
 }
 
 /**

@@ -33,6 +33,7 @@
 #include "UI/WidgetRegistry.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
+#include "UI/Widgets/BarPanel.h"
 #include "UI/Widgets/Compass.h"
 #include "UI/Widgets/DataGrid.h"
 #include "UI/Widgets/ExtensionData.h"
@@ -168,7 +169,25 @@ int UI::DashboardWidget::relativeIndex() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the color of the widget based on the current theme.
+ * @brief Returns true when a dataset widget belongs to the plot family, the only widgets that
+ *        keep the per-index multicolor cycle (spec 0052).
+ */
+[[nodiscard]] static bool plotClassDatasetWidget(const SerialStudio::DashboardWidget w)
+{
+  if (w == SerialStudio::DashboardPlot || w == SerialStudio::DashboardFFT)
+    return true;
+
+#ifdef BUILD_COMMERCIAL
+  if (w == SerialStudio::DashboardWaterfall)
+    return true;
+#endif
+
+  return false;
+}
+
+/**
+ * @brief Returns the color of the widget based on the current theme: plot-family widgets cycle
+ *        the theme palette, every other dataset widget shares the single accent (overrides win).
  */
 QColor UI::DashboardWidget::widgetColor() const
 {
@@ -176,7 +195,10 @@ QColor UI::DashboardWidget::widgetColor() const
     const auto slot = m_dashboard.widgetSlot(m_widgetType, m_relativeIndex);
     if (slot.valid && !slot.group) {
       const auto& dataset = GET_DATASET(m_widgetType, slot.bucketIndex);
-      return SerialStudio::getDatasetColor(dataset);
+      if (plotClassDatasetWidget(m_widgetType))
+        return SerialStudio::getDatasetColor(dataset);
+
+      return SerialStudio::getDatasetAccentColor(dataset);
     }
   }
 
@@ -427,6 +449,11 @@ void UI::DashboardWidget::reloadWidget()
  */
 void UI::DashboardWidget::buildWidgetForType()
 {
+#ifdef BUILD_COMMERCIAL
+  if (buildCommercialWidgetForType())
+    return;
+#endif
+
   switch (widgetType()) {
     case SerialStudio::DashboardDataGrid:
       m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
@@ -488,39 +515,53 @@ void UI::DashboardWidget::buildWidgetForType()
       m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
       m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/LEDPanel.qml";
       break;
+    case SerialStudio::DashboardBarPanel:
+      m_dbWidget = new Widgets::BarPanel(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/BarPanel.qml";
+      break;
     case SerialStudio::DashboardWebView:
       m_dbWidget = makeWebViewWidget(relativeIndex(), this);
       m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/WebView.qml";
       break;
-#ifdef BUILD_COMMERCIAL
-    case SerialStudio::DashboardPlot3D:
-      m_dbWidget = new Widgets::Plot3D(relativeIndex(), this);
-      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml";
-      break;
-    case SerialStudio::DashboardImageView:
-      m_dbWidget = new Widgets::ImageView(relativeIndex(), this);
-      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml";
-      break;
-    case SerialStudio::DashboardOutputPanel:
-      m_dbWidget = new Widgets::Output::Panel(relativeIndex(), this);
-      m_qmlPath =
-        "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml";
-      break;
-    case SerialStudio::DashboardNotificationLog:
-      m_dbWidget = nullptr;
-      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/NotificationLog.qml";
-      break;
-    case SerialStudio::DashboardWaterfall:
-      m_dbWidget = new Widgets::Waterfall(relativeIndex(), this);
-      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml";
-      break;
-    case SerialStudio::DashboardPainter:
-      m_dbWidget = makePainterWidget(relativeIndex(), this);
-      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Painter.qml";
-      break;
-#endif
-
     default:
       break;
   }
 }
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Builds the widget when the type is a commercial one; returns false for free types.
+ */
+bool UI::DashboardWidget::buildCommercialWidgetForType()
+{
+  switch (widgetType()) {
+    case SerialStudio::DashboardPlot3D:
+      m_dbWidget = new Widgets::Plot3D(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml";
+      return true;
+    case SerialStudio::DashboardImageView:
+      m_dbWidget = new Widgets::ImageView(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml";
+      return true;
+    case SerialStudio::DashboardOutputPanel:
+      m_dbWidget = new Widgets::Output::Panel(relativeIndex(), this);
+      m_qmlPath =
+        "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml";
+      return true;
+    case SerialStudio::DashboardNotificationLog:
+      m_dbWidget = nullptr;
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/NotificationLog.qml";
+      return true;
+    case SerialStudio::DashboardWaterfall:
+      m_dbWidget = new Widgets::Waterfall(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml";
+      return true;
+    case SerialStudio::DashboardPainter:
+      m_dbWidget = makePainterWidget(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Painter.qml";
+      return true;
+    default:
+      return false;
+  }
+}
+#endif

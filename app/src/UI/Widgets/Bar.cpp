@@ -26,6 +26,7 @@
 #include "DataModel/Frame.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
+#include "UI/WidgetBands.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
@@ -42,6 +43,9 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_value(0.0)
   , m_minValue(0.0)
   , m_maxValue(0.0)
+  , m_extremesValid(false)
+  , m_minSeen(0.0)
+  , m_maxSeen(0.0)
   , m_activeBandIndex(-1)
   , m_lastBandHint(-1)
   , m_dashboard(UI::Dashboard::instance())
@@ -157,6 +161,46 @@ const QVariantList& Widgets::Bar::alarmBands() const noexcept
   return m_bandsAsVariant;
 }
 
+/**
+ * @brief True when extreme-hold is on for the dataset and at least one sample was observed.
+ */
+bool Widgets::Bar::extremesValid() const noexcept
+{
+  return m_extremesValid;
+}
+
+/**
+ * @brief Returns the lowest value observed since the last data reset.
+ */
+double Widgets::Bar::minSeen() const noexcept
+{
+  return m_minSeen;
+}
+
+/**
+ * @brief Returns the highest value observed since the last data reset.
+ */
+double Widgets::Bar::maxSeen() const noexcept
+{
+  return m_maxSeen;
+}
+
+/**
+ * @brief Returns the normalized scale position of the lowest observed value.
+ */
+double Widgets::Bar::minSeenFrac() const noexcept
+{
+  return computeFractional(m_minSeen);
+}
+
+/**
+ * @brief Returns the normalized scale position of the highest observed value.
+ */
+double Widgets::Bar::maxSeenFrac() const noexcept
+{
+  return computeFractional(m_maxSeen);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Value getters
 //--------------------------------------------------------------------------------------------------
@@ -238,36 +282,34 @@ double Widgets::Bar::normalizedValue() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the index of the band that contains @a value; -1 if none.
- */
-int Widgets::Bar::bandIndexFor(double value) const noexcept
-{
-  if (m_bands.isEmpty())
-    return -1;
-
-  if (m_lastBandHint >= 0 && m_lastBandHint < m_bands.size()) [[likely]] {
-    const auto& b = m_bands[m_lastBandHint];
-    if (value >= b.min && value <= b.max)
-      return m_lastBandHint;
-  }
-
-  for (int i = 0; i < m_bands.size(); ++i) {
-    const auto& b = m_bands[i];
-    if (value >= b.min && value <= b.max)
-      return i;
-  }
-
-  return -1;
-}
-
-/**
- * @brief Updates the cached active band index from the current value.
+ * @brief Updates the cached active band index from the current value; a value outside every
+ *        band clamps to the nearest band so overrange data never renders as unclassified.
  */
 void Widgets::Bar::recomputeActiveBand(double value)
 {
-  m_activeBandIndex = bandIndexFor(value);
+  m_activeBandIndex = Bands::activeIndex(m_bands, value, m_lastBandHint);
   if (m_activeBandIndex >= 0)
     m_lastBandHint = m_activeBandIndex;
+}
+
+/**
+ * @brief Refreshes the extreme-hold state from the dashboard store; returns true on change.
+ */
+bool Widgets::Bar::refreshExtremes(const DataModel::Dataset& dataset)
+{
+  const auto extremes = m_dashboard.datasetExtremes(dataset.uniqueId);
+  const bool valid    = dataset.extremeHold && extremes.valid;
+  bool changed        = (valid != m_extremesValid);
+  if (valid && (DSP::notEqual(extremes.min, m_minSeen) || DSP::notEqual(extremes.max, m_maxSeen)))
+    changed = true;
+
+  m_extremesValid = valid;
+  if (valid) {
+    m_minSeen = extremes.min;
+    m_maxSeen = extremes.max;
+  }
+
+  return changed;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -284,12 +326,15 @@ void Widgets::Bar::updateData()
     if (!std::isfinite(dataset.numericValue))
       return;
 
-    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    if (DSP::notEqual(value, m_value)) {
+    const bool extremesChanged = refreshExtremes(dataset);
+    auto value                 = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
+    const bool valueChanged    = DSP::notEqual(value, m_value);
+    if (valueChanged) {
       m_value = value;
       recomputeActiveBand(value);
-      if (isEnabled())
-        Q_EMIT updated();
     }
+
+    if ((valueChanged || extremesChanged) && isEnabled())
+      Q_EMIT updated();
   }
 }

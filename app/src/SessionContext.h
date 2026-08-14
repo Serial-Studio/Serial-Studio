@@ -42,6 +42,7 @@ class ProjectModel;
 
 namespace IO {
 class ConnectionManager;
+class PipelineHost;
 }  // namespace IO
 
 namespace UI {
@@ -75,6 +76,7 @@ public:
   [[nodiscard]] virtual DataModel::FrameParser& frameParser() const;
   [[nodiscard]] virtual DataModel::FrameBuilder& frameBuilder() const;
   [[nodiscard]] virtual DataModel::ProjectModel& projectModel() const;
+  [[nodiscard]] virtual IO::PipelineHost& pipelineHost() const;
   [[nodiscard]] virtual IO::ConnectionManager& connectionManager() const;
   [[nodiscard]] virtual DataModel::NotificationCenter& notifications() const;
 
@@ -86,6 +88,7 @@ public:
   void adoptFrameParser(std::unique_ptr<DataModel::FrameParser> module);
   void adoptFrameBuilder(std::unique_ptr<DataModel::FrameBuilder> module);
   void adoptProjectModel(std::unique_ptr<DataModel::ProjectModel> module);
+  void adoptPipelineHost(std::unique_ptr<IO::PipelineHost> module);
   void adoptConnectionManager(std::unique_ptr<IO::ConnectionManager> module);
   void adoptNotifications(std::unique_ptr<DataModel::NotificationCenter> module);
 
@@ -110,6 +113,7 @@ private:
   std::unique_ptr<DataModel::FrameParser> m_frameParser;
   std::unique_ptr<DataModel::FrameBuilder> m_frameBuilder;
   std::unique_ptr<DataModel::ProjectModel> m_projectModel;
+  std::unique_ptr<IO::PipelineHost> m_pipelineHost;
   std::unique_ptr<IO::ConnectionManager> m_connectionManager;
   std::unique_ptr<DataModel::NotificationCenter> m_notifications;
 };

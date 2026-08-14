@@ -44,6 +44,7 @@
         "image",
         "painter",
         "webview",
+        "barpanel",
         "terminal",
         "clock",
         "stopwatch",

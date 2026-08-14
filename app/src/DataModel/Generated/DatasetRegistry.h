@@ -70,6 +70,7 @@ typedef enum {
   kDatasetView_FFT_LogX,
   kDatasetView_FFT_Ballistics,
   kDatasetView_FFT_BallisticsRelease,
+  kDatasetView_ExtremeHold,
 } DatasetItem;
 
 namespace DataModel::Registry {
@@ -199,6 +200,9 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
   {"WgtMax", "wgtMax", "wgtMax", "Edit Dataset", "dataset", kDatasetView_WgtMax,
    PropertyType::Double, PropertyWidget::FloatField, PersistRule::Always, true, true, false,
    false},
+  {"ExtremeHold", "extremeHold", "extremeHold", "Edit Dataset", "dataset",
+   kDatasetView_ExtremeHold, PropertyType::Bool, PropertyWidget::CheckBox, PersistRule::WhenTrue,
+   true, false, false, false},
   {"Led", "led", "led", "Edit Dataset", "dataset", kDatasetView_LED, PropertyType::Bool,
    PropertyWidget::CheckBox, PersistRule::Always, true, false, false, false},
   {"LedHigh", "ledHigh", "ledHigh", "Edit Dataset", "dataset", kDatasetView_LED_High,
@@ -228,7 +232,7 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
 /**
  * @brief Number of declared dataset properties.
  */
-inline constexpr int kDatasetPropertyCount = 41;
+inline constexpr int kDatasetPropertyCount = 42;
 
 /**
  * @brief Returns the property bound to a form-field id, or null when none is.

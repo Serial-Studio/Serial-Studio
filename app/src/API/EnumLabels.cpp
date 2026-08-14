@@ -267,6 +267,8 @@ QString API::EnumLabels::groupWidgetSlug(int value)
       return QStringLiteral("painter");
     case SerialStudio::WebView:
       return QStringLiteral("web-view");
+    case SerialStudio::BarPanel:
+      return QStringLiteral("bar-panel");
   }
   return QStringLiteral("unknown");
 }
@@ -297,6 +299,8 @@ QString API::EnumLabels::groupWidgetLabel(int value)
       return QStringLiteral("Painter (custom canvas)");
     case SerialStudio::WebView:
       return QStringLiteral("Web view (embedded browser)");
+    case SerialStudio::BarPanel:
+      return QStringLiteral("Bar panel (multi-channel bars)");
   }
   return QStringLiteral("Unknown");
 }
@@ -431,6 +435,8 @@ QString API::EnumLabels::dashboardWidgetSlug(int value)
       return QStringLiteral("webview");
     case SerialStudio::DashboardNoWidget:
       return QStringLiteral("none");
+    case SerialStudio::DashboardBarPanel:
+      return QStringLiteral("barpanel");
 #ifdef BUILD_COMMERCIAL
     case SerialStudio::DashboardImageView:
       return QStringLiteral("imageview");
@@ -508,6 +514,9 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
 
   if (s == QLatin1String("none"))
     return SerialStudio::DashboardNoWidget;
+
+  if (s == QLatin1String("barpanel") || s == QLatin1String("bar-panel"))
+    return SerialStudio::DashboardBarPanel;
 #ifdef BUILD_COMMERCIAL
   if (s == QLatin1String("imageview") || s == QLatin1String("image-view"))
     return SerialStudio::DashboardImageView;

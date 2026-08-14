@@ -21,8 +21,11 @@
 
 #include "DataModel/DataTable.h"
 
+#include <QCoreApplication>
 #include <QDebug>
+#include <QThread>
 
+#include "IO/PipelineHost.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
 
@@ -271,6 +274,15 @@ bool DataModel::DataTableStore::setByInternedKey(const char* table,
 bool DataModel::DataTableStore::isInitialized() const noexcept
 {
   return m_initialized;
+}
+
+/**
+ * @brief Returns the layout generation, bumped by every initialize(); handles carry it so a
+ *        handle minted against an older layout resolves to nullptr instead of a wrong slot.
+ */
+int DataModel::DataTableStore::generation() const noexcept
+{
+  return m_generation;
 }
 
 /**
@@ -648,6 +660,142 @@ QMap<QString, QMap<QString, DataModel::RegisterValue>> DataModel::DataTableStore
 }
 
 //--------------------------------------------------------------------------------------------------
+// Cross-thread mirror
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Publishes an immutable copy for readers on another thread; call from the store's owning
+ *        thread only. An uninitialized store yields an empty snapshot (generation -1), which is
+ *        what lets a reader drop the previous project's values the tick after a clear().
+ */
+DataModel::DataTableSnapshotPtr DataModel::DataTableStore::makeSnapshot() const
+{
+  auto snapshot = std::make_shared<DataTableSnapshot>();
+  if (!m_initialized)
+    return snapshot;
+
+  snapshot->generation   = m_generation;
+  snapshot->writeClock   = m_writeClock;
+  snapshot->values       = m_storage;
+  snapshot->index        = m_index;
+  snapshot->datasetIndex = m_datasetIndex;
+  snapshot->aliasIndex   = m_aliasIndex;
+  return snapshot;
+}
+
+/**
+ * @brief Bounds-checked slot read shared by every DataTableSnapshot accessor.
+ */
+[[nodiscard]] static const DataModel::RegisterValue* snapshotSlot(
+  const DataModel::DataTableSnapshot& snapshot, int slot)
+{
+  if (slot < 0 || slot >= static_cast<int>(snapshot.values.size())) [[unlikely]]
+    return nullptr;
+
+  return &snapshot.values[static_cast<size_t>(slot)];
+}
+
+/**
+ * @brief Looks up a register by table and register name; silent on miss (the live store already
+ *        warned once for the same name when the parser or a transform read it).
+ */
+const DataModel::RegisterValue* DataModel::DataTableSnapshot::get(const QString& table,
+                                                                  const QString& reg) const
+{
+  const auto it = index.constFind(qMakePair(table, reg));
+  if (it == index.constEnd()) [[unlikely]]
+    return nullptr;
+
+  return snapshotSlot(*this, it.value());
+}
+
+/**
+ * @brief Mirrors DataTableStore::isInitialized() so a reader templated over both views can ask
+ *        the same question of a snapshot; an unpublished snapshot keeps generation -1.
+ */
+bool DataModel::DataTableSnapshot::isInitialized() const
+{
+  return generation >= 0;
+}
+
+/**
+ * @brief Resolves (table, register) to the same generation-tagged handle the live store mints,
+ *        so a handle stays interchangeable between the store and its snapshots.
+ */
+qint64 DataModel::DataTableSnapshot::handleOf(const QString& table, const QString& reg) const
+{
+  const auto it = index.constFind(qMakePair(table, reg));
+  if (it == index.constEnd()) [[unlikely]]
+    return -1;
+
+  return (static_cast<qint64>(generation) << kHandleIndexBits) | static_cast<qint64>(it.value());
+}
+
+/**
+ * @brief Reads by handle; a handle minted against another layout generation is a safe nullptr.
+ */
+const DataModel::RegisterValue* DataModel::DataTableSnapshot::getByHandle(qint64 handle) const
+{
+  if (handle < 0) [[unlikely]]
+    return nullptr;
+
+  if (static_cast<int>(handle >> kHandleIndexBits) != generation) [[unlikely]]
+    return nullptr;
+
+  return snapshotSlot(*this, static_cast<int>(handle & kHandleIndexMask));
+}
+
+/**
+ * @brief Returns the raw (pre-transform) value for a dataset.
+ */
+const DataModel::RegisterValue* DataModel::DataTableSnapshot::getDatasetRaw(int uniqueId) const
+{
+  const auto it = datasetIndex.constFind(uniqueId);
+  if (it == datasetIndex.constEnd()) [[unlikely]]
+    return nullptr;
+
+  return snapshotSlot(*this, it->first);
+}
+
+/**
+ * @brief Returns the final (post-transform) value for a dataset.
+ */
+const DataModel::RegisterValue* DataModel::DataTableSnapshot::getDatasetFinal(int uniqueId) const
+{
+  const auto it = datasetIndex.constFind(uniqueId);
+  if (it == datasetIndex.constEnd()) [[unlikely]]
+    return nullptr;
+
+  return snapshotSlot(*this, it->second);
+}
+
+/**
+ * @brief Returns the raw (pre-transform) value for a dataset addressed by its alias.
+ */
+const DataModel::RegisterValue* DataModel::DataTableSnapshot::getDatasetRawByAlias(
+  const QString& alias) const
+{
+  const auto it = aliasIndex.constFind(alias);
+  if (it == aliasIndex.constEnd()) [[unlikely]]
+    return nullptr;
+
+  return snapshotSlot(*this, it->first);
+}
+
+/**
+ * @brief Returns the final (post-transform) value for a dataset addressed by its alias.
+ */
+const DataModel::RegisterValue* DataModel::DataTableSnapshot::getDatasetFinalByAlias(
+  const QString& alias) const
+{
+  const auto it = aliasIndex.constFind(alias);
+  if (it == aliasIndex.constEnd()) [[unlikely]]
+    return nullptr;
+
+  return snapshotSlot(*this, it->second);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
 
@@ -753,20 +901,27 @@ void DataModel::DataTableStore::noteMissingAlias(const QString& alias, const cha
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Converts a register value to the QVariant the JS bridge hands back; a missing register
+ *        is an invalid QVariant, which reaches the script as undefined.
+ */
+[[nodiscard]] static QVariant registerVariant(const DataModel::RegisterValue* val)
+{
+  if (!val)
+    return QVariant();
+
+  return val->isNumeric ? QVariant(val->numericValue) : QVariant(val->stringValue);
+}
+
+/**
  * @brief Returns a register value from a user-defined table.
  */
 QVariant DataModel::TableApiBridge::tableGet(const QString& t, const QString& r)
 {
-  SS_ASSERT(store != nullptr, return {});
+  SS_ASSERT(context.store != nullptr, return {});
 
-  const auto* val = store->get(t, r);
-  if (!val)
-    return QVariant();
-
-  if (val->isNumeric)
-    return QVariant(val->numericValue);
-
-  return QVariant(val->stringValue);
+  QVariant out;
+  readTableView(context, [&](const auto& view) { out = registerVariant(view.get(t, r)); });
+  return out;
 }
 
 /**
@@ -775,7 +930,7 @@ QVariant DataModel::TableApiBridge::tableGet(const QString& t, const QString& r)
  */
 void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, const QVariant& v)
 {
-  SS_ASSERT(store != nullptr, return);
+  SS_ASSERT(context.store != nullptr, return);
 
   if (!v.isValid() || v.typeId() == QMetaType::Nullptr)
     return;
@@ -785,7 +940,8 @@ void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, con
   if (!rv.isNumeric)
     rv.stringValue = v.toString();
 
-  store->set(t, r, rv);
+  auto* target = context.store;
+  writeTableStore(context, [target, t, r, rv = std::move(rv)] { (void)target->set(t, r, rv); });
 }
 
 /**
@@ -793,8 +949,11 @@ void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, con
  */
 qint64 DataModel::TableApiBridge::tableHandle(const QString& t, const QString& r)
 {
-  SS_ASSERT(store != nullptr, return -1);
-  return store->handleOf(t, r);
+  SS_ASSERT(context.store != nullptr, return -1);
+
+  qint64 handle = -1;
+  readTableView(context, [&](const auto& view) { handle = view.handleOf(t, r); });
+  return handle;
 }
 
 /**
@@ -802,12 +961,14 @@ qint64 DataModel::TableApiBridge::tableHandle(const QString& t, const QString& r
  */
 QVariantList DataModel::TableApiBridge::tableHandleMany(const QString& t, const QVariantList& regs)
 {
-  SS_ASSERT(store != nullptr, return {});
+  SS_ASSERT(context.store != nullptr, return {});
 
   QVariantList handles;
   handles.reserve(regs.size());
-  for (const QVariant& reg : regs)
-    handles.append(QVariant(store->handleOf(t, reg.toString())));
+  readTableView(context, [&](const auto& view) {
+    for (const QVariant& reg : regs)
+      handles.append(QVariant(view.handleOf(t, reg.toString())));
+  });
 
   return handles;
 }
@@ -817,13 +978,11 @@ QVariantList DataModel::TableApiBridge::tableHandleMany(const QString& t, const 
  */
 QVariant DataModel::TableApiBridge::tableGetH(qint64 h)
 {
-  SS_ASSERT(store != nullptr, return {});
+  SS_ASSERT(context.store != nullptr, return {});
 
-  const auto* val = store->getByHandle(h);
-  if (!val)
-    return QVariant();
-
-  return val->isNumeric ? QVariant(val->numericValue) : QVariant(val->stringValue);
+  QVariant out;
+  readTableView(context, [&](const auto& view) { out = registerVariant(view.getByHandle(h)); });
+  return out;
 }
 
 /**
@@ -832,7 +991,7 @@ QVariant DataModel::TableApiBridge::tableGetH(qint64 h)
  */
 void DataModel::TableApiBridge::tableSetH(qint64 h, const QVariant& v)
 {
-  SS_ASSERT(store != nullptr, return);
+  SS_ASSERT(context.store != nullptr, return);
 
   if (!v.isValid() || v.typeId() == QMetaType::Nullptr)
     return;
@@ -842,7 +1001,8 @@ void DataModel::TableApiBridge::tableSetH(qint64 h, const QVariant& v)
   if (!rv.isNumeric)
     rv.stringValue = v.toString();
 
-  store->setByHandle(h, rv);
+  auto* target = context.store;
+  writeTableStore(context, [target, h, rv = std::move(rv)] { (void)target->setByHandle(h, rv); });
 }
 
 /**
@@ -851,18 +1011,22 @@ void DataModel::TableApiBridge::tableSetH(qint64 h, const QVariant& v)
  */
 QVariant DataModel::TableApiBridge::datasetGetRaw(const QJSValue& sel)
 {
-  SS_ASSERT(store != nullptr, return {});
+  SS_ASSERT(context.store != nullptr, return {});
 
-  const RegisterValue* val = nullptr;
-  if (sel.isString())
-    val = store->getDatasetRawByAlias(sel.toString());
-  else if (sel.isNumber())
-    val = store->getDatasetRaw(sel.toInt());
+  const bool isString = sel.isString();
+  const bool isNumber = sel.isNumber();
+  const QString alias = isString ? sel.toString() : QString();
+  const int uniqueId  = isNumber ? sel.toInt() : -1;
 
-  if (!val)
-    return QVariant();
+  QVariant out;
+  readTableView(context, [&](const auto& view) {
+    if (isString)
+      out = registerVariant(view.getDatasetRawByAlias(alias));
+    else if (isNumber)
+      out = registerVariant(view.getDatasetRaw(uniqueId));
+  });
 
-  return val->isNumeric ? QVariant(val->numericValue) : QVariant(val->stringValue);
+  return out;
 }
 
 /**
@@ -871,18 +1035,22 @@ QVariant DataModel::TableApiBridge::datasetGetRaw(const QJSValue& sel)
  */
 QVariant DataModel::TableApiBridge::datasetGetFinal(const QJSValue& sel)
 {
-  SS_ASSERT(store != nullptr, return {});
+  SS_ASSERT(context.store != nullptr, return {});
 
-  const RegisterValue* val = nullptr;
-  if (sel.isString())
-    val = store->getDatasetFinalByAlias(sel.toString());
-  else if (sel.isNumber())
-    val = store->getDatasetFinal(sel.toInt());
+  const bool isString = sel.isString();
+  const bool isNumber = sel.isNumber();
+  const QString alias = isString ? sel.toString() : QString();
+  const int uniqueId  = isNumber ? sel.toInt() : -1;
 
-  if (!val)
-    return QVariant();
+  QVariant out;
+  readTableView(context, [&](const auto& view) {
+    if (isString)
+      out = registerVariant(view.getDatasetFinalByAlias(alias));
+    else if (isNumber)
+      out = registerVariant(view.getDatasetFinal(uniqueId));
+  });
 
-  return val->isNumeric ? QVariant(val->numericValue) : QVariant(val->stringValue);
+  return out;
 }
 
 #ifdef BUILD_COMMERCIAL

@@ -28,9 +28,7 @@
 #include "API/CommandRegistry.h"
 #include "API/ProcessLauncher.h"
 #include "API/SchemaBuilder.h"
-#include "AppState.h"
 #include "DataModel/ProjectModel.h"
-#include "Misc/DemoLauncher.h"
 
 /**
  * @brief Returns the directory, file path, and file name of the loaded project.
@@ -127,34 +125,6 @@ API::CommandResponse API::Handlers::SystemHandler::runningProcesses(const QStrin
 }
 
 /**
- * @brief Starts the bundled zero-hardware rocket-launch demo project.
- */
-API::CommandResponse API::Handlers::SystemHandler::startDemo(const QString& id,
-                                                             const QJsonObject& params)
-{
-  Q_UNUSED(params)
-
-#ifndef BUILD_COMMERCIAL
-  return CommandResponse::makeError(
-    id, ErrorCode::ExecutionError, QStringLiteral("Demo is unavailable in GPL builds"));
-#endif
-
-  static auto& appState = AppState::instance();
-  if (appState.ephemeralSession()) {
-    return CommandResponse::makeError(
-      id, ErrorCode::ExecutionError, QStringLiteral("Demo is unavailable in operator mode"));
-  }
-
-  static auto& demoLauncher = Misc::DemoLauncher::instance();
-  if (!demoLauncher.startDemo()) {
-    return CommandResponse::makeError(
-      id, ErrorCode::OperationFailed, QStringLiteral("Failed to start the demo project"));
-  }
-
-  return CommandResponse::makeSuccess(id, QJsonObject());
-}
-
-/**
  * @brief Registers all system.* commands with the global registry.
  */
 void API::Handlers::SystemHandler::registerCommands()
@@ -201,12 +171,4 @@ void API::Handlers::SystemHandler::registerCommands()
     QStringLiteral("List the helper processes currently managed by system.exec."),
     emptySchema(),
     &runningProcesses);
-
-  registry.registerCommand(
-    QStringLiteral("system.startDemo"),
-    QStringLiteral("Start the bundled zero-hardware rocket-launch demo: stages the demo "
-                   "project, opens it, and connects the simulated source so the dashboard "
-                   "streams live data. Unavailable in operator deployments."),
-    emptySchema(),
-    &startDemo);
 }

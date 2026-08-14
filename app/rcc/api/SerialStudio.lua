@@ -109,6 +109,7 @@ project.template = project.template or {}
 project.workspace = project.workspace or {}
 scripts = scripts or {}
 sessions = sessions or {}
+stream = stream or {}
 system = system or {}
 ui = ui or {}
 ui.window = ui.window or {}
@@ -2170,6 +2171,16 @@ function sessions.verify(sessionId)
   return apiCall('sessions.verify', p)
 end
 
+function stream.getInfo()
+  local p = {}
+  return apiCall('stream.getInfo', p)
+end
+
+function stream.getSources()
+  local p = {}
+  return apiCall('stream.getSources', p)
+end
+
 function system.exec(program, options)
   local p = {}
   p['program'] = program
@@ -2191,11 +2202,6 @@ end
 function system.runningProcesses()
   local p = {}
   return apiCall('system.runningProcesses', p)
-end
-
-function system.startDemo()
-  local p = {}
-  return apiCall('system.startDemo', p)
 end
 
 function ui.window.getLayout()

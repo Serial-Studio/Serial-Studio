@@ -28,6 +28,7 @@
 #include <QStringList>
 
 #include "DataModel/Scripting/IScriptEngine.h"
+#include "ThirdParty/readerwriterqueue.h"
 
 class SessionContext;
 
@@ -91,17 +92,19 @@ public:
 
   [[nodiscard]] bool hasTableApiEngines() const noexcept;
   [[nodiscard]] int engineEpoch() const noexcept;
-  [[nodiscard]] QList<ScriptStat> scriptStats() const;
+  [[nodiscard]] QList<ScriptStat> scriptStats();
 
   [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 
   [[nodiscard]] int detectTemplate(const QString& code) const;
 
+  void releaseEngines();
   void setSuppressMessageBoxes(bool suppress);
   void setSourceCode(int sourceId, const QString& code);
   void clearSourceEngine(int sourceId);
 
 public slots:
+  void prepareShutdown();
   void readCode();
   void reloadSourceCode(int sourceId);
   void clearContext();
@@ -113,6 +116,8 @@ public slots:
 
 private:
   void refreshEngineCaches() noexcept;
+  void publishScriptStats();
+  [[nodiscard]] QList<ScriptStat> guiScriptStats();
   void setNativeTemplateIdx(int sourceId, int idx);
   [[nodiscard]] IScriptEngine& engineForSource(int sourceId);
   [[nodiscard]] int languageForSource(int sourceId) const;
@@ -120,10 +125,17 @@ private:
   [[nodiscard]] QString scriptForSource(const Source& src) const;
 
 private:
+  using ScriptStatsPtr = std::shared_ptr<const QList<ScriptStat>>;
+
+  static constexpr size_t kStatsMirrorSlots = 4;
+
   bool m_hasLuaEngine;
   bool m_suppressMessageBoxes;
   int m_engineEpoch;
   IScriptEngine* m_engine0Cache;
+
+  ScriptStatsPtr m_guiScriptStats;
+  moodycamel::ReaderWriterQueue<ScriptStatsPtr> m_statsMirrorRing;
 
   QString m_defaultTemplateFile;
   QStringList m_templateFiles;

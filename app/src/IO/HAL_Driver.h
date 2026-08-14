@@ -80,6 +80,27 @@ struct CapturedData {
  */
 typedef std::shared_ptr<const CapturedData> CapturedDataPtr;
 
+/**
+ * @brief One captured block of a dense typed sample stream (spec 0051): interleaved native
+ *        samples plus timing metadata. Source owns time -- @c t0 is stamped at the capture
+ *        boundary and per-sample times derive as t0 + i * dt, never re-stamped downstream.
+ */
+struct SampleBlock {
+  using SteadyTimePoint = CapturedData::SteadyTimePoint;
+
+  std::vector<float> samples;      ///< Interleaved samples (frame-major)
+  int channels     = 1;            ///< Interleaved channel count
+  qsizetype frames = 0;            ///< Sample frames in this block
+  SteadyTimePoint t0;              ///< Capture time of the first frame
+  std::chrono::nanoseconds dt{1};  ///< Per-frame step (1 / sample rate)
+};
+
+/**
+ * @typedef SampleBlockPtr
+ * @brief Shared immutable pointer to a @ref SampleBlock instance.
+ */
+typedef std::shared_ptr<const SampleBlock> SampleBlockPtr;
+
 [[nodiscard]] inline CapturedDataPtr makeCapturedData(
   const QByteArray& data,
   CapturedData::SteadyTimePoint timestamp = CapturedData::SteadyClock::now(),
@@ -118,6 +139,7 @@ signals:
   void configurationChanged();
   void dataSent(const QByteArray& data);
   void dataReceived(const IO::CapturedDataPtr& data);
+  void sampleBlockReceived(const IO::SampleBlockPtr& block);
   void openFinished(bool ok, const QString& reason);
 
 public:
@@ -135,6 +157,8 @@ public:
   [[nodiscard]] virtual bool isOpen() const noexcept = 0;
 
   [[nodiscard]] virtual bool isConnecting() const noexcept { return false; }
+
+  [[nodiscard]] virtual bool isStreamCapable() const noexcept { return false; }
 
   [[nodiscard]] virtual bool isReadable() const noexcept                   = 0;
   [[nodiscard]] virtual bool isWritable() const noexcept                   = 0;
@@ -199,6 +223,8 @@ protected:
   {
     Q_EMIT dataReceived(makeCapturedData(std::move(data), timestamp, frameStep, logicalFramesHint));
   }
+
+  void publishSampleBlock(const IO::SampleBlockPtr& block) { Q_EMIT sampleBlockReceived(block); }
 
 private:
   bool m_openReportArmed;

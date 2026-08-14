@@ -60,6 +60,13 @@ Item {
     }
   }
 
+  //
+  // Severity-first needle color (spec 0052): the active band's color when bands exist, the
+  // accent otherwise. alarmColorForSeverity(-1) resolves to WARNING, so the gate is explicit.
+  //
+  readonly property color needleBaseColor: model.activeBandSeverity >= 0
+                                           ? Cpp_ThemeManager.alarmColorForSeverity(model.activeBandSeverity)
+                                           : root.color
 
   //
   // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
@@ -206,7 +213,14 @@ Item {
         readonly property real faceCy: Math.max(meterArea.faceR + meterArea.topMargin,
                                                 (meterArea.height - meterArea.labelBaseHeight
                                                  - meterArea.faceR) / 2 + meterArea.faceR)
-        readonly property real arcBand: Math.max(3, meterArea.faceR * 0.11)
+        //
+        // Scale chrome depth: major ticks span it, the alarm ring sits inside it, and
+        // labelClearR is the deepest radius any of that chrome reaches
+        //
+        readonly property real arcBand: Math.max(8, meterArea.faceR * 0.11)
+        readonly property real scaleOuterR: meterArea.faceR - 0.75
+        readonly property real labelClearR: meterArea.scaleOuterR - meterArea.arcBand
+                                            - Math.max(4, fontSize * 0.35)
         readonly property int autoTargetTickCount: {
           const arcLen = (angleRangeDeg * Math.PI / 180) * meterArea.faceR
           const labelW = fontSize * 4.0
@@ -369,7 +383,7 @@ Item {
                                                ? modelData.customColor
                                                : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
             readonly property real rOut: meterArea.faceR - 0.5
-            readonly property real rIn: alarmZoneShape.rOut - Math.max(3, meterArea.faceR * 0.035)
+            readonly property real rIn: alarmZoneShape.rOut - Math.max(6, meterArea.faceR * 0.075)
             readonly property real angADeg: modelData.fracMin <= 0
                                             ? -90 : startAngleDeg + modelData.fracMin * angleRangeDeg
             readonly property real angBDeg: modelData.fracMax >= 1
@@ -419,11 +433,10 @@ Item {
             required property int index
             required property var modelData
             readonly property real tickValue: modelData
-            readonly property real rTickOuter: meterArea.faceR - 0.75
+            readonly property real rTickOuter: meterArea.scaleOuterR
             readonly property real angleRad: angleDeg * Math.PI / 180
+            readonly property real rTickInner: rTickOuter - meterArea.arcBand
             readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
-            readonly property real rTickInner: rTickOuter - Math.max(8, meterArea.faceR * 0.10)
-            readonly property real rLabel: meterArea.faceR - 4 - meterArea.arcBand - Math.max(10, fontSize * 1.0)
             readonly property real tickMidX: meterArea.faceCx + Math.sin(angleRad) * (rTickOuter + rTickInner) / 2
             readonly property real tickMidY: meterArea.faceCy - Math.cos(angleRad) * (rTickOuter + rTickInner) / 2
             readonly property real frac: (modelData - root.model.minValue) / (root.model.maxValue - root.model.minValue)
@@ -449,8 +462,17 @@ Item {
               text: formatTickValue(parent.tickValue)
               color: Cpp_ThemeManager.colors["widget_text"]
               font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-              x: meterArea.faceCx + Math.sin(parent.angleRad) * parent.rLabel - width / 2
-              y: meterArea.faceCy - Math.cos(parent.angleRad) * parent.rLabel - height / 2
+
+              //
+              // Clearance uses the label box half-extent projected onto its own radial
+              // ray, so diagonal labels back off as much as their corner needs
+              //
+              readonly property real radialHalf: Math.abs(Math.sin(parent.angleRad)) * width / 2
+                                                 + Math.abs(Math.cos(parent.angleRad)) * height / 2
+              readonly property real rLabel: Math.max(0, meterArea.labelClearR - radialHalf)
+
+              x: meterArea.faceCx + Math.sin(parent.angleRad) * rLabel - width / 2
+              y: meterArea.faceCy - Math.cos(parent.angleRad) * rLabel - height / 2
             }
           }
         }
@@ -468,10 +490,8 @@ Item {
             readonly property real frac: (tickValue - root.model.minValue) / (root.model.maxValue - root.model.minValue)
             readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
             readonly property real angleRad: angleDeg * Math.PI / 180
-            readonly property real rOuter: meterArea.faceR - 0.75
-            readonly property real rInner: rOuter - (halfTick
-                                                     ? Math.max(6, meterArea.faceR * 0.075)
-                                                     : Math.max(4, meterArea.faceR * 0.05))
+            readonly property real rOuter: meterArea.scaleOuterR
+            readonly property real rInner: rOuter - meterArea.arcBand * (halfTick ? 0.68 : 0.45)
             readonly property real midX: meterArea.faceCx + Math.sin(angleRad) * (rOuter + rInner) / 2
             readonly property real midY: meterArea.faceCy - Math.cos(angleRad) * (rOuter + rInner) / 2
 
@@ -483,6 +503,36 @@ Item {
               color: Cpp_ThemeManager.colors["widget_border"]
               transformOrigin: Item.Center
               rotation: parent.angleDeg
+              x: parent.midX - width / 2
+              y: parent.midY - height / 2
+            }
+          }
+        }
+
+        //
+        // Min/max hold markers (spec 0052): tick pair pinned at the extreme values
+        // observed since the last data reset
+        //
+        Repeater {
+          model: root.model.extremesValid ? [root.model.minSeenFrac, root.model.maxSeenFrac]
+                                          : []
+          delegate: Item {
+            required property var modelData
+            readonly property real markOuter: meterArea.scaleOuterR
+            readonly property real angleRad: angleDeg * Math.PI / 180
+            readonly property real markInner: markOuter - meterArea.arcBand
+            readonly property real angleDeg: startAngleDeg + modelData * angleRangeDeg
+            readonly property real midX: meterArea.faceCx + Math.sin(angleRad) * (markOuter + markInner) / 2
+            readonly property real midY: meterArea.faceCy - Math.cos(angleRad) * (markOuter + markInner) / 2
+
+            Rectangle {
+              width: 2.5
+              opacity: 0.9
+              antialiasing: true
+              rotation: parent.angleDeg
+              transformOrigin: Item.Center
+              height: parent.markOuter - parent.markInner
+              color: Cpp_ThemeManager.colors["widget_text"]
               x: parent.midX - width / 2
               y: parent.midY - height / 2
             }
@@ -770,15 +820,15 @@ Item {
             ShapePath {
               strokeWidth: 0.6
               joinStyle: ShapePath.MiterJoin
-              strokeColor: Qt.darker(root.color, 1.35)
+              strokeColor: Qt.darker(root.needleBaseColor, 1.35)
               fillGradient: LinearGradient {
                 x1: needleShape.cx
                 x2: needleShape.cx
                 y1: needleShape.cy
                 y2: needleShape.cy - needleShape.tipLen
-                GradientStop { position: 0.0; color: Qt.darker(root.color, 1.10) }
-                GradientStop { position: 0.5; color: root.color }
-                GradientStop { position: 1.0; color: Qt.lighter(root.color, 1.18) }
+                GradientStop { position: 0.0; color: Qt.darker(root.needleBaseColor, 1.10) }
+                GradientStop { position: 0.5; color: root.needleBaseColor }
+                GradientStop { position: 1.0; color: Qt.lighter(root.needleBaseColor, 1.18) }
               }
 
               startY: needleShape.cy

@@ -314,22 +314,8 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     return;
   }
 
-  if (id == kGroupView_LogX) {
-    const bool log_x = value.toBool();
-    for (auto& dataset : m_selectedGroup.datasets)
-      dataset.pltLogX = log_x;
-
-    pm.updateGroup(groupId, m_selectedGroup);
-    Q_EMIT editableOptionsChanged();
-    return;
-  }
-
-  if (id == kGroupView_LogY) {
-    const bool log_y = value.toBool();
-    for (auto& dataset : m_selectedGroup.datasets)
-      dataset.pltLogY = log_y;
-
-    pm.updateGroup(groupId, m_selectedGroup);
+  if (id == kGroupView_LogX || id == kGroupView_LogY) {
+    applyGroupLogAxisEdit(id == kGroupView_LogX, value.toBool(), groupId);
     Q_EMIT editableOptionsChanged();
     return;
   }
@@ -338,6 +324,12 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     m_selectedGroup.webViewUrl = value.toString();
     pm.setNextUndoHint(tr("Edit Group"), QStringLiteral("group-weburl:%1").arg(groupId));
     pm.updateGroup(groupId, m_selectedGroup, false);
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
+
+  if (id == kGroupView_BarPanelStyle) {
+    applyGroupBarPanelStyleEdit(value.toInt(), groupId);
     Q_EMIT editableOptionsChanged();
     return;
   }
@@ -412,6 +404,35 @@ void DataModel::ProjectEditor::applyGroupSourceEdit(int srcIdx, int groupId)
 }
 
 /**
+ * @brief Fans a group-level log-axis toggle onto every member dataset (the multiplot group
+ *        combo's per-dataset encoding; read back from datasets.front()).
+ */
+void DataModel::ProjectEditor::applyGroupLogAxisEdit(bool xAxis, bool enabled, int groupId)
+{
+  for (auto& dataset : m_selectedGroup.datasets)
+    if (xAxis)
+      dataset.pltLogX = enabled;
+    else
+      dataset.pltLogY = enabled;
+
+  m_projectModelRef.updateGroup(groupId, m_selectedGroup);
+}
+
+/**
+ * @brief Applies the bar-panel orientation combo (0 = auto, 1 = horizontal, 2 = vertical).
+ */
+void DataModel::ProjectEditor::applyGroupBarPanelStyleEdit(int styleIdx, int groupId)
+{
+  static const QStringList kStyles = {
+    QLatin1String(""), QStringLiteral("horizontal"), QStringLiteral("vertical")};
+
+  m_selectedGroup.barPanelStyle = kStyles.value(styleIdx);
+  m_projectModelRef.setNextUndoHint(tr("Edit Group"),
+                                    QStringLiteral("group-barstyle:%1").arg(groupId));
+  m_projectModelRef.updateGroup(groupId, m_selectedGroup, false);
+}
+
+/**
  * @brief Applies a group-widget change; returns false when the change is rejected.
  */
 bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
@@ -436,6 +457,7 @@ bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
     {         "gyro",     SerialStudio::Gyroscope},
     {          "map",           SerialStudio::GPS},
     {     "datagrid",      SerialStudio::DataGrid},
+    {     "barpanel",      SerialStudio::BarPanel},
     {       "plot3d",        SerialStudio::Plot3D},
     {        "image",     SerialStudio::ImageView},
     {      "painter",       SerialStudio::Painter},

@@ -3400,6 +3400,10 @@
                 "description": "Major-tick count on the dial scale (0 = auto-fit to widget size)",
                 "type": "integer"
             },
+            "extremeHold": {
+                "description": "Show hold markers at the lowest and highest values observed since the last data reset",
+                "type": "boolean"
+            },
             "fft": {
                 "description": "Perform frequency-domain analysis of the dataset",
                 "type": "boolean"
@@ -3876,7 +3880,7 @@
                 "type": "string"
             },
             "widgetType": {
-                "description": "GroupWidget enum -- see command description for decision guidance. 0=DataGrid, 1=Accelerometer, 2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter",
+                "description": "GroupWidget enum -- see command description for decision guidance. 0=DataGrid, 1=Accelerometer, 2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter, 9=WebView, 10=BarPanel",
                 "type": "integer"
             }
         },
@@ -5224,6 +5228,22 @@
         ]
     },
     {
+        "description": "Report the typed sample-stream surface: how many stream sources are live, the wire encoding of a streamBlock line (base64 float32le), the per-subscriber queue depth before the oldest block is dropped and counted, and the names of the connection-scoped commands (stream.subscribe / stream.unsubscribe) a subscriber sends on its own socket.",
+        "name": "stream.getInfo",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "List every live stream source: sourceId, channel count, sample rate, and the dataset uniqueIds its blocks carry.",
+        "name": "stream.getSources",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Launch a helper process (e.g. \"python\" with a script path). Control script only -- rejected over the network/SDK. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.",
         "name": "system.exec",
         "properties": {
@@ -5271,14 +5291,6 @@
     {
         "description": "List the helper processes currently managed by system.exec.",
         "name": "system.runningProcesses",
-        "properties": {
-        },
-        "required": [
-        ]
-    },
-    {
-        "description": "Start the bundled zero-hardware rocket-launch demo: stages the demo project, opens it, and connects the simulated source so the dashboard streams live data. Unavailable in operator deployments.",
-        "name": "system.startDemo",
         "properties": {
         },
         "required": [

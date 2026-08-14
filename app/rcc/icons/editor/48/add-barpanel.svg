@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="add-barpanel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+<g id="surface-barpanel-large-48">
+  <rect x="4.5" y="7.5" width="39.0" height="9.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="2"/>
+  <rect x="4.5" y="7.5" width="27.0" height="9.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="2"/>
+  <rect x="4.5" y="22.5" width="39.0" height="9.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="2"/>
+  <rect x="4.5" y="22.5" width="18.0" height="9.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="2"/>
+  <rect x="4.5" y="37.5" width="39.0" height="9.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="2"/>
+  <rect x="4.5" y="37.5" width="33.0" height="9.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="2"/>
+</g>
+
+<g id="add-badge"><g transform="scale(1.33333333)">
+    <g id="surface178">
+        <path d="M27.898,35.773C23.578,35.773 20.023,32.219 20.023,27.898C20.023,23.578 23.578,20.023 27.898,20.023C32.219,20.023 35.773,23.578 35.773,27.898C35.773,32.219 32.219,35.773 27.898,35.773Z" style="fill:rgb(186,224,189);fill-rule:nonzero;"/>
+        <path d="M27.898,20.25C32.129,20.25 35.551,23.672 35.551,27.898C35.551,32.129 32.129,35.551 27.898,35.551C23.672,35.551 20.25,32.129 20.25,27.898C20.25,23.672 23.672,20.25 27.898,20.25M27.898,19.801C23.445,19.801 19.801,23.445 19.801,27.898C19.801,32.355 23.445,36 27.898,36C32.355,36 36,32.355 36,27.898C36,23.445 32.355,19.801 27.898,19.801Z" style="fill:rgb(94,156,118);fill-rule:nonzero;"/>
+        <rect x="27" y="23.398" width="1.801" height="9" style="fill:rgb(254,254,254);fill-rule:nonzero;"/>
+        <rect x="23.398" y="27" width="9" height="1.801" style="fill:rgb(254,254,254);fill-rule:nonzero;"/>
+    </g>
+</g></g>
+</svg>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="add-barpanel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<g id="surface-barpanel-large-32">
+  <rect x="3.0" y="5.0" width="26.0" height="6.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1.5"/>
+  <rect x="3.0" y="5.0" width="18.0" height="6.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1.5"/>
+  <rect x="3.0" y="15.0" width="26.0" height="6.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1.5"/>
+  <rect x="3.0" y="15.0" width="12.0" height="6.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1.5"/>
+  <rect x="3.0" y="25.0" width="26.0" height="6.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1.5"/>
+  <rect x="3.0" y="25.0" width="22.0" height="6.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1.5"/>
+</g>
+
+<g id="add-badge"><g transform="scale(1.33333333)">
+    <g id="surface131">
+        <path d="M18.602,13.5C15.785,13.5 13.5,15.785 13.5,18.602C13.5,21.418 15.785,23.699 18.602,23.699C21.418,23.699 23.699,21.418 23.699,18.602C23.699,15.785 21.418,13.5 18.602,13.5Z" style="fill:rgb(186,224,189);fill-rule:nonzero;"/>
+        <path d="M18.602,13.801C21.246,13.801 23.398,15.953 23.398,18.602C23.398,21.246 21.246,23.398 18.602,23.398C15.953,23.398 13.801,21.246 13.801,18.602C13.801,15.953 15.953,13.801 18.602,13.801M18.602,13.199C15.617,13.199 13.199,15.617 13.199,18.602C13.199,21.582 15.617,24 18.602,24C21.582,24 24,21.582 24,18.602C24,15.617 21.582,13.199 18.602,13.199Z" style="fill:rgb(94,156,118);fill-rule:nonzero;"/>
+        <g transform="matrix(0.6,0,0,0.6,0,0)">
+            <path d="M31.003,36.003L31.003,26.003M26.003,31.003L36.003,31.003" style="fill:none;fill-rule:nonzero;stroke:rgb(254,254,254);stroke-width:2px;"/>
+        </g>
+    </g>
+</g></g>
+</svg>

@@ -81,7 +81,7 @@ Item {
         property bool owMono: owData ? (owData.monoIcon || false) : false
         property string owIcon: owData ? (owData.icon || "") : ""
         property string owTitle: owData ? owData.title : ""
-        property color accentColor: SerialStudio.getDatasetColor(index + 1)
+        property color accentColor: SerialStudio.getDatasetAccentColor()
 
         //
         // Transmit error indicator: flash a red border + tooltip when the

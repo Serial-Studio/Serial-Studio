@@ -81,6 +81,7 @@ inline constexpr KeyView FrameParserCode("frameParserCode");
 inline constexpr KeyView FrameParserLanguage("frameParserLanguage");
 inline constexpr KeyView FrameParserTemplate("frameParserTemplate");
 inline constexpr KeyView FrameParserParams("frameParserParams");
+inline constexpr KeyView SourceStreamLane("streamLane");
 
 // Dataset keys
 inline constexpr KeyView FFT("fft");
@@ -135,6 +136,7 @@ inline constexpr KeyView TransformLanguage("transformLanguage");
 inline constexpr KeyView DatasetId("datasetId");
 inline constexpr KeyView UniqueId("uniqueId");
 inline constexpr KeyView NumericValue("numericValue");
+inline constexpr KeyView ExtremeHold("extremeHold");
 
 // Frame container keys
 inline constexpr KeyView Groups("groups");
@@ -172,6 +174,9 @@ inline constexpr KeyView HideOnDashboard("hideOnDashboard");
 
 // Web-view-group keys
 inline constexpr KeyView WebViewUrl("webViewUrl");
+
+// Bar-panel-group keys
+inline constexpr KeyView BarPanelStyle("barPanelStyle");
 
 // Dashboard layout keys
 inline constexpr KeyView DashboardLayout("dashboardLayout");
@@ -459,6 +464,7 @@ struct alignas(8) Dataset {
   bool isNumeric           = false;  ///< True if value was parsed as numeric
   bool virtual_            = false;  ///< True if dataset is generated rather than parsed directly
   bool hideOnDashboard = false;  ///< Suppress dataset-level dashboard tile (painter still sees it)
+  bool extremeHold     = false;  ///< Show min/max hold markers on analog widgets
   bool enabled         = true;   ///< False excludes the dataset from frame building (editor-only)
   double fftMin        = 0;      ///< Minimum value (for FFT)
   double fftMax        = 0;      ///< Maximum value (for FFT)
@@ -516,6 +522,7 @@ struct alignas(8) Group {
   QString imgEndSequence;                   ///< Hex end delimiter (manual mode only)
   QString painterCode;                      ///< User JS for painter widget (paint/onFrame)
   QString webViewUrl;                       ///< URL loaded by the web-view widget
+  QString barPanelStyle;  ///< Bar-panel orientation ("" = auto | horizontal | vertical)
 };
 
 static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");
@@ -539,6 +546,7 @@ struct alignas(8) Source {
   QString frameParserCode;             ///< Per-source parser code
   QString frameParserTemplate;         ///< Native parser template id (Native language only)
   QJsonObject frameParserParams;       ///< Native parser template params (Native language only)
+  QString streamLane;                  ///< Stream-lane override: ""/auto (driver), "on", "off"
 };
 
 static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
@@ -603,6 +611,9 @@ struct TableDef {
     if (!s.frameParserParams.isEmpty())
       obj.insert(Keys::FrameParserParams, s.frameParserParams);
   }
+
+  if (!s.streamLane.isEmpty())
+    obj.insert(Keys::SourceStreamLane, s.streamLane);
 
   return obj;
 }
@@ -1195,6 +1206,9 @@ void read_io_settings(QByteArray& frameStart,
   if (g.widget.simplified() == QLatin1String("webview") && !g.webViewUrl.isEmpty())
     obj.insert(Keys::WebViewUrl, g.webViewUrl);
 
+  if (g.widget.simplified() == QLatin1String("barpanel") && !g.barPanelStyle.isEmpty())
+    obj.insert(Keys::BarPanelStyle, g.barPanelStyle);
+
   if (!g.outputWidgets.empty()) {
     QJsonArray owArray;
     for (const auto& ow : g.outputWidgets)
@@ -1264,6 +1278,7 @@ void read_io_settings(QByteArray& frameStart,
   s.frameParserLanguage   = ss_jsr(obj, Keys::FrameParserLanguage, 0).toInt();
   s.frameParserTemplate   = ss_jsr(obj, Keys::FrameParserTemplate, "").toString();
   s.frameParserParams     = ss_jsr(obj, Keys::FrameParserParams, QJsonObject()).toJsonObject();
+  s.streamLane            = ss_jsr(obj, Keys::SourceStreamLane, "").toString();
 
   if (obj.contains(Keys::ChecksumAlgorithm))
     s.checksumAlgorithm = obj.value(Keys::ChecksumAlgorithm).toString();
@@ -1388,6 +1403,9 @@ inline void normalizeDatasetRanges(Dataset& d)
 
   if (widget == QLatin1String("webview"))
     g.webViewUrl = ss_jsr(obj, Keys::WebViewUrl, "").toString();
+
+  if (widget == QLatin1String("barpanel"))
+    g.barPanelStyle = ss_jsr(obj, Keys::BarPanelStyle, "").toString();
 
   g.datasets.clear();
   g.datasets.reserve(array.count());

@@ -32,6 +32,7 @@
 
 namespace DataModel {
 struct AlarmBand;
+struct Dataset;
 }  // namespace DataModel
 
 namespace Widgets {
@@ -70,6 +71,21 @@ class Bar : public QQuickItem {
   Q_PROPERTY(QVariantList alarmBands
              READ alarmBands
              CONSTANT)
+  Q_PROPERTY(bool extremesValid
+             READ extremesValid
+             NOTIFY updated)
+  Q_PROPERTY(double minSeen
+             READ minSeen
+             NOTIFY updated)
+  Q_PROPERTY(double maxSeen
+             READ maxSeen
+             NOTIFY updated)
+  Q_PROPERTY(double minSeenFrac
+             READ minSeenFrac
+             NOTIFY updated)
+  Q_PROPERTY(double maxSeenFrac
+             READ maxSeenFrac
+             NOTIFY updated)
   Q_PROPERTY(double value
              READ value
              NOTIFY updated)
@@ -118,6 +134,12 @@ public:
   [[nodiscard]] const QString& displayFormat() const noexcept;
   [[nodiscard]] int decimalPoints() const noexcept;
 
+  [[nodiscard]] bool extremesValid() const noexcept;
+  [[nodiscard]] double minSeen() const noexcept;
+  [[nodiscard]] double maxSeen() const noexcept;
+  [[nodiscard]] double minSeenFrac() const noexcept;
+  [[nodiscard]] double maxSeenFrac() const noexcept;
+
   [[nodiscard]] double value() const noexcept;
   [[nodiscard]] double minValue() const noexcept;
   [[nodiscard]] double maxValue() const noexcept;
@@ -142,8 +164,8 @@ private:
 
 protected:
   void buildBands(const std::vector<DataModel::AlarmBand>& srcBands);
-  [[nodiscard]] int bandIndexFor(double value) const noexcept;
   void recomputeActiveBand(double value);
+  bool refreshExtremes(const DataModel::Dataset& dataset);
 
   int m_index;
   int m_displayTickCount;
@@ -155,6 +177,10 @@ protected:
   double m_value;
   double m_minValue;
   double m_maxValue;
+
+  bool m_extremesValid;
+  double m_minSeen;
+  double m_maxSeen;
 
   QVector<BarBand> m_bands;
   QVariantList m_bandsAsVariant;

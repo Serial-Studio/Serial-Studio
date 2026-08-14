@@ -1321,6 +1321,7 @@ void DataModel::ProjectModel::ensureValidGroup(int sourceId)
     switch (SerialStudio::groupWidgetFromId(g.widget)) {
       case SerialStudio::MultiPlot:
       case SerialStudio::DataGrid:
+      case SerialStudio::BarPanel:
       case SerialStudio::NoGroupWidget:
         return true;
       default:
@@ -1675,9 +1676,10 @@ bool DataModel::ProjectModel::confirmGroupWidgetChange(DataModel::Group& grp,
 
   const bool compatibleTarget =
     (widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
-     || widget == SerialStudio::NoGroupWidget);
-  const bool compatibleSource = (grp.widget == "multiplot" || grp.widget == "datagrid"
-                                 || grp.widget == "painter" || grp.widget == "");
+     || widget == SerialStudio::BarPanel || widget == SerialStudio::NoGroupWidget);
+  const bool compatibleSource =
+    (grp.widget == "multiplot" || grp.widget == "datagrid" || grp.widget == "barpanel"
+     || grp.widget == "painter" || grp.widget == "");
   if (compatibleTarget && compatibleSource) {
     grp.widget = "";
     return true;
@@ -1710,6 +1712,11 @@ bool DataModel::ProjectModel::applyGroupWidget(DataModel::Group& grp,
 
   if (widget == SerialStudio::DataGrid) {
     grp.widget = "datagrid";
+    return true;
+  }
+
+  if (widget == SerialStudio::BarPanel) {
+    grp.widget = "barpanel";
     return true;
   }
 

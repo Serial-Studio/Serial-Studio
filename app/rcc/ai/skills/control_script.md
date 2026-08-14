@@ -94,9 +94,9 @@ they close the See -> Decide -> Act loop:
   units, ...}]}`. Groups match by title, datasets by parser `index` within the
   group; only missing items are created, existing ones are never modified, and
   the last satisfied spec is memoized so calling it every `loop()` is free.
-  Group `widget`: datagrid | accelerometer | gyroscope | gps | multiplot |
-  none | plot3d | image | painter. Dataset flags: plot, fft, bar, gauge,
-  compass, led, waterfall (or a raw `options` bitfield). Created items are real
+  Group `widget`: datagrid | barpanel | accelerometer | gyroscope | gps |
+  multiplot | none | plot3d | image | painter. Dataset flags: plot, fft, bar,
+  gauge, compass, led, waterfall (or a raw `options` bitfield). Created items are real
   project edits and persist with the project.
 
 Control scripts also get the data-table globals `tableGet(table, register)` and

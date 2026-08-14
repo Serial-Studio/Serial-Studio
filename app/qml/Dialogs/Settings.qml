@@ -1028,6 +1028,31 @@ Widgets.SmartDialog {
           }
 
           Label {
+            text: qsTr("Manual-Layout Spacing")
+            color: Cpp_ThemeManager.colors["text"]
+          } SpinBox {
+            id: _manualLayoutSpacing
+
+            from: -1
+            stepSize: 1
+            editable: true
+            to: 2147483647
+            Layout.fillWidth: true
+            value: Cpp_UI_Dashboard.manualLayoutSpacing
+            onValueChanged: {
+              if (value !== Cpp_UI_Dashboard.manualLayoutSpacing)
+                Cpp_UI_Dashboard.manualLayoutSpacing = value
+            }
+
+            Connections {
+              target: Cpp_UI_Dashboard
+              function onManualLayoutSpacingChanged() {
+                _manualLayoutSpacing.value = Cpp_UI_Dashboard.manualLayoutSpacing
+              }
+            }
+          }
+
+          Label {
             text: qsTr("Show Actions Panel")
             color: Cpp_ThemeManager.colors["text"]
           } Switch {

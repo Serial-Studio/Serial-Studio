@@ -458,8 +458,9 @@ API::CommandResponse API::Handlers::IOManagerHandler::getLatestFrame(const QStri
   }
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  const auto* latest        = frameBuilder.latestFrame(sourceId);
-  if (!latest || !latest->chunk) {
+  const auto snapshot       = frameBuilder.latestFrameSnapshot(sourceId);
+  const auto* latest        = &snapshot;
+  if (!latest->chunk) {
     QJsonObject empty;
     empty[QStringLiteral("hasData")]  = false;
     empty[QStringLiteral("sequence")] = 0;

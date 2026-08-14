@@ -206,6 +206,163 @@ void CSV::ExportWorker::writeRow(const DataModel::TimestampedFrame::SteadyTimePo
   m_textStream << '\n';
 }
 
+//--------------------------------------------------------------------------------------------------
+// Stream-block CSV sink (spec 0051 M5)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs the stream-block CSV worker.
+ */
+CSV::StreamExportWorker::StreamExportWorker(
+  moodycamel::ReaderWriterQueue<IO::StreamBlockItemPtr>* queue,
+  std::atomic<bool>* enabled,
+  std::atomic<size_t>* queueSize)
+  : FrameConsumerWorker(queue, enabled, queueSize)
+{}
+
+/**
+ * @brief Returns true while any per-source stream CSV file is open.
+ */
+bool CSV::StreamExportWorker::isResourceOpen() const
+{
+  return !m_files.empty();
+}
+
+/**
+ * @brief Closes every per-source stream CSV file.
+ */
+void CSV::StreamExportWorker::closeResources()
+{
+  for (auto& [sourceId, state] : m_files) {
+    if (state.stream)
+      state.stream->flush();
+
+    if (state.file)
+      state.file->close();
+  }
+
+  m_files.clear();
+}
+
+/**
+ * @brief Returns (creating on first sight) the file state for @p block's source; the header
+ *        row names each dataset column by uniqueId.
+ */
+CSV::StreamExportWorker::FileState* CSV::StreamExportWorker::fileFor(
+  const IO::StreamBlockItem& block)
+{
+  auto it = m_files.find(block.sourceId);
+  if (it != m_files.end())
+    return &it->second;
+
+  const auto dt       = QDateTime::currentDateTime();
+  const auto fileName = dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss"))
+                      + QStringLiteral("_stream_source%1.csv").arg(block.sourceId);
+
+  static auto& workspaceManager = Misc::WorkspaceManager::instance();
+  QDir dir(workspaceManager.path(QStringLiteral("CSV")));
+
+  FileState state;
+  state.file = std::make_unique<QFile>(dir.filePath(fileName));
+  if (!state.file->open(QIODevice::WriteOnly | QIODevice::Text)) {
+    qWarning() << "[CSV] cannot open stream export file" << state.file->fileName();
+    return nullptr;
+  }
+
+  state.stream = std::make_unique<QTextStream>(state.file.get());
+  state.start  = block.t0;
+
+  *state.stream << "Time (s)";
+  for (const int uniqueId : block.uniqueIds)
+    *state.stream << ",ds" << uniqueId;
+
+  *state.stream << '\n';
+
+  auto [inserted, ok] = m_files.emplace(block.sourceId, std::move(state));
+  return ok ? &inserted->second : nullptr;
+}
+
+/**
+ * @brief Writes one full-rate block: every sample row carries t0 + i * dt relative to the
+ *        file's first block (source-owns-time; never the monotonic bump).
+ */
+void CSV::StreamExportWorker::writeBlock(FileState& state, const IO::StreamBlockItem& block)
+{
+  const double baseSec = std::chrono::duration<double>(block.t0 - state.start).count();
+  const double dtSec   = std::chrono::duration<double>(block.dt).count();
+  auto& stream         = *state.stream;
+
+  for (qsizetype i = 0; i < block.frames; ++i) {
+    stream << QString::number(baseSec + static_cast<double>(i) * dtSec, 'f', 9);
+    for (const auto& channel : block.channels) {
+      stream << ',';
+      if (static_cast<std::size_t>(i) < channel.size())
+        stream << QString::number(channel[static_cast<std::size_t>(i)], 'g', 10);
+    }
+
+    stream << '\n';
+  }
+}
+
+/**
+ * @brief Writes a batch of stream blocks to their per-source files.
+ */
+void CSV::StreamExportWorker::processItems(const std::vector<IO::StreamBlockItemPtr>& items)
+{
+  for (const auto& block : items) {
+    if (!block || block->frames <= 0)
+      continue;
+
+    auto* state = fileFor(*block);
+    if (!state)
+      continue;
+
+    writeBlock(*state, *block);
+  }
+
+  for (auto& [sourceId, state] : m_files)
+    if (state.stream)
+      state.stream->flush();
+}
+
+/**
+ * @brief Constructs the stream-block CSV facade (worker created eagerly like the frame sink).
+ */
+CSV::StreamExport::StreamExport()
+  : DataModel::FrameConsumer<IO::StreamBlockItemPtr>(
+      {.queueCapacity = 4096, .flushThreshold = 256, .timerIntervalMs = 500})
+{
+  initializeWorker();
+  setConsumerEnabled(false);
+}
+
+/**
+ * @brief GUI-thread ingest slot: the single producer for the worker's SPSC queue, fed by every
+ *        stream worker's queued blockReady signal (block rate, never per sample).
+ */
+void CSV::StreamExport::ingestBlock(const IO::StreamBlockItemPtr& block)
+{
+  if (block)
+    enqueueData(block);
+}
+
+/**
+ * @brief Flushes and closes every per-source stream file (queued to the worker).
+ */
+void CSV::StreamExport::closeFiles()
+{
+  if (m_worker)
+    QMetaObject::invokeMethod(m_worker, "close", Qt::QueuedConnection);
+}
+
+/**
+ * @brief Factory method creating the stream-block worker.
+ */
+DataModel::FrameConsumerWorkerBase* CSV::StreamExport::createWorker()
+{
+  return new StreamExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
+}
+
 /**
  * @brief Creates a new CSV file and writes the header row from the frame schema.
  */
@@ -365,6 +522,7 @@ void CSV::Export::closeFile()
 {
   auto* worker = static_cast<ExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
+  m_streamExport.closeFiles();
 }
 
 /**
@@ -387,8 +545,11 @@ void CSV::Export::setupExternalConnections()
       if (IO::ConnectionManager::instance().isConnected()) {
         auto* worker = static_cast<ExportWorker*>(m_worker);
         DataModel::Frame frame;
-        if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
-          frame = DataModel::FrameBuilder::instance().frame();
+        if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
+          static auto& builder = DataModel::FrameBuilder::instance();
+          builder.invokeOnBuilderThreadBlocking(
+            [&frame] { frame = DataModel::FrameBuilder::instance().frame(); });
+        }
 
         QMetaObject::invokeMethod(
           worker,
@@ -450,10 +611,22 @@ void CSV::Export::setExportEnabled(const bool enabled)
     closeFile();
 
   setConsumerEnabled(allow);
+  m_streamExport.setConsumerEnabled(allow);
+  if (!allow)
+    m_streamExport.closeFiles();
+
   if (m_persistSettings)
     m_settings.setValue("CSVExport", allow);
 
   Q_EMIT enabledChanged();
+}
+
+/**
+ * @brief Returns the typed stream-block sink (spec 0051 M5); enable state follows exportEnabled.
+ */
+CSV::StreamExport& CSV::Export::streamSink() noexcept
+{
+  return m_streamExport;
 }
 
 //--------------------------------------------------------------------------------------------------

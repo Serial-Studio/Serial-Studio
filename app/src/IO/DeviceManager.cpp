@@ -21,6 +21,7 @@
 
 #include "IO/DeviceManager.h"
 
+#include "IO/PipelineHost.h"
 #include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -34,7 +35,11 @@ IO::DeviceManager::DeviceManager(int deviceId,
                                  std::unique_ptr<HAL_Driver> driver,
                                  const FrameConfig& config,
                                  QObject* parent)
-  : QObject(parent), m_deviceId(deviceId), m_frameConfig(config), m_driver(std::move(driver))
+  : QObject(parent)
+  , m_deviceId(deviceId)
+  , m_pipeline(PipelineHost::instance())
+  , m_frameConfig(config)
+  , m_driver(std::move(driver))
 {
   SS_ASSERT_LOG(m_driver);
   SS_ASSERT_LOG(deviceId >= 0);
@@ -163,21 +168,6 @@ void IO::DeviceManager::reconfigure(const FrameConfig& config)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Drains the FrameReader queue and forwards each frame as frameReady().
- */
-void IO::DeviceManager::onReadyRead()
-{
-  SS_ASSERT_LOG(m_driver);
-
-  if (!m_frameReader)
-    return;
-
-  auto& queue = m_frameReader->queue();
-  while (queue.try_dequeue(m_frameScratch))
-    Q_EMIT frameReady(m_deviceId, m_frameScratch);
-}
-
-/**
  * @brief Re-emits raw bytes from the driver tagged with the device identifier.
  */
 void IO::DeviceManager::onRawDataReceived(const IO::CapturedDataPtr& data)
@@ -190,7 +180,9 @@ void IO::DeviceManager::onRawDataReceived(const IO::CapturedDataPtr& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Creates a new FrameReader and wires it to the driver's data signal.
+ * @brief Creates a new FrameReader, configures it while still on this thread, then hands it to
+ *        the PipelineHost: configuration runs before the move (no live connections yet), and
+ *        after adoption the reader is only reached through queued driver chunks or recreation.
  */
 void IO::DeviceManager::startFrameReader(const FrameConfig& config)
 {
@@ -211,7 +203,7 @@ void IO::DeviceManager::startFrameReader(const FrameConfig& config)
 
   connect(
     m_driver.get(), &IO::HAL_Driver::dataReceived, m_frameReader, &IO::FrameReader::processData);
-  connect(m_frameReader, &IO::FrameReader::readyRead, this, &IO::DeviceManager::onReadyRead);
+  m_pipeline.registerFrameReader(m_deviceId, m_frameReader);
 }
 
 /**

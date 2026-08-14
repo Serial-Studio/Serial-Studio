@@ -37,7 +37,8 @@
     "PltLogY",
     "FftLogX",
     "FftBallistics",
-    "FftBallisticsRelease"
+    "FftBallisticsRelease",
+    "ExtremeHold"
   ],
   "struct": {
     "type": "DataModel::Dataset",
@@ -406,6 +407,11 @@
       "signature": "bool widgetRangeApplicable(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
       "origin": "ProjectEditorForms.cpp:addWidgetSection (rangeEnabled)"
     },
+    "extremeHoldApplicable": {
+      "kind": "predicate",
+      "signature": "bool extremeHoldApplicable(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "PropertyHooks.cpp:extremeHoldApplicable (spec 0052)"
+    },
     "ledEnabled": {
       "kind": "predicate",
       "signature": "bool ledEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
@@ -632,7 +638,8 @@
         "flagHook": "widgetRangeApplicable",
         "rows": [
           "WgtMin",
-          "WgtMax"
+          "WgtMax",
+          "ExtremeHold"
         ]
       },
       {
@@ -1512,6 +1519,31 @@
         "aliases": [
           "widgetMax"
         ]
+      }
+    },
+    {
+      "id": "ExtremeHold",
+      "field": "extremeHold",
+      "jsonKey": "ExtremeHold",
+      "formId": "kDatasetView_ExtremeHold",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "widget",
+      "widget": "CheckBox",
+      "label": "Hold Min/Max Markers",
+      "description": "Show hold markers at the lowest and highest values observed since the last data reset",
+      "placeholder": 0,
+      "onCommit": "onReshape",
+      "enabledWhen": "extremeHoldApplicable",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "extremeHold"
       }
     },
     {

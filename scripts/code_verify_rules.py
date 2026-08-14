@@ -2506,8 +2506,7 @@ _CONSTANT_NAME_RE = re.compile(r"^(?:k[A-Z]|s_[a-z_]|[A-Z][A-Z0-9_]+$)")
 # Implementation-file suffixes for the "all constants in one top section" rule.
 # Headers legitimately group constants next to the type they describe, so the
 # rule skips them. `.mm` is excluded too: tree-sitter-cpp can't parse
-# Objective-C++, so it mis-classifies function-local statics as file-scope
-# (a false positive on Utilities_macOS.mm's `kOrder`).
+# Objective-C++, so it mis-classifies function-local statics as file-scope.
 _IMPL_SUFFIXES = (".cpp", ".cc", ".cxx")
 
 

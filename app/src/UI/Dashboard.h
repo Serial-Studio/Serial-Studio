@@ -22,6 +22,7 @@
 #pragma once
 
 #include <chrono>
+#include <QElapsedTimer>
 #include <QFont>
 #include <QHash>
 #include <QObject>
@@ -30,6 +31,7 @@
 #include <utility>
 
 #include "DSP.h"
+#include "IO/StreamWorker.h"
 #include "SerialStudio.h"
 #include "UI/WidgetRegistry.h"
 
@@ -94,6 +96,10 @@ class Dashboard : public QObject {
              READ  autoLayoutSpacing
              WRITE setAutoLayoutSpacing
              NOTIFY autoLayoutSpacingChanged)
+  Q_PROPERTY(int manualLayoutSpacing
+             READ  manualLayoutSpacing
+             WRITE setManualLayoutSpacing
+             NOTIFY manualLayoutSpacingChanged)
   Q_PROPERTY(double plotTimeRange
              READ  plotTimeRange
              WRITE setPlotTimeRange
@@ -130,6 +136,7 @@ signals:
   void showAlignmentGuidesChanged();
   void autoLayoutMarginChanged();
   void autoLayoutSpacingChanged();
+  void manualLayoutSpacingChanged();
   void plotTimeRangeChanged();
   void frozenChanged();
   void thinningActiveChanged();
@@ -159,6 +166,16 @@ public:
     QString extensionId;
   };
 
+  /**
+   * @brief Min/max hold state for one extreme-hold dataset (spec 0052): the lowest and highest
+   *        finite values observed since the last data reset; survives layout rebuilds.
+   */
+  struct DatasetExtremes {
+    double min = 0;
+    double max = 0;
+    bool valid = false;
+  };
+
   [[nodiscard]] static Dashboard& instance();
 
   [[nodiscard]] bool available() const;
@@ -181,6 +198,7 @@ public:
   [[nodiscard]] int totalWidgetCount() const noexcept;
   [[nodiscard]] int autoLayoutMargin() const noexcept;
   [[nodiscard]] int autoLayoutSpacing() const noexcept;
+  [[nodiscard]] int manualLayoutSpacing() const noexcept;
 
   [[nodiscard]] Q_INVOKABLE bool frameValid() const;
   [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
@@ -199,6 +217,7 @@ public:
 
   [[nodiscard]] int groupIdForUniqueId(int uniqueId) const;
   [[nodiscard]] int groupUniqueIdForGroupId(int groupId) const;
+  [[nodiscard]] DatasetExtremes datasetExtremes(int uniqueId) const;
 
   // clang-format off
   [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const;
@@ -253,6 +272,7 @@ public slots:
   void setShowAlignmentGuides(const bool enabled);
   void setAutoLayoutMargin(const int margin);
   void setAutoLayoutSpacing(const int spacing);
+  void setManualLayoutSpacing(const int spacing);
   void setFrozen(const bool frozen);
   void setPlotTimeRange(const double seconds);
   void setSettingsPersistent(const bool persistent);
@@ -284,9 +304,11 @@ public slots:
   void armMultiplotSweep(const int index);
 
   void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
+  void applyStreamUpdate(const IO::StreamDisplayUpdate& update);
   void updateStreamAvailable();
   void pollThinningState();
   void refreshDisplayTitles();
+  void onDisplayTick();
 
 private:
   void restorePersistedSettings();
@@ -342,6 +364,9 @@ private:
   void buildDatasetReferences();
   void rebuildDatasetReferences();
   void buildValuePushes();
+  void buildExtremePushes();
+  void appendExtremePush(int sourceId, const DataModel::Dataset& dataset);
+  void foldExtremes(int sourceId);
   void addExtensionStringTargets(QSet<const DataModel::Dataset*>& targets) const;
   [[nodiscard]] int datasetBucketBase(const SerialStudio::DashboardWidget key) const noexcept;
   void clearPushTables();
@@ -408,6 +433,44 @@ private:
                                         const QSet<const DataModel::Dataset*>& stringTargets) const;
 
   /**
+   * @brief Pre-resolved extreme-hold fold for one flagged dataset: the store slot plus value and
+   *        numeric-gate pointers into the m_datasets copy (QMap nodes, address-stable across
+   *        frames; both maps rebuild with the push tables).
+   */
+  struct ExtremePush {
+    DatasetExtremes* slot;
+    const double* value;
+    const bool* numeric;
+  };
+
+  /**
+   * @brief Pre-resolved stream ingest targets for one dataset uniqueId: widget indexes only
+   *        (never raw ring pointers -- a layout rebuild reallocates those), rebuilt lazily
+   *        after every reconfigure (spec 0051 T25).
+   */
+  struct StreamTargets {
+    std::vector<int> plotIndexes;
+    std::vector<std::pair<int, int>> multiplotCurves;
+    std::vector<int> fftIndexes;
+#ifdef BUILD_COMMERCIAL
+    std::vector<int> waterfallIndexes;
+#endif
+  };
+
+  [[nodiscard]] const StreamTargets& streamTargetsFor(int uniqueId);
+  void applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpdate& channel, double baseSec);
+  void feedPlotStreamSweep(int plotIndex,
+                           const IO::StreamDisplayUpdate::ChannelUpdate& channel,
+                           double baseSec);
+  void feedMultiplotStreamSweep(int groupIndex,
+                                const IO::StreamDisplayUpdate& update,
+                                double baseSec);
+  void drainDashboardRing(const QElapsedTimer& clock, qint64 budgetNs);
+  void drainStreamWorkers(const QElapsedTimer& clock, qint64 budgetNs);
+  void drainStreamWorker(IO::StreamWorker& worker, const QElapsedTimer& clock, qint64 budgetNs);
+  double advancePlotClock(int sourceId, const std::chrono::steady_clock::time_point& ts);
+
+  /**
    * @brief Pre-resolved descriptor that pushes one dataset value into one sample ring.
    */
   struct SeriesPush {
@@ -466,6 +529,7 @@ private:
   };
 
   QSettings m_settings;
+  qint64 m_drainBudgetNs;
   int m_points;
   int m_widgetCount;
   bool m_updateRequired;
@@ -481,6 +545,7 @@ private:
 
   int m_autoLayoutMargin;
   int m_autoLayoutSpacing;
+  int m_manualLayoutSpacing;
 
   bool m_updateRetryInProgress;
 
@@ -539,6 +604,8 @@ private:
 
   QHash<int, QVector<DataModel::Dataset*>> m_datasetReferences;
   QHash<int, std::vector<ValuePush>> m_valuePushes;
+  QHash<int, std::vector<ExtremePush>> m_extremePushes;
+  QMap<int, DatasetExtremes> m_datasetExtremes;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
 
@@ -548,6 +615,10 @@ private:
 
   DataModel::Frame m_lastFrame;
   QMap<int, DataModel::Frame> m_sourceRawFrames;
+  QHash<int, StreamTargets> m_streamTargets;
+
+  // Curve-index -> channel scratch for one multiplot sweep; reused so a tick allocates nothing
+  std::vector<const IO::StreamDisplayUpdate::ChannelUpdate*> m_streamSweepCurves;
 
   // Subordinate to m_sourceRawFrames (validated by its contains(sid) check); never cleared alone.
   QHash<int, quint64> m_sourceStructureGen;

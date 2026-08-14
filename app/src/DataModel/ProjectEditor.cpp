@@ -215,7 +215,8 @@ bool DataModel::ProjectEditor::currentGroupIsEditable() const
 {
   if (m_currentView == GroupView) {
     const auto& widget = m_selectedGroup.widget;
-    if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter")
+    if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter"
+        && widget != "barpanel")
       return false;
   }
 
@@ -244,7 +245,8 @@ bool DataModel::ProjectEditor::datasetWidgetEditable(const DataModel::Dataset& d
   const auto groupId = dataset.groupId;
   if (groupId >= 0 && static_cast<size_t>(groupId) < groups.size()) {
     const auto& widget = groups[groupId].widget;
-    if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter")
+    if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter"
+        && widget != "barpanel")
       return false;
   }
 
@@ -704,6 +706,7 @@ void DataModel::ProjectEditor::generateComboBoxModels()
 #endif
 
   m_groupWidgets.clear();
+  m_groupWidgets.insert(QStringLiteral("barpanel"), tr("Bar Panel"));
   m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
   m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
   m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));

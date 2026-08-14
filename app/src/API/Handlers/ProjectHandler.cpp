@@ -286,7 +286,8 @@ void API::Handlers::ProjectHandler::registerGroupCommands()
        QStringLiteral("integer"),
        QStringLiteral("GroupWidget enum -- see command description for decision "
        "guidance. 0=DataGrid, 1=Accelerometer, 2=Gyroscope, 3=GPS, "
-       "4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter")                   }
+       "4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter, "
+       "9=WebView, 10=BarPanel")                                                           }
   }),
     &groupAdd);
 

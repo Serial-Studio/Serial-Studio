@@ -71,13 +71,13 @@
 #include "DataModel/Scripting/MacroRunner.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
+#include "IO/PipelineHost.h"
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
 #include "Misc/BackupManager.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ConnectionDiagnostics.h"
 #include "Misc/CrashTracker.h"
-#include "Misc/DemoLauncher.h"
 #include "Misc/Examples.h"
 #include "Misc/ExtensionManager.h"
 #include "Misc/GraphicsBackend.h"
@@ -103,6 +103,7 @@
 #include "UI/WidgetExtensions.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
+#include "UI/Widgets/BarPanel.h"
 #include "UI/Widgets/Compass.h"
 #include "UI/Widgets/DataGrid.h"
 #include "UI/Widgets/ExtensionData.h"
@@ -368,7 +369,9 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Stops every active module and exits the application event loop.
+ * @brief Stops every active module and exits the application event loop. Latching teardown is
+ *        the first statement: past this point the GUI thread stops pumping events, so every
+ *        cross-thread marshal must degrade to a no-op instead of blocking on it.
  */
 void Misc::ModuleManager::onQuit()
 {
@@ -376,6 +379,8 @@ void Misc::ModuleManager::onQuit()
     return;
 
   m_quitHandled = true;
+
+  IO::PipelineHost::beginTeardown();
 
   qInstallMessageHandler(nullptr);
 
@@ -416,9 +421,15 @@ void Misc::ModuleManager::onQuit()
  */
 void Misc::ModuleManager::stopFrameConsumerWorkers()
 {
+  IO::ConnectionManager::instance().stopStreamWorkers();
+  IO::PipelineHost::instance().shutdown();
   Console::Export::instance().stopWorker();
   CSV::Export::instance().stopWorker();
+  CSV::Export::instance().streamSink().stopWorker();
   MDF4::Export::instance().stopWorker();
+#ifdef BUILD_COMMERCIAL
+  MDF4::Export::instance().streamSink().stopWorker();
+#endif
   API::Server::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().stopWorker();
@@ -567,6 +578,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<DataModel::MacroRunner>("SerialStudio", 1, 0, "MacroRunner");
   qmlRegisterType<DataModel::RowFilterProxy>("SerialStudio", 1, 0, "RowFilterProxy");
   qmlRegisterType<Widgets::Bar>("SerialStudio", 1, 0, "BarModel");
+  qmlRegisterType<Widgets::BarPanel>("SerialStudio", 1, 0, "BarPanelModel");
   qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");
   qmlRegisterType<Widgets::Plot>("SerialStudio", 1, 0, "PlotModel");
   qmlRegisterType<Widgets::PlotAreaFill>("SerialStudio", 1, 0, "PlotAreaFill");
@@ -688,6 +700,7 @@ void Misc::ModuleManager::instantiateCoreModules()
   ctx.adoptProjectModel(SessionContext::create<DataModel::ProjectModel>());
   ctx.adoptAppState(SessionContext::create<AppState>());
   ctx.adoptFrameBuilder(SessionContext::create<DataModel::FrameBuilder>());
+  ctx.adoptPipelineHost(SessionContext::create<IO::PipelineHost>());
   ctx.adoptConnectionManager(SessionContext::create<IO::ConnectionManager>());
   ctx.adoptConsole(SessionContext::create<Console::Handler>());
   (void)API::Server::instance();
@@ -715,6 +728,7 @@ void Misc::ModuleManager::instantiateCoreModules()
 void Misc::ModuleManager::setupHeadlessSessionConnections()
 {
   DataModel::FrameBuilder::instance().setupExternalConnections();
+  IO::PipelineHost::instance().setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().setupExternalConnections();
 #endif
@@ -763,7 +777,8 @@ static void wireProblemCenterSessionReset(IO::ConnectionManager* manager,
 /**
  * @brief Wires inter-module signals and runs each module's setupExternalConnections. The
  *        session context is published right after the pinned order and before any wiring,
- *        so an injected class can never be constructed before it exists (spec 0039).
+ *        so an injected class can never be constructed before it exists (spec 0039); the
+ *        FrameBuilder/FrameParser affinity move to the pipeline thread runs last (spec 0051).
  */
 void Misc::ModuleManager::setupCrossModuleConnections()
 {
@@ -782,6 +797,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   appState->setupExternalConnections();
   CSV::Export::instance().setupExternalConnections();
   ioManager->setupExternalConnections();
+  IO::PipelineHost::instance().setupExternalConnections();
   MDF4::Export::instance().setupExternalConnections();
   DataModel::FrameParser::instance().setupExternalConnections();
   DataModel::ProjectModel::instance().setupExternalConnections();
@@ -861,6 +877,8 @@ void Misc::ModuleManager::setupCrossModuleConnections()
 
   (void)API::MirrorPublisher::instance();
   (void)API::MirrorSession::instance();
+
+  IO::PipelineHost::instance().relocateProcessingObjects();
 }
 
 /**
@@ -902,7 +920,6 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_IO_FileTransmission", &IO::FileTransmission::instance());
   ctx->setContextProperty("Cpp_Misc_WorkspaceManager", &Misc::WorkspaceManager::instance());
   ctx->setContextProperty("Cpp_Examples", &Misc::Examples::instance());
-  ctx->setContextProperty("Cpp_Misc_Demo", &Misc::DemoLauncher::instance());
   ctx->setContextProperty("Cpp_HelpCenter", &Misc::HelpCenter::instance());
   ctx->setContextProperty("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
   ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());

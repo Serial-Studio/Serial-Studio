@@ -533,6 +533,8 @@ private:
   void applyGroupSourceEdit(int srcIdx, int groupId);
   bool applyGroupTitleEdit(const QString& newTitle, int groupId);
   bool applyGroupWidgetEdit(int widgetIdx, int groupId);
+  void applyGroupLogAxisEdit(bool xAxis, bool enabled, int groupId);
+  void applyGroupBarPanelStyleEdit(int styleIdx, int groupId);
 #ifdef BUILD_COMMERCIAL
   bool applyGroupImgModeEdit(int modeIdx, int groupId);
 #endif
@@ -576,6 +578,7 @@ private:
   void buildGroupSourceSection(const DataModel::Group& group);
   void buildGroupXAxisRow(const DataModel::Group& group);
   void buildGroupWebViewRow(const DataModel::Group& group);
+  void buildGroupBarPanelStyleRow(const DataModel::Group& group);
   void buildGroupImageSection(const DataModel::Group& group);
   void buildGroupDatasetsSection(const DataModel::Group& group);
 

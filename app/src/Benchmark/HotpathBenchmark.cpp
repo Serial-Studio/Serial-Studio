@@ -50,6 +50,8 @@
 #include "IO/ConnectionManager.h"
 #include "IO/FrameReader.h"
 #include "IO/HAL_Driver.h"
+#include "IO/PipelineHost.h"
+#include "IO/StreamWorker.h"
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
 #include "SessionContext.h"
@@ -615,12 +617,18 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   auto& queue = reader.queue();
   IO::CapturedDataPtr drained;
 
+  static auto& dashboard = UI::Dashboard::instance();
+  static auto& pipeline  = IO::PipelineHost::instance();
+  DataModel::TimestampedFramePtr ringFrame;
+
   if (activateDashboard) {
     reader.processData(IO::makeCapturedData(chunk));
 
     // code-verify off
     while (queue.try_dequeue(drained))
       builder.hotpathRxFrame(drained);
+    while (pipeline.dequeueDashboardFrame(ringFrame))
+      dashboard.hotpathRxFrame(ringFrame);
     // code-verify on
 
     activateDashboardWidgets();
@@ -643,6 +651,9 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     // code-verify off
     while (queue.try_dequeue(drained))
       builder.hotpathRxFrame(drained);
+    if (activateDashboard)
+      while (pipeline.dequeueDashboardFrame(ringFrame))
+        dashboard.hotpathRxFrame(ringFrame);
     // code-verify on
 
     fed     += kFramesPerChunk;
@@ -990,6 +1001,106 @@ bool HotpathBenchmark::printReport(const Result* results,
 }
 
 /**
+ * @brief Measures stream-lane throughput (spec 0051 M4, ungated): a StreamProcessor driven
+ *        synchronously with 96 kHz stereo blocks, with and without a heavy Lua block transform.
+ *        Returns per-channel sample frames per second (the AC6/AC19 counter source).
+ */
+static double streamPhaseThroughput(const QString& transformCode, bool fastMode, double seconds)
+{
+  IO::StreamConfig config;
+  config.sourceId    = 0;
+  config.channels    = 2;
+  config.sampleRate  = 96000.0;
+  config.luaFastMode = fastMode;
+  for (int channel = 0; channel < 2; ++channel) {
+    IO::StreamChannelConfig dataset;
+    dataset.uniqueId          = channel;
+    dataset.channel           = channel;
+    dataset.plot              = true;
+    dataset.transformLanguage = SerialStudio::Lua;
+    dataset.transformCode     = transformCode;
+    config.datasets.push_back(dataset);
+  }
+
+  moodycamel::ReaderWriterQueue<IO::StreamDisplayUpdatePtr> ring(4096);
+  std::atomic<int> pixelWidth{512};
+  std::atomic<double> windowSec{10.0};
+  std::atomic<bool> exportActive{false};
+  IO::StreamProcessor processor(config, &ring, &pixelWidth, &windowSec, &exportActive);
+  processor.compileEngines();
+
+  constexpr qsizetype kFrames = 960;
+  auto block                  = std::make_shared<IO::SampleBlock>();
+  block->channels             = 2;
+  block->frames               = kFrames;
+  block->t0                   = IO::SampleBlock::SteadyTimePoint(std::chrono::seconds(1));
+  block->dt                   = std::chrono::nanoseconds(1'000'000'000 / 96'000);
+  block->samples.resize(static_cast<std::size_t>(kFrames) * 2);
+  for (qsizetype i = 0; i < kFrames * 2; ++i)
+    block->samples[static_cast<std::size_t>(i)] = std::sin(static_cast<float>(i) * 0.01f) * 1000.0f;
+
+  using Clock      = std::chrono::steady_clock;
+  const auto start = Clock::now();
+  double elapsed   = 0.0;
+  IO::StreamDisplayUpdatePtr drained;
+  // code-verify off
+  // Wall-clock-bounded drive loop; the inner drain is bounded by the ring capacity.
+  while (elapsed < seconds) {
+    processor.onSampleBlock(block);
+
+    while (ring.try_dequeue(drained)) {
+    }
+
+    elapsed = std::chrono::duration<double>(Clock::now() - start).count();
+  }
+  // code-verify on
+
+  const auto frames = processor.samplesProcessed();
+  return elapsed > 0.0 ? static_cast<double>(frames) / elapsed : 0.0;
+}
+
+/**
+ * @brief Runs and prints the ungated stream-lane phase: raw ingest, Safe-mode heavy Lua block
+ *        transform, and Fast-mode (JIT) heavy Lua block transform.
+ */
+static void runStreamPhase(double minSeconds)
+{
+  const double window = std::max(1.0, minSeconds * 0.25);
+
+  const QString heavy = QStringLiteral("function transform_block(samples, info)\n"
+                                       "  local b0, b1, b2 = 0.2, 0.4, 0.2\n"
+                                       "  local x1, x2 = 0, 0\n"
+                                       "  for i = 1, info.count do\n"
+                                       "    local x = samples[i]\n"
+                                       "    samples[i] = b0 * x + b1 * x1 + b2 * x2\n"
+                                       "    x2 = x1\n"
+                                       "    x1 = x\n"
+                                       "  end\n"
+                                       "  return samples\n"
+                                       "end\n");
+
+  const double raw  = streamPhaseThroughput(QString(), false, window);
+  const double safe = streamPhaseThroughput(heavy, false, window);
+  const double fast = streamPhaseThroughput(heavy, true, window);
+
+  // code-verify off
+  // Benchmark report lines must reach raw stdout (CI parses them); qDebug would detour through
+  // the message handler and the console widget.
+  std::printf("hotpath-stream: raw %.0f frames/s, lua-block safe %.0f frames/s, "
+              "lua-block fast %.0f frames/s (2 ch, 96 kHz target per source)\n",
+              raw,
+              safe,
+              fast);
+  std::printf("HOTPATH_STREAM_RAW_FPS=%.0f HOTPATH_STREAM_SAFE_FPS=%.0f "
+              "HOTPATH_STREAM_FAST_FPS=%.0f\n",
+              raw,
+              safe,
+              fast);
+  std::fflush(stdout);
+  // code-verify on
+}
+
+/**
  * @brief Runs the gated data + parser tiers (plus 0.5x floors on the lua exporter/dashboard
  *        reference rows, so a consumer-path collapse can't ship silently), then the ungated
  *        export x dashboard x engine coverage matrix so PGO training and CI exercise every
@@ -1036,6 +1147,8 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   }
 
   const int code = printReport(results, coverage, stages, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+  runStreamPhase(minSeconds);
 
   SessionContext::current().shutdown();
 

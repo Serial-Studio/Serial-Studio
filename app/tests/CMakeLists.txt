@@ -120,6 +120,25 @@ ss_add_unit_test(tst_checksums
 )
 
 #
+# Header-only band lookup shared by Bar/Gauge/Meter/BarPanel (spec 0052); no production TU to link.
+#
+ss_add_unit_test(tst_bar_bands
+  SOURCES tst_bar_bands.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Pure layout tiler (spec 0053). LayoutPatterns.cpp deliberately depends on nothing but QtCore
+# and QtGui (QRect), which is what keeps this suite a seconds-long link and lets the whole
+# pattern catalog be verified without a GUI.
+#
+ss_add_unit_test(tst_layout_patterns
+  SOURCES tst_layout_patterns.cpp
+          ${SS_APP_SRC}/UI/LayoutPatterns.cpp
+  LIBS    Qt6::Core Qt6::Gui
+)
+
+#
 # SerialStudioFrameSupport.cpp holds the four SerialStudio statics Frame.cpp reaches (commercialCfg,
 # resolveEscapeSequences, hexToBytes, encodeText). They live apart from SerialStudio.cpp so this
 # suite links without the icon registry, theme manager and player singletons. Core5Compat comes with
@@ -194,7 +213,7 @@ ss_add_unit_test(tst_frame_delimiters
           Qt6::Gui
           Qt6::Qml
           Qt6::Widgets
-          lua54
+          luajit
           ${SS_PLATFORM_LIBS}
 )
 
@@ -338,7 +357,7 @@ ss_add_unit_test(tst_lua_compat
           ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
-          lua54
+          luajit
 )
 
 ss_add_unit_test(tst_js_watchdog
@@ -348,6 +367,16 @@ ss_add_unit_test(tst_js_watchdog
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Qml
+)
+
+ss_add_unit_test(tst_stream_worker
+  SOURCES tst_stream_worker.cpp
+          ${SS_APP_SRC}/IO/StreamWorker.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          luajit
 )
 
 ss_add_unit_test(tst_frame_consumer
@@ -389,17 +418,10 @@ ss_add_unit_test(tst_frame_json_legacy
 
 #
 # CFrameParser reports a load failure through Misc::Utilities::showMessageBox(), so Utilities.cpp is
-# a link-time dependency even though every test in the suite loads with message boxes disabled. On
-# macOS that TU forwards to the Objective-C++ native alert, which has to come along with it.
+# a link-time dependency even though every test in the suite loads with message boxes disabled.
 #
-set(SS_CFRAME_PARSER_PLATFORM_SOURCES "")
-if(APPLE)
-  list(APPEND SS_CFRAME_PARSER_PLATFORM_SOURCES ${SS_APP_SRC}/Misc/Utilities_macOS.mm)
-endif()
-
 ss_add_unit_test(tst_cframe_parser
   SOURCES tst_cframe_parser.cpp
-          ${SS_CFRAME_PARSER_PLATFORM_SOURCES}
           ${SS_APP_SRC}/DataModel/Scripting/CFrameParser.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
@@ -428,7 +450,7 @@ ss_add_unit_test(tst_frame_reader_modes
           Qt6::Gui
           Qt6::Qml
           Qt6::Widgets
-          lua54
+          luajit
           ${SS_PLATFORM_LIBS}
 )
 

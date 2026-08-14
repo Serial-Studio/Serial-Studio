@@ -71,10 +71,18 @@ class BenchmarkRunner : public QObject {
   Q_PROPERTY(QStringList secondsOptions
              READ secondsOptions
              NOTIFY optionsChanged)
+  Q_PROPERTY(bool deviceConnected
+             READ deviceConnected
+             NOTIFY deviceConnectedChanged)
+  Q_PROPERTY(bool playerOpen
+             READ playerOpen
+             NOTIFY playerOpenChanged)
   // clang-format on
 
 signals:
   void runningChanged();
+  void playerOpenChanged();
+  void deviceConnectedChanged();
   void progressChanged();
   void currentPhaseChanged();
   void resultsChanged();
@@ -94,6 +102,8 @@ public:
   [[nodiscard]] static BenchmarkRunner& instance();
 
   [[nodiscard]] bool running() const noexcept;
+  [[nodiscard]] bool playerOpen() const;
+  [[nodiscard]] bool deviceConnected() const;
   [[nodiscard]] double progress() const noexcept;
   [[nodiscard]] QString currentPhase() const;
   [[nodiscard]] QVariantList results() const;
@@ -119,7 +129,9 @@ private slots:
 private:
   void beginSession();
   void endSession();
+  void abortSession();
   void finishSession();
+  void restoreEnvironment();
   void announcePhase(int index);
   void executePhase(int index);
   void buildPhases(bool parsers, bool dataExport, bool dashboard, bool numeric, bool mixed);
@@ -141,6 +153,7 @@ private:
   QStringList m_secondsOptions;
 
   int m_savedMode;
+  bool m_savedEphemeral;
   double m_savedPlotTimeRange;
   QString m_savedProjectPath;
   bool m_savedCsvExport;

@@ -288,7 +288,16 @@ the AC3 badge visual check.
 - **Verify:** code-verify incl. `--singleton-census --check` (baseline updated
   deliberately, named in chat); ctor-edge read-back (no instance() calls in ctor).
 - **Deps:** M1 complete (budget code stable before it moves threads)
-- [ ] done
+- [x] done — 2026-08-12; `IO::PipelineHost` (QThread "FramePipeline", 8192 SPSC dashboard
+  ring + drop counter, atomic paused/connected/operationMode/dashboardAccepting mirrors);
+  adopted between FrameBuilder and ConnectionManager, reverse-release in shutdown();
+  joined first in `stopFrameConsumerWorkers()` (bounded 5 s wait + warn-and-abandon, R21)
+  with FrameBuilder/FrameParser `prepareShutdown()` queued ahead of quit(). ALSO gained the
+  cross-thread marshal protocol: `runOnObjectThread` (GUI-side waits spin a QEventLoop and
+  keep serving pipeline dispatches; parked-flag fast path runs inline when the pipeline is
+  provably blocked in an apiCall the GUI is serving) + `runOnGuiThreadBlocking` (pipeline
+  reads of GUI state; plain blocking is safe because GUI never plain-blocks on pipeline).
+  Census re-baselined at the M3 gate.
 
 ### T15 — FrameReader + FrameBuilder + FrameParser affinity move
 
@@ -305,7 +314,18 @@ the AC3 badge visual check.
 - **Verify:** code-verify; connection-type audit read-back (every connect on the frame
   path listed with resolved type); app smoke by maintainer.
 - **Deps:** T14
-- [ ] done
+- [x] done — 2026-08-12; readers configured on GUI then `moveToThread` + registered with
+  PipelineHost (readyRead → routeFrames, DirectConnection, reader as context so wiring dies
+  with the reader; deleteLater executes on the pipeline loop); DeviceManager::frameReady +
+  onReadyRead + ConnectionManager::onFrameReady DELETED (routing + MQTT raw-frame fan-out
+  relocated into PipelineHost::routeFrames, paused/mode via atomics); FrameBuilder +
+  FrameParser moved as the LAST step of setupCrossModuleConnections (startup calls stay
+  same-thread; headless/benchmark bootstraps never move them, so verifier + benchmark stay
+  single-threaded by construction); cross-thread Q_ASSERT removed from hotpathRxFrame.
+  Frame-path connection audit: driver dataReceived→FrameReader (Auto→queued, chunk rate);
+  FrameReader readyRead→routeFrames (Direct, same thread); routeFrames→FrameBuilder (plain
+  call); FrameBuilder→dashboard ring (SPSC, no signal); FrameBuilder→async sinks (SPSC
+  queues, producer identity moved wholesale GUI→pipeline, still exactly one producer).
 
 ### T16 — GUI→pipeline marshaling of synchronous entry points
 
@@ -320,7 +340,31 @@ the AC3 badge visual check.
 - **Verify:** code-verify; grep for remaining direct GUI-thread calls into
   FrameBuilder/FrameParser mutable state (checklist in commit).
 - **Deps:** T15
-- [ ] done
+- [x] done — 2026-08-12; scope grew far past the planned four sites (full caller audit by
+  subagent, every finding closed): FrameBuilder self-marshals (syncFromProjectModel,
+  registerQuickPlotHeaders, setReplayColumnMap, replayChannels/Spans/Typed via plain
+  BlockingQueued — borrowed spans stay valid, engines are torn down during replay so no
+  apiCall cycle exists; reprocessFrames, dashboardTick, refreshTableStore, resetFrameCounters,
+  setParseBudgetEnabled, parseLoadSnapshot, new latestFrameSnapshot value-copy accessor);
+  FrameParser self-marshals (readCode, reloadSourceCode, clearContext, loadScript,
+  setSourceCode, clearSourceEngine, setSuppressMessageBoxes, scriptStats, setTemplateIdx
+  split engine-op-on-parser-thread / model-writes-on-GUI); OUTBOUND direction fixed too —
+  pipeline code snapshots ProjectModel state via runOnGuiThreadBlocking (syncFromProjectModel,
+  readCode, reloadSourceCode, clearContext, languageForSource, initializeTableStore, audio
+  config for QuickPlot) and resolveDecoderMethod now reads the builder-local m_frame.sources
+  snapshot + cached m_projectDecoderMethod (refreshed on ProjectModel::sourceChanged) instead
+  of walking live ProjectModel per frame; onConnectedChanged uses the atomic mirrors and
+  queues auto-execute writes back to the GUI. Table store: all 8 Lua closures + all
+  TableApiBridge JS methods marshal store access to the builder thread (owner anchor);
+  DataTablesHandler 5 verbs wrapped; Sessions::Export 1 Hz table snapshot wrapped; MacroRunner
+  + LuaScriptEngine clearLookupCache wrapped. Checkers: LinkCheckers sourceLabel +
+  parseLoadSnapshot, ScriptCheckers lastTransformError copy, FrameParser scriptStats.
+  Exports: CSV/MDF4 template-frame copies wrapped. Dashboard resetData frame copy wrapped;
+  ProjectModelWorkspaces quickPlotFrame copy wrapped; FrameParserModel live preview runs on
+  the parser thread. apiCall (ScriptApiCall::dispatchApiCall) marshals to GUI from pipeline
+  engines with the parked-flag bracket. Accepted residuals (named): template-name QStringList
+  getters (mutate only on languageChanged), ConnectionManager::busType/AppState mode plain
+  enum reads, transition-rate bool reads in refreshAnyAsyncSink.
 
 ### T17 — Dashboard tick drain + exporter producer notes
 
@@ -334,7 +378,15 @@ the AC3 badge visual check.
   GUI-thread-only.
 - **Verify:** code-verify; maintainer smoke (live device, all widget types).
 - **Deps:** T15
-- [ ] done
+- [x] done — 2026-08-12; Dashboard::onDisplayTick (extracted member slot) drains the
+  PipelineHost ring ahead of the coalesced updated() emission; publish sites
+  (hotpathTxFrame, publishReplayFrame, republishFrames) enqueue via
+  publishFrameToDashboard, gated on the dashboardAccepting mirror pushed from
+  updateStreamAvailable() so no-dashboard sessions never pin pool slots in the ring;
+  MDF4 worker's cross-thread ConnectionManager::isConnected() replaced by the
+  PipelineHost::pipelineConnected() atomic. Pool backpressure unchanged: a stalled GUI
+  pins ring refs → pool exhausts → existing heap-fallback warning; ring-full drops are
+  counted (dashboardDropCount, pulled).
 
 ### T18 — Benchmark on pipeline thread + flag-refresh audit
 
@@ -345,7 +397,14 @@ the AC3 badge visual check.
   dataflow.md threading table + cached-flags section rewritten for the two-thread world.
 - **Verify:** maintainer runs full gated `--benchmark-hotpath` (AC4 must hold).
 - **Deps:** T15–T17
-- [ ] done
+- [x] done (code) — 2026-08-12; AMENDMENT (named): the benchmark bootstrap
+  (CLI → instantiateCoreModules, no setupCrossModuleConnections) never moves
+  FrameBuilder/FrameParser, so the drive loop already measures the same single-threaded
+  pipeline — no blocking dispatch needed and AC4 stays apples-to-apples by construction;
+  the self-marshal guards all hit the same-thread fast path there. The dashboard tiers
+  now drain the PipelineHost ring inline in the drive loop (parse + ring + ingest = the
+  two-thread world's total work, one thread). dataflow.md rewrite lands at the M3 gate.
+  AC4 run itself: maintainer, production-optimized configure.
 
 ### T19 ◆ — M3 validation: golden session + UI-immunity
 
@@ -355,7 +414,13 @@ the AC3 badge visual check.
   UI fluid, streams live); teardown ctest for PipelineHost join ordering.
 - **Verify:** pytest + golden harness + maintainer observation logged in spec ACs.
 - **Deps:** T14–T18
-- [ ] done
+- [x] done (code) — 2026-08-12; `test_pipeline_thread.py` (3 tests): AC14 proxy (GUI-thread
+  API latency bounded + light source live under a saturating Lua parser), connect/disconnect
+  churn settles, ring-drain delivery. Full `--benchmark-hotpath` smoke on the rebuilt binary:
+  ALL tiers green (native 4.02 MHz, Lua 771 k, dashboard-ingest tiers run through the ring
+  drain, clean exit = teardown join verified). Census re-baselined. MAINTAINER REMAINING:
+  AC15 spec-0047 dual-replay run, AC14 in-app fluidity observation, AC4 gated benchmark on
+  the production PGO configure.
 
 ## M4 — Stream lane core (ACs 5–9, 13)
 
@@ -370,7 +435,13 @@ the AC3 badge visual check.
   at capture, `dt` from device rate.
 - **Verify:** code-verify; project save/load round-trip read-back.
 - **Deps:** M3 complete
-- [ ] done
+- [x] done — 2026-08-12; `SampleBlock`/`SampleBlockPtr` + `sampleBlockReceived` signal +
+  `publishSampleBlock()` + `isStreamCapable()` (default false) in HAL_Driver.h;
+  `Keys::SourceStreamLane` ("streamLane": absent/auto, "on", "off") in Frame.h Source +
+  serialize/deserialize; `ProjectModel::updateSourceStreamLane` (undo-scoped, validates the
+  value set, emits sourceStreamLaneChanged + sourceChanged). `IO::streamLaneOn()` resolves
+  driver default + override. NOTE (named): the plan's source-editor QML combo was not
+  scheduled by any task; the flag is settable via project JSON/API — UI expose deferred.
 
 ### T21 — StreamWorker skeleton + lifecycle
 
@@ -385,7 +456,15 @@ the AC3 badge visual check.
 - **Verify:** code-verify; teardown ctest (join, abandon, no leak of abandoned thread's
   queues).
 - **Deps:** T20
-- [ ] done
+- [x] done — 2026-08-12; `IO::StreamWorker` (GUI facade: QThread + display SPSC ring (256) +
+  resize atomics) + `IO::StreamProcessor` (worker-affine: reused float64 scratch, per-channel
+  envelope/FFT/latest state, pulled quint64 counters). Lifecycle in ConnectionManager
+  (`rebuildStreamWorkers` from rebuildDevices/setBusType + lane/luaFastMode change signals;
+  `stopStreamWorkers` from shutdownDrivers + FIRST in ModuleManager::stopFrameConsumerWorkers);
+  stop() = disconnect feed, queued engine teardown, quit, 5 s bounded wait, warn-and-abandon
+  (abandoned() latch keeps the facade from deleting a live processor). Teardown + behavior
+  ctest suite `tst_stream_worker` (6 cases) registered (also fixed app/tests/CMakeLists.txt
+  still linking the DELETED lua54 target in 3 suites — M2 leftover, now luajit; named).
 
 ### T22 — Audio driver typed publish
 
@@ -398,7 +477,14 @@ the AC3 badge visual check.
 - **Verify:** code-verify; maintainer smoke: QuickPlot audio silent until T25 wires
   ingest — task ordering noted in chat at edit time.
 - **Deps:** T21
-- [ ] done
+- [x] done — 2026-08-12; AMENDMENT (named): the CSV members are NOT deleted — the per-source
+  lane override ("off") keeps the legacy frame-lane path alive, so processInputBuffer now
+  BRANCHES on the driver's atomic streamLaneActive flag (set by ConnectionManager): typed
+  SampleBlock publish (float32 interleaved, same numeric magnitudes as the CSV text) vs the
+  existing CSV encode. The sample-clock resync moved ahead of the branch verbatim (shared by
+  both lanes). The pump timer's timeout hop is now Qt::DirectConnection so the encode runs on
+  the input worker thread, never the GUI (the receiver-`this` bug this spec documented); the
+  double-deleteLater is fixed by deleting the timer exactly once after the join.
 
 ### T23 — Stream transform engines + block contract
 
@@ -412,7 +498,15 @@ the AC3 badge visual check.
   block falls back to raw (R10).
 - **Verify:** code-verify; `tests/scripts/` block-contract units (AC7) green.
 - **Deps:** T21, M2 complete
-- [ ] done
+- [x] done — 2026-08-12; AMENDMENT (named): the compile helper was NOT extracted from
+  FrameBuilder (its engine machinery is coupled to per-frame refs/watchdog state); the worker
+  owns a compact sandbox of its own (same safe-lib set + LuaCompat, ffi/jit never opened,
+  Safe = interpreter + count hook + 100 ms deadline / Fast = JIT + no hook, one mode).
+  `transform_block(samples, info)` detected by NAME at compile (info = frozen R9 seven-field
+  payload, reused per call); per-sample `transform(value)` fallback loop; errors counted
+  (pulled) and the block falls back to raw (R10). Block-contract coverage lives in the ctest
+  tier (`tst_stream_worker`: block form, per-sample fallback, Safe-mode runaway abort) —
+  tests/scripts/ is the JS-parser tier and has no Lua/QJSEngine host for worker engines.
 
 ### T24 — Envelope + FFT + latest-value reduction
 
@@ -426,7 +520,16 @@ the AC3 badge visual check.
 - **Verify:** code-verify; envelope ctest incl. single-sample impulse survival (AC9
   logic tier).
 - **Deps:** T21
-- [ ] done
+- [x] done — 2026-08-12; per-bucket min/max envelope with time-ordered pair emission (scalar
+  loop, NOT the DSPSimd kernels — named deviation: the reduction needs argmin/argmax TIMES
+  for pair ordering, which the pure min/max kernels don't produce; buckets are ~hundreds of
+  samples so the scan is far off the critical path); worker-side FFT ring (capacity =
+  dataset fftSamples, linearized snapshot per update once filled); latest values. Display
+  budget: bucket count = Dashboard points()/2 and window = plotTimeRange pushed via the
+  facade atomics on every display tick — named deviation from "plot pixel width": the
+  dashboard TimeRing itself caps fidelity at points/2 min/max cells, so per-pixel pairs
+  would be re-decimated to exactly this grid anyway (fidelity identical to the frame lane's).
+  Impulse-survival case in `tst_stream_worker`.
 
 ### T25 — Dashboard stream ingest + QuickPlot routing
 
@@ -443,7 +546,16 @@ the AC3 badge visual check.
 - **Verify:** code-verify; maintainer visual: QuickPlot audio waveform+FFT live (AC13),
   project-mode plots/FFT live.
 - **Deps:** T22–T24
-- [ ] done
+- [x] done (code) — 2026-08-12; `Dashboard::applyStreamUpdate` on the onDisplayTick drain
+  (after the frame-ring drain): latest values via m_datasetReferences[uniqueId], envelope
+  pairs appendDecimated into plot/multiplot rings (per-source PlotClock advanced from block
+  t0 via the extracted advancePlotClock — shared with hotpathRxFrame, never cleared), FFT
+  window into m_fftValues; targets resolved through a lazy uniqueId->widget-index cache
+  (indexes only — ring pointers dangle across rebuilds; cleared with the push tables).
+  Template frames: FrameBuilder::publishSourceTemplate(sourceId) (ProjectFile) +
+  publishQuickPlotAudioTemplate(channels) (QuickPlot, sourceId 0 threaded through the
+  synthesized frame), invoked by ConnectionManager::publishStreamTemplates() on worker
+  rebuild + connect edge. MAINTAINER REMAINING: AC13 visual (waveform+FFT live).
 
 ### T26 ◆ — M4 validation + stream benchmark phase
 
@@ -455,7 +567,14 @@ the AC3 badge visual check.
   profiling + render-FPS observation; AC9 impulse + sine-bin scripted check.
 - **Verify:** pytest; benchmark report; maintainer profiling session.
 - **Deps:** T20–T25
-- [ ] done
+- [x] done (code) — 2026-08-12; ungated `hotpath-stream` benchmark phase (StreamProcessor
+  driven synchronously with 96 kHz stereo blocks): raw 305 M frames/s, heavy-Lua-block Safe
+  15.6 M frames/s, Fast (JIT) 22.4 M frames/s on the dev machine — Safe is ~2.5x the whole
+  hooked-5.4 block-DSP baseline PER CALL PATH and both clear 8x96 kHz with >20x headroom at
+  the x5 derate (AC19 counter source; provisional per spec). Full gated suite re-ran green
+  with the phase in place. `test_stream_lane.py`: streamLane persistence round-trip +
+  audio-gated QuickPlot liveness (self-skips without the loopback rig). AC8/AC17 runaway
+  logic tier covered in `tst_stream_worker`; AC5 GUI profiling + AC9 visual = maintainer.
 
 ## M5 — Stream exports + table store (ACs 10, 11)
 
@@ -471,7 +590,17 @@ the AC3 badge visual check.
 - **Verify:** code-verify; AC10 integration test (row/sample counts + checksum vs known
   vector).
 - **Deps:** M4 complete
-- [ ] done
+- [x] done — 2026-08-12; `CSV::StreamExportWorker/StreamExport` + `MDF4::StreamExportWorker/
+  StreamExport` (FrameConsumer<StreamBlockItemPtr>, own worker threads): one file per stream
+  source (`*_stream_sourceN.csv` / `.mf4`), full-rate POST-transform planar samples, per-sample
+  time = t0 + i*dt (CSV: seconds relative to first block; MDF4: system-clock base captured at
+  file creation) — never the monotonic bump. SPSC single-producer solved by fan-in: every
+  StreamProcessor's blockReady is QUEUED to the GUI-affine StreamExport::ingestBlock, so the
+  GUI is the one producer for each sink's queue regardless of worker count. Export payloads
+  are gated on a per-worker atomic (refreshStreamExportFlags on CSV/MDF4 enabledChanged) so
+  no sink = zero export allocations. Enable/close follows the parent exporters; workers stop
+  in stopFrameConsumerWorkers. Backpressure = existing pool/queue drop semantics, capture
+  never stalls. AC10 integration run pending maintainer rebuild+session.
 
 ### T28 — Block-rate table-store publish
 
@@ -484,7 +613,11 @@ the AC3 badge visual check.
 - **Verify:** code-verify; AC11 integration test (frame-lane virtual dataset reads
   stream slot at block rate); maintainer TSan run over mixed-lane session.
 - **Deps:** T27
-- [ ] done
+- [x] done — 2026-08-12; `StreamProcessor::latestValuesReady(sourceId, values)` (per block)
+  QUEUED to `FrameBuilder::ingestStreamValues` — the slot executes on the pipeline thread,
+  so every store write stays on the single writer and change-driven versioning works
+  unchanged; writes are setDatasetRaw+Final with the post-transform latest (numeric).
+  Never per-sample (R13). MAINTAINER REMAINING: AC11 integration run + TSan mixed-lane pass.
 
 ## M6 — Block-rate API (AC 20)
 
@@ -500,7 +633,18 @@ the AC3 badge visual check.
 - **Verify:** code-verify; AC20 integration test (slow client sees missed counts, fast
   client + capture unaffected).
 - **Deps:** M5 complete
-- [ ] done
+- [x] done — 2026-08-12; connection-scoped `stream.subscribe`/`stream.unsubscribe` in
+  API::Server (mirror-style pre-registry dispatch, ConnectionState fields, optional
+  `params.sources` filter, cleared with the connection) + discovery commands
+  `stream.getInfo`/`stream.getSources` in a new `Handlers/StreamHandler.cpp` (registered in
+  CommandHandler). Wire: one `streamBlock` NDJSON line per dataset channel, base64 float32le,
+  carrying sourceId/uniqueId/seq/missed/t0Ms/dtNs/count. BACKPRESSURE (named design choice):
+  the plan's worker-side per-subscriber ring became an ACK-PACED server-side queue — the
+  worker's writeStreamBlock emits streamWriteDone after the write, and the next block is only
+  sent then, so a slow reader accumulates the bounded per-connection deque (depth 8, drop
+  OLDEST + missed count reported on the next delivered line) instead of the socket buffer;
+  capture and other consumers are never involved. Export-payload construction is gated on a
+  sink being live (CSV/MDF4/API), so a session with no subscriber allocates nothing.
 
 ### T30 ◆ — SDK/schema regeneration
 
@@ -510,7 +654,13 @@ the AC3 badge visual check.
   hand-edit generated files; proto ledger untouched (NDJSON-only surface).
 - **Verify:** `python scripts/sanitize-commit.py` (runs the full check chain).
 - **Deps:** T29
-- [ ] done
+- [x] done — 2026-08-12; `--dump-api-schema` re-dumped on the rebuilt binary (365 commands),
+  `generate-sdk.py` regenerated SerialStudio.js/.lua/sdk-symbols.json (715 symbols); the
+  sanitize chain also appended the two new commands to the gRPC field ledger + typed proto
+  (append-only, no renumbering). Full `sanitize-commit.py` clean; singleton census
+  re-baselined (+26: the new stream lifecycle/sink/handler static& caches, precedent-conform).
+  `test_stream_api.py` (3 surface tests green on the live binary + audio-gated AC20 delivery
+  test) verifies getInfo/getSources/subscribe/unsubscribe end-to-end.
 
 ## M7 — Whole-feature validation (ACs 6, 12, 19)
 
@@ -523,7 +673,11 @@ the AC3 badge visual check.
   hooked-5.4 baseline, Fast holds 8×96 kHz with ≥2× headroom at ×5 margin.
 - **Verify:** pytest + archived benchmark reports referenced from spec AC checkboxes.
 - **Deps:** M4–M6
-- [ ] done
+- [x] done (code) — 2026-08-12; `test_stream_scaling.py`: AC6 compares per-source throughput
+  from the pulled `stream.getSources` counters (skips without the loopback rig; the
+  hardware-free number is the benchmark's `hotpath-stream` phase) + a counter-surface test
+  that runs anywhere. Dev-machine figures recorded at T26. AC19's Safe-vs-hooked-5.4 ratio and
+  the physical floor box stay maintainer/provisional per the spec's Constraints.
 
 ### T32 — BADAQ definition-of-done + docs + CLAUDE.md
 
@@ -537,7 +691,44 @@ the AC3 badge visual check.
 - **Verify:** maintainer sign-off recorded in spec; `ss-ai-audit`-style read of updated
   docs against code.
 - **Deps:** everything
-- [ ] done
+- [x] done (docs) — 2026-08-12; dataflow.md rewritten for the two-thread world (data-flow
+  diagram, marshal-protocol section, threading table, cached-flag rule); io.md gained the
+  stream-lane section; dashboard.md the display-tick drain + stream ingest; export.md the
+  typed stream sinks; startup.md the ninth module, the pinned-order entry and the
+  relocate-last rule; scripting.md the block-transform contract + LuaJIT engine line;
+  CLAUDE.md's threading + composition-root blocks and the `ss-hotpath` skill re-stated for
+  the pipeline thread; directory-map.md lists the two new IO modules. MAINTAINER REMAINING:
+  AC12 (restored un-degraded BADAQ project) and the `bug-report.md` disposition — that file
+  is the maintainer's and was not touched.
+
+### M4-M7 follow-up — slow-readings report (2026-08-12)
+
+Maintainer reported that a mixed CAN + audio project's readings advanced far more slowly than
+before the stream lane landed. Three defects behind it, all fixed and re-verified:
+
+1. **Frame-lane virtual datasets stopped recomputing at stream rate (R13/AC11).** Stream values
+   reached the data-table store, but nothing re-ran the transforms that read it, so a metric
+   engine's outputs only advanced when a frame-lane source published -- i.e. at the slowest
+   source's rate (10 Hz CAN). `ingestStreamValues` now raises a dirty flag and
+   `refreshStreamDrivenFrames()` (UI refresh tick, per maintainer: the rate these values are
+   drawn at, not an invented 20 Hz) re-runs the frame-lane transforms. Gated on the flag, so an
+   all-frame-lane session pays nothing.
+2. **A stream source's own virtual datasets never recomputed at all.** Its template frame was
+   skipped wholesale. It is now recomputed every tick (store-visible) but still not published --
+   publishing would overwrite the Dashboard's stream-ingest widget copies and double-push its
+   plot rings. Channel-bound stream datasets are skipped inside `reprocessDatasetValues`
+   (`m_streamDatasetIds`), since their transform already ran on the worker; re-running it would
+   double-apply it to an already-post-transform value.
+3. **A stream-capable source with no channel-bound datasets went dark.** `rebuildStreamWorkers`
+   set the driver's lane flag before the check that actually creates a worker, so such a source
+   stopped publishing on the frame lane with nothing consuming the typed blocks. The flag is now
+   set only once a worker will exist; otherwise the source keeps its frame-lane path.
+
+Measured after the fixes: gated benchmark unchanged (native 4.08 MHz, Lua 780 k, dashboard
+362 k, HOTPATH_PASS=1), stream phase raw 235 M / Safe 16.2 M / Fast 23.3 M frames/s, integration
+12/12 green. Also probed the new GUI->pipeline marshal under a saturated pipeline (heavy Lua
+parser at ~200 fps): a store read round-trips p50 1.0 ms / p95 9.5 ms through the API socket --
+no queuing collapse, so the marshal protocol is not a throughput factor.
 
 ## Definition of Done
 

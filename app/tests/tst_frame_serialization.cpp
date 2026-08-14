@@ -153,6 +153,7 @@ static Dataset populatedDataset()
   d.transformLanguage    = 1;
   d.virtual_             = true;
   d.hideOnDashboard      = true;
+  d.extremeHold          = true;
   d.overviewDisplay      = true;
   d.enabled              = false;
   return d;
@@ -741,6 +742,7 @@ void TstFrameSerialization::datasetRoundTripsConfiguration()
   QCOMPARE(restored->transformLanguage, d.transformLanguage);
   QCOMPARE(restored->virtual_, d.virtual_);
   QCOMPARE(restored->hideOnDashboard, d.hideOnDashboard);
+  QCOMPARE(restored->extremeHold, d.extremeHold);
   QCOMPARE(restored->overviewDisplay, d.overviewDisplay);
   QCOMPARE(restored->enabled, d.enabled);
 
@@ -766,6 +768,7 @@ void TstFrameSerialization::defaultDatasetRoundTripsToItsDefaults()
   QCOMPARE(restored->enabled, true);
   QCOMPARE(restored->virtual_, false);
   QCOMPARE(restored->hideOnDashboard, false);
+  QCOMPARE(restored->extremeHold, false);
   QCOMPARE(restored->waterfall, false);
   QVERIFY(!restored->isNumeric);
   QVERIFY(restored->alarmBands.empty());
@@ -1093,6 +1096,25 @@ void TstFrameSerialization::groupRoundTripsImagePainterAndWebViewFields()
   const auto restoredWeb = fromJson<Group>(toJson(webview));
   QVERIFY(restoredWeb.has_value());
   QCOMPARE(restoredWeb->webViewUrl, webview.webViewUrl);
+
+  Group barPanel;
+  barPanel.title         = QStringLiteral("Pressures");
+  barPanel.widget        = QStringLiteral("barpanel");
+  barPanel.barPanelStyle = QStringLiteral("vertical");
+
+  const auto restoredPanel = fromJson<Group>(toJson(barPanel));
+  QVERIFY(restoredPanel.has_value());
+  QCOMPARE(restoredPanel->barPanelStyle, barPanel.barPanelStyle);
+
+  Group autoPanel;
+  autoPanel.title  = QStringLiteral("Temperatures");
+  autoPanel.widget = QStringLiteral("barpanel");
+
+  const auto json = toJson(autoPanel);
+  QVERIFY(!json.contains(Keys::BarPanelStyle));
+  const auto restoredAuto = fromJson<Group>(json);
+  QVERIFY(restoredAuto.has_value());
+  QVERIFY(restoredAuto->barPanelStyle.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

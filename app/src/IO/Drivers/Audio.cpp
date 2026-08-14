@@ -295,6 +295,7 @@ static bool packCsvSample(ma_format format, const QByteArray& token, QVector<qui
 IO::Drivers::Audio::Audio()
   : m_init(false)
   , m_isOpen(false)
+  , m_discoveryPaused(false)
   , m_selectedSampleRate(0)
   , m_selectedInputDevice(-1)
   , m_selectedInputSampleFormat(0)
@@ -307,6 +308,7 @@ IO::Drivers::Audio::Audio()
   , m_inputWorkerTimer(nullptr)
   , m_sampleClockValid(false)
   , m_stopNotifyArmed(false)
+  , m_streamLaneActive(false)
   , m_rtCaptureFormat(ma_format_unknown)
   , m_rtPlaybackFormat(ma_format_unknown)
   , m_rtCaptureChannels(0)
@@ -365,9 +367,10 @@ IO::Drivers::Audio::~Audio()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the audio device and releases all associated resources;
- * draining the SPSC queues is safe because ma_device_uninit above already
- * joined the audio (producer) thread.
+ * @brief Closes the audio device and releases all associated resources; draining the SPSC queues
+ *        is safe because ma_device_uninit already joined the audio thread. The worker timer's
+ *        deleteLater is posted before quit() so the thread's exit-time DeferredDelete sweep runs
+ *        ~QTimer on its own thread (a plain delete here kills the timer id from the GUI thread).
  */
 void IO::Drivers::Audio::closeDevice()
 {
@@ -377,16 +380,18 @@ void IO::Drivers::Audio::closeDevice()
   m_stopNotifyArmed.store(false, std::memory_order_release);
   ma_device_uninit(&m_device);
 
-  if (m_inputWorkerTimer) {
-    QMetaObject::invokeMethod(m_inputWorkerTimer, "stop", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(m_inputWorkerTimer, "deleteLater", Qt::QueuedConnection);
-    m_inputWorkerTimer = nullptr;
-  }
+  if (m_inputWorkerTimer && m_inputWorkerThread.isRunning())
+    m_inputWorkerTimer->deleteLater();
+
+  else
+    delete m_inputWorkerTimer;
 
   if (m_inputWorkerThread.isRunning()) {
     m_inputWorkerThread.quit();
     m_inputWorkerThread.wait();
   }
+
+  m_inputWorkerTimer = nullptr;
 
   {
     QByteArray dropped;
@@ -669,7 +674,10 @@ bool IO::Drivers::Audio::configurePlaybackFormat(QIODevice::OpenMode mode)
 }
 
 /**
- * @brief Lazily creates the input worker timer/thread and starts the read tick.
+ * @brief Lazily creates the input worker timer/thread and starts the read tick. The timeout hop
+ *        is DirectConnection so processInputBuffer executes on the worker thread (the timer's
+ *        thread), never the GUI thread (spec 0051 T22); the timer is deleted exactly once, by
+ *        closeDevice()'s queued deleteLater (the old finished->deleteLater double-delete is gone).
  */
 void IO::Drivers::Audio::startInputWorker()
 {
@@ -678,8 +686,11 @@ void IO::Drivers::Audio::startInputWorker()
     m_inputWorkerTimer->setInterval(10);
     m_inputWorkerTimer->setTimerType(Qt::PreciseTimer);
     m_inputWorkerTimer->moveToThread(&m_inputWorkerThread);
-    connect(&m_inputWorkerThread, &QThread::finished, m_inputWorkerTimer, &QObject::deleteLater);
-    connect(m_inputWorkerTimer, &QTimer::timeout, this, &IO::Drivers::Audio::processInputBuffer);
+    connect(m_inputWorkerTimer,
+            &QTimer::timeout,
+            this,
+            &IO::Drivers::Audio::processInputBuffer,
+            Qt::DirectConnection);
   }
 
   if (!m_inputWorkerThread.isRunning()) {
@@ -1120,10 +1131,10 @@ void IO::Drivers::Audio::configureOutput()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Converts raw audio input into CSV-formatted text and emits it;
- * draining the queue lock-free is safe (audio thread is the sole producer),
- * and the timestamp advances by frameStep * totalFrames so input jitter never
- * shifts the sample timeline.
+ * @brief Drains captured PCM on the input worker thread and publishes it: a typed SampleBlock
+ *        when the stream lane is active (spec 0051, no text round-trip), the CSV text path
+ *        otherwise (lane "off" keeps today's frame-lane semantics). The sample-clock resync is
+ *        shared by both lanes, so input jitter never shifts the sample timeline.
  */
 void IO::Drivers::Audio::processInputBuffer()
 {
@@ -1143,6 +1154,26 @@ void IO::Drivers::Audio::processInputBuffer()
     return;
 
   const int totalFrames = raw.size() / frameSize;
+
+  const auto frameStep =
+    std::max(std::chrono::nanoseconds(1),
+             std::chrono::duration_cast<std::chrono::nanoseconds>(
+               std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
+
+  const auto now       = IO::CapturedData::SteadyClock::now();
+  const auto wallFirst = now - (frameStep * std::max(0, totalFrames - 1));
+  if (!m_sampleClockValid || std::chrono::abs(m_nextSampleTime - wallFirst) > kAudioClockResync) {
+    m_nextSampleTime   = wallFirst;
+    m_sampleClockValid = true;
+  }
+
+  const auto timestamp  = m_nextSampleTime;
+  m_nextSampleTime     += frameStep * totalFrames;
+
+  if (m_streamLaneActive.load(std::memory_order_relaxed)) {
+    publishTypedBlock(raw, channels, format, totalFrames, timestamp, frameStep);
+    return;
+  }
 
   m_csvBuffer.seek(0);
 
@@ -1193,21 +1224,95 @@ void IO::Drivers::Audio::processInputBuffer()
 
   m_csvStream.flush();
   const auto length = m_csvBuffer.pos();
-  const auto frameStep =
-    std::max(std::chrono::nanoseconds(1),
-             std::chrono::duration_cast<std::chrono::nanoseconds>(
-               std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
+  publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
+}
 
-  const auto now       = IO::CapturedData::SteadyClock::now();
-  const auto wallFirst = now - (frameStep * std::max(0, totalFrames - 1));
-  if (!m_sampleClockValid || std::chrono::abs(m_nextSampleTime - wallFirst) > kAudioClockResync) {
-    m_nextSampleTime   = wallFirst;
-    m_sampleClockValid = true;
+/**
+ * @brief Decodes raw PCM into a typed SampleBlock (interleaved float32, same numeric magnitudes
+ *        the CSV lane emitted) and publishes it for the stream worker (spec 0051 R6).
+ */
+void IO::Drivers::Audio::publishTypedBlock(const QByteArray& raw,
+                                           int channels,
+                                           ma_format format,
+                                           int totalFrames,
+                                           CapturedData::SteadyTimePoint timestamp,
+                                           std::chrono::nanoseconds frameStep)
+{
+  SS_ASSERT(channels > 0, return);
+  SS_ASSERT(totalFrames > 0, return);
+
+  auto block      = std::make_shared<SampleBlock>();
+  block->channels = channels;
+  block->frames   = totalFrames;
+  block->t0       = timestamp;
+  block->dt       = frameStep;
+  block->samples.resize(static_cast<std::size_t>(totalFrames) * static_cast<std::size_t>(channels));
+
+  const int bytesPerSample = ma_get_bytes_per_sample(format);
+  const char* ptr          = raw.constData();
+  float* out               = block->samples.data();
+  const qsizetype count    = block->frames * channels;
+
+  for (qsizetype i = 0; i < count; ++i) {
+    switch (format) {
+      case ma_format_u8:
+        out[i] = static_cast<float>(static_cast<quint8>(*ptr));
+        break;
+      case ma_format_s16:
+        out[i] =
+          static_cast<float>(qFromLittleEndian<qint16>(reinterpret_cast<const quint8*>(ptr)));
+        break;
+      case ma_format_s24: {
+        const quint8* b  = reinterpret_cast<const quint8*>(ptr);
+        const qint32 s24 = static_cast<qint32>(b[0]) | (static_cast<qint32>(b[1]) << 8)
+                         | (static_cast<qint32>(b[2]) << 16);
+        const qint32 sample = (s24 & 0x800000) ? (s24 | static_cast<qint32>(0xFF000000)) : s24;
+        out[i]              = static_cast<float>(sample);
+        break;
+      }
+      case ma_format_s32:
+        out[i] =
+          static_cast<float>(qFromLittleEndian<qint32>(reinterpret_cast<const quint8*>(ptr)));
+        break;
+      case ma_format_f32: {
+        float sample;
+        std::memcpy(&sample, ptr, sizeof(float));
+        out[i] = sample;
+        break;
+      }
+      default:
+        return;
+    }
+
+    ptr += bytesPerSample;
   }
 
-  const auto timestamp  = m_nextSampleTime;
-  m_nextSampleTime     += frameStep * totalFrames;
-  publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
+  publishSampleBlock(block);
+}
+
+/**
+ * @brief Audio captures native typed samples, so it is a stream source by default (spec 0051 R6).
+ */
+bool IO::Drivers::Audio::isStreamCapable() const noexcept
+{
+  return true;
+}
+
+/**
+ * @brief Returns whether the stream lane currently consumes this driver's blocks.
+ */
+bool IO::Drivers::Audio::streamLaneActive() const noexcept
+{
+  return m_streamLaneActive.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief Selects the publish lane: typed SampleBlocks (true) or the legacy CSV text path.
+ *        Written by ConnectionManager at connect/config time, read by the input worker.
+ */
+void IO::Drivers::Audio::setStreamLaneActive(bool active) noexcept
+{
+  m_streamLaneActive.store(active, std::memory_order_relaxed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1215,11 +1320,26 @@ void IO::Drivers::Audio::processInputBuffer()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Suspends device discovery while a session is live: ma_context_get_devices() is a
+ *        syscall-heavy enumeration on the GUI thread, and the pickers it feeds are locked for the
+ *        duration anyway. Resuming refreshes once so the lists are current when they unlock.
+ */
+void IO::Drivers::Audio::setDiscoveryPaused(const bool paused)
+{
+  if (m_discoveryPaused == paused)
+    return;
+
+  m_discoveryPaused = paused;
+  if (!paused)
+    refreshAudioDevices();
+}
+
+/**
  * @brief Refreshes the list of available audio input/output devices.
  */
 void IO::Drivers::Audio::refreshAudioDevices()
 {
-  if (!m_init)
+  if (!m_init || m_discoveryPaused)
     return;
 
   ma_uint32 inputCount          = 0;

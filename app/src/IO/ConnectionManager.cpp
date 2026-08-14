@@ -27,6 +27,7 @@
 #include "API/Server.h"
 #include "AppState.h"
 #include "Console/Handler.h"
+#include "CSV/Export.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -35,6 +36,7 @@
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/UART.h"
 #include "IO/FileTransmission.h"
+#include "MDF4/Export.h"
 #include "Misc/ConnectionDiagnostics.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -571,7 +573,9 @@ void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVaria
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Feeds a pre-built payload directly into the frame processing pipeline.
+ * @brief Feeds a pre-built payload into the frame pipeline. The builder call marshals to the
+ *        pipeline thread (queued; command-rate, never per frame) while the console/API taps
+ *        stay on this thread.
  */
 void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
@@ -586,10 +590,14 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
   const auto captured = makeCapturedData(payload);
   server.hotpathTxData(captured->data);
   console.hotpathRxData(captured->data);
-  if (appState.operationMode() == SerialStudio::ProjectFile)
-    frameBuilder.hotpathRxSourceFrame(0, captured);
-  else
-    frameBuilder.hotpathRxFrame(captured);
+
+  const bool projectMode = (appState.operationMode() == SerialStudio::ProjectFile);
+  frameBuilder.invokeOnBuilderThread([captured, projectMode] {
+    if (projectMode)
+      frameBuilder.hotpathRxSourceFrame(0, captured);
+    else
+      frameBuilder.hotpathRxFrame(captured);
+  });
 
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
@@ -616,8 +624,12 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
   server.hotpathTxData(captured->data);
   console.hotpathRxData(captured->data);
 
-  for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it)
-    frameBuilder.hotpathRxSourceFrame(it.key(), makeCapturedData(it.value(), captured->timestamp));
+  for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it) {
+    const int sourceId  = it.key();
+    const auto srcChunk = makeCapturedData(it.value(), captured->timestamp);
+    frameBuilder.invokeOnBuilderThread(
+      [sourceId, srcChunk] { frameBuilder.hotpathRxSourceFrame(sourceId, srcChunk); });
+  }
 
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
@@ -985,6 +997,8 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::onProjectSourceChanged,
           Qt::DirectConnection);
 
+  wireStreamLifecycle();
+
   connect(
     &AppState::instance(),
     &AppState::frameConfigChanged,
@@ -1028,6 +1042,12 @@ void IO::ConnectionManager::setupExternalConnections()
   connect(m_usbUi.get(), &IO::Drivers::USB::deviceListChanged, this, clearEditing);
   connect(m_hidUi.get(), &IO::Drivers::HID::deviceListChanged, this, clearEditing);
   connect(m_modbusUi.get(), &IO::Drivers::Modbus::availableSerialPortsChanged, this, clearEditing);
+
+  connect(this, &IO::ConnectionManager::connectedChanged, this, [this] {
+    const bool paused = isConnected();
+    m_hidUi->setDiscoveryPaused(paused);
+    m_audioUi->setDiscoveryPaused(paused);
+  });
 #endif
 }
 
@@ -1071,6 +1091,7 @@ void IO::ConnectionManager::disconnectAllDevices()
  */
 void IO::ConnectionManager::shutdownDrivers()
 {
+  stopStreamWorkers();
   disconnectAllDevices();
 
   // code-verify off
@@ -1325,25 +1346,10 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 
     m_devices[0] = std::move(dm);
   } else {
-    auto existing = m_devices.find(0);
-    if (existing != m_devices.end()) {
-      if (existing->second)
-        disconnect(existing->second.get(), nullptr, this, nullptr);
-
-      m_devices.erase(existing);
-    }
-
-    if (uiDriverForBusType(type) != nullptr) {
-      QMetaObject::invokeMethod(
-        this,
-        [] {
-          Misc::Utilities::showMessageBox(
-            tr("This connection type requires an active license or trial."),
-            tr("Activate Serial Studio Pro or start a trial to use this device type."));
-        },
-        Qt::QueuedConnection);
-    }
+    dropUnavailablePrimaryDevice(type);
   }
+
+  rebuildStreamWorkers();
 
   Q_EMIT driverChanged();
   Q_EMIT busTypeChanged();
@@ -1354,6 +1360,32 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 
     if (!model.jsonFilePath().isEmpty())
       (void)model.saveJsonFile(false);
+  }
+}
+
+/**
+ * @brief Removes the primary device when no driver could be created for @p type (license gate)
+ *        and queues the activation prompt when the bus exists but is not licensed.
+ */
+void IO::ConnectionManager::dropUnavailablePrimaryDevice(SerialStudio::BusType type)
+{
+  auto existing = m_devices.find(0);
+  if (existing != m_devices.end()) {
+    if (existing->second)
+      disconnect(existing->second.get(), nullptr, this, nullptr);
+
+    m_devices.erase(existing);
+  }
+
+  if (uiDriverForBusType(type) != nullptr) {
+    QMetaObject::invokeMethod(
+      this,
+      [] {
+        Misc::Utilities::showMessageBox(
+          tr("This connection type requires an active license or trial."),
+          tr("Activate Serial Studio Pro or start a trial to use this device type."));
+      },
+      Qt::QueuedConnection);
   }
 }
 
@@ -1430,21 +1462,15 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
 }
 
 /**
- * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots; the data
- * hops are DirectConnection to avoid per-frame postEvent overhead on the main-thread hotpath hop,
- * while the open-completion hop fires once per attempt and stays on the default. The lost-link hop
- * is queued so its teardown and modal cannot run inside the finishing flow's own emission.
+ * @brief Connects a DeviceManager's raw-byte signal to the console/API fan-out; DirectConnection
+ *        avoids per-chunk postEvent overhead on the main-thread hop. Extracted frames no longer
+ *        pass through here: FrameReaders route them into FrameBuilder on the pipeline thread
+ *        (IO::PipelineHost::routeFrames, spec 0051 M3).
  */
 void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 {
   SS_ASSERT(dm != nullptr, return);
   SS_ASSERT_LOG(dm->driver() != nullptr);
-
-  connect(dm,
-          &IO::DeviceManager::frameReady,
-          this,
-          &IO::ConnectionManager::onFrameReady,
-          Qt::DirectConnection);
 
   connect(dm,
           &IO::DeviceManager::rawDataReceived,
@@ -1595,6 +1621,297 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
 }
 
 /**
+ * @brief Wires the stream-lane lifecycle inputs: worker rebuilds on lane/mode edits, template
+ *        publish on the connect edge, export-flag refresh on sink enable changes (spec 0051).
+ */
+void IO::ConnectionManager::wireStreamLifecycle()
+{
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  static auto& csvExport    = CSV::Export::instance();
+
+  connect(&projectModel,
+          &DataModel::ProjectModel::sourceStreamLaneChanged,
+          this,
+          &IO::ConnectionManager::rebuildStreamWorkers,
+          Qt::QueuedConnection);
+
+  connect(&projectModel,
+          &DataModel::ProjectModel::luaFastModeChanged,
+          this,
+          &IO::ConnectionManager::rebuildStreamWorkers,
+          Qt::QueuedConnection);
+
+  connect(this, &IO::ConnectionManager::connectedChanged, this, [this] {
+    if (isConnected() && !m_streamWorkers.empty())
+      publishStreamTemplates();
+  });
+
+  connect(&csvExport,
+          &CSV::Export::enabledChanged,
+          this,
+          &IO::ConnectionManager::refreshStreamExportFlags);
+
+  static auto& apiServer = API::Server::instance();
+  connect(&apiServer,
+          &API::Server::enabledChanged,
+          this,
+          &IO::ConnectionManager::refreshStreamExportFlags);
+#ifdef BUILD_COMMERCIAL
+  static auto& mdf4Export = MDF4::Export::instance();
+  connect(&mdf4Export,
+          &MDF4::Export::enabledChanged,
+          this,
+          &IO::ConnectionManager::refreshStreamExportFlags);
+#endif
+}
+
+/**
+ * @brief Returns the per-source stream-lane override for @p deviceId ("", "on" or "off").
+ */
+QString IO::ConnectionManager::streamLaneForSource(int deviceId) const
+{
+  static auto& appState = AppState::instance();
+  if (appState.operationMode() != SerialStudio::ProjectFile)
+    return QString();
+
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  for (const auto& src : projectModel.sources())
+    if (src.sourceId == deviceId)
+      return src.streamLane;
+
+  return QString();
+}
+
+/**
+ * @brief Builds one stream source's worker configuration: bindings come from the project's
+ *        datasets (ProjectFile) or are synthesized per audio channel (QuickPlot), carrying
+ *        the PERSISTED uniqueId the dashboard registers its stream targets under (positional
+ *        ids are only the loader's legacy backfill); rate/channels come from the driver.
+ */
+IO::StreamConfig IO::ConnectionManager::buildStreamConfig(int deviceId, HAL_Driver* driver) const
+{
+  SS_ASSERT(driver != nullptr, return {});
+  SS_ASSERT_LOG(deviceId >= 0);
+
+  StreamConfig config;
+  config.sourceId = deviceId;
+
+#ifdef BUILD_COMMERCIAL
+  if (auto* audioDriver = qobject_cast<IO::Drivers::Audio*>(driver)) {
+    config.channels   = std::max(1u, audioDriver->config().capture.channels);
+    config.sampleRate = static_cast<double>(audioDriver->config().sampleRate);
+  }
+#endif
+
+  static auto& appState     = AppState::instance();
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  config.luaFastMode        = projectModel.luaFastMode();
+
+  const auto appendGroupChannels = [&config](const DataModel::Group& group) {
+    for (const auto& dataset : group.datasets) {
+      if (!dataset.enabled || dataset.index <= 0)
+        continue;
+
+      StreamChannelConfig channel;
+      channel.uniqueId =
+        dataset.uniqueId >= 0 ? dataset.uniqueId : DataModel::dataset_unique_id(group, dataset);
+      channel.channel = dataset.index - 1;
+      channel.plot    = dataset.plt;
+#ifdef BUILD_COMMERCIAL
+      channel.fft = dataset.fft || dataset.waterfall;
+#else
+      channel.fft = dataset.fft;
+#endif
+      channel.fftSamples        = dataset.fftSamples;
+      channel.transformLanguage = dataset.transformLanguage;
+      channel.transformCode     = dataset.transformCode;
+      config.datasets.push_back(std::move(channel));
+    }
+  };
+
+  if (appState.operationMode() == SerialStudio::ProjectFile) {
+    for (const auto& group : projectModel.groups())
+      if (group.sourceId == deviceId)
+        appendGroupChannels(group);
+  } else {
+    const int targetSamples = static_cast<int>(config.sampleRate * 0.05);
+    int fftSamples          = 256;
+    while (fftSamples < targetSamples && fftSamples < 8192)
+      fftSamples *= 2;
+
+    for (int i = 0; i < config.channels; ++i) {
+      StreamChannelConfig channel;
+      channel.uniqueId   = DataModel::dataset_unique_id(0, 0, i);
+      channel.channel    = i;
+      channel.plot       = true;
+      channel.fft        = true;
+      channel.fftSamples = fftSamples;
+      config.datasets.push_back(std::move(channel));
+    }
+  }
+
+  return config;
+}
+
+/**
+ * @brief Rebuilds the per-source stream workers: one per device whose lane is on (driver
+ *        default + per-source override, R6); old workers stop first (bounded join). The
+ *        driver's lane flag is set only once a worker will exist -- a lane with no
+ *        channel-bound datasets would otherwise leave that source dark.
+ */
+void IO::ConnectionManager::rebuildStreamWorkers()
+{
+  stopStreamWorkers();
+
+  for (const auto& [deviceId, dm] : m_devices) {
+    if (!dm || !dm->driver())
+      continue;
+
+    HAL_Driver* halDriver = dm->driver();
+    const bool laneOn     = IO::streamLaneOn(halDriver, streamLaneForSource(deviceId));
+
+    auto config       = laneOn ? buildStreamConfig(deviceId, halDriver) : StreamConfig{};
+    const bool active = laneOn && !config.datasets.empty();
+
+#ifdef BUILD_COMMERCIAL
+    if (auto* audioDriver = qobject_cast<IO::Drivers::Audio*>(halDriver))
+      audioDriver->setStreamLaneActive(active);
+#endif
+
+    if (!active)
+      continue;
+
+    auto worker = std::make_unique<StreamWorker>(halDriver, config, nullptr);
+    wireStreamWorkerSinks(*worker);
+    m_streamWorkers.push_back(std::move(worker));
+  }
+
+  refreshStreamExportFlags();
+
+  QSet<int> streamSourceIds;
+  for (const auto& worker : m_streamWorkers)
+    if (worker)
+      streamSourceIds.insert(worker->sourceId());
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  frameBuilder.setStreamSourceIds(streamSourceIds);
+
+  if (!m_streamWorkers.empty() && isConnected())
+    publishStreamTemplates();
+}
+
+/**
+ * @brief Connects one worker's block-rate outputs: full-rate export blocks to the typed
+ *        CSV/MDF4 sinks (queued to the GUI, which is their single SPSC producer) and per-block
+ *        latest values to the FrameBuilder's store ingest (queued to the pipeline thread, the
+ *        store's single writer; spec 0051 R12/R13).
+ */
+void IO::ConnectionManager::wireStreamWorkerSinks(StreamWorker& worker)
+{
+  auto* processor = worker.processor();
+  SS_ASSERT(processor != nullptr, return);
+
+  static auto& csvSink = CSV::Export::instance().streamSink();
+  connect(processor,
+          &IO::StreamProcessor::blockReady,
+          &csvSink,
+          &CSV::StreamExport::ingestBlock,
+          Qt::QueuedConnection);
+
+#ifdef BUILD_COMMERCIAL
+  static auto& mdf4Sink = MDF4::Export::instance().streamSink();
+  connect(processor,
+          &IO::StreamProcessor::blockReady,
+          &mdf4Sink,
+          &MDF4::StreamExport::ingestBlock,
+          Qt::QueuedConnection);
+#endif
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  connect(processor,
+          &IO::StreamProcessor::latestValuesReady,
+          &frameBuilder,
+          &DataModel::FrameBuilder::ingestStreamValues,
+          Qt::QueuedConnection);
+
+  static auto& apiServer = API::Server::instance();
+  connect(processor,
+          &IO::StreamProcessor::blockReady,
+          &apiServer,
+          &API::Server::ingestStreamBlock,
+          Qt::QueuedConnection);
+}
+
+/**
+ * @brief Pushes the current typed-sink enable state (CSV or MDF4 export on) to every worker so
+ *        export payloads are only built while a sink can consume them.
+ */
+void IO::ConnectionManager::refreshStreamExportFlags()
+{
+  static auto& csvExport = CSV::Export::instance();
+  static auto& apiServer = API::Server::instance();
+  bool exportOn          = csvExport.exportEnabled() || apiServer.enabled();
+#ifdef BUILD_COMMERCIAL
+  static auto& mdf4Export = MDF4::Export::instance();
+  exportOn                = exportOn || mdf4Export.exportEnabled();
+#endif
+
+  for (auto& worker : m_streamWorkers)
+    if (worker)
+      worker->setExportActive(exportOn);
+}
+
+/**
+ * @brief Publishes the dashboard structure for every stream source so widget models build
+ *        before display updates arrive: per-source template frames in ProjectFile mode, the
+ *        synthesized audio frame in QuickPlot (spec 0051 T25).
+ */
+void IO::ConnectionManager::publishStreamTemplates()
+{
+  static auto& appState     = AppState::instance();
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+
+  if (appState.operationMode() == SerialStudio::ProjectFile) {
+    for (const auto& worker : m_streamWorkers) {
+      const int sourceId = worker->sourceId();
+      frameBuilder.invokeOnBuilderThread(
+        [sourceId] { frameBuilder.publishSourceTemplate(sourceId); });
+    }
+
+    return;
+  }
+
+  for (const auto& worker : m_streamWorkers) {
+    const int channels = worker->config().channels;
+    frameBuilder.invokeOnBuilderThread(
+      [channels] { frameBuilder.publishQuickPlotAudioTemplate(channels); });
+  }
+}
+
+/**
+ * @brief Stops and destroys every stream worker (idempotent; called on rebuilds and at quit
+ *        from ModuleManager::stopFrameConsumerWorkers before SessionContext::shutdown).
+ */
+void IO::ConnectionManager::stopStreamWorkers()
+{
+  for (auto& worker : m_streamWorkers)
+    if (worker)
+      worker->stop();
+
+  m_streamWorkers.clear();
+}
+
+/**
+ * @brief Returns the live stream workers (GUI thread only; Dashboard drains their display
+ *        rings on the display tick).
+ */
+const std::vector<std::unique_ptr<IO::StreamWorker>>& IO::ConnectionManager::streamWorkers()
+  const noexcept
+{
+  return m_streamWorkers;
+}
+
+/**
  * @brief Rebuilds DeviceManagers for all sources when the project source list changes. Reentrant
  *        triggers coalesce into one queued follow-up rebuild. Never emits sessionClosed: a
  *        rebuild is transient churn that reconnects on its own, and ProcessLauncher reaps the
@@ -1664,6 +1981,8 @@ void IO::ConnectionManager::rebuildDevices()
 
   concludeConnectRequest();
 
+  rebuildStreamWorkers();
+
   Q_EMIT configurationChanged();
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
@@ -1729,32 +2048,6 @@ bool IO::ConnectionManager::projectConfigurationOk() const
   }
 
   return true;
-}
-
-/**
- * @brief Routes a completed frame from device @p deviceId to FrameBuilder.
- */
-void IO::ConnectionManager::onFrameReady(int deviceId, const IO::CapturedDataPtr& frame)
-{
-  SS_ASSERT(frame != nullptr, return);
-  SS_ASSERT_LOG(deviceId >= 0);
-  SS_ASSERT_LOG(!frame->data.isEmpty());
-
-  if (m_paused)
-    return;
-
-  static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  static auto& appState     = AppState::instance();
-
-  if (appState.operationMode() == SerialStudio::ProjectFile)
-    frameBuilder.hotpathRxSourceFrame(deviceId, frame);
-  else
-    frameBuilder.hotpathRxFrame(frame);
-
-#ifdef BUILD_COMMERCIAL
-  static auto& mqttPublisher = MQTT::Publisher::instance();
-  mqttPublisher.hotpathTxRawFrame(deviceId, frame);
-#endif
 }
 
 /**

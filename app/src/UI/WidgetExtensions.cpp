@@ -114,25 +114,16 @@ QString UI::WidgetExtensions::hostApiVersion()
 QStringList UI::WidgetExtensions::reservedIds()
 {
   static const QStringList ids = {
-    QStringLiteral("datagrid"),
-    QStringLiteral("map"),
-    QStringLiteral("gps"),
-    QStringLiteral("gyro"),
-    QStringLiteral("gyroscope"),
-    QStringLiteral("multiplot"),
-    QStringLiteral("accelerometer"),
-    QStringLiteral("plot3d"),
-    QStringLiteral("image"),
-    QStringLiteral("painter"),
-    QStringLiteral("webview"),
-    QStringLiteral("terminal"),
-    QStringLiteral("clock"),
-    QStringLiteral("stopwatch"),
-    QStringLiteral("notification-log"),
-    QStringLiteral("led-panel"),
-    QStringLiteral("bar"),
-    QStringLiteral("gauge"),
-    QStringLiteral("compass"),
+    QStringLiteral("datagrid"),      QStringLiteral("map"),
+    QStringLiteral("gps"),           QStringLiteral("gyro"),
+    QStringLiteral("gyroscope"),     QStringLiteral("multiplot"),
+    QStringLiteral("accelerometer"), QStringLiteral("plot3d"),
+    QStringLiteral("image"),         QStringLiteral("painter"),
+    QStringLiteral("webview"),       QStringLiteral("barpanel"),
+    QStringLiteral("terminal"),      QStringLiteral("clock"),
+    QStringLiteral("stopwatch"),     QStringLiteral("notification-log"),
+    QStringLiteral("led-panel"),     QStringLiteral("bar"),
+    QStringLiteral("gauge"),         QStringLiteral("compass"),
     QStringLiteral("meter"),
   };
   return ids;
@@ -155,7 +146,7 @@ QStringList UI::WidgetExtensions::hostContextNames()
       "Cpp_Misc_Translator Cpp_JSON_ProjectModel Cpp_JSON_ProjectEditor Cpp_ControlScript "
       "Cpp_JSON_ProtoImporter Cpp_JSON_FrameBuilder Cpp_Notifications Cpp_Misc_TimerEvents "
       "Cpp_Misc_CommonFonts Cpp_IO_FileTransmission Cpp_Misc_WorkspaceManager Cpp_Examples "
-      "Cpp_Misc_Demo Cpp_HelpCenter Cpp_ExtensionManager Cpp_Misc_IconEngine "
+      "Cpp_HelpCenter Cpp_ExtensionManager Cpp_Misc_IconEngine "
       "Cpp_Misc_IconRegistry Cpp_Misc_ProblemCenter Cpp_Misc_ConnectionDiagnostics Cpp_UI_CommandRegistry "
       "Cpp_UI_WidgetExtensions Cpp_Misc_GraphicsBackend Cpp_Misc_HighDpiScaling "
       "Cpp_Misc_CrashTracker Cpp_Misc_BackupManager Cpp_Benchmark_Runner Cpp_IO_Audio "

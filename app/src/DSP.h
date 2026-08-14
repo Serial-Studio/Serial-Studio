@@ -63,6 +63,7 @@ namespace DSP {
   v |= v >> 16;
   if constexpr (sizeof(std::size_t) > 4)
     v |= v >> 32;
+
   return v + 1;
 }
 

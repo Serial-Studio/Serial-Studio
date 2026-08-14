@@ -302,8 +302,17 @@ class TestParseBudgetFairShare:
         heavy.set_interval(0.1)
         time.sleep(1.0)
 
+        # The counter DELTA is the recovery signal, not the number of distinct polls: the
+        # producer and the poller both run near 10 Hz, so a fraction of polls alias onto the
+        # same value however healthy the source is. A thinned source advances a handful of
+        # counts per second; a recovered one tracks the ~10 Hz feed.
         heavy_series, _ = _sample_values(api, seconds=1.5, period=0.1)
-        assert _distinct(heavy_series) >= 10, (
-            f"heavy source did not recover to full rate: "
-            f"{_distinct(heavy_series)} distinct values in 1.5 s at 10 Hz"
+        advanced = heavy_series[-1] - heavy_series[0]
+        assert advanced >= 10, (
+            f"heavy source did not recover to full rate: counter advanced {advanced} "
+            f"in 1.5 s at 10 Hz: {heavy_series}"
+        )
+        assert _distinct(heavy_series) >= 6, (
+            f"heavy source still updating in lockstep steps: "
+            f"{_distinct(heavy_series)} distinct values in 1.5 s"
         )

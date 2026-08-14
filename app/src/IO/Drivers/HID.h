@@ -93,6 +93,7 @@ public:
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
+  void setDiscoveryPaused(const bool paused);
   void setDeviceIndex(const int index);
 
 private slots:

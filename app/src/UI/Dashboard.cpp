@@ -28,6 +28,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
+#include "IO/PipelineHost.h"
 #include "MDF4/Player.h"
 #include "Misc/IconEngine.h"
 #include "Misc/TimerEvents.h"
@@ -45,6 +46,7 @@
 #endif
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <QSet>
 #include <QTimer>
@@ -60,6 +62,11 @@ constexpr double kAssumedMaxRateHz    = 1024000.0;
 constexpr double kTimeRingHeadroom    = 1.25;
 constexpr double kSmoothMaxPeriodSec  = 0.002;
 constexpr double kSmoothMaxForwardSec = 0.050;
+
+// Ring-drain budget per display tick: kDrainBudgetNs / fps == 40% of the tick period
+constexpr qint64 kDrainBudgetNs = 400000000LL;
+constexpr int kMaxDisplayFps    = 240;
+constexpr int kBudgetCheckMask  = 7;
 
 // Pre-resolved push fallbacks for GPS / 3D groups missing an axis dataset
 static constexpr double kNoGpsFix   = std::numeric_limits<double>::quiet_NaN();
@@ -156,7 +163,8 @@ static void applyTimerMode(QTimer* timer,
  * @brief Constructs the Dashboard, wires reset signals and loads persisted settings.
  */
 UI::Dashboard::Dashboard()
-  : m_points(kDefaultPlotPoints)
+  : m_drainBudgetNs(kDrainBudgetNs / kMaxDisplayFps)
+  , m_points(kDefaultPlotPoints)
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_thinningActive(false)
@@ -170,6 +178,7 @@ UI::Dashboard::Dashboard()
   , m_persistSettings(true)
   , m_autoLayoutMargin(0)
   , m_autoLayoutSpacing(-1)
+  , m_manualLayoutSpacing(-1)
   , m_updateRetryInProgress(false)
   , m_layoutValid(false)
   , m_streamAvailable(false)
@@ -246,12 +255,13 @@ UI::Dashboard::Dashboard()
   connectStreamAvailableInputs();
 
   static auto& timerEvents = Misc::TimerEvents::instance();
-  connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, [=, this] {
-    if (m_updateRequired) {
-      m_updateRequired = false;
-      Q_EMIT updated();
-    }
-  });
+  connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, &UI::Dashboard::onDisplayTick);
+
+  const auto refreshDrainBudget = [this] {
+    m_drainBudgetNs = kDrainBudgetNs / qBound(1, timerEvents.fps(), kMaxDisplayFps);
+  };
+  connect(&timerEvents, &Misc::TimerEvents::fpsChanged, this, refreshDrainBudget);
+  refreshDrainBudget();
 
   connect(&timerEvents, &Misc::TimerEvents::timeout1Hz, this, &UI::Dashboard::pollThinningState);
 
@@ -274,6 +284,367 @@ UI::Dashboard::Dashboard()
 }
 
 /**
+ * @brief Display-tick drain: ingests the frames and stream updates queued since the last tick
+ *        under a shared wall-clock budget, refreshes the GUI-side data-table mirror the widget
+ *        scripts read, then coalesces the widget repaint into one updated() emission (spec 0051
+ *        M3/M5). The mirror refresh precedes updated() so scripts see this tick.
+ */
+void UI::Dashboard::onDisplayTick()
+{
+  QElapsedTimer clock;
+  clock.start();
+
+  SS_ASSERT(m_drainBudgetNs > 0, return);
+
+  drainDashboardRing(clock, m_drainBudgetNs);
+  drainStreamWorkers(clock, m_drainBudgetNs);
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  frameBuilder.drainTableSnapshot();
+  frameBuilder.drainLatestFrameSnapshot();
+
+  if (m_updateRequired) {
+    m_updateRequired = false;
+    Q_EMIT updated();
+  }
+}
+
+/**
+ * @brief Drains the dashboard ring under @p budgetNs of @p clock, hard-bounded by the ring
+ *        capacity: the producer is a live thread, so draining "until empty" livelocks the GUI.
+ *        Frames past the budget are discarded except the newest, so the display stays current;
+ *        exports are untouched, they fan out on the pipeline thread.
+ */
+void UI::Dashboard::drainDashboardRing(const QElapsedTimer& clock, const qint64 budgetNs)
+{
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  const int max_drain = pipeline.dashboardRingCapacity();
+  SS_ASSERT(max_drain > 0, return);
+  SS_ASSERT(budgetNs > 0, return);
+
+  quint64 discarded = 0;
+  bool over_budget  = false;
+  DataModel::TimestampedFramePtr frame;
+  DataModel::TimestampedFramePtr newest;
+
+  for (int drained = 0; drained < max_drain && pipeline.dequeueDashboardFrame(frame); ++drained) {
+    if (over_budget) [[unlikely]] {
+      newest = frame;
+      ++discarded;
+      continue;
+    }
+
+    hotpathRxFrame(frame);
+    if ((drained & kBudgetCheckMask) == kBudgetCheckMask)
+      over_budget = clock.nsecsElapsed() >= budgetNs;
+  }
+
+  if (newest) [[unlikely]] {
+    hotpathRxFrame(newest);
+    --discarded;
+    newest.reset();
+  }
+
+  frame.reset();
+  pipeline.noteDisplayDrops(discarded);
+}
+
+/**
+ * @brief Drains every stream worker's display ring and applies the updates, publishing the
+ *        current display budget (points/window) to the workers' resize atomics on the way
+ *        (GUI-written, worker-read, eventually consistent by design; spec 0051 T25).
+ */
+void UI::Dashboard::drainStreamWorkers(const QElapsedTimer& clock, const qint64 budgetNs)
+{
+  static auto& ioManager = IO::ConnectionManager::instance();
+  const auto& workers    = ioManager.streamWorkers();
+  if (workers.empty()) [[likely]]
+    return;
+
+  for (const auto& worker : workers) {
+    if (!worker)
+      continue;
+
+    worker->setPixelWidth(qMax(1, m_points / 2));
+    worker->setWindowSec(m_plotTimeRange);
+    drainStreamWorker(*worker, clock, budgetNs);
+  }
+}
+
+/**
+ * @brief Drains one worker's display ring, hard-bounded by the ring capacity and stopped by the
+ *        shared tick budget. Leftovers stay queued for the next tick; a ring that then fills is
+ *        dropped and counted worker-side, which is the reported signal.
+ */
+void UI::Dashboard::drainStreamWorker(IO::StreamWorker& worker,
+                                      const QElapsedTimer& clock,
+                                      const qint64 budgetNs)
+{
+  const int max_drain = worker.displayRingCapacity();
+  SS_ASSERT(max_drain > 0, return);
+  SS_ASSERT(budgetNs > 0, return);
+
+  IO::StreamDisplayUpdatePtr update;
+
+  for (int drained = 0; drained < max_drain && worker.dequeueDisplayUpdate(update); ++drained) {
+    if (update)
+      applyStreamUpdate(*update);
+
+    if ((drained & kBudgetCheckMask) == kBudgetCheckMask && clock.nsecsElapsed() >= budgetNs)
+      break;
+  }
+
+  update.reset();
+}
+
+/**
+ * @brief Ingests one bounded stream display update: latest values into the widget dataset
+ *        copies, envelope pairs into the plot/multiplot time rings (per-source clock advanced
+ *        from block t0, never cleared), FFT window into the FFT series. All work is O(pixels +
+ *        fftSize + datasets), independent of the stream's sample rate (spec 0051 R7/R11).
+ */
+void UI::Dashboard::applyStreamUpdate(const IO::StreamDisplayUpdate& update)
+{
+  if (!m_layoutValid || !m_streamAvailable) [[unlikely]]
+    return;
+
+  const double baseSec = advancePlotClock(update.sourceId, update.t0);
+
+  for (const auto& channel : update.channels)
+    applyStreamChannel(channel, baseSec);
+
+  for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
+    if (it.value().enabled && m_activeMultiplots.value(it.key(), false))
+      feedMultiplotStreamSweep(it.key(), update, baseSec);
+
+  m_updateRequired = true;
+}
+
+/**
+ * @brief Applies one channel's display payload: latest value into every widget dataset copy,
+ *        envelope pairs into the plot/multiplot rings, FFT window into the FFT and waterfall
+ *        series (both hold time-domain samples and transform themselves).
+ */
+void UI::Dashboard::applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpdate& channel,
+                                       double baseSec)
+{
+  const auto refs = m_datasetReferences.constFind(channel.uniqueId);
+  if (refs != m_datasetReferences.cend()) {
+    const QString text = QString::number(channel.latest, 'g', 10);
+    for (auto* dataset : refs.value()) {
+      dataset->isNumeric    = true;
+      dataset->numericValue = channel.latest;
+      dataset->value        = text;
+    }
+  }
+
+  const auto ext_it = m_datasetExtremes.find(channel.uniqueId);
+  if (ext_it != m_datasetExtremes.end()) [[unlikely]] {
+    auto& slot = ext_it.value();
+    if (std::isfinite(channel.latest)) {
+      slot.min   = slot.valid ? qMin(slot.min, channel.latest) : channel.latest;
+      slot.max   = slot.valid ? qMax(slot.max, channel.latest) : channel.latest;
+      slot.valid = true;
+    }
+
+    for (const auto& pair : channel.envelope) {
+      if (!std::isfinite(pair.second))
+        continue;
+
+      slot.min   = slot.valid ? qMin(slot.min, pair.second) : pair.second;
+      slot.max   = slot.valid ? qMax(slot.max, pair.second) : pair.second;
+      slot.valid = true;
+    }
+  }
+
+  const StreamTargets& targets = streamTargetsFor(channel.uniqueId);
+
+  for (const int plotIndex : targets.plotIndexes) {
+    if (!m_activePlots.value(plotIndex, false))
+      continue;
+
+    auto ringIt = m_plotTimeRings.find(plotIndex);
+    if (ringIt == m_plotTimeRings.end()) [[unlikely]]
+      continue;
+
+    for (const auto& pair : channel.envelope)
+      ringIt.value().appendDecimated(baseSec + pair.first, pair.second);
+
+    feedPlotStreamSweep(plotIndex, channel, baseSec);
+  }
+
+  for (const auto& [groupIndex, curveIndex] : targets.multiplotCurves) {
+    if (!m_activeMultiplots.value(groupIndex, false))
+      continue;
+
+    auto ringsIt = m_multiplotTimeRings.find(groupIndex);
+    if (ringsIt == m_multiplotTimeRings.end()) [[unlikely]]
+      continue;
+
+    auto& rings = ringsIt.value();
+    if (curveIndex < 0 || static_cast<std::size_t>(curveIndex) >= rings.size()) [[unlikely]]
+      continue;
+
+    for (const auto& pair : channel.envelope)
+      rings[curveIndex].appendDecimated(baseSec + pair.first, pair.second);
+  }
+
+  if (!channel.hasFft)
+    return;
+
+  for (const int fftIndex : targets.fftIndexes) {
+    if (!m_activeFFTPlots.value(fftIndex, false))
+      continue;
+
+    if (fftIndex < 0 || fftIndex >= m_fftValues.size()) [[unlikely]]
+      continue;
+
+    auto& series = m_fftValues[fftIndex];
+    series.clear();
+    for (const double sample : channel.fftWindow)
+      series.push(sample);
+  }
+
+#ifdef BUILD_COMMERCIAL
+  for (const int fallIndex : targets.waterfallIndexes) {
+    if (!m_activeWaterfalls.value(fallIndex, false))
+      continue;
+
+    if (fallIndex < 0 || fallIndex >= m_waterfallValues.size()) [[unlikely]]
+      continue;
+
+    auto& series = m_waterfallValues[fallIndex];
+    series.clear();
+    for (const double sample : channel.fftWindow)
+      series.push(sample);
+  }
+#endif
+}
+
+/**
+ * @brief Feeds the stream lane's envelope into one plot's sweep engine, the counterpart of the
+ *        frame lane's feedSweep (spec 0051 M4: stream sources never reach that path). Trigger
+ *        detection runs at the envelope's bucket resolution, which is the resolution the trace
+ *        is drawn at, so precision degrades in step with the display and never below it.
+ */
+void UI::Dashboard::feedPlotStreamSweep(int plotIndex,
+                                        const IO::StreamDisplayUpdate::ChannelUpdate& channel,
+                                        double baseSec)
+{
+  auto sweepIt = m_plotSweep.find(plotIndex);
+  if (sweepIt == m_plotSweep.end())
+    return;
+
+  DSP::SweepEngine& sweep = sweepIt.value();
+  if (!sweep.enabled || sweep.back.empty())
+    return;
+
+  for (const auto& pair : channel.envelope) {
+    const double st = sweep.advance(baseSec + pair.first, pair.second);
+    if (st >= 0)
+      sweep.back[0].appendDecimated(st, pair.second);
+  }
+}
+
+/**
+ * @brief Feeds one multiplot's sweep engine from a stream update: the trigger curve alone drives
+ *        advance(), every curve is appended at the time it returns, and curves pair by envelope
+ *        index because one source's channels share a bucket grid. A group this update feeds no
+ *        curve of resolves to no trigger, which keeps frame-fed multiplots out of this path.
+ */
+void UI::Dashboard::feedMultiplotStreamSweep(int groupIndex,
+                                             const IO::StreamDisplayUpdate& update,
+                                             double baseSec)
+{
+  auto sweepIt = m_multiplotSweep.find(groupIndex);
+  if (sweepIt == m_multiplotSweep.end())
+    return;
+
+  DSP::SweepEngine& sweep = sweepIt.value();
+  if (!sweep.enabled || sweep.back.empty())
+    return;
+
+  m_streamSweepCurves.assign(sweep.back.size(), nullptr);
+  for (const auto& channel : update.channels) {
+    for (const auto& [group, curve] : streamTargetsFor(channel.uniqueId).multiplotCurves) {
+      if (group != groupIndex || curve < 0)
+        continue;
+
+      if (static_cast<std::size_t>(curve) < m_streamSweepCurves.size())
+        m_streamSweepCurves[static_cast<std::size_t>(curve)] = &channel;
+    }
+  }
+
+  const int last      = static_cast<int>(m_streamSweepCurves.size()) - 1;
+  const int trigCurve = qBound(0, sweep.triggerCurve, last);
+  const auto* trigger = m_streamSweepCurves[static_cast<std::size_t>(trigCurve)];
+  if (!trigger)
+    return;
+
+  std::size_t count = trigger->envelope.size();
+  for (const auto* curve : m_streamSweepCurves)
+    if (curve)
+      count = std::min(count, curve->envelope.size());
+
+  for (std::size_t i = 0; i < count; ++i) {
+    const double st =
+      sweep.advance(baseSec + trigger->envelope[i].first, trigger->envelope[i].second);
+    if (st < 0)
+      continue;
+
+    for (std::size_t j = 0; j < m_streamSweepCurves.size(); ++j)
+      if (m_streamSweepCurves[j])
+        sweep.back[j].appendDecimated(st, m_streamSweepCurves[j]->envelope[i].second);
+  }
+}
+
+/**
+ * @brief Lazily resolves (and caches) the widget indexes fed by one stream dataset. The cache
+ *        holds indexes only -- ring pointers would dangle across a layout rebuild -- and is
+ *        cleared with the push tables on every reconfigure.
+ */
+const UI::Dashboard::StreamTargets& UI::Dashboard::streamTargetsFor(int uniqueId)
+{
+  auto it = m_streamTargets.find(uniqueId);
+  if (it != m_streamTargets.end()) [[likely]]
+    return it.value();
+
+  StreamTargets targets;
+
+  const auto plots = m_widgetDatasets.constFind(SerialStudio::DashboardPlot);
+  if (plots != m_widgetDatasets.cend())
+    for (int i = 0; i < plots.value().size(); ++i)
+      if (plots.value()[i].uniqueId == uniqueId)
+        targets.plotIndexes.push_back(i);
+
+  const auto ffts = m_widgetDatasets.constFind(SerialStudio::DashboardFFT);
+  if (ffts != m_widgetDatasets.cend())
+    for (int i = 0; i < ffts.value().size(); ++i)
+      if (ffts.value()[i].uniqueId == uniqueId)
+        targets.fftIndexes.push_back(i);
+
+#ifdef BUILD_COMMERCIAL
+  const auto falls = m_widgetDatasets.constFind(SerialStudio::DashboardWaterfall);
+  if (falls != m_widgetDatasets.cend())
+    for (int i = 0; i < falls.value().size(); ++i)
+      if (falls.value()[i].uniqueId == uniqueId)
+        targets.waterfallIndexes.push_back(i);
+#endif
+
+  const auto groups    = m_widgetGroups.constFind(SerialStudio::DashboardMultiPlot);
+  const int groupCount = (groups != m_widgetGroups.cend()) ? groups.value().size() : 0;
+  for (int g = 0; g < groupCount; ++g) {
+    const auto& datasets = groups.value()[g].datasets;
+    for (std::size_t c = 0; c < datasets.size(); ++c)
+      if (datasets[c].uniqueId == uniqueId)
+        targets.multiplotCurves.emplace_back(g, static_cast<int>(c));
+  }
+
+  return m_streamTargets.insert(uniqueId, std::move(targets)).value();
+}
+
+/**
  * @brief Restores the persisted view-state flags and layout preferences from QSettings.
  */
 void UI::Dashboard::restorePersistedSettings()
@@ -288,8 +659,9 @@ void UI::Dashboard::restorePersistedSettings()
   m_plotTimeRange =
     qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
 
-  m_autoLayoutMargin  = qMax(0, m_settings.value("Dashboard/AutoLayoutMargin", 0).toInt());
-  m_autoLayoutSpacing = qMax(-1, m_settings.value("Dashboard/AutoLayoutSpacing", -1).toInt());
+  m_autoLayoutMargin    = qMax(0, m_settings.value("Dashboard/AutoLayoutMargin", 0).toInt());
+  m_autoLayoutSpacing   = qMax(-1, m_settings.value("Dashboard/AutoLayoutSpacing", -1).toInt());
+  m_manualLayoutSpacing = qMax(-1, m_settings.value("Dashboard/ManualLayoutSpacing", -1).toInt());
 }
 
 /**
@@ -402,6 +774,14 @@ int UI::Dashboard::autoLayoutSpacing() const noexcept
 }
 
 /**
+ * @brief Returns the border spacing manual layouts snap and weld to (-1 = shared border).
+ */
+int UI::Dashboard::manualLayoutSpacing() const noexcept
+{
+  return m_manualLayoutSpacing;
+}
+
+/**
  * @brief Returns true when a plot dataset should render against time.
  */
 bool UI::Dashboard::useTimeXAxis(const DataModel::Dataset& dataset) const
@@ -456,6 +836,9 @@ bool UI::Dashboard::streamAvailable() const
 void UI::Dashboard::updateStreamAvailable()
 {
   m_streamAvailable = streamAvailable();
+
+  static auto& pipeline = IO::PipelineHost::instance();
+  pipeline.setDashboardAccepting(m_streamAvailable);
 }
 
 /**
@@ -779,6 +1162,15 @@ int UI::Dashboard::groupUniqueIdForGroupId(int groupId) const
   return -1;
 }
 
+/**
+ * @brief Returns the min/max hold state for one extreme-hold dataset; invalid when the dataset
+ *        never opted in or no finite sample arrived since the last data reset.
+ */
+UI::Dashboard::DatasetExtremes UI::Dashboard::datasetExtremes(int uniqueId) const
+{
+  return m_datasetExtremes.value(uniqueId);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Dataset & group access functions
 //--------------------------------------------------------------------------------------------------
@@ -1095,6 +1487,8 @@ void UI::Dashboard::clearPushTables()
   m_fftPushes.clear();
   m_gpsPushes.clear();
   m_valuePushes.clear();
+  m_extremePushes.clear();
+  m_streamTargets.clear();
   m_multiplotPushes.clear();
   m_yLinePushes.shrink_to_fit();
   m_xLinePushes.shrink_to_fit();
@@ -1180,10 +1574,15 @@ void UI::Dashboard::resetData(const bool notify)
 
   if (appState.operationMode() == SerialStudio::ProjectFile) {
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
-    configureActions(frameBuilder.frame());
+    DataModel::Frame templateFrame;
+    frameBuilder.invokeOnBuilderThreadBlocking(
+      [&templateFrame] { templateFrame = frameBuilder.frame(); });
+    configureActions(templateFrame);
   }
 
   if (notify) {
+    m_datasetExtremes.clear();
+
     m_updateRequired = true;
 
     Q_EMIT updated();
@@ -1512,6 +1911,23 @@ void UI::Dashboard::setAutoLayoutSpacing(const int spacing)
 }
 
 /**
+ * @brief Sets the border spacing manual layouts snap and weld to; clamped to >= -1 (the
+ *        default, which overlaps two borders into one shared line) and persisted.
+ */
+void UI::Dashboard::setManualLayoutSpacing(const int spacing)
+{
+  const int clamped = qMax(-1, spacing);
+  if (m_manualLayoutSpacing == clamped)
+    return;
+
+  m_manualLayoutSpacing = clamped;
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/ManualLayoutSpacing", m_manualLayoutSpacing);
+
+  Q_EMIT manualLayoutSpacingChanged();
+}
+
+/**
  * @brief Forwards the freeze toggle to the project model, the single owner of the stored
  *        flag; the effective state re-derives through the frozenChanged wiring.
  */
@@ -1833,51 +2249,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
     return;
 
   const int sid = payload.sourceId;
-
-  {
-    // code-verify off
-    // Scoped tight: reconfigureDashboard (below) move-assigns m_plotClocks, so this reference
-    // must not survive past this block.
-    PlotClock& clk = m_plotClocks[sid];
-    // code-verify on
-
-    if (!clk.originSet) [[unlikely]] {
-      clk.origin          = frame->timestamp;
-      clk.originSet       = true;
-      clk.groupCount      = 0;
-      clk.groupStartSec   = 0;
-      clk.displayTimeSec  = 0;
-      clk.samplePeriodSec = 0;
-    }
-    clk.relativeFrameTimeSec = std::chrono::duration<double>(frame->timestamp - clk.origin).count();
-
-    ++clk.groupCount;
-    if (clk.relativeFrameTimeSec > clk.groupStartSec) {
-      const int n      = (clk.groupCount > 1) ? (clk.groupCount - 1) : 1;
-      const double gap = clk.relativeFrameTimeSec - clk.groupStartSec;
-
-      // code-verify off
-      // Divide only for rare multi-sample coarse-clock groups; fine-timestamp sources hit n == 1.
-      const double period = (n > 1) ? (gap / n) : gap;
-      // code-verify on
-
-      clk.samplePeriodSec =
-        (clk.samplePeriodSec > 0) ? (0.8 * clk.samplePeriodSec + 0.2 * period) : period;
-      clk.groupStartSec = clk.relativeFrameTimeSec;
-      clk.groupCount    = 1;
-    }
-    const double expected = clk.displayTimeSec + clk.samplePeriodSec;
-
-    double displayNext = qMax(expected, clk.relativeFrameTimeSec);
-
-    const double forwardError = clk.relativeFrameTimeSec - expected;
-    if (clk.samplePeriodSec > 0 && clk.samplePeriodSec < kSmoothMaxPeriodSec && forwardError > 0
-        && forwardError < kSmoothMaxForwardSec)
-      displayNext = expected;
-
-    clk.displayTimeSec   = displayNext;
-    m_plotDisplayTimeSec = displayNext;
-  }
+  (void)advancePlotClock(sid, frame->timestamp);
 
   const auto genIt = m_sourceStructureGen.constFind(sid);
   const bool genKnown =
@@ -1900,6 +2272,59 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   updateDashboardData(payload);
 
   m_updateRequired = true;
+}
+
+/**
+ * @brief Advances the per-source plot clock for one publish (frame or stream block) and returns
+ *        the new forward-only display time, also published to m_plotDisplayTimeSec. Each source
+ *        owns its clock so interleaved publishes never rewind another source's rings.
+ */
+double UI::Dashboard::advancePlotClock(int sourceId,
+                                       const std::chrono::steady_clock::time_point& ts)
+{
+  // code-verify off
+  // Scoped tight: reconfigureDashboard move-assigns m_plotClocks, so this reference must not
+  // survive past this function.
+  PlotClock& clk = m_plotClocks[sourceId];
+  // code-verify on
+
+  if (!clk.originSet) [[unlikely]] {
+    clk.origin          = ts;
+    clk.originSet       = true;
+    clk.groupCount      = 0;
+    clk.groupStartSec   = 0;
+    clk.displayTimeSec  = 0;
+    clk.samplePeriodSec = 0;
+  }
+  clk.relativeFrameTimeSec = std::chrono::duration<double>(ts - clk.origin).count();
+
+  ++clk.groupCount;
+  if (clk.relativeFrameTimeSec > clk.groupStartSec) {
+    const int n      = (clk.groupCount > 1) ? (clk.groupCount - 1) : 1;
+    const double gap = clk.relativeFrameTimeSec - clk.groupStartSec;
+
+    // code-verify off
+    // Divide only for rare multi-sample coarse-clock groups; fine-timestamp sources hit n == 1.
+    const double period = (n > 1) ? (gap / n) : gap;
+    // code-verify on
+
+    clk.samplePeriodSec =
+      (clk.samplePeriodSec > 0) ? (0.8 * clk.samplePeriodSec + 0.2 * period) : period;
+    clk.groupStartSec = clk.relativeFrameTimeSec;
+    clk.groupCount    = 1;
+  }
+  const double expected = clk.displayTimeSec + clk.samplePeriodSec;
+
+  double displayNext = qMax(expected, clk.relativeFrameTimeSec);
+
+  const double forwardError = clk.relativeFrameTimeSec - expected;
+  if (clk.samplePeriodSec > 0 && clk.samplePeriodSec < kSmoothMaxPeriodSec && forwardError > 0
+      && forwardError < kSmoothMaxForwardSec)
+    displayNext = expected;
+
+  clk.displayTimeSec   = displayNext;
+  m_plotDisplayTimeSec = displayNext;
+  return displayNext;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1977,7 +2402,36 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
     }
   }
 
+  foldExtremes(frame.sourceId);
   updateDataSeries(frame.sourceId);
+}
+
+/**
+ * @brief Folds the just-propagated values of one source's extreme-hold datasets into their
+ *        min/max slots (spec 0052). The table holds only opted-in datasets, so the common case
+ *        is one failed hash lookup; non-finite and non-numeric samples never move the hold.
+ */
+void UI::Dashboard::foldExtremes(int sourceId)
+{
+  const auto it = m_extremePushes.constFind(sourceId);
+  if (it == m_extremePushes.cend()) [[likely]]
+    return;
+
+  for (const auto& push : it.value()) {
+    if (!*push.numeric || !std::isfinite(*push.value))
+      continue;
+
+    const double value = *push.value;
+    if (!push.slot->valid) {
+      push.slot->min   = value;
+      push.slot->max   = value;
+      push.slot->valid = true;
+      continue;
+    }
+
+    push.slot->min = qMin(push.slot->min, value);
+    push.slot->max = qMax(push.slot->max, value);
+  }
 }
 
 /**
@@ -2456,6 +2910,13 @@ void UI::Dashboard::buildValuePushes()
         string_targets.insert(&dataset);
   }
 
+  const auto panel_it = m_widgetGroups.constFind(SerialStudio::DashboardBarPanel);
+  if (panel_it != m_widgetGroups.cend()) {
+    for (const auto& group : panel_it.value())
+      for (const auto& dataset : group.datasets)
+        string_targets.insert(&dataset);
+  }
+
   addExtensionStringTargets(string_targets);
 
   for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it) {
@@ -2464,6 +2925,42 @@ void UI::Dashboard::buildValuePushes()
       for (const auto& dataset : group.datasets)
         table.push_back(makeValuePush(dataset, string_targets));
   }
+
+  buildExtremePushes();
+}
+
+/**
+ * @brief Pre-resolves the per-source extreme-hold fold tables (spec 0052): one entry per opted-in
+ *        dataset, pointing at the address-stable m_datasets copy and its m_datasetExtremes slot.
+ *        Datasets that never opt in contribute no entry, so the per-frame fold walks nothing.
+ */
+void UI::Dashboard::buildExtremePushes()
+{
+  m_extremePushes.clear();
+
+  for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it)
+    for (const auto& group : it.value().groups)
+      for (const auto& dataset : group.datasets)
+        appendExtremePush(it.key(), dataset);
+}
+
+/**
+ * @brief Appends one extreme-hold fold entry when @a dataset opted in and resolves in m_datasets.
+ */
+void UI::Dashboard::appendExtremePush(int sourceId, const DataModel::Dataset& dataset)
+{
+  if (!dataset.extremeHold)
+    return;
+
+  const auto ds_it = m_datasets.constFind(dataset.uniqueId);
+  if (ds_it == m_datasets.cend())
+    return;
+
+  ExtremePush push;
+  push.slot    = &m_datasetExtremes[dataset.uniqueId];
+  push.value   = &ds_it.value().numericValue;
+  push.numeric = &ds_it.value().isNumeric;
+  m_extremePushes[sourceId].push_back(push);
 }
 
 /**

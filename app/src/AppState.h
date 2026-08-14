@@ -80,7 +80,6 @@ public slots:
   void setupExternalConnections();
   void restoreLastProject();
   void setEphemeralSession(bool ephemeral);
-  void setDemoSession(const QString& demoDir);
   void setOperationMode(SerialStudio::OperationMode mode);
 
 private slots:
@@ -92,7 +91,6 @@ private:
 private:
   QSettings m_settings;
   bool m_ephemeralSession;
-  QString m_demoSessionDir;
   QString m_projectFilePath;
   SerialStudio::OperationMode m_operationMode;
   IO::FrameConfig m_frameConfig;

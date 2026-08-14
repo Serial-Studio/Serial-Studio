@@ -110,6 +110,7 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardClock:
     case DashboardStopwatch:
     case DashboardWebView:
+    case DashboardBarPanel:
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
     case DashboardOutputPanel:
@@ -186,6 +187,8 @@ static QString dashboardWidgetIconName(const SerialStudio::DashboardWidget w)
       return QStringLiteral("plot3d");
     case SerialStudio::DashboardWebView:
       return QStringLiteral("webview");
+    case SerialStudio::DashboardBarPanel:
+      return QStringLiteral("barpanel");
 #ifdef BUILD_COMMERCIAL
     case SerialStudio::DashboardImageView:
       return QStringLiteral("image");
@@ -340,6 +343,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardWebView:
       return tr("Web Views");
       break;
+    case DashboardBarPanel:
+      return tr("Bar Panels");
+      break;
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
       return tr("Image Views");
@@ -428,6 +434,9 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
 
   if (widget == "webview")
     return DashboardWebView;
+
+  if (widget == "barpanel")
+    return DashboardBarPanel;
 
 #ifdef BUILD_COMMERCIAL
   if (widget == "image")
@@ -587,6 +596,9 @@ QString SerialStudio::groupWidgetId(const GroupWidget widget)
     case WebView:
       return "webview";
       break;
+    case BarPanel:
+      return "barpanel";
+      break;
 #ifdef BUILD_COMMERCIAL
     case ImageView:
       return "image";
@@ -629,6 +641,9 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString& id)
 
   if (id == "webview")
     return WebView;
+
+  if (id == "barpanel")
+    return BarPanel;
 
 #ifdef BUILD_COMMERCIAL
   if (id == "image")
@@ -761,6 +776,30 @@ QColor SerialStudio::getDatasetColor(const DataModel::Dataset& dataset)
   }
 
   return getDatasetColor(dataset.index);
+}
+
+/**
+ * @brief Returns the shared single-accent color for non-plot widgets: the theme's first widget
+ *        color, so severity stays the only varying color axis on instruments (spec 0052).
+ */
+QColor SerialStudio::getDatasetAccentColor()
+{
+  return getDatasetColor(1);
+}
+
+/**
+ * @brief Resolves a dataset's single-accent display color: a valid explicit override wins, else
+ *        the shared accent.
+ */
+QColor SerialStudio::getDatasetAccentColor(const DataModel::Dataset& dataset)
+{
+  if (!dataset.color.isEmpty()) {
+    const auto color = QColor::fromString(dataset.color);
+    if (color.isValid())
+      return color;
+  }
+
+  return getDatasetAccentColor();
 }
 
 /**

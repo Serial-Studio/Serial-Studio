@@ -1326,6 +1326,7 @@ message ProjectDatasetUpdateRequest {
   double wgtMin = 38;
   string widget = 39;  // enum: "", "bar", "compass", "gauge", "meter"
   int64 xAxisId = 40;
+  bool extremeHold = 41;
 }
 
 message ProjectDryRunEndToEndRequest {
@@ -1907,6 +1908,14 @@ message SessionsVerifyRequest {
   int64 sessionId = 2;
 }
 
+message StreamGetInfoRequest {
+  string id = 1;
+}
+
+message StreamGetSourcesRequest {
+  string id = 1;
+}
+
 message SystemExecRequest {
   string id = 1;
   google.protobuf.ListValue args = 2;
@@ -1924,10 +1933,6 @@ message SystemProjectDirRequest {
 }
 
 message SystemRunningProcessesRequest {
-  string id = 1;
-}
-
-message SystemStartDemoRequest {
   string id = 1;
 }
 
@@ -3085,6 +3090,12 @@ service SerialStudioTypedAPI {
   // Verify a stored session's reproducibility in a child process (async; poll sessions.getVerification; params: sessionId)
   rpc SessionsVerify(SessionsVerifyRequest) returns (CommandResponse);
 
+  // Report the typed sample-stream surface: how many stream sources are live, the wire encoding of a streamBlock line (base64 float32le), the per-subscriber queue depth before the oldest block is dropped and counted, and the names of the connection-scoped commands (stream.subscribe / stream.unsubscribe) a subscriber sends on its own socket.
+  rpc StreamGetInfo(StreamGetInfoRequest) returns (CommandResponse);
+
+  // List every live stream source: sourceId, channel count, sample rate, and the dataset uniqueIds its blocks carry.
+  rpc StreamGetSources(StreamGetSourcesRequest) returns (CommandResponse);
+
   // Launch a helper process (e.g. "python" with a script path). Control script only -- rejected over the network/SDK. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.
   rpc SystemExec(SystemExecRequest) returns (CommandResponse);
 
@@ -3096,9 +3107,6 @@ service SerialStudioTypedAPI {
 
   // List the helper processes currently managed by system.exec.
   rpc SystemRunningProcesses(SystemRunningProcessesRequest) returns (CommandResponse);
-
-  // Start the bundled zero-hardware rocket-launch demo: stages the demo project, opens it, and connects the simulated source so the dashboard streams live data. Unavailable in operator deployments.
-  rpc SystemStartDemo(SystemStartDemoRequest) returns (CommandResponse);
 
   // Get serialized layout JSON from WindowManager
   rpc UiWindowGetLayout(UiWindowGetLayoutRequest) returns (CommandResponse);

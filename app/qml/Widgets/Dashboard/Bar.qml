@@ -63,6 +63,14 @@ Item {
   }
 
   //
+  // Severity-first fill color (spec 0052): the active band's color when bands exist, the
+  // accent otherwise. alarmColorForSeverity(-1) resolves to WARNING, so the gate is explicit.
+  //
+  readonly property color fillBaseColor: model.activeBandSeverity >= 0
+                                         ? Cpp_ThemeManager.alarmColorForSeverity(model.activeBandSeverity)
+                                         : root.color
+
+  //
   // Helper properties
   //
   readonly property bool isHorizontal: root.width > 1.5 * root.height
@@ -273,6 +281,37 @@ Item {
               }
 
               //
+              // Alarm-band zones drawn full-breadth on the well, under the fill, so the
+              // whole band structure stays readable at any value (spec 0052)
+              //
+              Repeater {
+                model: root.model.alarmBands
+                delegate: Rectangle {
+                  required property var modelData
+                  opacity: 0.32
+                  antialiasing: true
+                  readonly property real innerW: innerWell.width - innerWell.border.width * 2
+                  readonly property real innerH: innerWell.height - innerWell.border.width * 2
+                  color: modelData.customColor && modelData.customColor.length > 0
+                         ? modelData.customColor
+                         : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
+
+                  x: isHorizontal
+                     ? innerWell.border.width + modelData.fracMin * innerW
+                     : innerWell.border.width
+                  y: isHorizontal
+                     ? innerWell.border.width
+                     : innerWell.border.width + (1 - modelData.fracMax) * innerH
+                  width: isHorizontal
+                         ? Math.max(0, (modelData.fracMax - modelData.fracMin) * innerW)
+                         : innerW
+                  height: isHorizontal
+                          ? innerH
+                          : Math.max(0, (modelData.fracMax - modelData.fracMin) * innerH)
+                }
+              }
+
+              //
               // Coloured fill that grows from low end of the range
               //
               Rectangle {
@@ -295,9 +334,9 @@ Item {
 
                 gradient: Gradient {
                   orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
-                  GradientStop { position: 0.0; color: Qt.lighter(root.color, 1.20) }
-                  GradientStop { position: 0.5; color: root.color }
-                  GradientStop { position: 1.0; color: Qt.darker(root.color, 1.10) }
+                  GradientStop { position: 0.0; color: Qt.lighter(root.fillBaseColor, 1.20) }
+                  GradientStop { position: 0.5; color: root.fillBaseColor }
+                  GradientStop { position: 1.0; color: Qt.darker(root.fillBaseColor, 1.10) }
                 }
 
                 Rectangle {
@@ -320,29 +359,21 @@ Item {
             }
 
             //
-            // Alarm-band zone strips on the glass, along the reading edge (like the
-            // coloured temperature zones printed on a thermometer tube).
+            // Min/max hold markers (spec 0052): thin ticks pinned at the extreme values
+            // observed since the last data reset, spanning the full track breadth
             //
             Repeater {
-              model: root.model.alarmBands
+              model: root.model.extremesValid ? [root.model.minSeenFrac, root.model.maxSeenFrac]
+                                              : []
               delegate: Rectangle {
                 required property var modelData
-                opacity: 0.65
+                opacity: 0.9
                 antialiasing: true
-                readonly property real bandLen: Math.max(0, (modelData.fracMax - modelData.fracMin) * progressBar.innerLen)
-                readonly property real bandThickness: Math.max(4, Math.min(7, progressBar.innerBreadth * 0.14))
-                color: modelData.customColor && modelData.customColor.length > 0
-                       ? modelData.customColor
-                       : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
-
-                x: isHorizontal
-                   ? progressBar.posFor(modelData.fracMin)
-                   : progressBar.width - progressBar.wellInset - bandThickness
-                y: isHorizontal
-                   ? progressBar.height - progressBar.wellInset - bandThickness
-                   : progressBar.posFor(modelData.fracMax)
-                width: isHorizontal ? bandLen : bandThickness
-                height: isHorizontal ? bandThickness : bandLen
+                color: Cpp_ThemeManager.colors["widget_text"]
+                x: isHorizontal ? progressBar.posFor(modelData) - 1 : -2
+                y: isHorizontal ? -2 : progressBar.posFor(modelData) - 1
+                width: isHorizontal ? 2 : progressBar.width + 4
+                height: isHorizontal ? progressBar.height + 4 : 2
               }
             }
 

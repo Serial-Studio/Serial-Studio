@@ -726,14 +726,6 @@ Item {
   }
 
   //
-  // Zero-hardware demo project: author-only, commercial builds only
-  //
-  function showDemo() {
-    if (!app.runtimeMode && app.proVersion)
-      Cpp_Misc_Demo.startDemo()
-  }
-
-  //
   // Extension manager: author-only
   //
   function showExtensionManager() {

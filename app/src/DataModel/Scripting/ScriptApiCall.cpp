@@ -47,6 +47,7 @@ extern "C" {
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "IO/PipelineHost.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
 
@@ -252,7 +253,10 @@ static void jsonValueToLua(lua_State* L, const QJsonValue& v, int depth)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Runs the API command synchronously and returns the wrapped CommandResponse.
+ * @brief Runs the API command synchronously and returns the wrapped CommandResponse. Handlers
+ *        assume the GUI thread, so a call from a pipeline-hosted engine (parser or transform,
+ *        spec 0051 M3) marshals there blocking; the parked bracket lets GUI-side marshals run
+ *        inline against the quiescent pipeline instead of deadlocking (PipelineHost contract).
  */
 static API::CommandResponse dispatchApiCall(const QString& method, const QJsonObject& params)
 {
@@ -262,7 +266,25 @@ static API::CommandResponse dispatchApiCall(const QString& method, const QJsonOb
   request.params  = params;
 
   static auto& commandHandler = API::CommandHandler::instance();
-  return commandHandler.processCommand(request);
+  if (QThread::currentThread() == qApp->thread())
+    return commandHandler.processCommand(request);
+
+  static auto& pipelineHost = IO::PipelineHost::instance();
+  const bool onPipeline     = (QThread::currentThread() == pipelineHost.pipelineThread());
+
+  API::CommandResponse response;
+  if (onPipeline)
+    IO::PipelineHost::setPipelineParkedOnGui(true);
+
+  QMetaObject::invokeMethod(
+    qApp,
+    [&response, &request] { response = commandHandler.processCommand(request); },
+    Qt::BlockingQueuedConnection);
+
+  if (onPipeline)
+    IO::PipelineHost::setPipelineParkedOnGui(false);
+
+  return response;
 }
 
 //--------------------------------------------------------------------------------------------------

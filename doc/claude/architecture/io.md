@@ -17,6 +17,35 @@
 - Live drivers may have empty device lists. UART/Modbus call `refreshSerialDevices()` /
   `refreshSerialPorts()` in `open()` if empty.
 
+## Typed Stream Lane (spec 0051)
+
+Dense typed sample sources bypass the frame pipeline entirely. Two things decide the lane:
+the driver (`HAL_Driver::isStreamCapable()`, true for Audio) and the per-source project
+override `streamLane` (`""`/absent = auto, `"on"`, `"off"`); `IO::streamLaneOn()` is the one
+resolver. A lane-active driver publishes `IO::SampleBlock` (interleaved float32 + channel
+count + `t0` + `dt`) through `publishSampleBlock()`; a lane-off audio source keeps the legacy
+CSV text path, so the branch inside `Audio::processInputBuffer` is deliberate, not dead code.
+
+- **`IO::StreamWorker`** (GUI facade) owns one `QThread` per stream source, the display SPSC
+  ring and the resize/export atomics; `ConnectionManager::rebuildStreamWorkers()` creates them
+  beside the DeviceManagers and `stopStreamWorkers()` joins them FIRST in
+  `ModuleManager::stopFrameConsumerWorkers()`. `stop()` is: disconnect the feed, queue engine
+  teardown (script states die on their own thread), quit, bounded 5 s wait, then
+  **warn-and-abandon** on a hung Fast-mode script — the facade latches `abandoned()` and never
+  deletes a processor that may still be running (R21, spec 0046 precedent).
+- **`IO::StreamProcessor`** (worker-affine) does every per-sample thing: channel extraction into
+  a reused float64 scratch, `transform_block(samples, info)` once per block (frozen R9 info
+  payload) or the per-sample `transform(value)` fallback, min/max envelope reduction on the
+  display grid, FFT ring append, latest values. Safe/Fast mode is the project's `luaFastMode`
+  (interpreter + count hook + 100 ms deadline / JIT + no hook); `ffi` and `jit` are never
+  opened. A failed or aborted transform counts an error and the block falls back to raw.
+- **Everything leaving the worker is per block, never per sample**: a bounded display update
+  through the SPSC ring (drained by `Dashboard::onDisplayTick`), `blockReady` (full-rate typed
+  export payload, queued to the GUI-affine CSV/MDF4 stream sinks and the API server —
+  the GUI is thus the single SPSC producer for each sink), and `latestValuesReady` (queued to
+  `FrameBuilder::ingestStreamValues`, which runs on the pipeline thread so the data-table
+  store keeps exactly one writer). Export payloads are only built while a sink is live.
+
 ## Opening a Link — Synchronous, Per-Driver
 
 `DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls

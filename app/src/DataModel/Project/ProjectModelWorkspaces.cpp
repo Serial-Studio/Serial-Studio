@@ -647,8 +647,12 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
   const auto mode = appState.operationMode();
-  const auto& groups =
-    (mode == SerialStudio::QuickPlot) ? frameBuilder.quickPlotFrame().groups : m_groups;
+  std::vector<DataModel::Group> quickPlotGroups;
+  if (mode == SerialStudio::QuickPlot)
+    frameBuilder.invokeOnBuilderThreadBlocking(
+      [&] { quickPlotGroups = frameBuilder.quickPlotFrame().groups; });
+
+  const auto& groups = (mode == SerialStudio::QuickPlot) ? quickPlotGroups : m_groups;
 
   QMap<SerialStudio::DashboardWidget, int> groupIdx;
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;

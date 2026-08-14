@@ -118,6 +118,9 @@ public slots:
 
 private:
   void buildWidgetForType();
+#ifdef BUILD_COMMERCIAL
+  [[nodiscard]] bool buildCommercialWidgetForType();
+#endif
   [[nodiscard]] bool buildExtensionModel();
   void failExtension(const QString& error);
 

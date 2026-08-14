@@ -723,6 +723,51 @@ Item {
         opacity: _gestureOverlay.guideOpacity
         border.color: Cpp_ThemeManager.colors["highlight"]
       }
+
+      //
+      // Wrench-fraction resize preview: the footprint the window lands on, labelled with
+      // its width and height as canvas fractions
+      //
+      Rectangle {
+        id: _fractionPreview
+
+        radius: 2
+        border.width: 1
+        x: _wm.fractionPreviewRect.x
+        y: _wm.fractionPreviewRect.y
+        width: _wm.fractionPreviewRect.width
+        height: _wm.fractionPreviewRect.height
+        visible: _wm.fractionPreviewLabel.length > 0
+        opacity: _gestureOverlay.guideOpacity
+        border.color: Cpp_ThemeManager.colors["highlight"]
+        color: Qt.alpha(Cpp_ThemeManager.colors["highlight"], 0.14)
+
+        //
+        // Centered on the footprint, but allowed to overflow it (a 1/16 tile is far
+        // narrower than the readout) and clamped so it never leaves the canvas
+        //
+        Rectangle {
+          radius: 3
+          color: Cpp_ThemeManager.colors["highlight"]
+          width: _fractionLabel.implicitWidth + 12
+          height: _fractionLabel.implicitHeight + 6
+          x: Math.max(-parent.x,
+                      Math.min((parent.width - width) / 2,
+                               _gestureOverlay.width - parent.x - width))
+          y: Math.max(-parent.y,
+                      Math.min((parent.height - height) / 2,
+                               _gestureOverlay.height - parent.y - height))
+
+          Label {
+            id: _fractionLabel
+
+            anchors.centerIn: parent
+            text: _wm.fractionPreviewLabel
+            color: Cpp_ThemeManager.colors["highlighted_text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
+          }
+        }
+      }
     }
 
     //

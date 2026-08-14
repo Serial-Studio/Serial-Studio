@@ -225,6 +225,7 @@ private:
 [[nodiscard]] bool waterfallEnabled(const Dataset& d, const ProjectModel& pm);
 [[nodiscard]] bool widgetSelectable(const Dataset& d, const ProjectModel& pm);
 [[nodiscard]] bool widgetRangeApplicable(const Dataset& d, const ProjectModel& pm);
+[[nodiscard]] bool extremeHoldApplicable(const Dataset& d, const ProjectModel& pm);
 [[nodiscard]] bool ledEnabled(const Dataset& d, const ProjectModel& pm);
 [[nodiscard]] bool ledBandsAbsent(const Dataset& d, const ProjectModel& pm);
 

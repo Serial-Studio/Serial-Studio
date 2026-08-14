@@ -26,6 +26,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/SchemaBuilder.h"
+#include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -748,13 +749,27 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueGet(const QString& i
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  const auto& store         = frameBuilder.tableStore();
-  if (!store.isInitialized())
+
+  bool initialized = false;
+  bool found       = false;
+  DataModel::RegisterValue value;
+  DataModel::readTableView(frameBuilder.guiTableApiContext(), [&](const auto& store) {
+    initialized = store.isInitialized();
+    if (!initialized)
+      return;
+
+    const auto* entry = store.get(table, name);
+    if (entry) {
+      value = *entry;
+      found = true;
+    }
+  });
+
+  if (!initialized)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
 
-  const auto* value = store.get(table, name);
-  if (!value)
+  if (!found)
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
@@ -763,15 +778,17 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueGet(const QString& i
   QJsonObject result;
   result[QStringLiteral("table")]     = table;
   result[QStringLiteral("name")]      = name;
-  result[QStringLiteral("isNumeric")] = value->isNumeric;
+  result[QStringLiteral("isNumeric")] = value.isNumeric;
   result[QStringLiteral("value")] =
-    value->isNumeric ? QJsonValue(value->numericValue) : QJsonValue(value->stringValue);
+    value.isNumeric ? QJsonValue(value.numericValue) : QJsonValue(value.stringValue);
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
  * @brief Writes a register's live runtime value into the data-table store, mirroring the
  *        parser/transform tableSet() value semantics (numeric when parseable, string otherwise).
+ *        A GUI-thread caller queues the write and reports whether the register resolved, since
+ *        waiting for the store's thread would park the GUI behind the pipeline.
  */
 API::CommandResponse API::Handlers::DataTablesHandler::valueSet(const QString& id,
                                                                 const QJsonObject& params)
@@ -798,12 +815,26 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueSet(const QString& i
     rv.stringValue = v.toString();
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  auto& store               = frameBuilder.tableStore();
-  if (!store.isInitialized())
+
+  const auto& tableCtx = frameBuilder.guiTableApiContext();
+
+  bool initialized = false;
+  bool written     = false;
+  DataModel::readTableView(tableCtx, [&](const auto& store) {
+    initialized = store.isInitialized();
+    if (initialized)
+      written = (store.get(table, name) != nullptr);
+  });
+
+  if (written)
+    DataModel::writeTableStore(
+      tableCtx, [table, name, rv] { (void)frameBuilder.tableStore().set(table, name, rv); });
+
+  if (!initialized)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
 
-  if (!store.set(table, name, rv))
+  if (!written)
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
@@ -834,12 +865,18 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueHandle(const QString
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  const auto& store         = frameBuilder.tableStore();
-  if (!store.isInitialized())
+
+  bool initialized = false;
+  qint64 handle    = -1;
+  DataModel::readTableView(frameBuilder.guiTableApiContext(), [&](const auto& store) {
+    initialized = store.isInitialized();
+    if (initialized)
+      handle = store.handleOf(table, name);
+  });
+
+  if (!initialized)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
-
-  const qint64 handle = store.handleOf(table, name);
 
   QJsonObject result;
   result[QStringLiteral("table")]  = table;
@@ -862,28 +899,42 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueGetH(const QString& 
     static_cast<qint64>(SerialStudio::toDouble(params.value(QStringLiteral("handle"))));
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  const auto& store         = frameBuilder.tableStore();
-  if (!store.isInitialized())
+
+  bool initialized = false;
+  bool found       = false;
+  DataModel::RegisterValue value;
+  DataModel::readTableView(frameBuilder.guiTableApiContext(), [&](const auto& store) {
+    initialized = store.isInitialized();
+    if (!initialized)
+      return;
+
+    const auto* entry = store.getByHandle(handle);
+    if (entry) {
+      value = *entry;
+      found = true;
+    }
+  });
+
+  if (!initialized)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
 
-  const auto* value = store.getByHandle(handle);
-
   QJsonObject result;
   result[QStringLiteral("handle")] = static_cast<double>(handle);
-  result[QStringLiteral("found")]  = (value != nullptr);
+  result[QStringLiteral("found")]  = found;
   result[QStringLiteral("value")]  = QJsonValue();
-  if (value) {
-    result[QStringLiteral("isNumeric")] = value->isNumeric;
+  if (found) {
+    result[QStringLiteral("isNumeric")] = value.isNumeric;
     result[QStringLiteral("value")] =
-      value->isNumeric ? QJsonValue(value->numericValue) : QJsonValue(value->stringValue);
+      value.isNumeric ? QJsonValue(value.numericValue) : QJsonValue(value.stringValue);
   }
 
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
- * @brief Writes a register's live value by handle; written=false for stale/invalid/constant.
+ * @brief Writes a register's live value by handle; written=false for a stale or invalid handle.
+ *        A GUI-thread caller queues the write, so a constant register still reports written=true.
  */
 API::CommandResponse API::Handlers::DataTablesHandler::valueSetH(const QString& id,
                                                                  const QJsonObject& params)
@@ -906,12 +957,24 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueSetH(const QString& 
     rv.stringValue = v.toString();
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  auto& store               = frameBuilder.tableStore();
-  if (!store.isInitialized())
+
+  const auto& tableCtx = frameBuilder.guiTableApiContext();
+
+  bool initialized = false;
+  bool written     = false;
+  DataModel::readTableView(tableCtx, [&](const auto& store) {
+    initialized = store.isInitialized();
+    if (initialized)
+      written = (store.getByHandle(handle) != nullptr);
+  });
+
+  if (written)
+    DataModel::writeTableStore(
+      tableCtx, [handle, rv] { (void)frameBuilder.tableStore().setByHandle(handle, rv); });
+
+  if (!initialized)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Data-table store not initialized (no project)"));
-
-  const bool written = store.setByHandle(handle, rv);
 
   QJsonObject result;
   result[QStringLiteral("handle")]  = static_cast<double>(handle);

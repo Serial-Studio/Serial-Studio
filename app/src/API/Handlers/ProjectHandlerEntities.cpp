@@ -177,15 +177,15 @@ API::CommandResponse API::Handlers::ProjectHandler::groupAdd(const QString& id,
   }
 
   const int widget_type = params.value(QStringLiteral("widgetType")).toInt();
-  if (widget_type < 0 || widget_type > static_cast<int>(SerialStudio::Painter)) {
+  if (widget_type < 0 || widget_type > static_cast<int>(SerialStudio::BarPanel)) {
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
       QStringLiteral("Invalid widgetType: must be 0..%1 "
                      "(see GroupWidget enum: 0=DataGrid, 1=Accelerometer, "
                      "2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, "
-                     "6=Plot3D, 7=ImageView, 8=Painter)")
-        .arg(static_cast<int>(SerialStudio::Painter)));
+                     "6=Plot3D, 7=ImageView, 8=Painter, 9=WebView, 10=BarPanel)")
+        .arg(static_cast<int>(SerialStudio::BarPanel)));
   }
 
   const auto widget         = static_cast<SerialStudio::GroupWidget>(widget_type);

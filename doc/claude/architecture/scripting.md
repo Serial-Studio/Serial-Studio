@@ -31,7 +31,7 @@ path runs under a protected bootstrap so `lua_atpanic` is unreachable.
     only (**not** `AllExtensions`). Watchdog: **always route through
     `JsScriptEngine::guardedCall()`** (concrete engine — the `IScriptEngine` interface does
     not carry it); never call `parseFunction.call()` directly.
-  - `LuaScriptEngine` — Lua 5.4 (`lib/lua/lua54`), one `lua_State*` per source.
+  - `LuaScriptEngine` — LuaJIT (`lib/luajit`), one `lua_State*` per source.
   - `CFrameParser` — native C++ parametrized templates (`SerialStudio::Native = 2`). The
     "script" is a canonical JSON descriptor `{"params": {...}, "template": "<id>"}` built by
     `CFrameParser::buildDescriptor()` (compact + key-sorted, so the BackupManager SHA stays
@@ -147,6 +147,13 @@ lag on every keystroke/drag.
   `applyTransformJs` sets `m_jsTransformTimedOut`; the user-facing notification is posted once
   from the main thread after the loop, never from the watchdog thread.
 - Non-finite numeric results are rejected (`[[unlikely]]` guarded) and `rawValue` is returned.
+- **Stream-lane datasets run their transform in the `IO::StreamWorker`, not here (spec 0051).**
+  That engine is worker-owned (same safe-lib sandbox, same Safe/Fast mode) and prefers
+  `transform_block(samples, info) -> samples`, called ONCE per captured block with the
+  dataset's samples; `info` carries exactly `sourceId`, `uniqueId`, `blockNumber`,
+  `timestampMs`, `sampleRate`, `count`, `firstSampleIndex` (frozen at ship). A dataset that
+  only defines `transform(value)` still works — it is called per sample on the worker, at full
+  rate. A failing or watchdog-aborted block falls back to raw samples and counts an error.
 - **Editor**: `DatasetTransformEditor` prefills a multiline-comment placeholder when the
   dataset has no transform; `onApply` runs `validateTransform(code, language, error)` which
   returns a `TransformStatus` (`Ok` / `SyntaxError` / `NoFunction`). `SyntaxError` and
@@ -166,6 +173,30 @@ lag on every keystroke/drag.
   value explicitly at the top of an early dataset.
 - **Transform API** (injected at compile time): `tableGet`, `tableSet`, `datasetGetRaw`,
   `datasetGetFinal`. Lua = C closures; JS = `TableApiBridge` QObject.
+- **Thread routing (spec 0051 M5) — one rule, both languages.** The store's single writer is the
+  pipeline thread. `DataModel::readTableView` / `writeTableStore` (templates in `DataTable.h`)
+  are the *only* definition of how a script reaches it, and both the JS `TableApiBridge` and
+  the Lua C closures go through them, carrying the same `DataModel::TableApiContext`
+  (`store` + `owner` + `mirror`). Reads: live store when the caller owns it (parser and dataset
+  transforms), the GUI-side `DataTableSnapshot` mirror on the GUI thread (painters, editors,
+  dialogs), the live store behind `PipelineHost::runOnObjectThread` for any other worker
+  (control script, macros). Writes: direct / queued fire-and-forget from the GUI / blocking
+  elsewhere. **Never make a GUI-thread read block on the pipeline thread** — the wait spins a
+  nested `QEventLoop` that fires the display tick and re-enters the very script that is
+  mid-call, and at 26 reads per painter frame it blew the 250 ms watchdog outright.
+- **The mirror.** `FrameBuilder::publishTableSnapshot()` (pipeline) copies the store into a
+  4-slot SPSC ring only when `generation`/`writeClock` moved; `drainTableSnapshot()` (GUI)
+  adopts the newest and requests the next, once per display tick, before `Dashboard::updated()`.
+  It is one tick stale by construction, and armed only by `noteGuiTableApiUser()` — i.e. when a
+  script engine is wired up *on the GUI thread*, so pipeline-side transform engines never make
+  the builder pay for a snapshot nobody reads.
+- **Lua closures: resolve, route, then push.** A `lua_State` belongs to one thread, so no
+  `lua_*` call may appear inside a routed lambda — read the arguments, route the pure store
+  access, push the result after. This is also why `luaDatasetSelector` runs `luaL_checkinteger`
+  up front: its error `longjmp` must unwind the Lua state's own thread, not the pipeline's.
+  The interned-pointer fast paths (`getByInternedKey`, `getDataset*ByAliasInterned`) are valid
+  **only** on the store thread — they key on raw `lua_State` string pointers, which mean nothing
+  across states — so off-thread callers take the QString-keyed lookups instead.
 - **Processing order**: group-array then dataset-array. A transform sees raw of ALL datasets,
   final of EARLIER datasets only.
 - `applyTransform` returns `QVariant` (double or QString). `Dataset` has

@@ -256,7 +256,8 @@ if (typeof __ss_bridge !== 'undefined') {
 
   var __ssGroupWidgets = {
     datagrid: 0, accelerometer: 1, gyroscope: 2, gps: 3,
-    multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8
+    multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8,
+    webview: 9, barpanel: 10
   };
   var __ssDatasetBits = {
     plot: 1, fft: 2, bar: 4, gauge: 8, compass: 16, led: 32, waterfall: 64
@@ -402,6 +403,7 @@ project.template = project.template || {};
 project.workspace = project.workspace || {};
 var scripts = (typeof scripts !== 'undefined') ? scripts : {};
 var sessions = (typeof sessions !== 'undefined') ? sessions : {};
+var stream = (typeof stream !== 'undefined') ? stream : {};
 var system = (typeof system !== 'undefined') ? system : {};
 var ui = (typeof ui !== 'undefined') ? ui : {};
 ui.window = ui.window || {};
@@ -2463,6 +2465,16 @@ sessions.verify = function(sessionId) {
   return apiCall('sessions.verify', p);
 };
 
+stream.getInfo = function() {
+  var p = {};
+  return apiCall('stream.getInfo', p);
+};
+
+stream.getSources = function() {
+  var p = {};
+  return apiCall('stream.getSources', p);
+};
+
 system.exec = function(program, options) {
   var p = {};
   p['program'] = program;
@@ -2484,11 +2496,6 @@ system.projectDir = function() {
 system.runningProcesses = function() {
   var p = {};
   return apiCall('system.runningProcesses', p);
-};
-
-system.startDemo = function() {
-  var p = {};
-  return apiCall('system.startDemo', p);
 };
 
 ui.window.getLayout = function() {

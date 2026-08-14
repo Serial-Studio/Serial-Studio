@@ -4,7 +4,7 @@ description: >-
   Serial Studio data-hotpath rules and the 256 kHz throughput gate. Use BEFORE editing or
   reviewing FrameReader, CircularBuffer, FrameBuilder, ConnectionManager, DeviceManager, or
   Dashboard frame-draw code — anything on the Driver → FrameReader → FrameBuilder → Dashboard
-  path. Covers SPSC/main-thread rules, DirectConnection requirement, the no-alloc/no-copy slot
+  path. Covers SPSC/pipeline-thread rules, DirectConnection requirement, the no-alloc/no-copy slot
   pool, source-owns-time, and how to measure throughput with --benchmark-hotpath.
 paths:
   - app/src/IO/FrameReader.*
@@ -31,16 +31,25 @@ action is the deliberate-mode interrupt. Do not proceed straight from pattern-ma
 
 ## Data flow
 
-`Driver → FrameReader::processData (main) → DeviceManager::onReadyRead →
-ConnectionManager::onFrameReady → FrameBuilder → shared TimestampedFramePtr →
-Dashboard / CSV / MDF4 / API / Sessions`
+`Driver → FrameReader::processData (pipeline thread) → PipelineHost::routeFrames →
+FrameBuilder → shared TimestampedFramePtr → PipelineHost dashboard ring →
+Dashboard::onDisplayTick (GUI) | CSV / MDF4 / API / Sessions (detached copy)`
+
+Dense typed sources (audio) skip all of that: driver `SampleBlock` → per-source
+`IO::StreamWorker` thread → bounded display update / export block / latest values, all per
+block. Never per-sample across a thread boundary.
 
 ## Hard rules
 
-- **`FrameReader` and `CircularBuffer` are main-thread / SPSC. Never add a mutex.** Reconfigure
+- **The frame pipeline lives on `IO::PipelineHost`'s thread, not the GUI thread** (spec 0051).
+  GUI→pipeline calls self-marshal via `PipelineHost::runOnObjectThread` (event-loop backed);
+  pipeline→GUI reads via `runOnGuiThreadBlocking`. A plain `BlockingQueuedConnection` from the
+  GUI into the pipeline deadlocks against a script's apiCall — never add one.
+- **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add a mutex.** Reconfigure
   by recreating via `resetFrameReader()` / `reconfigure()`, never by locking.
 - **Hotpath signal hops must be `Qt::DirectConnection`.** A queued connection between two
-  main-thread objects fills the slot queue at 10+ kHz and drops frames.
+  pipeline-thread objects fills the slot queue at 10+ kHz and drops frames. GUI↔pipeline
+  traffic must stay chunk/command/tick rate.
 - **No allocation and no `Frame` copy on the dashboard path.** Draw frames from
   `FrameBuilder::acquireFrame()` (the slot pool) — never `make_shared<TimestampedFrame>` directly.
   The one detached copy in the `hotpathTxFrame` async-sink fan-out is intentional (slow export

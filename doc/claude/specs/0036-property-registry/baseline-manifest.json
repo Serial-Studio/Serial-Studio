@@ -5,10 +5,6 @@
   "note": "sha256 of the on-disk project corpus before any registry change. Not a substitute for the live project.open + project.exportJson baseline (T1); it only proves the input files were unchanged when the maintainer runs the capture.",
   "projects": [
     {
-      "path": "app/rcc/demo/RocketLaunch.ssproj",
-      "sha256": "df792f6bc79c652f6841997c29567ecff7a4cb6d31427c1973731123f3e80462"
-    },
-    {
       "path": "examples/BLE Battery/BLE Battery Level.ssproj",
       "sha256": "6f3f04f58fb8eb24383ecc17c5591d72b647d1d6907ad0f8cbf666f57201f9e3"
     },
@@ -22,7 +18,7 @@
     },
     {
       "path": "examples/Dual Drone Telemetry/Dual Drone Telemetry.ssproj",
-      "sha256": "7de7a16332a387719aa936d497281469e1bba86b70d6dbcf28cf75cb609246bd"
+      "sha256": "90c3f2d998f9e59a9c3ea067dcbce9c92533b7eca1153518f4326bace02c3f79"
     },
     {
       "path": "examples/EM Wave Simulator/EMWaveSimulator.ssproj",

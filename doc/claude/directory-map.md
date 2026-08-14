@@ -2,7 +2,8 @@
 
 ```
 app/src/
-├── IO/              ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig
+├── IO/              ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig,
+│                    PipelineHost (frame-processing thread), StreamWorker (typed stream lane)
 │   ├── Drivers/     UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, MQTT, Process, USB
 │   └── FileTransmission/  Protocol base, XMODEM, YMODEM, ZMODEM, CRC utilities
 ├── Async/           TaskTree, RetryPolicy, AsyncClock — task-tree engine used by MQTT::Publisher

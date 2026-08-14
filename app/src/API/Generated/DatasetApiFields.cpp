@@ -23,10 +23,11 @@
 
 // Regenerate with: python3 scripts/generate-property-registry.py
 
-#include <optional>
-#include <QJsonArray>
-
 #include "API/Handlers/ProjectHandler.h"
+
+#include <QJsonArray>
+#include <optional>
+
 #include "DataModel/Project/PropertyHooks.h"
 #include "DataModel/ProjectModel.h"
 #include "SerialStudio.h"
@@ -286,7 +287,7 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared flag fields onto d (part 1 of 2); returns a non-empty error string when a
+ * @brief Applies declared flag fields onto d (part 1 of 3); returns a non-empty error string when a
  *        value is rejected.
  */
 static QString applyDatasetFlagFields1(DataModel::Dataset& d,
@@ -328,7 +329,7 @@ static QString applyDatasetFlagFields1(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared flag fields onto d (part 2 of 2); returns a non-empty error string when a
+ * @brief Applies declared flag fields onto d (part 2 of 3); returns a non-empty error string when a
  *        value is rejected.
  */
 static QString applyDatasetFlagFields2(DataModel::Dataset& d,
@@ -356,12 +357,30 @@ static QString applyDatasetFlagFields2(DataModel::Dataset& d,
   if (!key_fft_log_x.isEmpty())
     d.fftLogX = params.value(key_fft_log_x).toBool();
 
+  const auto key_extreme_hold = takeDatasetField(params, consumed, {Keys::ExtremeHold});
+  if (!key_extreme_hold.isEmpty())
+    d.extremeHold = params.value(key_extreme_hold).toBool();
+
   const auto key_led = takeDatasetField(params, consumed, {Keys::LED});
   if (!key_led.isEmpty()) {
     d.led = params.value(key_led).toBool();
     rebuildTree = true;
   }
 
+  return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Applies declared flag fields onto d (part 3 of 3); returns a non-empty error string when a
+ *        value is rejected.
+ */
+static QString applyDatasetFlagFields3(DataModel::Dataset& d,
+                                       const QJsonObject& params,
+                                       bool& rebuildTree,
+                                       QSet<QString>& consumed)
+{
   const auto key_overview_display = takeDatasetField(params, consumed, {Keys::Overview});
   if (!key_overview_display.isEmpty()) {
     d.overviewDisplay = params.value(key_overview_display).toBool();
@@ -455,6 +474,9 @@ QString API::Handlers::ProjectHandler::applyDatasetUpdateParams(DataModel::Datas
     return err;
 
   if (auto err = applyDatasetFlagFields2(d, params, rebuildTree, consumed); !err.isEmpty())
+    return err;
+
+  if (auto err = applyDatasetFlagFields3(d, params, rebuildTree, consumed); !err.isEmpty())
     return err;
 
   applyDatasetSubEntityFields(d, params, consumed);
@@ -651,6 +673,11 @@ static void datasetSchemaPart3(QJsonObject& props)
                                      "Upper bound of the gauge or bar range; falls back to the "
                                      "dataset value range when left unset",
                                      QJsonArray()));
+  props.insert(Keys::ExtremeHold,
+               datasetSchemaProperty("boolean",
+                                     "Show hold markers at the lowest and highest values observed "
+                                     "since the last data reset",
+                                     QJsonArray()));
   props.insert(Keys::LED,
                datasetSchemaProperty("boolean",
                                      "Enable visual status monitoring using an LED display",
@@ -668,10 +695,6 @@ static void datasetSchemaPart3(QJsonObject& props)
                datasetSchemaProperty("string",
                                      "Per-dataset transform script; runs on every parsed value",
                                      QJsonArray()));
-  props.insert(Keys::TransformLanguage,
-               datasetSchemaProperty("integer",
-                                     "Transform script language: -1 inherit, 0 JavaScript, 1 Lua",
-                                     QJsonArray()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -681,6 +704,10 @@ static void datasetSchemaPart3(QJsonObject& props)
  */
 static void datasetSchemaPart4(QJsonObject& props)
 {
+  props.insert(Keys::TransformLanguage,
+               datasetSchemaProperty("integer",
+                                     "Transform script language: -1 inherit, 0 JavaScript, 1 Lua",
+                                     QJsonArray()));
   props.insert(Keys::SourceId,
                datasetSchemaProperty("integer",
                                      "Source (device) this dataset belongs to",

@@ -170,6 +170,7 @@ signals:
   void frameParserParamsChanged();
   void sourceFrameParserTemplateChanged(int sourceId);
   void sourceFrameParserParamsChanged(int sourceId);
+  void sourceStreamLaneChanged(int sourceId);
   void activeGroupIdChanged();
   void widgetSettingsChanged();
   void widgetDisplayChanged();
@@ -444,6 +445,7 @@ public slots:
   void setFrameParserParams(const QJsonObject& params);
   void updateSourceFrameParserTemplate(int sourceId, const QString& templateId);
   void updateSourceFrameParserParams(int sourceId, const QJsonObject& params);
+  void updateSourceStreamLane(int sourceId, const QString& lane);
   void setActiveGroupId(const int groupId);
   void setGroupLayout(const int groupId, const QJsonObject& layout);
   void setDecoderMethod(const SerialStudio::DecoderMethod method);

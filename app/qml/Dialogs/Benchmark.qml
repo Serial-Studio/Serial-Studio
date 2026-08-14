@@ -53,6 +53,8 @@ Widgets.SmartDialog {
   readonly property bool running: runner.running
   readonly property var runner: Cpp_Benchmark_Runner
   readonly property bool rtl: Cpp_Misc_Translator.rtl
+  readonly property bool playerOpen: runner.playerOpen
+  readonly property bool deviceConnected: runner.deviceConnected
 
   //
   // A run needs at least one section and at least one variant; otherwise the schedule is empty.
@@ -352,6 +354,22 @@ Widgets.SmartDialog {
     }
 
     //
+    // The benchmark drives the parse pipeline itself, so any other frame producer (a live device,
+    // a replayed recording) would both distort the numbers and feed a pipeline the run owns
+    //
+    Label {
+      opacity: 0.8
+      Layout.fillWidth: true
+      Layout.maximumWidth: 560
+      wrapMode: Text.WordWrap
+      color: Cpp_ThemeManager.colors["error"]
+      font: Cpp_Misc_CommonFonts.uiFont
+      visible: (root.deviceConnected || root.playerOpen) && !root.running
+      text: root.deviceConnected ? qsTr("Disconnect the active device before running a benchmark.")
+                                 : qsTr("Close the open recording before running a benchmark.")
+    }
+
+    //
     // Results table. The body is a fixed-height scroll area so the window keeps a stable
     // size as rows stream in, instead of growing one row at a time.
     //
@@ -587,9 +605,9 @@ Widgets.SmartDialog {
 
       Widgets.IconButton {
         rightPadding: 8
-        enabled: !root.running && root.configValid
         icon.source: "qrc:/icons/buttons/apply.svg"
         text: root.running ? qsTr("Running...") : qsTr("Run Benchmark")
+        enabled: !root.running && root.configValid && !root.deviceConnected && !root.playerOpen
         onClicked: root.runner.start(root.framesIndex, root.secondsIndex,
                                      root.runParsers, root.runDataExport, root.runDashboard,
                                      root.runNumeric, root.runMixed)

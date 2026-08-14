@@ -434,6 +434,9 @@ void TstEnumLabels::groupWidgetFullSweep_data()
                            << QStringLiteral("Painter (custom canvas)");
   QTest::newRow("WebView") << static_cast<int>(SerialStudio::WebView) << QStringLiteral("web-view")
                            << QStringLiteral("Web view (embedded browser)");
+  QTest::newRow("BarPanel") << static_cast<int>(SerialStudio::BarPanel)
+                            << QStringLiteral("bar-panel")
+                            << QStringLiteral("Bar panel (multi-channel bars)");
 }
 
 /**
@@ -464,13 +467,14 @@ void TstEnumLabels::groupWidgetSlugsAreWellFormedAndUnique()
                      SerialStudio::Plot3D,
                      SerialStudio::ImageView,
                      SerialStudio::Painter,
-                     SerialStudio::WebView}) {
+                     SerialStudio::WebView,
+                     SerialStudio::BarPanel}) {
     const auto slug = API::EnumLabels::groupWidgetSlug(static_cast<int>(value));
     QVERIFY(isWellFormedSlug(slug));
     slugs.insert(slug);
   }
 
-  QCOMPARE(slugs.size(), qsizetype(10));
+  QCOMPARE(slugs.size(), qsizetype(11));
 }
 
 void TstEnumLabels::groupWidgetOutOfRange_data()
@@ -607,6 +611,8 @@ void TstEnumLabels::dashboardWidgetGplSweepRoundTrips_data()
                            << QStringLiteral("webview");
   QTest::newRow("NoWidget") << static_cast<int>(SerialStudio::DashboardNoWidget)
                             << QStringLiteral("none");
+  QTest::newRow("BarPanel") << static_cast<int>(SerialStudio::DashboardBarPanel)
+                            << QStringLiteral("barpanel");
   QTest::newRow("Extension") << static_cast<int>(SerialStudio::DashboardExtension)
                              << QStringLiteral("extension");
 }
@@ -638,6 +644,8 @@ void TstEnumLabels::dashboardWidgetFromSlugAcceptsAliasesCaseAndWhitespace_data(
                                  << static_cast<int>(SerialStudio::DashboardPlot3D);
   QTest::newRow("web-view-alias") << QStringLiteral("web-view")
                                   << static_cast<int>(SerialStudio::DashboardWebView);
+  QTest::newRow("bar-panel-alias")
+    << QStringLiteral("bar-panel") << static_cast<int>(SerialStudio::DashboardBarPanel);
   QTest::newRow("mixed-case") << QStringLiteral("DataGrid")
                               << static_cast<int>(SerialStudio::DashboardDataGrid);
   QTest::newRow("padded-whitespace")

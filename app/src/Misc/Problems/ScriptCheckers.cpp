@@ -209,17 +209,22 @@ static void checkTransformErrors(QList<Finding>& out)
   if (fails == 0)
     return;
 
-  const int uniqueId = builder.lastTransformDataset();
-  out.append(
-    makeFinding(Misc::ProblemCenter::Warning,
-                "transform-errors",
-                trProblem("A value transform is failing"),
-                trProblem("The transform of \"%1\" has failed %2, so the dataset shows "
-                          "its untransformed value. Last error: %3")
-                  .arg(datasetLabel(uniqueId), bucketLabel(fails), builder.lastTransformError()),
-                trProblem("Open the dataset's transform and fix the reported error."),
-                uniqueId,
-                kJumpDataset));
+  int uniqueId = -1;
+  QString lastError;
+  builder.invokeOnBuilderThreadBlocking([&] {
+    uniqueId  = builder.lastTransformDataset();
+    lastError = builder.lastTransformError();
+  });
+
+  out.append(makeFinding(Misc::ProblemCenter::Warning,
+                         "transform-errors",
+                         trProblem("A value transform is failing"),
+                         trProblem("The transform of \"%1\" has failed %2, so the dataset shows "
+                                   "its untransformed value. Last error: %3")
+                           .arg(datasetLabel(uniqueId), bucketLabel(fails), lastError),
+                         trProblem("Open the dataset's transform and fix the reported error."),
+                         uniqueId,
+                         kJumpDataset));
 }
 
 //--------------------------------------------------------------------------------------------------

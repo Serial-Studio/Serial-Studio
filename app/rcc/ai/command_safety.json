@@ -363,7 +363,6 @@
     "project.workspace.delete",
     "sessions.delete",
     "sessions.deleteTag",
-    "sessions.removeTag",
-    "system.startDemo"
+    "sessions.removeTag"
   ]
 }

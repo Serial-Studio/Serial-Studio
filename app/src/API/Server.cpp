@@ -56,6 +56,9 @@ constexpr int kMaxAuthAttempts         = 3;
 constexpr int kAuthTokenBytes          = 32;
 constexpr int kMinAuthTokenChars       = 32;
 
+// Per-subscriber stream backlog before the oldest block is dropped and counted (spec 0051 R24)
+constexpr std::size_t kStreamQueueDepth = 8;
+
 //--------------------------------------------------------------------------------------------------
 // Static functions
 //--------------------------------------------------------------------------------------------------
@@ -280,6 +283,24 @@ void API::ServerWorker::writeToSocket(QTcpSocket* socket,
 }
 
 /**
+ * @brief Writes one typed stream block and acknowledges it, which is what paces the subscriber:
+ *        the server only sends the next block after this ack, so a slow reader accumulates the
+ *        bounded per-connection queue (drop-oldest + missed count) instead of the socket buffer.
+ *        A session mismatch still acks so the sender's in-flight latch cannot wedge.
+ */
+void API::ServerWorker::writeStreamBlock(QTcpSocket* socket,
+                                         const QString& sessionId,
+                                         const QByteArray& data)
+{
+  SS_ASSERT(!data.isEmpty(), return);
+
+  if (socket && m_sockets.value(socket) == sessionId && socket->isWritable())
+    socket->write(data);
+
+  Q_EMIT streamWriteDone(socket, sessionId);
+}
+
+/**
  * @brief Disconnects a socket (worker thread); a session id mismatch means the connection
  *        already ended, so the request is ignored instead of hitting an unrelated socket.
  */
@@ -392,6 +413,8 @@ API::Server::Server()
           this,
           &Server::onSocketDisconnected,
           Qt::QueuedConnection);
+  connect(
+    worker, &ServerWorker::streamWriteDone, this, &Server::onStreamWriteDone, Qt::QueuedConnection);
 
   connect(&m_server, &QTcpServer::newConnection, this, &Server::acceptConnection);
 
@@ -1059,6 +1082,12 @@ void API::Server::handleJsonMessage(QTcpSocket* socket,
     return;
   }
 
+  if (type == MessageType::Command
+      && isStreamCommand(json.value(QStringLiteral("command")).toString())) {
+    handleStreamCommand(socket, state, json);
+    return;
+  }
+
   static auto& cmdHandler = API::CommandHandler::instance();
   sendResponseToSocket(socket, cmdHandler.processMessage(jsonBytes, CommandOrigin::Remote));
 }
@@ -1517,6 +1546,198 @@ API::CommandResponse API::Server::mirrorUnsubscribe(ConnectionState& state,
   QJsonObject result;
   result.insert(QStringLiteral("mirrorSubscribed"), false);
   return CommandResponse::makeSuccess(request.id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Server: typed stream-block subscription (connection-scoped, spec 0051 M6)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether a command name is one of the connection-scoped stream commands. Handled here
+ *        rather than in CommandRegistry for the same reason as the mirror verbs: they mutate
+ *        per-socket state the registry cannot reach.
+ */
+bool API::Server::isStreamCommand(const QString& command)
+{
+  return command == QLatin1String("stream.subscribe")
+      || command == QLatin1String("stream.unsubscribe");
+}
+
+/**
+ * @brief Dispatches one connection-scoped stream command and answers on the same socket.
+ */
+void API::Server::handleStreamCommand(QTcpSocket* socket,
+                                      ConnectionState& state,
+                                      const QJsonObject& json)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!state.sessionId.isEmpty());
+
+  const auto request = CommandRequest::fromJson(json);
+  if (request.command == QLatin1String("stream.subscribe"))
+    sendResponseToSocket(socket, streamSubscribe(state, request).toJsonBytes());
+  else
+    sendResponseToSocket(socket, streamUnsubscribe(state, request).toJsonBytes());
+}
+
+/**
+ * @brief Subscribes this connection to post-transform stream blocks, optionally filtered to a
+ *        source id list ("sources": [..]; absent = every stream source).
+ */
+API::CommandResponse API::Server::streamSubscribe(ConnectionState& state,
+                                                  const CommandRequest& request)
+{
+  SS_ASSERT_LOG(state.authenticated);
+
+  state.streamSources.clear();
+  const auto sources = request.params.value(QStringLiteral("sources")).toArray();
+  for (const auto& value : sources)
+    state.streamSources.insert(value.toInt(-1));
+
+  state.streamSubscribed = true;
+  state.streamSeq        = 0;
+  state.streamMissed     = 0;
+  state.streamPending.clear();
+
+  QJsonArray subscribed;
+  for (const int sourceId : std::as_const(state.streamSources))
+    subscribed.append(sourceId);
+
+  QJsonObject result;
+  result.insert(QStringLiteral("connectionId"), state.sessionId);
+  result.insert(QStringLiteral("subscribed"), true);
+  result.insert(QStringLiteral("sources"), subscribed);
+  result.insert(QStringLiteral("queueDepth"), static_cast<int>(kStreamQueueDepth));
+  result.insert(QStringLiteral("encoding"), QStringLiteral("base64:float32le"));
+  return CommandResponse::makeSuccess(request.id, result);
+}
+
+/**
+ * @brief Drops this connection's stream subscription and its pending backlog.
+ */
+API::CommandResponse API::Server::streamUnsubscribe(ConnectionState& state,
+                                                    const CommandRequest& request)
+{
+  if (!state.streamSubscribed) {
+    return CommandResponse::makeError(request.id,
+                                      ErrorCode::ExecutionError,
+                                      QStringLiteral("This connection holds no stream "
+                                                     "subscription"));
+  }
+
+  state.streamSubscribed = false;
+  state.streamPending.clear();
+
+  QJsonObject result;
+  result.insert(QStringLiteral("subscribed"), false);
+  result.insert(QStringLiteral("missed"), static_cast<double>(state.streamMissed));
+  return CommandResponse::makeSuccess(request.id, result);
+}
+
+/**
+ * @brief Queues one post-transform block for every subscribed connection (GUI thread; fed by
+ *        each stream worker's queued blockReady). The per-connection queue is bounded: an
+ *        overflow drops the OLDEST block and counts it, so a slow subscriber falls behind
+ *        visibly instead of growing memory or stalling the worker (R24).
+ */
+void API::Server::ingestStreamBlock(const IO::StreamBlockItemPtr& block)
+{
+  if (!block || !enabled())
+    return;
+
+  for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
+    auto& state = it.value();
+    if (!state.streamSubscribed)
+      continue;
+
+    if (!state.streamSources.isEmpty() && !state.streamSources.contains(block->sourceId))
+      continue;
+
+    state.streamPending.push_back(block);
+    while (state.streamPending.size() > kStreamQueueDepth) {
+      state.streamPending.pop_front();
+      ++state.streamMissed;
+    }
+
+    pumpStreamQueue(it.key(), state);
+  }
+}
+
+/**
+ * @brief Sends the next queued block for one connection when no write is in flight: one NDJSON
+ *        line per dataset channel, payload base64 float32le, carrying (and clearing) the missed
+ *        counter accumulated since the last delivery.
+ */
+void API::Server::pumpStreamQueue(QTcpSocket* socket, ConnectionState& state)
+{
+  SS_ASSERT(socket != nullptr, return);
+
+  if (state.streamWriteInFlight || state.streamPending.empty())
+    return;
+
+  const auto block = state.streamPending.front();
+  state.streamPending.pop_front();
+  if (!block)
+    return;
+
+  const qint64 t0Ms =
+    std::chrono::duration_cast<std::chrono::milliseconds>(block->t0.time_since_epoch()).count();
+
+  QByteArray payload;
+  const auto missed  = state.streamMissed;
+  state.streamMissed = 0;
+  ++state.streamSeq;
+
+  const std::size_t channelCount = std::min(block->uniqueIds.size(), block->channels.size());
+  for (std::size_t c = 0; c < channelCount; ++c) {
+    const auto& samples = block->channels[c];
+
+    QByteArray raw;
+    raw.resize(static_cast<qsizetype>(samples.size() * sizeof(float)));
+    auto* out = reinterpret_cast<float*>(raw.data());
+    for (std::size_t i = 0; i < samples.size(); ++i)
+      out[i] = static_cast<float>(samples[i]);
+
+    QJsonObject entry;
+    entry.insert(Keys::SourceId, block->sourceId);
+    entry.insert(Keys::UniqueId, block->uniqueIds[c]);
+    entry.insert(QStringLiteral("seq"), static_cast<double>(state.streamSeq));
+    entry.insert(QStringLiteral("missed"), static_cast<double>(missed));
+    entry.insert(QStringLiteral("t0Ms"), static_cast<double>(t0Ms));
+    entry.insert(QStringLiteral("dtNs"), static_cast<double>(block->dt.count()));
+    entry.insert(QStringLiteral("count"), static_cast<double>(samples.size()));
+    entry.insert(QStringLiteral("data"), QString::fromLatin1(raw.toBase64()));
+
+    QJsonObject line;
+    line.insert(QStringLiteral("streamBlock"), entry);
+    payload += QJsonDocument(line).toJson(QJsonDocument::Compact) + '\n';
+  }
+
+  if (payload.isEmpty())
+    return;
+
+  state.streamWriteInFlight = true;
+  auto* worker              = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker,
+                            "writeStreamBlock",
+                            Qt::QueuedConnection,
+                            Q_ARG(QTcpSocket*, socket),
+                            Q_ARG(QString, state.sessionId),
+                            Q_ARG(QByteArray, payload));
+}
+
+/**
+ * @brief Clears the in-flight latch when the worker finished a stream write and sends the next
+ *        queued block, which is what paces delivery to the subscriber's actual read rate.
+ */
+void API::Server::onStreamWriteDone(QTcpSocket* socket, const QString& sessionId)
+{
+  const auto it = m_connections.find(socket);
+  if (it == m_connections.end() || it->sessionId != sessionId)
+    return;
+
+  it->streamWriteInFlight = false;
+  pumpStreamQueue(socket, it.value());
 }
 
 //--------------------------------------------------------------------------------------------------

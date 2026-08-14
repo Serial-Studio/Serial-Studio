@@ -292,6 +292,24 @@ void IO::Drivers::HID::onReadError()
 }
 
 /**
+ * @brief Suspends hotplug enumeration while a session is live: hid_enumerate() is a syscall-heavy
+ *        walk on the GUI thread, and the picker it feeds is locked for the duration anyway.
+ *        Resuming re-enumerates once so the list is current the moment it becomes selectable.
+ */
+void IO::Drivers::HID::setDiscoveryPaused(const bool paused)
+{
+  if (paused) {
+    m_enumTimer.stop();
+    return;
+  }
+
+  if (!m_enumTimer.isActive()) {
+    enumerateDevices();
+    m_enumTimer.start();
+  }
+}
+
+/**
  * @brief Re-enumerates all connected HID devices.
  */
 void IO::Drivers::HID::enumerateDevices()

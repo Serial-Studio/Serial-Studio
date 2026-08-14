@@ -255,6 +255,7 @@ Widgets.SmartWindow {
           const webviewPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/WebView.qml"
           const painterPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Painter.qml"
           const datagridPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/DataGrid.qml"
+          const barPanelPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/BarPanel.qml"
           const waterfallPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml"
           const imageViewPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml"
 
@@ -270,6 +271,7 @@ Widgets.SmartWindow {
           case webviewPath:
           case painterPath:
           case datagridPath:
+          case barPanelPath:
           case waterfallPath:
           case imageViewPath:
             window.width = 640

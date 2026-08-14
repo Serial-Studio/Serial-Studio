@@ -73,7 +73,8 @@ typedef enum {
   kGroupView_Columns,
   kGroupView_Dataset,
   kGroupView_LogX,
-  kGroupView_LogY
+  kGroupView_LogY,
+  kGroupView_BarPanelStyle
 } GroupItem;
 
 /**

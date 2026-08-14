@@ -197,7 +197,8 @@ if (typeof __ss_bridge !== 'undefined') {
 
   var __ssGroupWidgets = {
     datagrid: 0, accelerometer: 1, gyroscope: 2, gps: 3,
-    multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8
+    multiplot: 4, none: 5, plot3d: 6, image: 7, painter: 8,
+    webview: 9, barpanel: 10
   };
   var __ssDatasetBits = {
     plot: 1, fft: 2, bar: 4, gauge: 8, compass: 16, led: 32, waterfall: 64

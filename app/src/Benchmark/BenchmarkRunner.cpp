@@ -37,9 +37,13 @@
 #include "AppState.h"
 #include "Benchmark/HotpathBenchmark.h"
 #include "CSV/Export.h"
+#include "CSV/Player.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "IO/ConnectionManager.h"
+#include "IO/PipelineHost.h"
+#include "MDF4/Player.h"
 #include "Misc/Translator.h"
 #include "Misc/WorkspaceManager.h"
 #include "Platform/AppPlatform.h"
@@ -49,6 +53,7 @@
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"
 #  include "Sessions/Export.h"
+#  include "Sessions/Player.h"
 #endif
 #ifdef ENABLE_GRPC
 #  include "API/GRPC/GRPCServer.h"
@@ -91,6 +96,7 @@ BenchmarkRunner::BenchmarkRunner()
   , m_frames(kFrameValues[kDefaultFrames])
   , m_seconds(kSecondValues[kDefaultSeconds])
   , m_savedMode(SerialStudio::ProjectFile)
+  , m_savedEphemeral(false)
   , m_savedPlotTimeRange(0.0)
   , m_savedCsvExport(false)
   , m_savedApiServer(false)
@@ -105,6 +111,27 @@ BenchmarkRunner::BenchmarkRunner()
   retranslate();
   static auto& translator = Misc::Translator::instance();
   connect(&translator, &Misc::Translator::languageChanged, this, &BenchmarkRunner::retranslate);
+
+  static auto& ioManager = IO::ConnectionManager::instance();
+  connect(&ioManager,
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &BenchmarkRunner::deviceConnectedChanged);
+
+  const auto playerOpenNotify = [this] {
+    Q_EMIT playerOpenChanged();
+  };
+  static auto& csvPlayer = CSV::Player::instance();
+  static auto& mdfPlayer = MDF4::Player::instance();
+  connect(&csvPlayer, &CSV::Player::openChanged, this, playerOpenNotify);
+  connect(&mdfPlayer, &MDF4::Player::openChanged, this, playerOpenNotify);
+#ifdef BUILD_COMMERCIAL
+  static auto& sessionPlayer = Sessions::Player::instance();
+  connect(&sessionPlayer, &Sessions::Player::openChanged, this, playerOpenNotify);
+#endif
+
+  if (auto* app = qApp)
+    connect(app, &QCoreApplication::aboutToQuit, this, &BenchmarkRunner::abortSession);
 }
 
 /**
@@ -126,6 +153,26 @@ BenchmarkRunner& BenchmarkRunner::instance()
 bool BenchmarkRunner::running() const noexcept
 {
   return m_running;
+}
+
+/**
+ * @brief Returns true while a device is streaming: the benchmark owns the processing objects for
+ *        the run (it drives them from the GUI thread), so a live pipeline-thread producer would
+ *        both wreck the measurement and reach a FrameBuilder that no longer lives there.
+ */
+bool BenchmarkRunner::deviceConnected() const
+{
+  static auto& ioManager = IO::ConnectionManager::instance();
+  return ioManager.isConnected();
+}
+
+/**
+ * @brief Returns true while a recording is loaded for playback: replayed frames enter the same
+ *        FrameBuilder the phases are driving, so their rows would be mixed into the measurement.
+ */
+bool BenchmarkRunner::playerOpen() const
+{
+  return SerialStudio::isAnyPlayerOpen();
 }
 
 /**
@@ -426,7 +473,7 @@ void BenchmarkRunner::start(int framesIndex,
                             bool numeric,
                             bool mixed)
 {
-  if (m_running)
+  if (m_running || deviceConnected() || playerOpen())
     return;
 
   if (!(parsers || dataExport || dashboard) || !(numeric || mixed))
@@ -459,20 +506,27 @@ void BenchmarkRunner::start(int framesIndex,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Snapshots project + consumer state and redirects exports into a throwaway workspace.
+ * @brief Snapshots project + consumer state, redirects exports to a throwaway workspace, and takes
+ *        the FrameBuilder/FrameParser onto this thread: the phases drive the pipeline with plain
+ *        synchronous calls, legal only while the script engines live here. The session stays
+ *        ephemeral and non-persistent, so a quit mid-run writes none of it to QSettings.
  */
 void BenchmarkRunner::beginSession()
 {
   static auto& appState = AppState::instance();
   m_savedMode           = appState.operationMode();
   m_savedProjectPath    = appState.projectFilePath();
+  m_savedEphemeral      = appState.ephemeralSession();
+  appState.setEphemeralSession(true);
 
   static auto& dashboard = UI::Dashboard::instance();
   m_savedPlotTimeRange   = dashboard.plotTimeRange();
+  dashboard.setSettingsPersistent(false);
   dashboard.setPlotTimeRange(10.0);
 
   static auto& csvExport = CSV::Export::instance();
   m_savedCsvExport       = csvExport.exportEnabled();
+  csvExport.setSettingsPersistent(false);
   static auto& apiServer = API::Server::instance();
   m_savedApiServer       = apiServer.enabled();
 #ifdef BUILD_COMMERCIAL
@@ -480,6 +534,8 @@ void BenchmarkRunner::beginSession()
   m_savedMdfExport           = mdfExport.exportEnabled();
   static auto& sessionExport = Sessions::Export::instance();
   m_savedSessionExport       = sessionExport.exportEnabled();
+  mdfExport.setSettingsPersistent(false);
+  sessionExport.setSettingsPersistent(false);
 #endif
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
@@ -491,13 +547,21 @@ void BenchmarkRunner::beginSession()
     static auto& workspaceManager = Misc::WorkspaceManager::instance();
     workspaceManager.setTemporaryPath(m_tempWorkspace->path());
   }
+
+  static auto& pipeline = IO::PipelineHost::instance();
+  pipeline.moveProcessingObjectsTo(thread());
 }
 
 /**
- * @brief Restores the user's workspace/consumers/project and deletes the benchmark's temp files.
+ * @brief Gives the processing objects back to the pipeline thread and restores the user's
+ *        workspace/consumers/dashboard, re-arming settings persistence only once the saved
+ *        values are back in memory (so the benchmark's values never reach the disk).
  */
-void BenchmarkRunner::endSession()
+void BenchmarkRunner::restoreEnvironment()
 {
+  static auto& pipeline = IO::PipelineHost::instance();
+  pipeline.moveProcessingObjectsTo(pipeline.pipelineThread());
+
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
   workspaceManager.clearTemporaryPath();
   m_tempWorkspace.reset();
@@ -525,17 +589,52 @@ void BenchmarkRunner::endSession()
   static auto& frameParser = DataModel::FrameParser::instance();
   frameParser.setSuppressMessageBoxes(false);
 
+  dashboard.setSettingsPersistent(true);
+  csvExport.setSettingsPersistent(true);
+#ifdef BUILD_COMMERCIAL
+  mdfExport.setSettingsPersistent(true);
+  sessionExport.setSettingsPersistent(true);
+#endif
+}
+
+/**
+ * @brief Restores the environment and then the user's project, which also re-arms the persisted
+ *        project path the synthetic benchmark project displaced in memory.
+ */
+void BenchmarkRunner::endSession()
+{
+  restoreEnvironment();
+
+  static auto& appState = AppState::instance();
+  appState.setEphemeralSession(m_savedEphemeral);
+
+  static auto& projectModel = DataModel::ProjectModel::instance();
   if (!m_savedProjectPath.isEmpty()) {
-    static auto& appState = AppState::instance();
     appState.setOperationMode(SerialStudio::ProjectFile);
     (void)projectModel.openJsonFile(m_savedProjectPath);
   } else {
-    static auto& appState = AppState::instance();
     appState.setOperationMode(static_cast<SerialStudio::OperationMode>(m_savedMode));
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
+    static auto& dashboard    = UI::Dashboard::instance();
     frameBuilder.syncFromProjectModel();
     dashboard.resetData();
   }
+}
+
+/**
+ * @brief Tears a session down on application quit: the run never reaches its last phase, so the
+ *        environment is restored without reloading the user's project (the session stayed
+ *        ephemeral, so nothing of the benchmark's was ever persisted to restore over).
+ */
+void BenchmarkRunner::abortSession()
+{
+  if (!m_running)
+    return;
+
+  m_running = false;
+  m_phases.clear();
+  HotpathBenchmark::setActive(false);
+  restoreEnvironment();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -565,6 +664,9 @@ void BenchmarkRunner::announcePhase(int index)
  */
 void BenchmarkRunner::executePhase(int index)
 {
+  if (!m_running)
+    return;
+
   const int phaseCount = static_cast<int>(m_phases.size());
   SS_ASSERT(index >= 0 && index < phaseCount, {
     finishSession();

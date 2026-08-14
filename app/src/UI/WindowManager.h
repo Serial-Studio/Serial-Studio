@@ -87,6 +87,12 @@ class WindowManager : public QQuickItem {
   Q_PROPERTY(bool sizeMatchVisible
              READ sizeMatchVisible
              NOTIFY sizeMatchRectChanged)
+  Q_PROPERTY(QRect fractionPreviewRect
+             READ fractionPreviewRect
+             NOTIFY fractionPreviewChanged)
+  Q_PROPERTY(QString fractionPreviewLabel
+             READ fractionPreviewLabel
+             NOTIFY fractionPreviewChanged)
   Q_PROPERTY(bool manualGestureActive
              READ manualGestureActive
              NOTIFY manualGestureChanged)
@@ -110,6 +116,7 @@ signals:
   void gridEnabledChanged();
   void sizeMatchRectChanged();
   void manualGestureChanged();
+  void fractionPreviewChanged();
   void snapIndicatorChanged();
   void alignmentGuidesChanged();
   void backgroundImageChanged();
@@ -136,6 +143,8 @@ public:
   [[nodiscard]] bool sizeMatchVisible() const;
   [[nodiscard]] bool manualGestureActive() const;
   [[nodiscard]] const QRect& sizeMatchRect() const;
+  [[nodiscard]] const QRect& fractionPreviewRect() const;
+  [[nodiscard]] const QString& fractionPreviewLabel() const;
   [[nodiscard]] const QRect& manualGestureGeometry() const;
   [[nodiscard]] const QVariantList& alignmentGuides() const;
   [[nodiscard]] const QVariantList& spacingIndicators() const;
@@ -204,12 +213,14 @@ private:
   void handleDragMove(QMouseEvent* event, const QPoint& delta);
   void handleResizeMove(QMouseEvent* event, const QPoint& delta);
   void applyManualAnchors(int newWidth, int newHeight);
+  void weldManualSeams(int canvasWidth, int canvasHeight);
 
   void clearSnapGuides();
   void clearManualGesture();
   void cacheSnapSiblings(QQuickItem* target);
   void publishManualGesture(const QRect& geometry);
   void publishSnapGuides(const Snap::SnapResult& result);
+  void publishFractionPreview(const QRect& geometry);
 
   [[nodiscard]] bool tryReorderDraggedWindow();
 
@@ -261,6 +272,8 @@ private:
   bool m_manualGestureActive;
   QRect m_manualGestureGeometry;
   QRect m_sizeMatchRect;
+  QRect m_fractionPreviewRect;
+  QString m_fractionPreviewLabel;
   QVariantList m_alignmentGuides;
   QVariantList m_spacingIndicators;
   QVector<QRect> m_snapSiblings;

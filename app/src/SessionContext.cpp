@@ -28,6 +28,7 @@
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "IO/ConnectionManager.h"
+#include "IO/PipelineHost.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
 
@@ -75,7 +76,7 @@ int SessionContext::sessionId() const noexcept
 bool SessionContext::sealed() const noexcept
 {
   return m_appState && m_dashboard && m_console && m_frameParser && m_frameBuilder && m_projectModel
-      && m_connectionManager && m_notifications;
+      && m_pipelineHost && m_connectionManager && m_notifications;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,6 +144,16 @@ void SessionContext::adoptProjectModel(std::unique_ptr<DataModel::ProjectModel> 
 }
 
 /**
+ * @brief Takes ownership of this session's pipeline host.
+ */
+void SessionContext::adoptPipelineHost(std::unique_ptr<IO::PipelineHost> module)
+{
+  SS_ASSERT(!m_pipelineHost, return);
+  SS_ASSERT(module != nullptr, return);
+  m_pipelineHost = std::move(module);
+}
+
+/**
  * @brief Takes ownership of this session's connection manager.
  */
 void SessionContext::adoptConnectionManager(std::unique_ptr<IO::ConnectionManager> module)
@@ -167,17 +178,25 @@ void SessionContext::adoptNotifications(std::unique_ptr<DataModel::NotificationC
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Releases every adopted subsystem in the exact reverse of the pinned construction
- *        order, while qApp is still alive and after the QML engine has died (INV-6), which is
- *        what removes both preconditions of the __cxa_finalize teardown crash class. Nothing
- *        may touch a session subsystem after this returns.
+ * @brief Releases every adopted subsystem in exact reverse pinned order, while qApp is alive
+ *        and after the QML engine died (INV-6), removing both preconditions of the
+ *        __cxa_finalize crash class. An abandoned processing thread is the one exception: the
+ *        parser and builder slots leak rather than being freed under a live user.
  */
 void SessionContext::shutdown()
 {
   m_dashboard.reset();
+
+  const bool pipelineAbandoned = m_pipelineHost && m_pipelineHost->pipelineAbandoned();
+  if (pipelineAbandoned) {
+    (void)m_frameParser.release();
+    (void)m_frameBuilder.release();
+  }
+
   m_frameParser.reset();
   m_console.reset();
   m_connectionManager.reset();
+  m_pipelineHost.reset();
   m_frameBuilder.reset();
   m_appState.reset();
   m_projectModel.reset();
@@ -185,7 +204,7 @@ void SessionContext::shutdown()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Session-scoped subsystems (all eight owned; a reach before adoption is a named fatal)
+// Session-scoped subsystems (all nine owned; a reach before adoption is a named fatal)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -245,6 +264,16 @@ DataModel::ProjectModel& SessionContext::projectModel() const
   SS_ASSERT(m_projectModel != nullptr,
             qFatal("SessionContext: %s accessed before adoption", "projectModel"));
   return *m_projectModel;
+}
+
+/**
+ * @brief Returns the pipeline host owning this session's frame-processing thread.
+ */
+IO::PipelineHost& SessionContext::pipelineHost() const
+{
+  SS_ASSERT(m_pipelineHost != nullptr,
+            qFatal("SessionContext: %s accessed before adoption", "pipelineHost"));
+  return *m_pipelineHost;
 }
 
 /**

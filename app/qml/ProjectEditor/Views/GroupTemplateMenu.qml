@@ -56,6 +56,14 @@ Menu {
   MenuItem {
     icon.width: 16
     icon.height: 16
+    text: qsTr("Bar Panel")
+    icon.source: Cpp_Misc_IconRegistry.icon("widgets", "barpanel", 16)
+    onTriggered: root.add(qsTr("Bar Panel"), SerialStudio.BarPanel)
+  }
+
+  MenuItem {
+    icon.width: 16
+    icon.height: 16
     text: qsTr("Multi-Plot")
     icon.source: Cpp_Misc_IconRegistry.icon("widgets", "multiplot", 16)
     onTriggered: root.add(qsTr("Multiple Plot"), SerialStudio.MultiPlot)

@@ -30,9 +30,11 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/FrameParserPipeline.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "IO/Checksum.h"
+#include "IO/PipelineHost.h"
 #include "Misc/IconRegistry.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
@@ -517,7 +519,11 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
 
   if (src.frameParserLanguage != SerialStudio::Native) {
     m_frameBuilder.refreshTableStoreFromProjectModel();
-    emitPreview(runFrameParserPipeline(bytes, spec, m_sourceId), spec.decoderMethod);
+    static auto& parser = DataModel::FrameParser::instance();
+    DataModel::PipelineResult preview;
+    IO::PipelineHost::runOnObjectThread(
+      &parser, [&] { preview = runFrameParserPipeline(bytes, spec, m_sourceId); });
+    emitPreview(preview, spec.decoderMethod);
     return;
   }
 

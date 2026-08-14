@@ -158,7 +158,6 @@
         <file>api/SerialStudio.lua</file>
         <file>chartjs/chart.umd.min.js</file>
         <file>chartjs/LICENSE.md</file>
-        <file>demo/RocketLaunch.ssproj</file>
         <file>extensions/schema/widget-manifest.json</file>
         <file>extensions/widget/compass/Compass.qml</file>
         <file>extensions/widget/compass/info.json</file>
@@ -450,6 +449,7 @@
         <file>icons/editor/16/add-action.svg</file>
         <file>icons/editor/16/add-bar.svg</file>
         <file>icons/editor/16/add-compass.svg</file>
+        <file>icons/editor/16/add-barpanel.svg</file>
         <file>icons/editor/16/add-datagrid.svg</file>
         <file>icons/editor/16/add-device.svg</file>
         <file>icons/editor/16/add-fft.svg</file>
@@ -530,6 +530,7 @@
         <file>icons/editor/24/add-action.svg</file>
         <file>icons/editor/24/add-bar.svg</file>
         <file>icons/editor/24/add-compass.svg</file>
+        <file>icons/editor/24/add-barpanel.svg</file>
         <file>icons/editor/24/add-datagrid.svg</file>
         <file>icons/editor/24/add-dataset.svg</file>
         <file>icons/editor/24/add-device.svg</file>
@@ -599,6 +600,7 @@
         <file>icons/editor/32/add-action.svg</file>
         <file>icons/editor/32/add-bar.svg</file>
         <file>icons/editor/32/add-compass.svg</file>
+        <file>icons/editor/32/add-barpanel.svg</file>
         <file>icons/editor/32/add-datagrid.svg</file>
         <file>icons/editor/32/add-dataset.svg</file>
         <file>icons/editor/32/add-device.svg</file>
@@ -654,6 +656,7 @@
         <file>icons/editor/48/add-action.svg</file>
         <file>icons/editor/48/add-bar.svg</file>
         <file>icons/editor/48/add-compass.svg</file>
+        <file>icons/editor/48/add-barpanel.svg</file>
         <file>icons/editor/48/add-datagrid.svg</file>
         <file>icons/editor/48/add-device.svg</file>
         <file>icons/editor/48/add-fft.svg</file>
@@ -737,6 +740,7 @@
         <file>icons/system/48/missing.svg</file>
         <file>icons/widgets/16/accelerometer.svg</file>
         <file>icons/widgets/16/bar.svg</file>
+        <file>icons/widgets/16/barpanel.svg</file>
         <file>icons/widgets/16/clock.svg</file>
         <file>icons/widgets/16/compass.svg</file>
         <file>icons/widgets/16/datagrid.svg</file>
@@ -762,6 +766,7 @@
         <file>icons/widgets/16/workspace.svg</file>
         <file>icons/widgets/24/accelerometer.svg</file>
         <file>icons/widgets/24/bar.svg</file>
+        <file>icons/widgets/24/barpanel.svg</file>
         <file>icons/widgets/24/clock.svg</file>
         <file>icons/widgets/24/compass.svg</file>
         <file>icons/widgets/24/datagrid.svg</file>
@@ -787,6 +792,7 @@
         <file>icons/widgets/24/workspace.svg</file>
         <file>icons/widgets/32/accelerometer.svg</file>
         <file>icons/widgets/32/bar.svg</file>
+        <file>icons/widgets/32/barpanel.svg</file>
         <file>icons/widgets/32/clock.svg</file>
         <file>icons/widgets/32/compass.svg</file>
         <file>icons/widgets/32/datagrid.svg</file>
@@ -812,6 +818,7 @@
         <file>icons/widgets/32/workspace.svg</file>
         <file>icons/widgets/48/accelerometer.svg</file>
         <file>icons/widgets/48/bar.svg</file>
+        <file>icons/widgets/48/barpanel.svg</file>
         <file>icons/widgets/48/clock.svg</file>
         <file>icons/widgets/48/compass.svg</file>
         <file>icons/widgets/48/datagrid.svg</file>

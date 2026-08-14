@@ -255,6 +255,11 @@
             },
             {
               "type": "command",
+              "id": "editor.addBarPanel",
+              "title": "Bar Panel"
+            },
+            {
+              "type": "command",
               "id": "editor.addMultiPlot",
               "title": "Multi-Plot"
             },

@@ -366,15 +366,25 @@ static void reportDroppedFrames(QList<Finding>& out)
 }
 
 /**
- * @brief Returns the project title for @p sourceId, falling back to a numbered label.
+ * @brief Returns the project title for @p sourceId, falling back to a numbered label. The label
+ *        walk marshals to the builder thread: m_frame.sources is rebuilt there (spec 0051 M3).
  */
 [[nodiscard]] static QString sourceLabel(int sourceId)
 {
   static auto& builder = DataModel::FrameBuilder::instance();
-  const auto& sources  = builder.frame().sources;
-  for (const auto& source : sources)
-    if (source.sourceId == sourceId && !source.title.isEmpty())
-      return source.title;
+
+  QString title;
+  builder.invokeOnBuilderThreadBlocking([&] {
+    const auto& sources = builder.frame().sources;
+    for (const auto& source : sources)
+      if (source.sourceId == sourceId && !source.title.isEmpty()) {
+        title = source.title;
+        return;
+      }
+  });
+
+  if (!title.isEmpty())
+    return title;
 
   return trProblem("Source %1").arg(sourceId);
 }

@@ -24,6 +24,15 @@
   (`--selftest`, `--benchmark-hotpath`) against an existing build dir; prototype ideas as
   throwaway Node/Python sims in the scratchpad. Launching the GUI app and compiling stay
   the user's.
+- **Sample the running app before theorizing about a GUI stall.** Freezes, stutters, ignored
+  window resize/close: get the stack, don't reason from the source. `pgrep -f Serial-Studio-Pro`
+  (skip Helper processes), then run `sample <pid> 12 -f out.txt` **in the background** and tell the
+  user to reproduce during that window -- a drag steals their keyboard, so a foreground sample
+  never lines up. Read the `com.apple.main-thread` tree first. Known signatures: a nested
+  `QEventLoop` appears as a re-entrant `-[NSApplication run]` under a timer callback (it swallows
+  in-flight OS resize steps); render-thread saturation appears as `QWaitCondition::wait` under
+  `QQuickWindow::event`, with `QSGRenderThread` busy in `renderSceneGraph`. Earned the hard way on
+  2026-08-13: three plausible fixes read out of the source were all wrong, one sample was decisive.
 - **Update CLAUDE.md** for any architectural change that future me would otherwise miss.
 - **`scripts/` is the style contract.** When in doubt, run it; don't restate it here.
 
@@ -129,7 +138,8 @@ pytest tests/ -m "not destructive" -v     # skip server-crashing tests
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
 TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
 visualization widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below).
-Frame parsers in JavaScript (`QJSEngine`), Lua 5.4 (embedded `lua54`), or Built-In ("Native"
+Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims; per-project
+Safe/Fast execution mode — spec 0051), or Built-In ("Native"
 in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
 user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
 descriptor, no user code). Per-dataset value transforms in JS or Lua. Pro features: Output
@@ -182,14 +192,41 @@ cached flags, benchmark mechanics) in
 [doc/claude/architecture/dataflow.md](doc/claude/architecture/dataflow.md); the
 `ss-hotpath` skill auto-activates on these paths and re-states them.
 
-- **`FrameReader` and `CircularBuffer` are main-thread / SPSC. Never add mutexes.** Recreate
+- **The frame pipeline runs on `IO::PipelineHost`'s processing thread (spec 0051 M3), not the
+  GUI thread.** FrameReaders, `FrameParser` and `FrameBuilder` all live there; the GUI drains
+  finished pooled frames from an SPSC ring in `Dashboard::onDisplayTick`. Public
+  FrameBuilder/FrameParser mutators SELF-MARSHAL — GUI→pipeline waits go through
+  `IO::PipelineHost::runOnObjectThread` (event-loop-backed, so it can't deadlock against a
+  script's blocking apiCall), pipeline→GUI reads through `runOnGuiThreadBlocking`. Never add a
+  plain `BlockingQueuedConnection` from the GUI into the pipeline.
+- **`runOnObjectThread` is for command-rate waits, never for a GUI-thread script API.** The wait
+  spins a nested `QEventLoop` that fires the display tick and re-enters the calling script; per
+  script-API-call it also parks the GUI behind a saturated pipeline. `DataModel::readTableView` /
+  `writeTableStore` (`DataTable.h`) hold the ONE routing rule — own-thread direct, GUI reads the
+  `DataTableSnapshot` mirror (`FrameBuilder::publishTableSnapshot()` → `drainTableSnapshot()`,
+  display-tick rate), GUI writes queued, other workers marshal — and both the JS bridge and the
+  Lua closures go through them. **No `lua_*` call may run inside a routed lambda** (a `lua_State`
+  is thread-owned, and `luaL_check*` longjmps); interned-pointer fast paths are store-thread only.
+  Any new GUI-callable script API follows the same rule — see
+  [doc/claude/architecture/scripting.md](doc/claude/architecture/scripting.md) "Data Tables".
+- **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add mutexes.** Recreate
   via `resetFrameReader()` / `reconfigure()`.
-- **Hotpath signal hops must be `Qt::DirectConnection`.** Queued between two main-thread
-  objects fills the 65536-slot queue at 10+ kHz and drops frames.
+- **In-pipeline signal hops must be `Qt::DirectConnection`.** Queued between two
+  pipeline-thread objects fills the 65536-slot queue at 10+ kHz and drops frames. GUI↔pipeline
+  traffic is chunk/command/tick rate only — never a per-frame queued emission.
 - **No allocation, no Frame copy on the dashboard path.** Draw the Dashboard frame from
   `FrameBuilder::acquireFrame()` (slot pool, aliasing shared_ptr), never a direct
   `make_shared<TimestampedFrame>`. The `hotpathTxFrame` async-sink fan-out makes one detached
   copy on purpose (slow export path, gated on a sink being on) so a backlog can't pin the pool.
+- **Dense typed sources take the stream lane, never the frame lane (spec 0051 M4).** Audio (and
+  any driver whose `isStreamCapable()` is true, overridable per source by `streamLane`)
+  publishes `IO::SampleBlock`s to a per-source `IO::StreamWorker` thread that does ALL
+  per-sample work — decode, `transform_block`/`transform`, envelope + FFT reduction, full-rate
+  typed export payloads. Everything crossing back is per block: a bounded display update
+  (drained on the display tick), export blocks queued to the GUI-affine CSV/MDF4/API sinks, and
+  latest values queued to the pipeline thread for the data-table store (its single writer).
+  Never add per-sample cross-thread traffic; see
+  [doc/claude/architecture/io.md](doc/claude/architecture/io.md).
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` →
   `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes,
   zero steady-state allocation. The hotpath reads **cached** flags (`m_operationMode`,
@@ -260,10 +297,12 @@ cached flags, benchmark mechanics) in
   (see [doc/claude/architecture/startup.md](doc/claude/architecture/startup.md)).
 - **A ctor-edge proof dies when ctor-reachable code changes.** Any edit inside that closure
   re-triggers the check, no matter how unrelated the edit looks.
-- **`SessionContext` (spec 0039) owns the eight core modules** as `unique_ptr` slots adopted
-  inside `instantiateCoreModules()`. Ctor/dtor stay empty (a constructing ctor re-enters the
+- **`SessionContext` (spec 0039) owns the nine core modules** as `unique_ptr` slots adopted
+  inside `instantiateCoreModules()` (`IO::PipelineHost` sits between FrameBuilder and
+  ConnectionManager since spec 0051). Ctor/dtor stay empty (a constructing ctor re-enters the
   Meyers guard and aborts); adopted addresses never change; `shutdown()` (from `main.cpp`
-  while `qApp` is alive) releases in exact reverse pinned order. **Never call
+  while `qApp` is alive) releases in exact reverse pinned order. The pipeline thread and every
+  stream worker join in `stopFrameConsumerWorkers()` BEFORE that release. **Never call
   `SessionContext::current()` from a method body** — composition root and `instance()`
   forwarders only; the singleton census (`code-verify.py --singleton-census --check`) fails
   on any increase. Full contract:

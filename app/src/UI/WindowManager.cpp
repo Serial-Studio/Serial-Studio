@@ -22,19 +22,34 @@
 
 #include "WindowManager.h"
 
+#include <algorithm>
 #include <QApplication>
 #include <QFile>
 #include <QFileDialog>
 #include <QSet>
 #include <QStandardPaths>
-#include <QtMath>
 #include <QUrl>
 
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
+#include "UI/LayoutPatterns.h"
 #include "UI/SnapGuides.h"
 #include "UI/Taskbar.h"
 #include "UI/UISessionRegistry.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Largest rescale gap still treated as rounding drift rather than an intentional separation.
+constexpr int kSeamWeldTolerance = 6;
+
+// Manual-mode window size floor; mirrors the fallback constrainWindows() applies.
+constexpr int kManualMinSize = 48;
+
+// Auto-layout size floor; mirrors the auto-mode floor constrainWindows() applies.
+constexpr int kAutoLayoutMinWidth  = 100;
+constexpr int kAutoLayoutMinHeight = 80;
 
 namespace detail {
 
@@ -71,18 +86,9 @@ struct StableKey {
 /**
  * @brief Tiling environment shared by the auto-layout tiling helpers.
  */
-struct TileEnv {
-  int margin;
-  int spacing;
-  int availW;
-  int availH;
-  bool isLandscape;
-};
-
 }  // namespace detail
 
 using detail::StableKey;
-using detail::TileEnv;
 
 /**
  * @brief Builds a (widgetType, relativeIndex) -> windowId map from the live
@@ -246,6 +252,35 @@ static QRect anchoredGeometry(const QRect& preferred,
 }
 
 /**
+ * @brief Rescales one stored manual geometry from the canvas it was captured on to the
+ *        current canvas, then anchors it. Shared by the live-resize and project-load paths,
+ *        which differ only in where the reference size comes from; anchoring a saved rect
+ *        without rescaling it is what used to break layouts loaded at another window size.
+ */
+[[nodiscard]] static QRect scaledManualGeometry(const QRect& preferred,
+                                                const QMargins& margins,
+                                                const int refW,
+                                                const int refH,
+                                                const int canvasW,
+                                                const int canvasH)
+{
+  const double scaleX = refW > 0 ? double(canvasW) / double(refW) : 1.0;
+  const double scaleY = refH > 0 ? double(canvasH) / double(refH) : 1.0;
+
+  const QMargins scaled(qRound(margins.left() * scaleX),
+                        qRound(margins.top() * scaleY),
+                        qRound(margins.right() * scaleX),
+                        qRound(margins.bottom() * scaleY));
+
+  const int maxW = qMax(0, canvasW - scaled.left() - scaled.right());
+  const int maxH = qMax(0, canvasH - scaled.top() - scaled.bottom());
+  const int w    = qMin(qRound(preferred.width() * scaleX), maxW);
+  const int h    = qMin(qRound(preferred.height() * scaleY), maxH);
+
+  return anchoredGeometry(QRect(0, 0, w, h), scaled, canvasW, canvasH);
+}
+
+/**
  * @brief Returns true if any tracked window is currently in the maximized state.
  */
 static bool anyWindowMaximized(const QMap<int, QQuickItem*>& windows)
@@ -266,122 +301,6 @@ static void placeWindow(QQuickItem* win, int x, int y, int w, int h)
   win->setY(y);
   win->setWidth(w);
   win->setHeight(h);
-}
-
-/**
- * @brief Picks the auto-layout column count for a window count: fixed choices
- *        up to six windows, aspect-aware square-root fit beyond that.
- */
-[[nodiscard]] static int autoLayoutColumnCount(const int n, const TileEnv& env)
-{
-  static constexpr int kLandscapeCols[] = {1, 1, 2, 2, 2, 3, 3};
-  static constexpr int kPortraitCols[]  = {1, 1, 1, 1, 2, 2, 2};
-  if (n <= 6)
-    return env.isLandscape ? kLandscapeCols[n] : kPortraitCols[n];
-
-  const double safeW = qMax(1, env.availW);
-  const double safeH = qMax(1, env.availH);
-
-  int cols;
-  if (env.isLandscape) {
-    cols = qCeil(qSqrt(static_cast<double>(n) * safeW / safeH));
-  } else {
-    const int rows = qBound(1, qCeil(qSqrt(static_cast<double>(n) * safeH / safeW)), n);
-    cols           = qCeil(static_cast<double>(n) / rows);
-  }
-
-  return qBound(1, cols, n);
-}
-
-/**
- * @brief Lays out windows in a uniform cols x rows grid in row-major order;
- *        requires the window count to be an exact multiple of cols.
- */
-static void tileExactGrid(const QList<QQuickItem*>& wins, const TileEnv& env, const int cols)
-{
-  const int n                = wins.size();
-  const int rows             = n / cols;
-  const int spacingForSizing = qMax(env.spacing, 0);
-  const int totalCellsW      = qMax(1, env.availW - (cols - 1) * spacingForSizing);
-  const int totalCellsH      = qMax(1, env.availH - (rows - 1) * spacingForSizing);
-  const int baseCellW        = totalCellsW / cols;
-  const int baseCellH        = totalCellsH / rows;
-  const int extraW           = totalCellsW % cols;
-  const int extraH           = totalCellsH % rows;
-
-  QVector<int> colWidths(cols), colXs(cols);
-  QVector<int> rowHeights(rows), rowYs(rows);
-
-  int runningX = env.margin;
-  for (int c = 0; c < cols; ++c) {
-    colWidths[c]  = baseCellW + (c < extraW ? 1 : 0);
-    colXs[c]      = runningX;
-    runningX     += colWidths[c] + env.spacing;
-  }
-
-  int runningY = env.margin;
-  for (int r = 0; r < rows; ++r) {
-    rowHeights[r]  = baseCellH + (r < extraH ? 1 : 0);
-    rowYs[r]       = runningY;
-    runningY      += rowHeights[r] + env.spacing;
-  }
-
-  for (int i = 0; i < n; ++i)
-    placeWindow(
-      wins[i], colXs[i % cols], rowYs[i / cols], colWidths[i % cols], rowHeights[i / cols]);
-}
-
-/**
- * @brief Lays out windows in equal-width columns, column-major, when the count
- *        does not fill a grid evenly: every widget keeps the same width, the
- *        extra windows stack in the trailing columns, and each column's windows
- *        split the full canvas height evenly.
- */
-static void tileUnevenColumns(const QList<QQuickItem*>& wins, const TileEnv& env, const int cols)
-{
-  const int n                = wins.size();
-  const int spacingForSizing = qMax(env.spacing, 0);
-  const int totalCellsW      = qMax(1, env.availW - (cols - 1) * spacingForSizing);
-  const int baseCellW        = totalCellsW / cols;
-  const int extraW           = totalCellsW % cols;
-  const int baseCount        = n / cols;
-  const int extraCount       = n % cols;
-
-  int index    = 0;
-  int runningX = env.margin;
-  for (int c = 0; c < cols; ++c) {
-    const int colW        = baseCellW + (c < extraW ? 1 : 0);
-    const int count       = baseCount + (c >= cols - extraCount ? 1 : 0);
-    const int totalCellsH = qMax(1, env.availH - (count - 1) * spacingForSizing);
-    const int baseCellH   = totalCellsH / count;
-    const int extraH      = totalCellsH % count;
-
-    int runningY = env.margin;
-    for (int r = 0; r < count; ++r) {
-      const int cellH = baseCellH + (r < extraH ? 1 : 0);
-      placeWindow(wins[index++], runningX, runningY, colW, cellH);
-      runningY += cellH + env.spacing;
-    }
-
-    runningX += colW + env.spacing;
-  }
-}
-
-/**
- * @brief Tiles windows into equal-width columns so every widget shares the
- *        same width regardless of count; exact grids keep row-major order.
- */
-static void dispatchTile(const QList<QQuickItem*>& wins, const TileEnv& env)
-{
-  const int n = wins.size();
-  if (n <= 0)
-    return;
-
-  const int cols = autoLayoutColumnCount(n, env);
-  if (n % cols == 0)
-    tileExactGrid(wins, env, cols);
-  else
-    tileUnevenColumns(wins, env, cols);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -428,6 +347,11 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
 
   connect(this, &UI::WindowManager::widthChanged, this, &UI::WindowManager::triggerLayoutUpdate);
   connect(this, &UI::WindowManager::heightChanged, this, &UI::WindowManager::triggerLayoutUpdate);
+
+  connect(&m_dashboard, &UI::Dashboard::manualLayoutSpacingChanged, this, [this] {
+    if (!m_autoLayoutEnabled)
+      weldManualSeams(static_cast<int>(width()), static_cast<int>(height()));
+  });
 
   m_sessionRegistry.registerWindowManager(this);
 }
@@ -530,6 +454,22 @@ bool UI::WindowManager::manualGestureActive() const
 const QRect& UI::WindowManager::sizeMatchRect() const
 {
   return m_sizeMatchRect;
+}
+
+/**
+ * @brief Returns the footprint of the wrench-fraction resize preview; invalid when hidden.
+ */
+const QRect& UI::WindowManager::fractionPreviewRect() const
+{
+  return m_fractionPreviewRect;
+}
+
+/**
+ * @brief Returns the fraction preview's label ("1/2 x 1/4"); empty when hidden.
+ */
+const QString& UI::WindowManager::fractionPreviewLabel() const
+{
+  return m_fractionPreviewLabel;
 }
 
 /**
@@ -706,7 +646,8 @@ void UI::WindowManager::applySavedGeometries(const QJsonObject& layout,
     const int h = static_cast<int>(SerialStudio::toDouble(winGeom["height"], 150.0));
     const QRect geom(x, y, w, h);
     const QMargins margins = manualMarginsForGeometry(geom, marginCanvasW, marginCanvasH);
-    const QRect anchored   = anchoredGeometry(geom, margins, canvasW, canvasH);
+    const QRect anchored =
+      scaledManualGeometry(geom, margins, marginCanvasW, marginCanvasH, canvasW, canvasH);
 
     auto* win = m_windows.value(id);
     if (win) {
@@ -753,6 +694,7 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
 
     applySavedGeometries(layout, stableLookup, marginCanvasW, marginCanvasH);
 
+    weldManualSeams(canvasW, canvasH);
     constrainWindows();
     Q_EMIT geometryChanged(nullptr);
   }
@@ -809,7 +751,8 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
     const int h = static_cast<int>(SerialStudio::toDouble(winGeom["height"], 150.0));
     const QRect geom(x, y, w, h);
     const QMargins margins = manualMarginsForGeometry(geom, marginCanvasW, marginCanvasH);
-    const QRect anchored   = anchoredGeometry(geom, margins, canvasW, canvasH);
+    const QRect anchored =
+      scaledManualGeometry(geom, margins, marginCanvasW, marginCanvasH, canvasW, canvasH);
 
     m_manualGeometries.insert(id, geom);
     m_manualMargins.insert(id, margins);
@@ -925,13 +868,19 @@ void UI::WindowManager::autoLayout()
   if (windows.isEmpty())
     return;
 
-  TileEnv env;
+  Layouts::LayoutEnv env;
   env.margin      = qMax(0, m_dashboard.autoLayoutMargin());
   env.spacing     = qMax(-1, m_dashboard.autoLayoutSpacing());
   env.availW      = canvasW - 2 * env.margin;
   env.availH      = canvasH - 2 * env.margin;
   env.isLandscape = env.availW >= env.availH;
-  dispatchTile(windows, env);
+  env.minWidth    = kAutoLayoutMinWidth;
+  env.minHeight   = kAutoLayoutMinHeight;
+
+  const auto rects = Layouts::tile(windows.size(), Layouts::Pattern::Grid, env);
+  const int placed = qMin(rects.size(), windows.size());
+  for (int i = 0; i < placed; ++i)
+    placeWindow(windows[i], rects[i].x(), rects[i].y(), rects[i].width(), rects[i].height());
 
   for (auto* win : std::as_const(m_windows))
     if (win && !win->isVisible() && (win->state() == "normal" || win->state() == "maximized"))
@@ -1285,9 +1234,6 @@ void UI::WindowManager::applyManualAnchors(const int newWidth, const int newHeig
   if (m_manualCanvasHeight <= 0 && refHeight > 0)
     m_manualCanvasHeight = refHeight;
 
-  const double scaleX = refWidth > 0 ? double(newWidth) / double(refWidth) : 1.0;
-  const double scaleY = refHeight > 0 ? double(newHeight) / double(refHeight) : 1.0;
-
   for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it) {
     const int id = it.key();
     auto* win    = it.value();
@@ -1299,23 +1245,117 @@ void UI::WindowManager::applyManualAnchors(const int newWidth, const int newHeig
 
     const QRect prefGeom   = m_manualGeometries.value(id, extractGeometry(win));
     const QMargins margins = m_manualMargins.value(id, QMargins());
-    int scaledW            = qRound(prefGeom.width() * scaleX);
-    int scaledH            = qRound(prefGeom.height() * scaleY);
-    const QMargins scaledMargins(qRound(margins.left() * scaleX),
-                                 qRound(margins.top() * scaleY),
-                                 qRound(margins.right() * scaleX),
-                                 qRound(margins.bottom() * scaleY));
-    const int maxW = qMax(0, newWidth - scaledMargins.left() - scaledMargins.right());
-    const int maxH = qMax(0, newHeight - scaledMargins.top() - scaledMargins.bottom());
-    scaledW        = qMin(scaledW, maxW);
-    scaledH        = qMin(scaledH, maxH);
-    const QRect scaledPref(0, 0, scaledW, scaledH);
-    const QRect anchored = anchoredGeometry(scaledPref, scaledMargins, newWidth, newHeight);
+    const QRect anchored =
+      scaledManualGeometry(prefGeom, margins, refWidth, refHeight, newWidth, newHeight);
 
-    win->setX(anchored.x());
-    win->setY(anchored.y());
-    win->setWidth(anchored.width());
-    win->setHeight(anchored.height());
+    const int left = Snap::snapToFraction(anchored.left(), newWidth, kSeamWeldTolerance);
+    const int top  = Snap::snapToFraction(anchored.top(), newHeight, kSeamWeldTolerance);
+    const int right =
+      Snap::snapToFraction(anchored.left() + anchored.width(), newWidth, kSeamWeldTolerance);
+    const int bottom =
+      Snap::snapToFraction(anchored.top() + anchored.height(), newHeight, kSeamWeldTolerance);
+
+    win->setX(left);
+    win->setY(top);
+    win->setWidth(qMax(kManualMinSize, right - left));
+    win->setHeight(qMax(kManualMinSize, bottom - top));
+  }
+
+  weldManualSeams(newWidth, newHeight);
+}
+
+/**
+ * @brief Maps every edge coordinate onto a shared representative, grouping values that sit
+ *        within @a tolerance of each other; a group touching a canvas bound adopts that bound
+ *        so outer edges stay flush with the canvas rather than with each other's average.
+ */
+[[nodiscard]] static QHash<int, int> clusterEdges(const QVector<int>& edgeValues,
+                                                  const int canvasEnd,
+                                                  const int tolerance)
+{
+  QHash<int, int> mapping;
+  QVector<int> edges = edgeValues;
+  edges.append(0);
+  edges.append(canvasEnd);
+  std::sort(edges.begin(), edges.end());
+
+  int index = 0;
+  while (index < edges.size()) {
+    int last      = index;
+    long long sum = edges[index];
+    while (last + 1 < edges.size() && edges[last + 1] - edges[last] <= tolerance) {
+      ++last;
+      sum += edges[last];
+    }
+
+    const int count    = last - index + 1;
+    int representative = static_cast<int>(sum / count);
+    if (edges[index] == 0)
+      representative = 0;
+    else if (edges[last] == canvasEnd)
+      representative = canvasEnd;
+
+    for (int k = index; k <= last; ++k)
+      mapping.insert(edges[k], representative);
+
+    index = last + 1;
+  }
+
+  return mapping;
+}
+
+/**
+ * @brief Removes the hairline gaps a manual-layout rescale leaves behind. Each window is
+ *        scaled and rounded independently, so edges that were flush drift a few pixels apart;
+ *        this welds near-coincident edges back onto one coordinate (spec 0052 follow-up).
+ */
+void UI::WindowManager::weldManualSeams(const int canvasWidth, const int canvasHeight)
+{
+  if (canvasWidth <= 0 || canvasHeight <= 0)
+    return;
+
+  QVector<QQuickItem*> windows;
+  QVector<int> xs;
+  QVector<int> ys;
+  for (auto* win : std::as_const(m_windows)) {
+    if (!win || win->state() != "normal")
+      continue;
+
+    const QRect geometry = extractGeometry(win);
+    windows.append(win);
+    xs.append(geometry.left());
+    xs.append(geometry.left() + geometry.width());
+    ys.append(geometry.top());
+    ys.append(geometry.top() + geometry.height());
+  }
+
+  if (windows.isEmpty())
+    return;
+
+  const auto xMap   = clusterEdges(xs, canvasWidth, kSeamWeldTolerance);
+  const auto yMap   = clusterEdges(ys, canvasHeight, kSeamWeldTolerance);
+  const int spacing = m_dashboard.manualLayoutSpacing();
+
+  for (auto* win : std::as_const(windows)) {
+    const QRect geometry = extractGeometry(win);
+    const int minWidth   = qMax(static_cast<int>(win->implicitWidth()), kManualMinSize);
+    const int minHeight  = qMax(static_cast<int>(win->implicitHeight()), kManualMinSize);
+
+    int left         = xMap.value(geometry.left(), geometry.left());
+    int top          = yMap.value(geometry.top(), geometry.top());
+    const int right  = xMap.value(geometry.left() + geometry.width(), geometry.right() + 1);
+    const int bottom = yMap.value(geometry.top() + geometry.height(), geometry.bottom() + 1);
+
+    if (left > 0)
+      left += spacing;
+
+    if (top > 0)
+      top += spacing;
+
+    win->setX(left);
+    win->setY(top);
+    win->setWidth(qMax(minWidth, right - left));
+    win->setHeight(qMax(minHeight, bottom - top));
   }
 }
 
@@ -1363,10 +1403,50 @@ void UI::WindowManager::publishSnapGuides(const Snap::SnapResult& result)
 }
 
 /**
+ * @brief Publishes the wrench-fraction preview for a resize in progress: the footprint the
+ *        window occupies plus its width/height as canvas fractions. Only axes actually
+ *        snapped onto a stop are named, so the panel confirms a real snap instead of
+ *        approximating one; it describes the widget's size, never where it sits.
+ */
+void UI::WindowManager::publishFractionPreview(const QRect& geometry)
+{
+  const bool guidesOn = m_dashboard.showAlignmentGuides();
+  const QString widthLabel =
+    guidesOn ? Snap::fractionLabel(geometry.width(), static_cast<int>(width())) : QString();
+  const QString heightLabel =
+    guidesOn ? Snap::fractionLabel(geometry.height(), static_cast<int>(height())) : QString();
+
+  QRect rect;
+  QString label;
+  if (!widthLabel.isEmpty() && !heightLabel.isEmpty())
+    label = tr("Width: %1    Height: %2").arg(widthLabel, heightLabel);
+  else if (!widthLabel.isEmpty())
+    label = tr("Width: %1").arg(widthLabel);
+  else if (!heightLabel.isEmpty())
+    label = tr("Height: %1").arg(heightLabel);
+
+  if (!label.isEmpty())
+    rect = geometry;
+
+  if (m_fractionPreviewRect == rect && m_fractionPreviewLabel == label)
+    return;
+
+  m_fractionPreviewRect  = rect;
+  m_fractionPreviewLabel = label;
+  Q_EMIT fractionPreviewChanged();
+}
+
+/**
  * @brief Clears the guide/spacing/size-match visuals, emitting only when needed.
  */
 void UI::WindowManager::clearSnapGuides()
 {
+  if (m_fractionPreviewRect.isValid() || !m_fractionPreviewLabel.isEmpty()) {
+    m_fractionPreviewRect = QRect();
+    m_fractionPreviewLabel.clear();
+    Q_EMIT fractionPreviewChanged();
+  }
+
   if (!m_alignmentGuides.isEmpty()) {
     m_alignmentGuides.clear();
     Q_EMIT alignmentGuidesChanged();
@@ -1865,7 +1945,7 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
                                0,
                                m_gridEnabled,
                                m_gridSize,
-                               qMax(-1, m_dashboard.autoLayoutSpacing()),
+                               m_dashboard.manualLayoutSpacing(),
                                m_dashboard.showAlignmentGuides()};
       const Snap::SnapResult res = Snap::resolveMoveSnap(in);
       rect                       = res.rect;
@@ -1991,11 +2071,12 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
                              minSize,
                              m_gridEnabled,
                              m_gridSize,
-                             qMax(-1, m_dashboard.autoLayoutSpacing()),
+                             m_dashboard.manualLayoutSpacing(),
                              m_dashboard.showAlignmentGuides()};
     const Snap::SnapResult res = Snap::resolveResizeSnap(in, movingEdgesFor(m_resizeEdge));
     geometry                   = res.rect;
     publishSnapGuides(res);
+    publishFractionPreview(geometry);
   }
 
   const QRect unclamped = geometry;

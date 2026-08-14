@@ -31,7 +31,7 @@ invariants hold it together:
 
 - **`SessionContext::current()` is first reached as the opening statement of
   `instantiateCoreModules()` (spec 0039 M2)** — the composition root takes `auto& ctx =
-  SessionContext::current()` before the pinned order runs and adopts the eight owned modules
+  SessionContext::current()` before the pinned order runs and adopts the nine owned modules
   inline as each constructs. A class that takes the context by injection can therefore never be
   constructed before the context exists. See "Session Context" below for the ownership contract.
 
@@ -39,7 +39,8 @@ invariants hold it together:
 `instantiateCoreModules()`): `Translator`, `TimerEvents`, `CommonFonts`, `WorkspaceManager`,
 `NotificationCenter`, `Misc::ProblemCenter`, `Misc::ConnectionDiagnostics`, `ThemeManager`,
 `ExtensionManager`, `ControlScript`, **`ProjectModel` before `AppState`**, [`MachineID`,
-`LemonSqueezy`, `OfflineLicense`, `Trial`, commercial], `FrameBuilder`, `IO::ConnectionManager`,
+`LemonSqueezy`, `OfflineLicense`, `Trial`, commercial], `FrameBuilder`, `IO::PipelineHost`,
+`IO::ConnectionManager`,
 `Console::Handler`, `API::Server`, `CSV::Player`, `MDF4::Player`, [`Sessions::Player`,
 `Sessions::Export`, `Sessions::DatabaseManager`, `MQTT::Publisher`, commercial], `CSV::Export`,
 `MDF4::Export`, `Console::Export`, `FrameParser`, `UI::WidgetExtensions`, and `UI::Dashboard`
@@ -99,10 +100,10 @@ to inherit the boosted band.
 ## Session Context (spec 0039)
 
 `SessionContext` (`app/src/SessionContext.h`) is the session/application ownership split: a
-plain non-QObject, non-copyable class holding eight `unique_ptr` slots — AppState,
+plain non-QObject, non-copyable class holding nine `unique_ptr` slots — AppState,
 `UI::Dashboard`, `Console::Handler`, `FrameParser`, `FrameBuilder`, `ProjectModel`,
-`IO::ConnectionManager`, `NotificationCenter`. Those classes have private ctors with
-`friend class ::SessionContext`; the composition root constructs them via
+`IO::PipelineHost`, `IO::ConnectionManager`, `NotificationCenter`. Those classes have private
+ctors with `friend class ::SessionContext`; the composition root constructs them via
 `SessionContext::create<T>()` and `adopt*()` inside `instantiateCoreModules()`. The contract:
 
 - **Ctor and dtor stay empty.** Constructing a module inside the `SessionContext` ctor
@@ -118,13 +119,25 @@ plain non-QObject, non-copyable class holding eight `unique_ptr` slots — AppSt
   exact reverse of the pinned instantiation order; update the two in lockstep.
 - **Never call `SessionContext::current()` from a method body.** Sanctioned sites: the
   composition root, and a class's own `instance()` accessor passing the context into its ctor.
-  The eight legacy `instance()` accessors are thin forwarders to `current()`, so existing call
+  The nine legacy `instance()` accessors are thin forwarders to `current()`, so existing call
   sites keep working. The `arch-session-context-bypass` advisory and the singleton-census gate
   (`scripts/singleton-census.json` baseline; `code-verify.py --singleton-census --check` fails
   on any increase) hold the line — don't add new `instance()` reach or a casual fourth pilot.
 - **Injection pilots** (ctor takes `SessionContext&`): `Misc::BackupManager`,
   `DataModel::ProtoImporter`, `DataModel::DBCImporter`, plus `API::MirrorPublisher` /
   `API::MirrorSession` from spec 0040.
+
+**The frame pipeline moves threads as the last wiring step (spec 0051 M3).**
+`setupCrossModuleConnections()` ends with `IO::PipelineHost::relocateProcessingObjects()`,
+which `moveToThread`s `FrameBuilder` and `FrameParser` onto the processing thread. Everything
+before it — `restoreLastProject()`, the initial `readCode()`, every `setupExternalConnections`
+— therefore runs same-thread, and only steady-state traffic crosses the boundary. The headless
+and benchmark bootstraps call `instantiateCoreModules()` without
+`setupCrossModuleConnections()`, so they stay single-threaded by construction (which is why
+the spec-0044 verifier and `--benchmark-hotpath` measure the same pipeline they always did).
+The pipeline thread is joined in `stopFrameConsumerWorkers()` **before**
+`SessionContext::shutdown()` frees the modules, with `prepareShutdown()` queued ahead of the
+quit so Lua states and QJSEngines die on the thread that owns them.
 
 M3 (a real second session) is not started; everything above is single-context with session
 id 0. Ctor-edge proofs: `0039-session-context/ctor-proof.md` (M1) and `ctor-proof-m2.md`

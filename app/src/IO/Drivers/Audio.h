@@ -119,6 +119,9 @@ public:
   void close() override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isStreamCapable() const noexcept override;
+  [[nodiscard]] bool streamLaneActive() const noexcept;
+  void setStreamLaneActive(bool active) noexcept;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -154,6 +157,7 @@ public:
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
+  void setDiscoveryPaused(const bool paused);
   void setSelectedSampleRate(int index);
 
   void setSelectedInputDevice(int index);
@@ -192,6 +196,12 @@ private:
   static void notificationCallback(const ma_device_notification* notification);
 
   void applyPlatformAudioConfig();
+  void publishTypedBlock(const QByteArray& raw,
+                         int channels,
+                         ma_format format,
+                         int totalFrames,
+                         CapturedData::SteadyTimePoint timestamp,
+                         std::chrono::nanoseconds frameStep);
   void configureCaptureFormat(QIODevice::OpenMode mode);
   [[nodiscard]] bool configurePlaybackFormat(QIODevice::OpenMode mode);
   void startInputWorker();
@@ -202,6 +212,7 @@ private:
 private:
   bool m_init;
   bool m_isOpen;
+  bool m_discoveryPaused;
 
   int m_selectedSampleRate;
 
@@ -238,6 +249,12 @@ private:
   CapturedData::SteadyTimePoint m_nextSampleTime;
 
   std::atomic<bool> m_stopNotifyArmed;
+
+  // code-verify off
+  // Written at connect/config time only (no steady-state cross-core writes); sharing the line
+  // with the stop-notify flag is harmless.
+  std::atomic<bool> m_streamLaneActive;
+  // code-verify on
 
   // code-verify off
   // Written once in open() before the RT thread starts, then read-only; there are no concurrent

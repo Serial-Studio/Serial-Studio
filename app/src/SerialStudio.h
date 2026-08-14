@@ -192,6 +192,7 @@ public:
     ImageView,
     Painter,
     WebView,
+    BarPanel,
   };
   Q_ENUM(GroupWidget)
 
@@ -235,6 +236,8 @@ public:
    *        explicit high value so no existing ordinal moves and extension widgets always sort last
    *        in the widget maps; every third-party package shares it, and its entity scope, title,
    *        and icon come from the UI::WidgetExtensions descriptor, never from the enum.
+   *        DashboardBarPanel is pinned at 90 for the same reason: an implicit value after the
+   *        commercial block would differ between build configurations.
    */
   enum DashboardWidget {
     DashboardTerminal,
@@ -262,6 +265,7 @@ public:
     DashboardWaterfall,
     DashboardPainter,
 #endif
+    DashboardBarPanel  = 90,
     DashboardExtension = 100,
   };
   Q_ENUM(DashboardWidget)
@@ -344,6 +348,8 @@ public:
   Q_INVOKABLE [[nodiscard]] static bool isFinalValuePlayerOpen();
   Q_INVOKABLE [[nodiscard]] static QColor getDatasetColor(const int index);
   [[nodiscard]] static QColor getDatasetColor(const DataModel::Dataset& dataset);
+  Q_INVOKABLE [[nodiscard]] static QColor getDatasetAccentColor();
+  [[nodiscard]] static QColor getDatasetAccentColor(const DataModel::Dataset& dataset);
   [[nodiscard]] static QColor getGroupColorOverride(const DataModel::Group& group);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceColor(const int sourceId);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceTopColor(const int sourceId);

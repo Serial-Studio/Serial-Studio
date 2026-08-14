@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <memory>
+#include <QCoreApplication>
 #include <QHash>
 #include <QJSValue>
 #include <QMap>
@@ -28,11 +30,13 @@
 #include <QPair>
 #include <QSet>
 #include <QString>
+#include <QThread>
 #include <QVariant>
 #include <QVariantList>
 #include <vector>
 
 #include "DataModel/Frame.h"
+#include "IO/PipelineHost.h"
 
 namespace DataModel {
 
@@ -51,6 +55,36 @@ struct RegisterValue {
 };
 
 /**
+ * @brief Immutable copy of a DataTableStore for readers off its owning thread (spec 0051 M5):
+ *        GUI scripts read a snapshot instead of blocking the display tick on a marshal. Lookup
+ *        maps are implicitly shared and only rebuilt by initialize(), so a snapshot costs three
+ *        refcount bumps plus one copy of the value vector.
+ */
+struct DataTableSnapshot {
+  int generation     = -1;
+  quint64 writeClock = 0;
+  std::vector<RegisterValue> values;
+  QHash<QPair<QString, QString>, int> index;
+  QHash<int, std::pair<int, int>> datasetIndex;
+  QHash<QString, std::pair<int, int>> aliasIndex;
+
+  [[nodiscard]] bool isInitialized() const;
+  [[nodiscard]] qint64 handleOf(const QString& table, const QString& reg) const;
+  [[nodiscard]] const RegisterValue* getByHandle(qint64 handle) const;
+  [[nodiscard]] const RegisterValue* getDatasetRaw(int uniqueId) const;
+  [[nodiscard]] const RegisterValue* getDatasetFinal(int uniqueId) const;
+  [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
+  [[nodiscard]] const RegisterValue* getDatasetRawByAlias(const QString& alias) const;
+  [[nodiscard]] const RegisterValue* getDatasetFinalByAlias(const QString& alias) const;
+};
+
+/**
+ * @typedef DataTableSnapshotPtr
+ * @brief Shared immutable pointer to a published data-table snapshot.
+ */
+typedef std::shared_ptr<const DataTableSnapshot> DataTableSnapshotPtr;
+
+/**
  * @brief Flat pre-allocated store for all data table registers; central data
  *        bus for cross-dataset communication and transforms.
  */
@@ -64,8 +98,10 @@ public:
 
   void clear();
 
+  [[nodiscard]] int generation() const noexcept;
   [[nodiscard]] bool isInitialized() const noexcept;
   [[nodiscard]] quint64 writeClock() const noexcept;
+  [[nodiscard]] DataTableSnapshotPtr makeSnapshot() const;
 
   [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
 
@@ -161,6 +197,62 @@ private:
 };
 
 /**
+ * @brief Everything a script bridge needs to reach the table store from any thread: the live
+ *        store, the QObject whose thread owns it (the FrameBuilder), and the GUI-side snapshot
+ *        slot. Shared by the JS bridge and the Lua C closures so the routing rule below has a
+ *        single definition.
+ */
+struct TableApiContext {
+  DataTableStore* store              = nullptr;
+  QObject* owner                     = nullptr;
+  const DataTableSnapshotPtr* mirror = nullptr;
+};
+
+/**
+ * @brief Runs @p fn against whichever view of the store is safe to read here: the live store when
+ *        the caller owns it, the GUI mirror snapshot on the GUI thread, the live store behind the
+ *        marshal otherwise (including before the first snapshot lands, so a handle resolved at
+ *        startup is never a spurious -1). Marshaling on the GUI would park the display tick.
+ */
+template<typename Fn>
+void readTableView(const TableApiContext& ctx, Fn&& fn)
+{
+  if (QThread::currentThread() == ctx.owner->thread()) {
+    fn(*ctx.store);
+    return;
+  }
+
+  if (qApp && QThread::currentThread() == qApp->thread() && ctx.mirror && *ctx.mirror) {
+    fn(**ctx.mirror);
+    return;
+  }
+
+  IO::PipelineHost::runOnObjectThread(ctx.owner, [&] { fn(*ctx.store); });
+}
+
+/**
+ * @brief Applies a store mutation on the store's own thread: direct when the caller owns it,
+ *        queued fire-and-forget from the GUI (waiting there would park the display tick and
+ *        re-enter the calling script), blocking from any other worker thread so a control
+ *        script's write-then-read stays ordered.
+ */
+template<typename Fn>
+void writeTableStore(const TableApiContext& ctx, Fn&& fn)
+{
+  if (QThread::currentThread() == ctx.owner->thread()) {
+    fn();
+    return;
+  }
+
+  if (qApp && QThread::currentThread() == qApp->thread() && ctx.mirror) {
+    QMetaObject::invokeMethod(ctx.owner, std::forward<Fn>(fn), Qt::QueuedConnection);
+    return;
+  }
+
+  IO::PipelineHost::runOnObjectThread(ctx.owner, std::forward<Fn>(fn));
+}
+
+/**
  * @brief QObject bridge exposing DataTableStore to QJSEngine for JS transforms.
  */
 class TableApiBridge : public QObject {
@@ -169,9 +261,9 @@ class TableApiBridge : public QObject {
   // clang-format on
 
 public:
-  explicit TableApiBridge(QObject* parent = nullptr) : QObject(parent), store(nullptr) {}
+  explicit TableApiBridge(QObject* parent = nullptr) : QObject(parent), context() {}
 
-  DataTableStore* store;
+  TableApiContext context;
 
 public:
   Q_INVOKABLE [[nodiscard]] QVariant tableGet(const QString& t, const QString& r);

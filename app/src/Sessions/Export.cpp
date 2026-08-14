@@ -1054,8 +1054,16 @@ void Sessions::Export::captureTableSnapshots()
 
   sampleSessionHealth();
 
-  const auto& store = m_frameBuilder->tableStore();
-  if (!store.isInitialized())
+  bool initialized = false;
+  decltype(m_frameBuilder->tableStore().snapshot()) snapshot;
+  m_frameBuilder->invokeOnBuilderThreadBlocking([&] {
+    const auto& store = m_frameBuilder->tableStore();
+    initialized       = store.isInitialized();
+    if (initialized)
+      snapshot = store.snapshot();
+  });
+
+  if (!initialized)
     return;
 
   const auto changed =
@@ -1072,8 +1080,7 @@ void Sessions::Export::captureTableSnapshots()
           || r.value().stringValue != val.stringValue;
     };
 
-  const auto now      = DataModel::TimestampedFrame::SteadyClock::now();
-  const auto snapshot = store.snapshot();
+  const auto now = DataModel::TimestampedFrame::SteadyClock::now();
   for (auto t = snapshot.constBegin(); t != snapshot.constEnd(); ++t) {
     if (t.key() == DataModel::systemDataTableName())
       continue;

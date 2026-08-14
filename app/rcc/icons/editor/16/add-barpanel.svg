@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="add-barpanel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+<g id="surface-barpanel-small-16">
+  <rect x="1.5" y="2.5" width="13.0" height="3.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1"/>
+  <rect x="1.5" y="2.5" width="9.0" height="3.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1"/>
+  <rect x="1.5" y="7.5" width="13.0" height="3.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1"/>
+  <rect x="1.5" y="7.5" width="6.0" height="3.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1"/>
+  <rect x="1.5" y="12.5" width="13.0" height="3.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1"/>
+  <rect x="1.5" y="12.5" width="11.0" height="3.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1"/>
+</g>
+
+<g id="add-badge">    <g transform="matrix(0.266667,0,0,0.266667,0,0)">
+        <g id="surface25">
+            <path d="M43.125,26.25C33.805,26.25 26.25,33.805 26.25,43.125C26.25,52.445 33.805,60 43.125,60C52.445,60 60,52.445 60,43.125C60,33.805 52.445,26.25 43.125,26.25Z" style="fill:rgb(94,156,118);fill-rule:nonzero;"/>
+            <rect x="41.25" y="33.75" width="3.75" height="18.75" style="fill:rgb(254,254,254);fill-rule:nonzero;"/>
+            <rect x="33.75" y="41.25" width="18.75" height="3.75" style="fill:rgb(254,254,254);fill-rule:nonzero;"/>
+        </g>
+    </g></g>
+</svg>

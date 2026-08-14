@@ -1664,6 +1664,7 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -2495,11 +2496,11 @@
         "layout:5000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 530,
+                "canvasHeight": 546,
                 "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 265,
+                        "height": 273,
                         "id": 9,
                         "relativeIndex": 0,
                         "state": "normal",
@@ -2509,54 +2510,54 @@
                         "y": 0
                     },
                     {
-                        "height": 265,
+                        "height": 273,
                         "id": 5,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 5,
-                        "width": 351,
+                        "width": 350,
                         "x": 350,
                         "y": 0
                     },
                     {
-                        "height": 265,
+                        "height": 273,
                         "id": 14,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 351,
-                        "x": 700,
+                        "width": 350,
+                        "x": 699,
                         "y": 0
                     },
                     {
-                        "height": 265,
+                        "height": 273,
                         "id": 10,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 18,
                         "width": 351,
                         "x": 0,
-                        "y": 264
+                        "y": 272
                     },
                     {
-                        "height": 265,
+                        "height": 273,
                         "id": 6,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 5,
-                        "width": 351,
+                        "width": 350,
                         "x": 350,
-                        "y": 264
+                        "y": 272
                     },
                     {
-                        "height": 265,
+                        "height": 273,
                         "id": 15,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 351,
-                        "x": 700,
-                        "y": 264
+                        "width": 350,
+                        "x": 699,
+                        "y": 272
                     }
                 ],
                 "userReordered": true,
@@ -3741,11 +3742,11 @@
         "layout:5014": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 530,
+                "canvasHeight": 546,
                 "canvasWidth": 1051,
                 "geometries": [
                     {
-                        "height": 530,
+                        "height": 546,
                         "id": 11,
                         "relativeIndex": 0,
                         "state": "normal",

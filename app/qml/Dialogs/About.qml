@@ -216,19 +216,6 @@ Widgets.SmartDialog {
       }
 
       //
-      // Zero-hardware demo project (commercial builds only)
-      //
-      Button {
-        Layout.fillWidth: true
-        visible: app.proVersion
-        text: qsTr("Project Demo")
-        onClicked: {
-          root.close()
-          app.showDemo()
-        }
-      }
-
-      //
       // License Agreement
       //
       Button {

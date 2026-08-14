@@ -62,6 +62,7 @@ existing scripts and clients that haven't migrated.
 | `"notification-log"`| 20           | Pro                                            |
 | `"waterfall"`       | 21           | Pro                                            |
 | `"painter"`         | 22           | Pro                                            |
+| `"barpanel"`        | 90           | One bar per dataset; pinned value, identical in both builds (`"bar-panel"` also accepted) |
 
 **Clock and Stopwatch are utility widgets, not tiles.** They have
 `DashboardWidget` slots (14, 15) so they can render and live in the
@@ -178,6 +179,7 @@ See `api_semantics` for the full alias list.
 | `"waterfall"` (Pro)  | `fftMin` / `fftMax`                        | Reuses the dataset's FFT settings, including the input-normalization range and `fftWindow`. |
 | `"led"`              | (none; uses `ledHigh` threshold)           | `ledHigh` is on/off boundary.                     |
 | `"datagrid"`         | (none)                                     | Shows raw values.                                 |
+| `"barpanel"`         | `wgtMin` / `wgtMax` per dataset            | One band-zoned bar per dataset; fill takes the active alarm band's color; `barPanelStyle` (group key) picks auto/horizontal/vertical; `extremeHold` per dataset adds min/max hold markers. |
 
 FFT and Waterfall also honor `fftWindow`, the window function applied before
 the transform (reduces spectral leakage). Integer values: 0=Rectangular,
@@ -260,8 +262,8 @@ Reading the API:
   is the GroupWidget enum (the int column above).
 - `project.group.update` accepts `{title, widget, columns, sourceId,
   painterCode}`. **It does NOT accept `widgetType`.** Pass `widget` as
-  a STRING ("datagrid", "multiplot", "accelerometer", "gyro", "map",
-  "plot3d", "image", "painter", "webview") or `""` to clear. Sending
+  a STRING ("datagrid", "barpanel", "multiplot", "accelerometer", "gyro",
+  "map", "plot3d", "image", "painter", "webview") or `""` to clear. Sending
   `widgetType: 4` to `update` is silently dropped. You'll see no
   error, and `compatibleWidgetTypes` won't change. If you wrote that
   call and saw nothing happen, that's why.
@@ -354,9 +356,9 @@ only useful when restoring a hand-crafted layout from an export.
 (`plot`, `fft`, `bar`, `gauge`, `meter`, `compass`, `waterfall`). It pins
 the tile to one specific dataset inside the group; without it, the
 first dataset in the group with the matching option enabled is used.
-For group-level widgets (`datagrid`, `multiplot`, `led`, `accelerometer`,
-`gyroscope`, `gps`, `plot3d`, `painter`, `imageview`, `output-panel`)
-the field is ignored: one tile per group regardless.
+For group-level widgets (`datagrid`, `barpanel`, `multiplot`, `led`,
+`accelerometer`, `gyroscope`, `gps`, `plot3d`, `painter`, `imageview`,
+`output-panel`) the field is ignored: one tile per group regardless.
 
 **Why this matters.** Earlier versions of this API auto-assigned
 `relativeIndex` as a per-workspace counter, which meant every

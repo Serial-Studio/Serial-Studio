@@ -349,6 +349,30 @@ void DataModel::ProjectEditor::buildGroupWebViewRow(const DataModel::Group& grou
 }
 
 /**
+ * @brief Adds the bar-panel orientation combo (Auto / Horizontal / Vertical, spec 0052).
+ */
+void DataModel::ProjectEditor::buildGroupBarPanelStyleRow(const DataModel::Group& group)
+{
+  int index = 0;
+  if (group.barPanelStyle == QLatin1String("horizontal"))
+    index = 1;
+  else if (group.barPanelStyle == QLatin1String("vertical"))
+    index = 2;
+
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(ComboBox, WidgetType);
+  item->setData(QStringList{tr("Auto"), tr("Horizontal"), tr("Vertical")}, ComboBoxData);
+  item->setData(index, EditableValue);
+  item->setData(kGroupView_BarPanelStyle, ParameterType);
+  item->setData(tr("Bar Style"), ParameterName);
+  item->setData(tr("Bar orientation: automatic, horizontal rows, or vertical columns"),
+                ParameterDescription);
+  m_groupModel->appendRow(item);
+}
+
+/**
  * @brief Rebuilds the group-settings form model for the given group.
  */
 void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
@@ -395,6 +419,9 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 
   if (group.widget == QStringLiteral("webview"))
     buildGroupWebViewRow(group);
+
+  if (group.widget == QStringLiteral("barpanel"))
+    buildGroupBarPanelStyleRow(group);
 
   buildGroupImageSection(group);
   buildGroupDatasetsSection(group);

@@ -64,12 +64,15 @@ void Widgets::Gauge::updateData()
     if (!std::isfinite(dataset.numericValue))
       return;
 
-    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    if (DSP::notEqual(value, m_value)) {
+    const bool extremesChanged = refreshExtremes(dataset);
+    auto value                 = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
+    const bool valueChanged    = DSP::notEqual(value, m_value);
+    if (valueChanged) {
       m_value = value;
       recomputeActiveBand(value);
-      if (isEnabled())
-        Q_EMIT updated();
     }
+
+    if ((valueChanged || extremesChanged) && isEnabled())
+      Q_EMIT updated();
   }
 }

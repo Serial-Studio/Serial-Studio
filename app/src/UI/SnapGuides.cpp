@@ -22,6 +22,7 @@
 #include "SnapGuides.h"
 
 #include <algorithm>
+#include <numeric>
 #include <optional>
 #include <QtGlobal>
 
@@ -31,8 +32,9 @@ constexpr int kRankSize     = 1;
 constexpr int kRankSpacing  = 2;
 constexpr int kRankFraction = 3;
 
-// Canvas fraction denominators the snap grid recognizes: n/2 through n/8.
-constexpr int kFractionDenominators[] = {2, 3, 4, 5, 6, 7, 8};
+// Imperial wrench ladder; a rung closer-spaced than kMinFractionSpacing is skipped.
+constexpr int kFractionDenominators[] = {2, 4, 8, 16};
+constexpr int kMinFractionSpacing     = 40;
 
 namespace detail {
 
@@ -125,7 +127,7 @@ static void appendIfViable(const Candidate& candidate,
 
 /**
  * @brief Collects edge/center alignment candidates against every sibling, the
- *        canvas edges/centerline and the n/2..n/8 canvas fractions for one axis.
+ *        canvas edges/centerline and the wrench-ladder canvas fractions for one axis.
  *        The two abutting sibling edges carry siblingSpacing so a flush snap
  *        shares a border instead of doubling it.
  */
@@ -156,6 +158,9 @@ static void appendAlignCandidates(const UI::Snap::SnapInput& input,
   appendIfViable({extent / 2 - mid, extent / 2, kRankCenter, 0, true}, input, horiz, out);
 
   for (const int den : kFractionDenominators) {
+    if (extent / den < kMinFractionSpacing)
+      continue;
+
     for (int num = 1; num < den; ++num) {
       const int frac = extent * num / den;
       appendIfViable({frac - lo, frac, kRankFraction, 0, true}, input, horiz, out);
@@ -362,6 +367,9 @@ static void appendResizeCandidates(const UI::Snap::SnapInput& input,
     {canvasEdge - edge, canvasEdge, kRankEdge, 0, true}, input, horiz, movingLo, out);
 
   for (const int den : kFractionDenominators) {
+    if (extent / den < kMinFractionSpacing)
+      continue;
+
     for (int num = 1; num < den; ++num) {
       const int fracSize = extent * num / den;
       const int target   = movingLo ? hi - fracSize : lo + fracSize;
@@ -417,6 +425,62 @@ int UI::Snap::snapToGrid(const int value, const int gridSize)
 
   const int offset = value >= 0 ? gridSize / 2 : -(gridSize / 2);
   return ((value + offset) / gridSize) * gridSize;
+}
+
+/**
+ * @brief Snaps a coordinate onto the nearest wrench-ladder stop of @a extent when one sits
+ *        within @a tolerance, else returns it untouched. Canvas bounds count as stops, so a
+ *        layout rescale lands shared edges on one coordinate instead of drifting apart.
+ */
+int UI::Snap::snapToFraction(const int value, const int extent, const int tolerance)
+{
+  if (extent <= 0)
+    return value;
+
+  int best     = value;
+  int bestDist = tolerance + 1;
+  for (const int den : kFractionDenominators) {
+    if (extent / den < kMinFractionSpacing)
+      continue;
+
+    for (int num = 0; num <= den; ++num) {
+      const int stop = extent * num / den;
+      const int dist = qAbs(stop - value);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best     = stop;
+      }
+    }
+  }
+
+  return bestDist <= tolerance ? best : value;
+}
+
+/**
+ * @brief Returns @a size as a reduced wrench fraction of @a extent ("1/2", "3/16"), or empty
+ *        when it is not ON a live stop -- it confirms a snap landed and must never name a
+ *        fraction the size merely resembles. Coarsest rung first, so shared stops reduce.
+ */
+QString UI::Snap::fractionLabel(const int size, const int extent)
+{
+  if (size <= 0 || extent <= 0)
+    return {};
+
+  for (const int den : kFractionDenominators) {
+    if (extent / den < kMinFractionSpacing)
+      continue;
+
+    for (int num = 1; num <= den; ++num) {
+      if (qAbs(size - extent * num / den) > 1)
+        continue;
+
+      const int divisor = std::gcd(num, den);
+      return QStringLiteral("%1/%2").arg(QString::number(num / divisor),
+                                         QString::number(den / divisor));
+    }
+  }
+
+  return {};
 }
 
 /**

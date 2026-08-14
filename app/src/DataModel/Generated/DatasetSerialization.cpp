@@ -23,11 +23,12 @@
 
 // Regenerate with: python3 scripts/generate-property-registry.py
 
+#include "DataModel/Frame.h"
+
 #include <QJsonArray>
 
-#include "DataModel/Frame.h"
-#include "DataModel/Project/PropertyHooks.h"
 #include "SerialStudio.h"
+#include "DataModel/Project/PropertyHooks.h"
 
 // clang-format off
 
@@ -63,6 +64,9 @@ static void writeDatasetFlags(QJsonObject& obj, const Dataset& d)
 
   if (d.fftLogX)
     obj.insert(Keys::FFTLogX, true);
+
+  if (d.extremeHold)
+    obj.insert(Keys::ExtremeHold, true);
 
   obj.insert(Keys::LED, d.led);
   if (d.overviewDisplay)
@@ -180,6 +184,7 @@ static void readDatasetFlags(Dataset& d, const QJsonObject& obj)
   d.waterfall = ss_jsr(obj, Keys::Waterfall, false).toBool();
   d.fftBallistics = ss_jsr(obj, Keys::FFTBallistics, false).toBool();
   d.fftLogX = ss_jsr(obj, Keys::FFTLogX, false).toBool();
+  d.extremeHold = ss_jsr(obj, Keys::ExtremeHold, false).toBool();
   d.led = ss_jsr(obj, Keys::LED, false).toBool();
   d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
   d.enabled = !ss_jsr(obj, Keys::Disabled, false).toBool();

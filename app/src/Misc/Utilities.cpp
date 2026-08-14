@@ -42,20 +42,6 @@
 #include "AppInfo.h"
 
 //--------------------------------------------------------------------------------------------------
-// Platform-specific hooks
-//--------------------------------------------------------------------------------------------------
-
-#ifdef Q_OS_MACOS
-extern int Misc_Utilities_showNativeMessageBox(const QString& text,
-                                               const QString& informativeText,
-                                               QMessageBox::Icon icon,
-                                               const QString& windowTitle,
-                                               QMessageBox::StandardButtons bt,
-                                               QMessageBox::StandardButton defaultButton,
-                                               const ButtonTextMap& buttonTexts);
-#endif
-
-//--------------------------------------------------------------------------------------------------
 // Singleton access
 //--------------------------------------------------------------------------------------------------
 
@@ -154,7 +140,9 @@ QString Misc::Utilities::hdpiImagePath(const QString& path)
 }
 
 /**
- * @brief Shows a macOS-like message box with the given properties.
+ * @brief Shows a macOS-like message box with the given properties. It is a QMessageBox on
+ *        every platform: AppKit stops an NSAlert opened from inside its own terminate/close
+ *        callbacks, so the native panel never reached the user on the quit path.
  */
 int Misc::Utilities::showMessageBox(const QString& text,
                                     const QString& informativeText,
@@ -166,11 +154,6 @@ int Misc::Utilities::showMessageBox(const QString& text,
 {
   if (qApp->platformName() == QLatin1String("offscreen"))
     return QMessageBox::Ok;
-
-#ifdef Q_OS_MACOS
-  return Misc_Utilities_showNativeMessageBox(
-    text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts);
-#endif
 
   QMessageBox box;
   box.setStandardButtons(bt);

@@ -42,6 +42,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "IO/PipelineHost.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
@@ -196,14 +197,20 @@ static int bootstrapEngineState(lua_State* L)
 
 /**
  * @brief Closes a Lua state after invalidating the interned-key cache it may have populated.
+ *        The cache clear is skipped during teardown: the store dies moments later, and reaching
+ *        it from a destructor would marshal across threads while no event loop is pumping.
  */
 static void closeLuaState(lua_State* state)
 {
   if (!state)
     return;
 
-  static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  frameBuilder.tableStore().clearLookupCache();
+  if (!IO::PipelineHost::tearingDown()) {
+    static auto& frameBuilder = DataModel::FrameBuilder::instance();
+    frameBuilder.invokeOnBuilderThreadBlocking(
+      [] { frameBuilder.tableStore().clearLookupCache(); });
+  }
+
   lua_close(state);
 }
 

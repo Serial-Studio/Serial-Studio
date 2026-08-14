@@ -37,6 +37,7 @@
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/UART.h"
 #include "IO/HAL_Driver.h"
+#include "IO/StreamWorker.h"
 #include "SerialStudio.h"
 
 class SessionContext;
@@ -163,6 +164,7 @@ public:
   [[nodiscard]] QString linkState() const;
   [[nodiscard]] LinkStats linkStats() const;
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
+  [[nodiscard]] const std::vector<std::unique_ptr<StreamWorker>>& streamWorkers() const noexcept;
 
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
@@ -212,6 +214,9 @@ public slots:
 
   void resetFrameReader();
   void setupExternalConnections();
+  void rebuildStreamWorkers();
+  void refreshStreamExportFlags();
+  void stopStreamWorkers();
 
   void setPaused(bool paused);
   void setWriteEnabled(bool enabled);
@@ -233,7 +238,6 @@ private slots:
   void wireDevice(DeviceManager* dm);
   void refreshConnectedState();
   void onUiDriverConfigurationChanged();
-  void onFrameReady(int deviceId, const IO::CapturedDataPtr& frame);
   void onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
   void onDeviceOpenFinished(int deviceId, bool ok, const QString& reason);
   void onDriverOpenFinished(bool ok, const QString& reason);
@@ -251,6 +255,12 @@ private:
   [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] bool diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const;
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
+  [[nodiscard]] QString streamLaneForSource(int deviceId) const;
+  [[nodiscard]] StreamConfig buildStreamConfig(int deviceId, HAL_Driver* driver) const;
+  void publishStreamTemplates();
+  void wireStreamWorkerSinks(StreamWorker& worker);
+  void wireStreamLifecycle();
+  void dropUnavailablePrimaryDevice(SerialStudio::BusType type);
 
 private:
   std::atomic<bool> m_paused;
@@ -274,6 +284,7 @@ private:
 
   QSet<int> m_pendingDialVerdicts;
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
+  std::vector<std::unique_ptr<StreamWorker>> m_streamWorkers;
 
   std::atomic<bool> m_replyCaptureArmed;
   mutable QMutex m_replyMutex;

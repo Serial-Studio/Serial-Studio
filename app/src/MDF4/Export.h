@@ -31,6 +31,7 @@
 #include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
+#include "IO/StreamWorker.h"
 
 class AppState;
 
@@ -108,6 +109,60 @@ private:
   DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
   std::chrono::system_clock::time_point m_systemBaseline;
 };
+
+/**
+ * @brief Worker writing full-rate typed stream blocks (spec 0051 M5) to one MDF4 file per
+ *        stream source: native float channels, per-sample timestamps derived as t0 + i * dt.
+ */
+class StreamExportWorker : public DataModel::FrameConsumerWorker<IO::StreamBlockItemPtr> {
+  Q_OBJECT
+
+public:
+  StreamExportWorker(moodycamel::ReaderWriterQueue<IO::StreamBlockItemPtr>* queue,
+                     std::atomic<bool>* enabled,
+                     std::atomic<size_t>* queueSize);
+  ~StreamExportWorker() override;
+
+  void closeResources() override;
+  [[nodiscard]] bool isResourceOpen() const override;
+
+protected:
+  void processItems(const std::vector<IO::StreamBlockItemPtr>& items) override;
+
+private:
+  struct StreamFile {
+    std::unique_ptr<mdf::MdfWriter> writer;
+    mdf::IChannelGroup* channelGroup = nullptr;
+    mdf::IChannel* timeChannel       = nullptr;
+    std::vector<mdf::IChannel*> channels;
+    DataModel::TimestampedFrame::SteadyTimePoint steadyBaseline;
+    std::chrono::system_clock::time_point systemBaseline;
+  };
+
+  [[nodiscard]] StreamFile* fileFor(const IO::StreamBlockItem& block);
+  void writeBlock(StreamFile& state, const IO::StreamBlockItem& block);
+
+private:
+  std::map<int, StreamFile> m_files;
+};
+
+/**
+ * @brief FrameConsumer facade for the stream-block MDF4 sink; the single producer is the GUI
+ *        thread (ingestBlock is a queued slot fed by every StreamProcessor's blockReady).
+ */
+class StreamExport : public DataModel::FrameConsumer<IO::StreamBlockItemPtr> {
+  Q_OBJECT
+
+public:
+  explicit StreamExport();
+
+public slots:
+  void ingestBlock(const IO::StreamBlockItemPtr& block);
+  void closeFiles();
+
+protected:
+  DataModel::FrameConsumerWorkerBase* createWorker() override;
+};
 #endif
 
 /**
@@ -149,6 +204,9 @@ public:
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
+#ifdef BUILD_COMMERCIAL
+  [[nodiscard]] StreamExport& streamSink() noexcept;
+#endif
 
 public slots:
   void closeFile();
@@ -180,6 +238,7 @@ private:
 #ifdef BUILD_COMMERCIAL
   AppState* m_appState;
   DataModel::FrameBuilder* m_frameBuilder;
+  StreamExport m_streamExport;
 #endif
 };
 }  // namespace MDF4

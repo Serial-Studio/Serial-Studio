@@ -40,6 +40,7 @@ extern "C" {
 #include <QMap>
 #include <QObject>
 #include <QSet>
+#include <QThread>
 #include <QTimer>
 #include <QVariant>
 #include <unordered_map>
@@ -50,7 +51,9 @@ extern "C" {
 #include "DataModel/ParseBudget.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
+#include "IO/PipelineHost.h"
 #include "SerialStudio.h"
+#include "ThirdParty/readerwriterqueue.h"
 
 class SessionContext;
 
@@ -103,10 +106,11 @@ public:
 
   using ParseLoad = DataModel::ParseBudget::Load;
 
-  void resetFrameCounters() noexcept;
-  void setParseBudgetEnabled(bool enabled) noexcept;
+  void resetFrameCounters();
+  void setParseBudgetEnabled(bool enabled);
   [[nodiscard]] bool parseBudgetThinning() const noexcept;
-  [[nodiscard]] std::vector<ParseLoad> parseLoadSnapshot() const;
+  [[nodiscard]] std::vector<ParseLoad> parseLoadSnapshot();
+  [[nodiscard]] LatestFrameInfo latestFrameSnapshot(int sourceId);
   [[nodiscard]] quint64 parsedFrameCount() const noexcept;
   [[nodiscard]] quint64 skippedFrameCount() const noexcept;
   [[nodiscard]] quint64 transformErrorCount() const noexcept;
@@ -121,6 +125,8 @@ public:
     const QString* text;
     double number;
   };
+
+  [[nodiscard]] const DataModel::TableApiContext& guiTableApiContext();
 
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
@@ -140,8 +146,38 @@ public:
 
   [[nodiscard]] bool reprocessFrames();
   [[nodiscard]] bool dashboardTick();
+  void drainTableSnapshot();
+  void drainLatestFrameSnapshot();
+
+  /**
+   * @brief Runs @p fn on the frame builder's owning thread, fire-and-forget: direct when the
+   *        caller is already there (headless paths keep synchronous semantics), queued
+   *        otherwise (spec 0051 M3 -- the builder lives on the pipeline thread).
+   */
+  template<typename Fn>
+  void invokeOnBuilderThread(Fn&& fn)
+  {
+    if (QThread::currentThread() == thread()) {
+      fn();
+      return;
+    }
+
+    QMetaObject::invokeMethod(this, std::forward<Fn>(fn), Qt::QueuedConnection);
+  }
+
+  /**
+   * @brief Blocking twin of invokeOnBuilderThread for callers that need the result before
+   *        returning (ControlScript verbs, API table commands, editor dry runs). Delegates to
+   *        the deadlock-aware marshal (IO::PipelineHost::runOnObjectThread).
+   */
+  template<typename Fn>
+  void invokeOnBuilderThreadBlocking(Fn&& fn)
+  {
+    IO::PipelineHost::runOnObjectThread(this, std::forward<Fn>(fn));
+  }
 
 public slots:
+  void prepareShutdown();
   void setupExternalConnections();
   void syncFromProjectModel();
   void registerQuickPlotHeaders(const QStringList& headers);
@@ -149,12 +185,19 @@ public slots:
   void hotpathRxFrame(const IO::CapturedDataPtr& data);
   void hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data);
 
+  void publishSourceTemplate(int sourceId);
+  void publishQuickPlotAudioTemplate(int channels);
+  void setStreamSourceIds(const QSet<int>& sourceIds);
+  void ingestStreamValues(int sourceId, const QList<QPair<int, double>>& values);
+  void refreshStreamDrivenFrames();
+
   void collectTransformEngineGarbage();
 
 private slots:
   void onSourceRemoved();
   void onConnectedChanged();
   void onOperationModeChanged();
+  void refreshProjectSourceSnapshot();
 
 private:
   using BudgetClock                             = DataModel::ParseBudget::Clock;
@@ -229,6 +272,7 @@ private:
   bool m_shuttingDown;
   int m_seenEngineEpoch;
   SerialStudio::OperationMode m_operationMode;
+  SerialStudio::DecoderMethod m_projectDecoderMethod;
   DataModel::ParseBudget m_parseBudget;
 
   quint64 m_parsedFrameCount;
@@ -245,6 +289,30 @@ private:
   DataModel::Frame m_quickPlotFrame;
   DataModel::DataTableStore m_tableStore;
 
+  static constexpr size_t kTableMirrorSlots = 4;
+
+  int m_publishedTableGeneration;
+  quint64 m_publishedTableClock;
+
+  // code-verify off
+  // One is written once at bridge injection, the other toggles once per display tick. No
+  // steady-state cross-core write traffic, so sharing a cache line is harmless.
+  std::atomic<bool> m_guiTableApiUsers;
+  std::atomic<bool> m_tableSnapshotRequested;
+  // code-verify on
+
+  DataModel::DataTableSnapshotPtr m_guiTableSnapshot;
+  moodycamel::ReaderWriterQueue<DataModel::DataTableSnapshotPtr> m_tableMirrorRing;
+
+  // Upvalue every Lua table-API closure carries; pinned for this object's lifetime
+  DataModel::TableApiContext m_luaTableContext;
+
+  void noteGuiTableApiUser();
+  void publishTableSnapshot();
+
+  bool m_streamValuesDirty;
+  QSet<int> m_streamSourceIds;
+  QSet<int> m_streamDatasetIds;
   QSet<int> m_republishedSourceIds;
   QMap<int, DataModel::Frame> m_sourceFrames;
   std::map<int, quint64> m_sourceFrameCounters;
@@ -255,6 +323,44 @@ private:
   int m_latestFrameSourceId;
   quint64 m_latestFrameSeq;
   QHash<int, LatestFrameInfo> m_latestFrames;
+
+  /**
+   * @brief GUI-side copy of every source's latest capture, published by the builder thread at
+   *        display-tick rate so an API handler serving a script never marshals into the pipeline.
+   */
+  struct LatestFrameMirror {
+    int newestSourceId;
+    QHash<int, LatestFrameInfo> frames;
+  };
+
+  using LatestFrameMirrorPtr = std::shared_ptr<const LatestFrameMirror>;
+
+  static constexpr size_t kLatestFrameMirrorSlots = 4;
+
+  quint64 m_publishedLatestFrameSeq;
+
+  // code-verify off
+  // One is armed once by the first GUI-thread reader, the other toggles once per display tick.
+  // No steady-state cross-core write traffic, so sharing a cache line is harmless.
+  std::atomic<bool> m_guiLatestFrameUsers;
+  std::atomic<bool> m_latestFrameSnapshotRequested;
+  // code-verify on
+
+  LatestFrameMirrorPtr m_guiLatestFrameMirror;
+  moodycamel::ReaderWriterQueue<LatestFrameMirrorPtr> m_latestFrameMirrorRing;
+
+  [[nodiscard]] LatestFrameInfo guiLatestFrame(int sourceId);
+  void publishLatestFrameSnapshot();
+
+  using ParseLoadsPtr = std::shared_ptr<const std::vector<ParseLoad>>;
+
+  static constexpr size_t kParseLoadMirrorSlots = 4;
+
+  ParseLoadsPtr m_guiParseLoads;
+  moodycamel::ReaderWriterQueue<ParseLoadsPtr> m_parseLoadMirrorRing;
+
+  [[nodiscard]] std::vector<ParseLoad> guiParseLoads();
+  void publishParseLoads();
 
   int m_engineCacheSourceId;
   TransformEngine* m_luaEngineForSource;

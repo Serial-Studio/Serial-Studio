@@ -24,6 +24,7 @@
 // Regenerate with: python3 scripts/generate-property-registry.py
 
 #include "DataModel/Generated/DatasetRegistry.h"
+
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/IconRegistry.h"
@@ -727,6 +728,19 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   item_wgt_max->setData(tr("Upper bound of the gauge or bar range; falls back to the dataset "
                            "value range when left unset"), ParameterDescription);
   model->appendRow(item_wgt_max);
+
+  const bool on_extreme_hold = PropertyHooks::extremeHoldApplicable(dataset, m_projectModelRef);
+  auto* item_extreme_hold = new QStandardItem();
+  item_extreme_hold->setEditable(on_extreme_hold);
+  item_extreme_hold->setData(on_extreme_hold, Active);
+  item_extreme_hold->setData(CheckBox, WidgetType);
+  item_extreme_hold->setData(dataset.extremeHold, EditableValue);
+  item_extreme_hold->setData(kDatasetView_ExtremeHold, ParameterType);
+  item_extreme_hold->setData(0, PlaceholderValue);
+  item_extreme_hold->setData(tr("Hold Min/Max Markers"), ParameterName);
+  item_extreme_hold->setData(tr("Show hold markers at the lowest and highest values observed "
+                                "since the last data reset"), ParameterDescription);
+  model->appendRow(item_extreme_hold);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -922,6 +936,9 @@ static bool applyDatasetFlagEdit(int formId, const QVariant& value, DataModel::D
     case kDatasetView_FFT_LogX:
       d.fftLogX = value.toBool();
       return true;
+    case kDatasetView_ExtremeHold:
+      d.extremeHold = value.toBool();
+      return true;
     case kDatasetView_LED:
       d.led = value.toBool();
       return true;
@@ -952,6 +969,8 @@ static RebuildHint datasetCommitHook(int formId, DataModel::Dataset& d)
       return PropertyHooks::onReshape(d);
     case kDatasetView_Widget:
       return PropertyHooks::onWidgetChanged(d);
+    case kDatasetView_ExtremeHold:
+      return PropertyHooks::onReshape(d);
     case kDatasetView_LED:
       return PropertyHooks::onReshape(d);
     default:
@@ -1075,6 +1094,8 @@ QVariant Registry::datasetFormValue(int formId,
       return d.wgtMin;
     case kDatasetView_WgtMax:
       return d.wgtMax;
+    case kDatasetView_ExtremeHold:
+      return d.extremeHold;
     case kDatasetView_LED:
       return d.led;
     case kDatasetView_LED_High:

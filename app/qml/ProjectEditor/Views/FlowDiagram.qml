@@ -938,6 +938,7 @@ Item {
       case "painter":
       case "plot3d":
       case "datagrid":
+      case "barpanel":
         return Cpp_Misc_IconRegistry.icon("widgets", w, 16)
       default:
         return Cpp_Misc_IconRegistry.icon("widgets", "group", 16)
@@ -1766,6 +1767,19 @@ Item {
                                        menuController.targetSourceId()))
     }
 
+    Action {
+      id: actAddGroupBarPanel
+
+      icon.width: 16
+      icon.height: 16
+      text: qsTr("Bar Panel")
+      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "barpanel", 16)
+      onTriggered: menuController.locked(() =>
+        Cpp_JSON_ProjectModel.addGroup(qsTr("Bar Panel"),
+                                       SerialStudio.BarPanel,
+                                       menuController.targetSourceId()))
+    }
+
     //
     // Dataset variants (target-group selection lives on menuController)
     //
@@ -1982,6 +1996,7 @@ Item {
       MenuItem { action: actAddGroupPainter }
       MenuItem { action: actAddGroupWebView }
       MenuItem { action: actAddGroupDataGrid }
+      MenuItem { action: actAddGroupBarPanel }
     }
     Menu {
       icon.width: 16
@@ -2058,6 +2073,7 @@ Item {
       MenuItem { action: actAddGroupPainter }
       MenuItem { action: actAddGroupWebView }
       MenuItem { action: actAddGroupDataGrid }
+      MenuItem { action: actAddGroupBarPanel }
     }
     Menu {
       icon.width: 16
@@ -2146,6 +2162,7 @@ Item {
       MenuItem { action: actAddGroupPainter }
       MenuItem { action: actAddGroupWebView }
       MenuItem { action: actAddGroupDataGrid }
+      MenuItem { action: actAddGroupBarPanel }
     }
     Menu {
       icon.width: 16

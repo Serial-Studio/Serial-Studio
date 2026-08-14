@@ -42,8 +42,9 @@ Widgets.MiniWindow {
   focused: taskBar.activeWindow === root
   windowControlsVisible: !Cpp_UI_TaskbarSettings.taskbarHidden
   shadowEnabled: !root.frozen && root.state === "normal"
-                 && (!windowManager.autoLayoutEnabled
-                     || Cpp_UI_Dashboard.autoLayoutSpacing > -1)
+                 && (windowManager.autoLayoutEnabled
+                     ? Cpp_UI_Dashboard.autoLayoutSpacing > -1
+                     : Cpp_UI_Dashboard.manualLayoutSpacing > -1)
 
   //
   // Effective freeze state: WidgetToolbar instances read this via windowRoot

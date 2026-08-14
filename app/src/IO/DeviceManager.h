@@ -31,6 +31,8 @@
 
 namespace IO {
 
+class PipelineHost;
+
 /**
  * @brief Non-singleton owner of one HAL driver and one FrameReader.
  */
@@ -38,7 +40,6 @@ class DeviceManager : public QObject {
   Q_OBJECT
 
 signals:
-  void frameReady(int deviceId, const IO::CapturedDataPtr& frame);
   void rawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
 
 public:
@@ -64,7 +65,6 @@ public slots:
   void close();
 
 private slots:
-  void onReadyRead();
   void onRawDataReceived(const IO::CapturedDataPtr& data);
 
 private:
@@ -73,10 +73,10 @@ private:
 
 private:
   int m_deviceId;
+  PipelineHost& m_pipeline;
   FrameConfig m_frameConfig;
   std::unique_ptr<HAL_Driver> m_driver;
   QPointer<FrameReader> m_frameReader;
-  IO::CapturedDataPtr m_frameScratch;
 };
 
 }  // namespace IO

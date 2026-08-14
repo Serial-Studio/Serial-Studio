@@ -477,6 +477,33 @@ void DataModel::ProjectModel::updateSourceFrameParserParams(int sourceId, const 
 }
 
 /**
+ * @brief Sets the stream-lane override for the source with the given sourceId: "" or "auto"
+ *        (stored as absent -- the driver decides), "on", or "off" (spec 0051 R6). Unknown
+ *        values are rejected so a typo can never silently kill a source's data path.
+ */
+void DataModel::ProjectModel::updateSourceStreamLane(int sourceId, const QString& lane)
+{
+  const QString effective = (lane == QLatin1String("auto")) ? QString() : lane;
+  if (!effective.isEmpty() && effective != QLatin1String("on") && effective != QLatin1String("off"))
+    return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change Stream Lane")};
+  auto it =
+    std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
+      return src.sourceId == sourceId;
+    });
+
+  if (it == m_sources.end() || it->streamLane == effective)
+    return;
+
+  it->streamLane = effective;
+  setModified(true);
+
+  Q_EMIT sourceStreamLaneChanged(sourceId);
+  Q_EMIT sourceChanged(sourceId);
+}
+
+/**
  * @brief Stores frame parser code without emitting signals or reloading the JS engine.
  */
 void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& code)

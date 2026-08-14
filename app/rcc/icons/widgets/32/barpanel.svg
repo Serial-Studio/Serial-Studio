@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<g id="surface-barpanel-large-32">
+  <rect x="3.0" y="5.0" width="26.0" height="6.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1.5"/>
+  <rect x="3.0" y="5.0" width="18.0" height="6.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1.5"/>
+  <rect x="3.0" y="15.0" width="26.0" height="6.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1.5"/>
+  <rect x="3.0" y="15.0" width="12.0" height="6.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1.5"/>
+  <rect x="3.0" y="25.0" width="26.0" height="6.0" fill="#e1ebf2" stroke="#788b9c" stroke-width="1.5"/>
+  <rect x="3.0" y="25.0" width="22.0" height="6.0" fill="#8bb7f0" stroke="#4e7ab5" stroke-width="1.5"/>
+</g>
+</svg>

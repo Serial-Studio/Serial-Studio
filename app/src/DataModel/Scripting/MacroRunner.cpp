@@ -50,6 +50,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/MacroWorker.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "IO/PipelineHost.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
 
@@ -555,13 +556,17 @@ void DataModel::MacroRunner::onWorkerError(const QString& message)
 
 /**
  * @brief Closes a macro Lua state after invalidating the table-store lookup cache the
- *        injected table API may have populated (the closeLuaState rule).
+ *        injected table API may have populated (the closeLuaState rule). Skipped during
+ *        teardown, when no event loop is left to carry the marshal.
  */
 void DataModel::MacroRunner::closeMacroLuaState(lua_State* state)
 {
   if (!state)
     return;
 
-  m_frameBuilder.tableStore().clearLookupCache();
+  if (!IO::PipelineHost::tearingDown())
+    m_frameBuilder.invokeOnBuilderThreadBlocking(
+      [this] { m_frameBuilder.tableStore().clearLookupCache(); });
+
   lua_close(state);
 }

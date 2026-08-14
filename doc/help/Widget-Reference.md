@@ -34,6 +34,21 @@ flowchart TD
 - Configuration: none required beyond adding datasets to the group.
 - Supports pause/resume.
 
+### Bar Panel
+
+- Widget key: `"barpanel"`.
+- One labeled bar per dataset in the group: title, alarm-band-zoned track, live value.
+- Alarm bands are always drawn in full as muted zones on each track; the fill takes the
+  active band's color (green while normal, yellow/red as the value crosses band edges).
+- **Bar Style** option in the Project Editor: Auto (default, picks by panel shape),
+  Horizontal (labeled rows), or Vertical (rake-style columns).
+- Datasets with **Hold Min/Max Markers** enabled show tick marks at the lowest and highest
+  values observed since the last data reset.
+- Best for: monitoring many related channels at a glance (temperatures, pressures, EGT
+  rakes) where color should mean severity and nothing else.
+- Configuration: set `widgetMin`/`widgetMax` per dataset for the track range; define
+  alarm bands for severity coloring.
+
 ### MultiPlot
 
 - Widget key: `"multiplot"`.
@@ -213,7 +228,7 @@ flowchart TD
 
 ## Alarm bands
 
-Bar, Gauge, Meter, and LED Panel widgets render one or more **alarm bands**. Each band is a contiguous value range with a color and a severity tier. The gauge paints them as colored stripes (Bar) or arc segments (Gauge / Meter), and the needle / fill tints to the active band's color when the value enters it; LED Panel entries light in the active band's color. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
+Bar, Gauge, Meter, Bar Panel, and LED Panel widgets render one or more **alarm bands**. Each band is a contiguous value range with a color and a severity tier. The bands are always drawn in full — muted zones along the bar track (Bar / Bar Panel) or arc segments on the dial rim (Gauge / Meter) — and the fill or needle takes the active band's color at all times, so a value in the normal range reads as a positive green signal. A value outside every band clamps to the nearest band's severity, so overrange data always renders as critical rather than unclassified; LED Panel entries light in the active band's color. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
 
 **Band schema.** Under the dataset's `alarmBands` array, each entry is an object:
 
@@ -256,6 +271,7 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | Widget        | Type    | Key            | Min datasets | Key settings                                 |
 |---------------|---------|----------------|--------------|----------------------------------------------|
 | Data Grid     | Group   | `datagrid`     | 1+           | (none)                                       |
+| Bar Panel     | Group   | `barpanel`     | 1+           | `widgetMin`/`widgetMax`, `alarmBands[]`, `barPanelStyle` |
 | MultiPlot     | Group   | `multiplot`    | 1+           | `graph: true` on datasets                    |
 | GPS Map       | Group   | `map`          | 2-3          | lat, lon, (alt) datasets                     |
 | Gyroscope     | Group   | `gyro`         | 3            | yaw, pitch, roll                             |

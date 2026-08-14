@@ -35,6 +35,30 @@ reconfigure and the per-frame walk is pointer-only.
   `dashboard ingest costs N.NNx` / `HOTPATH_DASHBOARD_INGEST_COST`. Optimize against that
   number; the historical `dashboard costs N.NNx` line compares two different projects.
 
+## Display Tick — Frame Drain + Stream Ingest (spec 0051)
+
+`Dashboard::onDisplayTick` (the `uiTimeout` slot) is now the single entry point for data on
+the GUI thread, and it runs in this order:
+
+1. **Frame ring drain** — pop every finished `TimestampedFramePtr` the pipeline thread queued
+   (`PipelineHost::dequeueDashboardFrame`) and run `hotpathRxFrame` on each. The publisher no
+   longer calls the Dashboard directly; nothing about the push tables or `structureGeneration`
+   revalidation changed, only who calls them and when.
+2. **Stream worker drain** — for each `IO::StreamWorker`, publish the current display budget
+   into its atomics (bucket count = `points()/2`, window = `plotTimeRange`) and apply every
+   pending `StreamDisplayUpdate` through `applyStreamUpdate`.
+3. **One coalesced `updated()`** if anything set `m_updateRequired`.
+
+`applyStreamUpdate` is O(pixels + fftSize + datasets) per block, never O(samples): latest
+values into the widget dataset copies via `m_datasetReferences`, envelope pairs
+`appendDecimated` into the plot/multiplot time rings, the FFT window memcpy'd into the FFT
+series. Both lanes share `advancePlotClock(sourceId, t0)` — the per-source clock is advanced
+from the block timestamp and **never cleared** (the `bulkLoadPlotWindow` clear/re-anchor
+semantics are deliberately not reused). Stream widget targets resolve through a lazy
+`uniqueId → StreamTargets` cache holding **indexes only** (a layout rebuild reallocates the
+ring nodes, so cached pointers would dangle); it is cleared with the push tables in
+`clearPushTables()`.
+
 ## Alarm Bands — Central Tracking in `UI::AlarmMonitor`
 
 Alarm-band *notifications* are dataset-level, not widget-level. `UI::AlarmMonitor` (singleton,
@@ -284,6 +308,20 @@ MultiPlot); `sweepTimebase` is ms, 0 = match time range). QML wiring is a Pro-ga
 `PlotWidget.qml` (`sweepMode`/`triggerLevel`). Setters are runtime-gated on a valid commercial
 token (`isValid()` + `SS_LICENSE_GUARD()`; tier compares were removed 2026-07, trial = Pro).
 `SweepMode`/`TriggerEdge` enums live in `SerialStudio.h`.
+
+**Stream-lane sources feed the same engines by a second path (spec 0051 M4).** Audio and any other
+`isStreamCapable()` source never reaches `updateLineSeries`/`updateDataSeries`, so `feedSweep`/
+`feedMultiSweep` never see it; until this was wired the trigger was simply dead for those sources while
+the plain time rings kept updating, so the plot looked alive. `applyStreamChannel` now calls
+`feedPlotStreamSweep` per plot, and `applyStreamUpdate` calls `feedMultiplotStreamSweep` per enabled
+multiplot sweep after the channel loop (a multiplot needs one sweep time from its trigger curve applied
+to every curve, which a per-channel hook cannot produce). Both drive `advance()` from the
+`StreamDisplayUpdate` envelope pairs, so **trigger resolution is the envelope bucket**, i.e. exactly the
+resolution the trace is drawn at (`StreamProcessor::reduceChannel` buckets on the same
+`windowSec`/`pixelWidth` the plot uses). Curves pair by envelope index because one source's channels
+share that grid. A multiplot no channel of the update feeds resolves to a null trigger and is skipped,
+which is what keeps frame-fed multiplots out of the stream path; a multiplot mixing both lanes would be
+advanced by both clocks and is not supported.
 
 ## Output Widgets (Pro)
 

@@ -32,9 +32,60 @@
 #include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
+#include "IO/StreamWorker.h"
 
 namespace CSV {
 class Export;
+
+/**
+ * @brief Worker writing full-rate typed stream blocks (spec 0051 M5) to one numeric CSV per
+ *        stream source; per-sample timestamps derive as t0 + i * dt, never re-stamped.
+ */
+class StreamExportWorker : public DataModel::FrameConsumerWorker<IO::StreamBlockItemPtr> {
+  Q_OBJECT
+
+public:
+  StreamExportWorker(moodycamel::ReaderWriterQueue<IO::StreamBlockItemPtr>* queue,
+                     std::atomic<bool>* enabled,
+                     std::atomic<size_t>* queueSize);
+
+  void closeResources() override;
+  [[nodiscard]] bool isResourceOpen() const override;
+
+protected:
+  void processItems(const std::vector<IO::StreamBlockItemPtr>& items) override;
+
+private:
+  struct FileState {
+    std::unique_ptr<QFile> file;
+    std::unique_ptr<QTextStream> stream;
+    DataModel::TimestampedFrame::SteadyTimePoint start;
+  };
+
+  [[nodiscard]] FileState* fileFor(const IO::StreamBlockItem& block);
+  void writeBlock(FileState& state, const IO::StreamBlockItem& block);
+
+private:
+  std::map<int, FileState> m_files;
+};
+
+/**
+ * @brief FrameConsumer facade for the stream-block CSV sink; the single producer is the GUI
+ *        thread (ingestBlock is a queued slot fed by every StreamProcessor's blockReady).
+ */
+class StreamExport : public DataModel::FrameConsumer<IO::StreamBlockItemPtr> {
+  Q_OBJECT
+
+public:
+  explicit StreamExport();
+
+public slots:
+  void ingestBlock(const IO::StreamBlockItemPtr& block);
+  void closeFiles();
+
+protected:
+  DataModel::FrameConsumerWorkerBase* createWorker() override;
+};
 
 /**
  * @brief Worker object that performs CSV file I/O on a background thread.
@@ -114,6 +165,7 @@ public:
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
   [[nodiscard]] int exportInterval() const;
+  [[nodiscard]] StreamExport& streamSink() noexcept;
 
 public slots:
   void closeFile();
@@ -135,5 +187,6 @@ private:
   std::atomic<bool> m_isOpen;
   bool m_persistSettings;
   int m_exportInterval;
+  StreamExport m_streamExport;
 };
 }  // namespace CSV

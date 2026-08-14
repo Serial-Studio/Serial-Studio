@@ -216,7 +216,6 @@ set(SOURCES
   src/Misc/WorkspaceManager.cpp
   src/Misc/ExtensionManager.cpp
   src/Misc/Examples.cpp
-  src/Misc/DemoLauncher.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
   src/Misc/IconRegistry.cpp
@@ -252,8 +251,10 @@ set(SOURCES
   src/UI/Widgets/Plot.cpp
   src/UI/Widgets/PlotAreaFill.cpp
   src/UI/Widgets/PlotCurve.cpp
+  src/UI/LayoutPatterns.cpp
   src/UI/Widgets/Compass.cpp
   src/UI/Widgets/Bar.cpp
+  src/UI/Widgets/BarPanel.cpp
   src/UI/Widgets/Meter.cpp
   src/UI/Widgets/FFTPlot.cpp
   src/UI/Widgets/Accelerometer.cpp
@@ -299,6 +300,7 @@ set(SOURCES
   src/API/Handlers/SystemHandler.cpp
   src/API/Handlers/WorkspacesHandler.cpp
   src/API/Handlers/ScriptsHandler.cpp
+  src/API/Handlers/StreamHandler.cpp
   src/API/Handlers/AssistantHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
@@ -308,6 +310,8 @@ set(SOURCES
   src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
   src/IO/ConnectionManager.cpp
+  src/IO/PipelineHost.cpp
+  src/IO/StreamWorker.cpp
   src/Async/TaskTree.cpp
   src/Async/RetryPolicy.cpp
   src/Console/Export.cpp
@@ -412,7 +416,6 @@ set(HEADERS
   src/Misc/WorkspaceManager.h
   src/Misc/ExtensionManager.h
   src/Misc/Examples.h
-  src/Misc/DemoLauncher.h
   src/Misc/HelpCenter.h
   src/Misc/IconEngine.h
   src/Misc/IconRegistry.h
@@ -429,6 +432,8 @@ set(HEADERS
   src/UI/TaskbarSettings.h
   src/UI/WindowManager.h
   src/UI/WidgetRegistry.h
+  src/UI/WidgetBands.h
+  src/UI/LayoutPatterns.h
   src/UI/WidgetExtensions.h
   src/UI/Widgets/GPS.h
   src/UI/Widgets/MultiPlot.h
@@ -443,6 +448,7 @@ set(HEADERS
   src/UI/Widgets/FFTWindow.h
   src/UI/Widgets/Gyroscope.h
   src/UI/Widgets/Bar.h
+  src/UI/Widgets/BarPanel.h
   src/UI/Widgets/Meter.h
   src/UI/Widgets/Accelerometer.h
   src/UI/Widgets/ExtensionData.h
@@ -484,6 +490,7 @@ set(HEADERS
   src/API/Handlers/SystemHandler.h
   src/API/Handlers/WorkspacesHandler.h
   src/API/Handlers/ScriptsHandler.h
+  src/API/Handlers/StreamHandler.h
   src/API/Handlers/AssistantHandler.h
   src/UI/UISessionRegistry.h
   src/Misc/CLI.h
@@ -499,6 +506,8 @@ set(HEADERS
   src/IO/FrameConfig.h
   src/IO/DeviceManager.h
   src/IO/ConnectionManager.h
+  src/IO/PipelineHost.h
+  src/IO/StreamWorker.h
   src/Async/TaskTree.h
   src/Async/RetryPolicy.h
   src/Async/AsyncClock.h
@@ -667,6 +676,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Clock.qml
   qml/Widgets/Dashboard/Compass.qml
   qml/Widgets/Dashboard/DashboardToolButton.qml
+  qml/Widgets/Dashboard/BarPanel.qml
   qml/Widgets/Dashboard/DataGrid.qml
   qml/Widgets/Dashboard/ExtensionPlaceholder.qml
   qml/Widgets/Dashboard/ExtensionWidgetSettings.qml
@@ -1130,13 +1140,9 @@ elseif(APPLE)
     ${ICON_MACOSX}
     ${ASSETS_MACOSX}
     "src/Platform/NativeWindow_macOS.mm"
-    "src/Misc/Utilities_macOS.mm"
   )
 
   set_source_files_properties("src/Platform/NativeWindow_macOS.mm"
-    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-  )
-  set_source_files_properties("src/Misc/Utilities_macOS.mm"
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 elseif(UNIX)

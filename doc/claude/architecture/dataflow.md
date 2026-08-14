@@ -7,11 +7,17 @@
 
 ## Data Flow
 
+Since spec 0051 M3 the frame pipeline runs on a dedicated **processing thread**
+("FramePipeline", owned by `IO::PipelineHost`, a SessionContext module adopted between
+FrameBuilder and ConnectionManager). FrameReaders, the FrameParser engines and the
+FrameBuilder all live there; the GUI thread only drains finished pooled frames from an
+SPSC ring on the display tick (`Dashboard::onDisplayTick`).
+
 ```
 Driver  (driver thread OR main, depending on driver)
-  │ HAL_Driver::dataReceived(CapturedDataPtr)           AutoConnection
+  │ HAL_Driver::dataReceived(CapturedDataPtr)           Auto → QUEUED to pipeline (chunk rate)
   ▼
-FrameReader::processData  (main thread)
+FrameReader::processData  (pipeline thread — moveToThread at creation)
   │ appends to CircularBuffer (SPSC); tracks per-chunk timestamps;
   │ delimiter scan: vectorized memchr for 1-byte delimiters, memchr-anchored
   │ + memcmp for <= 8-byte patterns on the linear region, KMP for long or
@@ -20,13 +26,12 @@ FrameReader::processData  (main thread)
   │ in place — steady-state zero-allocation; backlog falls back to heap);
   │ enqueues to lock-free ReaderWriterQueue<CapturedDataPtr>; emits readyRead
   ▼
-DeviceManager::onReadyRead  (main, DirectConnection)
-  │ while try_dequeue: Q_EMIT frameReady(deviceId, frame)
+PipelineHost::routeFrames  (pipeline thread, DirectConnection — same thread)
+  │ drains the reader queue; routes by ATOMIC operation-mode/paused mirrors
+  │ (written on the GUI thread at transition rate) to FrameBuilder; MQTT raw-frame
+  │ fan-out rides along
   ▼
-ConnectionManager::onFrameReady  (main)
-  │ routes to FrameBuilder::hotpathRxFrame / hotpathRxSourceFrame
-  ▼
-FrameBuilder  (main)
+FrameBuilder  (pipeline thread — moveToThread as the LAST composition-root step)
   │ parse → apply per-dataset transforms → mutate m_frame / m_sourceFrames
   │ Native + PlainText takes the span fast lane (trySpanLane): the engine tokenizes the
   │ raw bytes into the member QByteArrayView scratch (IScriptEngine::parseUtf8Spans,
@@ -50,8 +55,49 @@ FrameBuilder  (main)
   │ dataset capture only runs when a script can read it back (transforms, Lua parser
   │ engines, injected table APIs) — native/script-less projects skip it entirely.
   ▼
-Dashboard (pooled)   |   CSV / MDF4 / API / gRPC / Sessions / MQTT (detached copy)
+PipelineHost dashboard ring (SPSC, 8192 = pool size; gated on the dashboardAccepting
+mirror so no-dashboard sessions never pin pool slots; full ring = counted drop, the
+pool-exhaustion warning carries the user signal)
+  ▼
+Dashboard::onDisplayTick drain (GUI thread, uiTimeout)   |   CSV / MDF4 / API / gRPC /
+Sessions / MQTT (detached copy, SPSC queues — single producer is now the pipeline thread)
 ```
+
+### Cross-thread marshal protocol (spec 0051 M3)
+
+The pipeline is single-threaded internally; the thread boundary is crossed only by:
+
+- **GUI → pipeline commands**: FrameBuilder/FrameParser public mutators self-marshal
+  (`invokeOnBuilderThreadBlocking` / `IO::PipelineHost::runOnObjectThread`). GUI-side
+  waits spin a QEventLoop so the GUI keeps serving the pipeline's own blocking apiCall
+  dispatches — never a plain BlockingQueuedConnection from GUI to pipeline (deadlock),
+  with ONE exception: the player replay lanes (`replayChannels*`) use plain
+  BlockingQueued because transform engines are torn down during replay, so no apiCall
+  cycle can exist and the borrowed span/text pointers must stay alive.
+- **pipeline → GUI reads**: `runOnGuiThreadBlocking` snapshots GUI-owned state
+  (ProjectModel sources/groups/tables). Plain blocking is safe by protocol: the GUI
+  never plain-blocks on the pipeline. `resolveDecoderMethod` never reaches ProjectModel —
+  it reads the builder-local `m_frame.sources` snapshot + `m_projectDecoderMethod`,
+  refreshed on `ProjectModel::sourceChanged`.
+- **apiCall from pipeline engines** (parser/transform scripts): dispatches to the GUI
+  via BlockingQueued with the parked-flag bracket
+  (`PipelineHost::setPipelineParkedOnGui`); while parked, GUI-side marshals run inline
+  against the quiescent pipeline — exactly the old single-thread mid-frame semantics.
+- **Table store**: single-writer on the pipeline thread. Every external access path
+  (Lua closures, TableApiBridge JS methods, API datatables verbs, the 1 Hz session
+  snapshot) marshals to the builder thread; GUI-side script engines pay the hop only
+  at command/paint rate.
+- **Headless/benchmark bootstraps never move the builder** (they skip
+  `setupCrossModuleConnections`), so the spec-0044 verifier and `--benchmark-hotpath`
+  stay single-threaded by construction and every marshal hits its same-thread fast path.
+- **The in-app benchmark dialog borrows the same property in a live session**: it drives
+  the pipeline with plain synchronous calls from the GUI thread, so
+  `BenchmarkRunner::beginSession()` takes FrameBuilder/FrameParser onto the GUI thread and
+  `endSession()` hands them back. Run is blocked while a device is connected or a recording is
+  open (any other producer both pollutes the rows and, for a live device, reaches a builder that
+  no longer lives on the pipeline thread). The session is `ephemeralSession` +
+  `setSettingsPersistent(false)` throughout and `abortSession()` runs on `aboutToQuit`, so a quit
+  mid-run persists none of the synthetic project, forced-on exporters, or 10 s plot range.
 
 ## Timestamp Ownership — Source Owns Time
 
@@ -82,19 +128,23 @@ export or report workers.
 
 | Component | Rule |
 |-----------|------|
-| `FrameReader` | **Main thread.** Config set once before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()`. **Never add mutexes.** Single-delimiter uses KMP; multi uses `CircularBuffer::findFirstOfPatterns()` (single-pass, stack array ≤8). Preserves driver timing via `PendingChunk` spans. (Historical: threaded extraction removed in beeda4c0; if it returns, `DeviceManager::frameReady` / `rawDataReceived` go back to `Qt::QueuedConnection`.) |
-| `CircularBuffer` | **SPSC only.** Driver writes from whatever thread emitted `dataReceived`; reader is FrameReader on main. Never MPMC. |
-| `Dashboard` | **Main thread only.** Reads the shared `TimestampedFramePtr`. |
-| Export workers | Lock-free enqueue from main; batch on worker thread. Consume a detached `make_shared` copy of the frame (NOT the Dashboard's pooled slot), so a slow worker's backlog can't pin the pool. |
+| `PipelineHost` | GUI-affine module owning the processing `QThread`, the dashboard SPSC ring and the atomic mode/paused/connected/dashboardAccepting mirrors. Joined FIRST in `ModuleManager::stopFrameConsumerWorkers()` (bounded 5 s wait, warn-and-abandon on a hung Fast-mode script, R21) with FrameBuilder/FrameParser `prepareShutdown()` queued ahead of quit() so script engines die on their own thread. |
+| `FrameReader` | **Pipeline thread** (configured on GUI before `moveToThread`, then registered via `PipelineHost::registerFrameReader`). Recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` — the old reader's deleteLater executes on the pipeline loop. **Never add mutexes.** Single-delimiter uses KMP; multi uses `CircularBuffer::findFirstOfPatterns()` (single-pass, stack array ≤8). Preserves driver timing via `PendingChunk` spans. |
+| `CircularBuffer` | **SPSC only.** Producer/consumer are both the pipeline thread (processData appends and scans). Never MPMC. |
+| `FrameBuilder` / `FrameParser` | **Pipeline thread** after the composition root's final `relocateProcessingObjects()` step. All external mutators self-marshal; the parse path is plain same-thread calls. Ownership moves only through `PipelineHost::moveProcessingObjectsTo()`, which releases every script engine on the outgoing thread and rebuilds them via `readCode()` on the new one — a `lua_State` / `QJSEngine` used off its creating thread corrupts the QV4 heap (crashed the in-app benchmark's JS phase, 2026-08-12). |
+| `Dashboard` | **GUI thread only.** Ingests pooled `TimestampedFramePtr`s from the PipelineHost ring on the display tick (`onDisplayTick`). |
+| Export workers | Lock-free enqueue from the pipeline thread (single producer); batch on worker thread. Consume a detached `make_shared` copy of the frame (NOT the pooled slot), so a slow worker's backlog can't pin the pool. |
 
-**Hotpath signal hops must be `Qt::DirectConnection`.** A queued connection between two
-main-thread objects costs a `QMetaCallEvent` alloc + event-queue insertion per emit; at
+**In-pipeline signal hops must be `Qt::DirectConnection`.** A queued connection between two
+pipeline-thread objects costs a `QMetaCallEvent` alloc + event-queue insertion per emit; at
 10+ kHz that fills FrameReader's 65536-slot queue faster than the consumer drains and
-trips `Frame queue full — frame dropped`. Known direct sites:
+trips `Frame queue full — frame dropped`. GUI↔pipeline traffic is chunk/command/tick rate,
+never per-frame signals. Known frame-path sites:
 
-- `DeviceManager::frameReady → ConnectionManager::onFrameReady`
-- `DeviceManager::rawDataReceived → ConnectionManager::onRawDataReceived`
-- `FrameReader::readyRead → DeviceManager::onReadyRead` (AutoConnection resolves Direct)
+- `FrameReader::readyRead → PipelineHost::routeFrames` (explicit Direct, same thread)
+- `routeFrames → FrameBuilder::hotpathRx*` (plain call)
+- `FrameBuilder → PipelineHost dashboard ring` (SPSC enqueue, no signal)
+- `DeviceManager::rawDataReceived → ConnectionManager::onRawDataReceived` (Direct, GUI raw path)
 
 ## Cached Hotpath Flags
 
@@ -102,8 +152,14 @@ The hotpath reads **cached** flags, never live getters: `m_operationMode`, `m_pl
 `m_anyAsyncSink`, `m_captureLatestFrame`, `m_changeDriven`, and Dashboard
 `m_streamAvailable`. A new input to any of them must wire its change signal to the matching
 cache refresh (`updateStreamAvailable` / `refreshAnyAsyncSink` / the player lambdas) or
-frames/exports silently stop. Wire the refresh with `Qt::DirectConnection` — a queued
-refresh lags a full event-loop turn behind frames already flowing. `streamAvailable()` also
+frames/exports silently stop. **Two-thread refresh rule (spec 0051 M3):** FrameBuilder's
+refresh slots are pipeline-affine, so their connections auto-queue from GUI emitters —
+that is correct and cannot be "fixed" back to Direct: refreshes are FIFO in the pipeline's
+event queue, so they can lag in-flight frames by queued hops but can never be torn or
+lost. Dashboard-side (`m_streamAvailable`) stays GUI-affine with Direct wiring, and it
+pushes the `PipelineHost::setDashboardAccepting` atomic mirror the publish gate reads.
+PipelineHost's own mode/paused/connected mirrors are written Direct on the GUI thread at
+transition rate. `streamAvailable()` also
 carries the spec-0040 mirror input: a leading `[[unlikely]]` read of
 `API::MirrorSession::mirroring()`, deliberately a plain module-static bool (never a
 `MirrorSession` construction — the getter runs inside Dashboard's ctor); see

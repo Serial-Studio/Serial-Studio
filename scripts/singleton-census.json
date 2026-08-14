@@ -1,47 +1,48 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1632,
-  "files": 206,
+  "total": 1680,
+  "files": 209,
   "buckets": {
-    "root": 151,
+    "root": 157,
     "accessor": 68,
-    "ctor-capture": 103,
-    "deferred": 17,
-    "static-cache": 1175,
-    "loose": 118
+    "ctor-capture": 105,
+    "deferred": 19,
+    "static-cache": 1209,
+    "loose": 122
   },
   "per_class": {
-    "DataModel::ProjectModel": 210,
-    "IO::ConnectionManager": 210,
-    "AppState": 136,
-    "CommandRegistry": 100,
+    "DataModel::ProjectModel": 216,
+    "IO::ConnectionManager": 214,
+    "AppState": 132,
+    "CommandRegistry": 101,
     "UI::Dashboard": 83,
-    "DataModel::FrameBuilder": 62,
+    "DataModel::FrameBuilder": 68,
     "Misc::IconRegistry": 48,
     "Misc::ThemeManager": 43,
-    "Misc::TimerEvents": 32,
+    "Misc::TimerEvents": 33,
+    "API::Server": 31,
+    "Misc::WorkspaceManager": 29,
     "Console::Handler": 29,
-    "API::Server": 28,
-    "Misc::WorkspaceManager": 27,
     "Misc::CommonFonts": 27,
     "DataModel::NotificationCenter": 26,
     "API::CommandRegistry": 25,
     "Misc::Translator": 25,
     "Sessions::Export": 24,
+    "CSV::Export": 23,
     "Licensing::LemonSqueezy": 23,
     "Sessions::DatabaseManager": 23,
-    "CSV::Player": 21,
-    "MDF4::Player": 20,
-    "CSV::Export": 19,
-    "MDF4::Export": 18,
-    "DataModel::FrameParser": 18,
+    "CSV::Player": 22,
+    "MDF4::Export": 22,
+    "MDF4::Player": 21,
+    "DataModel::FrameParser": 20,
+    "IO::PipelineHost": 18,
     "UI::WidgetExtensions": 18,
     "API::GRPC::GRPCServer": 16,
     "MQTT::Publisher": 16,
+    "Sessions::Player": 16,
     "AI::CommandRegistry": 15,
     "DataModel::ControlScript": 15,
-    "Sessions::Player": 15,
     "Misc::ExtensionManager": 14,
     "Misc::ProblemCenter": 13,
     "DataModel::ProjectEditor": 13,
@@ -68,7 +69,6 @@
     "ConnectionDiagnostics": 3,
     "MirrorPublisher": 3,
     "ProcessLauncher": 3,
-    "Misc::DemoLauncher": 3,
     "API::MirrorSession": 3,
     "JsWatchdogThread": 3,
     "QCanBus": 3,
@@ -100,6 +100,7 @@
     "CommandHandler": 1,
     "BenchmarkRunner": 1,
     "DataModel::JsWatchdogThread": 1,
+    "PipelineHost": 1,
     "Benchmark::BenchmarkRunner": 1,
     "Translator": 1
   },
@@ -632,14 +633,25 @@
         "loose": 0
       }
     },
-    "app/src/API/Handlers/SystemHandler.cpp": {
-      "total": 8,
+    "app/src/API/Handlers/StreamHandler.cpp": {
+      "total": 3,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 8,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/SystemHandler.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
         "loose": 0
       }
     },
@@ -765,35 +777,35 @@
       }
     },
     "app/src/Benchmark/BenchmarkRunner.cpp": {
-      "total": 22,
+      "total": 30,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 21,
+        "static-cache": 29,
         "loose": 0
       }
     },
     "app/src/Benchmark/HotpathBenchmark.cpp": {
-      "total": 18,
+      "total": 20,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 18,
+        "static-cache": 20,
         "loose": 0
       }
     },
     "app/src/CSV/Export.cpp": {
-      "total": 11,
+      "total": 13,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 4,
         "loose": 8
       }
     },
@@ -875,13 +887,13 @@
       }
     },
     "app/src/DataModel/Editors/FrameParserModel.cpp": {
-      "total": 4,
+      "total": 5,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 3,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 2,
         "loose": 0
       }
     },
@@ -930,14 +942,14 @@
       }
     },
     "app/src/DataModel/FrameBuilder.cpp": {
-      "total": 63,
+      "total": 64,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 42,
-        "loose": 20
+        "static-cache": 41,
+        "loose": 22
       }
     },
     "app/src/DataModel/Generated/DatasetForm.cpp": {
@@ -1282,13 +1294,13 @@
       }
     },
     "app/src/DataModel/Scripting/LuaScriptEngine.cpp": {
-      "total": 2,
+      "total": 3,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 3,
         "loose": 0
       }
     },
@@ -1315,13 +1327,13 @@
       }
     },
     "app/src/DataModel/Scripting/ScriptApiCall.cpp": {
-      "total": 7,
+      "total": 8,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 7,
+        "static-cache": 8,
         "loose": 0
       }
     },
@@ -1337,14 +1349,25 @@
       }
     },
     "app/src/IO/ConnectionManager.cpp": {
-      "total": 52,
+      "total": 67,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 45,
+        "static-cache": 60,
         "loose": 6
+      }
+    },
+    "app/src/IO/DeviceManager.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
       }
     },
     "app/src/IO/Drivers/Audio.cpp": {
@@ -1479,6 +1502,17 @@
         "loose": 0
       }
     },
+    "app/src/IO/PipelineHost.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 2,
+        "static-cache": 2,
+        "loose": 2
+      }
+    },
     "app/src/Licensing/LemonSqueezy.cpp": {
       "total": 8,
       "buckets": {
@@ -1535,13 +1569,13 @@
       }
     },
     "app/src/MDF4/Export.cpp": {
-      "total": 14,
+      "total": 15,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 4,
+        "static-cache": 5,
         "loose": 9
       }
     },
@@ -1641,17 +1675,6 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/DemoLauncher.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
         "loose": 0
       }
     },
@@ -1766,9 +1789,9 @@
       }
     },
     "app/src/Misc/ModuleManager.cpp": {
-      "total": 145,
+      "total": 151,
       "buckets": {
-        "root": 145,
+        "root": 151,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
@@ -2030,13 +2053,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 37,
+      "total": 41,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 36,
+        "static-cache": 40,
         "loose": 0
       }
     },
@@ -2140,6 +2163,17 @@
       }
     },
     "app/src/UI/Widgets/Bar.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "app/src/UI/Widgets/BarPanel.cpp": {
       "total": 1,
       "buckets": {
         "root": 0,

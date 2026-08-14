@@ -428,7 +428,11 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
     assert (
         "void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);" in builder_h
     )
-    assert "dashboard.hotpathRxFrame(frame);" in builder_cpp
+    # Since spec 0051 the builder runs on the pipeline thread and hands the pooled frame to
+    # the dashboard through PipelineHost's SPSC ring, drained on the GUI display tick; it must
+    # never call into UI::Dashboard directly from the frame path again.
+    assert "pipeline.publishFrameToDashboard(frame);" in builder_cpp
+    assert "dashboard.hotpathRxFrame(" not in builder_cpp
     assert "const auto frameTs = data->timestamp + step * i;" in builder_cpp
     # Hotpath fan-out draws each TimestampedFramePtr from a fixed-size slot
     # pool (acquireFrame) so we never heap-allocate per frame.
@@ -1182,9 +1186,14 @@ def test_modbus_register_bool_decodes_whole_word():
     assert (
         'QStringLiteral("bool")' in text
     ), "register-block bools must keep the 'bool' spec type"
+    # Spec 0051 replaced string.unpack (a 5.3 library LuaJIT lacks) with pure-Lua
+    # big-endian decoders, so the width now lives in the SIZES table.
     assert (
-        'bool = ">I2"' in text
-    ), "the generated Lua FORMATS table must decode bool as a full big-endian word"
+        "bool = 2," in text
+    ), "the generated Lua SIZES table must decode bool as a full 2-byte big-endian word"
+    assert (
+        'string.unpack("' not in text
+    ), "the generated Lua must not call string.unpack (absent in LuaJIT)"
 
 
 def _decode_modbus_reg_bool(reg_value: int) -> int:
@@ -1360,8 +1369,12 @@ def test_can_driver_extended_id_header():
     # The generated DBC Lua decodes both header forms and keys on 29-bit ids.
     dbc = _read("app/src/DataModel/Importers/DBCImporter.cpp")
     assert "local function frame_id(frame)" in dbc
-    assert "((b1 & 0x1F) << 24)" in dbc
-    assert "& 0x1FFFFFFF" in dbc
+    # Spec 0051 migrated the generator off 5.3 bitwise syntax: the 29-bit id is now
+    # assembled with bit.band + arithmetic shifts (values exceed bit.*'s 32-bit range).
+    assert "bit.band(b1, 0x1F) * 16777216" in dbc
+    assert (
+        "bit.band(b1, 0x80)" in dbc
+    ), "the generated Lua must test the extended-header flag with bit.band, not 5.3 `&`"
 
 
 def _encode_can_header(can_id: int, extended: bool, payload: bytes) -> bytes:

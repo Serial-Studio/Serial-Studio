@@ -266,7 +266,7 @@ void Widgets::LEDPanel::onThemeChanged()
   const size_t n    = qMin(m_leds.size(), group.datasets.size());
   for (size_t i = 0; i < n; ++i) {
     auto& led        = m_leds[i];
-    const auto color = SerialStudio::getDatasetColor(group.datasets[i]).name();
+    const auto color = SerialStudio::getDatasetAccentColor(group.datasets[i]).name();
 
     for (auto& band : led.bands)
       band.resolvedColor = resolveBandColor(band, color);

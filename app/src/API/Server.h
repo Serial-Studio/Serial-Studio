@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <deque>
 #include <QByteArray>
 #include <QElapsedTimer>
 #include <QHash>
@@ -36,6 +37,7 @@
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 #include "IO/HAL_Driver.h"
+#include "IO/StreamWorker.h"
 
 #define API_TCP_PORT 7777
 
@@ -54,6 +56,7 @@ class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::Timestampe
 signals:
   void clientCountChanged(int count);
   void socketRemoved(QTcpSocket* socket, const QString& sessionId);
+  void streamWriteDone(QTcpSocket* socket, const QString& sessionId);
   void dataReceived(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
 
 public:
@@ -70,6 +73,7 @@ public slots:
   void addSocket(QTcpSocket* socket, const QString& sessionId);
   void disconnectSocket(QTcpSocket* socket, const QString& sessionId);
   void writeToSocket(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
+  void writeStreamBlock(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
 
 protected:
@@ -143,6 +147,7 @@ public slots:
   void setExternalConnections(const bool enabled);
   void hotpathTxData(const QByteArray& data);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void ingestStreamBlock(const IO::StreamBlockItemPtr& block);
   void broadcastLifecycleEvent(const QString& eventName);
 
 protected:
@@ -151,6 +156,7 @@ protected:
 private slots:
   void acceptConnection();
   void onClientCountChanged(int count);
+  void onStreamWriteDone(QTcpSocket* socket, const QString& sessionId);
   void sendMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& payload);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
   void onSocketDisconnected(QTcpSocket* socket, const QString& sessionId);
@@ -173,6 +179,14 @@ private:
     bool mirrorSubscribed = false;
     int mirrorHz          = 20;
     int mirrorPrecision   = 0;
+
+    // Typed stream-block subscription (spec 0051 M6): ack-paced, drop-oldest, counted
+    bool streamSubscribed    = false;
+    bool streamWriteInFlight = false;
+    QSet<int> streamSources;
+    quint64 streamSeq    = 0;
+    quint64 streamMissed = 0;
+    std::deque<IO::StreamBlockItemPtr> streamPending;
   };
 
   /**
@@ -191,6 +205,13 @@ private:
 
   [[nodiscard]] MirrorPublisher& mirrorPublisher();
   [[nodiscard]] static bool isMirrorCommand(const QString& command);
+  [[nodiscard]] static bool isStreamCommand(const QString& command);
+  void handleStreamCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
+  [[nodiscard]] CommandResponse streamSubscribe(ConnectionState& state,
+                                                const CommandRequest& request);
+  [[nodiscard]] CommandResponse streamUnsubscribe(ConnectionState& state,
+                                                  const CommandRequest& request);
+  void pumpStreamQueue(QTcpSocket* socket, ConnectionState& state);
   void setStreamFrames(QTcpSocket* socket, ConnectionState& state, const bool enabled);
   void handleMirrorCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
   [[nodiscard]] CommandResponse mirrorSubscribe(QTcpSocket* socket,
