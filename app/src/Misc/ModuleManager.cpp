@@ -423,11 +423,11 @@ void Misc::ModuleManager::stopFrameConsumerWorkers()
 {
   IO::ConnectionManager::instance().stopStreamWorkers();
   IO::PipelineHost::instance().shutdown();
-  Console::Export::instance().stopWorker();
   CSV::Export::instance().stopWorker();
   CSV::Export::instance().streamSink().stopWorker();
-  MDF4::Export::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
+  Console::Export::instance().stopWorker();
+  MDF4::Export::instance().stopWorker();
   MDF4::Export::instance().streamSink().stopWorker();
 #endif
   API::Server::instance().stopWorker();
