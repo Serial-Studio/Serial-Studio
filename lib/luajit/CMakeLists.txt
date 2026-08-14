@@ -7,6 +7,8 @@
 # src/Makefile + src/msvcbuild.bat to CMake for NATIVE builds on the architectures Serial
 # Studio ships (x86-64 and arm64; macOS / Linux / Windows MSVC+clang-cl / MinGW). Cross
 # compilation is intentionally unsupported — host tools are built with the target toolchain.
+# The one sanctioned exception is macOS x86_64 on an arm64 host: the target-arch host tools
+# execute under Rosetta, so the native-build invariant (buildvm runs what it targets) holds.
 #
 # Stage 1 (host): minilua -> DynASM generates buildvm_arch.h -> buildvm.
 # Stage 2 (target): buildvm emits lj_vm.S (or lj_vm.obj via peobj on MSVC) plus the
@@ -39,6 +41,14 @@ file(MAKE_DIRECTORY "${LJ_GEN}")
 # derive the DynASM flags from the LJ_* macros, exactly like upstream. MSVC (cl and clang-cl)
 # uses the hardcoded msvcbuild.bat recipe instead (x64 and arm64 only).
 #
+# The probe must see the TARGET architecture flags, exactly like upstream's TARGET_TESTARCH
+# (which probes via TARGET_CC with its -arch flags). A bare compiler invocation probes the
+# build HOST: on the macOS x86_64 CI leg (arm64 runner + CMAKE_OSX_ARCHITECTURES=x86_64,
+# executed under Rosetta) that generated an arm64 buildvm_arch.h compiled into an x86-64
+# buildvm — the dual-number #error and the missing CCallState retp member. Single-arch
+# builds only: the universal dmg is a post-build lipo merge of two single-arch builds, and
+# a fat buildvm_arch.h cannot exist.
+#
 
 set(LJ_DASM_FLAGS "")
 set(LJ_DASC "")
@@ -55,8 +65,19 @@ if(MSVC)
   endif()
   set(LJ_DASM_FLAGS -D WIN -D JIT -D FFI -D ENDIAN_LE -D FPU -D P64)
 else()
+  set(LJ_PROBE_ARCH_FLAGS "")
+  if(APPLE AND CMAKE_OSX_ARCHITECTURES)
+    list(LENGTH CMAKE_OSX_ARCHITECTURES LJ_OSX_ARCH_COUNT)
+    if(LJ_OSX_ARCH_COUNT GREATER 1)
+      message(FATAL_ERROR
+        "LuaJIT: single-architecture builds only (CMAKE_OSX_ARCHITECTURES='"
+        "${CMAKE_OSX_ARCHITECTURES}'); build each slice separately and lipo the results")
+    endif()
+    list(APPEND LJ_PROBE_ARCH_FLAGS -arch ${CMAKE_OSX_ARCHITECTURES})
+  endif()
+
   execute_process(
-    COMMAND ${CMAKE_C_COMPILER} -E -dM -x c "${LJ_SRC}/lj_arch.h"
+    COMMAND ${CMAKE_C_COMPILER} ${LJ_PROBE_ARCH_FLAGS} -E -dM -x c "${LJ_SRC}/lj_arch.h"
     OUTPUT_VARIABLE LJ_TESTARCH
     RESULT_VARIABLE LJ_TESTARCH_RC
     ERROR_QUIET)
