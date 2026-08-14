@@ -33,7 +33,9 @@ extern "C" {
 #include <algorithm>
 #include <cmath>
 #include <QDebug>
+#include <QScopedValueRollback>
 
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/HotpathOptimization.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
@@ -91,19 +93,25 @@ IO::StreamProcessor::StreamProcessor(
   moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr>* displayOut,
   std::atomic<int>* pixelWidth,
   std::atomic<double>* windowSec,
-  std::atomic<bool>* exportActive)
+  std::atomic<bool>* exportActive,
+  std::atomic<bool>* paused,
+  DataModel::FrameBuilder* frameBuilder)
   : m_config(config)
   , m_displayOut(displayOut)
   , m_pixelWidth(pixelWidth)
   , m_windowSec(windowSec)
   , m_exportActive(exportActive)
+  , m_paused(paused)
+  , m_frameBuilder(frameBuilder)
   , m_lua(nullptr)
   , m_js(nullptr)
   , m_luaDeadline(QDeadlineTimer::Forever)
+  , m_inBlock(false)
   , m_samplesProcessed(0)
   , m_blocksProcessed(0)
   , m_transformErrors(0)
   , m_displayDrops(0)
+  , m_updatePoolHint(0)
 {
   SS_ASSERT_LOG(displayOut != nullptr);
   SS_ASSERT_LOG(pixelWidth != nullptr && windowSec != nullptr);
@@ -118,6 +126,11 @@ IO::StreamProcessor::StreamProcessor(
     state.envelope.reserve(64);
     m_channels.push_back(std::move(state));
   }
+
+  const std::size_t pool_slots = (displayOut ? displayOut->max_capacity() : 0) + 4;
+  m_updatePool.reserve(pool_slots);
+  for (std::size_t i = 0; i < pool_slots; ++i)
+    m_updatePool.push_back(std::make_shared<StreamDisplayUpdate>());
 }
 
 /**
@@ -151,6 +164,8 @@ void IO::StreamProcessor::luaWatchdogHook(lua_State* L, lua_Debug* ar)
 /**
  * @brief Creates the sandboxed Lua state on the worker thread with the project's Safe/Fast mode
  *        applied: Safe = interpreter + count hook, Fast = JIT + no hook (one mode, spec 0051 R20).
+ *        The shared data-table closures are injected for parity with frame-lane transforms; from
+ *        this thread they route through the readTableView/writeTableStore marshal (spec 0051 M5).
  */
 void IO::StreamProcessor::setupLuaState()
 {
@@ -181,6 +196,9 @@ void IO::StreamProcessor::setupLuaState()
     return;
   }
 
+  if (m_frameBuilder)
+    m_frameBuilder->injectTableApiLua(L);
+
   if (m_config.luaFastMode) {
     luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
   } else {
@@ -192,11 +210,32 @@ void IO::StreamProcessor::setupLuaState()
 }
 
 /**
- * @brief Creates the worker-owned QJSEngine for JavaScript stream transforms.
+ * @brief Creates the worker-owned QJSEngine for JavaScript stream transforms. The __ss table-API
+ *        bridge is installed for parity with frame-lane transforms, and the friendly globals are
+ *        defined over it exactly as the SDK prelude (app/rcc/api/prelude.js) does.
  */
 void IO::StreamProcessor::setupJsEngine()
 {
   m_js = new QJSEngine();
+  if (!m_frameBuilder)
+    return;
+
+  m_frameBuilder->injectTableApiJS(m_js);
+
+  static const QString kTablePrelude =
+    QStringLiteral("if (typeof __ss !== 'undefined') {"
+                   " tableGet = function(t, r) { return __ss.tableGet(t, r); };"
+                   " tableSet = function(t, r, v) { __ss.tableSet(t, r, v); };"
+                   " tableHandle = function(t, r) { return __ss.tableHandle(t, r); };"
+                   " tableHandleMany = function(t, regs) { return __ss.tableHandleMany(t, regs); };"
+                   " tableGetH = function(h) { return __ss.tableGetH(h); };"
+                   " tableSetH = function(h, v) { __ss.tableSetH(h, v); };"
+                   " datasetGetRaw = function(u) { return __ss.datasetGetRaw(u); };"
+                   " datasetGetFinal = function(u) { return __ss.datasetGetFinal(u); };"
+                   " if (__ss.mqttPublish)"
+                   "  mqttPublish = function(t, p, q, r) { return __ss.mqttPublish(t, p, q, r); };"
+                   "}");
+  (void)m_js->evaluate(kTablePrelude);
 }
 
 /**
@@ -334,9 +373,10 @@ void IO::StreamProcessor::teardownEngines()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Consumes one typed sample block: per dataset, extract the channel into the reused
- *        float64 scratch, run the block/per-sample transform, reduce to envelope + FFT + latest,
- *        then publish one bounded display update. All per-sample work stays on this thread.
+ * @brief Consumes one typed sample block: extract each dataset's channel into the reused scratch,
+ *        run the transform, reduce to envelope + FFT + latest, publish one bounded display
+ *        update. A table-API marshal spins a nested event loop here, so a re-entrant block is
+ *        dropped and counted -- the shared scratch is never processed twice concurrently.
  */
 void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
 {
@@ -346,6 +386,15 @@ void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
   if (block->frames <= 0 || block->samples.empty()) [[unlikely]]
     return;
 
+  if (m_paused && m_paused->load(std::memory_order_relaxed)) [[unlikely]]
+    return;
+
+  if (m_inBlock) [[unlikely]] {
+    ++m_displayDrops;
+    return;
+  }
+
+  const QScopedValueRollback<bool> reentry_guard(m_inBlock, true);
   const quint64 blockNumber = ++m_blocksProcessed;
 
   std::shared_ptr<StreamBlockItem> exportItem;
@@ -672,40 +721,71 @@ void IO::StreamProcessor::reduceChannel(ChannelState& state, const IO::SampleBlo
 }
 
 /**
- * @brief Publishes one bounded display update: accumulated envelope pairs move out (applied by
- *        every drain), the FFT window is a linearized snapshot (newest-update-wins on drain).
- *        A full ring drops the update and counts it -- the GUI stalled, peaks may coalesce.
+ * @brief Claims a free pooled display update, or null when every slot is in flight (the caller
+ *        drops and counts, the same coalescing contract as a full ring). The use_count probe is
+ *        an atomic read and the acquire fence pairs with the GUI's release of its last alias, so
+ *        slot reuse happens-after every consumer read of the slot's buffers.
+ */
+std::shared_ptr<IO::StreamDisplayUpdate> IO::StreamProcessor::claimUpdateSlot()
+{
+  SS_ASSERT(!m_updatePool.empty(), return nullptr);
+
+  const std::size_t n = m_updatePool.size();
+  for (std::size_t k = 0; k < n; ++k) {
+    const std::size_t idx = (m_updatePoolHint + k) % n;
+    if (m_updatePool[idx].use_count() != 1)
+      continue;
+
+    std::atomic_thread_fence(std::memory_order_acquire);
+    m_updatePoolHint = (idx + 1) % n;
+    return m_updatePool[idx];
+  }
+
+  return nullptr;
+}
+
+/**
+ * @brief Publishes one bounded display update from a reused pool slot, so the steady state
+ *        allocates nothing: envelope pairs copy into the slot's retained capacity (channel
+ *        state keeps its own buffer), the FFT window is a linearized snapshot reusing the
+ *        slot's buffer. Pool exhaustion or a full ring drops the update and counts it.
  */
 void IO::StreamProcessor::publishDisplayUpdate(const IO::SampleBlock& block, quint64 blockNumber)
 {
-  auto update         = std::make_shared<StreamDisplayUpdate>();
+  const auto slot = claimUpdateSlot();
+  if (!slot) [[unlikely]] {
+    ++m_displayDrops;
+    return;
+  }
+
+  auto* update        = slot.get();
   update->sourceId    = m_config.sourceId;
   update->blockNumber = blockNumber;
   update->t0          = block.t0;
   update->dt          = block.dt;
   update->frames      = block.frames;
-  update->channels.reserve(m_channels.size());
+  update->channels.resize(m_channels.size());
 
-  for (auto& state : m_channels) {
-    StreamDisplayUpdate::ChannelUpdate channel;
+  for (std::size_t i = 0; i < m_channels.size(); ++i) {
+    auto& state      = m_channels[i];
+    auto& channel    = update->channels[i];
     channel.uniqueId = state.config.uniqueId;
     channel.latest   = state.latest;
-    channel.envelope = std::move(state.envelope);
+    channel.envelope.assign(state.envelope.begin(), state.envelope.end());
     state.envelope.clear();
-    state.envelope.reserve(64);
 
+    channel.hasFft = false;
+    channel.fftWindow.clear();
     if (!state.fftRing.empty() && state.fftFill == state.fftRing.size()) {
       channel.hasFft = true;
       channel.fftWindow.resize(state.fftRing.size());
       const std::size_t cap = state.fftRing.size();
-      for (std::size_t i = 0; i < cap; ++i)
-        channel.fftWindow[i] = state.fftRing[(state.fftHead + i) % cap];
+      for (std::size_t j = 0; j < cap; ++j)
+        channel.fftWindow[j] = state.fftRing[(state.fftHead + j) % cap];
     }
-
-    update->channels.push_back(std::move(channel));
   }
 
-  if (!m_displayOut->try_enqueue(StreamDisplayUpdatePtr(std::move(update)))) [[unlikely]]
+  if (!m_displayOut->try_enqueue(StreamDisplayUpdatePtr(slot, update))) [[unlikely]]
     ++m_displayDrops;
 }
 
@@ -715,9 +795,14 @@ void IO::StreamProcessor::publishDisplayUpdate(const IO::SampleBlock& block, qui
 
 /**
  * @brief Creates the worker thread, moves the processor onto it, wires the driver's typed block
- *        signal (queued, block rate) and schedules engine compilation on the worker thread.
+ *        signal (queued, block rate) and schedules engine compilation on the worker thread. A
+ *        non-null @p frameBuilder grants transforms the shared data-table API; unit tests and
+ *        the benchmark pass null and keep a table-free sandbox.
  */
-IO::StreamWorker::StreamWorker(HAL_Driver* driver, const StreamConfig& config, QObject* parent)
+IO::StreamWorker::StreamWorker(HAL_Driver* driver,
+                               const StreamConfig& config,
+                               DataModel::FrameBuilder* frameBuilder,
+                               QObject* parent)
   : QObject(parent)
   , m_config(config)
   , m_abandoned(false)
@@ -725,6 +810,7 @@ IO::StreamWorker::StreamWorker(HAL_Driver* driver, const StreamConfig& config, Q
   , m_pixelWidth(kDefaultPixelWidth)
   , m_windowSec(10.0)
   , m_exportActive(false)
+  , m_paused(false)
   , m_displayRing(kDisplayRingSlots)
 {
   SS_ASSERT(driver != nullptr, return);
@@ -732,8 +818,8 @@ IO::StreamWorker::StreamWorker(HAL_Driver* driver, const StreamConfig& config, Q
 
   m_thread.setObjectName(QStringLiteral("StreamWorker-%1").arg(config.sourceId));
 
-  m_processor =
-    new StreamProcessor(config, &m_displayRing, &m_pixelWidth, &m_windowSec, &m_exportActive);
+  m_processor = new StreamProcessor(
+    config, &m_displayRing, &m_pixelWidth, &m_windowSec, &m_exportActive, &m_paused, frameBuilder);
   m_processor->moveToThread(&m_thread);
   m_thread.start();
 
@@ -833,6 +919,15 @@ void IO::StreamWorker::setWindowSec(double seconds) noexcept
 void IO::StreamWorker::setExportActive(bool active) noexcept
 {
   m_exportActive.store(active, std::memory_order_relaxed);
+}
+
+/**
+ * @brief Mirrors the session pause into the worker (GUI-written): the processor drops incoming
+ *        blocks while set, the stream-lane counterpart of PipelineHost::routeFrames' pause gate.
+ */
+void IO::StreamWorker::setPaused(bool paused) noexcept
+{
+  m_paused.store(paused, std::memory_order_relaxed);
 }
 
 /**

@@ -123,7 +123,8 @@ void DataModel::ProjectEditor::handleSourceBusTypeChange(QStandardItem* item)
 }
 
 /**
- * @brief Applies a live-driver property edit and rebuilds the form on transport mode changes.
+ * @brief Applies a live-driver property edit and rebuilds the form on transport-mode or
+ *        audio-input-device changes, so dependent option lists never go stale.
  */
 void DataModel::ProjectEditor::handleSourcePropertyChange(QStandardItem* item)
 {
@@ -138,6 +139,7 @@ void DataModel::ProjectEditor::handleSourcePropertyChange(QStandardItem* item)
   static const QStringList kModeKeys = {
     QStringLiteral("socketTypeIndex"),
     QStringLiteral("protocolIndex"),
+    QStringLiteral("inputDevice"),
   };
   if (kModeKeys.contains(key))
     buildSourceModel(m_selectedSource);

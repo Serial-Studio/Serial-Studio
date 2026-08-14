@@ -195,15 +195,17 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
 }
 
 /**
- * @brief Application entry-point: bootstraps Qt, parses CLI flags, and runs the event loop.
- *        The 250 ms mimalloc purge delay batches page purges across frames: parse/export churn
- *        recycles the same page range continuously, and the 10 ms default decommits pages the
- *        next frame needs, paying madvise/VirtualFree plus re-fault costs in steady state.
+ * @brief Application entry-point: bootstraps Qt, parses CLI flags, runs the event loop. mimalloc:
+ *        purge_delay 250 ms batches purges across frames; page_reclaim_on_free=1 lets the freeing
+ *        thread adopt cross-thread-freed pages (workers allocate, GUI/sinks free; parked pages
+ *        drove the process high-water); arena_purge_mult=4 returns burst memory within a second.
  */
 int main(int argc, char** argv)
 {
 #if defined(SS_MIMALLOC_ACTIVE)
   mi_option_set(mi_option_purge_delay, 250);
+  mi_option_set(mi_option_page_reclaim_on_free, 1);
+  mi_option_set(mi_option_arena_purge_mult, 4);
 #endif
 
   setupQtApplicationMetadata();

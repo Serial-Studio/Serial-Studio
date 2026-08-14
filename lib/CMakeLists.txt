@@ -551,6 +551,10 @@ function(configure_third_party_lib TARGET_NAME)
 endfunction()
 
 configure_third_party_lib(luajit)
+# LuaJIT's stage-1 host tools are separate executable targets, so they inherit the app's
+# -Wundef / CRT-deprecation warnings unless suppressed like the library itself.
+configure_third_party_lib(luajit-minilua)
+configure_third_party_lib(luajit-buildvm)
 configure_third_party_lib(kissfft)
 configure_third_party_lib(QCodeEditor)
 configure_third_party_lib(QSimpleUpdater)

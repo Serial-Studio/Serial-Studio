@@ -60,7 +60,9 @@ signals:
   void dataReceived(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
 
 public:
-  using DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::FrameConsumerWorker;
+  ServerWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
+               std::atomic<bool>* enabled,
+               std::atomic<size_t>* queueSize);
   ~ServerWorker() override;
 
   [[nodiscard]] bool isResourceOpen() const override;
@@ -84,10 +86,16 @@ private slots:
   void onSocketDisconnected();
 
 private:
+  [[nodiscard]] bool underWriteCap(QTcpSocket* socket);
+
+private:
   QHash<QTcpSocket*, QString> m_sockets;
 
   // Sockets whose client opted out of the per-frame broadcast; empty for every ordinary client
   QSet<QTcpSocket*> m_mutedSockets;
+
+  quint64 m_droppedBroadcasts;
+  bool m_warnedBackpressure;
 };
 
 /**

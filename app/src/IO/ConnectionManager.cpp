@@ -56,6 +56,7 @@
 #  include "Licensing/Trial.h"
 #  include "MQTT/Publisher.h"
 #  include "Sessions/Export.h"
+#  include "UI/Widgets/AudioExport.h"
 #endif
 
 #ifdef ENABLE_GRPC
@@ -755,9 +756,10 @@ bool IO::ConnectionManager::anyDeviceConnecting() const
 }
 
 /**
- * @brief Connects the primary device (device 0) and, in ProjectFile mode, all other sources. The
- *        request concludes when the last device stops opening, which for a synchronous driver is
- *        before the fan-out returns and for an orchestrated one is when its flow reports.
+ * @brief Connects device 0 and, in ProjectFile mode, all other sources. The request concludes
+ *        when the last device stops opening: before the fan-out returns for a synchronous driver,
+ *        when its flow reports for an orchestrated one. Stream workers rebuild at this edge so
+ *        their config captures the settings the session opens with, not the last bus switch's.
  */
 void IO::ConnectionManager::connectDevice()
 {
@@ -772,6 +774,9 @@ void IO::ConnectionManager::connectDevice()
     return;
   }
 #endif
+
+  if (!isConnected())
+    rebuildStreamWorkers();
 
   static auto& appState = AppState::instance();
   if (appState.operationMode() == SerialStudio::ProjectFile) {
@@ -1218,6 +1223,10 @@ void IO::ConnectionManager::setPaused(bool paused)
     return;
 
   m_paused = effective;
+  for (auto& worker : m_streamWorkers)
+    if (worker)
+      worker->setPaused(effective);
+
   Q_EMIT pausedChanged();
 }
 
@@ -1662,6 +1671,12 @@ void IO::ConnectionManager::wireStreamLifecycle()
           &MDF4::Export::enabledChanged,
           this,
           &IO::ConnectionManager::refreshStreamExportFlags);
+
+  static auto& audioExport = Widgets::AudioExport::instance();
+  connect(&audioExport,
+          &Widgets::AudioExport::activeSessionsChanged,
+          this,
+          &IO::ConnectionManager::refreshStreamExportFlags);
 #endif
 }
 
@@ -1763,6 +1778,7 @@ void IO::ConnectionManager::rebuildStreamWorkers()
 {
   stopStreamWorkers();
 
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
   for (const auto& [deviceId, dm] : m_devices) {
     if (!dm || !dm->driver())
       continue;
@@ -1781,7 +1797,8 @@ void IO::ConnectionManager::rebuildStreamWorkers()
     if (!active)
       continue;
 
-    auto worker = std::make_unique<StreamWorker>(halDriver, config, nullptr);
+    auto worker = std::make_unique<StreamWorker>(halDriver, config, &frameBuilder, nullptr);
+    worker->setPaused(m_paused);
     wireStreamWorkerSinks(*worker);
     m_streamWorkers.push_back(std::move(worker));
   }
@@ -1793,7 +1810,6 @@ void IO::ConnectionManager::rebuildStreamWorkers()
     if (worker)
       streamSourceIds.insert(worker->sourceId());
 
-  static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.setStreamSourceIds(streamSourceIds);
 
   if (!m_streamWorkers.empty() && isConnected())
@@ -1825,6 +1841,13 @@ void IO::ConnectionManager::wireStreamWorkerSinks(StreamWorker& worker)
           &mdf4Sink,
           &MDF4::StreamExport::ingestBlock,
           Qt::QueuedConnection);
+
+  static auto& audioExport = Widgets::AudioExport::instance();
+  connect(processor,
+          &IO::StreamProcessor::blockReady,
+          &audioExport,
+          &Widgets::AudioExport::ingestStreamBlock,
+          Qt::QueuedConnection);
 #endif
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
@@ -1852,8 +1875,9 @@ void IO::ConnectionManager::refreshStreamExportFlags()
   static auto& apiServer = API::Server::instance();
   bool exportOn          = csvExport.exportEnabled() || apiServer.enabled();
 #ifdef BUILD_COMMERCIAL
-  static auto& mdf4Export = MDF4::Export::instance();
-  exportOn                = exportOn || mdf4Export.exportEnabled();
+  static auto& mdf4Export  = MDF4::Export::instance();
+  static auto& audioExport = Widgets::AudioExport::instance();
+  exportOn = exportOn || mdf4Export.exportEnabled() || audioExport.hasActiveSessions();
 #endif
 
   for (auto& worker : m_streamWorkers)

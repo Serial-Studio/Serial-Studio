@@ -24,12 +24,14 @@
 
 #include <cstdint>
 #include <memory>
+#include <QHash>
 #include <QSet>
 #include <QString>
 #include <unordered_map>
 #include <vector>
 
 #include "DataModel/FrameConsumer.h"
+#include "IO/StreamWorker.h"
 #include "SerialStudio.h"
 
 class QFile;
@@ -49,6 +51,7 @@ struct AudioExportItem {
  */
 struct AudioSessionConfig {
   int sampleRate{0};
+  int uniqueId{-1};
   bool useScale{false};
   double center{0.0};
   double halfRange{1.0};
@@ -106,10 +109,10 @@ private:
 };
 
 /**
- * @brief Singleton facade recording FFT/Waterfall input to WAV (Pro). Owns session lifecycle only;
- * widgets own their Dashboard taps. External auto-stop (disconnect, pause, replay, license loss)
- * calls @c closeAllSessions(), which finalises every session and emits @c sessionsClosed() so the
- * widgets reset @c audioRecordingEnabled and disarm their taps (the T6/T7 contract).
+ * @brief Singleton facade recording FFT/Waterfall input to WAV (Pro). Widgets own their frame-lane
+ * Dashboard taps; stream-lane sources feed sessions by dataset uniqueId via @c ingestStreamBlock
+ * (queued from blockReady, so the GUI stays the queue's single producer). External auto-stop calls
+ * @c closeAllSessions(), which emits @c sessionsClosed() so widgets disarm (T6/T7 contract).
  */
 class AudioExport : public DataModel::FrameConsumer<AudioExportItem> {
   Q_OBJECT
@@ -117,6 +120,7 @@ class AudioExport : public DataModel::FrameConsumer<AudioExportItem> {
 signals:
   void sessionsClosed();
   void sessionClosed(quint32 key);
+  void activeSessionsChanged();
 
 private:
   explicit AudioExport();
@@ -131,6 +135,7 @@ public:
   [[nodiscard]] static AudioExport& instance();
   [[nodiscard]] static quint32 sessionKey(SerialStudio::DashboardWidget kind, int index);
 
+  [[nodiscard]] bool hasActiveSessions() const noexcept;
   [[nodiscard]] Q_INVOKABLE QString audioPath(const QString& datasetTitle,
                                               const QString& projectTitle) const;
 
@@ -143,6 +148,7 @@ public slots:
   void openSession(SerialStudio::DashboardWidget kind, int index, AudioSessionConfig config);
   void closeSession(SerialStudio::DashboardWidget kind, int index);
   void closeAllSessions();
+  void ingestStreamBlock(const IO::StreamBlockItemPtr& block);
   void setupExternalConnections();
 
 private slots:
@@ -153,6 +159,7 @@ protected:
 
 private:
   QSet<quint32> m_activeSessions;
+  QHash<quint32, int> m_sessionDatasets;
 };
 
 }  // namespace Widgets

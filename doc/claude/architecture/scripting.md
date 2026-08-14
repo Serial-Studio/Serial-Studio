@@ -180,7 +180,7 @@ lag on every keystroke/drag.
   (`store` + `owner` + `mirror`). Reads: live store when the caller owns it (parser and dataset
   transforms), the GUI-side `DataTableSnapshot` mirror on the GUI thread (painters, editors,
   dialogs), the live store behind `PipelineHost::runOnObjectThread` for any other worker
-  (control script, macros). Writes: direct / queued fire-and-forget from the GUI / blocking
+  (control script, macros, stream-lane transforms). Writes: direct / queued fire-and-forget from the GUI / blocking
   elsewhere. **Never make a GUI-thread read block on the pipeline thread** — the wait spins a
   nested `QEventLoop` that fires the display tick and re-enters the very script that is
   mid-call, and at 26 reads per painter frame it blew the 250 ms watchdog outright.

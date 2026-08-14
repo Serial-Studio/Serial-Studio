@@ -27,8 +27,12 @@ count + `t0` + `dt`) through `publishSampleBlock()`; a lane-off audio source kee
 CSV text path, so the branch inside `Audio::processInputBuffer` is deliberate, not dead code.
 
 - **`IO::StreamWorker`** (GUI facade) owns one `QThread` per stream source, the display SPSC
-  ring and the resize/export atomics; `ConnectionManager::rebuildStreamWorkers()` creates them
-  beside the DeviceManagers and `stopStreamWorkers()` joins them FIRST in
+  ring and the resize/export/pause atomics (`setPaused` mirrors the session pause; the
+  processor drops incoming blocks while set, the stream-lane counterpart of
+  `PipelineHost::routeFrames`' gate); `ConnectionManager::rebuildStreamWorkers()` creates them
+  beside the DeviceManagers, runs again at the connect edge (`connectDevice()`) so the config
+  captures the driver settings the session actually opens with (channels, sample rate — not the
+  ones from the last bus switch), and `stopStreamWorkers()` joins them FIRST in
   `ModuleManager::stopFrameConsumerWorkers()`. `stop()` is: disconnect the feed, queue engine
   teardown (script states die on their own thread), quit, bounded 5 s wait, then
   **warn-and-abandon** on a hung Fast-mode script — the facade latches `abandoned()` and never
@@ -39,12 +43,19 @@ CSV text path, so the branch inside `Audio::processInputBuffer` is deliberate, n
   display grid, FFT ring append, latest values. Safe/Fast mode is the project's `luaFastMode`
   (interpreter + count hook + 100 ms deadline / JIT + no hook); `ffi` and `jit` are never
   opened. A failed or aborted transform counts an error and the block falls back to raw.
+  Stream transforms get the shared data-table API (`FrameBuilder::injectTableApi{Lua,JS}` +
+  the prelude's friendly globals for JS), routed through the `readTableView`/`writeTableStore`
+  marshal like any other worker; the marshal wait spins a nested event loop on the worker
+  thread, so a re-entrant block delivered mid-wait is dropped and counted, never processed
+  concurrently. Unit tests and the benchmark pass a null FrameBuilder (table-free sandbox).
 - **Everything leaving the worker is per block, never per sample**: a bounded display update
   through the SPSC ring (drained by `Dashboard::onDisplayTick`), `blockReady` (full-rate typed
-  export payload, queued to the GUI-affine CSV/MDF4 stream sinks and the API server —
-  the GUI is thus the single SPSC producer for each sink), and `latestValuesReady` (queued to
-  `FrameBuilder::ingestStreamValues`, which runs on the pipeline thread so the data-table
-  store keeps exactly one writer). Export payloads are only built while a sink is live.
+  export payload, queued to the GUI-affine CSV/MDF4 stream sinks, the API server, and
+  `Widgets::AudioExport::ingestStreamBlock` for the FFT/Waterfall WAV taps, matched by dataset
+  uniqueId — the GUI is thus the single SPSC producer for each sink), and `latestValuesReady`
+  (queued to `FrameBuilder::ingestStreamValues`, which runs on the pipeline thread so the
+  data-table store keeps exactly one writer). Export payloads are only built while a sink is
+  live; an open WAV session counts as a live sink (`AudioExport::hasActiveSessions`).
 
 ## Opening a Link — Synchronous, Per-Driver
 

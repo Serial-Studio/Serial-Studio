@@ -19,14 +19,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+// clang-format off
+extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
 #include <lualib.h>
+}
+// clang-format on
 
 #include <QByteArray>
 #include <QTest>
 
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/LuaCompatJIT.h"
 #include "SSAssert.h"
 
 // Every test function here is self-contained: each opens its own lua_State (via LuaState below)

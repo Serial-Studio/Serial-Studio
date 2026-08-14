@@ -664,23 +664,29 @@ QMap<QString, QMap<QString, DataModel::RegisterValue>> DataModel::DataTableStore
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Publishes an immutable copy for readers on another thread; call from the store's owning
- *        thread only. An uninitialized store yields an empty snapshot (generation -1), which is
+ * @brief Copies the store into @p out for readers on another thread, reusing its buffers (the
+ *        value vector keeps capacity, the lookup maps re-share); call from the owning thread
+ *        only. An uninitialized store resets @p out to the empty generation -1 state, which is
  *        what lets a reader drop the previous project's values the tick after a clear().
  */
-DataModel::DataTableSnapshotPtr DataModel::DataTableStore::makeSnapshot() const
+void DataModel::DataTableStore::snapshotInto(DataTableSnapshot& out) const
 {
-  auto snapshot = std::make_shared<DataTableSnapshot>();
-  if (!m_initialized)
-    return snapshot;
+  if (!m_initialized) {
+    out.generation = -1;
+    out.writeClock = 0;
+    out.values.clear();
+    out.index.clear();
+    out.datasetIndex.clear();
+    out.aliasIndex.clear();
+    return;
+  }
 
-  snapshot->generation   = m_generation;
-  snapshot->writeClock   = m_writeClock;
-  snapshot->values       = m_storage;
-  snapshot->index        = m_index;
-  snapshot->datasetIndex = m_datasetIndex;
-  snapshot->aliasIndex   = m_aliasIndex;
-  return snapshot;
+  out.generation   = m_generation;
+  out.writeClock   = m_writeClock;
+  out.values       = m_storage;
+  out.index        = m_index;
+  out.datasetIndex = m_datasetIndex;
+  out.aliasIndex   = m_aliasIndex;
 }
 
 /**

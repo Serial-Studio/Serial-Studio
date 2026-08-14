@@ -101,7 +101,7 @@ public:
   [[nodiscard]] int generation() const noexcept;
   [[nodiscard]] bool isInitialized() const noexcept;
   [[nodiscard]] quint64 writeClock() const noexcept;
-  [[nodiscard]] DataTableSnapshotPtr makeSnapshot() const;
+  void snapshotInto(DataTableSnapshot& out) const;
 
   [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
 
@@ -209,10 +209,10 @@ struct TableApiContext {
 };
 
 /**
- * @brief Runs @p fn against whichever view of the store is safe to read here: the live store when
- *        the caller owns it, the GUI mirror snapshot on the GUI thread, the live store behind the
- *        marshal otherwise (including before the first snapshot lands, so a handle resolved at
- *        startup is never a spurious -1). Marshaling on the GUI would park the display tick.
+ * @brief Runs @p fn against the safe view here: the live store when the caller owns it, the GUI
+ *        mirror snapshot on the GUI thread, the live store behind the marshal otherwise (also
+ *        before the first snapshot lands, so a startup handle is never a spurious -1). The
+ *        marshaled read re-checks isInitialized(), so a read racing a disconnect clear misses.
  */
 template<typename Fn>
 void readTableView(const TableApiContext& ctx, Fn&& fn)
@@ -227,14 +227,17 @@ void readTableView(const TableApiContext& ctx, Fn&& fn)
     return;
   }
 
-  IO::PipelineHost::runOnObjectThread(ctx.owner, [&] { fn(*ctx.store); });
+  IO::PipelineHost::runOnObjectThread(ctx.owner, [&] {
+    if (ctx.store->isInitialized())
+      fn(*ctx.store);
+  });
 }
 
 /**
- * @brief Applies a store mutation on the store's own thread: direct when the caller owns it,
- *        queued fire-and-forget from the GUI (waiting there would park the display tick and
- *        re-enter the calling script), blocking from any other worker thread so a control
- *        script's write-then-read stays ordered.
+ * @brief Applies a store mutation on the store's thread: direct when the caller owns it, queued
+ *        fire-and-forget from the GUI (a wait would park the display tick and re-enter the
+ *        script), blocking from other workers so write-then-read stays ordered. Cross-thread
+ *        paths re-check isInitialized() on arrival, so a write racing a disconnect clear no-ops.
  */
 template<typename Fn>
 void writeTableStore(const TableApiContext& ctx, Fn&& fn)
@@ -244,12 +247,18 @@ void writeTableStore(const TableApiContext& ctx, Fn&& fn)
     return;
   }
 
+  DataTableStore* store = ctx.store;
+  auto guarded          = [store, fn = std::forward<Fn>(fn)] {
+    if (store->isInitialized())
+      fn();
+  };
+
   if (qApp && QThread::currentThread() == qApp->thread() && ctx.mirror) {
-    QMetaObject::invokeMethod(ctx.owner, std::forward<Fn>(fn), Qt::QueuedConnection);
+    QMetaObject::invokeMethod(ctx.owner, std::move(guarded), Qt::QueuedConnection);
     return;
   }
 
-  IO::PipelineHost::runOnObjectThread(ctx.owner, std::forward<Fn>(fn));
+  IO::PipelineHost::runOnObjectThread(ctx.owner, std::move(guarded));
 }
 
 /**

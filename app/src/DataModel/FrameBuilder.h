@@ -304,11 +304,17 @@ private:
   DataModel::DataTableSnapshotPtr m_guiTableSnapshot;
   moodycamel::ReaderWriterQueue<DataModel::DataTableSnapshotPtr> m_tableMirrorRing;
 
+  static constexpr size_t kTableSnapshotPoolSlots = kTableMirrorSlots + 4;
+
+  std::vector<std::shared_ptr<DataModel::DataTableSnapshot>> m_tableSnapshotPool;
+  std::size_t m_tableSnapshotPoolHint;
+
   // Upvalue every Lua table-API closure carries; pinned for this object's lifetime
   DataModel::TableApiContext m_luaTableContext;
 
   void noteGuiTableApiUser();
   void publishTableSnapshot();
+  [[nodiscard]] std::shared_ptr<DataModel::DataTableSnapshot> claimTableSnapshotSlot();
 
   bool m_streamValuesDirty;
   QSet<int> m_streamSourceIds;

@@ -162,6 +162,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_guiTableApiUsers(false)
   , m_tableSnapshotRequested(false)
   , m_tableMirrorRing(kTableMirrorSlots)
+  , m_tableSnapshotPoolHint(0)
   , m_streamValuesDirty(false)
   , m_latestFrameSourceId(-1)
   , m_latestFrameSeq(0)
@@ -185,6 +186,10 @@ DataModel::FrameBuilder::FrameBuilder()
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
+
+  m_tableSnapshotPool.reserve(kTableSnapshotPoolSlots);
+  for (size_t i = 0; i < kTableSnapshotPoolSlots; ++i)
+    m_tableSnapshotPool.emplace_back(std::make_shared<DataModel::DataTableSnapshot>());
 
 #ifdef BUILD_COMMERCIAL
   static auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
@@ -1194,10 +1199,34 @@ const DataModel::TableApiContext& DataModel::FrameBuilder::guiTableApiContext()
 }
 
 /**
- * @brief Builder-thread half of the mirror: publishes a fresh copy of the store when its layout
- *        generation or write clock moved since the last one. Runs on request at display-tick
- *        rate, never per frame -- the copy is O(registers), which the hotpath must not pay. A
- *        full ring leaves the bookkeeping untouched so the next request retries the same state.
+ * @brief Claims a free pooled snapshot slot, or null when every slot is in flight (the caller
+ *        skips the publish and the next display-tick request retries the same state). The
+ *        use_count probe is an atomic read and the acquire fence pairs with the GUI's release
+ *        of its previously adopted snapshot, so slot reuse happens-after every consumer read.
+ */
+std::shared_ptr<DataModel::DataTableSnapshot> DataModel::FrameBuilder::claimTableSnapshotSlot()
+{
+  SS_ASSERT(!m_tableSnapshotPool.empty(), return nullptr);
+
+  const std::size_t n = m_tableSnapshotPool.size();
+  for (std::size_t k = 0; k < n; ++k) {
+    const std::size_t idx = (m_tableSnapshotPoolHint + k) % n;
+    if (m_tableSnapshotPool[idx].use_count() != 1)
+      continue;
+
+    std::atomic_thread_fence(std::memory_order_acquire);
+    m_tableSnapshotPoolHint = (idx + 1) % n;
+    return m_tableSnapshotPool[idx];
+  }
+
+  return nullptr;
+}
+
+/**
+ * @brief Builder-thread half of the mirror: fills a reused pool slot from the store when its
+ *        layout generation or write clock moved since the last publish, so the steady state
+ *        allocates nothing. Runs on request at display-tick rate, never per frame. Pool
+ *        exhaustion or a full ring leaves the bookkeeping untouched so the next request retries.
  */
 void DataModel::FrameBuilder::publishTableSnapshot()
 {
@@ -1210,7 +1239,13 @@ void DataModel::FrameBuilder::publishTableSnapshot()
   if (generation == m_publishedTableGeneration && clock == m_publishedTableClock)
     return;
 
-  if (!m_tableMirrorRing.try_enqueue(m_tableStore.makeSnapshot())) [[unlikely]]
+  const auto slot = claimTableSnapshotSlot();
+  if (!slot) [[unlikely]]
+    return;
+
+  m_tableStore.snapshotInto(*slot);
+  if (!m_tableMirrorRing.try_enqueue(DataModel::DataTableSnapshotPtr(slot, slot.get())))
+    [[unlikely]]
     return;
 
   m_publishedTableGeneration = generation;

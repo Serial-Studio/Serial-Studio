@@ -501,6 +501,7 @@ void Widgets::FFTPlot::setAudioRecordingEnabled(const bool enabled)
     const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
     AudioSessionConfig cfg;
     cfg.sampleRate   = m_samplingRate;
+    cfg.uniqueId     = dataset.uniqueId;
     cfg.useScale     = m_scaleIsValid;
     cfg.center       = m_center;
     cfg.halfRange    = m_halfRange;

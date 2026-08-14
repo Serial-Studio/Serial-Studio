@@ -27,6 +27,7 @@
 #include <QJsonObject>
 #include <QRandomGenerator>
 #include <QSet>
+#include <utility>
 
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
@@ -58,6 +59,9 @@ constexpr int kMinAuthTokenChars       = 32;
 
 // Per-subscriber stream backlog before the oldest block is dropped and counted (spec 0051 R24)
 constexpr std::size_t kStreamQueueDepth = 8;
+
+// Broadcast-lane cap per socket: over-cap (non-reading) clients are skipped, bounding the buffer
+constexpr qint64 kMaxApiPendingWriteBytes = 16 * 1024 * 1024;
 
 //--------------------------------------------------------------------------------------------------
 // Static functions
@@ -137,9 +141,45 @@ bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Constructs the worker over the shared frame-consumer queue plumbing.
+ */
+API::ServerWorker::ServerWorker(
+  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
+  std::atomic<bool>* enabled,
+  std::atomic<size_t>* queueSize)
+  : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(queue, enabled, queueSize)
+  , m_droppedBroadcasts(0)
+  , m_warnedBackpressure(false)
+{}
+
+/**
  * @brief Destructor
  */
 API::ServerWorker::~ServerWorker() = default;
+
+/**
+ * @brief True while @p socket has room for another broadcast; an over-cap socket is skipped and
+ *        counted, with a single warning the first time so a wedged client is visible without
+ *        per-batch log spam. Skipping is self-healing: a client that resumes reading drains its
+ *        backlog under the cap and rejoins the broadcast on the next batch.
+ */
+bool API::ServerWorker::underWriteCap(QTcpSocket* socket)
+{
+  SS_ASSERT(socket != nullptr, return false);
+
+  if (socket->bytesToWrite() <= kMaxApiPendingWriteBytes) [[likely]]
+    return true;
+
+  ++m_droppedBroadcasts;
+  if (!m_warnedBackpressure) {
+    m_warnedBackpressure = true;
+    qWarning() << "[API] Client" << socket->peerAddress().toString() << ":" << socket->peerPort()
+               << "is not reading the broadcast stream; dropping its broadcasts while the socket"
+               << "backlog exceeds" << kMaxApiPendingWriteBytes << "bytes";
+  }
+
+  return false;
+}
 
 /**
  * @brief Returns false (no file resources to manage)
@@ -218,7 +258,8 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
 }
 
 /**
- * @brief Writes raw data to all connected sockets (worker thread)
+ * @brief Writes raw data to all connected sockets (worker thread); a socket over the outbound
+ *        write cap is skipped so a non-reading client cannot grow its buffer without bound.
  */
 void API::ServerWorker::writeRawData(const QByteArray& data)
 {
@@ -232,7 +273,7 @@ void API::ServerWorker::writeRawData(const QByteArray& data)
 
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
-    if (socket && socket->isWritable())
+    if (socket && socket->isWritable() && underWriteCap(socket))
       socket->write(json);
   }
 }
@@ -344,12 +385,24 @@ void API::ServerWorker::onSocketDisconnected()
 
 /**
  * @brief Processes frames by serializing them to JSON and writing to sockets. Sockets whose
- *        client opted out of the stream (mirror viewers) are skipped, and the serialization is
- *        skipped entirely when every connected client has opted out.
+ *        client opted out of the stream (mirror viewers) or whose outbound backlog is over the
+ *        write cap are skipped, and the serialization is skipped entirely when no socket is
+ *        eligible for this batch.
  */
 void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
-  if (items.empty() || m_sockets.isEmpty() || m_sockets.count() == m_mutedSockets.count())
+  if (items.empty() || m_sockets.isEmpty())
+    return;
+
+  QVector<QTcpSocket*> targets;
+  targets.reserve(m_sockets.size());
+  for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
+    auto* socket = *it;
+    if (socket && socket->isWritable() && !m_mutedSockets.contains(socket) && underWriteCap(socket))
+      targets.append(socket);
+  }
+
+  if (targets.isEmpty())
     return;
 
   QJsonArray array;
@@ -364,11 +417,8 @@ void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFra
   const QJsonDocument document(object);
   const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
-  for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
-    auto* socket = *it;
-    if (socket && socket->isWritable() && !m_mutedSockets.contains(socket))
-      socket->write(json);
-  }
+  for (auto* socket : std::as_const(targets))
+    socket->write(json);
 }
 
 //--------------------------------------------------------------------------------------------------

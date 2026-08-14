@@ -41,6 +41,10 @@ extern "C" {
 #include "IO/HAL_Driver.h"
 #include "ThirdParty/readerwriterqueue.h"
 
+namespace DataModel {
+class FrameBuilder;
+}  // namespace DataModel
+
 namespace IO {
 
 /**
@@ -149,7 +153,9 @@ public:
                            moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr>* displayOut,
                            std::atomic<int>* pixelWidth,
                            std::atomic<double>* windowSec,
-                           std::atomic<bool>* exportActive);
+                           std::atomic<bool>* exportActive,
+                           std::atomic<bool>* paused             = nullptr,
+                           DataModel::FrameBuilder* frameBuilder = nullptr);
   ~StreamProcessor() override;
 
   StreamProcessor(StreamProcessor&&)                 = delete;
@@ -199,6 +205,7 @@ private:
   void runSampleTransform(ChannelState& state);
   void reduceChannel(ChannelState& state, const IO::SampleBlock& block);
   void publishDisplayUpdate(const IO::SampleBlock& block, quint64 blockNumber);
+  [[nodiscard]] std::shared_ptr<StreamDisplayUpdate> claimUpdateSlot();
   void setupLuaState();
   void setupJsEngine();
   static void luaWatchdogHook(lua_State* L, lua_Debug* ar);
@@ -213,10 +220,13 @@ private:
   std::atomic<int>* m_pixelWidth;
   std::atomic<double>* m_windowSec;
   std::atomic<bool>* m_exportActive;
+  std::atomic<bool>* m_paused;
+  DataModel::FrameBuilder* m_frameBuilder;
 
   lua_State* m_lua;
   QJSEngine* m_js;
   QDeadlineTimer m_luaDeadline;
+  bool m_inBlock;
 
   quint64 m_samplesProcessed;
   quint64 m_blocksProcessed;
@@ -225,6 +235,9 @@ private:
 
   std::vector<double> m_scratch;
   std::vector<ChannelState> m_channels;
+
+  std::vector<std::shared_ptr<StreamDisplayUpdate>> m_updatePool;
+  std::size_t m_updatePoolHint;
 };
 
 /**
@@ -237,7 +250,10 @@ class StreamWorker : public QObject {
   Q_OBJECT
 
 public:
-  explicit StreamWorker(HAL_Driver* driver, const StreamConfig& config, QObject* parent = nullptr);
+  explicit StreamWorker(HAL_Driver* driver,
+                        const StreamConfig& config,
+                        DataModel::FrameBuilder* frameBuilder = nullptr,
+                        QObject* parent                       = nullptr);
   ~StreamWorker() override;
 
   StreamWorker(StreamWorker&&)                 = delete;
@@ -255,6 +271,7 @@ public:
   void setPixelWidth(int px) noexcept;
   void setWindowSec(double seconds) noexcept;
   void setExportActive(bool active) noexcept;
+  void setPaused(bool paused) noexcept;
 
   void stop();
 
@@ -275,6 +292,7 @@ private:
   std::atomic<int> m_pixelWidth;
   std::atomic<double> m_windowSec;
   std::atomic<bool> m_exportActive;
+  std::atomic<bool> m_paused;
   // code-verify on
   moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr> m_displayRing;
 };
