@@ -105,11 +105,19 @@ jobs:
       contents: read
       security-events: write
     steps:
+    #
+    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
+    # and a shallow checkout configures but fails to build
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
+    #
+    # apt payload for a Qt 6 desktop build: the xcb/xkb platform stack, GStreamer for
+    # QtMultimedia, and the packaging tools (rpm, fakeroot, python3-venv) linuxdeploy shells out to
+    #
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
@@ -172,6 +180,10 @@ jobs:
           gstreamer1.0-pulseaudio \
           gstreamer1.0-gl \
           
+    #
+    # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
+    # than the rest of the job put together
+    #
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v${{env.GRPC_VERSION}} \
@@ -182,6 +194,10 @@ jobs:
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+    #
+    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
+    # rewrites the entry
+    #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
       uses: actions/cache/restore@v5
@@ -191,6 +207,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
 
+    #
+    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
+    # secrets; only reached when the cache missed
+    #
     - name: '⚙️ Install Qt (cache miss)'
       shell: bash
       if: steps.qt_cache.outputs.cache-hit != 'true'
@@ -204,6 +224,9 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
+    #
+    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
+    #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
@@ -213,6 +236,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
 
+    #
+    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
+    # later step in the job sees the same Qt
+    #
     - name: '⚙️ Add Qt to PATH'
       shell: bash
       env:
@@ -227,6 +254,9 @@ jobs:
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
+    #
+    # get-cmake supplies a current CMake independently of whatever the runner image ships
+    #
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
@@ -253,6 +283,10 @@ jobs:
         QT_QPA_PLATFORM: offscreen
       run: ctest --preset unit-ci --output-on-failure
 
+    #
+    # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
+    # profiles for the training runs below
+    #
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -273,9 +307,16 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # Builds the instrumented binary the two training runs profile
+    #
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
+    # failure is tolerated because an unlicensed profile still beats no profile
+    #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -284,6 +325,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
 
+    #
+    # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
+    # the optimized binary
+    #
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -292,6 +337,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
+    #
+    # Second profile: the big_db_test load exercises the project and dashboard paths that the
+    # hotpath benchmark never reaches
+    #
     - name: '🏋️ PGO training run (big project)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -300,6 +349,10 @@ jobs:
       run: |
         bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 25
 
+    #
+    # Stage 2: identical flags with PGO_STAGE=USE so the compiler consumes the profiles just
+    # written
+    #
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -320,9 +373,15 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # The binary that ships, and the one every gate below measures
+    #
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
+    #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -331,6 +390,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
 
+    #
+    # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
+    # throughput benchmark never sees
+    #
     - name: '🩺 Big project verification (optimized)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -339,6 +402,9 @@ jobs:
       run: |
         bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 15
 
+    #
+    # always(): activations are seat-limited, so a failed job still has to release the seat
+    #
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
       env:
@@ -348,6 +414,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
+    #
+    # Signing is opt-in on the secrets being present; without them the step exits clean and the
+    # packages ship unsigned
+    #
     - name: '🔐 Prepare GPG signing (optional)'
       env:
         GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
@@ -381,6 +451,14 @@ jobs:
         echo "LDAI_SIGN=1" >> "$GITHUB_ENV"
         echo "LDAI_SIGN_KEY=$GPG_KEY_ID" >> "$GITHUB_ENV"
 
+    #
+    # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
+    # pruned first so the image carries only what the app loads. Two things the tool cannot bundle
+    # by itself are added afterwards: the offscreen platform plugin, since linuxdeploy ships xcb
+    # and wayland only while the integration tests run headless, and Qt WebEngine's NSS crypto
+    # backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler never sees
+    # them and leaves a half-bundled NSS that crashes against the host's newer copies
+    #
     - name: '📦 Create AppImage'
       run: |
         cd "build/app"
@@ -403,7 +481,6 @@ jobs:
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
         fi
 
-        # linuxdeploy bundles only xcb/wayland; add offscreen for headless CI tests
         mkdir -p AppDir/usr/plugins/platforms
         if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" ]; then
           cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
@@ -411,10 +488,6 @@ jobs:
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
 
-        # Qt WebEngine's NSS dlopen()s its crypto backends (softokn/freebl/
-        # nssckbi) at runtime, so linuxdeploy (ldd-based) never bundles them and
-        # leaves a half-bundled NSS that crashes against the host's newer copies.
-        # Copy the version-matched modules next to the bundled libnssutil3.so.
         have_softokn=0
         for d in /usr/lib/*/nss /usr/lib/*-linux-gnu /usr/lib64; do
           [ -d "$d" ] || continue
@@ -439,6 +512,10 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
 
+    #
+    # Reuses the AppDir from the step above through linuxdeploy-plugin-native_packages, then reads
+    # ss-config.json back out of each package to prove the stamp survived
+    #
     - name: '📦 Create .deb and .rpm packages'
       run: |
         set -euo pipefail
@@ -473,6 +550,10 @@ jobs:
         rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm" \
           | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
 
+    #
+    # Every artifact is verified right after it is signed, so a broken signature fails here
+    # instead of on a user's machine
+    #
     - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
       env:
         GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
@@ -511,24 +592,37 @@ jobs:
           gpg --verify "$f.asc" "$f"
         done
 
+    #
+    # Release artifact: the AppImage users download
+    #
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
 
+    #
+    # Release artifact: Debian package
+    #
     - name: '📤 Upload artifact: .deb (x64)'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb
 
+    #
+    # Release artifact: RPM package
+    #
     - name: '📤 Upload artifact: .rpm (x64)'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
 
+    #
+    # Detached signatures plus the raw binary and the public key, so a user can verify without
+    # trusting the release page; ignored when signing was skipped
+    #
     - name: '📤 Upload artifact: signatures + signed binary (x64)'
       uses: actions/upload-artifact@v5
       with:
@@ -553,11 +647,19 @@ jobs:
       contents: read
       security-events: write
     steps:
+    #
+    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
+    # and a shallow checkout configures but fails to build
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
+    #
+    # apt payload for a Qt 6 desktop build: the xcb/xkb platform stack, GStreamer for
+    # QtMultimedia, and the packaging tools (rpm, fakeroot, python3-venv) linuxdeploy shells out to
+    #
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
@@ -620,6 +722,10 @@ jobs:
           gstreamer1.0-pulseaudio \
           gstreamer1.0-gl \
           
+    #
+    # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
+    # than the rest of the job put together
+    #
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v${{env.GRPC_VERSION}} \
@@ -630,6 +736,10 @@ jobs:
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+    #
+    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
+    # rewrites the entry
+    #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
       uses: actions/cache/restore@v5
@@ -638,6 +748,10 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
 
+    #
+    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
+    # secrets; only reached when the cache missed
+    #
     - name: '⚙️ Install Qt (cache miss)'
       shell: bash
       if: steps.qt_cache.outputs.cache-hit != 'true'
@@ -651,6 +765,9 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
+    #
+    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
+    #
     - name: '⚙️ Save Qt Cache'
       uses: actions/cache/save@v5
       if: steps.qt_cache.outputs.cache-hit != 'true'
@@ -659,6 +776,10 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
 
+    #
+    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
+    # later step in the job sees the same Qt
+    #
     - name: '⚙️ Add Qt to PATH'
       shell: bash
       env:
@@ -673,22 +794,39 @@ jobs:
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
+    #
+    # get-cmake supplies a current CMake independently of whatever the runner image ships
+    #
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
 
+    #
+    # Unit tests live inside the build job so the Qt cache has one consumer per arch;
+    # a parallel unit job racing this restore could get denied or evict the entry
+    #
     - name: '🚧 Configure unit-test tier'
       run: cmake --preset unit-ci
 
+    #
+    # Lean Debug tier from the unit-ci preset; the application target never builds here
+    #
     - name: '🚧 Build unit-test tier'
       run: cmake --build --preset unit-ci --target ss_unit_tests
 
+    #
+    # Runs on both arches: DSPSimd.h picks its SIMD lane from the target architecture
+    #
     - name: '🧪 Run ctest'
       env:
         QT_QPA_PLATFORM: offscreen
       run: ctest --preset unit-ci --output-on-failure
 
+    #
+    # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
+    # profiles for the training runs below
+    #
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -709,9 +847,16 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # Builds the instrumented binary the two training runs profile
+    #
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
+    # failure is tolerated because an unlicensed profile still beats no profile
+    #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -720,6 +865,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
 
+    #
+    # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
+    # the optimized binary
+    #
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -728,6 +877,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
+    #
+    # Second profile: the big_db_test load exercises the project and dashboard paths that the
+    # hotpath benchmark never reaches
+    #
     - name: '🏋️ PGO training run (big project)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -736,6 +889,10 @@ jobs:
       run: |
         bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 25
 
+    #
+    # Stage 2: identical flags with PGO_STAGE=USE so the compiler consumes the profiles just
+    # written
+    #
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -756,9 +913,15 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # The binary that ships, and the one every gate below measures
+    #
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
+    #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -767,6 +930,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
 
+    #
+    # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
+    # throughput benchmark never sees
+    #
     - name: '🩺 Big project verification (optimized)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -775,6 +942,9 @@ jobs:
       run: |
         bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 15
 
+    #
+    # always(): activations are seat-limited, so a failed job still has to release the seat
+    #
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
       env:
@@ -784,6 +954,10 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
+    #
+    # Signing is opt-in on the secrets being present; without them the step exits clean and the
+    # packages ship unsigned
+    #
     - name: '🔐 Prepare GPG signing (optional)'
       env:
         GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
@@ -817,6 +991,14 @@ jobs:
         echo "LDAI_SIGN=1" >> "$GITHUB_ENV"
         echo "LDAI_SIGN_KEY=$GPG_KEY_ID" >> "$GITHUB_ENV"
 
+    #
+    # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
+    # pruned first so the image carries only what the app loads. Two things the tool cannot bundle
+    # by itself are added afterwards: the offscreen platform plugin, since linuxdeploy ships xcb
+    # and wayland only while the integration tests run headless, and Qt WebEngine's NSS crypto
+    # backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler never sees
+    # them and leaves a half-bundled NSS that crashes against the host's newer copies
+    #
     - name: '📦 Create AppImage'
       run: |
         cd "build/app"
@@ -839,7 +1021,6 @@ jobs:
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
         fi
 
-        # linuxdeploy bundles only xcb/wayland; add offscreen for headless CI tests
         mkdir -p AppDir/usr/plugins/platforms
         if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" ]; then
           cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
@@ -847,10 +1028,6 @@ jobs:
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
 
-        # Qt WebEngine's NSS dlopen()s its crypto backends (softokn/freebl/
-        # nssckbi) at runtime, so linuxdeploy (ldd-based) never bundles them and
-        # leaves a half-bundled NSS that crashes against the host's newer copies.
-        # Copy the version-matched modules next to the bundled libnssutil3.so.
         have_softokn=0
         for d in /usr/lib/*/nss /usr/lib/*-linux-gnu /usr/lib64; do
           [ -d "$d" ] || continue
@@ -875,6 +1052,10 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
+    #
+    # Reuses the AppDir from the step above through linuxdeploy-plugin-native_packages, then reads
+    # ss-config.json back out of each package to prove the stamp survived
+    #
     - name: '📦 Create .deb and .rpm packages'
       run: |
         set -euo pipefail
@@ -909,6 +1090,10 @@ jobs:
         rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm" \
           | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
 
+    #
+    # Every artifact is verified right after it is signed, so a broken signature fails here
+    # instead of on a user's machine
+    #
     - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
       env:
         GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
@@ -947,24 +1132,37 @@ jobs:
           gpg --verify "$f.asc" "$f"
         done
 
+    #
+    # Release artifact: the AppImage users download
+    #
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
+    #
+    # Release artifact: Debian package
+    #
     - name: '📤 Upload artifact: .deb (arm64)'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb
 
+    #
+    # Release artifact: RPM package
+    #
     - name: '📤 Upload artifact: .rpm (arm64)'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
 
+    #
+    # Detached signatures plus the raw binary and the public key, so a user can verify without
+    # trusting the release page; ignored when signing was skipped
+    #
     - name: '📤 Upload artifact: signatures + signed binary (arm64)'
       uses: actions/upload-artifact@v5
       with:
@@ -988,11 +1186,18 @@ jobs:
     permissions:
       contents: read
     steps:
+    #
+    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
+    # and a shallow checkout configures but fails to build
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
+    #
+    # One universal tarball feeds both macOS slices, so the arm64 and x86_64 jobs stay in sync
+    #
     - name: '⚙️ Download prebuilt gRPC (universal)'
       run: |
         gh release download v${{env.GRPC_VERSION}} \
@@ -1003,6 +1208,10 @@ jobs:
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+    #
+    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
+    # rewrites the entry
+    #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
       uses: actions/cache/restore@v5
@@ -1012,6 +1221,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
+    #
+    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
+    # secrets; only reached when the cache missed
+    #
     - name: '⚙️ Install Qt (cache miss)'
       shell: bash
       if: steps.qt_cache.outputs.cache-hit != 'true'
@@ -1025,6 +1238,9 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
+    #
+    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
+    #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
@@ -1034,6 +1250,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
+    #
+    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
+    # later step in the job sees the same Qt
+    #
     - name: '⚙️ Add Qt to PATH'
       shell: bash
       env:
@@ -1048,11 +1268,17 @@ jobs:
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
+    #
+    # get-cmake supplies a current CMake independently of whatever the runner image ships
+    #
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
 
+    #
+    # Stage 1 of the two-stage PGO flow, pinned to arm64: this job builds only the native slice
+    #
     - name: '🚧 Configure with CMake (PGO generate, arm64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1073,9 +1299,16 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # Builds the instrumented arm64 binary the training runs profile
+    #
     - name: '🚧 Build application (instrumented, arm64)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
+    # failure is tolerated because an unlicensed profile still beats no profile
+    #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1083,6 +1316,10 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
 
+    #
+    # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
+    # the optimized binary
+    #
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1090,6 +1327,10 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
 
+    #
+    # Second profile: the big_db_test load exercises the project and dashboard paths that the
+    # hotpath benchmark never reaches
+    #
     - name: '🏋️ PGO training run (big project)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1097,6 +1338,10 @@ jobs:
       run: |
         bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" 25
 
+    #
+    # Stage 2: LLVM_PROFDATA comes from xcrun so the merge tool matches the toolchain that wrote
+    # the raw profiles
+    #
     - name: '🚧 Reconfigure with CMake (PGO use, arm64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1118,9 +1363,15 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # The arm64 half of the universal binary the merge job assembles
+    #
     - name: '🚧 Build application (PGO optimized, arm64)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
+    #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1128,6 +1379,10 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
 
+    #
+    # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
+    # throughput benchmark never sees
+    #
     - name: '🩺 Big project verification (optimized)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1135,6 +1390,9 @@ jobs:
       run: |
         bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" 15
 
+    #
+    # always(): activations are seat-limited, so a failed job still has to release the seat
+    #
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
       env:
@@ -1143,17 +1401,27 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --deactivate || true
 
+    #
+    # cpack builds the DMG from the deployed bundle
+    #
     - name: '📦 Package application'
       run: |
         cd build
         cpack --verbose
 
+    #
+    # The merge job needs a bundle, not a disk image, so the .app is pulled back out of the DMG
+    #
     - name: '💿 Mount DMG and copy application'
       run: |
         VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
         cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
         hdiutil detach "$VOLUME"
 
+    #
+    # The deploy tools bundle only the native platform plugin; the integration tests run with
+    # QT_QPA_PLATFORM=offscreen
+    #
     - name: '🧩 Bundle offscreen platform plugin (headless CI tests)'
       run: |
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/plugins"
@@ -1165,10 +1433,18 @@ jobs:
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
 
+    #
+    # COPYFILE_DISABLE=1 keeps AppleDouble ._ files out of the tarball, so the bundle survives the
+    # round trip through the artifact store intact
+    #
     - name: '🗜 Archive deployed .app'
       run: |
         COPYFILE_DISABLE=1 tar -czf macos-arm64-app.tar.gz "${{env.APPLICATION}}.app"
 
+    #
+    # retention-days: 1 marks this as an intermediate for the universal merge job, not a release
+    # artifact
+    #
     - name: '📤 Upload artifact: arm64 deployed .app'
       uses: actions/upload-artifact@v5
       with:
@@ -1186,11 +1462,18 @@ jobs:
     permissions:
       contents: read
     steps:
+    #
+    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
+    # and a shallow checkout configures but fails to build
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
+    #
+    # One universal tarball feeds both macOS slices, so the arm64 and x86_64 jobs stay in sync
+    #
     - name: '⚙️ Download prebuilt gRPC (universal)'
       run: |
         gh release download v${{env.GRPC_VERSION}} \
@@ -1201,6 +1484,10 @@ jobs:
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+    #
+    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
+    # rewrites the entry
+    #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
       uses: actions/cache/restore@v5
@@ -1210,6 +1497,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
 
+    #
+    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
+    # secrets; only reached when the cache missed
+    #
     - name: '⚙️ Install Qt (cache miss)'
       shell: bash
       if: steps.qt_cache.outputs.cache-hit != 'true'
@@ -1223,6 +1514,9 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
+    #
+    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
+    #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
@@ -1232,6 +1526,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
 
+    #
+    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
+    # later step in the job sees the same Qt
+    #
     - name: '⚙️ Add Qt to PATH'
       shell: bash
       env:
@@ -1246,14 +1544,24 @@ jobs:
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
+    #
+    # get-cmake supplies a current CMake independently of whatever the runner image ships
+    #
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
 
+    #
+    # The x86_64 slice is cross-built and smoke-benchmarked under Rosetta on an arm64 runner
+    #
     - name: '⚙️ Ensure Rosetta 2'
       run: softwareupdate --install-rosetta --agree-to-license
 
+    #
+    # No PGO here: this job only supplies the x86_64 half of the universal binary, and a Rosetta
+    # profile would describe the emulator rather than the target
+    #
     - name: '🚧 Configure with CMake (production, x86_64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1272,9 +1580,16 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
+    #
+    # Builds the x86_64 slice
+    #
     - name: '🚧 Build application (x86_64)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    #
+    # continue-on-error: throughput under Rosetta says nothing about native x86_64 hardware, so
+    # the number is recorded but never gates
+    #
     - name: '🚦 Hotpath throughput (x86_64 / Rosetta, informational)'
       continue-on-error: true
       env:
@@ -1283,9 +1598,15 @@ jobs:
       run: |
         arch -x86_64 ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
 
+    #
+    # Lifts the slice out of the bundle; the upload itself is the next step
+    #
     - name: '📤 Upload artifact: x86_64 executable'
       run: cp "build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" "${{env.EXECUTABLE}}-x86_64"
 
+    #
+    # retention-days: 1, an intermediate consumed by the universal merge job
+    #
     - name: '📤 Upload artifact: x86_64 slice'
       uses: actions/upload-artifact@v5
       with:
@@ -1307,29 +1628,48 @@ jobs:
       contents: read
       security-events: write
     steps:
+    #
+    # No submodules: this job merges, signs and notarizes prebuilt artifacts and never compiles
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
 
+    #
+    # create-dmg is an npm package
+    #
     - name: '⚙️ Install Node'
       uses: actions/setup-node@v6
       with:
         node-version: 22
 
+    #
+    # The deployed arm64 bundle produced by build-macos-arm64
+    #
     - name: '📥 Download arm64 deployed .app'
       uses: actions/download-artifact@v5
       with:
         name: macos-arm64-app
         path: .
 
+    #
+    # The bare x86_64 executable produced by build-macos-intel
+    #
     - name: '📥 Download x86_64 slice'
       uses: actions/download-artifact@v5
       with:
         name: macos-intel-exe
         path: ./intel-slice
 
+    #
+    # Unpacks the bundle the lipo step edits in place
+    #
     - name: '🗜 Unpack deployed .app'
       run: tar -xzf macos-arm64-app.tar.gz
 
+    #
+    # lipo fuses the two slices into the bundle's existing executable; the greps assert both
+    # architectures survived the merge
+    #
     - name: '🔗 Lipo arm64 + x86_64 into a universal binary'
       run: |
         APP_EXE="${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}"
@@ -1340,17 +1680,28 @@ jobs:
         lipo -info "$APP_EXE"
         lipo -info "$APP_EXE" | grep -q "arm64" && lipo -info "$APP_EXE" | grep -q "x86_64"
 
+    #
+    # The stamp goes in before codesign: any edit to the bundle afterwards invalidates the
+    # signature
+    #
     - name: '📝 Stamp packaging metadata (before codesign)'
       run: |
         printf '{"packageType":"dmg","arch":"universal"}\n' \
           > "${{env.APPLICATION}}.app/Contents/Resources/ss-config.json"
 
+    #
+    # Loads the Developer ID identity from the p12 secret into the runner keychain
+    #
     - name: '🪪 Import Certificates'
       uses: apple-actions/import-codesign-certs@v6
       with:
         p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
         p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
 
+    #
+    # --options runtime is what notarization requires; the entitlements are the ones shipped in
+    # app/deploy/macOS
+    #
     - name: '✍🏻 Sign Application with Entitlements'
       run: |
         codesign --force --deep --options runtime \
@@ -1358,6 +1709,10 @@ jobs:
           --sign "${{secrets.APPLE_APPID_TEAM_ID}}" \
           "${{env.APPLICATION}}.app"
 
+    #
+    # create-dmg builds the release image; LICENSE.md is removed first so it is not folded into
+    # the DMG layout
+    #
     - name: '💽 Create nice DMG'
       run: |
         npm install --global create-dmg
@@ -1365,6 +1720,9 @@ jobs:
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
         mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
 
+    #
+    # --wait blocks on Apple's verdict, so a rejected build fails the job here
+    #
     - name: '📋 Notarize'
       shell: bash
       env:
@@ -1381,6 +1739,9 @@ jobs:
           --wait \
           --output-format json
 
+    #
+    # Stapling the ticket lets Gatekeeper clear the DMG on a machine that is offline
+    #
     - name: '📌 Staple'
       shell: bash
       run: |
@@ -1388,6 +1749,9 @@ jobs:
         echo "Stapling $PRODUCT..."
         xcrun stapler staple "$PRODUCT"
 
+    #
+    # Release artifact: the signed, notarized, stapled universal DMG
+    #
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v5
       with:
@@ -1405,12 +1769,24 @@ jobs:
       contents: read
       security-events: write
     steps:
+    #
+    # core.autocrlf=input keeps the checkout LF-only, which is what code-verify and clang-format
+    # assume
+    #
     - run: git config --global core.autocrlf input
+    #
+    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
+    # and a shallow checkout configures but fails to build
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
+    #
+    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
+    # rewrites the entry
+    #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
       uses: actions/cache/restore@v5
@@ -1420,6 +1796,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
 
+    #
+    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
+    # secrets; only reached when the cache missed
+    #
     - name: '⚙️ Install Qt (cache miss)'
       shell: pwsh
       if: steps.qt_cache.outputs.cache-hit != 'true'
@@ -1432,6 +1812,9 @@ jobs:
       run: |
         ./scripts/install-qt.ps1
 
+    #
+    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
+    #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
@@ -1441,6 +1824,10 @@ jobs:
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
 
+    #
+    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
+    # later step in the job sees the same Qt
+    #
     - name: '⚙️ Add Qt to PATH'
       shell: pwsh
       env:
@@ -1455,17 +1842,27 @@ jobs:
         Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
+    #
+    # get-cmake supplies a current CMake; both of its caches are off on this image
+    #
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: false
         useCloudCache: false
 
+    #
+    # Sets the x64 MSVC environment that the Ninja generator and clang-cl inherit
+    #
     - name: '🛠 Setup MSVC Development Environment'
       uses: TheMrMilchmann/setup-msvc-dev@v4
       with:
         arch: x64
 
+    #
+    # The VS-bundled clang-cl is used in preference to any LLVM on PATH, and the step throws
+    # rather than silently falling back
+    #
     - name: '🛠 Use Microsoft (VS-bundled) clang-cl'
       run: |
         $clangDir = Join-Path $env:VCINSTALLDIR 'Tools\Llvm\x64\bin'
@@ -1473,6 +1870,10 @@ jobs:
         Add-Content -Path $env:GITHUB_PATH -Value $clangDir
         & (Join-Path $clangDir 'clang-cl.exe') --version
 
+    #
+    # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
+    # than the rest of the job put together
+    #
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v${{env.GRPC_VERSION}} `
@@ -1483,6 +1884,10 @@ jobs:
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+    #
+    # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
+    # profiles for the training runs below
+    #
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1503,9 +1908,16 @@ jobs:
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
+    #
+    # Builds the instrumented binary the two training runs profile
+    #
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
+    #
+    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
+    # wrapped in try/catch and exit 0 because an unlicensed profile still beats no profile
+    #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       run: |
         try {
@@ -1519,6 +1931,10 @@ jobs:
         }
         exit 0
 
+    #
+    # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
+    # the optimized binary
+    #
     - name: '🏋️ PGO training run (hotpath)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
@@ -1526,11 +1942,19 @@ jobs:
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out (no PGO profile)' }
 
+    #
+    # continue-on-error: the second profile is a bonus, and this load is the flakiest step in the
+    # job on Windows
+    #
     - name: '🏋️ PGO training run (big project)'
       continue-on-error: true
       run: |
         ./tests/benchmarks/big_db_test/run_load.ps1 -App "build/app/${{env.EXECUTABLE}}.exe" -Seconds 25
 
+    #
+    # Stage 2: identical flags with PGO_STAGE=USE so the compiler consumes the profiles just
+    # written
+    #
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1552,9 +1976,16 @@ jobs:
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
+    #
+    # The binary that ships, and the one every gate below measures
+    #
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
+    #
+    # The throughput gate reads HOTPATH_PASS out of benchmark.txt: Start-Process loses the child's
+    # exit code, so the verdict travels through the file
+    #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
@@ -1563,11 +1994,18 @@ jobs:
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
 
+    #
+    # continue-on-error, like the training load it mirrors
+    #
     - name: '🩺 Big project verification (optimized)'
       continue-on-error: true
       run: |
         ./tests/benchmarks/big_db_test/run_load.ps1 -App "build/app/${{env.EXECUTABLE}}.exe" -Seconds 15
 
+    #
+    # Dumps written by the big_db_test harness itself; always() because the interesting case is
+    # the run that failed
+    #
     - name: '📦 Upload big_db_test crash dumps'
       if: always()
       uses: actions/upload-artifact@v5
@@ -1576,6 +2014,9 @@ jobs:
         path: tests/benchmarks/big_db_test/dumps/
         if-no-files-found: ignore
 
+    #
+    # always(): activations are seat-limited, so a failed job still has to release the seat
+    #
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
       run: |
@@ -1589,12 +2030,21 @@ jobs:
         }
         exit 0
 
+    #
+    # msbuild is what the WiX toolchain shells out to
+    #
     - name: '⚙️ Add msbuild to PATH'
       uses: microsoft/setup-msbuild@v3
 
+    #
+    # WiX is the CPack backend for the MSI
+    #
     - name: '⚙️ Install WiX'
       run: dotnet tool install --global wix
 
+    #
+    # cpack drives WiX; the installer is renamed to the release naming scheme
+    #
     - name: '📦 Create MSI installer'
       run: |
         cd build
@@ -1602,12 +2052,18 @@ jobs:
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi ../
 
+    #
+    # The same build packaged as a plain archive, the base of the portable ZIP
+    #
     - name: '📦 Create portable TGZ'
       run: |
         cd build
         cpack -G TGZ
         mv *.tar.gz ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tgz
 
+    #
+    # Unpacks the TGZ so the portable ZIP can be assembled with a launcher and a license beside it
+    #
     - name: '📦 Extract TGZ contents'
       shell: bash
       run: |
@@ -1618,6 +2074,10 @@ jobs:
         echo $DIRNAME > dirname.txt
         cp ../app/deploy/windows/license.rtf ./License.rtf
 
+    #
+    # The deploy tools bundle only the native platform plugin; the integration tests run with
+    # QT_QPA_PLATFORM=offscreen
+    #
     - name: '🧩 Bundle offscreen platform plugin (headless CI tests)'
       shell: bash
       run: |
@@ -1632,6 +2092,10 @@ jobs:
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
 
+    #
+    # Portable entry point: a .bat next to the extracted tree, so users do not have to dig into
+    # bin\ for the executable
+    #
     - name: '📝 Create Windows batch launcher'
       shell: bash
       run: |
@@ -1640,6 +2104,9 @@ jobs:
         echo "@echo off" > "${{env.APPLICATION}}.bat"
         echo "start \"\" \"%~dp0${DIRNAME}\\bin\\${{env.EXECUTABLE}}.exe\"" >> "${{env.APPLICATION}}.bat"
 
+    #
+    # Stamps ss-config.json as portable and reads it straight back out of the archive as a check
+    #
     - name: '📦 Add files to ZIP'
       shell: bash
       run: |
@@ -1650,6 +2117,15 @@ jobs:
         7z e -so ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "$DIRNAME/bin/ss-config.json" | grep -q '"packageType":"portable"'
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
 
+    #
+    # Store package: the logo variants are rendered from PackageIcon.png onto transparent square
+    # canvases, so no plate bleeds behind the icon. The taskbar and the Start "all apps" list read
+    # the target-size variants, and they are shipped in their unplated form so Windows draws the
+    # bare icon instead of stamping it on the accent-colour plate. resources.pri is what makes
+    # those qualified variants resolve at runtime; without the index Windows only sees the neutral
+    # logo and plates it. The manifest is generated inline, and makepri/makeappx are located in the
+    # installed Windows SDK rather than assumed on PATH
+    #
     - name: '📦 Create MSIX package (Microsoft Store)'
       run: |
         $dirname = (Get-Content build/dirname.txt -TotalCount 1).Trim()
@@ -1662,8 +2138,6 @@ jobs:
         Add-Type -AssemblyName System.Drawing
         $icon = [System.Drawing.Image]::FromFile("$PWD/app/deploy/PackageIcon.png")
 
-        # Render the transparent source logo onto a square canvas of the given
-        # size; the canvas stays transparent so no plate bleeds behind the icon.
         function Save-Logo($size, $name) {
           $bmp = New-Object System.Drawing.Bitmap($size, $size)
           $gfx = [System.Drawing.Graphics]::FromImage($bmp)
@@ -1679,10 +2153,6 @@ jobs:
         Save-Logo 150 'Square150x150Logo.png'
         Save-Logo 44  'Square44x44Logo.png'
 
-        # The taskbar and Start "all apps" list read the target-size variants.
-        # Ship the unplated forms so Windows draws the bare icon instead of
-        # stamping it on the accent-colour plate (the blue rectangle behind the
-        # taskbar icon on Microsoft Store installs).
         foreach ($s in 16, 24, 32, 48, 256) {
           Save-Logo $s "Square44x44Logo.targetsize-$s.png"
           Save-Logo $s "Square44x44Logo.targetsize-${s}_altform-unplated.png"
@@ -1729,9 +2199,6 @@ jobs:
         "@
         Set-Content -Path "$staging/AppxManifest.xml" -Value $manifest -Encoding utf8
 
-        # Build resources.pri so the qualified logo variants (targetsize /
-        # altform-unplated) resolve at runtime; without the resource index
-        # Windows only sees the neutral logo and plates it in the taskbar.
         $makepri = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.*\x64\makepri.exe" -ErrorAction SilentlyContinue |
           Sort-Object FullName -Descending | Select-Object -First 1
         if (-not $makepri) { throw 'makepri.exe not found in any installed Windows SDK' }
@@ -1749,18 +2216,27 @@ jobs:
         $stamp = & 7z e -so "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msix" "bin/ss-config.json"
         if ($stamp -notmatch '"packageType":"msix"') { throw 'MSIX ss-config.json stamp mismatch' }
 
+    #
+    # Release artifact: the MSI installer
+    #
     - name: '📤 Upload artifact: MSI installer'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
 
+    #
+    # Release artifact: the portable ZIP
+    #
     - name: '📤 Upload artifact: Portable ZIP'
       uses: actions/upload-artifact@v5
       with:
        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable
        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
 
+    #
+    # Release artifact: the MSIX package uploaded to the Microsoft Store
+    #
     - name: '📤 Upload artifact: MSIX package (Store upload)'
       uses: actions/upload-artifact@v5
       with:
@@ -1787,15 +2263,25 @@ jobs:
       RELEASE_TAG: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref_name || 'continuous' }}
 
     steps:
+      #
+      # No submodules: this job only needs the workflow checkout to run gh
+      #
       - name: '🧰 Checkout'
         uses: actions/checkout@v5
 
+      #
+      # merge-multiple flattens every build job's artifact into one ./artifacts directory
+      #
       - name: '📥 Download artifacts'
         uses: actions/download-artifact@v5
         with:
           path: ./artifacts
           merge-multiple: true
 
+      #
+      # The continuous release is recreated from scratch on every run; deleting the tag with it
+      # keeps the release page from accumulating stale assets
+      #
       - name: '🗑️ Delete previous release and tag if exists'
         run: |
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
@@ -1807,6 +2293,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      #
+      # prerelease + allowUpdates: 'continuous' is a moving target, while a pushed tag publishes
+      # under its own name
+      #
       - name: '🚀 Create Release'
         uses: ncipollo/release-action@v1
         with:
@@ -1832,26 +2322,46 @@ jobs:
     runs-on: ubuntu-24.04
     name: '🔬 Lint'
     steps:
+    #
+    # No submodules: the linters only read first-party sources and scripts
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
 
+    #
+    # 3.11 with pip caching: every gate in this job is a Python script
+    #
     - name: '🐍 Set up Python'
       uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
 
+    #
+    # tests/requirements.txt is the single dependency manifest for the repo's Python tooling
+    #
     - name: '🐍 Install Python dependencies'
       run: pip install -r tests/requirements.txt
 
+    #
+    # The repo is REUSE-compliant (REUSE.toml + LICENSES/); a file without an SPDX header fails
+    # here
+    #
     - name: '⚖️ Verify REUSE licensing compliance'
       run: |
         pip install reuse
         reuse lint
 
+    #
+    # scripts/code-verify.py is the style contract: errors block the job, advisories do not
+    #
     - name: '🔬 Verify code conventions'
       run: python3 scripts/code-verify.py --check
 
+    #
+    # The .code-report cleanup checklist, uploaded even on success so the baseline debt stays
+    # visible
+    #
     - name: '📤 Upload code-verify report'
       if: always()
       uses: actions/upload-artifact@v5
@@ -1860,6 +2370,11 @@ jobs:
         path: .code-report
         if-no-files-found: ignore
 
+    #
+    # Spec 0037: every drift gate the repo owns has a caller. The snapshot projection is --strict
+    # here (locally it warns, because only a build can refresh api-schema.json); its failure
+    # message names the ordered fix
+    #
     - name: '🧬 Verify generated API surfaces'
       run: |
         python3 scripts/registry-verify.py
@@ -1914,23 +2429,39 @@ jobs:
       run:
         shell: bash
     steps:
+    #
+    # No submodules: this job runs the pytest suite against a downloaded binary
+    #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
 
+    #
+    # Derives the asset name and release tag that the download step below resolves against
+    #
     - name: '🧮 Resolve artifact name'
       run: |
         echo "ARTIFACT=${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}" >> "$GITHUB_ENV"
         echo "RELEASE_TAG=${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref_name || 'continuous' }}" >> "$GITHUB_ENV"
 
+    #
+    # 3.11 with pip caching: every gate in this job is a Python script
+    #
     - name: '🐍 Set up Python'
       uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
 
+    #
+    # tests/requirements.txt is the single dependency manifest for the repo's Python tooling
+    #
     - name: '🐍 Install Python dependencies'
       run: pip install -r tests/requirements.txt
 
+    #
+    # The suite runs against the published artifact rather than a local build, so packaging bugs
+    # are in scope
+    #
     - name: '📥 Download released binary'
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -1942,6 +2473,10 @@ jobs:
         gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" \
           --pattern "$PATTERN" --clobber
 
+    #
+    # Extracting the AppImage beats running it (no FUSE needed); the apt payload is the runtime
+    # the tests exercise: audio, fonts and the broker client
+    #
     - name: '📦 Prepare binary (Linux AppImage)'
       if: matrix.os == 'linux'
       run: |
@@ -1952,6 +2487,9 @@ jobs:
         ./"$ARTIFACT" --appimage-extract >/dev/null
         echo "SS_RUN=$PWD/squashfs-root/AppRun" >> "$GITHUB_ENV"
 
+    #
+    # Mounts the DMG, copies the bundle out, and exports SS_RUN
+    #
     - name: '📦 Prepare binary (macOS .app)'
       if: matrix.os == 'macos'
       run: |
@@ -1960,6 +2498,9 @@ jobs:
         hdiutil detach /tmp/ssdmg
         echo "SS_RUN=$PWD/${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}" >> "$GITHUB_ENV"
 
+    #
+    # Unzips the portable build and locates the executable inside it
+    #
     - name: '📦 Prepare binary (Windows portable)'
       if: matrix.os == 'windows'
       run: |
@@ -1967,6 +2508,10 @@ jobs:
         EXE=$(find app_win -name "${{env.EXECUTABLE}}.exe" | head -1)
         echo "SS_RUN=$PWD/$EXE" >> "$GITHUB_ENV"
 
+    #
+    # Local broker on 127.0.0.1:1883 for the MQTT tests; the Windows leg has no broker and drops
+    # the requires_broker marker instead
+    #
     - name: '🦟 Start Mosquitto (Linux)'
       if: matrix.os == 'linux'
       run: |
@@ -1975,6 +2520,9 @@ jobs:
         mosquitto -d -c /tmp/mosq.conf
         for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
 
+    #
+    # Same broker, installed through Homebrew
+    #
     - name: '🦟 Start Mosquitto (macOS)'
       if: matrix.os == 'macos'
       run: |
@@ -1983,6 +2531,10 @@ jobs:
         "$(brew --prefix mosquitto)/sbin/mosquitto" -d -c /tmp/mosq.conf
         for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
 
+    #
+    # snd-aloop gives the audio driver a capture device; every command is tolerant because the
+    # audio leg is non-blocking anyway
+    #
     - name: '🎙 Set up ALSA loopback (Linux)'
       if: matrix.os == 'linux'
       run: |
@@ -1990,6 +2542,10 @@ jobs:
         sudo modprobe snd-aloop || true
         aplay -l || true
 
+    #
+    # Per-OS core-dump and WER configuration, applied before the app starts so a mid-suite crash
+    # leaves something to read
+    #
     - name: '🧯 Enable crash capture'
       continue-on-error: true
       run: |
@@ -2015,16 +2571,33 @@ jobs:
             ;;
         esac
 
+    #
+    # The --selftest tier runs inside CLI::process(), before the composition root exists
+    #
     - name: '🔏 Offline license self-test'
       env:
         QT_QPA_PLATFORM: offscreen
       run: '"$SS_RUN" --selftest-offline-license'
 
+    #
+    # Pro surfaces are license-gated; without activation most of the suite would skip
+    #
     - name: '🔑 Activate Serial Studio license'
       env:
         QT_QPA_PLATFORM: offscreen
       run: '"$SS_RUN" --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}"'
 
+    #
+    # Starts the app with the API server on 7777, waits for the port, and redirects its output to
+    # ss_output.log so the assert-scan step below has something to read. The API path policy
+    # defaults to home + temp, but the repo corpus the round-trip baseline tests open lives in the
+    # workspace (outside home on the Windows runners), so all three roots are allowed explicitly;
+    # pytest's tmp_path follows TMPDIR, which on the macOS runners is a private /var/folders tree
+    # under neither home nor /tmp, and without it every tmp_path project file is rejected as
+    # "filePath is not allowed". SS_ASSERT_NONFATAL is a no-op on the released (Release) binaries,
+    # where soft asserts are always nonfatal; it keeps a locally-substituted Debug binary from
+    # aborting mid-suite
+    #
     - name: '🚀 Start Serial Studio (headless)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -2045,6 +2618,13 @@ jobs:
           sleep 1
         done
 
+    #
+    # Publishing blocks on this suite for tagged builds; continuous builds only report
+    # (REQUIRE_TESTS_TO_PUBLISH). timeout-method=signal (POSIX) fails only the hung test and keeps
+    # the suite and its junit XML alive, where the ini default (thread) kills the whole pytest
+    # process; Windows has no SIGALRM, so it stays on thread, and timeout-minutes is what bounds a
+    # fully wedged app now that a hang no longer fast-fails the run
+    #
     - name: '🧪 Run tests'
       id: run_tests
       continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' && !startsWith(github.ref, 'refs/tags/') }}
@@ -2059,6 +2639,11 @@ jobs:
           --timeout-method=${{ matrix.timeout_method }} \
           -q --tb=line --timeout=60 --junit-xml=test-results.xml
 
+    #
+    # Only on a test failure: distinguishes a hang from a crash, and for a hang takes the dump
+    # Windows never writes on its own (nothing crashed, so WER produces nothing). comsvcs.dll's
+    # MiniDump entry point ships with Windows, so no extra tooling is installed for it
+    #
     - name: '🔬 Capture hung app (Windows)'
       if: always() && matrix.os == 'windows' && steps.run_tests.outcome == 'failure'
       continue-on-error: true
@@ -2084,6 +2669,10 @@ jobs:
         echo '--- captured ---'
         ls -la crash-reports || true
 
+    #
+    # macOS counterpart: sample and spindump both capture a live process, so a hang leaves a
+    # thread state behind
+    #
     - name: '🔬 Capture hung app (macOS)'
       if: always() && matrix.os == 'macos' && steps.run_tests.outcome == 'failure'
       continue-on-error: true
@@ -2106,6 +2695,11 @@ jobs:
         echo '--- captured ---'
         ls -la crash-reports || true
 
+    #
+    # A mid-suite death turns every later test into a connection error, which reads like hundreds
+    # of unrelated failures; say so explicitly and show the app's last words, since a clean exit
+    # leaves no crash dump behind
+    #
     - name: '🩺 Report app liveness after tests'
       if: always()
       continue-on-error: true
@@ -2119,6 +2713,10 @@ jobs:
           tail -n 60 ss_output.log 2>/dev/null || echo '(no ss_output.log)'
         fi
 
+    #
+    # The audio marker is excluded from the main run: loopback hardware is not guaranteed on a
+    # runner, so this leg reports and never blocks
+    #
     - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
       if: matrix.os == 'linux'
       continue-on-error: true
@@ -2130,16 +2728,27 @@ jobs:
         pytest tests/integration/test_audio_loopback.py \
           -m audio -q --tb=line --timeout=120 --junit-xml=audio-test-results.xml
 
+    #
+    # always(): the seat has to come back even when the suite failed
+    #
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
       env:
         QT_QPA_PLATFORM: offscreen
       run: '"$SS_RUN" --deactivate || true'
 
+    #
+    # always(): the app is a background process and would otherwise outlive the job
+    #
     - name: '🛑 Stop Serial Studio'
       if: always()
       run: '[ -f ss_pid.txt ] && kill $(cat ss_pid.txt) || true'
 
+    #
+    # SS_ASSERT reports once per source site through the serialstudio.assert category; surface
+    # every site the suite tripped as a workflow annotation (non-blocking) so regressions are
+    # visible without digging into artifacts
+    #
     - name: '🔎 Scan app output for soft asserts'
       if: always()
       continue-on-error: true
@@ -2159,6 +2768,9 @@ jobs:
           echo 'No soft asserts in app output.'
         fi
 
+    #
+    # Collects whatever the crash-capture step arranged for, per OS
+    #
     - name: '🩹 Collect crash reports'
       if: always()
       run: |
@@ -2195,10 +2807,16 @@ jobs:
         echo '--- crash-reports ---'
         ls -la crash-reports 2>/dev/null || true
 
+    #
+    # Guarded on matrix.broker so the Windows leg does not try to kill a broker it never started
+    #
     - name: '🦟 Stop Mosquitto'
       if: always() && matrix.broker
       run: pkill -f "mosquitto -d -c /tmp/mosq.conf" || true
 
+    #
+    # junit XML plus the app's own output, which the assert scan reads from
+    #
     - name: '📤 Upload test results'
       if: always()
       uses: actions/upload-artifact@v5
@@ -2210,6 +2828,9 @@ jobs:
           ss_output.log
           tests/**/*.log
 
+    #
+    # Ignored when clean: an empty crash-reports directory is the expected outcome
+    #
     - name: '📤 Upload crash reports'
       if: always()
       uses: actions/upload-artifact@v5

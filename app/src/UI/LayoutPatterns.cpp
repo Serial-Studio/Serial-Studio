@@ -27,7 +27,6 @@
 #include <QSet>
 #include <QtGlobal>
 #include <QtMath>
-#include <utility>
 
 //--------------------------------------------------------------------------------------------------
 // Grid: the historical auto-layout, moved here verbatim
@@ -392,27 +391,21 @@ using detail::Span;
 }
 
 /**
- * @brief Returns the seam lines a join actually consumes spacing at: interior lines where one
- *        widget ends and another begins. A lone floating edge sits on a seam of its own and
- *        consumes nothing, which is why it cannot be counted here.
+ * @brief Returns the interior seam lines that consume spacing: every line a normalized leading
+ *        edge lands on. The reconstruction re-inflates each of those by one gap, so demanding a
+ *        trailing edge there as well would let a floater - or a join the user broke by resizing
+ *        one side - scale the gap inside its span and then have the gap added on top.
  */
 [[nodiscard]] static QSet<int> gapConsumingSeams(const QHash<int, int>& mapping,
                                                  const QVector<int>& leads,
-                                                 const QVector<int>& trails,
                                                  const int canvasEnd)
 {
-  QSet<int> leading;
-  QSet<int> trailing;
-  for (const int edge : leads)
-    leading.insert(mapping.value(edge));
-
-  for (const int edge : trails)
-    trailing.insert(mapping.value(edge));
-
   QSet<int> seams;
-  for (const int seam : std::as_const(leading))
-    if (seam > 0 && seam < canvasEnd && trailing.contains(seam))
+  for (const int edge : leads) {
+    const int seam = mapping.value(edge);
+    if (seam > 0 && seam < canvasEnd)
       seams.insert(seam);
+  }
 
   return seams;
 }
@@ -485,7 +478,7 @@ using detail::Span;
   }
 
   const auto mapping  = clusterEdges(leads + trails, refExtent);
-  const auto gapSeams = gapConsumingSeams(mapping, leads, trails, refExtent);
+  const auto gapSeams = gapConsumingSeams(mapping, leads, refExtent);
   const int gap       = effectiveSpacing(spacing, static_cast<int>(gapSeams.size()), newExtent);
 
   QVector<int> seams;
