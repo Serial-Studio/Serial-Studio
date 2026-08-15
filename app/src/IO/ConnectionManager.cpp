@@ -1684,6 +1684,10 @@ void IO::ConnectionManager::wireStreamLifecycle()
           &API::Server::enabledChanged,
           this,
           &IO::ConnectionManager::refreshStreamExportFlags);
+  connect(&apiServer,
+          &API::Server::streamSubscribersChanged,
+          this,
+          &IO::ConnectionManager::refreshStreamExportFlags);
 #ifdef BUILD_COMMERCIAL
   static auto& mdf4Export = MDF4::Export::instance();
   connect(&mdf4Export,
@@ -1892,7 +1896,7 @@ void IO::ConnectionManager::refreshStreamExportFlags()
 {
   static auto& csvExport = CSV::Export::instance();
   static auto& apiServer = API::Server::instance();
-  bool exportOn          = csvExport.exportEnabled() || apiServer.enabled();
+  bool exportOn          = csvExport.exportEnabled() || apiServer.hasStreamSubscribers();
 #ifdef BUILD_COMMERCIAL
   static auto& mdf4Export  = MDF4::Export::instance();
   static auto& audioExport = Widgets::AudioExport::instance();

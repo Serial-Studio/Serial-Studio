@@ -127,6 +127,7 @@ signals:
   void enabledChanged();
   void authTokenChanged();
   void clientCountChanged();
+  void streamSubscribersChanged();
   void externalConnectionsChanged();
 
 private:
@@ -142,6 +143,7 @@ public:
   [[nodiscard]] static Server& instance();
   [[nodiscard]] static int maxClients() noexcept;
   [[nodiscard]] bool enabled() const noexcept;
+  [[nodiscard]] bool hasStreamSubscribers() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
   [[nodiscard]] QString authToken() const;
   [[nodiscard]] bool authorizeDeviceWrite();

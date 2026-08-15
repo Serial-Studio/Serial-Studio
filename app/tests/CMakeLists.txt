@@ -284,6 +284,17 @@ ss_add_unit_test(tst_parse_budget
 )
 
 #
+# The frame-pool policy is the regression guard for the slot-selection bug that let a large
+# project's pool materialise a full frame copy per publish (2026-08-15). Pure bookkeeping: no
+# session context, no Frame storage, so it links against QtCore alone.
+#
+ss_add_unit_test(tst_frame_pool_policy
+  SOURCES tst_frame_pool_policy.cpp
+          ${SS_APP_SRC}/DataModel/FramePoolPolicy.cpp
+  LIBS    Qt6::Core
+)
+
+#
 # The layout-pattern labels forward to UI::Layouts::patternId(), so the enum-label suite needs that
 # TU in its link set; LayoutPatterns.cpp is header-only in its dependencies (QtCore/QtGui types).
 #

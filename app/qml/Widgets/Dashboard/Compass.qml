@@ -353,8 +353,6 @@ Item {
           //
           Shape {
             smooth: true
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             width: gaugeFace.width
             height: gaugeFace.height
@@ -362,7 +360,6 @@ Item {
             transformOrigin: Item.Center
             rotation: root.unwrappedHeading
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
             anchors.verticalCenterOffset: Math.max(1, gaugeFace.width * 0.004)
 
             ShapePath {
@@ -396,8 +393,6 @@ Item {
             id: needleShape
 
             smooth: true
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             width: gaugeFace.width
             anchors.centerIn: parent
@@ -405,7 +400,6 @@ Item {
             transformOrigin: Item.Center
             rotation: root.unwrappedHeading
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2

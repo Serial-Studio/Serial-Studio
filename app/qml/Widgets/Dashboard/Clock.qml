@@ -477,8 +477,6 @@ Item {
             //
             Shape {
               smooth: true
-              layer.samples: 16
-              layer.smooth: true
               antialiasing: true
               width: parent.width
               height: parent.height
@@ -486,7 +484,6 @@ Item {
               transformOrigin: Item.Center
               y: Math.max(1, gaugeFace.width * 0.004)
               preferredRendererType: Shape.CurveRenderer
-              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
               Behavior on rotation {
                 SpringAnimation {
@@ -509,14 +506,11 @@ Item {
               id: hourShape
 
               smooth: true
-              layer.samples: 16
-              layer.smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.hourAngle
               transformOrigin: Item.Center
               preferredRendererType: Shape.CurveRenderer
-              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
               readonly property real tipLen: gaugeFace.width * 0.26
               readonly property real tailLen: gaugeFace.width * 0.10
@@ -569,8 +563,6 @@ Item {
             //
             Shape {
               smooth: true
-              layer.samples: 16
-              layer.smooth: true
               antialiasing: true
               width: parent.width
               height: parent.height
@@ -578,7 +570,6 @@ Item {
               transformOrigin: Item.Center
               y: Math.max(1.5, gaugeFace.width * 0.006)
               preferredRendererType: Shape.CurveRenderer
-              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
               Behavior on rotation {
                 SpringAnimation {
@@ -601,14 +592,11 @@ Item {
               id: minuteShape
 
               smooth: true
-              layer.samples: 16
-              layer.smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.minuteAngle
               transformOrigin: Item.Center
               preferredRendererType: Shape.CurveRenderer
-              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
               readonly property real tipLen: gaugeFace.width * 0.38
               readonly property real tailLen: gaugeFace.width * 0.11
@@ -660,8 +648,6 @@ Item {
             //
             Shape {
               smooth: true
-              layer.samples: 16
-              layer.smooth: true
               antialiasing: true
               width: parent.width
               height: parent.height
@@ -669,7 +655,6 @@ Item {
               transformOrigin: Item.Center
               y: Math.max(2, gaugeFace.width * 0.008)
               preferredRendererType: Shape.CurveRenderer
-              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
               Behavior on rotation {
                 SpringAnimation {
@@ -702,14 +687,11 @@ Item {
               id: secondShape
 
               smooth: true
-              layer.samples: 16
-              layer.smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.secondAngle
               transformOrigin: Item.Center
               preferredRendererType: Shape.CurveRenderer
-              layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
               Behavior on rotation {
                 SpringAnimation {

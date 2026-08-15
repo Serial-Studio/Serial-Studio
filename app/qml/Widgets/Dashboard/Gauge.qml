@@ -402,12 +402,9 @@ Item {
 
                 smooth: true
                 opacity: 0.60
-                layer.samples: 16
-                layer.smooth: true
                 antialiasing: true
                 anchors.fill: parent
                 preferredRendererType: Shape.CurveRenderer
-                layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
                 required property var modelData
                 readonly property color bandColor: modelData.customColor && modelData.customColor.length > 0
@@ -747,15 +744,12 @@ Item {
           //
           Shape {
             smooth: true
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             width: parent.width
             height: parent.height
             transformOrigin: Item.Center
             y: Math.max(1, gaugeFace.width * 0.004)
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
             rotation: startAngleDeg + root.normalizedValue * angleRangeDeg
 
             ShapePath {
@@ -779,13 +773,10 @@ Item {
             id: needleShape
 
             smooth: true
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             transformOrigin: Item.Center
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
             rotation: startAngleDeg + root.normalizedValue * angleRangeDeg
 
             readonly property real cx: needleShape.width / 2

@@ -249,13 +249,10 @@ Item {
           id: chromeShape
 
           smooth: true
-          layer.samples: 16
-          layer.smooth: true
           antialiasing: true
           anchors.fill: parent
           preferredRendererType: Shape.CurveRenderer
           visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
-          layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
           readonly property real bottomExtension: meterArea.labelBaseHeight
           readonly property real rOuter: meterArea.faceR + meterArea.chromeW
@@ -312,12 +309,9 @@ Item {
           id: faceShape
 
           smooth: true
-          layer.samples: 16
-          layer.smooth: true
           antialiasing: true
           anchors.fill: parent
           preferredRendererType: Shape.CurveRenderer
-          layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
           readonly property real bottomExtension: Math.max(0, meterArea.labelBaseHeight - meterArea.chromeW)
 
@@ -371,12 +365,9 @@ Item {
 
             smooth: true
             opacity: 0.60
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             required property var modelData
             readonly property color bandColor: modelData.customColor && modelData.customColor.length > 0
@@ -766,12 +757,9 @@ Item {
 
           Shape {
             smooth: true
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             ShapePath {
               strokeWidth: -1
@@ -805,12 +793,9 @@ Item {
             id: needleShape
 
             smooth: true
-            layer.samples: 16
-            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
-            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2
@@ -929,12 +914,9 @@ Item {
         Shape {
           z: 9999
           smooth: true
-          layer.samples: 16
-          layer.smooth: true
           antialiasing: true
           anchors.fill: parent
           preferredRendererType: Shape.CurveRenderer
-          layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
           ShapePath {
             strokeColor: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.25)

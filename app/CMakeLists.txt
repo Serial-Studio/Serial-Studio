@@ -375,6 +375,7 @@ set(SOURCES
   src/DataModel/Project/ProjectEditorSummaries.cpp
   src/DataModel/Importers/ProtoImporter.cpp
   src/DataModel/FrameBuilder.cpp
+  src/DataModel/FramePoolPolicy.cpp
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
   src/DataModel/DataTable.cpp
@@ -561,6 +562,7 @@ set(HEADERS
   src/DataModel/Importers/ProtoImporter.h
   src/DataModel/Frame.h
   src/DataModel/FrameBuilder.h
+  src/DataModel/FramePoolPolicy.h
   src/DataModel/FrameConsumer.h
   src/DataModel/DataTable.h
   src/DataModel/RowFilterProxy.h

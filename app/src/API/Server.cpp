@@ -533,6 +533,21 @@ bool API::Server::enabled() const noexcept
 }
 
 /**
+ * @brief True while at least one connection holds a stream subscription. What gates the stream
+ *        workers' typed export payloads: ingestStreamBlock() drops a block for every connection
+ *        that never subscribed, so an enabled server with no subscriber would otherwise pay a
+ *        full per-block payload build and a queued fan-out to four sinks that all discard it.
+ */
+bool API::Server::hasStreamSubscribers() const noexcept
+{
+  for (auto it = m_connections.constBegin(); it != m_connections.constEnd(); ++it)
+    if (it.value().streamSubscribed)
+      return true;
+
+  return false;
+}
+
+/**
  * @brief Returns whether the server accepts connections from external hosts.
  */
 bool API::Server::externalConnections() const noexcept
@@ -1666,6 +1681,7 @@ API::CommandResponse API::Server::streamSubscribe(ConnectionState& state,
   state.streamSeq        = 0;
   state.streamMissed     = 0;
   state.streamPending.clear();
+  Q_EMIT streamSubscribersChanged();
 
   QJsonArray subscribed;
   for (const int sourceId : std::as_const(state.streamSources))
@@ -1695,6 +1711,7 @@ API::CommandResponse API::Server::streamUnsubscribe(ConnectionState& state,
 
   state.streamSubscribed = false;
   state.streamPending.clear();
+  Q_EMIT streamSubscribersChanged();
 
   QJsonObject result;
   result.insert(QStringLiteral("subscribed"), false);
@@ -1968,7 +1985,10 @@ void API::Server::onSocketDisconnected(QTcpSocket* socket, const QString& sessio
     qInfo() << "[API] Client disconnected (via worker):"
             << "- Remaining clients:" << (m_connections.size() - 1);
 
+    const bool wasStreaming = it->streamSubscribed;
     m_connections.erase(it);
+    if (wasStreaming)
+      Q_EMIT streamSubscribersChanged();
   }
 }
 

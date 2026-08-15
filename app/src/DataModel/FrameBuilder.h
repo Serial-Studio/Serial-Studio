@@ -48,6 +48,7 @@ extern "C" {
 
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FramePoolPolicy.h"
 #include "DataModel/ParseBudget.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
@@ -387,20 +388,24 @@ private:
     quint64 generation;
     const DataModel::Frame* matchedSrc;
     std::vector<DataModel::Dataset*> flat;
-    int owner;
   };
 
   static constexpr int kFramePoolSize     = 8192;
-  static constexpr int kUnownedSlot       = -1;
-  static constexpr size_t kInvalidSlotIdx = static_cast<size_t>(-1);
+  static constexpr size_t kInvalidSlotIdx = DataModel::FramePoolPolicy::kInvalidSlot;
+
+  // Memory ceiling for materialised slots; kFramePoolSize alone assumes small frames
+  static constexpr size_t kFramePoolBudgetBytes = 192ULL * 1024ULL * 1024ULL;
+
   std::vector<std::shared_ptr<PooledFrameSlot>> m_framePool;
-  std::atomic<size_t> m_framePoolHint;
+  DataModel::FramePoolPolicy m_poolPolicy;
   quint64 m_framePoolGeneration;
-  QHash<int, size_t> m_poolSlotHintBySource;
 
   void invalidateFramePool() noexcept;
+  void refreshFramePoolBudget(const DataModel::Frame& src) noexcept;
   SS_COLD void notePoolExhausted();
-  [[nodiscard]] size_t claimPoolSlot(int sourceId) noexcept;
+  [[nodiscard]] size_t claimPoolSlot(int sourceId, bool hintedOnly = false) noexcept;
+  [[nodiscard]] DataModel::TimestampedFramePtr acquireReusedFrame(const DataModel::Frame& src);
+  bool emitRepublishedFrame(const DataModel::Frame& frame, int key, bool feedExports);
   void bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] bool preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] SS_HOT DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);

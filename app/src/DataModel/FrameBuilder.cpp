@@ -176,7 +176,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_jsEngineForSource(nullptr)
   , m_compileGuard(0)
   , m_compilePending(false)
-  , m_framePoolHint(0)
+  , m_poolPolicy(kFramePoolSize)
   , m_framePoolGeneration(1)
 {
   m_luaTableContext.store  = &m_tableStore;
@@ -232,9 +232,7 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 /**
  * @brief Default-constructs a pool slot with no template generation or bound source frame.
  */
-DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot()
-  : generation(0), matchedSrc(nullptr), owner(kUnownedSlot)
-{}
+DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0), matchedSrc(nullptr) {}
 
 /**
  * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse
@@ -244,9 +242,10 @@ DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot()
 void DataModel::FrameBuilder::invalidateFramePool() noexcept
 {
   ++m_framePoolGeneration;
-  m_poolSlotHintBySource.clear();
-  for (const auto& slot : m_framePool)
-    slot->owner = kUnownedSlot;
+  m_poolPolicy.releaseOwnership();
+  refreshFramePoolBudget(m_frame.groups.empty() && !m_sourceFrames.isEmpty()
+                           ? m_sourceFrames.constBegin().value()
+                           : m_frame);
 }
 
 /**
@@ -255,50 +254,15 @@ void DataModel::FrameBuilder::invalidateFramePool() noexcept
  *        reclaims its last slot so interleaved multi-source publishes keep the pointer-identity
  *        fast path and the span lane's retained values; foreign slots are stolen only last.
  */
-size_t DataModel::FrameBuilder::claimPoolSlot(int sourceId) noexcept
+size_t DataModel::FrameBuilder::claimPoolSlot(int sourceId, bool hintedOnly) noexcept
 {
-  const size_t n = m_framePool.size();
-
   SS_ASSERT_HOTPATH(sourceId >= 0);
-  SS_ASSUME(n == static_cast<size_t>(kFramePoolSize));
 
-  const auto hit = m_poolSlotHintBySource.constFind(sourceId);
-  if (hit != m_poolSlotHintBySource.cend()) [[likely]] {
-    const size_t idx = hit.value();
-    if (m_framePool[idx].use_count() == 1 && m_framePool[idx]->owner == sourceId)
-      return idx;
-  }
+  const auto [idx, pick] = m_poolPolicy.claim(
+    sourceId, hintedOnly, [this](std::size_t slot) { return m_framePool[slot].use_count() == 1; });
 
-  const size_t hint = m_framePoolHint.load(std::memory_order_relaxed);
-  size_t stealable  = kInvalidSlotIdx;
-
-  for (size_t k = 0; k < n; ++k) {
-    const size_t idx = (hint + k) % n;
-    if (m_framePool[idx].use_count() != 1)
-      continue;
-
-    const int owner = m_framePool[idx]->owner;
-    if (owner != sourceId && owner != kUnownedSlot) {
-      if (stealable == kInvalidSlotIdx)
-        stealable = idx;
-
-      continue;
-    }
-
-    m_framePool[idx]->owner = sourceId;
-    m_poolSlotHintBySource.insert(sourceId, idx);
-    m_framePoolHint.store(idx, std::memory_order_relaxed);
-    return idx;
-  }
-
-  if (stealable != kInvalidSlotIdx) {
-    m_framePool[stealable]->owner = sourceId;
-    m_poolSlotHintBySource.insert(sourceId, stealable);
-    m_framePoolHint.store(stealable, std::memory_order_relaxed);
-    return stealable;
-  }
-
-  return kInvalidSlotIdx;
+  Q_UNUSED(pick)
+  return idx;
 }
 
 /**
@@ -377,6 +341,23 @@ bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const Dat
 }
 
 /**
+ * @brief Re-derives the pool's slot ceiling from the current frame's footprint, so the pool is
+ *        bounded by memory rather than by a slot count tuned for the small frames the 256 kHz
+ *        frame lane produces. Runs on structural change only, never per frame.
+ */
+void DataModel::FrameBuilder::refreshFramePoolBudget(const DataModel::Frame& src) noexcept
+{
+  std::size_t datasets = 0;
+  for (const auto& group : src.groups)
+    datasets += group.datasets.size();
+
+  const std::size_t bytes = sizeof(DataModel::Frame) + src.groups.size() * sizeof(DataModel::Group)
+                          + datasets * sizeof(DataModel::Dataset);
+
+  m_poolPolicy.applyMemoryBudget(bytes, kFramePoolBudgetBytes);
+}
+
+/**
  * @brief Claims a free pool slot, copies @p src + @p ts into it, and returns an aliasing
  *        shared_ptr: no deleter, no per-frame control block.
  */
@@ -400,6 +381,31 @@ SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
   slotRaw->frame.timestamp           = ts;
   slotRaw->frame.structureGeneration = m_framePoolGeneration;
   SS_ASSERT_HOTPATH(slotRaw->frame.data.groups.size() == src.groups.size());
+
+  return TimestampedFramePtr(slotOwner, &slotRaw->frame);
+}
+
+/**
+ * @brief Pooled acquire restricted to the source's own slot, for the synthetic dashboard refresh.
+ *        Returns null when that slot is still pinned by a frame the GUI has not drained yet: a
+ *        refresh carries no new data, so skipping it is free, whereas walking to a virgin slot
+ *        would fault in a permanent full-frame copy the pool never releases.
+ */
+DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireReusedFrame(
+  const DataModel::Frame& src)
+{
+  const size_t idx = claimPoolSlot(src.sourceId, true);
+  if (idx == kInvalidSlotIdx)
+    return {};
+
+  const auto& slotOwner = m_framePool[idx];
+  auto* slotRaw         = slotOwner.get();
+
+  if (preparePooledSlot(slotRaw, src)) [[likely]]
+    copy_frame_values(slotRaw->frame.data, src);
+
+  slotRaw->frame.timestamp           = DataModel::TimestampedFrame::SteadyClock::now();
+  slotRaw->frame.structureGeneration = m_framePoolGeneration;
 
   return TimestampedFramePtr(slotOwner, &slotRaw->frame);
 }
@@ -1044,6 +1050,32 @@ void DataModel::FrameBuilder::refreshStreamDrivenFrames()
 }
 
 /**
+ * @brief Sends one republished frame out, returning false when a dashboard-only refresh had to be
+ *        skipped because the source's pool slot was still pinned. Export republishes always go
+ *        through the normal acquire, so a recorded frame is never dropped for slot pressure.
+ */
+bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame,
+                                                   int key,
+                                                   bool feedExports)
+{
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  if (feedExports) {
+    m_republishedSourceIds.insert(key);
+    hotpathTxFrame(acquireFrame(frame));
+    return true;
+  }
+
+  auto pooled = acquireReusedFrame(frame);
+  if (!pooled)
+    return false;
+
+  m_republishedSourceIds.insert(key);
+  pipeline.publishFrameToDashboard(pooled);
+  return true;
+}
+
+/**
  * @brief Re-runs every dataset transform from the last raw values and republishes the live
  *        frames: dashboard only with @p feedExports false, hotpathTxFrame() fan-out with it
  *        true. A frame republishes only on a changed dataset value or its first publish, so a
@@ -1054,7 +1086,6 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
   if (m_operationMode != SerialStudio::ProjectFile)
     return false;
 
-  static auto& pipeline            = IO::PipelineHost::instance();
   constexpr int combined_frame_key = -1;
 
   bool published  = false;
@@ -1078,25 +1109,15 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
     if (!changed && m_republishedSourceIds.contains(frame.sourceId))
       continue;
 
-    m_republishedSourceIds.insert(frame.sourceId);
-    if (feedExports)
-      hotpathTxFrame(acquireFrame(frame));
-    else
-      pipeline.publishFrameToDashboard(acquireFrame(frame));
-
-    published = true;
+    if (emitRepublishedFrame(frame, frame.sourceId, feedExports))
+      published = true;
   }
 
   if (!any_source && !m_frame.groups.empty() && !m_frame.title.isEmpty()) {
     const bool changed = reprocessDatasetValues(m_frame);
     if (changed || !m_republishedSourceIds.contains(combined_frame_key)) {
-      m_republishedSourceIds.insert(combined_frame_key);
-      if (feedExports)
-        hotpathTxFrame(acquireFrame(m_frame));
-      else
-        pipeline.publishFrameToDashboard(acquireFrame(m_frame));
-
-      published = true;
+      if (emitRepublishedFrame(m_frame, combined_frame_key, feedExports))
+        published = true;
     }
   }
 
