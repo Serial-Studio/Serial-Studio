@@ -37,7 +37,7 @@ DataModel::FramePoolPolicy::FramePoolPolicy(std::size_t capacity)
   , m_walkHint(0)
   , m_materialised(0)
   , m_slotBudget(capacity < 1 ? 1 : capacity)
-  , m_stats{0, 0, 0, 0, 0}
+  , m_stats{0, 0, 0, 0, 0, 0}
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -82,13 +82,16 @@ DataModel::FramePoolPolicy::Stats DataModel::FramePoolPolicy::stats() const noex
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Drops every ownership claim and affinity hint, the structural-change path. The
- *        materialised count deliberately survives: those slots still hold their frames, so the
- *        memory they cost is still spent.
+ * @brief Drops every ownership claim and affinity hint, the structural-change path. Written slots
+ *        fall back to kReleased rather than kUnowned so the walk can still tell them from a virgin
+ *        slot: they keep their frames, so reusing one costs no new memory where faulting in a
+ *        virgin slot would grow the pool on every reconfigure.
  */
 void DataModel::FramePoolPolicy::releaseOwnership() noexcept
 {
-  std::fill(m_owner.begin(), m_owner.end(), kUnowned);
+  for (auto& owner : m_owner)
+    owner = (owner == kUnowned ? kUnowned : kReleased);
+
   m_hintBySource.clear();
 }
 
@@ -123,10 +126,14 @@ void DataModel::FramePoolPolicy::applyMemoryBudget(std::size_t frameBytes,
 
 /**
  * @brief Records @p idx as owned by @p sourceId and makes it both the source's affinity hint and
- *        the next walk's starting point.
+ *        the next walk's starting point. Counting the materialisation here is what keeps the total
+ *        exact: only a virgin slot has never been written, and it is counted exactly once.
  */
 std::size_t DataModel::FramePoolPolicy::adopt(int sourceId, std::size_t idx) noexcept
 {
+  if (m_owner[idx] == kUnowned)
+    ++m_materialised;
+
   m_owner[idx] = sourceId;
   m_hintBySource.insert(sourceId, idx);
   m_walkHint = idx;

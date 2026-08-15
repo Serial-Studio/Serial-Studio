@@ -37,6 +37,7 @@ namespace DataModel {
 enum class SlotPick {
   HintReuse,   ///< The source's own slot, still warm: values-only refresh
   WarmWalk,    ///< Another slot this source already owns: structural rebind
+  Recycle,     ///< Slot written before a release: full deep copy, already materialised
   VirginWalk,  ///< Never-written slot: full deep copy, permanently materialised
   Steal,       ///< Slot taken from another source: full deep copy, already materialised
   None         ///< Nothing available; the caller falls back to the heap or skips
@@ -56,6 +57,7 @@ public:
   struct Stats {
     quint64 hintReuse;
     quint64 warmWalk;
+    quint64 recycle;
     quint64 virginWalk;
     quint64 steal;
     quint64 fail;
@@ -63,6 +65,7 @@ public:
 
   static constexpr std::size_t kInvalidSlot = static_cast<std::size_t>(-1);
   static constexpr int kUnowned             = -1;
+  static constexpr int kReleased            = -2;
 
   explicit FramePoolPolicy(std::size_t capacity);
 
@@ -76,10 +79,10 @@ public:
   void applyMemoryBudget(std::size_t frameBytes, std::size_t budgetBytes) noexcept;
 
   /**
-   * @brief Picks a slot for @p sourceId. @p isFree reports whether a slot is unreferenced (the
-   *        caller's use_count()==1 test). With @p hintedOnly the source's own slot is the only
-   *        acceptable answer, which is what a synthetic refresh wants: it carries no new data,
-   *        so skipping the tick is free where materialising a slot is not.
+   * @brief Picks a slot for @p sourceId; @p isFree reports whether a slot is unreferenced. With
+   *        @p hintedOnly only the source's own slot is acceptable, which is what a synthetic
+   *        refresh wants: it carries no new data. A slot released by a structural change outranks
+   *        a virgin one, being already materialised: reusing it costs no new memory.
    */
   template<typename FreeFn>
   [[nodiscard]] std::pair<std::size_t, SlotPick> claim(int sourceId, bool hintedOnly, FreeFn isFree)
@@ -98,9 +101,10 @@ public:
       return {kInvalidSlot, SlotPick::None};
     }
 
-    const std::size_t n    = m_owner.size();
-    std::size_t virginSlot = kInvalidSlot;
-    std::size_t stealable  = kInvalidSlot;
+    const std::size_t n     = m_owner.size();
+    std::size_t virginSlot  = kInvalidSlot;
+    std::size_t recycleSlot = kInvalidSlot;
+    std::size_t stealable   = kInvalidSlot;
 
     for (std::size_t k = 0; k < n; ++k) {
       const std::size_t idx = (m_walkHint + k) % n;
@@ -120,13 +124,24 @@ public:
         continue;
       }
 
+      if (owner == kReleased) {
+        if (recycleSlot == kInvalidSlot)
+          recycleSlot = idx;
+
+        continue;
+      }
+
       if (stealable == kInvalidSlot)
         stealable = idx;
     }
 
+    if (recycleSlot != kInvalidSlot) {
+      ++m_stats.recycle;
+      return {adopt(sourceId, recycleSlot), SlotPick::Recycle};
+    }
+
     const bool underBudget = m_materialised < m_slotBudget;
     if (virginSlot != kInvalidSlot && underBudget) {
-      ++m_materialised;
       ++m_stats.virginWalk;
       return {adopt(sourceId, virginSlot), SlotPick::VirginWalk};
     }
@@ -137,7 +152,6 @@ public:
     }
 
     if (virginSlot != kInvalidSlot) {
-      ++m_materialised;
       ++m_stats.virginWalk;
       return {adopt(sourceId, virginSlot), SlotPick::VirginWalk};
     }
