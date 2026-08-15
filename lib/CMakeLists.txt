@@ -166,8 +166,11 @@ endif()
 #
 # Configuration:
 #   BUILD_SHARED_LIBS=OFF   - Build static library only
-#   ZLIB_BUILD_EXAMPLES=OFF - Don't build example programs
-#   SKIP_INSTALL_ALL=ON     - Don't install to system (local build only)
+#   ZLIB_BUILD_SHARED=OFF   - Don't build libz.so/.dylib (1.3.2 option name)
+#   ZLIB_BUILD_STATIC=ON    - Build zlibstatic
+#   ZLIB_BUILD_TESTING=OFF  - Don't build test/ example programs
+#   ZLIB_INSTALL=OFF        - Don't install to system (local build only)
+#   SKIP_INSTALL_ALL=ON     - Same, under the pre-1.3.2 option name
 #
 # Alias target:
 #   - Creates ZLIB::ZLIB alias for both system and FetchContent builds
@@ -195,15 +198,14 @@ else()
     GIT_PROGRESS   FALSE
   )
 
-  set(BUILD_SHARED_LIBS   OFF CACHE INTERNAL "Build static libraries" FORCE)
-  set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL     "Build zlib examples"    FORCE)
-  set(SKIP_INSTALL_ALL    ON  CACHE BOOL     "Skip zlib installation" FORCE)
+  set(BUILD_SHARED_LIBS   OFF CACHE INTERNAL "Build static libraries"  FORCE)
+  set(ZLIB_BUILD_SHARED   OFF CACHE BOOL     "Build zlib shared lib"   FORCE)
+  set(ZLIB_BUILD_STATIC   ON  CACHE BOOL     "Build zlib static lib"   FORCE)
+  set(ZLIB_BUILD_TESTING  OFF CACHE BOOL     "Build zlib examples"     FORCE)
+  set(ZLIB_INSTALL        OFF CACHE BOOL     "Skip zlib installation"  FORCE)
+  set(SKIP_INSTALL_ALL    ON  CACHE BOOL     "Skip zlib installation"  FORCE)
 
   FetchContent_MakeAvailable(zlib)
-
-  if(TARGET zlib)
-    set_target_properties(zlib PROPERTIES EXCLUDE_FROM_ALL TRUE)
-  endif()
 
   if(TARGET zlibstatic)
     target_compile_options(zlibstatic PRIVATE ${LIB_FLAGS})

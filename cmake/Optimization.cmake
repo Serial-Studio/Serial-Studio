@@ -536,3 +536,41 @@ if(ENABLE_PGO)
       message(FATAL_ERROR "Invalid PGO_STAGE: ${PGO_STAGE}. Must be GENERATE or USE")
    endif()
 endif()
+
+#---------------------------------------------------------------------------------------------------
+# Build-time host tools: opt out of PGO/LTO
+#---------------------------------------------------------------------------------------------------
+#
+# PGO and LTO flags are added at directory scope, so every target in the tree inherits them --
+# including code generators that are built AND executed during the build (LuaJIT's minilua and
+# buildvm). Instrumenting those is pure loss:
+#
+#   - They run at build time, so an instrumented minilua floods the build log with
+#     "LLVM Profile Warning: Unable to track new values: Running out of static counters"
+#     (a bytecode interpreter blows past the per-site value-profile budget).
+#   - Each run drops .profraw files into PGO_PROFILE_DIR that have nothing to do with the
+#     application workload the USE stage is supposed to be shaped by.
+#
+# CMake initializes a target's COMPILE_OPTIONS / LINK_OPTIONS from the directory properties at
+# target-creation time, so the flags can be filtered back out per target afterwards.
+#
+#---------------------------------------------------------------------------------------------------
+
+function(ss_exclude_from_pgo)
+  foreach(target ${ARGN})
+    if(NOT TARGET ${target})
+      message(WARNING "ss_exclude_from_pgo: no such target: ${target}")
+      continue()
+    endif()
+
+    foreach(property COMPILE_OPTIONS LINK_OPTIONS)
+      get_target_property(options ${target} ${property})
+      if(options)
+        list(FILTER options EXCLUDE REGEX "profile|GENPROFILE|USEPROFILE|PGD:|^/GL$|^/LTCG$")
+        set_target_properties(${target} PROPERTIES ${property} "${options}")
+      endif()
+    endforeach()
+
+    set_target_properties(${target} PROPERTIES INTERPROCEDURAL_OPTIMIZATION FALSE)
+  endforeach()
+endfunction()

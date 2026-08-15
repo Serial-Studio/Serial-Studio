@@ -151,6 +151,7 @@ if(NOT MSVC)
   target_link_libraries(luajit-minilua PRIVATE m)
 endif()
 set_target_properties(luajit-minilua PROPERTIES INTERPROCEDURAL_OPTIMIZATION FALSE)
+ss_exclude_from_pgo(luajit-minilua)
 
 add_custom_command(
   OUTPUT "${LJ_GEN}/buildvm_arch.h"
@@ -183,6 +184,7 @@ target_include_directories(luajit-buildvm PRIVATE
   "${LJ_GEN}" "${LJ_SRC}" "${CMAKE_CURRENT_SOURCE_DIR}/dynasm")
 target_compile_definitions(luajit-buildvm PRIVATE ${LJ_BUILDVM_DEFS})
 set_target_properties(luajit-buildvm PROPERTIES INTERPROCEDURAL_OPTIMIZATION FALSE)
+ss_exclude_from_pgo(luajit-buildvm)
 
 #---------------------------------------------------------------------------------------------------
 # Stage 2 — generated VM + tables
