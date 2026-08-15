@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "DataModel/Frame.h"
+#include "Licensing/SimpleCrypt.h"
 
 class SessionContext;
 
@@ -166,6 +167,7 @@ private:
   MirrorClient* m_client;
 
   QSettings m_settings;
+  mutable Licensing::SimpleCrypt m_simpleCrypt;
   bool m_attached;
   bool m_canAttach;
   bool m_anchored;

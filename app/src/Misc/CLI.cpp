@@ -43,6 +43,7 @@
 #include "Misc/ModuleManager.h"
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
+#include "SessionContext.h"
 #include "UI/Dashboard.h"
 #include "UI/TaskbarSettings.h"
 
@@ -366,6 +367,19 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
 
 #ifdef BUILD_COMMERCIAL
 /**
+ * @brief Tears a headless CLI session down in the pinned order main() uses for the GUI run: the
+ *        Sessions wiring, then every frame-consumer worker, then the adopted core modules. These
+ *        paths return from CLI::process() before main() reaches its own teardown, so skipping any
+ *        step leaves a worker ticking into modules freed at static destruction.
+ */
+static void teardownHeadlessSession()
+{
+  Misc::ModuleManager::teardownHeadlessSessionModules();
+  Misc::ModuleManager::stopFrameConsumerWorkers();
+  SessionContext::current().shutdown();
+}
+
+/**
  * @brief Runs the spec-0044 verifier and exits: builds the pinned module order plus the
  *        headless session wiring, since the GUI wiring phase never runs here. Exit code is
  *        binary (0 = reproduced); the verdict lives in the JSON. Sessions modules tear down
@@ -398,7 +412,7 @@ CLI::ProcessResult CLI::runSessionVerification()
   std::fputs(QJsonDocument(verifier.report()).toJson(QJsonDocument::Indented).constData(), stdout);
   std::fflush(stdout);
 
-  Misc::ModuleManager::teardownHeadlessSessionModules();
+  teardownHeadlessSession();
 
   return code == Sessions::Verifier::kExitReproduced ? ProcessResult::ExitSuccess
                                                      : ProcessResult::ExitFailure;
@@ -447,7 +461,7 @@ CLI::ProcessResult CLI::runSessionRegression()
   std::fputs(QJsonDocument(verifier.report()).toJson(QJsonDocument::Indented).constData(), stdout);
   std::fflush(stdout);
 
-  Misc::ModuleManager::teardownHeadlessSessionModules();
+  teardownHeadlessSession();
 
   return code == Sessions::Verifier::kExitReproduced ? ProcessResult::ExitSuccess
                                                      : ProcessResult::ExitFailure;

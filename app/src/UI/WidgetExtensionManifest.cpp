@@ -367,6 +367,20 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
 }
 
 /**
+ * @brief True when @p relative names a file that stays under @p directory. The only containment
+ *        rule a manifest-declared path gets: every consumer resolves such paths by concatenation,
+ *        so an escaping value would point the loader (or the icon fetch) at an arbitrary file.
+ */
+[[nodiscard]] static bool containedInPackage(const QString& directory, const QString& relative)
+{
+  const auto base = QFileInfo(directory).absoluteFilePath() + QStringLiteral("/");
+  const auto path = QFileInfo(directory + QStringLiteral("/") + relative).absoluteFilePath();
+
+  return !relative.isEmpty() && !relative.startsWith(QStringLiteral("/"))
+      && !relative.contains(QStringLiteral("..")) && path.startsWith(base);
+}
+
+/**
  * @brief Resolves the declared QML entry inside the package directory: the file must exist and
  *        must stay under that directory, so a manifest cannot point the loader at another path.
  */
@@ -376,11 +390,8 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
                                              QList<Finding>& findings)
 {
   const auto entry = block.value(QStringLiteral("qml")).toString().trimmed();
-  const auto base  = QFileInfo(directory).absoluteFilePath() + QStringLiteral("/");
-  const auto path  = QFileInfo(directory + QStringLiteral("/") + entry).absoluteFilePath();
 
-  const bool contained = !entry.isEmpty() && !entry.startsWith(QStringLiteral("/"))
-                      && !entry.contains(QStringLiteral("..")) && path.startsWith(base);
+  const bool contained = containedInPackage(directory, entry);
   if (!contained || !QFileInfo::exists(directory + QStringLiteral("/") + entry)) {
     findings.append(makeFinding(
       Misc::ProblemCenter::Error,
@@ -399,15 +410,20 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
 
 /**
  * @brief Reads the presentation and behavior keys that cannot fail validation: scope, icon,
- *        default size, the string-value declaration, and the experimental flag.
+ *        default size, the string-value declaration, and the experimental flag. A file-shaped
+ *        icon that escapes the package is dropped rather than rejected -- artwork is optional,
+ *        so the widget still loads on the built-in fallback.
  */
-static void readWidgetBlock(const QJsonObject& block, Descriptor& out)
+static void readWidgetBlock(const QJsonObject& block, Descriptor& out, const QString& directory)
 {
   out.scope = block.value(QStringLiteral("scope")).toString() == QStringLiteral("group")
               ? UI::WidgetExtensions::GroupScope
               : UI::WidgetExtensions::DatasetScope;
 
-  out.iconId            = block.value(QStringLiteral("icon")).toString().trimmed();
+  out.iconId = block.value(QStringLiteral("icon")).toString().trimmed();
+  if (out.iconId.contains(QStringLiteral(".")) && !containedInPackage(directory, out.iconId))
+    out.iconId.clear();
+
   out.experimental      = block.value(QStringLiteral("experimental")).toBool(false);
   out.readsStringValues = block.value(QStringLiteral("readsStringValues")).toBool(false);
 
@@ -453,7 +469,7 @@ UI::WidgetManifestResult UI::parseWidgetManifest(const QJsonObject& manifest,
   if (!validateEntryPoint(block, out, directory, result.findings))
     return result;
 
-  readWidgetBlock(block, out);
+  readWidgetBlock(block, out, directory);
   readDependencies(block, out);
 
   const auto config = block.value(QStringLiteral("config")).toArray();

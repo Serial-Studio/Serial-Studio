@@ -26,6 +26,7 @@
 #include <QJsonObject>
 #include <QObject>
 #include <QStringList>
+#include <unordered_map>
 
 #include "DataModel/Scripting/IScriptEngine.h"
 #include "ThirdParty/readerwriterqueue.h"
@@ -116,6 +117,7 @@ public slots:
 
 private:
   void refreshEngineCaches() noexcept;
+  void refreshSourceLanguages() const;
   void publishScriptStats();
   [[nodiscard]] QList<ScriptStat> guiScriptStats();
   void setNativeTemplateIdx(int sourceId, int idx);
@@ -131,6 +133,7 @@ private:
 
   bool m_hasLuaEngine;
   bool m_suppressMessageBoxes;
+  mutable bool m_languagesDirty;
   int m_engineEpoch;
   IScriptEngine* m_engine0Cache;
 
@@ -142,6 +145,7 @@ private:
   QStringList m_templateNames;
   QStringList m_nativeTemplateNames;
 
+  mutable std::unordered_map<int, int> m_sourceLanguages;
   std::map<int, std::unique_ptr<IScriptEngine>> m_engines;
 };
 

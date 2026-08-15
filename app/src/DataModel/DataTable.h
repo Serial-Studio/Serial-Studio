@@ -64,11 +64,14 @@ struct DataTableSnapshot {
   int generation     = -1;
   quint64 writeClock = 0;
   std::vector<RegisterValue> values;
+  std::vector<bool> computed;
   QHash<QPair<QString, QString>, int> index;
   QHash<int, std::pair<int, int>> datasetIndex;
   QHash<QString, std::pair<int, int>> aliasIndex;
 
   [[nodiscard]] bool isInitialized() const;
+  [[nodiscard]] bool isWritable(const QString& table, const QString& reg) const;
+  [[nodiscard]] bool isWritableHandle(qint64 handle) const;
   [[nodiscard]] qint64 handleOf(const QString& table, const QString& reg) const;
   [[nodiscard]] const RegisterValue* getByHandle(qint64 handle) const;
   [[nodiscard]] const RegisterValue* getDatasetRaw(int uniqueId) const;
@@ -104,6 +107,9 @@ public:
   void snapshotInto(DataTableSnapshot& out) const;
 
   [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
+
+  [[nodiscard]] bool isWritable(const QString& table, const QString& reg) const;
+  [[nodiscard]] bool isWritableHandle(qint64 handle) const;
 
   [[nodiscard]] qint64 handleOf(const QString& table, const QString& reg) const;
   [[nodiscard]] const RegisterValue* getByHandle(qint64 handle) const;

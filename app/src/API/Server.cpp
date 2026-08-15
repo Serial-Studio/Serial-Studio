@@ -149,7 +149,6 @@ API::ServerWorker::ServerWorker(
   std::atomic<size_t>* queueSize)
   : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(queue, enabled, queueSize)
   , m_droppedBroadcasts(0)
-  , m_warnedBackpressure(false)
 {}
 
 /**
@@ -159,9 +158,9 @@ API::ServerWorker::~ServerWorker() = default;
 
 /**
  * @brief True while @p socket has room for another broadcast; an over-cap socket is skipped and
- *        counted, with a single warning the first time so a wedged client is visible without
- *        per-batch log spam. Skipping is self-healing: a client that resumes reading drains its
- *        backlog under the cap and rejoins the broadcast on the next batch.
+ *        counted, warned once per socket so a wedged client is visible without per-batch log spam
+ *        and a second client's stall is not swallowed by the first one's warning. Skipping is
+ *        self-healing: a client that resumes reading drains its backlog and rejoins the broadcast.
  */
 bool API::ServerWorker::underWriteCap(QTcpSocket* socket)
 {
@@ -171,8 +170,8 @@ bool API::ServerWorker::underWriteCap(QTcpSocket* socket)
     return true;
 
   ++m_droppedBroadcasts;
-  if (!m_warnedBackpressure) {
-    m_warnedBackpressure = true;
+  if (!m_warnedSockets.contains(socket)) {
+    m_warnedSockets.insert(socket);
     qWarning() << "[API] Client" << socket->peerAddress().toString() << ":" << socket->peerPort()
                << "is not reading the broadcast stream; dropping its broadcasts while the socket"
                << "backlog exceeds" << kMaxApiPendingWriteBytes << "bytes";
@@ -206,6 +205,7 @@ void API::ServerWorker::closeResources()
 
   m_sockets.clear();
   m_mutedSockets.clear();
+  m_warnedSockets.clear();
 
   Q_EMIT clientCountChanged(0);
 }
@@ -224,6 +224,7 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
 
   m_sockets.insert(socket, sessionId);
   m_mutedSockets.remove(socket);
+  m_warnedSockets.remove(socket);
   connect(socket, &QTcpSocket::readyRead, this, &ServerWorker::onSocketReadyRead);
   connect(socket, &QTcpSocket::disconnected, this, &ServerWorker::onSocketDisconnected);
 
@@ -249,6 +250,7 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
   const QString sessionId = m_sockets.value(socket);
   m_sockets.remove(socket);
   m_mutedSockets.remove(socket);
+  m_warnedSockets.remove(socket);
 
   Q_EMIT socketRemoved(socket, sessionId);
   Q_EMIT clientCountChanged(m_sockets.count());
@@ -320,6 +322,22 @@ void API::ServerWorker::writeToSocket(QTcpSocket* socket,
   SS_ASSERT(!data.isEmpty(), return);
 
   if (socket && m_sockets.value(socket) == sessionId && socket->isWritable())
+    socket->write(data);
+}
+
+/**
+ * @brief Writes one mirror push (worker thread). Unlike a command response, this is producer-paced
+ *        at display-tick rate with nothing on the wire asking for it, so a viewer that stops
+ *        reading would grow the socket buffer without bound: the broadcast cap applies here.
+ */
+void API::ServerWorker::writeMirrorPayload(QTcpSocket* socket,
+                                           const QString& sessionId,
+                                           const QByteArray& data)
+{
+  SS_ASSERT(!data.isEmpty(), return);
+
+  if (socket && m_sockets.value(socket) == sessionId && socket->isWritable()
+      && underWriteCap(socket))
     socket->write(data);
 }
 
@@ -1448,7 +1466,7 @@ void API::Server::sendMirrorPayload(QTcpSocket* socket,
 
   auto* worker = static_cast<ServerWorker*>(m_worker);
   QMetaObject::invokeMethod(worker,
-                            "writeToSocket",
+                            "writeMirrorPayload",
                             Qt::QueuedConnection,
                             Q_ARG(QTcpSocket*, socket),
                             Q_ARG(QString, sessionId),

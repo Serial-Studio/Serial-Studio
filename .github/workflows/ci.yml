@@ -106,8 +106,7 @@ jobs:
       security-events: write
     steps:
     #
-    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
-    # and a shallow checkout configures but fails to build
+    # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -648,8 +647,7 @@ jobs:
       security-events: write
     steps:
     #
-    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
-    # and a shallow checkout configures but fails to build
+    # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -1187,8 +1185,7 @@ jobs:
       contents: read
     steps:
     #
-    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
-    # and a shallow checkout configures but fails to build
+    # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -1463,8 +1460,7 @@ jobs:
       contents: read
     steps:
     #
-    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
-    # and a shallow checkout configures but fails to build
+    # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -1775,8 +1771,7 @@ jobs:
     #
     - run: git config --global core.autocrlf input
     #
-    # Recursive submodules: the vendored deps (qlementine, LuaJIT, mimalloc) are submodules,
-    # and a shallow checkout configures but fails to build
+    # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
       uses: actions/checkout@v5

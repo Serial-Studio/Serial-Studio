@@ -830,10 +830,9 @@ void IO::Drivers::UART::refreshSerialDevices()
 }
 
 /**
- * @brief Retry poll after a resource-loss drop, driven by this instance's own timer so live
- *        drivers recover too (the UI-config instance never opens and never arms it). The flag is
- *        set only by handleError() and cleared by close(), so a user's manual disconnect always
- *        ends the retry; a reappeared port is matched by name, not by a stale list index.
+ * @brief Retry poll after a resource-loss drop, on this instance's own timer so live drivers
+ *        recover too. handleError() sets the flag and close() clears it, so a manual disconnect
+ *        ends the retry; the port is matched by name and the reopen is scoped to this driver.
  */
 void IO::Drivers::UART::pollAutoReconnect()
 {
@@ -851,7 +850,7 @@ void IO::Drivers::UART::pollAutoReconnect()
   setPortIndex(static_cast<quint8>(portList().indexOf(m_lastPortName)));
 
   static auto& connectionManager = ConnectionManager::instance();
-  connectionManager.connectDevice();
+  connectionManager.connectDevice(this);
 }
 
 /**

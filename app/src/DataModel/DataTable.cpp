@@ -407,6 +407,42 @@ qint64 DataModel::DataTableStore::handleOf(const QString& table, const QString& 
 }
 
 /**
+ * @brief True when the register exists and accepts a write. Constant registers exist and read
+ *        back fine but silently ignore set(), so a caller that reports success from mere
+ *        existence tells the user it wrote something it did not.
+ */
+bool DataModel::DataTableStore::isWritable(const QString& table, const QString& reg) const
+{
+  SS_ASSERT(m_initialized, return false);
+  SS_ASSERT(m_isComputed.size() == m_storage.size(), return false);
+
+  const int idx = indexOf(table, reg);
+  if (idx < 0)
+    return false;
+
+  return m_isComputed[static_cast<size_t>(idx)];
+}
+
+/**
+ * @brief Handle-keyed twin of isWritable(), matching setByHandle()'s generation and range guards.
+ */
+bool DataModel::DataTableStore::isWritableHandle(qint64 handle) const
+{
+  SS_ASSERT(m_initialized, return false);
+  SS_ASSERT(m_isComputed.size() == m_storage.size(), return false);
+
+  if (handle < 0)
+    return false;
+
+  const int gen   = static_cast<int>(handle >> kHandleIndexBits);
+  const int index = static_cast<int>(handle & kHandleIndexMask);
+  if (gen != m_generation || index >= static_cast<int>(m_storage.size()))
+    return false;
+
+  return m_isComputed[static_cast<size_t>(index)];
+}
+
+/**
  * @brief Hot-path read by handle; a stale, out-of-range, or -1 handle is a safe nullptr.
  */
 const DataModel::RegisterValue* DataModel::DataTableStore::getByHandle(qint64 handle) const
@@ -675,6 +711,7 @@ void DataModel::DataTableStore::snapshotInto(DataTableSnapshot& out) const
     out.generation = -1;
     out.writeClock = 0;
     out.values.clear();
+    out.computed.clear();
     out.index.clear();
     out.datasetIndex.clear();
     out.aliasIndex.clear();
@@ -684,6 +721,7 @@ void DataModel::DataTableStore::snapshotInto(DataTableSnapshot& out) const
   out.generation   = m_generation;
   out.writeClock   = m_writeClock;
   out.values       = m_storage;
+  out.computed     = m_isComputed;
   out.index        = m_index;
   out.datasetIndex = m_datasetIndex;
   out.aliasIndex   = m_aliasIndex;
@@ -722,6 +760,35 @@ const DataModel::RegisterValue* DataModel::DataTableSnapshot::get(const QString&
 bool DataModel::DataTableSnapshot::isInitialized() const
 {
   return generation >= 0;
+}
+
+/**
+ * @brief True when the register exists and accepts a write. Mirrors the live store's rule so a
+ *        GUI-thread caller reading through the snapshot gets the same verdict set() would give.
+ */
+bool DataModel::DataTableSnapshot::isWritable(const QString& table, const QString& reg) const
+{
+  const auto it = index.constFind(qMakePair(table, reg));
+  if (it == index.constEnd())
+    return false;
+
+  const auto slot = static_cast<size_t>(it.value());
+  return slot < computed.size() && computed[slot];
+}
+
+/**
+ * @brief Handle-keyed twin of isWritable(), with getByHandle()'s generation and range guards.
+ */
+bool DataModel::DataTableSnapshot::isWritableHandle(qint64 handle) const
+{
+  if (handle < 0)
+    return false;
+
+  if (static_cast<int>(handle >> kHandleIndexBits) != generation)
+    return false;
+
+  const auto slot = static_cast<size_t>(handle & kHandleIndexMask);
+  return slot < computed.size() && computed[slot];
 }
 
 /**

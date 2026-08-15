@@ -159,7 +159,7 @@ endif()
 #              vcpkg install zlib (Windows)
 #
 # 2. FetchContent download (USE_SYSTEM_ZLIB=OFF, default):
-#    - Downloads ZLIB 1.3.1 from GitHub (madler/zlib)
+#    - Downloads ZLIB 1.3.2 from GitHub (madler/zlib)
 #    - Builds as static library (zlibstatic)
 #    - Embedded in final executable (no runtime dependency)
 #    - Better version control and consistency
@@ -185,12 +185,12 @@ if(USE_SYSTEM_ZLIB)
 
   message(STATUS "System ZLIB found: ${ZLIB_VERSION_STRING}")
 else()
-  message(STATUS "Fetching ZLIB 1.3.1 from GitHub...")
+  message(STATUS "Fetching ZLIB 1.3.2 from GitHub...")
 
   FetchContent_Declare(
     zlib
     GIT_REPOSITORY https://github.com/madler/zlib.git
-    GIT_TAG        v1.3.1
+    GIT_TAG        v1.3.2
     GIT_SHALLOW    TRUE
     GIT_PROGRESS   FALSE
   )
@@ -221,9 +221,9 @@ else()
   set(ZLIB_INCLUDE_DIRS   "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE INTERNAL "ZLIB include directories")
   set(ZLIB_LIBRARY        "zlibstatic"                            CACHE INTERNAL "ZLIB library target")
   set(ZLIB_LIBRARIES      "zlibstatic"                            CACHE INTERNAL "ZLIB libraries")
-  set(ZLIB_VERSION_STRING "1.3.1"                                 CACHE INTERNAL "ZLIB version")
+  set(ZLIB_VERSION_STRING "1.3.2"                                 CACHE INTERNAL "ZLIB version")
 
-  message(STATUS "ZLIB 1.3.1 fetched and configured")
+  message(STATUS "ZLIB 1.3.2 fetched and configured")
 endif()
 
 #---------------------------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ endif()
 #              vcpkg install expat (Windows)
 #
 # 2. FetchContent download (USE_SYSTEM_EXPAT=OFF, default):
-#    - Downloads EXPAT 2.6.4 from GitHub (libexpat/libexpat)
+#    - Downloads EXPAT 2.8.3 from GitHub (libexpat/libexpat)
 #    - Builds as static library
 #    - Embedded in final executable (no runtime dependency)
 #    - Better version control and consistency
@@ -285,12 +285,12 @@ if(USE_SYSTEM_EXPAT)
 
   message(STATUS "System EXPAT found: ${EXPAT_VERSION_STRING}")
 else()
-  message(STATUS "Fetching EXPAT 2.6.4 from GitHub...")
+  message(STATUS "Fetching EXPAT 2.8.3 from GitHub...")
 
   FetchContent_Declare(
     expat
     GIT_REPOSITORY https://github.com/libexpat/libexpat.git
-    GIT_TAG        R_2_6_4
+    GIT_TAG        R_2_8_3
     GIT_SHALLOW    TRUE
     GIT_PROGRESS   FALSE
     SOURCE_SUBDIR  expat
@@ -319,7 +319,7 @@ else()
     set(EXPAT_LIBRARIES expat CACHE INTERNAL "EXPAT libraries")
   endif()
 
-  message(STATUS "EXPAT 2.6.4 fetched and configured")
+  message(STATUS "EXPAT 2.8.3 fetched and configured")
 endif()
 
 #---------------------------------------------------------------------------------------------------
@@ -387,7 +387,7 @@ add_subdirectory(mdflib)
 # libusb provides cross-platform access to USB devices via bulk/control transfers.
 # It is only included in BUILD_COMMERCIAL builds — the GPL binary contains no USB code.
 #
-# Acquisition: FetchContent downloads libusb 1.0.29 from GitHub at configure time.
+# Acquisition: FetchContent downloads libusb 1.0.30 from GitHub at configure time.
 # libusb ships no CMakeLists.txt, so the libusb-cmake wrapper assembles the target.
 #
 # Platform source sets:
@@ -398,7 +398,7 @@ add_subdirectory(mdflib)
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
-  message(STATUS "Fetching libusb-cmake (libusb 1.0.29) from GitHub...")
+  message(STATUS "Fetching libusb-cmake (libusb 1.0.30) from GitHub...")
 
   set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_TESTING            OFF CACHE BOOL "" FORCE)
@@ -409,7 +409,7 @@ if(BUILD_COMMERCIAL)
   FetchContent_Declare(
     libusb_cmake
     GIT_REPOSITORY https://github.com/libusb/libusb-cmake.git
-    GIT_TAG        v1.0.29-0
+    GIT_TAG        v1.0.30-0
     GIT_SHALLOW    TRUE
     GIT_PROGRESS   FALSE
   )
@@ -456,33 +456,6 @@ if(BUILD_COMMERCIAL)
   endif()
 
   message(STATUS "hidapi 0.14.0 configured")
-endif()
-
-#---------------------------------------------------------------------------------------------------
-# QuaZip (Pro edition only)
-#---------------------------------------------------------------------------------------------------
-#
-# QuaZip provides ZIP archive creation/reading built on top of zlib's minizip.
-# Used in commercial builds to zip exported image sessions on disconnect.
-#
-# License: LGPL-2.1 — shipped as a static library; the LGPL-2.1 notice is
-#          reproduced in Acknowledgements.txt as required.
-#
-# CMake target exposed: QuaZip::QuaZip
-#---------------------------------------------------------------------------------------------------
-
-if(BUILD_COMMERCIAL)
-  message(STATUS "Configuring QuaZip 1.5 (bundled)...")
-
-  set(QUAZIP_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-  set(QUAZIP_INSTALL      OFF CACHE BOOL "" FORCE)
-  set(QUAZIP_USE_QT_ZLIB  OFF CACHE BOOL "" FORCE)
-  set(QUAZIP_BZIP2        OFF CACHE BOOL "" FORCE)
-  set(BUILD_SHARED_LIBS   OFF CACHE BOOL "" FORCE)
-
-  add_subdirectory(QuaZip)
-
-  message(STATUS "QuaZip 1.5 configured")
 endif()
 
 #---------------------------------------------------------------------------------------------------
@@ -563,7 +536,6 @@ configure_third_party_lib(mdf)
 if(BUILD_COMMERCIAL)
   configure_third_party_lib(usb-1.0)
   configure_third_party_lib(${HIDAPI_CONCRETE_TARGET})
-  configure_third_party_lib(QuaZip)
 endif()
 
 #---------------------------------------------------------------------------------------------------

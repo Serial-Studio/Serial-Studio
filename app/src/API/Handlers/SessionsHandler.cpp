@@ -20,11 +20,20 @@
 #  include <QFile>
 #  include <QJsonArray>
 #  include <QJsonObject>
+#  include <QTemporaryFile>
 
 #  include "API/CommandRegistry.h"
+#  include "API/PathPolicy.h"
 #  include "DataModel/ProjectModel.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Newest projectJson scratch file, removed when the next call replaces it (GUI thread only)
+static QString s_regressScratchPath;
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -658,9 +667,9 @@ API::CommandResponse API::Handlers::SessionsHandler::getVerification(const QStri
 
 /**
  * @brief Start a spec-0047 regression pass (async; poll sessions.getRegression). One session
- *        via sessionId, or a golden-tag sweep via tag. The candidate is projectPath,
- *        projectJson (written to one per-process scratch file, overwritten per call), or the
- *        current editor project when neither is given.
+ *        via sessionId, or a golden-tag sweep via tag. The candidate is projectPath (held to the
+ *        same allowlist as every other file command), projectJson (written to an exclusively
+ *        created scratch file, the previous one removed), or the current editor project.
  */
 API::CommandResponse API::Handlers::SessionsHandler::regress(const QString& id,
                                                              const QJsonObject& params)
@@ -701,17 +710,24 @@ API::CommandResponse API::Handlers::SessionsHandler::regress(const QString& id,
       ErrorCode::InvalidParam,
       QStringLiteral("Pass at most one of 'projectPath' or 'projectJson'."));
 
+  if (!candidate.isEmpty() && !API::isPathAllowed(candidate))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("projectPath is not allowed"));
+
   if (candidate.isEmpty() && params.contains(QStringLiteral("projectJson"))) {
     const QByteArray json = params.value(QStringLiteral("projectJson")).toString().toUtf8();
-    const QString path    = QDir::temp().filePath(
-      QStringLiteral("ss-regress-api-%1.json").arg(QCoreApplication::applicationPid()));
-    QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate) || file.write(json) != json.size())
+    if (!s_regressScratchPath.isEmpty())
+      QFile::remove(s_regressScratchPath);
+
+    QTemporaryFile file(QDir::temp().filePath(QStringLiteral("ss-regress-api-XXXXXX.json")));
+    file.setAutoRemove(false);
+    if (!file.open() || file.write(json) != json.size())
       return CommandResponse::makeError(
         id, ErrorCode::ExecutionError, QStringLiteral("Cannot write candidate scratch file."));
 
     file.close();
-    candidate = path;
+    candidate            = file.fileName();
+    s_regressScratchPath = candidate;
   }
 
   QJsonObject result;

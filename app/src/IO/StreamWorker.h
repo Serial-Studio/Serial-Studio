@@ -282,7 +282,7 @@ private:
 
   StreamConfig m_config;
   bool m_abandoned;
-  QThread m_thread;
+  std::unique_ptr<QThread> m_thread;
   QMetaObject::Connection m_feed;
   StreamProcessor* m_processor;
 

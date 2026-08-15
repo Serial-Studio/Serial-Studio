@@ -148,7 +148,11 @@ updated: 2026-07-21
 - **Verify:** Grep: non-exempt literals remain only in `Toolbar.qml`,
   `ProjectToolbar.qml`, `StartMenu.qml`, the three provider files, and exempt sets.
 - **Deps:** T4
-- [ ] done
+- [x] done — verified at HEAD: repo-wide grep for `qrc:/icons/`/`:/icons/` in
+  `app/qml/**` and `app/src/**` finds zero non-exempt hits (only `icons/buttons/*`
+  literals and two doc-string examples in `ContextBuilder.cpp`/`WorkspacesHandler.cpp`);
+  now covered together with the later Toolbar/StartMenu/provider cutovers (T15/T16/T18/
+  T19) which have since landed.
 
 ### Phase B — command registry core
 
@@ -193,7 +197,13 @@ updated: 2026-07-21
 - **Verify:** `--check` mode detects a planted manifest/generated drift; registry-verify
   clean; generated file present in the lupdate `@list`.
 - **Deps:** T11, T12
-- [ ] done
+- [x] done — verified at HEAD: `scripts/generate-command-strings.py` exists with a
+  `--check` mode; `app/src/UI/CommandStrings.cpp` is the generated
+  `QT_TRANSLATE_NOOP("Commands", ...)` stub (auto-picked up by `translation_manager.py`'s
+  recursive `.cpp` walk, no separate registration needed); `sanitize-commit.py:261` runs
+  the regen step; `registry-verify.py` has the manifest-half lint (`check_manifests`,
+  `check_layouts` duplicate-shortcut check, `check_binding_guards` commercial-symbol
+  scan) and a live run is CLEAN.
 
 ### T14 — CommandModel + per-context bindings
 
@@ -250,7 +260,11 @@ updated: 2026-07-21
 - **Verify:** Read-back against the layout schema in `plan.md`; no surface-specific
   symbols inside the renderer.
 - **Deps:** T14
-- [ ] done
+- [x] done — verified at HEAD: `app/qml/Widgets/CommandToolbar.qml` exists, is a
+  `Repeater`-over-`RibbonSection`/`ToolbarButton` renderer driven purely by
+  `Cpp_UI_CommandRegistry.layout(surface)` + `model.binding(id)` (no surface-specific
+  symbols), and is consumed by `Toolbar.qml`, `ProjectToolbar.qml`, and
+  `DatabaseExplorer.qml`; registered in `app/CMakeLists.txt`.
 
 ### T18 — Main toolbar cutover
 
@@ -341,10 +355,10 @@ updated: 2026-07-21
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (runtime ACs
       confirmed by the maintainer: AC1, AC4-AC6, AC8-AC13).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new
-      errors).
-- [ ] `python scripts/registry-verify.py` clean (tree, qrc, manifests, shortcuts,
-      commercial-symbol sweep).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new
+      errors). — re-run repo-wide at HEAD: `3503 files scanned, 0 errors, 0 advisory`.
+- [x] `python scripts/registry-verify.py` clean (tree, qrc, manifests, shortcuts,
+      commercial-symbol sweep). — re-run at HEAD: `registry-verify: CLEAN`.
 - [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [ ] Hotpath untouched — no `--benchmark-hotpath` run required (re-affirm at handoff).
 - [ ] Translation refresh flow run by the maintainer after `CommandStrings.cpp` lands.

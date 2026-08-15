@@ -806,6 +806,7 @@ IO::StreamWorker::StreamWorker(HAL_Driver* driver,
   : QObject(parent)
   , m_config(config)
   , m_abandoned(false)
+  , m_thread(std::make_unique<QThread>())
   , m_processor(nullptr)
   , m_pixelWidth(kDefaultPixelWidth)
   , m_windowSec(10.0)
@@ -816,12 +817,12 @@ IO::StreamWorker::StreamWorker(HAL_Driver* driver,
   SS_ASSERT(driver != nullptr, return);
   SS_ASSERT_LOG(!config.datasets.empty());
 
-  m_thread.setObjectName(QStringLiteral("StreamWorker-%1").arg(config.sourceId));
+  m_thread->setObjectName(QStringLiteral("StreamWorker-%1").arg(config.sourceId));
 
   m_processor = new StreamProcessor(
     config, &m_displayRing, &m_pixelWidth, &m_windowSec, &m_exportActive, &m_paused, frameBuilder);
-  m_processor->moveToThread(&m_thread);
-  m_thread.start();
+  m_processor->moveToThread(m_thread.get());
+  m_thread->start();
 
   m_feed = connect(driver,
                    &IO::HAL_Driver::sampleBlockReceived,
@@ -931,13 +932,13 @@ void IO::StreamWorker::setPaused(bool paused) noexcept
 }
 
 /**
- * @brief Joins the worker: engine teardown queued ahead of quit so scripts die on their own
- *        thread, bounded wait, then warn-and-abandon on a hung Fast-mode script (R21, spec 0046
- *        precedent) -- the processor and its queues leak rather than blocking disconnect/quit.
+ * @brief Joins the worker: engine teardown queued ahead of quit, bounded wait, then
+ *        warn-and-abandon on a hung Fast-mode script (R21). The abandon latch makes the
+ *        destructor's repeat call free and releases the QThread, whose OS thread still runs.
  */
 void IO::StreamWorker::stop()
 {
-  if (!m_thread.isRunning())
+  if (m_abandoned || !m_thread || !m_thread->isRunning())
     return;
 
   if (m_feed)
@@ -947,9 +948,10 @@ void IO::StreamWorker::stop()
     QMetaObject::invokeMethod(
       m_processor, &IO::StreamProcessor::teardownEngines, Qt::QueuedConnection);
 
-  m_thread.quit();
-  if (!m_thread.wait(kJoinTimeoutMs)) [[unlikely]] {
+  m_thread->quit();
+  if (!m_thread->wait(kJoinTimeoutMs)) [[unlikely]] {
     m_abandoned = true;
+    (void)m_thread.release();
     qWarning() << "[StreamWorker] source" << m_config.sourceId << "worker did not stop within"
                << kJoinTimeoutMs << "ms (hung script?) -- abandoning it (R21)";
   }

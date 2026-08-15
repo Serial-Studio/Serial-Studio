@@ -209,6 +209,7 @@ public slots:
   void disconnectAllDevices();
   void shutdownDrivers();
   void connectDevice(int deviceId);
+  void connectDevice(HAL_Driver* driver);
   void disconnectDevice(int deviceId);
   void disconnectDevice(HAL_Driver* driver);
 

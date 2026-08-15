@@ -50,6 +50,7 @@
 DataModel::FrameParser::FrameParser()
   : m_hasLuaEngine(false)
   , m_suppressMessageBoxes(false)
+  , m_languagesDirty(true)
   , m_engineEpoch(0)
   , m_engine0Cache(nullptr)
   , m_statsMirrorRing(kStatsMirrorSlots)
@@ -118,20 +119,30 @@ DataModel::FrameParser& DataModel::FrameParser::instance()
  */
 void DataModel::FrameParser::setupExternalConnections()
 {
-  connect(&DataModel::ProjectModel::instance(),
+  auto& model = DataModel::ProjectModel::instance();
+
+  connect(&model,
           &DataModel::ProjectModel::frameParserCodeChanged,
           this,
           &DataModel::FrameParser::readCode);
 
-  connect(&DataModel::ProjectModel::instance(),
+  connect(&model,
           &DataModel::ProjectModel::sourceFrameParserTemplateChanged,
           this,
           &DataModel::FrameParser::reloadSourceCode);
 
-  connect(&DataModel::ProjectModel::instance(),
+  connect(&model,
           &DataModel::ProjectModel::sourceFrameParserParamsChanged,
           this,
           &DataModel::FrameParser::reloadSourceCode);
+
+  connect(&model, &DataModel::ProjectModel::sourceStructureChanged, this, [this] {
+    m_languagesDirty = true;
+  });
+
+  connect(&model, &DataModel::ProjectModel::sourceFrameParserLanguageChanged, this, [this] {
+    m_languagesDirty = true;
+  });
 
   readCode();
 }
@@ -373,23 +384,34 @@ const QStringList& DataModel::FrameParser::templateFiles() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the scripting language configured for the source. Snapshots on the GUI thread:
- *        the source list is GUI-owned and this may run on the pipeline thread (spec 0051 M3).
+ * @brief Rebuilds the per-source language mirror from the GUI-owned source list. One marshal per
+ *        structural/language change, never per frame: the multi-source parse fallback compares
+ *        languages on every frame, and a blocking GUI hop there parks the whole pipeline.
+ */
+void DataModel::FrameParser::refreshSourceLanguages() const
+{
+  m_sourceLanguages.clear();
+  IO::PipelineHost::runOnGuiThreadBlocking([this] {
+    static auto& projectModel = ProjectModel::instance();
+    for (const auto& src : projectModel.sources())
+      m_sourceLanguages[src.sourceId] = src.frameParserLanguage;
+  });
+
+  m_languagesDirty = false;
+}
+
+/**
+ * @brief Returns the scripting language configured for the source, from the mirror refreshed by
+ *        the same project signals that rebuild the engines. Unknown sources answer JavaScript,
+ *        matching the pre-mirror lookup's miss behaviour.
  */
 int DataModel::FrameParser::languageForSource(int sourceId) const
 {
-  int language = SerialStudio::JavaScript;
-  IO::PipelineHost::runOnGuiThreadBlocking([&] {
-    static auto& projectModel = ProjectModel::instance();
-    const auto& sources       = projectModel.sources();
-    for (const auto& src : sources)
-      if (src.sourceId == sourceId) {
-        language = src.frameParserLanguage;
-        return;
-      }
-  });
+  if (m_languagesDirty) [[unlikely]]
+    refreshSourceLanguages();
 
-  return language;
+  const auto it = m_sourceLanguages.find(sourceId);
+  return (it != m_sourceLanguages.end()) ? it->second : SerialStudio::JavaScript;
 }
 
 /**
@@ -740,6 +762,8 @@ void DataModel::FrameParser::readCode()
     IO::PipelineHost::runOnObjectThread(this, [this] { readCode(); });
     return;
   }
+
+  m_languagesDirty = true;
 
   for (auto it = m_engines.begin(); it != m_engines.end();)
     if (it->first != 0)

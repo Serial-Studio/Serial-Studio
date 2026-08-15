@@ -282,14 +282,20 @@ first. T8 above already absorbed R13.
 
 - [ ] Every acceptance criterion in `spec.md` met, or explicitly handed to the maintainer
       (AC1/AC5/AC6 visual + the rebuild-dependent ctest/pytest runs).
-- [ ] `python scripts/code-verify.py --check` clean on all changed files.
+- [x] `python scripts/code-verify.py --check` clean on all changed files. Re-verified
+      2026-08-14: full-repo `code-verify.py --check` is 0 errors/0 advisory across 3503 files.
 - [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [ ] AC4 proven by T2's baseline suite, not by inspection.
-- [ ] `pytest` targets listed for the maintainer (T10).
+- [x] `pytest` targets listed for the maintainer (T10):
+      `tests/integration/test_layout_patterns.py` (13 cases, collects clean; needs a
+      REBUILT app with the API server on to execute).
 - [ ] `python scripts/sanitize-commit.py` run; `registry-verify.py` clean.
 - [ ] AC9/AC10/AC11 proven by T14, not by inspection; AC11's glue half and AC12 handed to the
       maintainer as visual checks.
-- [ ] Old manual-rescale helpers are gone, not left dead beside the new path (T15).
+- [x] Old manual-rescale helpers are gone, not left dead beside the new path (T15).
+      Re-verified 2026-08-14: `weldManualSeams`, `scaledManualGeometry`, `anchoredGeometry`,
+      `manualMarginsForGeometry`, `clusterEdges`, `m_manualMargins`, `kSeamWeldTolerance` all
+      grep-absent from `WindowManager.h`/`.cpp`.
 - [ ] Diff is *what was asked, and only that* — manual mode's snapping and gesture behavior
       unchanged (AC8). Amended 2026-08-14: the seam weld is deliberately replaced by T13/T15;
       AC8 now means snapping, guides and the spacing setting behave as before, with gaps

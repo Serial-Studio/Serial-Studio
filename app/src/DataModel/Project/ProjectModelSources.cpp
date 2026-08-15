@@ -274,7 +274,8 @@ void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QStrin
 
 /**
  * @brief Snapshots the current driver settings for source @p sourceId into
- * Source::connectionSettings.
+ *        Source::connectionSettings. Password-typed properties are skipped: the project file is
+ *        shared and version-controlled, so secrets stay in the driver's own credential vault.
  */
 void DataModel::ProjectModel::captureSourceSettings(int sourceId)
 {
@@ -289,8 +290,12 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
     return;
 
   QJsonObject settings;
-  for (const auto& prop : driver->driverProperties())
+  for (const auto& prop : driver->driverProperties()) {
+    if (prop.type == IO::DriverProperty::Password)
+      continue;
+
     settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+  }
 
   const auto deviceId = driver->deviceIdentifier();
   if (!deviceId.isEmpty())

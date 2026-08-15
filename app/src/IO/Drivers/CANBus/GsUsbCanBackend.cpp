@@ -828,7 +828,10 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
 }
 
 /**
- * @brief Signals the read loop to exit and joins the worker thread.
+ * @brief Signals the read loop to exit and joins the worker thread, the same bounded quit+wait
+ *        USB and HID use. Never terminate(): the loop is inside libusb, which would be left
+ *        holding its internal locks, and the freed transfer state is what the next open reuses.
+ *        The kReadTimeoutMs bulk-read deadline is what makes the loop exit promptly.
  */
 void IO::Drivers::GsUsbCanBackend::stopReadThread()
 {
@@ -836,9 +839,6 @@ void IO::Drivers::GsUsbCanBackend::stopReadThread()
 
   if (m_readThread.isRunning()) {
     m_readThread.quit();
-    if (!m_readThread.wait(2000))
-      m_readThread.terminate();
-
     m_readThread.wait();
   }
 

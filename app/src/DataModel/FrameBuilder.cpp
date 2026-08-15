@@ -1470,10 +1470,8 @@ void DataModel::FrameBuilder::replayChannels(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(
-      this,
-      [this, sourceId, &channels, &timestamp] { replayChannels(sourceId, channels, timestamp); },
-      Qt::BlockingQueuedConnection);
+    invokeOnBuilderThreadBlocking(
+      [this, sourceId, &channels, &timestamp] { replayChannels(sourceId, channels, timestamp); });
     return;
   }
 
@@ -1659,12 +1657,9 @@ void DataModel::FrameBuilder::replayChannelSpans(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(
-      this,
-      [this, sourceId, cells, count, &timestamp] {
-        replayChannelSpans(sourceId, cells, count, timestamp);
-      },
-      Qt::BlockingQueuedConnection);
+    invokeOnBuilderThreadBlocking([this, sourceId, cells, count, &timestamp] {
+      replayChannelSpans(sourceId, cells, count, timestamp);
+    });
     return;
   }
 
@@ -1710,12 +1705,9 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(
-      this,
-      [this, sourceId, cells, count, &timestamp] {
-        replayChannelsTyped(sourceId, cells, count, timestamp);
-      },
-      Qt::BlockingQueuedConnection);
+    invokeOnBuilderThreadBlocking([this, sourceId, cells, count, &timestamp] {
+      replayChannelsTyped(sourceId, cells, count, timestamp);
+    });
     return;
   }
 
@@ -2991,8 +2983,7 @@ void DataModel::FrameBuilder::setReplayColumnMap(
   std::unordered_map<int, std::unordered_map<int, int>> map)
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(
-      this, [this, &map] { m_replayColumnMap = std::move(map); }, Qt::BlockingQueuedConnection);
+    invokeOnBuilderThreadBlocking([this, &map] { m_replayColumnMap = std::move(map); });
     return;
   }
 

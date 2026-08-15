@@ -62,6 +62,7 @@
     {      SerialStudio::DashboardWebView,       QStringLiteral("webview")},
     {          SerialStudio::DashboardLED,     QStringLiteral("led-panel")},
     {          SerialStudio::DashboardBar,           QStringLiteral("bar")},
+    {     SerialStudio::DashboardBarPanel,      QStringLiteral("barpanel")},
     {        SerialStudio::DashboardGauge,         QStringLiteral("gauge")},
     {      SerialStudio::DashboardCompass,       QStringLiteral("compass")},
     {        SerialStudio::DashboardMeter,         QStringLiteral("meter")},

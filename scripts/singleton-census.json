@@ -1,7 +1,7 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1686,
+  "total": 1684,
   "files": 209,
   "buckets": {
     "root": 157,
@@ -9,10 +9,10 @@
     "ctor-capture": 105,
     "deferred": 19,
     "static-cache": 1215,
-    "loose": 122
+    "loose": 120
   },
   "per_class": {
-    "DataModel::ProjectModel": 218,
+    "DataModel::ProjectModel": 216,
     "IO::ConnectionManager": 214,
     "AppState": 132,
     "CommandRegistry": 101,
@@ -1250,14 +1250,14 @@
       }
     },
     "app/src/DataModel/Scripting/FrameParser.cpp": {
-      "total": 13,
+      "total": 11,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 9,
-        "loose": 3
+        "loose": 1
       }
     },
     "app/src/DataModel/Scripting/FrameParserPipeline.cpp": {

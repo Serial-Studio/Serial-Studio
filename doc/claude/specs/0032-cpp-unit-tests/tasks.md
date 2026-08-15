@@ -489,7 +489,7 @@ updated: 2026-07-25
 ## Definition of Done
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
       **Coverage note, verified against the script:** `code-verify.py`'s `_is_first_party()`
       matches only consecutive `app/src` or `app/qml` path segments, so `app/tests/*.cpp`
       receives line-ending normalization but **not** the structural, comment-style,

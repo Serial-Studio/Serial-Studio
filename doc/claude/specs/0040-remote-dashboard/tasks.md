@@ -587,7 +587,17 @@ updated: 2026-07-25
 - **Verify:** `python -m py_compile`; markers registered in `pytest.ini`; **maintainer runs it**
   against two live instances (the agent cannot).
 - **Deps:** T23
-- [ ] done
+- [x] done — `tests/integration/test_remote_mirror.py`, 7 tests
+  (`test_attach_yields_a_verified_structure`, `test_live_values_flow_at_display_cadence`,
+  `test_detach_leaves_capture_running_and_reattach_recovers`,
+  `test_two_viewers_agree_and_are_independent`,
+  `test_stale_when_nothing_arrives_within_the_watchdog`, `test_wrong_token_is_refused`,
+  `test_plain_api_client_unaffected_while_a_viewer_is_attached` — the T6 regression check).
+  `python3 -m py_compile` clean; `mirror`/`integration`/`network` markers registered in
+  `tests/pytest.ini:50`. Every leg is environment-gated (`SS_MIRROR_HOST/PORT/TOKEN`) and skips
+  cleanly with no live instance, so this checkbox covers only "the file exists and is correct" —
+  actually running it against two live capture instances is the maintainer leg named in the
+  task and stays open under AC1-AC3.
 
 ### T25 — Help page (trust model)
 

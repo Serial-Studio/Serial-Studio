@@ -371,10 +371,9 @@ bool IO::PipelineHost::pipelineAbandoned() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Joins the processing thread with a bounded wait: FrameBuilder tears its script engines
- *        down on the thread first (queued ahead of quit), and a hung Fast-mode script trips the
- *        warn-and-abandon path instead of blocking quit forever (spec 0051 R21, 0046 precedent).
- *        Idempotent for the destructor's repeat call.
+ * @brief Joins the processing thread with a bounded wait: engines tear down on the thread first,
+ *        and a hung Fast-mode script trips warn-and-abandon instead of blocking quit (R21). The
+ *        abandon latch carries idempotency, and releases the thread: its OS thread still runs.
  */
 void IO::PipelineHost::shutdown()
 {
@@ -382,7 +381,7 @@ void IO::PipelineHost::shutdown()
 
   beginTeardown();
 
-  if (!m_thread || !m_thread->isRunning())
+  if (m_abandoned || !m_thread || !m_thread->isRunning())
     return;
 
   if (m_frameBuilder)
@@ -396,6 +395,7 @@ void IO::PipelineHost::shutdown()
   m_thread->quit();
   if (!m_thread->wait(kJoinTimeoutMs)) [[unlikely]] {
     m_abandoned = true;
+    (void)m_thread.release();
     qWarning() << "[PipelineHost] processing thread did not stop within" << kJoinTimeoutMs
                << "ms (hung script?) -- abandoning it (R21)";
   }

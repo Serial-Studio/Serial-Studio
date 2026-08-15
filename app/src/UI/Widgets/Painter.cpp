@@ -367,7 +367,9 @@ void Widgets::Painter::setPreviewGroupTitle(const QString& title)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Pulls the latest group snapshot, optionally calls onFrame(), repaints cache.
+ * @brief Pulls the latest group snapshot, optionally calls onFrame(), repaints cache. onFrame() is
+ *        user code with the device-write API behind it, so it runs whether or not the widget is
+ *        showing; visibility gates only the repaint.
  */
 void Widgets::Painter::updateData()
 {
@@ -375,9 +377,6 @@ void Widgets::Painter::updateData()
     return;
 
   if (m_index < 0)
-    return;
-
-  if (!isVisible())
     return;
 
   const auto count = m_dashboard.widgetCount(SerialStudio::DashboardPainter);
@@ -408,7 +407,8 @@ void Widgets::Painter::updateData()
     }
   }
 
-  renderFrame();
+  if (isVisible())
+    renderFrame();
 }
 
 /**

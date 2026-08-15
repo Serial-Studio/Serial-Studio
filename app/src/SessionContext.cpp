@@ -178,10 +178,9 @@ void SessionContext::adoptNotifications(std::unique_ptr<DataModel::NotificationC
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Releases every adopted subsystem in exact reverse pinned order, while qApp is alive
- *        and after the QML engine died (INV-6), removing both preconditions of the
- *        __cxa_finalize crash class. An abandoned processing thread is the one exception: the
- *        parser and builder slots leak rather than being freed under a live user.
+ * @brief Releases every adopted subsystem in exact reverse pinned order, while qApp is alive and
+ *        after the QML engine died (INV-6). An abandoned processing thread is the one exception:
+ *        parser, builder and host leak instead, since the thread's wirings still capture them.
  */
 void SessionContext::shutdown()
 {
@@ -191,6 +190,7 @@ void SessionContext::shutdown()
   if (pipelineAbandoned) {
     (void)m_frameParser.release();
     (void)m_frameBuilder.release();
+    (void)m_pipelineHost.release();
   }
 
   m_frameParser.reset();

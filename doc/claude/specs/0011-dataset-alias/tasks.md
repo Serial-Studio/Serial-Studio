@@ -245,7 +245,8 @@ updated: 2026-07-15
 - **Verify:** `pytest tests/scripts/test_ai_assistant_static.py -v` (index freshness
   check); grep the corpus for a stale `datasetGetRaw(uniqueId)`-only claim.
 - **Deps:** T14
-- [ ] done
+- [x] done (verified at HEAD 2026-08-14: all 12 files mention `alias`; committed in
+  5d215834d; `pytest tests/scripts/test_ai_assistant_static.py -v` 9/9 passed)
 
 ### T16 — JS unit coverage (runnable here)
 

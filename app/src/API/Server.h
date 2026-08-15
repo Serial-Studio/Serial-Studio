@@ -75,6 +75,7 @@ public slots:
   void addSocket(QTcpSocket* socket, const QString& sessionId);
   void disconnectSocket(QTcpSocket* socket, const QString& sessionId);
   void writeToSocket(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
+  void writeMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void writeStreamBlock(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
 
@@ -94,8 +95,10 @@ private:
   // Sockets whose client opted out of the per-frame broadcast; empty for every ordinary client
   QSet<QTcpSocket*> m_mutedSockets;
 
+  // Sockets already reported as over-cap; per socket so a later client's stall is not swallowed
+  QSet<QTcpSocket*> m_warnedSockets;
+
   quint64 m_droppedBroadcasts;
-  bool m_warnedBackpressure;
 };
 
 /**

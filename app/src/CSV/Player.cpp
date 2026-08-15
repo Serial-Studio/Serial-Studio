@@ -339,7 +339,7 @@ CSV::Player& CSV::Player::instance()
  */
 bool CSV::Player::isOpen() const
 {
-  return m_csvFile.isOpen();
+  return m_csvFile && m_csvFile->isOpen();
 }
 
 /**
@@ -407,7 +407,7 @@ int CSV::Player::framePosition() const
 QString CSV::Player::filename() const
 {
   if (isOpen()) {
-    auto fileInfo = QFileInfo(m_csvFile.fileName());
+    auto fileInfo = QFileInfo(m_csvFile->fileName());
     return fileInfo.fileName();
   }
 
@@ -534,13 +534,13 @@ void CSV::Player::closeFile()
   const bool joined = stopIndexing();
 
   if (m_mapped) {
-    if (joined)
-      m_csvFile.unmap(reinterpret_cast<uchar*>(const_cast<char*>(m_mapped)));
+    if (joined && m_csvFile)
+      m_csvFile->unmap(reinterpret_cast<uchar*>(const_cast<char*>(m_mapped)));
 
     m_mapped = nullptr;
   }
 
-  m_csvFile.close();
+  m_csvFile.reset();
   m_mappedSize = 0;
   m_dataOffset = 0;
   m_rowOffsets.clear();
@@ -637,15 +637,15 @@ void CSV::Player::openFile(const QString& filePath)
       return;
   }
 
-  m_csvFile.setFileName(filePath);
-  if (!m_csvFile.open(QIODevice::ReadOnly)) {
+  m_csvFile = std::make_unique<QFile>(filePath);
+  if (!m_csvFile->open(QIODevice::ReadOnly)) {
     Misc::Utilities::showMessageBox(
       tr("Cannot read CSV file"), tr("Check file permissions and location"), QMessageBox::Critical);
     closeFile();
     return;
   }
 
-  m_mappedSize = m_csvFile.size();
+  m_mappedSize = m_csvFile->size();
   if (m_mappedSize <= 0) {
     Misc::Utilities::showMessageBox(tr("Insufficient Data in CSV File"),
                                     tr("The CSV file must contain at least one data row to "
@@ -655,7 +655,7 @@ void CSV::Player::openFile(const QString& filePath)
     return;
   }
 
-  m_mapped = reinterpret_cast<const char*>(m_csvFile.map(0, m_mappedSize));
+  m_mapped = reinterpret_cast<const char*>(m_csvFile->map(0, m_mappedSize));
   if (!m_mapped) {
     Misc::Utilities::showMessageBox(
       tr("Cannot read CSV file"), tr("Check file permissions and location"), QMessageBox::Critical);
@@ -840,6 +840,15 @@ bool CSV::Player::stopIndexing()
     m_loaderThread->setParent(nullptr);
     connect(m_loaderThread, &QThread::finished, m_loader, &QObject::deleteLater);
     connect(m_loaderThread, &QThread::finished, m_loaderThread, &QObject::deleteLater);
+
+    // code-verify off
+    // The detached worker is still reading the mapping, and the QFile owns it: closing or
+    // destroying the file here unmaps memory under a live reader. Hand ownership to the thread.
+    // code-verify on
+    if (m_csvFile) {
+      auto* file = m_csvFile.release();
+      connect(m_loaderThread, &QThread::finished, file, &QObject::deleteLater);
+    }
   }
 
   m_loader       = nullptr;

@@ -175,27 +175,6 @@ SPDX-FileCopyrightText = "2014-2025 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = ["lib/QuaZip/**"]
-SPDX-FileCopyrightText = "2005-2020 Sergey A. Tachenov and contributors"
-SPDX-License-Identifier = "LGPL-2.1-or-later"
-
-# The bundled MiniZip sources predate QuaZip and stay under Gilles Vollant's zlib terms; this
-# entry follows lib/QuaZip/** so that the more specific declaration wins.
-[[annotations]]
-path = [
-  "lib/QuaZip/quazip/unzip.c",
-  "lib/QuaZip/quazip/unzip.h",
-  "lib/QuaZip/quazip/zip.c",
-  "lib/QuaZip/quazip/zip.h",
-  "lib/QuaZip/quazip/ioapi.h",
-  "lib/QuaZip/quazip/qioapi.cpp",
-  "lib/QuaZip/quazip/minizip_crypt.h",
-]
-precedence = "override"
-SPDX-FileCopyrightText = ["1998-2010 Gilles Vollant", "2005-2020 Sergey A. Tachenov"]
-SPDX-License-Identifier = "Zlib"
-
-[[annotations]]
 path = ["lib/CMakeLists.txt", "lib/OpenSSL/**"]
 SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"

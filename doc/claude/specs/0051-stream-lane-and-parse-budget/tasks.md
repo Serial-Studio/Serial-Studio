@@ -734,8 +734,10 @@ no queuing collapse, so the marshal protocol is not a throughput factor.
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC6/AC19
       marked provisional pending physical floor box, per spec).
-- [ ] `python scripts/code-verify.py --check` clean on all changed files (singleton-census
-      re-baseline named and justified).
+- [x] `python scripts/code-verify.py --check` clean on all changed files (singleton-census
+      re-baseline named and justified). Re-verified 2026-08-14: full-repo `code-verify.py
+      --check` is 0 errors/0 advisory across 3503 files, and `--singleton-census --check`
+      reports 1686/1686 (baseline matches HEAD exactly).
 - [ ] `qt-cpp-review` run at every ◆ milestone; findings addressed or noted.
 - [ ] `--benchmark-hotpath` full gated suite green at M1/M2/M3/M4 boundaries; new
       baseline archived after M2.

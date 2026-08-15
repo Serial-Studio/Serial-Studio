@@ -24,9 +24,11 @@
 #include <algorithm>
 #include <iterator>
 #include <limits>
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QSysInfo>
 
 #include "API/Mirror/MirrorClient.h"
 #include "AppState.h"
@@ -57,6 +59,27 @@ constexpr quint64 kMirrorGenerationBase = 1ULL << 48;
  *        constructor and must not construct a module that is built after the pinned order.
  */
 static bool s_mirroring = false;
+
+/**
+ * @brief Machine-bound obfuscation key for remembered endpoint tokens. Local-only protection: it
+ *        keeps a credential out of a settings file that gets copied, synced or shared, and makes
+ *        a lifted blob useless on another machine. It is not a defence against local code.
+ */
+static quint64 endpointTokenKey()
+{
+  auto seed = QSysInfo::machineUniqueId();
+  if (seed.isEmpty())
+    seed = QSysInfo::machineHostName().toUtf8();
+
+  const auto digest = QCryptographicHash::hash(seed, QCryptographicHash::Sha256);
+  SS_ASSERT(digest.size() >= 8, return 0x5361766564546F6BULL);
+
+  quint64 key = 0;
+  for (int i = 0; i < 8; ++i)
+    key = (key << 8) | static_cast<quint8>(digest.at(i));
+
+  return key;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Static functions
@@ -120,6 +143,9 @@ API::MirrorSession::MirrorSession(SessionContext& ctx)
   , m_anchored(false)
   , m_epoch(0)
 {
+  m_simpleCrypt.setKey(endpointTokenKey());
+  m_simpleCrypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
+
   connect(m_client, &MirrorClient::failed, this, &MirrorSession::onFailed);
   connect(m_client, &MirrorClient::snapshotReceived, this, &MirrorSession::onSnapshot);
   connect(m_client, &MirrorClient::structureReceived, this, &MirrorSession::onStructure);
@@ -255,13 +281,22 @@ QStringList API::MirrorSession::recentEndpoints() const
 }
 
 /**
- * @brief Remembered token for @p endpoint, empty when none was stored. Stored plaintext in the
- *        application settings, the same protection the publisher gives its own token.
+ * @brief Remembered token for @p endpoint, empty when none was stored or when the stored blob
+ *        fails its integrity check (a settings file copied from another machine decrypts to
+ *        nothing rather than to garbage the viewer would then send as a credential).
  */
 QString API::MirrorSession::tokenFor(const QString& endpoint) const
 {
-  const auto map = m_settings.value(QStringLiteral("Mirror/EndpointTokens")).toMap();
-  return map.value(endpoint).toString();
+  const auto map    = m_settings.value(QStringLiteral("Mirror/EndpointTokens")).toMap();
+  const auto cipher = map.value(endpoint).toString();
+  if (cipher.isEmpty())
+    return {};
+
+  const auto plain = m_simpleCrypt.decryptToString(cipher);
+  if (m_simpleCrypt.lastError() != Licensing::SimpleCrypt::ErrorNoError)
+    return {};
+
+  return plain;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -406,8 +441,9 @@ void API::MirrorSession::restoreLocalState()
 
 /**
  * @brief Moves @p endpoint to the front of the remembered list and stores its token alongside it,
- *        so reattaching to a known publisher needs no retyping. An empty token drops the stored
- *        one, keeping a credential the user cleared from lingering on disk.
+ *        encrypted under a machine-specific key, so reattaching to a known publisher needs no
+ *        retyping. An empty token drops the stored one, keeping a credential the user cleared
+ *        from lingering on disk.
  */
 void API::MirrorSession::rememberEndpoint(const QString& endpoint, const QString& token)
 {
@@ -423,7 +459,7 @@ void API::MirrorSession::rememberEndpoint(const QString& endpoint, const QString
   if (token.isEmpty())
     tokens.remove(endpoint);
   else
-    tokens.insert(endpoint, token);
+    tokens.insert(endpoint, m_simpleCrypt.encryptToString(token));
 
   for (auto it = tokens.begin(); it != tokens.end();)
     it = list.contains(it.key()) ? std::next(it) : tokens.erase(it);

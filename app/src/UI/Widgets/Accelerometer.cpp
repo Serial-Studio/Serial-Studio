@@ -166,11 +166,13 @@ void Widgets::Accelerometer::resetPeakG()
 }
 
 /**
- * @brief Updates the accelerometer data from the Dashboard.
+ * @brief Updates the accelerometer data from the Dashboard. The filter and the peak-G hold run
+ *        even while hidden -- a peak is a running maximum, and skipping ticks would silently lose
+ *        the spikes the widget exists to catch; visibility only gates the repaint signal.
  */
 void Widgets::Accelerometer::updateData()
 {
-  if (!isEnabled() || !isVisible())
+  if (!isEnabled())
     return;
 
   if (!VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
@@ -258,7 +260,7 @@ void Widgets::Accelerometer::updateData()
                     || DSP::notEqual(m_pitch, prevPitch) || DSP::notEqual(m_roll, prevRoll)
                     || DSP::notEqual(m_peakG, prevPeak);
 
-  if (changed)
+  if (changed && isVisible())
     Q_EMIT updated();
 }
 

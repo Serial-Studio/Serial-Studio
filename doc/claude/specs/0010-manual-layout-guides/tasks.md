@@ -111,7 +111,7 @@ updated: 2026-07-15
   WidgetDelegate.qml`; read-back that no other consumer of `minimumWidth` in the file
   assumes 356.
 - **Deps:** T5 (C++ floors must accept 48 first, or a mid-sequence run inflates windows)
-- [ ] done
+- [x] done
 
 ### T7 — MiniWindow: progressive caption collapse
 

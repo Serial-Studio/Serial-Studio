@@ -1593,13 +1593,22 @@ def test_control_script_connection_lifecycle():
     setup_err = re.search(r"setup\(\) line %1: %2[\s\S]*?\n  \}", worker)
     assert setup_err is not None and "stop();" in setup_err.group(0)
 
-    # FrameBuilder clears the latest-frame store on BOTH connection edges.
+    # FrameBuilder clears the latest-frame store on BOTH connection edges. The clear moved
+    # behind clearLatestFrames(), which also advances the sequence so the GUI mirror
+    # republishes the empty map -- assert the helper, and that the helper still clears.
     fb = _read("app/src/DataModel/FrameBuilder.cpp")
     connected = re.search(
         r"void DataModel::FrameBuilder::onConnectedChanged\(\)[\s\S]*?\n\}", fb
     )
     assert connected is not None
-    assert connected.group(0).count("m_latestFrames.clear();") >= 2
+    assert connected.group(0).count("clearLatestFrames();") >= 2
+
+    clear_fn = re.search(
+        r"void DataModel::FrameBuilder::clearLatestFrames\(\)[\s\S]*?\n\}", fb
+    )
+    assert clear_fn is not None
+    assert "m_latestFrames.clear();" in clear_fn.group(0)
+    assert "++m_latestFrameSeq;" in clear_fn.group(0)
 
 
 def test_control_script_agent_surface():

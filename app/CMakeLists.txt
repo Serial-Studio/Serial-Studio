@@ -283,6 +283,7 @@ set(SOURCES
   src/API/Mirror/MirrorPublisher.cpp
   src/API/Mirror/MirrorClient.cpp
   src/API/Mirror/MirrorSession.cpp
+  src/Licensing/SimpleCrypt.cpp
   src/API/Handlers/ProjectHandler.cpp
   src/API/Handlers/ProjectHandlerFile.cpp
   src/API/Handlers/ProjectHandlerEntities.cpp
@@ -479,6 +480,7 @@ set(HEADERS
   src/API/Mirror/MirrorPublisher.h
   src/API/Mirror/MirrorClient.h
   src/API/Mirror/MirrorSession.h
+  src/Licensing/SimpleCrypt.h
   src/API/Handlers/ProjectHandler.h
   src/API/Handlers/ConsoleHandler.h
   src/API/Handlers/ControlScriptHandler.h
@@ -786,7 +788,6 @@ if(BUILD_COMMERCIAL)
     src/DataModel/Importers/ModbusMapImporter.h
     src/Licensing/Trial.h
     src/Licensing/MachineID.h
-    src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
     src/Licensing/CommercialToken.h
     src/Licensing/MonotonicClock.h
@@ -899,7 +900,6 @@ if(BUILD_COMMERCIAL)
     src/Sessions/VerifierRegression.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
-    src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
     src/Licensing/MonotonicClock.cpp
     src/Licensing/OfflineCertificate.cpp
@@ -1212,7 +1212,6 @@ qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.q
 #     - QCodeEditor: Syntax highlighting for DataModel/JavaScript editor
 #     - QSimpleUpdater: Auto-update framework (checks for new versions)
 #     - mdf: MDF4/MF4 file format parser (Pro: replay CAN/LIN data)
-#     - QuaZip: ZIP archive support (Pro only)
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -1259,7 +1258,6 @@ endif()
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
-  target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC QuaZip::QuaZip)
 endif()
 
 if(SS_INAPP_TESTS)

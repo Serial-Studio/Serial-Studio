@@ -63,6 +63,7 @@ public:
   static void instantiateCoreModules();
   static void setupHeadlessSessionConnections();
   static void teardownHeadlessSessionModules();
+  static void stopFrameConsumerWorkers();
   [[nodiscard]] bool performanceMode() const noexcept;
   [[nodiscard]] bool inhibitIdleSleep() const noexcept;
   [[nodiscard]] bool autoUpdaterEnabled() const noexcept;
@@ -81,7 +82,6 @@ public slots:
   void setEphemeralSession(const bool ephemeral);
 
 private:
-  static void stopFrameConsumerWorkers();
   void setupCrossModuleConnections();
   void registerCoreContextProperties(QQmlContext* ctx);
   void registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable);

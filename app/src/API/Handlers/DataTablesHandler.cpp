@@ -823,7 +823,7 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueSet(const QString& i
   DataModel::readTableView(tableCtx, [&](const auto& store) {
     initialized = store.isInitialized();
     if (initialized)
-      written = (store.get(table, name) != nullptr);
+      written = store.isWritable(table, name);
   });
 
   if (written)
@@ -933,8 +933,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueGetH(const QString& 
 }
 
 /**
- * @brief Writes a register's live value by handle; written=false for a stale or invalid handle.
- *        A GUI-thread caller queues the write, so a constant register still reports written=true.
+ * @brief Writes a register's live value by handle; written=false for a stale, invalid or
+ *        constant-register handle. The write itself is queued off the GUI thread, so the verdict
+ *        comes from the same computed-register guard setByHandle() applies, not from the write.
  */
 API::CommandResponse API::Handlers::DataTablesHandler::valueSetH(const QString& id,
                                                                  const QJsonObject& params)
@@ -965,7 +966,7 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueSetH(const QString& 
   DataModel::readTableView(tableCtx, [&](const auto& store) {
     initialized = store.isInitialized();
     if (initialized)
-      written = (store.getByHandle(handle) != nullptr);
+      written = store.isWritableHandle(handle);
   });
 
   if (written)

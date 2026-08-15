@@ -1178,6 +1178,25 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
 }
 
 /**
+ * @brief Reopens only the device @p driver backs. The counterpart of disconnectDevice(driver), and
+ *        what a driver's own recovery must use: the argument-less connectDevice() is the user's
+ *        whole-session fan-out, which would redial every other device and re-run the control
+ *        script's onConnect on a single link's reappearance.
+ */
+void IO::ConnectionManager::connectDevice(HAL_Driver* driver)
+{
+  if (!driver)
+    return;
+
+  for (const auto& [id, dm] : m_devices) {
+    if (dm && dm->driver() == driver) {
+      connectDevice(id);
+      return;
+    }
+  }
+}
+
+/**
  * @brief Disconnects the source owned by @p driver, keeping other sources alive. Never emits
  *        sessionClosed: a driver drop is a link event, not the end of the user's session, and
  *        reaping the script-launched helpers here kills the very servers a retry needs.

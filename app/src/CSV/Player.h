@@ -22,6 +22,7 @@
 #pragma once
 
 #include <chrono>
+#include <memory>
 #include <QElapsedTimer>
 #include <QFile>
 #include <QHash>
@@ -157,7 +158,10 @@ private:
   bool m_multiSource;
   bool m_indexing;
   bool m_pausedAtFrontier;
-  QFile m_csvFile;
+
+  // Heap-held so a detached indexer's mapping outlives the player's own close (see closeFile)
+  std::unique_ptr<QFile> m_csvFile;
+
   QString m_timestamp;
 
   const char* m_mapped;

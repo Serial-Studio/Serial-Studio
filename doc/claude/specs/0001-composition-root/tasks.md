@@ -115,7 +115,7 @@ updated: 2026-07-06
   Dashboard ctor connects; ConnectionManager `m_uiDriverSaveTimer` lambda). AppState may
   ctor-capture ProjectModel post-S3; **never ctor-capture AppState** from ProjectModel.
   **One class per morning build, in order:**
-  - [ ] AppState
+  - [x] AppState
   - [ ] ConnectionManager
   - [ ] FrameBuilder
   - [ ] ProjectModel

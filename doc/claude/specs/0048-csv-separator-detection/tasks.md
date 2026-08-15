@@ -142,7 +142,7 @@ updated: 2026-08-09
 - **Deps:** T3, T4
 - **Status 2026-08-10:** found live on the real Mazda file — ms column read as seconds,
   play paced one row per 16+ s.
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
