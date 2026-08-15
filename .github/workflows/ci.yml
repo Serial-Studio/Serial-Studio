@@ -678,22 +678,12 @@ jobs:
       with:
         useLocalCache: true
 
-    #
-    # Unit tests live inside the build job so the Qt cache has one consumer per arch;
-    # a parallel unit job racing this restore could get denied or evict the entry
-    #
     - name: '🚧 Configure unit-test tier'
       run: cmake --preset unit-ci
 
-    #
-    # Lean Debug tier from the unit-ci preset; the application target never builds here
-    #
     - name: '🚧 Build unit-test tier'
       run: cmake --build --preset unit-ci --target ss_unit_tests
 
-    #
-    # Runs on both arches: DSPSimd.h picks its SIMD lane from the target architecture
-    #
     - name: '🧪 Run ctest'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1870,9 +1860,6 @@ jobs:
         path: .code-report
         if-no-files-found: ignore
 
-    # Spec 0037: every drift gate the repo owns has a caller. The snapshot
-    # projection is --strict here (locally it warns, because only a build can
-    # refresh api-schema.json); its failure message names the ordered fix.
     - name: '🧬 Verify generated API surfaces'
       run: |
         python3 scripts/registry-verify.py
@@ -2042,23 +2029,15 @@ jobs:
       env:
         QT_QPA_PLATFORM: offscreen
         SERIAL_STUDIO_API_AUTO_CONSENT: '1'
-        # No-op on the released (Release) binaries, where soft asserts are always
-        # nonfatal; keeps a locally-substituted Debug binary from aborting mid-suite.
         SS_ASSERT_NONFATAL: '1'
       run: |
-        # The API path policy defaults to home + temp; the repo corpus that the
-        # round-trip baseline tests open lives in the workspace (outside home on
-        # the Windows runners), so allow all three explicitly. pytest's tmp_path
-        # follows TMPDIR, which on the macOS runners is a private /var/folders
-        # tree under neither home nor /tmp -- without it every tmp_path project
-        # file is rejected as "filePath is not allowed".
         if [ "${{ matrix.os }}" = "windows" ]; then
           export SERIAL_STUDIO_API_ALLOWED_PATHS="$(cygpath -w "$GITHUB_WORKSPACE");$USERPROFILE;$(cygpath -w "$RUNNER_TEMP")"
         else
           ulimit -c unlimited
           export SERIAL_STUDIO_API_ALLOWED_PATHS="$GITHUB_WORKSPACE:$HOME:/tmp:$RUNNER_TEMP:${TMPDIR:-/tmp}"
         fi
-        # Capture app output so the assert-scan step can surface SS_ASSERT hits.
+
         "$SS_RUN" --headless --api-server > ss_output.log 2>&1 &
         echo $! > ss_pid.txt
         for i in $(seq 1 30); do
@@ -2074,10 +2053,6 @@ jobs:
         PYTHONIOENCODING: utf-8
         PYTHONUTF8: '1'
       run: |
-        # timeout-method=signal (POSIX) fails only the hung test and keeps the suite and
-        # its junit XML alive; the ini default (thread) kills the whole pytest process.
-        # Windows has no SIGALRM, so it stays on thread. The step timeout-minutes bounds
-        # a fully wedged app now that a hang no longer fast-fails the run.
         pytest tests/ \
           --deselect tests/integration/test_licensing.py::test_rapid_status_queries_no_crash \
           -m "${{ matrix.marker_expr }}" \
@@ -2088,8 +2063,6 @@ jobs:
       if: always() && matrix.os == 'windows' && steps.run_tests.outcome == 'failure'
       continue-on-error: true
       run: |
-        # A wedged app leaves no WER dump (nothing crashed), so take one ourselves:
-        # comsvcs.dll's MiniDump entry point ships with Windows, no extra tooling.
         mkdir -p crash-reports
         PID="$(cat ss_pid.txt 2>/dev/null)"
         if [ -z "$PID" ]; then
@@ -2137,9 +2110,6 @@ jobs:
       if: always()
       continue-on-error: true
       run: |
-        # A mid-suite death turns every later test into a connection error, which reads
-        # like hundreds of unrelated failures; say so explicitly and show the app's last
-        # words, since a clean exit leaves no crash dump behind.
         PID="$(cat ss_pid.txt 2>/dev/null)"
         if [ -n "$PID" ] && kill -0 "$PID" 2>/dev/null; then
           echo "Serial Studio (pid $PID) still running after the suite."
@@ -2170,11 +2140,6 @@ jobs:
       if: always()
       run: '[ -f ss_pid.txt ] && kill $(cat ss_pid.txt) || true'
 
-    #
-    # SS_ASSERT reports once per source site through the serialstudio.assert
-    # category; surface every site the suite tripped as a workflow annotation
-    # (non-blocking) so regressions are visible without digging into artifacts
-    #
     - name: '🔎 Scan app output for soft asserts'
       if: always()
       continue-on-error: true

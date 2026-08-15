@@ -115,30 +115,17 @@ ss_add_unit_test(tst_checksums
   LIBS    Qt6::Core
 )
 
-#
-# Header-only band lookup shared by Bar/Gauge/Meter/BarPanel (spec 0052); no production TU to link.
-#
 ss_add_unit_test(tst_bar_bands
   SOURCES tst_bar_bands.cpp
   LIBS    Qt6::Core
 )
 
-#
-# Pure layout tiler (spec 0053). LayoutPatterns.cpp deliberately depends on nothing but QtCore
-# and QtGui (QRect), which is what keeps this suite a seconds-long link and lets the whole
-# pattern catalog be verified without a GUI.
-#
 ss_add_unit_test(tst_layout_patterns
   SOURCES tst_layout_patterns.cpp
           ${SS_APP_SRC}/UI/LayoutPatterns.cpp
   LIBS    Qt6::Core Qt6::Gui
 )
 
-#
-# Source-to-source Lua rewriter behind the parser autofix. It is a lexer plus a precedence walker
-# over QString and nothing else -- no Lua state, no engine, no project model -- so the suite links
-# against QtCore alone and the whole operator matrix is checkable without a running app.
-#
 ss_add_unit_test(tst_lua_migration
   SOURCES tst_lua_migration.cpp
           ${SS_APP_SRC}/DataModel/Scripting/LuaMigration.cpp
@@ -146,18 +133,6 @@ ss_add_unit_test(tst_lua_migration
   LIBS    Qt6::Core
 )
 
-#
-# SerialStudioFrameSupport.cpp holds the four SerialStudio statics Frame.cpp reaches (commercialCfg,
-# resolveEscapeSequences, hexToBytes, encodeText). They live apart from SerialStudio.cpp so this
-# suite links without the icon registry, theme manager and player singletons. Core5Compat comes with
-# them: the East-Asian encodings go through QTextCodec.
-#
-# serialize(Dataset) / read(Dataset&, ...) are generated (spec 0036), so DatasetSerialization.cpp is
-# mandatory here. It calls two PropertyHooks validators, and PropertyHooks.cpp reaches
-# ProjectModel::groups() / datasetCount(), which would drag the whole application in; the
-# ProjectModel-free validators therefore live in PropertyValidators.cpp and that is the TU this
-# suite links. Adding PropertyHooks.cpp instead is the move that breaks the seconds-long link.
-#
 ss_add_unit_test(tst_frame_serialization
   SOURCES tst_frame_serialization.cpp
           ${SS_APP_SRC}/DataModel/Frame.cpp
@@ -170,13 +145,6 @@ ss_add_unit_test(tst_frame_serialization
           Qt6::Gui
 )
 
-#
-# dsp_scalar_ref.cpp is the *scalar* build of the same header the test TU sees vectorized. The two
-# builds must not share symbols: DSP:: kernels are inline with external linkage, so without a
-# distinct namespace the linker folds them and the "scalar" wrapper silently calls the vector code,
-# producing a green test that checks nothing. SS_DSP_NAMESPACE is what keeps them distinct, and it
-# applies to this one source file only.
-#
 set_source_files_properties(
   ${CMAKE_CURRENT_SOURCE_DIR}/dsp_scalar_ref.cpp
   PROPERTIES COMPILE_DEFINITIONS "SS_SIMD_DISABLE;SS_DSP_NAMESPACE=DspSimdScalar"
@@ -197,18 +165,6 @@ ss_add_unit_test(tst_async_engine
   LIBS    Qt6::Core
 )
 
-#
-# The carve-out is these four TUs and no more. AppPlatform.cpp is mandatory (FrameReader's ctor/dtor
-# call lockMemoryResident/unlockMemoryResident) and now carries only OS-level helpers:
-# FileOpenEventFilter, the one class there that reached AppState and the project model, lives in its
-# own TU that this suite deliberately does not link.
-#
-# session_context_stub.cpp carries the link-only stand-ins that keep the carve-out honest: the
-# SessionContext::current() reference inside NotificationCenter::instance() (linking the real
-# SessionContext.cpp would drag the dtor closure described below) and SerialStudio::staticMetaObject
-# for the Q_ENUM inlines in FrameReader's moc (compiling moc_SerialStudio.cpp instead would pull
-# the whole invokable surface and with it SerialStudio.cpp).
-#
 ss_add_unit_test(tst_frame_delimiters
   SOURCES tst_frame_delimiters.cpp
           session_context_stub.cpp
@@ -252,10 +208,6 @@ ss_add_unit_test(tst_parse_budget
   LIBS    Qt6::Core
 )
 
-#
-# The layout-pattern labels forward to UI::Layouts::patternId(), so the enum-label suite needs that
-# TU in its link set; LayoutPatterns.cpp is header-only in its dependencies (QtCore/QtGui types).
-#
 ss_add_unit_test(tst_enum_labels
   SOURCES tst_enum_labels.cpp
           ${SS_APP_SRC}/API/EnumLabels.cpp
@@ -265,10 +217,6 @@ ss_add_unit_test(tst_enum_labels
           Qt6::Gui
 )
 
-#
-# PasswordHash.cpp includes QPasswordDigestor, which lives in QtNetwork (not QtCore) despite the
-# rest of the file being Core-only; without Qt6::Network here the TU fails to find the header.
-#
 ss_add_unit_test(tst_password_hash
   SOURCES tst_password_hash.cpp
           ${SS_APP_SRC}/Misc/PasswordHash.cpp
@@ -308,11 +256,6 @@ ss_add_unit_test(tst_async_combinators
   LIBS    Qt6::Core
 )
 
-#
-# Protocol.h is a header-only Q_OBJECT (the abstract sender base): with no Protocol.cpp to pair it
-# with, AUTOMOC only emits its meta-object if the header itself is a target source. Dropping it
-# surfaces as an undefined vtable for IO::Protocols::Protocol, not as a missing-file error.
-#
 ss_add_unit_test(tst_xymodem
   SOURCES tst_xymodem.cpp
           ${SS_APP_SRC}/IO/FileTransmission/Protocol.h
@@ -322,11 +265,6 @@ ss_add_unit_test(tst_xymodem
   LIBS    Qt6::Core
 )
 
-#
-# Protocol.h is listed as a source on purpose: IO::Protocols::Protocol is an abstract QObject with
-# no .cpp of its own, so nothing in this link set would make AUTOMOC emit its meta-object and the
-# base-class signals ZMODEM emits would stay undefined at link time.
-#
 ss_add_unit_test(tst_zmodem
   SOURCES tst_zmodem.cpp
           ${SS_APP_SRC}/IO/FileTransmission/ZMODEM.cpp
@@ -335,10 +273,6 @@ ss_add_unit_test(tst_zmodem
   LIBS    Qt6::Core
 )
 
-#
-# TlsIdentity.{h,cpp} are commercial-only TUs guarded by BUILD_COMMERCIAL; the suite defines the
-# macro itself so the tier stays independent of the application target's configuration.
-#
 ss_add_unit_test(tst_tls_identity
   SOURCES tst_tls_identity.cpp
           ${SS_APP_SRC}/MQTT/TlsIdentity.cpp
@@ -349,11 +283,6 @@ if(TARGET tst_tls_identity)
   target_compile_definitions(tst_tls_identity PRIVATE BUILD_COMMERCIAL)
 endif()
 
-#
-# Header-only suite (MirrorProtocol.h precedent): GsUsbProtocol.h carries the gs_usb wire
-# vocabulary the CANable backend compiles against, so the solver and DLC tables test without
-# linking libusb or QtSerialBus.
-#
 ss_add_unit_test(tst_gsusb_protocol
   SOURCES tst_gsusb_protocol.cpp
   LIBS    Qt6::Core
@@ -376,14 +305,6 @@ ss_add_unit_test(tst_js_watchdog
           Qt6::Qml
 )
 
-#
-# HAL_Driver.h is header-only, so AUTOMOC's same-basename rule never reaches it and the driver's
-# meta-object (openFinished, linkDropped, the vtable) goes undefined at link. Listing the header as
-# a source is what gets moc_HAL_Driver.cpp generated for this suite. Qt6::Gui covers the QColor
-# include that StreamWorker.cpp pulls in through FrameBuilder.h -> ... -> SerialStudio.h; the two
-# FrameBuilder table-API injectors it references are stubbed inside tst_stream_worker.cpp so the
-# suite links without the FrameBuilder dependency web.
-#
 ss_add_unit_test(tst_stream_worker
   SOURCES tst_stream_worker.cpp
           ${SS_APP_SRC}/IO/HAL_Driver.h
@@ -433,10 +354,6 @@ ss_add_unit_test(tst_frame_json_legacy
           Qt6::Gui
 )
 
-#
-# CFrameParser reports a load failure through Misc::Utilities::showMessageBox(), so Utilities.cpp is
-# a link-time dependency even though every test in the suite loads with message boxes disabled.
-#
 ss_add_unit_test(tst_cframe_parser
   SOURCES tst_cframe_parser.cpp
           ${SS_APP_SRC}/DataModel/Scripting/CFrameParser.cpp
@@ -470,40 +387,6 @@ ss_add_unit_test(tst_frame_reader_modes
           luajit
           ${SS_PLATFORM_LIBS}
 )
-
-#
-# tst_proto_importer (spec 0039 AC3) is written and lands with this file, but it stays unregistered:
-# the minimal link set that resolves is the application, which is the one thing a suite here may not
-# carry. Four undefined-symbol groups force it, and none of them is reachable from the pure
-# generation path the test actually calls:
-#
-#   ProtoImporter.cpp:938,948,974,1014  Misc::Utilities::showMessageBox   -> Misc/Utilities.cpp
-#   ProtoImporter.cpp:1008,1024         ProjectModel::importCompleted,
-#                                       importProjectFromJson, metaobject  -> ProjectModel.cpp + the
-#                                                                             17 Project/*.cpp TUs
-#   ProtoImporter.cpp:1086..1245        SerialStudio::groupWidgetId        -> SerialStudio.cpp
-#   SessionContext dtor closure         ~SessionContext destroys eight unique_ptr members ->
-#                                       vtables of the six implicit-dtor modules (each in its
-#                                       moc_*.cpp) + ~ConnectionManager + ~NotificationCenter
-#                                       and everything their dtors reach
-#
-# Registering it anyway would configure and then fail at link, taking ss_unit_tests and CI with it.
-# M2 ownership did NOT unblock this (2026-07-25 analysis): a ProtoImporter TU split removes the
-# first three groups, but the stack SessionContext the suite builds still drags the dtor closure
-# above, and the shared detail:: proto parser (also used by showPreview) resists a clean cut.
-# The honest unblock is a SessionContext test-double seam -- see the M2-T16 status note in
-# doc/claude/specs/0039-session-context/m2-plan.md. Until then the source is compiled by nothing
-# and AC3 stays gated -- recorded as such in doc/claude/specs/0039-session-context/spec.md.
-#
-# ss_add_unit_test(tst_proto_importer
-#   SOURCES tst_proto_importer.cpp
-#           ${SS_APP_SRC}/DataModel/Importers/ProtoImporter.cpp
-#           ${SS_APP_SRC}/SessionContext.cpp
-#   LIBS    Qt6::Core
-#           Qt6::Gui
-#           Qt6::Widgets
-# )
-#
 
 #---------------------------------------------------------------------------------------------------
 # Aggregate target
