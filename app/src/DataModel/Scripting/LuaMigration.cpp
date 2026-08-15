@@ -30,7 +30,8 @@
 // Token model
 //--------------------------------------------------------------------------------------------------
 
-namespace detail {
+// Nested under `lua` so these types can't collide with another TU's `detail::Token` (ODR).
+namespace detail::lua {
 
 /**
  * @brief Lexical class of one Lua token; trivia covers whitespace and comments alike.
@@ -70,12 +71,12 @@ struct Target {
   bool unary;
 };
 
-}  // namespace detail
+}  // namespace detail::lua
 
-using detail::LongBracket;
-using detail::Target;
-using detail::Token;
-using detail::TokenKind;
+using detail::lua::LongBracket;
+using detail::lua::Target;
+using detail::lua::Token;
+using detail::lua::TokenKind;
 
 static constexpr int kMaxScanSteps = 100000;
 static constexpr int kMaxDepth     = 64;

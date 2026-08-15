@@ -41,7 +41,8 @@
 // Internal: proto3 lexer + parser implementation
 //--------------------------------------------------------------------------------------------------
 
-namespace detail {
+// Nested under `proto` so these types can't collide with LuaMigration.cpp's `detail::Token` (ODR).
+namespace detail::proto {
 
 /**
  * @brief Token kinds produced by the proto3 lexer.
@@ -777,9 +778,18 @@ bool isNumericScalar(DataModel::ProtoScalar s)
 }
 
 /**
+ * @brief Inclusive widget range; a struct instead of QPair to dodge GCC's C++17
+ *        std::pair<double,double> argument-passing ABI note.
+ */
+struct ScalarRange {
+  double min;
+  double max;
+};
+
+/**
  * @brief Chooses a reasonable (min,max) widget range for a scalar field type.
  */
-QPair<double, double> defaultRangeFor(DataModel::ProtoScalar s)
+ScalarRange defaultRangeFor(DataModel::ProtoScalar s)
 {
   using S = DataModel::ProtoScalar;
   switch (s) {
@@ -806,9 +816,9 @@ QPair<double, double> defaultRangeFor(DataModel::ProtoScalar s)
   return {0.0, 100.0};
 }
 
-}  // namespace detail
+}  // namespace detail::proto
 
-using namespace detail;
+using namespace detail::proto;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -1162,12 +1172,12 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
     }
 
     const auto range = defaultRangeFor(field.scalar);
-    d.wgtMin         = range.first;
-    d.wgtMax         = range.second;
-    d.pltMin         = range.first;
-    d.pltMax         = range.second;
-    d.fftMin         = range.first;
-    d.fftMax         = range.second;
+    d.wgtMin         = range.min;
+    d.wgtMax         = range.max;
+    d.pltMin         = range.min;
+    d.pltMax         = range.max;
+    d.fftMin         = range.min;
+    d.fftMax         = range.max;
 
     group.datasets.push_back(d);
   }
