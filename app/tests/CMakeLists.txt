@@ -45,12 +45,8 @@ find_package(Qt6 REQUIRED COMPONENTS Test)
 
 set(SS_APP_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(SS_UNIT_TEST_TARGETS "")
-
-#
-# AppPlatform.cpp reaches QDBusConnection under Q_OS_LINUX (same gate as the application target in
-# app/CMakeLists.txt), so any suite that compiles it needs the QtDBus include path on Linux.
-#
 set(SS_PLATFORM_LIBS "")
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   find_package(Qt6 REQUIRED COMPONENTS DBus)
   list(APPEND SS_PLATFORM_LIBS Qt6::DBus)
@@ -256,9 +252,14 @@ ss_add_unit_test(tst_parse_budget
   LIBS    Qt6::Core
 )
 
+#
+# The layout-pattern labels forward to UI::Layouts::patternId(), so the enum-label suite needs that
+# TU in its link set; LayoutPatterns.cpp is header-only in its dependencies (QtCore/QtGui types).
+#
 ss_add_unit_test(tst_enum_labels
   SOURCES tst_enum_labels.cpp
           ${SS_APP_SRC}/API/EnumLabels.cpp
+          ${SS_APP_SRC}/UI/LayoutPatterns.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
