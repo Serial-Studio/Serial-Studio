@@ -2411,144 +2411,144 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="492"/>
+        <location filename="../../src/CSV/Player.cpp" line="503"/>
         <source>Select CSV file</source>
         <translation>CSV फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="494"/>
+        <location filename="../../src/CSV/Player.cpp" line="505"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV फ़ाइलें (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="617"/>
+        <location filename="../../src/CSV/Player.cpp" line="628"/>
         <source>Device Connection Active</source>
         <translation>डिवाइस कनेक्शन सक्रिय</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="618"/>
+        <location filename="../../src/CSV/Player.cpp" line="629"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>इस सुविधा का उपयोग करने के लिए, डिवाइस से डिस्कनेक्ट करना आवश्यक है। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="632"/>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="643"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>Check file permissions and location</source>
         <translation>फ़ाइल अनुमतियाँ और स्थान जाँचें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="639"/>
-        <location filename="../../src/CSV/Player.cpp" line="720"/>
-        <location filename="../../src/CSV/Player.cpp" line="905"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="731"/>
+        <location filename="../../src/CSV/Player.cpp" line="916"/>
         <source>Insufficient Data in CSV File</source>
         <translation>CSV फ़ाइल में अपर्याप्त डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="632"/>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="643"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>Cannot read CSV file</source>
         <translation>CSV फ़ाइल नहीं पढ़ी जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="640"/>
-        <location filename="../../src/CSV/Player.cpp" line="721"/>
-        <location filename="../../src/CSV/Player.cpp" line="906"/>
+        <location filename="../../src/CSV/Player.cpp" line="651"/>
+        <location filename="../../src/CSV/Player.cpp" line="732"/>
+        <location filename="../../src/CSV/Player.cpp" line="917"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV फ़ाइल में आगे बढ़ने के लिए कम से कम एक डेटा पंक्ति होनी चाहिए। फ़ाइल जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="899"/>
+        <location filename="../../src/CSV/Player.cpp" line="910"/>
         <source>CSV Row Limit Reached</source>
         <translation>CSV पंक्ति सीमा पहुँच गई</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="900"/>
+        <location filename="../../src/CSV/Player.cpp" line="911"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>प्लेबैक %L1 पंक्तियों तक सीमित है; फ़ाइल का शेष भाग अनुक्रमित नहीं किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Seconds (s)</source>
         <translation>सेकंड (s)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Milliseconds (ms)</source>
         <translation>मिलीसेकंड (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Microseconds (us)</source>
         <translation>माइक्रोसेकंड (us)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1354"/>
+        <location filename="../../src/CSV/Player.cpp" line="1368"/>
         <source>Timestamp Units</source>
         <translation>टाइमस्टैम्प इकाइयाँ</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1355"/>
+        <location filename="../../src/CSV/Player.cpp" line="1369"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>टाइमस्टैम्प कॉलम में इकाई घोषित नहीं है। इसे कैसे व्याख्यायित किया जाना चाहिए?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1380"/>
+        <location filename="../../src/CSV/Player.cpp" line="1394"/>
         <source>Invalid CSV</source>
         <translation>अमान्य CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1381"/>
+        <location filename="../../src/CSV/Player.cpp" line="1395"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV फ़ाइल में कोई डेटा या हेडर नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1388"/>
+        <location filename="../../src/CSV/Player.cpp" line="1408"/>
         <source>Select a date/time column</source>
         <translation>दिनांक/समय कॉलम चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1388"/>
-        <location filename="../../src/CSV/Player.cpp" line="1400"/>
+        <location filename="../../src/CSV/Player.cpp" line="1408"/>
+        <location filename="../../src/CSV/Player.cpp" line="1420"/>
         <source>Set interval manually</source>
         <translation>अंतराल मैन्युअल रूप से सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1390"/>
+        <location filename="../../src/CSV/Player.cpp" line="1410"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV दिनांक/समय चयन</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1391"/>
+        <location filename="../../src/CSV/Player.cpp" line="1411"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>दिनांक/समय डेटा को कैसे संभालना है चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1403"/>
+        <location filename="../../src/CSV/Player.cpp" line="1423"/>
         <source>Set Interval</source>
         <translation>अंतराल सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1404"/>
+        <location filename="../../src/CSV/Player.cpp" line="1424"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>कृपया पंक्तियों के बीच अंतराल मिलीसेकंड में दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1421"/>
+        <location filename="../../src/CSV/Player.cpp" line="1441"/>
         <source>Select Date/Time Column</source>
         <translation>दिनांक/समय कॉलम चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1422"/>
+        <location filename="../../src/CSV/Player.cpp" line="1442"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>कृपया वह कॉलम चुनें जिसमें दिनांक/समय डेटा है:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1452"/>
         <source>Invalid Selection</source>
         <translation>अमान्य चयन</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1452"/>
         <source>The selected column is not valid.</source>
         <translation>चयनित कॉलम मान्य नहीं है।</translation>
     </message>
@@ -4458,17 +4458,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>फ़ॉलबैक विजेट सक्रिय हैं। पूर्ण कार्यक्षमता के लिए लाइसेंस खरीदें।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="796"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="797"/>
         <source>Empty Workspace</source>
         <translation>खाली कार्यस्थान</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="810"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="811"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>विजेट खोजने और जोड़ने के लिए खोज बार का उपयोग करें, या किसी अन्य कार्यस्थान में विजेट पर राइट-क्लिक करके इसे यहाँ जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="825"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="826"/>
         <source>Search Widgets</source>
         <translation>विजेट खोजें</translation>
     </message>
@@ -4591,28 +4591,28 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>मान</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>रोकें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>फिर से शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <source>Awaiting data…</source>
         <translation>डेटा की प्रतीक्षा में…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
         <source>Open %1 in a separate window</source>
         <translation>%1 को अलग विंडो में खोलें</translation>
     </message>
@@ -5066,29 +5066,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2631"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2769"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2638"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2776"/>
         <source>Channel %1</source>
         <translation>चैनल %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2780"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2787"/>
         <source>Audio Input</source>
         <translation>ऑडियो इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2640"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2785"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2647"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2792"/>
         <source>Quick Plot</source>
         <translation>क्विक प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2313"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2320"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript ट्रांसफॉर्म बजट सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2314"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2321"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>एक डेटासेट ट्रांसफॉर्म को %1 मि.से. से अधिक समय लगा; फ्रेम के बाकी डेटासेट अगले फ्रेम तक कच्चे मानों पर लौट आए। ट्रांसफॉर्म कोड को प्रोफाइल या सरल करें।</translation>
     </message>
@@ -5103,17 +5103,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>एक डाउनस्ट्रीम उपभोक्ता (डैशबोर्ड, CSV/MDF4 निर्यात, सत्र DB, या API सब्सक्राइबर) फ्रेम को पर्याप्त तेजी से नहीं निकाल रहा है। Serial Studio अब बैकलॉग साफ़ होने तक प्रति-फ्रेम आवंटन पर वापस जा रहा है। भारी उपभोक्ता को अक्षम करें या डेटा दर कम करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2591"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2598"/>
         <source>Device A</source>
         <translation>डिवाइस A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2647"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2654"/>
         <source>Quick Plot Data</source>
         <translation>क्विक प्लॉट डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2659"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2666"/>
         <source>Multiple Plots</source>
         <translation>मल्टीपल प्लॉट</translation>
     </message>
@@ -7477,62 +7477,62 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>सैंपल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1187"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT प्रकाशक बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1255"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1285"/>
         <source>Rename Widget</source>
         <translation>विजेट का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1256"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1286"/>
         <source>Display title (empty restores the original):</source>
         <translation>प्रदर्शन शीर्षक (खाली करने पर मूल बहाल होगा):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1622"/>
         <source>Change Project Title</source>
         <translation>प्रोजेक्ट शीर्षक बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1616"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
         <source>Edit Control Script</source>
         <translation>कंट्रोल स्क्रिप्ट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1633"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1663"/>
         <source>Change Point Count</source>
         <translation>पॉइंट संख्या बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1656"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1686"/>
         <source>Change Plot Time Range</source>
         <translation>प्लॉट टाइम रेंज बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1682"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1712"/>
         <source>Toggle Freeze</source>
         <translation>फ्रीज टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1727"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>परिवर्तन-संचालित ट्रांसफॉर्म्स टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1744"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>तेज़ Lua निष्पादन टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1765"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>तेज़ Lua निष्पादन सक्षम करें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1736"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1766"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -7541,37 +7541,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 इसे केवल उन स्क्रिप्ट के लिए सक्षम करें जिन पर आप भरोसा करते हैं और जिन्हें पहले Safe मोड में परीक्षण किया है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1741"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1771"/>
         <source>Fast Lua Execution</source>
         <translation>तेज़ Lua निष्पादन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1770"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1800"/>
         <source>Change Frame Start Sequence</source>
         <translation>फ्रेम स्टार्ट सीक्वेंस बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1789"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1819"/>
         <source>Change Frame End Sequence</source>
         <translation>फ्रेम एंड सीक्वेंस बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
         <source>Change Checksum</source>
         <translation>चेकसम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1827"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1857"/>
         <source>Change Frame Detection</source>
         <translation>फ्रेम डिटेक्शन बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1904"/>
         <source>Change Decoder</source>
         <translation>डिकोडर बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1923"/>
         <source>Toggle Hex Delimiters</source>
         <translation>हेक्स डिलीमिटर टॉगल करें</translation>
     </message>
@@ -7742,20 +7742,20 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Serial Studio प्रोजेक्ट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio प्रोजेक्ट फ़ाइलें (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1512"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1542"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
         <source>Untitled Project</source>
         <translation>अनाम प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="604"/>
         <source>Device A</source>
         <translation>डिवाइस A</translation>
@@ -8170,9 +8170,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="233"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>Workspace</source>
         <translation>कार्यस्थान</translation>
     </message>
@@ -8195,10 +8195,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>नई साझा टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1980"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
@@ -8211,8 +8213,6 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="399"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <source>Name:</source>
         <translation>नाम:</translation>
     </message>
@@ -8223,22 +8223,22 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>टेबल का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
         <source>Rename Group</source>
         <translation>समूह का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2034"/>
         <source>Rename Dataset</source>
         <translation>डेटासेट का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
         <source>Rename Data Source</source>
         <translation>डेटा स्रोत का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
         <source>Rename Action</source>
         <translation>एक्शन का नाम बदलें</translation>
     </message>
@@ -8253,10 +8253,10 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>रजिस्टर का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="455"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="480"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
         <source>This action cannot be undone.</source>
         <translation>यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
@@ -8266,9 +8266,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>यह टेबल के साथ %1 रजिस्टर हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <source>Delete "%1"?</source>
         <translation>"%1" डिलीट करें?</translation>
     </message>
@@ -8321,8 +8321,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>टेबल CSV आयात करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>New Workspace</source>
         <translation>नया कार्यस्थान</translation>
     </message>
@@ -8385,8 +8385,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>फ़ोल्डर जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <source>Move Group</source>
         <translation>समूह मूव करें</translation>
     </message>
@@ -13896,6 +13896,54 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
 </context>
 <context>
+    <name>LayoutPatternPicker</name>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="48"/>
+        <source>Grid</source>
+        <translation>ग्रिड</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="49"/>
+        <source>Master + Stack</source>
+        <translation>मास्टर + स्टैक</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="50"/>
+        <source>Master + Grid</source>
+        <translation>मास्टर + ग्रिड</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="51"/>
+        <source>Row</source>
+        <translation>पंक्ति</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="52"/>
+        <source>Column</source>
+        <translation>कॉलम</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="53"/>
+        <source>Spiral</source>
+        <translation>सर्पिल</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <source>Layout</source>
+        <translation>लेआउट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <source>Split</source>
+        <translation>विभाजित</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <source>Manual placement</source>
+        <translation>मैन्युअल प्लेसमेंट</translation>
+    </message>
+</context>
+<context>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
@@ -16009,8 +16057,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist नहीं लिखा जा सका: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -16041,8 +16089,8 @@ Would you like to open the download page?</source>
         <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -16081,92 +16129,92 @@ Would you like to open the download page?</source>
         <translation type="vanished">क्या %1 को स्वचालित रूप से अपडेट जाँचने चाहिए? आप "About" डायलॉग से मैन्युअल रूप से अपडेट जाँच सकते हैं</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="175"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
         <source>Ok</source>
         <translation>ठीक है</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="177"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
         <source>Save</source>
         <translation>सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="179"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
         <source>Save all</source>
         <translation>सभी सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="181"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
         <source>Open</source>
         <translation>खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="183"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
         <source>Yes</source>
         <translation>हाँ</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="185"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Yes to all</source>
         <translation>सभी के लिए हाँ</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="187"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>No</source>
         <translation>नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="189"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>No to all</source>
         <translation>सभी के लिए नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="191"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Abort</source>
         <translation>निरस्त करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="193"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Retry</source>
         <translation>पुनः प्रयास करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="195"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Ignore</source>
         <translation>अनदेखा करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="197"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="199"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="201"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Discard</source>
         <translation>त्यागें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="203"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Help</source>
         <translation>सहायता</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="205"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="207"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
         <source>Reset</source>
         <translation>रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="209"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
         <source>Restore defaults</source>
         <translation>डिफ़ॉल्ट पुनर्स्थापित करें</translation>
     </message>
@@ -19170,7 +19218,7 @@ Click Refresh to update the list.</source>
         <translation>सामान्य I/O त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="192"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="197"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -19179,13 +19227,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="375"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Parser अक्षम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="376"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="486"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -19194,12 +19242,36 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 संभावित कारण: स्क्रिप्ट बॉडी में अनंत लूप या अत्यधिक धीमा ऑपरेशन। स्क्रिप्ट को ठीक करें और पार्सिंग पुनः सक्षम करने के लिए प्रोजेक्ट को फिर से लोड करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="494"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="304"/>
         <source>Lua Syntax Error</source>
         <translation>Lua सिंटैक्स त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="495"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="265"/>
+        <source>The parser code contains an error:
+
+%1
+
+Serial Studio can rewrite the unsupported operators as bit.* calls and reload the parser. The bit library works on 32-bit integers, so a value wider than 32 bits will wrap once rewritten.</source>
+        <translation>पार्सर कोड में त्रुटि है:
+
+%1
+
+Serial Studio असमर्थित ऑपरेटरों को bit.* कॉल के रूप में फिर से लिख सकता है और पार्सर को पुनः लोड कर सकता है। bit लाइब्रेरी 32-बिट इंटीजर पर काम करती है, इसलिए 32 बिट से अधिक चौड़ाई वाला मान फिर से लिखे जाने पर रैप हो जाएगा।</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
+        <source>Fix Automatically</source>
+        <translation>स्वचालित रूप से ठीक करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
+        <source>Leave Unchanged</source>
+        <translation>अपरिवर्तित छोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="305"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -19208,12 +19280,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="550"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="653"/>
         <source>Lua Runtime Error</source>
         <translation>Lua रनटाइम त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="551"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="654"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -19222,13 +19294,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="572"/>
         <source>Missing Parse Function</source>
         <translation>Parse फ़ंक्शन अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="573"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="676"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -19239,13 +19311,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="592"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="635"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="636"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="739"/>
         <source>The parse function contains an error:
 
 %1
@@ -21371,78 +21443,87 @@ function parse(%1) { ... }
         <translation>सामान्य</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="97"/>
         <source>Export</source>
         <translation>एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="173"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="180"/>
         <source>Language</source>
         <translation>भाषा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="189"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Theme</source>
         <translation>थीम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="283"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="290"/>
         <source>Workspace Folder</source>
         <translation>वर्कस्पेस फ़ोल्डर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="330"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="337"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>API सर्वर सक्षम करें (पोर्ट 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="678"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>Automatically Check for Updates</source>
         <translation>अपडेट स्वचालित रूप से जाँचें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
         <source>Dashboard</source>
-        <translation>डैशबोर्ड</translation>
+        <translation type="vanished">डैशबोर्ड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="412"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="419"/>
         <source>Export…</source>
         <translation>एक्सपोर्ट करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="744"/>
         <source>Data Plotting</source>
         <translation>डेटा प्लॉटिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="804"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="811"/>
         <source>Point Count</source>
         <translation>पॉइंट काउंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="829"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="836"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI रिफ्रेश रेट (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1056"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1020"/>
+        <source>Layout Margin</source>
+        <translation>लेआउट मार्जिन</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1045"/>
+        <source>Layout Spacing</source>
+        <translation>लेआउट स्पेसिंग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1070"/>
         <source>Show Actions Panel</source>
         <translation>एक्शन पैनल दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1215"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1187"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>टास्कबार बटन हमेशा दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1335"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="165"/>
         <source>Appearance</source>
         <translation>अपीयरेंस</translation>
     </message>
@@ -21455,27 +21536,27 @@ function parse(%1) { ... }
         <translation type="vanished">उन्नत</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="355"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <source>Allow External API Connections</source>
         <translation>बाहरी API कनेक्शन की अनुमति दें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1072"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1086"/>
         <source>Auto-Hide Toolbar</source>
         <translation>टूलबार स्वतः छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
         <source>Taskbar</source>
         <translation>टास्कबार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="480"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="487"/>
         <source>Rendering Backend</source>
         <translation>रेंडरिंग बैकएंड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="380"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="387"/>
         <source>API Access Token</source>
         <translation>API एक्सेस टोकन</translation>
     </message>
@@ -21485,12 +21566,12 @@ function parse(%1) { ... }
         <translation>स्टार्टअप</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="216"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="223"/>
         <source>Window</source>
         <translation>विंडो</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Custom Window Decorations</source>
         <translation>कस्टम विंडो सजावट</translation>
     </message>
@@ -21499,57 +21580,57 @@ function parse(%1) { ... }
         <translation type="vanished">विंडो छाया</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="265"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>विंडो सजावट परिवर्तन %1 को पुनः आरंभ करने के बाद लागू होते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
         <source>Files</source>
         <translation>फ़ाइलें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
         <source>API &amp; Plugins</source>
         <translation>API और प्लगइन्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="462"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
         <source>Graphics</source>
         <translation>ग्राफ़िक्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="520"/>
         <source>Display Scaling</source>
         <translation>डिस्प्ले स्केलिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="546"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="553"/>
         <source>Custom Scale (%)</source>
         <translation>कस्टम स्केल (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="583"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="590"/>
         <source>System</source>
         <translation>सिस्टम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="606"/>
         <source>Apply Performance Hints</source>
         <translation>परफ़ॉर्मेंस हिंट्स लागू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="622"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="629"/>
         <source>Keep Display Awake</source>
         <translation>डिस्प्ले को सक्रिय रखें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="651"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>परफ़ॉर्मेंस हिंट्स प्रोसेस प्राथमिकता बढ़ाते हैं और OS पावर थ्रॉटलिंग से बाहर निकलते हैं। बदलाव अगली बार Serial Studio शुरू होने पर लागू होंगे।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="662"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="669"/>
         <source>Updates &amp; News</source>
         <translation>अपडेट और समाचार</translation>
     </message>
@@ -21558,170 +21639,173 @@ function parse(%1) { ... }
         <translation type="vanished">स्टार्टअप पर नया क्या है दिखाएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="752"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="759"/>
         <source>Time Range</source>
         <translation>समय सीमा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Small</source>
         <translation>छोटा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Normal</source>
         <translation>सामान्य</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Large</source>
         <translation>बड़ा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Extra Large</source>
         <translation>अतिरिक्त बड़ा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Custom</source>
         <translation>कस्टम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="966"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Layout</source>
         <translation>लेआउट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="981"/>
         <source>Auto-Layout Margin</source>
-        <translation>ऑटो-लेआउट मार्जिन</translation>
+        <translation type="vanished">ऑटो-लेआउट मार्जिन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1006"/>
         <source>Auto-Layout Spacing</source>
-        <translation>ऑटो-लेआउट स्पेसिंग</translation>
+        <translation type="vanished">ऑटो-लेआउट स्पेसिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1031"/>
         <source>Manual-Layout Spacing</source>
-        <translation>मैनुअल-लेआउट स्पेसिंग</translation>
+        <translation type="vanished">मैनुअल-लेआउट स्पेसिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Show Alignment Guides</source>
         <translation>संरेखण गाइड दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1125"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1933"/>
         <source>Video Export</source>
         <translation>वीडियो एक्सपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1143"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1951"/>
         <source>Save Videos by Default</source>
         <translation>डिफ़ॉल्ट रूप से वीडियो सहेजें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1194"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Behavior</source>
         <translation>व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
+        <source>Plotting</source>
+        <translation>प्लॉटिंग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1211"/>
         <source>Show Search Field</source>
         <translation>खोज फ़ील्ड दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1235"/>
         <source>Auto-hide Taskbar</source>
         <translation>टास्कबार स्वतः छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1290"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1262"/>
         <source>Hide Delay (ms)</source>
         <translation>छुपाने की देरी (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1323"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1295"/>
         <source>Pinned Buttons</source>
         <translation>पिन किए गए बटन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>क्रम बदलने के लिए टास्कबार पर पिन किए गए बटन को ड्रैग करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1362"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1334"/>
         <source>Settings</source>
         <translation>सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1365"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1337"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1366"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1338"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1367"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1339"/>
         <source>Pause / Resume</source>
         <translation>रोकें / फिर से शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1368"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1340"/>
         <source>File Transmission</source>
         <translation>फ़ाइल ट्रांसमिशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1369"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>AI Assistant</source>
         <translation>AI असिस्टेंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1499"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1471"/>
         <source>Display</source>
         <translation>डिस्प्ले</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1514"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1486"/>
         <source>Display Mode</source>
         <translation>डिस्प्ले मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1582"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1554"/>
         <source>Scrollback Lines</source>
         <translation>स्क्रॉलबैक लाइनें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="873"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1536"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="912"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1508"/>
         <source>Font Family</source>
         <translation>फ़ॉन्ट फ़ैमिली</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1364"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1336"/>
         <source>Notifications</source>
         <translation>नोटिफ़िकेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf फ़ाइल एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="897"/>
         <source>Dashboard Font</source>
         <translation>डैशबोर्ड फ़ॉन्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="895"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1558"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="934"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1530"/>
         <source>Font Size</source>
         <translation>फ़ॉन्ट साइज़</translation>
     </message>
@@ -21734,112 +21818,112 @@ function parse(%1) { ... }
         <translation type="vanished">डिफ़ॉल्ट रूप से इमेज सेव करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1607"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1579"/>
         <source>Show Timestamps</source>
         <translation>टाइमस्टैम्प दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1635"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1607"/>
         <source>Data Transmission</source>
         <translation>डेटा ट्रांसमिशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1650"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1622"/>
         <source>Line Ending</source>
         <translation>लाइन एंडिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1672"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1644"/>
         <source>Input Mode</source>
         <translation>इनपुट मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1694"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1666"/>
         <source>Text Encoding</source>
         <translation>टेक्स्ट एन्कोडिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1688"/>
         <source>Checksum</source>
         <translation>चेकसम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1738"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1710"/>
         <source>Echo Sent Data</source>
         <translation>भेजा गया डेटा इको करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1766"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1738"/>
         <source>Escape Codes</source>
         <translation>एस्केप कोड्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1781"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1753"/>
         <source>VT100 Emulation</source>
         <translation>VT100 एमुलेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1807"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1779"/>
         <source>ANSI Colors</source>
         <translation>ANSI रंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1871"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1843"/>
         <source>CSV Export</source>
         <translation>CSV एक्सपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1886"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1858"/>
         <source>Row Interval (ms)</source>
         <translation>पंक्ति अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1948"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1920"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 प्रत्येक प्राप्त फ्रेम के लिए एक पंक्ति लिखता है। धनात्मक मान उस अंतराल पर प्रत्येक चैनल की एक स्नैपशॉट पंक्ति लॉग करता है, जो मल्टी-सोर्स या हाई-रेट प्रोजेक्ट के लिए फ़ाइल साइज़ को सीमित रखता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2008"/>
         <source>Delivery</source>
         <translation>डिलीवरी</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2023"/>
         <source>System Notifications</source>
         <translation>सिस्टम नोटिफिकेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2044"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Serial Studio जब फोरग्राउंड विंडो नहीं है तब Warning/Critical इवेंट्स को OS डेस्कटॉप नोटिफिकेशन के रूप में दिखाएं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2040"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2054"/>
         <source>Application Logs</source>
         <translation>एप्लिकेशन लॉग्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2055"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2069"/>
         <source>Route Warnings to Notifications</source>
         <translation>Warnings को नोटिफिकेशन में रूट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2076"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2090"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>डिफ़ॉल्ट रूप से बंद — QT और QML अक्सर warnings उत्सर्जित करते हैं और इसे सक्षम करने से वास्तविक अलार्म दब सकते हैं। Critical संदेश हमेशा इस सेटिंग की परवाह किए बिना रूट किए जाते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2109"/>
         <source>Reset</source>
         <translation>रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2152"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2166"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2160"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2174"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
@@ -22922,67 +23006,67 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>खोजें… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="899"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="914"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>डेटा स्क्रिप्ट द्वारा प्रोसेस किए जाने की तुलना में तेज़ी से आ रहा है; कुछ फ्रेम पतले किए जा रहे हैं। विवरण के लिए समस्या केंद्र देखें।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="930"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="945"/>
         <source>Unfreeze Dashboard</source>
         <translation>डैशबोर्ड अनफ्रीज़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="931"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="946"/>
         <source>Freeze Dashboard</source>
         <translation>डैशबोर्ड फ्रीज़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1004"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: %1 से कनेक्ट हो गया</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: कनेक्ट नहीं है</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1014"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1029"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1024"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1039"/>
         <source>Status:</source>
         <translation>स्थिति:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1047"/>
         <source>Connected</source>
         <translation>कनेक्टेड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1033"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1048"/>
         <source>Disconnected</source>
         <translation>डिस्कनेक्टेड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1040"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Mode:</source>
         <translation>मोड:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1066"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1081"/>
         <source>Messages sent:</source>
         <translation>भेजे गए संदेश:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1095"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT सेटिंग्स खोलें</translation>
     </message>
@@ -23024,7 +23108,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">विजेट खोजें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1126"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1141"/>
         <source>Remove from Workspace</source>
         <translation>वर्कस्पेस से हटाएं</translation>
     </message>
@@ -23994,34 +24078,34 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2540"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2523"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2548"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2531"/>
         <source>Notifications</source>
         <translation>सूचनाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2556"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2539"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2563"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2546"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2617"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2632"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2600"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2615"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (फॉलबैक)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2654"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2733"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2637"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2716"/>
         <source>LED Panel (%1)</source>
         <translation>LED पैनल (%1)</translation>
     </message>
@@ -24042,27 +24126,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1001"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1133"/>
         <source>Select Background Image</source>
         <translation>पृष्ठभूमि छवि चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1003"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1135"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>छवियाँ (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1422"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1475"/>
         <source>Width: %1    Height: %2</source>
         <translation>चौड़ाई: %1    ऊंचाई: %2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1424"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1477"/>
         <source>Width: %1</source>
         <translation>चौड़ाई: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1426"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1479"/>
         <source>Height: %1</source>
         <translation>ऊंचाई: %1</translation>
     </message>
@@ -24719,47 +24803,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">कार्यस्थान से हटाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="156"/>
         <source>Rename Widget…</source>
         <translation>विजेट का नाम बदलें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="157"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
         <source>Freeze Title</source>
         <translation>शीर्षक फ्रीज करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="162"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="173"/>
         <source>Title Bar</source>
         <translation>शीर्षक पट्टी</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="182"/>
         <source>Painted Title</source>
         <translation>पेंटेड शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Hidden</source>
         <translation>छुपा हुआ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="206"/>
         <source>Widget Settings…</source>
         <translation>विजेट सेटिंग्स…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="220"/>
         <source>Open in External Window</source>
         <translation>बाहरी विंडो में खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="424"/>
         <source>The widget could not be created.</source>
         <translation>विजेट नहीं बनाया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="664"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="707"/>
         <source>Device Disconnected</source>
         <translation>डिवाइस डिस्कनेक्ट हो गया</translation>
     </message>

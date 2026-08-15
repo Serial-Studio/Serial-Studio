@@ -837,17 +837,17 @@ int Sessions::Export::currentSessionId() const
 }
 
 /**
- * @brief Closes the current database file.
+ * @brief Closes the current database file. The worker is asked unconditionally: m_isOpen only
+ *        catches up through a queued signal, so a caller that opened and closed within one
+ *        event-loop turn (the spec-0047 dual replay does exactly that) would otherwise leave the
+ *        file open and append the next pass into it.
  */
 void Sessions::Export::closeFile()
 {
-  if (m_isOpen.load(std::memory_order_relaxed)) {
-    QMetaObject::invokeMethod(
-      m_worker, &DataModel::FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
+  closeWorkerResources();
 
-    m_isOpen.store(false, std::memory_order_relaxed);
+  if (m_isOpen.exchange(false, std::memory_order_relaxed))
     Q_EMIT openChanged();
-  }
 
   m_lastTableSnapshot.clear();
 
@@ -976,7 +976,7 @@ void Sessions::Export::setExportEnabled(const bool enabled)
   if (m_exportEnabled.load(std::memory_order_relaxed) == allow)
     return;
 
-  if (!allow && isOpen())
+  if (!allow)
     closeFile();
 
   m_exportEnabled.store(allow, std::memory_order_relaxed);

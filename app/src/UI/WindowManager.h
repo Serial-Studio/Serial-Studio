@@ -25,7 +25,6 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMap>
-#include <QMargins>
 #include <QObject>
 #include <QPointF>
 #include <QQuickItem>
@@ -33,6 +32,8 @@
 #include <QSettings>
 #include <QVariant>
 #include <QVector>
+
+#include "UI/LayoutPatterns.h"
 
 namespace detail {
 struct StableKey;
@@ -107,6 +108,15 @@ class WindowManager : public QQuickItem {
              READ gridSize
              WRITE setGridSize
              NOTIFY gridSizeChanged)
+  Q_PROPERTY(QVariantMap mergedEdges
+             READ mergedEdges
+             NOTIFY mergedEdgesChanged)
+  Q_PROPERTY(int layoutRatio
+             READ layoutRatio
+             NOTIFY layoutChoiceChanged)
+  Q_PROPERTY(QString layoutPattern
+             READ layoutPattern
+             NOTIFY layoutChoiceChanged)
   // clang-format on
 
 signals:
@@ -114,6 +124,8 @@ signals:
   void frozenChanged();
   void gridSizeChanged();
   void gridEnabledChanged();
+  void mergedEdgesChanged();
+  void layoutChoiceChanged();
   void sizeMatchRectChanged();
   void manualGestureChanged();
   void fractionPreviewChanged();
@@ -140,6 +152,9 @@ public:
 
   [[nodiscard]] int gridSize() const;
   [[nodiscard]] bool gridEnabled() const;
+  [[nodiscard]] int layoutRatio() const;
+  [[nodiscard]] const QString& layoutPattern() const;
+  [[nodiscard]] const QVariantMap& mergedEdges() const;
   [[nodiscard]] bool sizeMatchVisible() const;
   [[nodiscard]] bool manualGestureActive() const;
   [[nodiscard]] const QRect& sizeMatchRect() const;
@@ -150,6 +165,10 @@ public:
   [[nodiscard]] const QVariantList& spacingIndicators() const;
 
   [[nodiscard]] Q_INVOKABLE int zOrder(QQuickItem* item) const;
+  [[nodiscard]] Q_INVOKABLE QVariantList layoutRatioStops() const;
+  [[nodiscard]] Q_INVOKABLE bool patternHasPrimary(int pattern) const;
+  [[nodiscard]] Q_INVOKABLE QVariantList
+  patternPreview(int pattern, int count, int width, int height, int ratio) const;
   [[nodiscard]] Q_INVOKABLE QJsonObject serializeLayout() const;
   [[nodiscard]] Q_INVOKABLE bool restoreLayout(const QJsonObject& layout);
   [[nodiscard]] int firstTileWindowId() const;
@@ -183,6 +202,7 @@ public slots:
   void focusWindowUnderCursor(const QPointF& pos);
   void setBackgroundImage(const QString& path);
   void setAutoLayoutEnabled(const bool enabled);
+  void selectLayoutPattern(const QString& pattern, const int ratio);
   void setFrozen(const bool frozen);
   void setGridEnabled(const bool enabled);
   void setGridSize(const int size);
@@ -191,6 +211,7 @@ public slots:
   void preloadPendingGeometries(const QJsonObject& layout);
 
 private:
+  void refreshLayoutChoice();
   [[nodiscard]] int getIdForWindow(QQuickItem* item) const;
   [[nodiscard]] QQuickItem* findOverlapTarget(const QRect& dragRect) const;
   [[nodiscard]] QVector<int> resolveSavedOrder(
@@ -212,9 +233,9 @@ private:
 
   void handleDragMove(QMouseEvent* event, const QPoint& delta);
   void handleResizeMove(QMouseEvent* event, const QPoint& delta);
-  void applyManualAnchors(int newWidth, int newHeight);
-  void weldManualSeams(int canvasWidth, int canvasHeight);
+  void applyManualLayout(int newWidth, int newHeight);
 
+  void computeMergedEdges();
   void clearSnapGuides();
   void clearManualGesture();
   void cacheSnapSiblings(QQuickItem* target);
@@ -224,8 +245,9 @@ private:
 
   [[nodiscard]] bool tryReorderDraggedWindow();
 
+  void storeManualLayout();
   void commitManualGeometry(QQuickItem* window);
-  void storeManualGeometry(int id, QQuickItem* item, int canvasWidth = -1, int canvasHeight = -1);
+  void storeManualGeometry(int id, QQuickItem* item);
 
   [[nodiscard]] QRect computeResizedGeometry(const QPoint& delta) const;
 
@@ -259,7 +281,6 @@ private:
   QMap<int, QQuickItem*> m_windows;
   QMap<QQuickItem*, int> m_windowZ;
   QMap<int, QRect> m_manualGeometries;
-  QMap<int, QMargins> m_manualMargins;
   QMap<int, QRect> m_pendingGeometries;
 
   ResizeEdge m_resizeEdge;
@@ -274,6 +295,9 @@ private:
   QRect m_sizeMatchRect;
   QRect m_fractionPreviewRect;
   QString m_fractionPreviewLabel;
+  int m_layoutRatio;
+  QString m_layoutPattern;
+  QVariantMap m_mergedEdges;
   QVariantList m_alignmentGuides;
   QVariantList m_spacingIndicators;
   QVector<QRect> m_snapSiblings;
@@ -282,6 +306,7 @@ private:
   QPoint m_initialMousePos;
 
   Taskbar* m_taskbar;
+  QMetaObject::Connection m_workspaceConnection;
   QQuickItem* m_dragWindow;
   QQuickItem* m_targetWindow;
   QQuickItem* m_resizeWindow;

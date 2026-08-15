@@ -2411,144 +2411,144 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="492"/>
+        <location filename="../../src/CSV/Player.cpp" line="503"/>
         <source>Select CSV file</source>
         <translation>Seleziona file CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="494"/>
+        <location filename="../../src/CSV/Player.cpp" line="505"/>
         <source>CSV files (*.csv)</source>
         <translation>File CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="617"/>
+        <location filename="../../src/CSV/Player.cpp" line="628"/>
         <source>Device Connection Active</source>
         <translation>Connessione Dispositivo Attiva</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="618"/>
+        <location filename="../../src/CSV/Player.cpp" line="629"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Per utilizzare questa funzione, è necessario disconnettersi dal dispositivo. Procedere?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="632"/>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="643"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>Check file permissions and location</source>
         <translation>Verificare i permessi e la posizione del file</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="639"/>
-        <location filename="../../src/CSV/Player.cpp" line="720"/>
-        <location filename="../../src/CSV/Player.cpp" line="905"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="731"/>
+        <location filename="../../src/CSV/Player.cpp" line="916"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Dati Insufficienti nel File CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="632"/>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="643"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>Cannot read CSV file</source>
         <translation>Impossibile leggere il file CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="640"/>
-        <location filename="../../src/CSV/Player.cpp" line="721"/>
-        <location filename="../../src/CSV/Player.cpp" line="906"/>
+        <location filename="../../src/CSV/Player.cpp" line="651"/>
+        <location filename="../../src/CSV/Player.cpp" line="732"/>
+        <location filename="../../src/CSV/Player.cpp" line="917"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Il file CSV deve contenere almeno una riga di dati per procedere. Verificare il file e riprovare.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="899"/>
+        <location filename="../../src/CSV/Player.cpp" line="910"/>
         <source>CSV Row Limit Reached</source>
         <translation>Limite Righe CSV Raggiunto</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="900"/>
+        <location filename="../../src/CSV/Player.cpp" line="911"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>La riproduzione è limitata a %L1 righe; il resto del file non è stato indicizzato.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Seconds (s)</source>
         <translation>Secondi (s)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Milliseconds (ms)</source>
         <translation>Millisecondi (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Microseconds (us)</source>
         <translation>Microsecondi (us)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1354"/>
+        <location filename="../../src/CSV/Player.cpp" line="1368"/>
         <source>Timestamp Units</source>
         <translation>Unità Timestamp</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1355"/>
+        <location filename="../../src/CSV/Player.cpp" line="1369"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>La colonna timestamp non dichiara un'unità. Come deve essere interpretata?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1380"/>
+        <location filename="../../src/CSV/Player.cpp" line="1394"/>
         <source>Invalid CSV</source>
         <translation>CSV Non Valido</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1381"/>
+        <location filename="../../src/CSV/Player.cpp" line="1395"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Il file CSV non contiene dati o intestazioni.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1388"/>
+        <location filename="../../src/CSV/Player.cpp" line="1408"/>
         <source>Select a date/time column</source>
         <translation>Selezionare una colonna data/ora</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1388"/>
-        <location filename="../../src/CSV/Player.cpp" line="1400"/>
+        <location filename="../../src/CSV/Player.cpp" line="1408"/>
+        <location filename="../../src/CSV/Player.cpp" line="1420"/>
         <source>Set interval manually</source>
         <translation>Imposta intervallo manualmente</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1390"/>
+        <location filename="../../src/CSV/Player.cpp" line="1410"/>
         <source>CSV Date/Time Selection</source>
         <translation>Selezione Data/ora CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1391"/>
+        <location filename="../../src/CSV/Player.cpp" line="1411"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Scegliere come gestire i dati data/ora:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1403"/>
+        <location filename="../../src/CSV/Player.cpp" line="1423"/>
         <source>Set Interval</source>
         <translation>Imposta Intervallo</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1404"/>
+        <location filename="../../src/CSV/Player.cpp" line="1424"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Inserire l'intervallo tra le righe in millisecondi:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1421"/>
+        <location filename="../../src/CSV/Player.cpp" line="1441"/>
         <source>Select Date/Time Column</source>
         <translation>Seleziona Colonna Data/ora</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1422"/>
+        <location filename="../../src/CSV/Player.cpp" line="1442"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Selezionare la colonna che contiene i dati di data/ora:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1452"/>
         <source>Invalid Selection</source>
         <translation>Selezione Non Valida</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1452"/>
         <source>The selected column is not valid.</source>
         <translation>La colonna selezionata non è valida.</translation>
     </message>
@@ -4458,17 +4458,17 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Widget di fallback attivi. Acquista una licenza per la funzionalità completa.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="796"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="797"/>
         <source>Empty Workspace</source>
         <translation>Area di Lavoro Vuota</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="810"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="811"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Usa la barra di ricerca per trovare e aggiungere widget, oppure fai clic destro su un widget in un'altra area di lavoro per aggiungerlo qui.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="825"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="826"/>
         <source>Search Widgets</source>
         <translation>Cerca Widget</translation>
     </message>
@@ -4591,28 +4591,28 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Valore</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <source>Awaiting data…</source>
         <translation>In attesa di dati…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
         <source>Open %1 in a separate window</source>
         <translation>Apri %1 in una finestra separata</translation>
     </message>
@@ -5066,29 +5066,29 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2631"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2769"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2638"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2776"/>
         <source>Channel %1</source>
         <translation>Canale %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2780"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2787"/>
         <source>Audio Input</source>
         <translation>Ingresso Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2640"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2785"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2647"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2792"/>
         <source>Quick Plot</source>
         <translation>Grafico Rapido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2313"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2320"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Trasformazione JavaScript ha superato il budget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2314"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2321"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Una trasformazione di dataset ha impiegato più di %1 ms; i dataset rimanenti nella frame sono stati riportati ai valori grezzi fino alla frame successiva. Profila o semplifica il codice di trasformazione.</translation>
     </message>
@@ -5103,17 +5103,17 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Un consumatore a valle (dashboard, esportazione CSV/MDF4, session DB o sottoscrittore API) non sta svuotando le frame abbastanza velocemente. Serial Studio sta passando ad allocazioni per frame fino a quando l’arretrato non si libera. Disabilita un consumatore pesante o riduci la velocità dei dati.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2591"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2598"/>
         <source>Device A</source>
         <translation>Dispositivo A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2647"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2654"/>
         <source>Quick Plot Data</source>
         <translation>Dati Grafico Rapido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2659"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2666"/>
         <source>Multiple Plots</source>
         <translation>Grafici Multipli</translation>
     </message>
@@ -7477,62 +7477,62 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Campioni</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1187"/>
         <source>Change MQTT Publisher</source>
         <translation>Modifica Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1255"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1285"/>
         <source>Rename Widget</source>
         <translation>Rinomina Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1256"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1286"/>
         <source>Display title (empty restores the original):</source>
         <translation>Titolo visualizzato (vuoto ripristina l'originale):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1622"/>
         <source>Change Project Title</source>
         <translation>Modifica Titolo Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1616"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
         <source>Edit Control Script</source>
         <translation>Modifica Script di Controllo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1633"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1663"/>
         <source>Change Point Count</source>
         <translation>Modifica Numero di Punti</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1656"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1686"/>
         <source>Change Plot Time Range</source>
         <translation>Modifica Intervallo Temporale Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1682"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1712"/>
         <source>Toggle Freeze</source>
         <translation>Attiva/disattiva Blocco</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1727"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Attiva/disattiva Trasformazioni Guidate da Cambiamenti</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1744"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Attiva/disattiva Esecuzione Lua Veloce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1765"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Abilitare Esecuzione Lua Veloce?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1736"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1766"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -7541,37 +7541,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Abilitarla solo per script di cui ci si fida e che sono stati testati prima in modalità Sicura.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1741"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1771"/>
         <source>Fast Lua Execution</source>
         <translation>Esecuzione Lua Veloce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1770"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1800"/>
         <source>Change Frame Start Sequence</source>
         <translation>Modifica Sequenza Inizio Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1789"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1819"/>
         <source>Change Frame End Sequence</source>
         <translation>Modifica Sequenza Fine Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
         <source>Change Checksum</source>
         <translation>Modifica Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1827"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1857"/>
         <source>Change Frame Detection</source>
         <translation>Modifica Rilevamento Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1904"/>
         <source>Change Decoder</source>
         <translation>Modifica Decodificatore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1923"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Attiva/disattiva Delimitatori Esadecimali</translation>
     </message>
@@ -7742,20 +7742,20 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Salva Progetto Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>File Progetto Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1512"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1542"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
         <source>Untitled Project</source>
         <translation>Progetto Senza Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="604"/>
         <source>Device A</source>
         <translation>Dispositivo A</translation>
@@ -8170,9 +8170,9 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="233"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>Workspace</source>
         <translation>Area di Lavoro</translation>
     </message>
@@ -8195,10 +8195,12 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Nuova Tabella Condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1980"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
@@ -8211,8 +8213,6 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="399"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
@@ -8223,22 +8223,22 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Rinomina Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
         <source>Rename Group</source>
         <translation>Rinomina Gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2034"/>
         <source>Rename Dataset</source>
         <translation>Rinomina Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
         <source>Rename Data Source</source>
         <translation>Rinomina Sorgente Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
         <source>Rename Action</source>
         <translation>Rinomina Azione</translation>
     </message>
@@ -8253,10 +8253,10 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Rinomina Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="455"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="480"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
         <source>This action cannot be undone.</source>
         <translation>Questa azione non può essere annullata.</translation>
     </message>
@@ -8266,9 +8266,9 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Questo rimuove %1 registro/i insieme alla tabella. Questa azione non può essere annullata.</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <source>Delete "%1"?</source>
         <translation>Eliminare "%1"?</translation>
     </message>
@@ -8321,8 +8321,8 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Importa CSV Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>New Workspace</source>
         <translation>Nuova Area di Lavoro</translation>
     </message>
@@ -8385,8 +8385,8 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Aggiungi Cartella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <source>Move Group</source>
         <translation>Sposta Gruppo</translation>
     </message>
@@ -13896,6 +13896,54 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     </message>
 </context>
 <context>
+    <name>LayoutPatternPicker</name>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="48"/>
+        <source>Grid</source>
+        <translation>Griglia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="49"/>
+        <source>Master + Stack</source>
+        <translation>Master + Pila</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="50"/>
+        <source>Master + Grid</source>
+        <translation>Master + Griglia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="51"/>
+        <source>Row</source>
+        <translation>Riga</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="52"/>
+        <source>Column</source>
+        <translation>Colonna</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="53"/>
+        <source>Spiral</source>
+        <translation>Spirale</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <source>Layout</source>
+        <translation>Layout</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <source>Split</source>
+        <translation>Dividi</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <source>Manual placement</source>
+        <translation>Posizionamento Manuale</translation>
+    </message>
+</context>
+<context>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
@@ -16009,8 +16057,8 @@ Aprire la pagina di download?</translation>
         <translation>Impossibile scrivere Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Il writer di scorciatoie Windows non è disponibile su questa piattaforma.</translation>
     </message>
@@ -16041,8 +16089,8 @@ Aprire la pagina di download?</translation>
         <translation>Salvataggio del file .lnk fallito (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Il writer di scorciatoie macOS non è disponibile su questa piattaforma.</translation>
     </message>
@@ -16081,92 +16129,92 @@ Aprire la pagina di download?</translation>
         <translation type="vanished">%1 deve verificare automaticamente gli aggiornamenti? Puoi sempre verificare gli aggiornamenti manualmente dalla finestra "Informazioni"</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="175"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="177"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="179"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
         <source>Save all</source>
         <translation>Salva tutto</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="181"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="183"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="185"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Yes to all</source>
         <translation>Sì a tutto</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="187"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="189"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>No to all</source>
         <translation>No a tutti</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="191"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="193"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Retry</source>
         <translation>Riprova</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="195"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Ignore</source>
         <translation>Ignora</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="197"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="199"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="201"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Discard</source>
         <translation>Scarta</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="203"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="205"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
         <source>Apply</source>
         <translation>Applica</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="207"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="209"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
         <source>Restore defaults</source>
         <translation>Ripristina Predefiniti</translation>
     </message>
@@ -19170,7 +19218,7 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
         <translation>Errore generale di I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="192"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="197"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -19179,13 +19227,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="375"/>
         <source>Frame Parser Disabled</source>
         <translation>Parser di Frame Disabilitato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="376"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="486"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -19194,12 +19242,36 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Causa più probabile: un ciclo infinito o un'operazione estremamente lenta nel corpo dello script. Correggere lo script e ricaricare il progetto per riabilitare il parsing.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="494"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="304"/>
         <source>Lua Syntax Error</source>
         <translation>Errore di Sintassi Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="495"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="265"/>
+        <source>The parser code contains an error:
+
+%1
+
+Serial Studio can rewrite the unsupported operators as bit.* calls and reload the parser. The bit library works on 32-bit integers, so a value wider than 32 bits will wrap once rewritten.</source>
+        <translation>Il codice del parser contiene un errore:
+
+%1
+
+Serial Studio può riscrivere gli operatori non supportati come chiamate bit.* e ricaricare il parser. La libreria bit funziona su interi a 32 bit, quindi un valore più ampio di 32 bit subirà un wrap una volta riscritto.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
+        <source>Fix Automatically</source>
+        <translation>Correggi Automaticamente</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
+        <source>Leave Unchanged</source>
+        <translation>Lascia Invariato</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="305"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -19208,12 +19280,12 @@ Causa più probabile: un ciclo infinito o un'operazione estremamente lenta nel c
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="550"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="653"/>
         <source>Lua Runtime Error</source>
         <translation>Errore di Runtime Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="551"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="654"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -19222,13 +19294,13 @@ Causa più probabile: un ciclo infinito o un'operazione estremamente lenta nel c
 %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="572"/>
         <source>Missing Parse Function</source>
         <translation>Funzione Parse Mancante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="573"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="676"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -19239,13 +19311,13 @@ Assicurarsi che il codice includa:
 function parse(frame) ... end</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="592"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="635"/>
         <source>Parse Function Runtime Error</source>
         <translation>Errore di Runtime della Funzione Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="636"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="739"/>
         <source>The parse function contains an error:
 
 %1
@@ -21371,78 +21443,87 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Generale</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="97"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="173"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="180"/>
         <source>Language</source>
         <translation>Linguaggio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="189"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="283"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="290"/>
         <source>Workspace Folder</source>
         <translation>Cartella Workspace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="678"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>Automatically Check for Updates</source>
         <translation>Verifica Automaticamente gli Aggiornamenti</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
         <source>Dashboard</source>
-        <translation>Dashboard</translation>
+        <translation type="vanished">Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="412"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="419"/>
         <source>Export…</source>
         <translation>Esporta…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="744"/>
         <source>Data Plotting</source>
         <translation>Tracciamento Dati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="804"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="811"/>
         <source>Point Count</source>
         <translation>Numero di Punti</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="829"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="836"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Frequenza di Aggiornamento UI (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1215"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1020"/>
+        <source>Layout Margin</source>
+        <translation>Margine Layout</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1045"/>
+        <source>Layout Spacing</source>
+        <translation>Spaziatura Layout</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1187"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Mostra Sempre i Pulsanti della Barra delle Applicazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1056"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1070"/>
         <source>Show Actions Panel</source>
         <translation>Mostra Pannello Azioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="330"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="337"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>Abilita Server API (Porta 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1335"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="165"/>
         <source>Appearance</source>
         <translation>Aspetto</translation>
     </message>
@@ -21455,27 +21536,27 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Avanzate</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="355"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <source>Allow External API Connections</source>
         <translation>Consenti Connessioni API Esterne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1072"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1086"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Nascondi Automaticamente la Barra Degli Strumenti</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
         <source>Taskbar</source>
         <translation>Barra delle Applicazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="480"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="487"/>
         <source>Rendering Backend</source>
         <translation>Backend di Rendering</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="380"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="387"/>
         <source>API Access Token</source>
         <translation>Token di Accesso API</translation>
     </message>
@@ -21485,12 +21566,12 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Avvio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="216"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="223"/>
         <source>Window</source>
         <translation>Finestra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Custom Window Decorations</source>
         <translation>Decorazioni Finestra Personalizzate</translation>
     </message>
@@ -21499,57 +21580,57 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Ombra Finestra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="265"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>Le modifiche alle decorazioni della finestra si applicano dopo il riavvio di %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
         <source>Files</source>
         <translation>File</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
         <source>API &amp; Plugins</source>
         <translation>API e Plugin</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="462"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
         <source>Graphics</source>
         <translation>Grafica</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="520"/>
         <source>Display Scaling</source>
         <translation>Ridimensionamento della Visualizzazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="546"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="553"/>
         <source>Custom Scale (%)</source>
         <translation>Scala Personalizzata (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="583"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="590"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="606"/>
         <source>Apply Performance Hints</source>
         <translation>Applica Suggerimenti Prestazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="622"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="629"/>
         <source>Keep Display Awake</source>
         <translation>Mantieni Display Attivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="651"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>I suggerimenti prestazioni aumentano la priorità del processo e disattivano la limitazione energetica del sistema operativo. Le modifiche hanno effetto al prossimo avvio di Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="662"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="669"/>
         <source>Updates &amp; News</source>
         <translation>Aggiornamenti e Notizie</translation>
     </message>
@@ -21558,170 +21639,173 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Mostra Novità all'Avvio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="752"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="759"/>
         <source>Time Range</source>
         <translation>Intervallo Temporale</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Small</source>
         <translation>Piccolo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Large</source>
         <translation>Grande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Extra Large</source>
         <translation>Extra Grande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Custom</source>
         <translation>Personalizzato</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="966"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Layout</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="981"/>
         <source>Auto-Layout Margin</source>
-        <translation>Margine Layout Automatico</translation>
+        <translation type="vanished">Margine Layout Automatico</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1006"/>
         <source>Auto-Layout Spacing</source>
-        <translation>Spaziatura Layout Automatico</translation>
+        <translation type="vanished">Spaziatura Layout Automatico</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1031"/>
         <source>Manual-Layout Spacing</source>
-        <translation>Spaziatura Layout Manuale</translation>
+        <translation type="vanished">Spaziatura Layout Manuale</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Show Alignment Guides</source>
         <translation>Mostra Guide di Allineamento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1125"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1933"/>
         <source>Video Export</source>
         <translation>Esportazione Video</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1143"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1951"/>
         <source>Save Videos by Default</source>
         <translation>Salva Video per Impostazione Predefinita</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1194"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Behavior</source>
         <translation>Comportamento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
+        <source>Plotting</source>
+        <translation>Tracciamento</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1211"/>
         <source>Show Search Field</source>
         <translation>Mostra Campo di Ricerca</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1235"/>
         <source>Auto-hide Taskbar</source>
         <translation>Nascondi Automaticamente la Barra delle Applicazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1290"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1262"/>
         <source>Hide Delay (ms)</source>
         <translation>Ritardo Nascondimento (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1323"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1295"/>
         <source>Pinned Buttons</source>
         <translation>Pulsanti Bloccati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Trascina un pulsante bloccato sulla barra delle applicazioni per riordinarlo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1362"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1334"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1365"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1337"/>
         <source>Clock</source>
         <translation>Orologio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1366"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1338"/>
         <source>Stopwatch</source>
         <translation>Cronometro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1367"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1339"/>
         <source>Pause / Resume</source>
         <translation>Pausa / Riprendi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1368"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1340"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1369"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>AI Assistant</source>
         <translation>Assistente AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1499"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1471"/>
         <source>Display</source>
         <translation>Visualizzazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1514"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1486"/>
         <source>Display Mode</source>
         <translation>Modalità di Visualizzazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1582"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1554"/>
         <source>Scrollback Lines</source>
         <translation>Righe di Cronologia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="873"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1536"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="912"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1508"/>
         <source>Font Family</source>
         <translation>Famiglia di Caratteri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1364"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1336"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>Export Protobuf File</source>
         <translation>Esporta File Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="897"/>
         <source>Dashboard Font</source>
         <translation>Font Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="895"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1558"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="934"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1530"/>
         <source>Font Size</source>
         <translation>Dimensione Font</translation>
     </message>
@@ -21734,112 +21818,112 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Salva Immagini per Impostazione Predefinita</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1607"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1579"/>
         <source>Show Timestamps</source>
         <translation>Mostra Timestamp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1635"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1607"/>
         <source>Data Transmission</source>
         <translation>Trasmissione Dati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1650"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1622"/>
         <source>Line Ending</source>
         <translation>Terminazione di Riga</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1672"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1644"/>
         <source>Input Mode</source>
         <translation>Modalità Ingresso</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1694"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1666"/>
         <source>Text Encoding</source>
         <translation>Codifica Testo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1688"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1738"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1710"/>
         <source>Echo Sent Data</source>
         <translation>Eco Dati Inviati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1766"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1738"/>
         <source>Escape Codes</source>
         <translation>Codici di Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1781"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1753"/>
         <source>VT100 Emulation</source>
         <translation>Emulazione VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1807"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1779"/>
         <source>ANSI Colors</source>
         <translation>Colori ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1871"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1843"/>
         <source>CSV Export</source>
         <translation>Esportazione CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1886"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1858"/>
         <source>Row Interval (ms)</source>
         <translation>Intervallo Righe (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1948"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1920"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 scrive una riga per ogni frame ricevuto. Un valore positivo registra una riga di snapshot di ogni canale a quell'intervallo, mantenendo la dimensione del file limitata per progetti multi-sorgente o ad alta frequenza.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2008"/>
         <source>Delivery</source>
         <translation>Consegna</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2023"/>
         <source>System Notifications</source>
         <translation>Notifiche di Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2044"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Mostra eventi di Avviso/Critici come notifiche desktop del SO quando Serial Studio non è la finestra in primo piano.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2040"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2054"/>
         <source>Application Logs</source>
         <translation>Log Applicazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2055"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2069"/>
         <source>Route Warnings to Notifications</source>
         <translation>Inoltra Avvisi alle Notifiche</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2076"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2090"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Disattivato per impostazione predefinita — QT e QML emettono avvisi frequentemente e abilitare questa opzione può oscurare allarmi reali. I messaggi critici vengono sempre instradati indipendentemente da questa impostazione.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2109"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2152"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2166"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2160"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2174"/>
         <source>Apply</source>
         <translation>Applica</translation>
     </message>
@@ -22922,67 +23006,67 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>Cerca… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="899"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="914"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>I dati stanno arrivando più velocemente di quanto gli script possano elaborarli; alcuni frame vengono ridotti. Consultare il centro problemi per i dettagli.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="930"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="945"/>
         <source>Unfreeze Dashboard</source>
         <translation>Sblocca Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="931"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="946"/>
         <source>Freeze Dashboard</source>
         <translation>Blocca Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1004"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Connesso a %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Non connesso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1014"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1029"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1024"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1039"/>
         <source>Status:</source>
         <translation>Stato:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1047"/>
         <source>Connected</source>
         <translation>Connesso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1033"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1048"/>
         <source>Disconnected</source>
         <translation>Disconnesso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1040"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Mode:</source>
         <translation>Modalità:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1066"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1081"/>
         <source>Messages sent:</source>
         <translation>Messaggi inviati:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1095"/>
         <source>Open MQTT Settings</source>
         <translation>Apri Impostazioni MQTT</translation>
     </message>
@@ -23024,7 +23108,7 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation type="vanished">Cerca widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1126"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1141"/>
         <source>Remove from Workspace</source>
         <translation>Rimuovi dallo Spazio di Lavoro</translation>
     </message>
@@ -23994,34 +24078,34 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2540"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2523"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2548"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2531"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2556"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2539"/>
         <source>Clock</source>
         <translation>Orologio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2563"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2546"/>
         <source>Stopwatch</source>
         <translation>Cronometro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2617"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2632"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2600"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2615"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Fallback)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2654"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2733"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2637"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2716"/>
         <source>LED Panel (%1)</source>
         <translation>Pannello LED (%1)</translation>
     </message>
@@ -24042,27 +24126,27 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1001"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1133"/>
         <source>Select Background Image</source>
         <translation>Seleziona Immagine di Sfondo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1003"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1135"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>Immagini (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1422"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1475"/>
         <source>Width: %1    Height: %2</source>
         <translation>Larghezza: %1    Altezza: %2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1424"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1477"/>
         <source>Width: %1</source>
         <translation>Larghezza: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1426"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1479"/>
         <source>Height: %1</source>
         <translation>Altezza: %1</translation>
     </message>
@@ -24719,47 +24803,47 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
         <translation type="vanished">Rimuovi dall'Area di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="156"/>
         <source>Rename Widget…</source>
         <translation>Rinomina Widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="157"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
         <source>Freeze Title</source>
         <translation>Blocca Titolo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="162"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="173"/>
         <source>Title Bar</source>
         <translation>Barra del Titolo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="182"/>
         <source>Painted Title</source>
         <translation>Titolo Disegnato</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Hidden</source>
         <translation>Nascosta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="206"/>
         <source>Widget Settings…</source>
         <translation>Impostazioni Widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="220"/>
         <source>Open in External Window</source>
         <translation>Apri in Finestra Esterna</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="424"/>
         <source>The widget could not be created.</source>
         <translation>Impossibile creare il widget.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="664"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="707"/>
         <source>Device Disconnected</source>
         <translation>Dispositivo Disconnesso</translation>
     </message>

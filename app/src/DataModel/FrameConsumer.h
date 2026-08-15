@@ -277,6 +277,22 @@ public:
   }
 
   /**
+   * @brief Drains the worker and closes its resources, leaving the thread running so a fresh file
+   * can be opened after. Idempotent, and independent of any main-thread open-state mirror: that
+   * mirror lands through a queued signal, so a caller that has not spun the event loop since the
+   * worker opened would otherwise skip the close and keep writing the previous file.
+   */
+  void closeWorkerResources()
+  {
+    if (!m_worker || !m_workerThread.isRunning())
+      return;
+
+    if (qApp)
+      QMetaObject::invokeMethod(
+        m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
+  }
+
+  /**
    * @brief Flushes and stops the worker thread, then disables enqueues and drops the deleted
    * worker/timer pointers so a post-teardown enqueueData() cannot invoke on freed memory.
    * Idempotent; call before QApplication teardown. The blocking flush needs a live qApp.

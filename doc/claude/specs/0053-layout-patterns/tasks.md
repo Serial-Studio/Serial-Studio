@@ -2,7 +2,7 @@
 spec: 0053-layout-patterns
 phase: tasks
 status: approved     # draft -> approved (gate before /ss-implement)
-updated: 2026-08-13
+updated: 2026-08-14  # T13-T15 added, T8 entry point revised (spec/plan amendment R11-R13)
 ---
 
 # Tasks 0053 — Per-workspace auto-layout patterns + frozen shared borders
@@ -82,20 +82,26 @@ updated: 2026-08-13
   an unusable window (spec constraint: never hide a widget, never go under the floor).
 - **Verify:** T9 extends the suite to cover these; code-verify clean.
 - **Deps:** T4
-- [ ] done
+- [x] done — Row/Column via a shared `tileStrip`, Master + Stack / Master + Grid via
+  `tileMaster` (remainder stripped or gridded), Spiral splitting the remaining rect along its
+  longer axis so the cut alternates on its own. One central degrade rule in `tile()`: a
+  candidate whose count is wrong or that breaches the floor is replaced by Grid
 
-### T6 — Workspace persistence
+### T6 — Layout-choice persistence
 
-- **Files:** `app/src/DataModel/Frame.h`,
-  `app/src/DataModel/Project/ProjectModelWorkspaces.cpp`
-- **Does:** `Keys::LayoutPattern` + `Keys::LayoutRatio`; `Workspace::layoutPattern` (QString)
-  and `layoutRatio` (int sixteenths, default 8); serialize omitting both at defaults so an
-  untouched project stays byte-identical; read clamps the ratio to 1..15 and falls back to
-  Grid on an unknown pattern id rather than failing the parse. Mutators open an undo scope
-  and `setModified(true)` like the other workspace edits.
+- **Files:** `app/src/DataModel/ProjectModel.{h,cpp}`
+- **Does:** REVISED 2026-08-14 (maintainer): the choice does NOT live on the workspace entry.
+  Storing it there forced `setCustomizeWorkspaces(true)` on every pick (materialising the auto
+  workspace list as a side effect of choosing a layout) and left group tabs with no choice at
+  all. It now lives beside the manual window geometry, under the same
+  `Keys::layoutKey(scope, groupId)` widgetSettings entry, as sibling sub-keys `pattern` and
+  `ratio` (`data` keeps holding the geometry). `layoutChoice()` reads, `setLayoutChoice()`
+  writes through `saveWidgetSetting`, so it inherits the existing modified/autosave path and
+  needs no customize mode. Defaults (`""`, 8) are simply absent keys.
 - **Verify:** code-verify clean; round-trip covered in T10.
 - **Deps:** none
-- [ ] done
+- [x] done — the original `Workspace::layoutPattern`/`layoutRatio` fields, their `Keys::`
+  entries and the `project.workspace.*` plumbing were reverted in full
 
 ### T7 — Pattern artwork + registration
 
@@ -105,22 +111,36 @@ updated: 2026-08-13
   count; register each in the qrc.
 - **Verify:** `python scripts/registry-verify.py` (qrc sync).
 - **Deps:** none
-- [ ] done
+- [x] done — DEVIATION, see the note below: no SVG files ship. The picker draws each tile
+  from `WindowManager::patternPreview`, i.e. from the real tiler, so artwork cannot drift from
+  behaviour and there is no qrc/registry surface to keep in sync
 
 ### T8 — Picker UI + live apply
 
 - **Files:** `app/qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml` (new),
+  `app/qml/MainWindow/Panes/Dashboard/Taskbar.qml`,
   `app/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml`, `app/src/UI/Taskbar.{h,cpp}`,
   `app/CMakeLists.txt`
 - **Does:** Artwork picker with the active pattern checked, plus a ratio control offering
-  only ladder stops and shown only for patterns with a primary region. Entry point beside
-  "Tile Windows" in the canvas context menu. Selecting writes to the active workspace and
-  re-tiles immediately; Taskbar exposes the active workspace's pattern/ratio and re-tiles on
-  `activeGroupIdChanged` via the existing `triggerLayoutUpdate()` path (do not add a second
-  layout entry point).
-- **Verify:** code-verify clean; maintainer applies each pattern (AC1/AC5).
+  only ladder stops and shown only for patterns with a primary region. Selecting writes to the
+  active workspace and re-tiles immediately; Taskbar exposes the active workspace's
+  pattern/ratio and re-tiles on `activeGroupIdChanged` via the existing `triggerLayoutUpdate()`
+  path (do not add a second layout entry point). **Revised 2026-08-14 (R13):** the picker is a
+  popup anchored under the taskbar auto-layout button, not a canvas-context-menu entry, and it
+  carries a **Manual** tile in the same grid — picking a pattern selects auto mode and applies
+  it, picking Manual switches to manual mode. The button keeps its highlight-when-auto
+  colouring and its freeze gating; `Taskbar.qml` therefore joins this task's file list. The
+  canvas context menu keeps a route to the same popup. Leave the
+  `dashboard.toggleAutoLayout` command binding and the `DashboardLayout` shortcut path alone —
+  they are the surviving one-keystroke toggle.
+- **Verify:** code-verify clean; maintainer applies each pattern (AC1/AC5) and exercises the
+  button popup incl. the Manual tile (AC12).
 - **Deps:** T5, T6, T7
-- [ ] done
+- [x] done — `LayoutPatternPicker.qml` as a popup under the taskbar auto-layout button,
+  with the Manual entry in the same gallery and the ratio row gated on
+  `patternHasPrimary`; `autoLayout()` reads the active workspace's pattern/ratio, and
+  `setTaskbar` wires `activeGroupIdChanged` to re-tile on workspace switch. The canvas
+  context-menu route was left out (spec says the button is primary, the menu "may" keep one)
 
 ### T9 — Pattern geometry tests
 
@@ -131,7 +151,10 @@ updated: 2026-08-13
   ratio-stop handling and out-of-range clamping.
 - **Verify:** `ctest -R tst_layout_patterns` (AC2).
 - **Deps:** T5
-- [ ] done
+- [x] done — Extended `everyPatternCoversTheCanvas` with exact canvas coverage (asserted
+  only for spacing >= 0 -- see the note below) and a floor check gated on Grid clearing the
+  floor; added `patternsHonorTheRatioStops` and widened the determinism case to all six
+  patterns
 
 ### T10 — Persistence integration tests
 
@@ -142,7 +165,9 @@ updated: 2026-08-13
 - **Verify:** `pytest tests/integration/test_layout_patterns.py -v` against a running,
   rebuilt app.
 - **Deps:** T6
-- [ ] done
+- [x] done — `tests/integration/test_layout_patterns.py`: defaults, per-pattern round-trip,
+  partial patch, unknown-id tolerance, ratio clamping, two independent workspaces. Needs the
+  rebuilt app; NOT run here (`clean_state` resets the project of the running instance)
 
 ### T11 — Frozen shared borders
 
@@ -156,7 +181,11 @@ updated: 2026-08-13
 - **Verify:** code-verify clean; maintainer visual in light + dark, frozen and unfrozen
   (AC6); T10 confirms no new project keys.
 - **Deps:** T4
-- [ ] done
+- [x] done — Per-window merged-edge bitmask (`WindowManager::computeMergedEdges`, published
+  as the `mergedEdges` map) consumed by `WidgetDelegate`: a frozen, titlebar-less widget bleeds
+  its body 1px over each shared edge so both borders land on one line, and squares its corners.
+  Presentation only -- no geometry moves, so unfreezing needs no undo. `MiniWindow.qml` needed
+  no change (the delegate owns the body border)
 
 ### T12 — API surface + docs
 
@@ -166,7 +195,88 @@ updated: 2026-08-13
   corpus's layout description.
 - **Verify:** `scripts/documentation-verify.py`; sanitize-commit rebuilds the search index.
 - **Deps:** T8, T11
-- [ ] done
+- [x] done — `EnumLabels::layoutPatternSlug/Label`, `project.workspace.update` and `.get`
+  carry `layoutPattern`/`layoutRatio` (the update registration split into a file-static helper
+  to stay under the 100-line cap), Toolbar-Reference row rewritten for the gallery, and a
+  "Layout pattern per workspace" section added to the AI corpus skill
+
+## Amendment tasks — 2026-08-14 (R11/R12)
+
+Independent of T5-T12: they touch the manual-layout path, not the tiler, so they can land
+first. T8 above already absorbed R13.
+
+### T13 — Pure manual rescale in `UI::Layouts`
+
+- **Files:** `app/src/UI/LayoutPatterns.h`, `app/src/UI/LayoutPatterns.cpp`
+- **Does:** Add `[[nodiscard]] QVector<QRect> rescaleManual(const QVector<QRect>& rects, QSize
+  refCanvas, QSize newCanvas, int spacing)` implementing the plan's seam model: normalize
+  (leading edge minus `spacing` when past the canvas start), cluster per axis at the existing
+  6 px tolerance with bound-touching clusters adopting the bound, classify a seam as
+  gap-consuming when interior and holding both a leading and a trailing edge, deflate by the
+  gap-consuming seams before it, scale the gap-free span, re-inflate, rebuild each rect.
+  Degrade by reducing the effective spacing when `newExtent - k*spacing` is not positive —
+  never overlap, never emit below the floor. PURITY IS THE CONTRACT, same as `tile()`: no
+  singletons, no `QQuickItem`, no Qt Quick include; applying it twice with the same inputs must
+  be a no-op, which is the invariant the whole amendment rests on.
+- **Verify:** code-verify clean; header still free of Qt Quick; T14 proves the behavior.
+- **Deps:** T1
+- [x] done — `rescaleManual` plus four file-static helpers (`clusterEdges`,
+  `gapConsumingSeams`, `effectiveSpacing`, `seamPositions`) and a `Span` axis pair;
+  `kSeamTolerance` moved into the header beside the other layout constants. Algorithm was
+  prototyped and validated in the scratchpad before porting (all four spacings, four target
+  canvases, 10x round-trip, idempotence)
+
+### T14 — Rescale test suite
+
+- **Files:** `app/tests/tst_layout_patterns.cpp`
+- **Does:** Extend the suite with rescale cases over four layouts (2x2 grid, master + stack, a
+  free-floating window, an overlapping pair) for spacing `-1, 0, 4, 16`: every shared edge
+  measures exactly the spacing and every outer edge is flush after rescaling across several
+  canvas sizes and non-uniform aspect changes (AC9); ten reference-based A->B->A round-trips
+  are byte-identical to the start, and the re-derived path (output fed back in) settles within
+  2 px on the first hop and moves no further across 50 cycles with joins and flushness exact
+  (AC10); rescale A->B, swap one rect, rescale B->A leaves the untouched rects within that
+  bound with joins intact (AC11, math half); a canvas too small for the gaps degrades without
+  overlap or sub-floor windows.
+- **Verify:** `ctest -R tst_layout_patterns` once the maintainer builds; code-verify clean.
+- **Deps:** T13
+- [x] done — four fixtures + five helpers in `namespace fixtures`; five new slots
+  (`rescaleHoldsJoinsAndOuterEdges` data-driven over 4 layouts x 4 spacings x 5 targets,
+  `rescaleFromTheReferenceIsLossless`, `rescaleSettlesWhenReDerived`,
+  `rescaleLeavesUntouchedWidgetsAlone`, `rescaleDegradesOnACrampedCanvas`). Every assertion
+  was pre-validated against the scratchpad model; AC10/AC11 wording was amended first because
+  the original "byte-identical" claim is not reachable through a lossy intermediate canvas
+
+### T15 — WindowManager routes through the rescale
+
+- **Files:** `app/src/UI/WindowManager.h`, `app/src/UI/WindowManager.cpp`,
+  `app/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml`
+- **Does:** Point `applyManualAnchors`, `applySavedGeometries` and `preloadPendingGeometries`
+  at `Layouts::rescaleManual` on the whole window set; delete `weldManualSeams`,
+  `scaledManualGeometry`, `anchoredGeometry`, `manualMarginsForGeometry`, `clusterEdges`, the
+  `m_manualMargins` member and the now-unused `kSeamWeldTolerance` if the module owns it.
+  `commitManualGeometry` re-snapshots EVERY normal window at the current canvas, since
+  `m_manualCanvasWidth/Height` is shared and a partial snapshot strands the rest. Re-apply the
+  layout when `layoutSpacing` changes in manual mode (the QML `Connections` block currently
+  re-tiles only in auto mode). THE INVARIANT TO NAME AT EDIT TIME: the reference set
+  (`m_manualGeometries` + `m_manualCanvas*`) is written only by a user gesture or a project
+  load — never from geometry a rescale just produced, which is the feedback loop that
+  compounds the drift today. Signal wiring: keep the existing `m_suppressGeometrySignal`
+  semantics around resize so per-window `geometryChanged` bursts do not reappear.
+- **Verify:** code-verify clean; T14 unaffected (pure module untouched); maintainer resizes a
+  manual dashboard across sizes and confirms constant gaps and inset (AC9), then moves one
+  widget after a resize and confirms the others hold (AC11, glue half).
+- **Deps:** T13, T14
+- [x] done — `applyManualAnchors` became `applyManualLayout` (rescales the whole set from the
+  reference); `applySavedGeometries`/`preloadPendingGeometries` share a new
+  `parseSavedGeometries` helper and rescale once; `weldManualSeams`, `clusterEdges`,
+  `scaledManualGeometry`, `anchoredGeometry`, `manualMarginsForGeometry`, `m_manualMargins`,
+  `kSeamWeldTolerance` and the now-unused `<QMargins>` include are gone; `storeManualLayout()`
+  snapshots every window and `commitManualGeometry` calls it. The per-edge
+  `Snap::snapToFraction` pass went with the old rescale: it moves an edge onto a canvas
+  fraction without accounting for the spacing, which would break the exact-join guarantee.
+  `DashboardCanvas.qml` needed no change after all — the C++ `layoutSpacingChanged` lambda
+  already covered manual mode, so the QML side stayed out of the diff
 
 ## Definition of Done
 
@@ -177,6 +287,11 @@ updated: 2026-08-13
 - [ ] AC4 proven by T2's baseline suite, not by inspection.
 - [ ] `pytest` targets listed for the maintainer (T10).
 - [ ] `python scripts/sanitize-commit.py` run; `registry-verify.py` clean.
-- [ ] Diff is *what was asked, and only that* — manual mode's snapping, welding and spacing
-      behavior unchanged (AC8).
+- [ ] AC9/AC10/AC11 proven by T14, not by inspection; AC11's glue half and AC12 handed to the
+      maintainer as visual checks.
+- [ ] Old manual-rescale helpers are gone, not left dead beside the new path (T15).
+- [ ] Diff is *what was asked, and only that* — manual mode's snapping and gesture behavior
+      unchanged (AC8). Amended 2026-08-14: the seam weld is deliberately replaced by T13/T15;
+      AC8 now means snapping, guides and the spacing setting behave as before, with gaps
+      constant across resizes rather than repaired after one.
 - [ ] `spec.md` status set to `done`.

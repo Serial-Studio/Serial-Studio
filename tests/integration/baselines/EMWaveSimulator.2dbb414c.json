@@ -188,6 +188,7 @@
     }
   ],
   "hexadecimalDelimiters": false,
+  "luaFastMode": false,
   "mqttPublisher": {
     "alpnEnabled": false,
     "alpnProtocol": "x-amzn-mqtt-ca",

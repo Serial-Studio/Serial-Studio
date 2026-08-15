@@ -331,6 +331,7 @@ set(SOURCES
   src/DataModel/Scripting/JsWatchdogThread.cpp
   src/DataModel/Scripting/LuaScriptEngine.cpp
   src/DataModel/Scripting/LuaCompat.cpp
+  src/DataModel/Scripting/LuaMigration.cpp
   src/DataModel/Scripting/DashboardApi.cpp
   src/DataModel/Scripting/DeviceWriteApi.cpp
   src/DataModel/Scripting/ScriptApiCall.cpp
@@ -533,6 +534,7 @@ set(HEADERS
   src/DataModel/Scripting/JsWatchdogThread.h
   src/DataModel/Scripting/LuaScriptEngine.h
   src/DataModel/Scripting/LuaCompat.h
+  src/DataModel/Scripting/LuaMigration.h
   src/DataModel/Scripting/DashboardApi.h
   src/DataModel/Scripting/DeviceWriteApi.h
   src/DataModel/Scripting/ScriptApiCall.h
@@ -626,6 +628,7 @@ set(QML_SOURCES
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
   qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml
+  qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml
   qml/MainWindow/Panes/Dashboard/PaletteModel.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
   qml/MainWindow/Panes/Dashboard/Taskbar.qml
@@ -1552,6 +1555,7 @@ if(SS_UNITY_BUILD)
     src/DataModel/Scripting/DeviceWriteApi.cpp
     src/DataModel/Scripting/JsWatchdog.cpp
     src/DataModel/Scripting/JsWatchdogThread.cpp
+    src/DataModel/Scripting/LuaMigration.cpp
     src/DataModel/Scripting/LuaScriptEngine.cpp
     src/DataModel/Scripting/MacroRunner.cpp
     src/DataModel/Scripting/MacroWorker.cpp

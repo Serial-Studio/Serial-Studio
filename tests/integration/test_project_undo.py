@@ -22,17 +22,36 @@ import pytest
 
 
 def _export(api_client) -> str:
-    """Canonical serialization of the current project document."""
+    """Canonical serialization of the current project document.
+
+    `treeExpansion` is dropped: it is editor view state keyed by the *current*
+    project title and rewritten by the debounced tree rebuild, so it drifts on
+    its own clock and says nothing about whether undo restored the document.
+    """
     result = api_client.command("project.exportJson")
     assert "config" in result
-    return json.dumps(result["config"], sort_keys=True)
+    config = dict(result["config"])
+    config.pop("treeExpansion", None)
+    return json.dumps(config, sort_keys=True)
+
+
+def _pace() -> None:
+    """Stay under the API server's 200-messages-per-second-per-client cap.
+
+    The randomized round-trip issues hundreds of commands back to back; without
+    pacing the server treats the burst as abuse and drops the connection, which
+    surfaces as `EXECUTION_ERROR: API rate limit exceeded` mid-test.
+    """
+    time.sleep(0.007)
 
 
 def _undo(api_client) -> dict:
+    _pace()
     return api_client.command("project.undo")
 
 
 def _redo(api_client) -> dict:
+    _pace()
     return api_client.command("project.redo")
 
 
@@ -61,6 +80,7 @@ def _random_mutations(api_client, rng: random.Random, count: int) -> int:
     """Apply count randomized single-op mutations; returns ops issued."""
     issued = 0
     for i in range(count):
+        _pace()
         choice = rng.randrange(6)
         groups = api_client.list_groups()
         if choice == 0 or not groups:

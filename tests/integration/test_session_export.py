@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pytest
 
-from utils import APIError
+from utils import APIError, session_diagnostics
 
 # ---------------------------------------------------------------------------
 # Pro gating fixture
@@ -234,7 +234,10 @@ def test_session_records_project_file_frames(
     _close_session(api_client)
 
     # Verify the DB exists with the expected schema
-    assert db_path.exists(), f"Session DB was never created at {db_path}"
+    assert db_path.exists(), (
+        f"Session DB was never created at {db_path}; "
+        f"state={session_diagnostics(api_client)}"
+    )
 
     tables = _sqlite_tables(db_path)
     assert "sessions" in tables
@@ -307,7 +310,10 @@ def test_quickplot_session_writes_column_rows(
     time.sleep(0.2)
     _close_session(api_client)
 
-    assert db_path.exists(), f"QuickPlot session DB was not created at {db_path}"
+    assert db_path.exists(), (
+        f"QuickPlot session DB was not created at {db_path}; "
+        f"state={session_diagnostics(api_client)}"
+    )
 
     # The bug we're guarding against: zero rows in `columns`.
     column_count = _row_count(db_path, "columns")
@@ -363,7 +369,9 @@ def test_quickplot_session_loads_for_replay(
     time.sleep(0.2)
     _close_session(api_client)
 
-    assert db_path.exists()
+    assert (
+        db_path.exists()
+    ), f"session DB missing; state={session_diagnostics(api_client)}"
 
     with sqlite3.connect(str(db_path)) as conn:
         column_uids = {r[0] for r in conn.execute("SELECT unique_id FROM columns")}
@@ -420,7 +428,9 @@ def test_quickplot_session_project_json_embeds_source(
     _close_session(api_client)
     _enable_export(api_client, False)
 
-    assert db_path.exists()
+    assert (
+        db_path.exists()
+    ), f"session DB missing; state={session_diagnostics(api_client)}"
     # Schema check first so we get a clear failure if the worker never finished init.
     tables = _sqlite_tables(db_path)
     assert "sessions" in tables, f"sessions table missing -- found: {sorted(tables)}"

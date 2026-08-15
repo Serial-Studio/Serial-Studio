@@ -859,9 +859,12 @@ Item {
     }
 
     //
-    // Auto-layout button
+    // Auto-layout button: opens the layout gallery, which is where the pattern, the split
+    // ratio and manual placement all live (spec 0053)
     //
     Widgets.IconButton {
+      id: _layoutButton
+
       iconSize: 16
       background: Item{}
       Layout.preferredWidth: 24
@@ -876,7 +879,19 @@ Item {
                     Cpp_ThemeManager.colors["taskbar_text"]
       onClicked: {
         taskBar.activeWindow = null
-        taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
+        _layoutPicker.open()
+      }
+
+      //
+      // Right-aligned to the button, since it sits near the window edge; Popup.margins is what
+      // keeps the final position inside the window
+      //
+      LayoutPatternPicker {
+        id: _layoutPicker
+
+        y: -height - 6
+        windowManager: taskBar.windowManager
+        x: Cpp_Misc_Translator.rtl ? 0 : _layoutButton.width - width
       }
     }
 

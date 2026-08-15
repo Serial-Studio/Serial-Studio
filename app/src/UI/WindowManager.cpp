@@ -26,10 +26,13 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileDialog>
+#include <QPair>
 #include <QSet>
+#include <QSize>
 #include <QStandardPaths>
 #include <QUrl>
 
+#include "DataModel/ProjectModel.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
 #include "UI/LayoutPatterns.h"
@@ -41,8 +44,11 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-// Largest rescale gap still treated as rounding drift rather than an intentional separation.
-constexpr int kSeamWeldTolerance = 6;
+// Edge gap still read as one seam by the shared-border merge (spacing -1 overlaps by a pixel).
+constexpr int kMergeTolerance = 1;
+
+// Perpendicular overlap two windows need before their edges are treated as adjacent.
+constexpr int kMergeOverlap = 2;
 
 // Manual-mode window size floor; mirrors the fallback constrainWindows() applies.
 constexpr int kManualMinSize = 48;
@@ -219,68 +225,6 @@ static void snapVisualsToVariants(const UI::Snap::SnapResult& result,
 }
 
 /**
- * @brief Returns manual anchor margins for a geometry within a canvas.
- */
-static QMargins manualMarginsForGeometry(const QRect& geom, const int canvasW, const int canvasH)
-{
-  if (canvasW <= 0 || canvasH <= 0)
-    return QMargins();
-
-  const int left   = qMax(0, geom.x());
-  const int top    = qMax(0, geom.y());
-  const int right  = qMax(0, canvasW - (geom.x() + geom.width()));
-  const int bottom = qMax(0, canvasH - (geom.y() + geom.height()));
-  return QMargins(left, top, right, bottom);
-}
-
-/**
- * @brief Returns the anchored geometry for a preferred size within a canvas.
- */
-static QRect anchoredGeometry(const QRect& preferred,
-                              const QMargins& margins,
-                              const int canvasW,
-                              const int canvasH)
-{
-  if (canvasW <= 0 || canvasH <= 0)
-    return preferred;
-
-  const bool anchorLeft = margins.left() <= margins.right();
-  const bool anchorTop  = margins.top() <= margins.bottom();
-  const int x = anchorLeft ? margins.left() : canvasW - (margins.right() + preferred.width());
-  const int y = anchorTop ? margins.top() : canvasH - (margins.bottom() + preferred.height());
-  return QRect(x, y, preferred.width(), preferred.height());
-}
-
-/**
- * @brief Rescales one stored manual geometry from the canvas it was captured on to the
- *        current canvas, then anchors it. Shared by the live-resize and project-load paths,
- *        which differ only in where the reference size comes from; anchoring a saved rect
- *        without rescaling it is what used to break layouts loaded at another window size.
- */
-[[nodiscard]] static QRect scaledManualGeometry(const QRect& preferred,
-                                                const QMargins& margins,
-                                                const int refW,
-                                                const int refH,
-                                                const int canvasW,
-                                                const int canvasH)
-{
-  const double scaleX = refW > 0 ? double(canvasW) / double(refW) : 1.0;
-  const double scaleY = refH > 0 ? double(canvasH) / double(refH) : 1.0;
-
-  const QMargins scaled(qRound(margins.left() * scaleX),
-                        qRound(margins.top() * scaleY),
-                        qRound(margins.right() * scaleX),
-                        qRound(margins.bottom() * scaleY));
-
-  const int maxW = qMax(0, canvasW - scaled.left() - scaled.right());
-  const int maxH = qMax(0, canvasH - scaled.top() - scaled.bottom());
-  const int w    = qMin(qRound(preferred.width() * scaleX), maxW);
-  const int h    = qMin(qRound(preferred.height() * scaleY), maxH);
-
-  return anchoredGeometry(QRect(0, 0, w, h), scaled, canvasW, canvasH);
-}
-
-/**
  * @brief Returns true if any tracked window is currently in the maximized state.
  */
 static bool anyWindowMaximized(const QMap<int, QQuickItem*>& windows)
@@ -328,6 +272,7 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
   , m_snapIndicatorVisible(false)
   , m_gridEnabled(false)
   , m_gridSize(16)
+  , m_layoutRatio(Layouts::kDefaultRatio)
   , m_manualGestureActive(false)
   , m_taskbar(nullptr)
   , m_dragWindow(nullptr)
@@ -350,7 +295,7 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
 
   connect(&m_dashboard, &UI::Dashboard::layoutSpacingChanged, this, [this] {
     if (!m_autoLayoutEnabled)
-      weldManualSeams(static_cast<int>(width()), static_cast<int>(height()));
+      applyManualLayout(static_cast<int>(width()), static_cast<int>(height()));
   });
 
   m_sessionRegistry.registerWindowManager(this);
@@ -489,6 +434,30 @@ const QVariantList& UI::WindowManager::alignmentGuides() const
 }
 
 /**
+ * @brief Split ratio of the layout pattern in force, in sixteenths.
+ */
+int UI::WindowManager::layoutRatio() const
+{
+  return m_layoutRatio;
+}
+
+/**
+ * @brief Id of the layout pattern in force; empty is Grid.
+ */
+const QString& UI::WindowManager::layoutPattern() const
+{
+  return m_layoutPattern;
+}
+
+/**
+ * @brief Per-window bitmask of the edges that coincide with a sibling's, keyed by window id.
+ */
+const QVariantMap& UI::WindowManager::mergedEdges() const
+{
+  return m_mergedEdges;
+}
+
+/**
  * @brief Returns the equal-spacing indicators for the active gesture.
  */
 const QVariantList& UI::WindowManager::spacingIndicators() const
@@ -622,21 +591,20 @@ QVector<int> UI::WindowManager::resolveSavedOrder(const QJsonObject& layout,
 }
 
 /**
- * @brief Applies saved manual-mode geometries to live windows and stashes the
- *        anchored rects for any window that hasn't registered yet.
+ * @brief Reads the saved manual geometries, resolving each entry to a live window id.
  */
-void UI::WindowManager::applySavedGeometries(const QJsonObject& layout,
-                                             const QHash<StableKey, int>& stableLookup,
-                                             int marginCanvasW,
-                                             int marginCanvasH)
+[[nodiscard]] static QVector<QPair<int, QRect>> parseSavedGeometries(
+  const QJsonObject& layout,
+  const QHash<StableKey, int>& stableLookup,
+  const QMap<int, QQuickItem*>& windows)
 {
-  const int canvasW           = static_cast<int>(width());
-  const int canvasH           = static_cast<int>(height());
+  QVector<QPair<int, QRect>> out;
   const QJsonArray geometries = layout["geometries"].toArray();
+  out.reserve(geometries.size());
 
   for (const auto& val : std::as_const(geometries)) {
     const QJsonObject winGeom = val.toObject();
-    const int id              = resolveSavedWindowId(winGeom, stableLookup, m_windows);
+    const int id              = resolveSavedWindowId(winGeom, stableLookup, windows);
     if (id < 0)
       continue;
 
@@ -644,22 +612,41 @@ void UI::WindowManager::applySavedGeometries(const QJsonObject& layout,
     const int y = static_cast<int>(SerialStudio::toDouble(winGeom["y"], 0.0));
     const int w = static_cast<int>(SerialStudio::toDouble(winGeom["width"], 200.0));
     const int h = static_cast<int>(SerialStudio::toDouble(winGeom["height"], 150.0));
-    const QRect geom(x, y, w, h);
-    const QMargins margins = manualMarginsForGeometry(geom, marginCanvasW, marginCanvasH);
-    const QRect anchored =
-      scaledManualGeometry(geom, margins, marginCanvasW, marginCanvasH, canvasW, canvasH);
+    out.append(qMakePair(id, QRect(x, y, w, h)));
+  }
 
-    auto* win = m_windows.value(id);
-    if (win) {
-      win->setX(anchored.x());
-      win->setY(anchored.y());
-      win->setWidth(anchored.width());
-      win->setHeight(anchored.height());
-    }
+  return out;
+}
 
-    m_manualGeometries.insert(id, geom);
-    m_manualMargins.insert(id, margins);
-    m_pendingGeometries.insert(id, anchored);
+/**
+ * @brief Applies saved manual-mode geometries to live windows and stashes the rescaled rects
+ *        for any window that hasn't registered yet. The saved rects stay the reference the
+ *        layout is re-derived from; only the placement follows the current canvas.
+ */
+void UI::WindowManager::applySavedGeometries(const QJsonObject& layout,
+                                             const QHash<StableKey, int>& stableLookup,
+                                             int marginCanvasW,
+                                             int marginCanvasH)
+{
+  const auto saved = parseSavedGeometries(layout, stableLookup, m_windows);
+  if (saved.isEmpty())
+    return;
+
+  QVector<QRect> reference;
+  reference.reserve(saved.size());
+  for (const auto& entry : std::as_const(saved))
+    reference.append(entry.second);
+
+  const QSize canvas(static_cast<int>(width()), static_cast<int>(height()));
+  const auto placed = Layouts::rescaleManual(
+    reference, QSize(marginCanvasW, marginCanvasH), canvas, m_dashboard.layoutSpacing());
+
+  for (int i = 0; i < saved.size(); ++i) {
+    if (auto* win = m_windows.value(saved[i].first))
+      placeWindow(win, placed[i].x(), placed[i].y(), placed[i].width(), placed[i].height());
+
+    m_manualGeometries.insert(saved[i].first, saved[i].second);
+    m_pendingGeometries.insert(saved[i].first, placed[i]);
   }
 }
 
@@ -682,7 +669,6 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
     m_windowOrder = resolveSavedOrder(layout, stableLookup);
 
   m_manualGeometries.clear();
-  m_manualMargins.clear();
   m_pendingGeometries.clear();
   if (!autoLayout && layout.contains("geometries")) {
     const int canvasW       = static_cast<int>(width());
@@ -693,8 +679,6 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
     m_manualCanvasHeight    = marginCanvasH;
 
     applySavedGeometries(layout, stableLookup, marginCanvasW, marginCanvasH);
-
-    weldManualSeams(canvasW, canvasH);
     constrainWindows();
     Q_EMIT geometryChanged(nullptr);
   }
@@ -720,7 +704,6 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
 {
   m_pendingGeometries.clear();
   m_manualGeometries.clear();
-  m_manualMargins.clear();
   if (layout.isEmpty() || !layout.contains("geometries"))
     return;
 
@@ -737,26 +720,23 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
   m_manualCanvasHeight    = marginCanvasH;
 
   const QHash<StableKey, int> stableLookup = buildStableKeyToWindowId();
+  const auto saved                         = parseSavedGeometries(layout, stableLookup, m_windows);
+  if (saved.isEmpty())
+    return;
 
-  const QJsonArray geometries = layout["geometries"].toArray();
-  for (const auto& val : std::as_const(geometries)) {
-    const QJsonObject winGeom = val.toObject();
-    const int id              = resolveSavedWindowId(winGeom, stableLookup, m_windows);
-    if (id < 0)
-      continue;
+  QVector<QRect> reference;
+  reference.reserve(saved.size());
+  for (const auto& entry : std::as_const(saved))
+    reference.append(entry.second);
 
-    const int x = static_cast<int>(SerialStudio::toDouble(winGeom["x"], 0.0));
-    const int y = static_cast<int>(SerialStudio::toDouble(winGeom["y"], 0.0));
-    const int w = static_cast<int>(SerialStudio::toDouble(winGeom["width"], 200.0));
-    const int h = static_cast<int>(SerialStudio::toDouble(winGeom["height"], 150.0));
-    const QRect geom(x, y, w, h);
-    const QMargins margins = manualMarginsForGeometry(geom, marginCanvasW, marginCanvasH);
-    const QRect anchored =
-      scaledManualGeometry(geom, margins, marginCanvasW, marginCanvasH, canvasW, canvasH);
+  const auto placed = Layouts::rescaleManual(reference,
+                                             QSize(marginCanvasW, marginCanvasH),
+                                             QSize(canvasW, canvasH),
+                                             m_dashboard.layoutSpacing());
 
-    m_manualGeometries.insert(id, geom);
-    m_manualMargins.insert(id, margins);
-    m_pendingGeometries.insert(id, anchored);
+  for (int i = 0; i < saved.size(); ++i) {
+    m_manualGeometries.insert(saved[i].first, saved[i].second);
+    m_pendingGeometries.insert(saved[i].first, placed[i]);
   }
 }
 
@@ -822,7 +802,6 @@ void UI::WindowManager::clear()
   m_lastCanvasHeight       = 0;
   m_snapIndicatorVisible   = false;
   m_manualGeometries.clear();
-  m_manualMargins.clear();
   m_pendingGeometries.clear();
   m_snapSiblings.clear();
   clearManualGesture();
@@ -878,8 +857,9 @@ void UI::WindowManager::autoLayout()
   env.isLandscape = env.availW >= env.availH;
   env.minWidth    = kAutoLayoutMinWidth;
   env.minHeight   = kAutoLayoutMinHeight;
+  env.ratio       = m_layoutRatio;
 
-  const auto rects = Layouts::tile(windows.size(), Layouts::Pattern::Grid, env);
+  const auto rects = Layouts::tile(windows.size(), Layouts::patternFromId(m_layoutPattern), env);
   const int placed = qMin(rects.size(), windows.size());
   for (int i = 0; i < placed; ++i)
     placeWindow(windows[i], rects[i].x(), rects[i].y(), rects[i].width(), rects[i].height());
@@ -888,7 +868,157 @@ void UI::WindowManager::autoLayout()
     if (win && !win->isVisible() && (win->state() == "normal" || win->state() == "maximized"))
       win->setVisible(true);
 
+  computeMergedEdges();
   Q_EMIT geometryChanged(nullptr);
+}
+
+/**
+ * @brief Re-reads the layout choice of whatever group or workspace the taskbar is showing.
+ *        Called on every workspace switch, so the pattern can never be a leftover from the
+ *        workspace the user just left.
+ */
+void UI::WindowManager::refreshLayoutChoice()
+{
+  if (!m_taskbar)
+    return;
+
+  static auto& project = DataModel::ProjectModel::instance();
+  const auto choice    = project.layoutChoice(m_taskbar->layoutScope(), m_taskbar->activeGroupId());
+
+  m_layoutPattern = choice.value(QStringLiteral("pattern")).toString();
+  m_layoutRatio   = qBound(1, choice.value(QStringLiteral("ratio")).toInt(), 15);
+}
+
+/**
+ * @brief Returns the rectangles @a pattern would produce, normalized to a @a width x @a height
+ *        preview box. The picker draws its artwork from this, so a tile can never disagree with
+ *        what applying it does.
+ */
+QVariantList UI::WindowManager::patternPreview(
+  const int pattern, const int count, const int width, const int height, const int ratio) const
+{
+  Layouts::LayoutEnv env;
+  env.margin      = 0;
+  env.spacing     = 1;
+  env.availW      = qMax(1, width);
+  env.availH      = qMax(1, height);
+  env.isLandscape = env.availW >= env.availH;
+  env.minWidth    = 1;
+  env.minHeight   = 1;
+  env.ratio       = qBound(1, ratio, Layouts::kRatioDenominator - 1);
+
+  QVariantList out;
+  const auto rects = Layouts::tile(qMax(1, count), static_cast<Layouts::Pattern>(pattern), env);
+  for (const auto& rect : rects) {
+    QVariantMap entry;
+    entry["x"]      = rect.x();
+    entry["y"]      = rect.y();
+    entry["width"]  = rect.width();
+    entry["height"] = rect.height();
+    out.append(entry);
+  }
+
+  return out;
+}
+
+/**
+ * @brief Returns which edges of each window coincide with a sibling's opposite edge, as a
+ *        per-window bitmask (1 left, 2 right, 4 top, 8 bottom). Presentation only: QML draws a
+ *        coincident pair as one border instead of two, and nothing here touches geometry.
+ */
+void UI::WindowManager::computeMergedEdges()
+{
+  QVector<int> ids;
+  QVector<QRect> rects;
+  for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it) {
+    if (!it.value() || it.value()->state() != "normal")
+      continue;
+
+    ids.append(it.key());
+    rects.append(extractGeometry(it.value()));
+  }
+
+  QVariantMap merged;
+  for (int i = 0; i < ids.size(); ++i) {
+    int mask = 0;
+    for (int j = 0; j < ids.size(); ++j) {
+      if (i == j)
+        continue;
+
+      const QRect a = rects[i];
+      const QRect b = rects[j];
+      const bool rows =
+        qMin(a.y() + a.height(), b.y() + b.height()) - qMax(a.y(), b.y()) > kMergeOverlap;
+      const bool cols =
+        qMin(a.x() + a.width(), b.x() + b.width()) - qMax(a.x(), b.x()) > kMergeOverlap;
+
+      if (rows && qAbs(a.x() - (b.x() + b.width())) <= kMergeTolerance)
+        mask |= 1;
+
+      if (rows && qAbs(b.x() - (a.x() + a.width())) <= kMergeTolerance)
+        mask |= 2;
+
+      if (cols && qAbs(a.y() - (b.y() + b.height())) <= kMergeTolerance)
+        mask |= 4;
+
+      if (cols && qAbs(b.y() - (a.y() + a.height())) <= kMergeTolerance)
+        mask |= 8;
+    }
+
+    merged.insert(QString::number(ids[i]), mask);
+  }
+
+  if (m_mergedEdges == merged)
+    return;
+
+  m_mergedEdges = merged;
+  Q_EMIT mergedEdgesChanged();
+}
+
+/**
+ * @brief Whether a pattern has a primary region, i.e. whether the picker should offer its
+ *        split ratio.
+ */
+bool UI::WindowManager::patternHasPrimary(const int pattern) const
+{
+  return Layouts::patternHasPrimary(static_cast<Layouts::Pattern>(pattern));
+}
+
+/**
+ * @brief The split ratios the picker offers, in sixteenths.
+ */
+QVariantList UI::WindowManager::layoutRatioStops() const
+{
+  QVariantList out;
+  for (const int stop : Layouts::ratioStops())
+    out.append(stop);
+
+  return out;
+}
+
+/**
+ * @brief Applies a pattern to the active workspace and re-tiles. An empty id is Grid, not
+ *        manual mode: manual is the auto-layout switch turned off, which the picker's Manual
+ *        entry does directly.
+ */
+void UI::WindowManager::selectLayoutPattern(const QString& pattern, const int ratio)
+{
+  m_layoutPattern = pattern.trimmed().toLower();
+  m_layoutRatio   = qBound(1, ratio, Layouts::kRatioDenominator - 1);
+
+  if (m_taskbar) {
+    static auto& project = DataModel::ProjectModel::instance();
+    project.setLayoutChoice(
+      m_taskbar->layoutScope(), m_taskbar->activeGroupId(), m_layoutPattern, m_layoutRatio);
+  }
+
+  Q_EMIT layoutChoiceChanged();
+
+  if (!m_autoLayoutEnabled)
+    setAutoLayoutEnabled(true);
+
+  else
+    autoLayout();
 }
 
 /**
@@ -1040,7 +1170,20 @@ void UI::WindowManager::bringToFront(QQuickItem* item)
  */
 void UI::WindowManager::setTaskbar(QQuickItem* taskbar)
 {
+  if (m_taskbar)
+    disconnect(m_workspaceConnection);
+
   m_taskbar = qobject_cast<UI::Taskbar*>(taskbar);
+  if (!m_taskbar)
+    return;
+
+  refreshLayoutChoice();
+  m_workspaceConnection = connect(m_taskbar, &UI::Taskbar::activeGroupIdChanged, this, [this] {
+    refreshLayoutChoice();
+    Q_EMIT layoutChoiceChanged();
+    if (m_autoLayoutEnabled)
+      triggerLayoutUpdate();
+  });
 }
 
 /**
@@ -1170,7 +1313,6 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 
     if (enabled) {
       m_manualGeometries.clear();
-      m_manualMargins.clear();
       m_manualCanvasWidth  = 0;
       m_manualCanvasHeight = 0;
     }
@@ -1182,182 +1324,91 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
     loadLayout();
 
     if (!m_autoLayoutEnabled)
-      for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it)
-        storeManualGeometry(it.key(), it.value());
+      storeManualLayout();
 
     Q_EMIT autoLayoutEnabledChanged();
   }
 }
 
 /**
- * @brief Stores the preferred manual geometry and anchor margins for a window.
+ * @brief Stores one window's geometry as the reference the manual layout is re-derived from.
  */
-void UI::WindowManager::storeManualGeometry(const int id,
-                                            QQuickItem* item,
-                                            const int canvasWidth,
-                                            const int canvasHeight)
+void UI::WindowManager::storeManualGeometry(const int id, QQuickItem* item)
 {
   if (!item)
     return;
 
-  const QRect geom = extractGeometry(item);
-  m_manualGeometries.insert(id, geom);
+  m_manualGeometries.insert(id, extractGeometry(item));
 
-  const int canvasW = canvasWidth > 0 ? canvasWidth : static_cast<int>(width());
-  const int canvasH = canvasHeight > 0 ? canvasHeight : static_cast<int>(height());
+  const int canvasW = static_cast<int>(width());
+  const int canvasH = static_cast<int>(height());
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
   m_manualCanvasWidth  = canvasW;
   m_manualCanvasHeight = canvasH;
-  m_manualMargins.insert(id, manualMarginsForGeometry(geom, canvasW, canvasH));
 }
 
 /**
- * @brief Repositions manual-layout windows to preserve edge anchoring on resize.
+ * @brief Snapshots every normal window as the new manual reference. The reference canvas size
+ *        is shared, so storing one window alone would leave the rest read against a size they
+ *        were never laid out on - which is how editing one widget used to move the others.
  */
-void UI::WindowManager::applyManualAnchors(const int newWidth, const int newHeight)
+void UI::WindowManager::storeManualLayout()
+{
+  for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it)
+    if (it.value() && it.value()->state() == "normal")
+      storeManualGeometry(it.key(), it.value());
+}
+
+/**
+ * @brief Lays the stored manual reference out on a canvas of the given size, holding every
+ *        join at the configured spacing and every outer edge flush. Reads the reference and
+ *        never its own output, so repeated resizes cannot accumulate drift.
+ */
+void UI::WindowManager::applyManualLayout(const int newWidth, const int newHeight)
 {
   if (newWidth <= 0 || newHeight <= 0)
     return;
 
-  int refWidth  = m_manualCanvasWidth > 0 ? m_manualCanvasWidth : newWidth;
-  int refHeight = m_manualCanvasHeight > 0 ? m_manualCanvasHeight : newHeight;
+  int refWidth  = m_manualCanvasWidth > 0 ? m_manualCanvasWidth : m_lastCanvasWidth;
+  int refHeight = m_manualCanvasHeight > 0 ? m_manualCanvasHeight : m_lastCanvasHeight;
+  refWidth      = refWidth > 0 ? refWidth : newWidth;
+  refHeight     = refHeight > 0 ? refHeight : newHeight;
 
-  if (m_manualCanvasWidth <= 0 && m_lastCanvasWidth > 0)
-    refWidth = m_lastCanvasWidth;
+  m_manualCanvasWidth  = refWidth;
+  m_manualCanvasHeight = refHeight;
 
-  if (m_manualCanvasHeight <= 0 && m_lastCanvasHeight > 0)
-    refHeight = m_lastCanvasHeight;
-
-  if (m_manualCanvasWidth <= 0 && refWidth > 0)
-    m_manualCanvasWidth = refWidth;
-
-  if (m_manualCanvasHeight <= 0 && refHeight > 0)
-    m_manualCanvasHeight = refHeight;
-
+  QVector<int> ids;
+  QVector<QRect> reference;
   for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it) {
-    const int id = it.key();
-    auto* win    = it.value();
+    auto* win = it.value();
     if (!win || win->state() != "normal")
       continue;
 
-    if (!m_manualGeometries.contains(id) || !m_manualMargins.contains(id))
-      storeManualGeometry(id, win);
+    if (!m_manualGeometries.contains(it.key()))
+      m_manualGeometries.insert(it.key(), extractGeometry(win));
 
-    const QRect prefGeom   = m_manualGeometries.value(id, extractGeometry(win));
-    const QMargins margins = m_manualMargins.value(id, QMargins());
-    const QRect anchored =
-      scaledManualGeometry(prefGeom, margins, refWidth, refHeight, newWidth, newHeight);
-
-    const int left = Snap::snapToFraction(anchored.left(), newWidth, kSeamWeldTolerance);
-    const int top  = Snap::snapToFraction(anchored.top(), newHeight, kSeamWeldTolerance);
-    const int right =
-      Snap::snapToFraction(anchored.left() + anchored.width(), newWidth, kSeamWeldTolerance);
-    const int bottom =
-      Snap::snapToFraction(anchored.top() + anchored.height(), newHeight, kSeamWeldTolerance);
-
-    win->setX(left);
-    win->setY(top);
-    win->setWidth(qMax(kManualMinSize, right - left));
-    win->setHeight(qMax(kManualMinSize, bottom - top));
+    ids.append(it.key());
+    reference.append(m_manualGeometries.value(it.key()));
   }
 
-  weldManualSeams(newWidth, newHeight);
-}
-
-/**
- * @brief Maps every edge coordinate onto a shared representative, grouping values that sit
- *        within @a tolerance of each other; a group touching a canvas bound adopts that bound
- *        so outer edges stay flush with the canvas rather than with each other's average.
- */
-[[nodiscard]] static QHash<int, int> clusterEdges(const QVector<int>& edgeValues,
-                                                  const int canvasEnd,
-                                                  const int tolerance)
-{
-  QHash<int, int> mapping;
-  QVector<int> edges = edgeValues;
-  edges.append(0);
-  edges.append(canvasEnd);
-  std::sort(edges.begin(), edges.end());
-
-  int index = 0;
-  while (index < edges.size()) {
-    int last      = index;
-    long long sum = edges[index];
-    while (last + 1 < edges.size() && edges[last + 1] - edges[last] <= tolerance) {
-      ++last;
-      sum += edges[last];
-    }
-
-    const int count    = last - index + 1;
-    int representative = static_cast<int>(sum / count);
-    if (edges[index] == 0)
-      representative = 0;
-    else if (edges[last] == canvasEnd)
-      representative = canvasEnd;
-
-    for (int k = index; k <= last; ++k)
-      mapping.insert(edges[k], representative);
-
-    index = last + 1;
-  }
-
-  return mapping;
-}
-
-/**
- * @brief Removes the hairline gaps a manual-layout rescale leaves behind. Each window is
- *        scaled and rounded independently, so edges that were flush drift a few pixels apart;
- *        this welds near-coincident edges back onto one coordinate (spec 0052 follow-up).
- */
-void UI::WindowManager::weldManualSeams(const int canvasWidth, const int canvasHeight)
-{
-  if (canvasWidth <= 0 || canvasHeight <= 0)
+  if (ids.isEmpty())
     return;
 
-  QVector<QQuickItem*> windows;
-  QVector<int> xs;
-  QVector<int> ys;
-  for (auto* win : std::as_const(m_windows)) {
-    if (!win || win->state() != "normal")
+  const auto placed = Layouts::rescaleManual(
+    reference, QSize(refWidth, refHeight), QSize(newWidth, newHeight), m_dashboard.layoutSpacing());
+
+  for (int i = 0; i < ids.size(); ++i) {
+    auto* win = m_windows.value(ids[i]);
+    if (!win)
       continue;
 
-    const QRect geometry = extractGeometry(win);
-    windows.append(win);
-    xs.append(geometry.left());
-    xs.append(geometry.left() + geometry.width());
-    ys.append(geometry.top());
-    ys.append(geometry.top() + geometry.height());
-  }
-
-  if (windows.isEmpty())
-    return;
-
-  const auto xMap   = clusterEdges(xs, canvasWidth, kSeamWeldTolerance);
-  const auto yMap   = clusterEdges(ys, canvasHeight, kSeamWeldTolerance);
-  const int spacing = m_dashboard.layoutSpacing();
-
-  for (auto* win : std::as_const(windows)) {
-    const QRect geometry = extractGeometry(win);
-    const int minWidth   = qMax(static_cast<int>(win->implicitWidth()), kManualMinSize);
-    const int minHeight  = qMax(static_cast<int>(win->implicitHeight()), kManualMinSize);
-
-    int left         = xMap.value(geometry.left(), geometry.left());
-    int top          = yMap.value(geometry.top(), geometry.top());
-    const int right  = xMap.value(geometry.left() + geometry.width(), geometry.right() + 1);
-    const int bottom = yMap.value(geometry.top() + geometry.height(), geometry.bottom() + 1);
-
-    if (left > 0)
-      left += spacing;
-
-    if (top > 0)
-      top += spacing;
-
-    win->setX(left);
-    win->setY(top);
-    win->setWidth(qMax(minWidth, right - left));
-    win->setHeight(qMax(minHeight, bottom - top));
+    placeWindow(win,
+                placed[i].x(),
+                placed[i].y(),
+                qMax(kManualMinSize, placed[i].width()),
+                qMax(kManualMinSize, placed[i].height()));
   }
 }
 
@@ -1611,7 +1662,7 @@ void UI::WindowManager::triggerLayoutUpdate()
     }
 
     if (sizeChanged)
-      applyManualAnchors(canvasW, canvasH);
+      applyManualLayout(canvasW, canvasH);
 
     m_suppressGeometrySignal = sizeChanged;
     const bool shouldCascade = hasUninitializedWindows && !m_layoutRestored;
@@ -1623,6 +1674,8 @@ void UI::WindowManager::triggerLayoutUpdate()
 
     m_suppressGeometrySignal = false;
   }
+
+  computeMergedEdges();
 
   if (sizeValid) {
     m_lastCanvasWidth  = canvasW;
@@ -2299,17 +2352,17 @@ bool UI::WindowManager::tryReorderDraggedWindow()
 }
 
 /**
- * @brief Persists window geometry under its id and emits geometryChanged.
+ * @brief Re-bases the manual reference on the finished gesture and emits geometryChanged. The
+ *        whole layout is snapshotted, not just the edited window: the canvas the reference is
+ *        measured against is shared by all of them.
  */
 void UI::WindowManager::commitManualGeometry(QQuickItem* window)
 {
   if (!window)
     return;
 
-  const int id = getIdForWindow(window);
-  if (id >= 0)
-    storeManualGeometry(id, window);
-
+  storeManualLayout();
+  computeMergedEdges();
   Q_EMIT geometryChanged(window);
 }
 

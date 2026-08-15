@@ -117,9 +117,12 @@ def strip_declared_deltas(config):
 def strip_live_connection(config):
     """Drop per-source connection blocks: loading a project resolves them against
     live device discovery (BLE scan results, enumerated ports), so they are
-    environment state, not document state."""
+    environment state, not document state. `treeExpansion` goes with them: the
+    editor rewrites it on a debounced rebuild, keyed by the project title in
+    effect at that moment, so it depends on load timing rather than the file."""
     for source in config.get("sources", []):
         source.pop("connection", None)
+    config.pop("treeExpansion", None)
     return config
 
 

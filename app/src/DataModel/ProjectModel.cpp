@@ -844,6 +844,36 @@ QJsonObject DataModel::ProjectModel::groupLayout(const QString& scope, int group
 }
 
 /**
+ * @brief Returns the auto-layout pattern and split ratio stored for a group or workspace, as
+ *        "pattern" and "ratio". These live beside the manual geometry under the same layout
+ *        key, which is what keeps the choice out of the workspace list: no customize mode, and
+ *        group tabs carry one just like user workspaces do.
+ */
+QJsonObject DataModel::ProjectModel::layoutChoice(const QString& scope, int groupId) const
+{
+  const auto entry = m_widgetSettings.value(Keys::layoutKey(scope, groupId)).toObject();
+
+  QJsonObject out;
+  out.insert(QStringLiteral("pattern"), entry.value(QStringLiteral("pattern")).toString());
+  out.insert(QStringLiteral("ratio"), entry.value(QStringLiteral("ratio")).toInt(8));
+  return out;
+}
+
+/**
+ * @brief Stores the auto-layout pattern and split ratio for a group or workspace. Writes the
+ *        two sub-keys separately so the manual geometry sitting under "data" is untouched.
+ */
+void DataModel::ProjectModel::setLayoutChoice(const QString& scope,
+                                              int groupId,
+                                              const QString& pattern,
+                                              int ratio)
+{
+  const auto key = Keys::layoutKey(scope, groupId);
+  saveWidgetSetting(key, QStringLiteral("pattern"), pattern.trimmed().toLower());
+  saveWidgetSetting(key, QStringLiteral("ratio"), qBound(1, ratio, 15));
+}
+
+/**
  * @brief Returns the persisted external-window records (workspace, geometry, state).
  */
 QJsonArray DataModel::ProjectModel::externalWindows() const

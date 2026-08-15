@@ -2048,12 +2048,15 @@ jobs:
       run: |
         # The API path policy defaults to home + temp; the repo corpus that the
         # round-trip baseline tests open lives in the workspace (outside home on
-        # the Windows runners), so allow all three explicitly.
+        # the Windows runners), so allow all three explicitly. pytest's tmp_path
+        # follows TMPDIR, which on the macOS runners is a private /var/folders
+        # tree under neither home nor /tmp -- without it every tmp_path project
+        # file is rejected as "filePath is not allowed".
         if [ "${{ matrix.os }}" = "windows" ]; then
           export SERIAL_STUDIO_API_ALLOWED_PATHS="$(cygpath -w "$GITHUB_WORKSPACE");$USERPROFILE;$(cygpath -w "$RUNNER_TEMP")"
         else
           ulimit -c unlimited
-          export SERIAL_STUDIO_API_ALLOWED_PATHS="$GITHUB_WORKSPACE:$HOME:/tmp:$RUNNER_TEMP"
+          export SERIAL_STUDIO_API_ALLOWED_PATHS="$GITHUB_WORKSPACE:$HOME:/tmp:$RUNNER_TEMP:${TMPDIR:-/tmp}"
         fi
         # Capture app output so the assert-scan step can surface SS_ASSERT hits.
         "$SS_RUN" --headless --api-server > ss_output.log 2>&1 &
@@ -2081,6 +2084,33 @@ jobs:
           --timeout-method=${{ matrix.timeout_method }} \
           -q --tb=line --timeout=60 --junit-xml=test-results.xml
 
+    - name: '🔬 Capture hung app (Windows)'
+      if: always() && matrix.os == 'windows' && steps.run_tests.outcome == 'failure'
+      continue-on-error: true
+      run: |
+        # A wedged app leaves no WER dump (nothing crashed), so take one ourselves:
+        # comsvcs.dll's MiniDump entry point ships with Windows, no extra tooling.
+        mkdir -p crash-reports
+        PID="$(cat ss_pid.txt 2>/dev/null)"
+        if [ -z "$PID" ]; then
+          echo 'no ss_pid.txt; nothing to dump' | tee crash-reports/hang-liveness.txt
+          exit 0
+        fi
+        if kill -0 "$PID" 2>/dev/null; then
+          echo "Serial Studio (pid $PID) still ALIVE after test failure -> HANG; dumping" \
+            | tee crash-reports/hang-liveness.txt
+          WIN_PID="$(powershell -NoProfile -Command "(Get-Process -Id $PID -ErrorAction SilentlyContinue).Id")"
+          DUMP="$(cygpath -w "$PWD/crash-reports/hang-full.dmp")"
+          powershell -NoProfile -Command \
+            "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump ${WIN_PID:-$PID} '$DUMP' full" \
+            || echo 'MiniDump failed' | tee -a crash-reports/hang-liveness.txt
+        else
+          echo "Serial Studio (pid $PID) GONE after test failure -> crashed/exited, not a hang" \
+            | tee crash-reports/hang-liveness.txt
+        fi
+        echo '--- captured ---'
+        ls -la crash-reports || true
+
     - name: '🔬 Capture hung app (macOS)'
       if: always() && matrix.os == 'macos' && steps.run_tests.outcome == 'failure'
       continue-on-error: true
@@ -2102,6 +2132,22 @@ jobs:
         fi
         echo '--- captured ---'
         ls -la crash-reports || true
+
+    - name: '🩺 Report app liveness after tests'
+      if: always()
+      continue-on-error: true
+      run: |
+        # A mid-suite death turns every later test into a connection error, which reads
+        # like hundreds of unrelated failures; say so explicitly and show the app's last
+        # words, since a clean exit leaves no crash dump behind.
+        PID="$(cat ss_pid.txt 2>/dev/null)"
+        if [ -n "$PID" ] && kill -0 "$PID" 2>/dev/null; then
+          echo "Serial Studio (pid $PID) still running after the suite."
+        else
+          echo "::warning title=App exited early::Serial Studio (pid ${PID:-unknown}) was gone when the suite ended"
+          echo '--- tail of ss_output.log ---'
+          tail -n 60 ss_output.log 2>/dev/null || echo '(no ss_output.log)'
+        fi
 
     - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
       if: matrix.os == 'linux'

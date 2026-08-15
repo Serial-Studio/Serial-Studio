@@ -48,10 +48,21 @@
 
 static constexpr double kInvMs          = 1.0 / 1000.0;
 static constexpr int kMaxSeekWindowRows = 262144;
+static constexpr int kDefaultIntervalMs = 1000;
 
 //--------------------------------------------------------------------------------------------------
 // Local helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief True when no user can answer a modal dialog (headless/offscreen, e.g. --headless with the
+ *        API server, the spec-0044 verifier child, CI). Callers then take the legacy default:
+ *        a blocking prompt here would wedge the API dispatch that asked for the open.
+ */
+static bool nonInteractive()
+{
+  return !qApp || qApp->platformName() == QLatin1String("offscreen");
+}
 
 /**
  * @brief Formats fractional seconds as HH:MM:SS.mmm.
@@ -1346,6 +1357,9 @@ double CSV::Player::promptTimestampUnitScale()
   SS_ASSERT_LOG(m_tsMode == PlayerTimestampMode::Numeric);
   SS_ASSERT_LOG(!m_headerCells.isEmpty());
 
+  if (nonInteractive())
+    return 1.0;
+
   QStringList options;
   options << tr("Seconds (s)") << tr("Milliseconds (ms)") << tr("Microseconds (us)");
 
@@ -1383,6 +1397,12 @@ bool CSV::Player::promptUserForDateTimeOrInterval(QByteArrayView firstDataRow)
     return false;
   }
 
+  if (nonInteractive()) {
+    m_tsMode          = PlayerTimestampMode::Interval;
+    m_intervalSeconds = kDefaultIntervalMs * kInvMs;
+    return true;
+  }
+
   bool ok;
   QStringList options;
   options << tr("Select a date/time column") << tr("Set interval manually");
@@ -1402,7 +1422,7 @@ bool CSV::Player::promptUserForDateTimeOrInterval(QByteArrayView firstDataRow)
       QInputDialog::getInt(nullptr,
                            tr("Set Interval"),
                            tr("Please enter the interval between rows in milliseconds:"),
-                           1000,
+                           kDefaultIntervalMs,
                            1,
                            1000000,
                            1,

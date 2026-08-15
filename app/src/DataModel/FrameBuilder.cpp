@@ -681,10 +681,20 @@ void DataModel::FrameBuilder::refreshLatestFrameCapture()
   static auto& server        = API::Server::instance();
   m_captureLatestFrame       = controlScript.running() || server.enabled();
 
-  if (wasEnabled && !m_captureLatestFrame) {
-    m_latestFrames.clear();
-    m_latestFrameSourceId = -1;
-  }
+  if (wasEnabled && !m_captureLatestFrame)
+    clearLatestFrames();
+}
+
+/**
+ * @brief Drops every retained capture and moves the sequence on, so the GUI mirror republishes
+ *        the empty map: publishLatestFrameSnapshot() compares sequences, and a clear that left
+ *        the sequence alone kept io.getLatestFrame serving the previous connection's frame.
+ */
+void DataModel::FrameBuilder::clearLatestFrames()
+{
+  m_latestFrames.clear();
+  m_latestFrameSourceId = -1;
+  ++m_latestFrameSeq;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -905,8 +915,7 @@ void DataModel::FrameBuilder::onOperationModeChanged()
   m_republishedSourceIds.clear();
   m_streamDatasetIds.clear();
   m_streamValuesDirty = false;
-  m_latestFrames.clear();
-  m_latestFrameSourceId = -1;
+  clearLatestFrames();
   invalidateFramePool();
   parseBudgetReset();
 }
@@ -1285,15 +1294,13 @@ void DataModel::FrameBuilder::onConnectedChanged()
     m_republishedSourceIds.clear();
     m_streamDatasetIds.clear();
     m_streamValuesDirty = false;
-    m_latestFrames.clear();
-    m_latestFrameSourceId = -1;
+    clearLatestFrames();
     destroyTransformEngines();
     m_tableStore.clear();
     return;
   }
 
-  m_latestFrames.clear();
-  m_latestFrameSourceId = -1;
+  clearLatestFrames();
 
   if (m_operationMode != SerialStudio::ProjectFile)
     return;

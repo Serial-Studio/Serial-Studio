@@ -3,7 +3,7 @@
   "changeDrivenTransforms": false,
   "controlScriptCode": "/**\n * Vibration Test Rig - Control Loop\n *\n * Launches the bundled Python data generator (vibration_test_rig.py) automatically when\n * the connection opens, so the example works without running anything by\n * hand. The helper process is stopped by Serial Studio when the device is\n * disconnected, when the project changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first\n * (Linux/macOS), falling back to \"python\" (typical on Windows).\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/vibration_test_rig.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction setup() {\n  startHelper();\n}\n\nfunction loop() {\n  delay(1000);\n}\n",
   "customizeWorkspaces": true,
-  "frozen": true,
+  "frozen": false,
   "groups": [
     {
       "datasets": [
@@ -300,6 +300,7 @@
     }
   ],
   "hexadecimalDelimiters": false,
+  "luaFastMode": false,
   "mqttPublisher": {
     "alpnEnabled": false,
     "alpnProtocol": "x-amzn-mqtt-ca",
@@ -354,7 +355,7 @@
       "colorbarVisible": true,
       "cursorEnabled": true
     },
-    "activeGroup": 5002,
+    "activeGroup": 5000,
     "layout:1000": {
       "data": {
         "autoLayout": true,
@@ -808,38 +809,38 @@
     "layout:5000": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 564,
+        "canvasWidth": 1115,
         "geometries": [
           {
-            "height": 546,
+            "height": 564,
             "id": 12,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 21,
-            "width": 525,
+            "width": 558,
             "x": 0,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 282,
             "id": 5,
             "relativeIndex": 1,
             "state": "normal",
             "widgetType": 22,
-            "width": 527,
-            "x": 524,
+            "width": 557,
+            "x": 557,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 282,
             "id": 4,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 22,
-            "width": 527,
-            "x": 524,
-            "y": 272
+            "width": 557,
+            "x": 557,
+            "y": 281
           }
         ],
         "userReordered": true,
@@ -1009,6 +1010,65 @@
           {
             "relativeIndex": 1,
             "widgetType": 22
+          }
+        ]
+      }
+    },
+    "layout:5002": {
+      "data": {
+        "autoLayout": true,
+        "canvasHeight": 564,
+        "canvasWidth": 1115,
+        "geometries": [
+          {
+            "height": 564,
+            "id": 7,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 9,
+            "width": 558,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "height": 282,
+            "id": 6,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 7,
+            "width": 557,
+            "x": 557,
+            "y": 0
+          },
+          {
+            "height": 282,
+            "id": 12,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 21,
+            "width": 557,
+            "x": 557,
+            "y": 281
+          }
+        ],
+        "userReordered": false,
+        "windowOrder": [
+          7,
+          6,
+          12
+        ],
+        "windowOrderTyped": [
+          {
+            "relativeIndex": 0,
+            "widgetType": 9
+          },
+          {
+            "relativeIndex": 0,
+            "widgetType": 7
+          },
+          {
+            "relativeIndex": 0,
+            "widgetType": 21
           }
         ]
       }

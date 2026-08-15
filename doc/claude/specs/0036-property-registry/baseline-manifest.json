@@ -10,7 +10,7 @@
     },
     {
       "path": "examples/CAN Bus Example/ecu_simulator.ssproj",
-      "sha256": "064d38f0b10bd1878694aee3dae06ed5d645181a1b5b09b94d19b6ced63b7d80"
+      "sha256": "682f1d3e0372a9556c1d8bbadbd6f0cc016068629d42071331d9b896290129f9"
     },
     {
       "path": "examples/Camera Telemetry/Camera Telemetry.ssproj",

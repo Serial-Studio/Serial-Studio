@@ -31,7 +31,7 @@ from pathlib import Path
 
 import pytest
 
-from utils import APIError
+from utils import APIError, session_diagnostics
 
 # ---------------------------------------------------------------------------
 # Pro gating fixtures
@@ -172,7 +172,10 @@ def _record_js_session(
     _close_session(api_client)
     _enable_export(api_client, False)
 
-    assert db_path.exists(), f"session DB was never created at {db_path}"
+    assert db_path.exists(), (
+        f"session DB was never created at {db_path}; "
+        f"state={session_diagnostics(api_client)}"
+    )
     return db_path
 
 

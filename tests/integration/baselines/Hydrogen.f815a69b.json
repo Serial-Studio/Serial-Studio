@@ -132,6 +132,7 @@
     }
   ],
   "hexadecimalDelimiters": false,
+  "luaFastMode": false,
   "mqttPublisher": {
     "alpnEnabled": false,
     "alpnProtocol": "x-amzn-mqtt-ca",
@@ -178,28 +179,6 @@
     }
   ],
   "title": "Hydrogen Atom: 1s Orbital",
-  "treeExpansion": {
-    "": false,
-    "Hydrogen Atom: 1s Orbital": true,
-    "Hydrogen Atom: 1s Orbital/ ": false,
-    "Hydrogen Atom: 1s Orbital/Control Loop": false,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets": true,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets/3D Visualization": true,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets/3D Visualization/X": false,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets/3D Visualization/Y": false,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets/3D Visualization/Z": false,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets/Probability Density": true,
-    "Hydrogen Atom: 1s Orbital/Dashboard Widgets/Probability Density/ψ²": false,
-    "Hydrogen Atom: 1s Orbital/Device A": true,
-    "Hydrogen Atom: 1s Orbital/Device A/Frame Parser": false,
-    "Hydrogen Atom: 1s Orbital/MQTT Publisher": false,
-    "Hydrogen Atom: 1s Orbital/Shared Memory": true,
-    "Hydrogen Atom: 1s Orbital/Shared Memory/Dataset Values": false,
-    "Hydrogen Atom: 1s Orbital/Workspaces": true,
-    "Hydrogen Atom: 1s Orbital/Workspaces/3D Visualization": false,
-    "Hydrogen Atom: 1s Orbital/Workspaces/All Data": false,
-    "Hydrogen Atom: 1s Orbital/Workspaces/Probability Density": false
-  },
   "widgetSettings": {
     "6:0:-1": {
       "anaglyphEnabled": false,

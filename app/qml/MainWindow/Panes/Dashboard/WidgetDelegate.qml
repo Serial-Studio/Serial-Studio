@@ -41,13 +41,26 @@ Widgets.MiniWindow {
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
   windowControlsVisible: !Cpp_UI_TaskbarSettings.taskbarHidden
-  shadowEnabled: !root.frozen && root.state === "normal"
-                 && Cpp_UI_Dashboard.layoutSpacing > -1
+  shadowFollowsFocus: !root.frozen
+  shadowEnabled: root.state === "normal"
+                 && (root.frozen
+                     ? Cpp_UI_Dashboard.layoutSpacing >= 1
+                     : (Cpp_UI_Dashboard.layoutSpacing >= 0 || root.sharedEdges === 0))
 
   //
   // Effective freeze state: WidgetToolbar instances read this via windowRoot
   //
   readonly property bool frozen: Cpp_UI_Dashboard.frozen
+
+  //
+  // Shared-border merge (spec 0053): a frozen widget hides its own leading border where a
+  // neighbour already draws that line. Only flush layouts double a border.
+  //
+  readonly property int sharedEdges: windowManager.mergedEdges[root.widgetIndex] || 0
+  readonly property int mergedEdges: root.frozen && !root.headerVisible
+                                     && Cpp_UI_Dashboard.layoutSpacing === 0 ? root.sharedEdges : 0
+  readonly property bool mergeLeft: (root.mergedEdges & 1) !== 0
+  readonly property bool mergeTop: (root.mergedEdges & 4) !== 0
 
   //
   // Per-widget freeze-title mode ("bar"/"painted"/"hidden"): the project model resolves
@@ -469,13 +482,45 @@ Widgets.MiniWindow {
   // Add widget background
   //
   Rectangle {
+    id: _body
+
     clip: true
-    radius: root.radius
-    anchors.fill: parent
     border.width: 1
+    anchors.fill: parent
+    radius: root.mergedEdges !== 0 ? 0 : root.radius
     color: Cpp_ThemeManager.colors["widget_window"]
     border.color: Cpp_ThemeManager.colors["window_border"]
     anchors.topMargin: Math.max(0, root.captionHeight + (root.hasToolbar ? 48 : 0) - 1)
+
+    //
+    // Seam cover: hides this widget's own leading border where the neighbour above or to the
+    // left already draws that line. Painted inside the widget, never over the neighbour.
+    //
+    Rectangle {
+      z: 1
+      width: 1
+      color: _body.color
+      visible: root.mergeLeft
+
+      anchors {
+        top: parent.top
+        left: parent.left
+        bottom: parent.bottom
+      }
+    }
+
+    Rectangle {
+      z: 1
+      height: 1
+      color: _body.color
+      visible: root.mergeTop
+
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+    }
 
     Rectangle {
       anchors {

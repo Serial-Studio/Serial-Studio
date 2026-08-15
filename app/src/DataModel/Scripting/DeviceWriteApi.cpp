@@ -35,6 +35,7 @@ extern "C" {
 #include <stdexcept>
 
 #include "IO/ConnectionManager.h"
+#include "IO/PipelineHost.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
 
@@ -43,7 +44,10 @@ extern "C" {
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Performs the synchronous write to @p sourceId and logs the attempt.
+ * @brief Performs the synchronous write to @p sourceId and logs the attempt. The drivers own
+ *        their sockets on the GUI thread, so a parser or transform engine hosted on the pipeline
+ *        thread (spec 0051 M3) marshals there: writing across threads only buffers the bytes and
+ *        leaves the notifier disabled, so the device never sees them.
  */
 static qint64 performDeviceWrite(int sourceId, const QByteArray& data, QString& errorMsgOut)
 {
@@ -56,14 +60,16 @@ static qint64 performDeviceWrite(int sourceId, const QByteArray& data, QString& 
   }
 
   qint64 written = -1;
-  try {
-    static auto& ioManager = IO::ConnectionManager::instance();
-    written                = ioManager.writeDataToDevice(sourceId, data);
-  } catch (const std::exception& e) {
-    errorMsgOut = QString::fromUtf8(e.what());
-  } catch (...) {
-    errorMsgOut = QStringLiteral("unknown exception");
-  }
+  IO::PipelineHost::runOnGuiThreadBlocking([&] {
+    try {
+      static auto& ioManager = IO::ConnectionManager::instance();
+      written                = ioManager.writeDataToDevice(sourceId, data);
+    } catch (const std::exception& e) {
+      errorMsgOut = QString::fromUtf8(e.what());
+    } catch (...) {
+      errorMsgOut = QStringLiteral("unknown exception");
+    }
+  });
 
   if (written <= 0 && errorMsgOut.isEmpty())
     errorMsgOut = QStringLiteral("device not connected or write failed");
@@ -256,25 +262,33 @@ void DataModel::DeviceWriteApi::setJSDefaultSourceId(QJSEngine* js, int defaultS
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Dispatches an action by its public actionId; returns ok + diagnostic on failure.
+ * @brief Dispatches an action by its public actionId; returns ok + diagnostic on failure. Dashboard
+ *        is GUI-affine and the dispatch ends in a device write, so a pipeline-hosted engine
+ *        marshals for the same reason performDeviceWrite() does.
  */
 static bool fireActionByPublicId(int actionId, QString& errorMsgOut)
 {
   static auto& dashboard = UI::Dashboard::instance();
 
-  const int idx = dashboard.actionIndexForId(actionId);
+  int idx = -1;
+  IO::PipelineHost::runOnGuiThreadBlocking([&] {
+    idx = dashboard.actionIndexForId(actionId);
+    if (idx < 0)
+      return;
+
+    try {
+      dashboard.activateAction(idx, false);
+    } catch (const std::exception& e) {
+      errorMsgOut = QString::fromUtf8(e.what());
+    } catch (...) {
+      errorMsgOut = QStringLiteral("unknown exception");
+    }
+  });
+
   if (idx < 0) {
     errorMsgOut = QStringLiteral("actionFire: no action with actionId=%1").arg(actionId);
     qInfo().noquote() << QStringLiteral("[actionFire] rejected id=%1 (not found)").arg(actionId);
     return false;
-  }
-
-  try {
-    dashboard.activateAction(idx, false);
-  } catch (const std::exception& e) {
-    errorMsgOut = QString::fromUtf8(e.what());
-  } catch (...) {
-    errorMsgOut = QStringLiteral("unknown exception");
   }
 
   qInfo().noquote() << QStringLiteral("[actionFire] id=%1 index=%2 %3")

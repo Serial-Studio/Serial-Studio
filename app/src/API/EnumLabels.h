@@ -69,6 +69,16 @@ namespace EnumLabels {
 /**
  * @brief Returns a short slug for a SerialStudio::GroupWidget value.
  */
+/**
+ * @brief Returns the wire slug of a dashboard layout pattern (spec 0053).
+ */
+[[nodiscard]] QString layoutPatternSlug(int value);
+
+/**
+ * @brief Returns the human-readable name of a dashboard layout pattern.
+ */
+[[nodiscard]] QString layoutPatternLabel(int value);
+
 [[nodiscard]] QString groupWidgetSlug(int value);
 
 /**

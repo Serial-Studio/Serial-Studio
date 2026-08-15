@@ -36,6 +36,7 @@ Item {
   property string title: ""
   property bool headerVisible: true
   property bool shadowEnabled: true
+  property bool shadowFollowsFocus: true
   readonly property int defaultRadius: 0
   property bool windowControlsVisible: true
 
@@ -317,17 +318,23 @@ Item {
     anchors.fill: _shadowSrc
 
     //
+    // Lifted only while focused, and only where focus is a live notion: a frozen dashboard
+    // has no focus to follow, so its shadows must not flicker as the pointer moves
+    //
+    readonly property bool lifted: root.focused && root.shadowFollowsFocus
+
+    //
     // Blur config
     //
     blurEnabled: true
-    blur: root.focused ? 0.6 : 0.3
-    blurMax: root.focused ? 24 : 12
+    blur: lifted ? 0.6 : 0.3
+    blurMax: lifted ? 24 : 12
 
     //
     // Shadow config
     //
     shadowEnabled: true
-    shadowOpacity: root.focused ? 0.07 : 0.035
+    shadowOpacity: lifted ? 0.07 : 0.035
     shadowColor: Cpp_ThemeManager.colors["shadow"]
 
     //

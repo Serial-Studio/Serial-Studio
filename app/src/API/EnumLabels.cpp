@@ -11,6 +11,8 @@
 
 #include <QStringList>
 
+#include "UI/LayoutPatterns.h"
+
 //--------------------------------------------------------------------------------------------------
 // BusType
 //--------------------------------------------------------------------------------------------------
@@ -240,6 +242,36 @@ QString API::EnumLabels::scriptLanguageLabel(int value)
 //--------------------------------------------------------------------------------------------------
 // GroupWidget
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the wire slug of a dashboard layout pattern; Grid is the empty default.
+ */
+QString API::EnumLabels::layoutPatternSlug(int value)
+{
+  return UI::Layouts::patternId(static_cast<UI::Layouts::Pattern>(value));
+}
+
+/**
+ * @brief Returns the human-readable name of a dashboard layout pattern.
+ */
+QString API::EnumLabels::layoutPatternLabel(int value)
+{
+  switch (static_cast<UI::Layouts::Pattern>(value)) {
+    case UI::Layouts::Pattern::MasterStack:
+      return QStringLiteral("Master + Stack");
+    case UI::Layouts::Pattern::MasterGrid:
+      return QStringLiteral("Master + Grid");
+    case UI::Layouts::Pattern::Row:
+      return QStringLiteral("Row");
+    case UI::Layouts::Pattern::Column:
+      return QStringLiteral("Column");
+    case UI::Layouts::Pattern::Spiral:
+      return QStringLiteral("Spiral");
+    case UI::Layouts::Pattern::Grid:
+      return QStringLiteral("Grid");
+  }
+  return QStringLiteral("Grid");
+}
 
 /**
  * @brief Returns a short slug for a GroupWidget value.

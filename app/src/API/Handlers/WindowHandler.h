@@ -48,6 +48,7 @@ private:
   static CommandResponse loadLayout(const QString& id, const QJsonObject& params);
   static CommandResponse getLayout(const QString& id, const QJsonObject& params);
   static CommandResponse setLayout(const QString& id, const QJsonObject& params);
+  static CommandResponse setLayoutPattern(const QString& id, const QJsonObject& params);
   static CommandResponse getWidgetSettings(const QString& id, const QJsonObject& params);
   static CommandResponse setWidgetSetting(const QString& id, const QJsonObject& params);
 };

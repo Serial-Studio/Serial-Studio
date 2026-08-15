@@ -2411,144 +2411,144 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="492"/>
+        <location filename="../../src/CSV/Player.cpp" line="503"/>
         <source>Select CSV file</source>
         <translation>CSV 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="494"/>
+        <location filename="../../src/CSV/Player.cpp" line="505"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 파일 (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="617"/>
+        <location filename="../../src/CSV/Player.cpp" line="628"/>
         <source>Device Connection Active</source>
         <translation>장치 연결 활성화됨</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="618"/>
+        <location filename="../../src/CSV/Player.cpp" line="629"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>이 기능을 사용하려면 장치 연결을 해제해야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="632"/>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="643"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>Check file permissions and location</source>
         <translation>파일 권한 및 위치 확인</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="639"/>
-        <location filename="../../src/CSV/Player.cpp" line="720"/>
-        <location filename="../../src/CSV/Player.cpp" line="905"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="731"/>
+        <location filename="../../src/CSV/Player.cpp" line="916"/>
         <source>Insufficient Data in CSV File</source>
         <translation>CSV 파일의 데이터 부족</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="632"/>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="643"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>Cannot read CSV file</source>
         <translation>CSV 파일을 읽을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="640"/>
-        <location filename="../../src/CSV/Player.cpp" line="721"/>
-        <location filename="../../src/CSV/Player.cpp" line="906"/>
+        <location filename="../../src/CSV/Player.cpp" line="651"/>
+        <location filename="../../src/CSV/Player.cpp" line="732"/>
+        <location filename="../../src/CSV/Player.cpp" line="917"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV 파일에는 진행하려면 최소 하나의 데이터 행이 포함되어야 합니다. 파일을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="899"/>
+        <location filename="../../src/CSV/Player.cpp" line="910"/>
         <source>CSV Row Limit Reached</source>
         <translation>CSV 행 제한 도달</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="900"/>
+        <location filename="../../src/CSV/Player.cpp" line="911"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>재생은 %L1개 행으로 제한됩니다. 파일의 나머지 부분은 인덱싱되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Seconds (s)</source>
         <translation>초 (s)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Milliseconds (ms)</source>
         <translation>밀리초 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1350"/>
+        <location filename="../../src/CSV/Player.cpp" line="1364"/>
         <source>Microseconds (us)</source>
         <translation>마이크로초 (us)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1354"/>
+        <location filename="../../src/CSV/Player.cpp" line="1368"/>
         <source>Timestamp Units</source>
         <translation>타임스탬프 단위</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1355"/>
+        <location filename="../../src/CSV/Player.cpp" line="1369"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>타임스탬프 열에 단위가 선언되지 않았습니다. 어떻게 해석해야 합니까?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1380"/>
+        <location filename="../../src/CSV/Player.cpp" line="1394"/>
         <source>Invalid CSV</source>
         <translation>잘못된 CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1381"/>
+        <location filename="../../src/CSV/Player.cpp" line="1395"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV 파일에 데이터 또는 헤더가 포함되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1388"/>
+        <location filename="../../src/CSV/Player.cpp" line="1408"/>
         <source>Select a date/time column</source>
         <translation>날짜/시간 열 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1388"/>
-        <location filename="../../src/CSV/Player.cpp" line="1400"/>
+        <location filename="../../src/CSV/Player.cpp" line="1408"/>
+        <location filename="../../src/CSV/Player.cpp" line="1420"/>
         <source>Set interval manually</source>
         <translation>간격 수동 설정</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1390"/>
+        <location filename="../../src/CSV/Player.cpp" line="1410"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV 날짜/시간 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1391"/>
+        <location filename="../../src/CSV/Player.cpp" line="1411"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>날짜/시간 데이터 처리 방법 선택:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1403"/>
+        <location filename="../../src/CSV/Player.cpp" line="1423"/>
         <source>Set Interval</source>
         <translation>간격 설정</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1404"/>
+        <location filename="../../src/CSV/Player.cpp" line="1424"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>행 간 간격을 밀리초 단위로 입력하십시오:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1421"/>
+        <location filename="../../src/CSV/Player.cpp" line="1441"/>
         <source>Select Date/Time Column</source>
         <translation>날짜/시간 열 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1422"/>
+        <location filename="../../src/CSV/Player.cpp" line="1442"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>날짜/시간 데이터가 포함된 열을 선택하십시오:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1452"/>
         <source>Invalid Selection</source>
         <translation>잘못된 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1452"/>
         <source>The selected column is not valid.</source>
         <translation>선택한 열이 유효하지 않습니다.</translation>
     </message>
@@ -4458,17 +4458,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>대체 위젯이 활성화되었습니다. 전체 기능을 사용하려면 라이선스를 구매하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="796"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="797"/>
         <source>Empty Workspace</source>
         <translation>빈 작업 공간</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="810"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="811"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>검색 바를 사용하여 위젯을 찾아 추가하거나, 다른 작업 공간의 위젯을 마우스 오른쪽 버튼으로 클릭하여 여기에 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="825"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="826"/>
         <source>Search Widgets</source>
         <translation>위젯 검색</translation>
     </message>
@@ -4591,28 +4591,28 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>값</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>일시정지</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>재개</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <source>Awaiting data…</source>
         <translation>데이터 대기 중…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
         <source>Open %1 in a separate window</source>
         <translation>%1을(를) 별도 창에서 열기</translation>
     </message>
@@ -5066,29 +5066,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2631"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2769"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2638"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2776"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2780"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2787"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2640"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2785"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2647"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2792"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2313"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2320"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 변환 예산 초과</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2314"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2321"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>데이터셋 변환이 %1ms 이상 소요되어, 프레임의 나머지 데이터셋은 다음 프레임까지 원시 값으로 대체되었습니다. 변환 코드를 프로파일링하거나 단순화하세요.</translation>
     </message>
@@ -5103,17 +5103,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 세션 DB, API 구독자)가 프레임을 충분히 빠르게 처리하지 못하고 있습니다. Serial Studio가 백로그가 해소될 때까지 프레임별 할당으로 전환합니다. 무거운 소비자를 비활성화하거나 데이터 속도를 줄이세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2591"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2598"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2647"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2654"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2659"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2666"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
@@ -7477,62 +7477,62 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>샘플</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1187"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT 발행자 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1255"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1285"/>
         <source>Rename Widget</source>
         <translation>위젯 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1256"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1286"/>
         <source>Display title (empty restores the original):</source>
         <translation>표시 제목 (비워두면 원래대로 복원됨):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1622"/>
         <source>Change Project Title</source>
         <translation>프로젝트 제목 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1616"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
         <source>Edit Control Script</source>
         <translation>제어 스크립트 편집</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1633"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1663"/>
         <source>Change Point Count</source>
         <translation>포인트 개수 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1656"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1686"/>
         <source>Change Plot Time Range</source>
         <translation>플롯 시간 범위 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1682"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1712"/>
         <source>Toggle Freeze</source>
         <translation>고정 전환</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1727"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>변경 기반 변환 전환</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1744"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>고속 Lua 실행 전환</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1765"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>고속 Lua 실행을 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1736"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1766"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -7541,37 +7541,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 안전 모드에서 먼저 테스트하고 신뢰할 수 있는 스크립트에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1741"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1771"/>
         <source>Fast Lua Execution</source>
         <translation>고속 Lua 실행</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1770"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1800"/>
         <source>Change Frame Start Sequence</source>
         <translation>프레임 시작 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1789"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1819"/>
         <source>Change Frame End Sequence</source>
         <translation>프레임 종료 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
         <source>Change Checksum</source>
         <translation>체크섬 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1827"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1857"/>
         <source>Change Frame Detection</source>
         <translation>프레임 감지 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1904"/>
         <source>Change Decoder</source>
         <translation>디코더 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1923"/>
         <source>Toggle Hex Delimiters</source>
         <translation>16진수 구분자 전환</translation>
     </message>
@@ -7742,20 +7742,20 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1512"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1542"/>
         <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
+        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="604"/>
         <source>Device A</source>
         <translation>장치 A</translation>
@@ -8170,9 +8170,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="233"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>Workspace</source>
         <translation>작업 공간</translation>
     </message>
@@ -8195,10 +8195,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>새 공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1980"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
@@ -8211,8 +8213,6 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="399"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
@@ -8223,22 +8223,22 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>테이블 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
         <source>Rename Group</source>
         <translation>그룹 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2034"/>
         <source>Rename Dataset</source>
         <translation>데이터셋 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
         <source>Rename Data Source</source>
         <translation>데이터 소스 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
         <source>Rename Action</source>
         <translation>액션 이름 변경</translation>
     </message>
@@ -8253,10 +8253,10 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>레지스터 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="455"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="480"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
         <source>This action cannot be undone.</source>
         <translation>이 작업은 취소할 수 없습니다.</translation>
     </message>
@@ -8266,9 +8266,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>테이블과 함께 %1개의 레지스터가 제거됩니다. 이 작업은 취소할 수 없습니다.</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <source>Delete "%1"?</source>
         <translation>"%1"을(를) 삭제하시겠습니까?</translation>
     </message>
@@ -8321,8 +8321,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>테이블 CSV 가져오기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>New Workspace</source>
         <translation>새 작업 공간</translation>
     </message>
@@ -8385,8 +8385,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>폴더 추가</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <source>Move Group</source>
         <translation>그룹 이동</translation>
     </message>
@@ -13896,6 +13896,54 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
 </context>
 <context>
+    <name>LayoutPatternPicker</name>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="48"/>
+        <source>Grid</source>
+        <translation>격자</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="49"/>
+        <source>Master + Stack</source>
+        <translation>마스터 + 스택</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="50"/>
+        <source>Master + Grid</source>
+        <translation>마스터 + 격자</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="51"/>
+        <source>Row</source>
+        <translation>행</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="52"/>
+        <source>Column</source>
+        <translation>열</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="53"/>
+        <source>Spiral</source>
+        <translation>나선형</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <source>Layout</source>
+        <translation>레이아웃</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <source>Split</source>
+        <translation>분할</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <source>Manual placement</source>
+        <translation>수동 배치</translation>
+    </message>
+</context>
+<context>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
@@ -16009,8 +16057,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist를 쓸 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -16041,8 +16089,8 @@ Would you like to open the download page?</source>
         <translation>.lnk 파일 저장 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -16081,92 +16129,92 @@ Would you like to open the download page?</source>
         <translation type="vanished">%1이(가) 자동으로 업데이트를 확인하도록 하시겠습니까? "정보" 대화 상자에서 언제든지 수동으로 업데이트를 확인할 수 있습니다</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="175"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
         <source>Ok</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="177"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="179"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
         <source>Save all</source>
         <translation>모두 저장</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="181"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="183"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
         <source>Yes</source>
         <translation>예</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="185"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Yes to all</source>
         <translation>모두 예</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="187"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>No</source>
         <translation>아니요</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="189"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>No to all</source>
         <translation>모두 아니요</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="191"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Abort</source>
         <translation>중단</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="193"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Retry</source>
         <translation>재시도</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="195"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Ignore</source>
         <translation>무시</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="197"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="199"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="201"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Discard</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="203"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Help</source>
         <translation>도움말</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="205"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="207"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
         <source>Reset</source>
         <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="209"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
         <source>Restore defaults</source>
         <translation>기본값 복원</translation>
     </message>
@@ -19170,7 +19218,7 @@ Click Refresh to update the list.</source>
         <translation>일반 I/O 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="192"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="197"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -19179,13 +19227,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="375"/>
         <source>Frame Parser Disabled</source>
         <translation>프레임 파서 비활성화됨</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="376"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="486"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -19194,12 +19242,36 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 가장 가능성 높은 원인: 스크립트 본문의 무한 루프 또는 매우 느린 작업. 스크립트를 수정하고 프로젝트를 다시 로드하여 파싱을 재활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="494"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="304"/>
         <source>Lua Syntax Error</source>
         <translation>Lua 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="495"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="265"/>
+        <source>The parser code contains an error:
+
+%1
+
+Serial Studio can rewrite the unsupported operators as bit.* calls and reload the parser. The bit library works on 32-bit integers, so a value wider than 32 bits will wrap once rewritten.</source>
+        <translation>파서 코드에 오류가 있습니다:
+
+%1
+
+Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하여 파서를 다시 로드할 수 있습니다. bit 라이브러리는 32비트 정수에서 작동하므로 32비트보다 큰 값은 재작성 후 래핑됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
+        <source>Fix Automatically</source>
+        <translation>자동으로 수정</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
+        <source>Leave Unchanged</source>
+        <translation>변경하지 않음</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="305"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -19208,12 +19280,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="550"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="653"/>
         <source>Lua Runtime Error</source>
         <translation>Lua 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="551"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="654"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -19222,13 +19294,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="572"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="573"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="676"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -19239,13 +19311,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="592"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="635"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="636"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="739"/>
         <source>The parse function contains an error:
 
 %1
@@ -21371,78 +21443,87 @@ function parse(%1) { ... }
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="97"/>
         <source>Export</source>
         <translation>내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="173"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="180"/>
         <source>Language</source>
         <translation>언어</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="189"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Theme</source>
         <translation>테마</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="283"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="290"/>
         <source>Workspace Folder</source>
         <translation>작업 공간 폴더</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="678"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>Automatically Check for Updates</source>
         <translation>자동으로 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
         <source>Dashboard</source>
-        <translation>대시보드</translation>
+        <translation type="vanished">대시보드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="412"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="419"/>
         <source>Export…</source>
         <translation>내보내기…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="744"/>
         <source>Data Plotting</source>
         <translation>데이터 플로팅</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="804"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="811"/>
         <source>Point Count</source>
         <translation>포인트 수</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="829"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="836"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI 새로고침 레이트 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1215"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1020"/>
+        <source>Layout Margin</source>
+        <translation>레이아웃 여백</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1045"/>
+        <source>Layout Spacing</source>
+        <translation>레이아웃 간격</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1187"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>작업 표시줄 버튼 항상 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1056"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1070"/>
         <source>Show Actions Panel</source>
         <translation>작업 패널 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="330"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="337"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>API 서버 활성화 (포트 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1363"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1335"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="165"/>
         <source>Appearance</source>
         <translation>모양</translation>
     </message>
@@ -21455,27 +21536,27 @@ function parse(%1) { ... }
         <translation type="vanished">고급</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="355"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <source>Allow External API Connections</source>
         <translation>외부 API 연결 허용</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1072"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1086"/>
         <source>Auto-Hide Toolbar</source>
         <translation>도구 모음 자동 숨기기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
         <source>Taskbar</source>
         <translation>작업 표시줄</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="480"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="487"/>
         <source>Rendering Backend</source>
         <translation>렌더링 백엔드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="380"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="387"/>
         <source>API Access Token</source>
         <translation>API 액세스 토큰</translation>
     </message>
@@ -21485,12 +21566,12 @@ function parse(%1) { ... }
         <translation>시작</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="216"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="223"/>
         <source>Window</source>
         <translation>창</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Custom Window Decorations</source>
         <translation>사용자 정의 창 장식</translation>
     </message>
@@ -21499,57 +21580,57 @@ function parse(%1) { ... }
         <translation type="vanished">창 그림자</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="265"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>창 장식 변경 사항은 %1 재시작 후 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
         <source>Files</source>
         <translation>파일</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
         <source>API &amp; Plugins</source>
         <translation>API 및 플러그인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="462"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
         <source>Graphics</source>
         <translation>그래픽</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="520"/>
         <source>Display Scaling</source>
         <translation>디스플레이 배율</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="546"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="553"/>
         <source>Custom Scale (%)</source>
         <translation>사용자 지정 배율 (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="583"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="590"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="599"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="606"/>
         <source>Apply Performance Hints</source>
         <translation>성능 힌트 적용</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="622"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="629"/>
         <source>Keep Display Awake</source>
         <translation>디스플레이 켜짐 유지</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="651"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>성능 힌트는 프로세스 우선순위를 높이고 OS 전력 조절을 해제합니다. 변경 사항은 다음 Serial Studio 시작 시 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="662"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="669"/>
         <source>Updates &amp; News</source>
         <translation>업데이트 및 소식</translation>
     </message>
@@ -21558,170 +21639,173 @@ function parse(%1) { ... }
         <translation type="vanished">시작 시 새로운 기능 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="752"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="759"/>
         <source>Time Range</source>
         <translation>시간 범위</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Small</source>
         <translation>작게</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Normal</source>
         <translation>보통</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Large</source>
         <translation>크게</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Extra Large</source>
         <translation>매우 크게</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Custom</source>
         <translation>사용자 지정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="966"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Layout</source>
         <translation>레이아웃</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="981"/>
         <source>Auto-Layout Margin</source>
-        <translation>자동 레이아웃 여백</translation>
+        <translation type="vanished">자동 레이아웃 여백</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1006"/>
         <source>Auto-Layout Spacing</source>
-        <translation>자동 레이아웃 간격</translation>
+        <translation type="vanished">자동 레이아웃 간격</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1031"/>
         <source>Manual-Layout Spacing</source>
-        <translation>수동 레이아웃 간격</translation>
+        <translation type="vanished">수동 레이아웃 간격</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1109"/>
         <source>Show Alignment Guides</source>
         <translation>정렬 안내선 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1125"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1933"/>
         <source>Video Export</source>
         <translation>비디오 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1143"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1951"/>
         <source>Save Videos by Default</source>
         <translation>기본적으로 비디오 저장</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1194"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1166"/>
         <source>Behavior</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
+        <source>Plotting</source>
+        <translation>플로팅</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1211"/>
         <source>Show Search Field</source>
         <translation>검색 필드 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1263"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1235"/>
         <source>Auto-hide Taskbar</source>
         <translation>작업 표시줄 자동 숨기기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1290"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1262"/>
         <source>Hide Delay (ms)</source>
         <translation>숨기기 지연 시간 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1323"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1295"/>
         <source>Pinned Buttons</source>
         <translation>고정된 버튼</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1313"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>작업 표시줄에서 고정된 버튼을 드래그하여 순서를 변경합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1362"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1334"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1365"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1337"/>
         <source>Clock</source>
         <translation>시계</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1366"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1338"/>
         <source>Stopwatch</source>
         <translation>스톱워치</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1367"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1339"/>
         <source>Pause / Resume</source>
         <translation>일시정지 / 재개</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1368"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1340"/>
         <source>File Transmission</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1369"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1341"/>
         <source>AI Assistant</source>
         <translation>AI 어시스턴트</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1499"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1471"/>
         <source>Display</source>
         <translation>디스플레이</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1514"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1486"/>
         <source>Display Mode</source>
         <translation>디스플레이 모드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1582"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1554"/>
         <source>Scrollback Lines</source>
         <translation>스크롤백 라인 수</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="873"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1536"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="912"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1508"/>
         <source>Font Family</source>
         <translation>글꼴 패밀리</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1364"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1336"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf 파일 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="858"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="897"/>
         <source>Dashboard Font</source>
         <translation>대시보드 글꼴</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="895"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1558"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="934"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1530"/>
         <source>Font Size</source>
         <translation>글꼴 크기</translation>
     </message>
@@ -21734,112 +21818,112 @@ function parse(%1) { ... }
         <translation type="vanished">기본적으로 이미지 저장</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1607"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1579"/>
         <source>Show Timestamps</source>
         <translation>타임스탬프 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1635"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1607"/>
         <source>Data Transmission</source>
         <translation>데이터 전송</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1650"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1622"/>
         <source>Line Ending</source>
         <translation>줄 끝</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1672"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1644"/>
         <source>Input Mode</source>
         <translation>입력 모드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1694"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1666"/>
         <source>Text Encoding</source>
         <translation>텍스트 인코딩</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1716"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1688"/>
         <source>Checksum</source>
         <translation>체크섬</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1738"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1710"/>
         <source>Echo Sent Data</source>
         <translation>전송 데이터 에코</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1766"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1738"/>
         <source>Escape Codes</source>
         <translation>이스케이프 코드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1781"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1753"/>
         <source>VT100 Emulation</source>
         <translation>VT100 에뮬레이션</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1807"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1779"/>
         <source>ANSI Colors</source>
         <translation>ANSI 색상</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1871"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1843"/>
         <source>CSV Export</source>
         <translation>CSV 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1886"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1858"/>
         <source>Row Interval (ms)</source>
         <translation>행 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1948"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1920"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0은 수신된 프레임당 하나의 행을 기록합니다. 양수 값은 해당 간격으로 모든 채널의 스냅샷 행을 하나씩 기록하여 다중 소스 또는 고속 프로젝트의 파일 크기를 제한합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1994"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2008"/>
         <source>Delivery</source>
         <translation>전달</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2009"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2023"/>
         <source>System Notifications</source>
         <translation>시스템 알림</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2030"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2044"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Serial Studio가 포그라운드 창이 아닐 때 경고/치명적 이벤트를 OS 데스크톱 알림으로 표시합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2040"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2054"/>
         <source>Application Logs</source>
         <translation>애플리케이션 로그</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2055"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2069"/>
         <source>Route Warnings to Notifications</source>
         <translation>경고를 알림으로 라우팅</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2076"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2090"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>기본적으로 비활성화 — QT와 QML은 경고를 자주 발생시키며 이 옵션을 활성화하면 실제 알람이 묻힐 수 있습니다. 중요 메시지는 이 설정과 관계없이 항상 전달됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2095"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2109"/>
         <source>Reset</source>
         <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2152"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2166"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2160"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="2174"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
@@ -22922,67 +23006,67 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>검색… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="899"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="914"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>데이터가 스크립트의 처리 속도보다 빠르게 도착하고 있습니다; 일부 프레임이 간소화되고 있습니다. 자세한 내용은 문제 센터를 참조하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="930"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="945"/>
         <source>Unfreeze Dashboard</source>
         <translation>대시보드 고정 해제</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="931"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="946"/>
         <source>Freeze Dashboard</source>
         <translation>대시보드 고정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1004"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: %1에 연결됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: 연결되지 않음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1014"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1029"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 발행자</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1024"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1039"/>
         <source>Status:</source>
         <translation>상태:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1047"/>
         <source>Connected</source>
         <translation>연결됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1033"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1048"/>
         <source>Disconnected</source>
         <translation>연결 해제됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1040"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Broker:</source>
         <translation>브로커:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Mode:</source>
         <translation>모드:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1066"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1081"/>
         <source>Messages sent:</source>
         <translation>전송된 메시지:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1095"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT 설정 열기</translation>
     </message>
@@ -22996,7 +23080,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">위젯 검색…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1126"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1141"/>
         <source>Remove from Workspace</source>
         <translation>작업 공간에서 제거</translation>
     </message>
@@ -23966,34 +24050,34 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2540"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2523"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2548"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2531"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2556"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2539"/>
         <source>Clock</source>
         <translation>시계</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2563"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2546"/>
         <source>Stopwatch</source>
         <translation>스톱워치</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2617"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2632"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2600"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2615"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (대체)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2654"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2733"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2637"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2716"/>
         <source>LED Panel (%1)</source>
         <translation>LED 패널 (%1)</translation>
     </message>
@@ -24014,27 +24098,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1001"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1133"/>
         <source>Select Background Image</source>
         <translation>배경 이미지 선택</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1003"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1135"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>이미지 (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1422"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1475"/>
         <source>Width: %1    Height: %2</source>
         <translation>너비: %1    높이: %2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1424"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1477"/>
         <source>Width: %1</source>
         <translation>너비: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1426"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1479"/>
         <source>Height: %1</source>
         <translation>높이: %1</translation>
     </message>
@@ -24691,47 +24775,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">작업 공간에서 제거</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="156"/>
         <source>Rename Widget…</source>
         <translation>위젯 이름 변경…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="157"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
         <source>Freeze Title</source>
         <translation>제목 고정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="162"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="173"/>
         <source>Title Bar</source>
         <translation>제목 표시줄</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="182"/>
         <source>Painted Title</source>
         <translation>그려진 제목</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Hidden</source>
         <translation>숨김</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="206"/>
         <source>Widget Settings…</source>
         <translation>위젯 설정…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="220"/>
         <source>Open in External Window</source>
         <translation>외부 창에서 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="424"/>
         <source>The widget could not be created.</source>
         <translation>위젯을 생성할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="664"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="707"/>
         <source>Device Disconnected</source>
         <translation>장치 연결 해제됨</translation>
     </message>

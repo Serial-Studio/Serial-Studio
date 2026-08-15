@@ -11,6 +11,7 @@ from .api_client import SerialStudioClient, APIError
 from .device_simulator import DeviceSimulator
 from .data_generator import DataGenerator, ChecksumType
 from .validators import validate_csv_export, validate_frame_structure
+from .session_diag import session_diagnostics
 from .virtual_serial import VirtualSerialPort, DualSerialPorts, PTY_AVAILABLE
 from .audio_tools import (
     generate_chirp_wav,
@@ -27,6 +28,7 @@ __all__ = [
     "ChecksumType",
     "validate_csv_export",
     "validate_frame_structure",
+    "session_diagnostics",
     "VirtualSerialPort",
     "DualSerialPorts",
     "PTY_AVAILABLE",

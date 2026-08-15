@@ -3,6 +3,7 @@ spec: 0053-layout-patterns
 title: Per-workspace auto-layout patterns + frozen shared borders
 status: in-progress  # draft -> approved -> in-progress -> done | shelved
 created: 2026-08-13
+amended: 2026-08-14  # R11-R13 / AC9-AC12: constant manual metrics + picker on the auto-layout button
 author: Alex Spataru
 ---
 
@@ -30,6 +31,26 @@ Separately, a frozen dashboard built from titlebar-less widgets still draws two 
 every seam — each widget renders its own edge — so a layout intended to read as one
 continuous instrument panel reads as a grid of separate boxes.
 
+**Amendment, 2026-08-14 — two gaps found while building this spec.**
+
+*Manual layouts do not survive a window resize.* The rescale treats a manual layout as a set
+of proportional rectangles, so the canvas margin and the gap between two widgets are scaled by
+the same factor as the widgets themselves: with a 4 px spacing, doubling the dashboard width
+turns every 4 px gap into 8 px, and halving it closes the gaps entirely. The seam repair that
+runs afterwards only recognizes gaps below a fixed pixel tolerance, so a larger spacing
+setting is never repaired at all, and when it does fire it re-centers the seam — moving it a
+fraction of the spacing each time and trading pixels between the two neighbours. Because the
+resulting geometry is what gets saved, that shift compounds across resizes and sessions until
+the arrangement no longer resembles what the user built. Committing a move or resize of a
+single widget after the dashboard has been resized also re-bases the reference size shared by
+*all* widgets, so the untouched ones jump back to a stale arrangement on the next resize.
+Margin and spacing are pixel settings; the user expects them to look the same at every window
+size.
+
+*The pattern picker is not discoverable.* The picker was scoped into the canvas context menu,
+which is where users do not look. The taskbar auto-layout button is the control they already
+associate with "how is this dashboard arranged", so that is where the choice belongs.
+
 ## Goals
 
 - A user picks a named layout pattern per workspace from a visual picker and the dashboard
@@ -42,7 +63,10 @@ continuous instrument panel reads as a grid of separate boxes.
   adjacent widgets share a single border instead of drawing one each.
 - Existing projects keep their current appearance: the default pattern reproduces today's
   equal-grid behavior exactly.
-- Manual mode remains available and unchanged for arrangements no pattern expresses.
+- Manual mode remains available for arrangements no pattern expresses, and a manual layout
+  keeps its look at any dashboard size.
+- The arrangement choice — pattern, split ratio, or manual — is reachable from the control the
+  user already uses to change the layout.
 
 ## Non-Goals
 
@@ -81,6 +105,23 @@ continuous instrument panel reads as a grid of separate boxes.
    stays reachable and behaves exactly as it does today when selected.
 10. **R10 — Free tier.** Patterns, the picker, the ratio control, and the shared-border merge
     are available in GPL builds.
+11. **R11 — Layout metrics are absolute.** The canvas margin and the inter-widget spacing are
+    pixel settings in both layout modes. Resizing the dashboard changes neither: the widgets
+    absorb the size change, the gaps do not scale, grow, shrink, or close. A layout whose
+    widgets sat flush against each other stays flush; one built at the configured spacing keeps
+    exactly that spacing.
+12. **R12 — Resizing is lossless.** Resizing the dashboard away from a size and back restores
+    the layout that was there, and repeated resizes introduce no cumulative drift — geometry is
+    always re-derived from what the user authored, never from the previous rescale's output.
+    Editing one widget after a resize leaves every other widget where it is. Saving and
+    reloading at a
+    different dashboard size preserves the arrangement's structure — which edges are shared,
+    which are flush with the canvas — not merely the approximate rectangles.
+13. **R13 — The layout choice lives on the auto-layout button.** The taskbar auto-layout button
+    opens a gallery of the shipped patterns plus a Manual entry, with the active choice marked
+    and the split ratio offered for patterns that have a primary region. Choosing a pattern
+    applies it immediately; choosing Manual switches to manual mode. The canvas context menu
+    may keep a route to the same gallery, but the button is the primary one.
 
 ## Acceptance Criteria
 
@@ -103,6 +144,24 @@ continuous instrument panel reads as a grid of separate boxes.
       frozen-and-merged reloads identical to one saved unfrozen (round-trip test).
 - [ ] **AC8** — Manual mode still snaps, welds seams and honors its spacing setting exactly
       as before (existing spec-0052 behavior, re-checked).
+- [ ] **AC9** — For a manual layout of several adjacent widgets rescaled across a range of
+      canvas sizes (including non-uniform aspect changes), every shared edge measures exactly
+      the configured spacing and every outer edge sits flush with the canvas, for spacing
+      values of -1, 0, 4 and 16 (automated check over the rescale function; no GUI required).
+- [ ] **AC10** — Rescaling a manual layout from its stored reference to another canvas size and
+      back returns geometry identical to the start, ten times over. Where a layout is instead
+      re-derived from an intermediate size — a save taken there, or an edit committed there —
+      integer rounding may move an edge by at most 2 px on the first hop; repeating that cycle
+      50 times must not move it further, and joins and outer-edge flushness stay exact
+      throughout (automated).
+- [ ] **AC11** — After the dashboard is resized, moving or resizing one widget leaves every
+      other widget's geometry unchanged at commit time; returning to the earlier size leaves
+      them within the AC10 bound of their earlier geometry, joins and flushness exact. The
+      commit re-bases the reference to the current canvas by design — that size is what the
+      user just authored against (automated plus maintainer check).
+- [ ] **AC12** — Clicking the taskbar auto-layout button opens the gallery with the active
+      choice marked; each pattern and the Manual entry apply on selection, and the ratio
+      control appears only for patterns with a primary region (maintainer check).
 
 ## Constraints & Invariants
 
@@ -115,8 +174,13 @@ continuous instrument panel reads as a grid of separate boxes.
 - **Tiling stays deterministic and pure.** Given a widget count, canvas size, pattern and
   ratio, the resulting rectangles must be reproducible — this is what makes AC2 testable
   without a GUI.
-- Layouts must respect the existing auto-layout margin and spacing settings, and the manual
-  layout spacing setting stays independent of them.
+- Both layout modes read the one shared margin and spacing pair; neither mode may reintroduce
+  a private copy of either value.
+- Rescaling a manual layout must be a pure function of the stored layout and the two canvas
+  sizes: applying it twice with the same inputs yields the same output. Nothing may be derived
+  from the geometry it just produced.
+- A canvas too small to hold the configured gaps degrades by reducing them, never by
+  overlapping widgets or driving one below the minimum size.
 - Must honor the existing minimum window size; a pattern that would violate it on a small
   canvas degrades (fewer subdivisions) rather than producing unusable windows.
 - No new dependency; artwork ships as bundled resources like the existing icon sets.
@@ -129,3 +193,6 @@ continuous instrument panel reads as a grid of separate boxes.
   the split ratio is per-workspace and restricted to wrench ladder stops; the shared-border
   merge is automatic while frozen for titlebar-less neighbours; manual mode is kept with
   patterns as the default path.
+- Resolved with the maintainer on 2026-08-14 (amendment): the auto-layout button opens the
+  gallery popup rather than keeping its one-click auto/manual toggle — Manual is one of the
+  entries in the gallery.

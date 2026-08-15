@@ -428,6 +428,7 @@ private:
   void refreshAnyAsyncSink();
   void refreshDatasetCaptureFlag();
   void refreshLatestFrameCapture();
+  void clearLatestFrames();
   void captureLatestChunk(int sourceId, const IO::CapturedDataPtr& data);
   void captureLatestChannels(int sourceId, const QStringList& channels);
   void captureLatestChannelSpans(int sourceId, const QByteArrayView* spans, qsizetype count);

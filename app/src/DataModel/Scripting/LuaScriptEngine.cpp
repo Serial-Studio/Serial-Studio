@@ -31,7 +31,9 @@ extern "C" {
 // clang-format on
 
 #include <QDebug>
+#include <QHash>
 #include <QMessageBox>
+#include <QSet>
 #include <stdexcept>
 
 #include "DataModel/FrameBuilder.h"
@@ -41,11 +43,14 @@ extern "C" {
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DataModel/Scripting/LuaMigration.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/PipelineHost.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
+
+static constexpr int kMaxOfferedMigrations = 64;
 
 //--------------------------------------------------------------------------------------------------
 // Sandboxed library loader
@@ -196,6 +201,112 @@ static int bootstrapEngineState(lua_State* L)
 }
 
 /**
+ * @brief Returns the LuaJIT rewrite of the script, but only when the rewrite itself compiles:
+ *        trading one syntax error for another is worse than offering no fix at all.
+ */
+[[nodiscard]] static QString compilableMigration(lua_State* L, const QString& script)
+{
+  const QString migrated = DataModel::LuaMigration::migrateToLuaJit(script);
+  if (migrated.isEmpty())
+    return {};
+
+  const QByteArray utf8 = migrated.toUtf8();
+  const int status      = luaL_loadbuffer(L, utf8.constData(), utf8.size(), "migration_probe");
+  lua_pop(L, 1);
+  return status == LUA_OK ? migrated : QString();
+}
+
+/**
+ * @brief Returns the project model, resolved once for every consumer in this translation unit.
+ */
+[[nodiscard]] static DataModel::ProjectModel& projectModel()
+{
+  static auto& model = DataModel::ProjectModel::instance();
+  return model;
+}
+
+/**
+ * @brief Writes an accepted rewrite back into the project, whose own change signal reloads the
+ *        parser and repopulates the code editor.
+ */
+static void applyLuaMigration(int sourceId, const QString& fixed)
+{
+  if (sourceId == 0)
+    projectModel().setFrameParserCode(fixed);
+  else
+    projectModel().updateSourceFrameParser(sourceId, fixed);
+}
+
+/**
+ * @brief Offers the rewrite from the GUI thread, once per broken script: the engine runs on the
+ *        pipeline thread, where a modal dialog cannot be raised and its answer cannot be waited
+ *        on, and one project load re-enters the parser several times.
+ */
+static void offerLuaMigration(int sourceId,
+                              const QString& error,
+                              const QString& script,
+                              const QString& fixed)
+{
+  const QString key =
+    QStringLiteral("%1:%2").arg(QString::number(sourceId), QString::number(qHash(script)));
+  QMetaObject::invokeMethod(
+    qApp,
+    [sourceId, error, fixed, key] {
+      static QSet<QString> offered;
+      if (offered.contains(key))
+        return;
+
+      if (offered.size() >= kMaxOfferedMigrations)
+        offered.clear();
+
+      offered.insert(key);
+      const auto answer = Misc::Utilities::showMessageBox(
+        QObject::tr("Lua Syntax Error"),
+        QObject::tr("The parser code contains an error:\n\n%1\n\n"
+                    "Serial Studio can rewrite the unsupported operators as bit.* calls and "
+                    "reload the parser. The bit library works on 32-bit integers, so a value "
+                    "wider than 32 bits will wrap once rewritten.")
+          .arg(error),
+        QMessageBox::Critical,
+        QString(),
+        QMessageBox::Yes | QMessageBox::No,
+        QMessageBox::Yes,
+        {
+          {QMessageBox::Yes, QObject::tr("Fix Automatically")},
+          { QMessageBox::No,   QObject::tr("Leave Unchanged")}
+      });
+
+      if (answer == QMessageBox::Yes)
+        applyLuaMigration(sourceId, fixed);
+    },
+    Qt::QueuedConnection);
+}
+
+/**
+ * @brief Reports a compile failure: an offer to rewrite it when the script is Lua 5.3 syntax that
+ *        migrates cleanly, a plain error dialog otherwise, and a log line when boxes are muted.
+ */
+static void reportSyntaxError(
+  lua_State* L, int sourceId, const QString& script, const QString& errorMsg, bool showMessageBoxes)
+{
+  if (!showMessageBoxes) {
+    qWarning() << "[LuaScriptEngine] Source" << sourceId << "syntax error:" << errorMsg;
+    return;
+  }
+
+  const QString fixed = compilableMigration(L, script);
+  if (!fixed.isEmpty()) {
+    offerLuaMigration(sourceId, errorMsg, script, fixed);
+    return;
+  }
+
+  Misc::Utilities::showMessageBox(
+    QObject::tr("Lua Syntax Error"),
+    QObject::tr("The parser code contains an error:\n\n%1").arg(errorMsg),
+    QMessageBox::Critical);
+}
+
+/**
  * @brief Closes a Lua state after invalidating the interned-key cache it may have populated.
  *        The cache clear is skipped during teardown: the store dies moments later, and reaching
  *        it from a destructor would marshal across threads while no event loop is pumping.
@@ -276,8 +387,7 @@ void DataModel::LuaScriptEngine::createState()
     return;
   }
 
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  if (projectModel.luaFastMode()) {
+  if (projectModel().luaFastMode()) {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
   } else {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
@@ -489,14 +599,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
       const QString errorMsg =
         enrichSyntaxError(QString::fromUtf8(lua_tostring(m_state, -1)), script);
       lua_pop(m_state, 1);
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          QObject::tr("Lua Syntax Error"),
-          QObject::tr("The parser code contains an error:\n\n%1").arg(errorMsg),
-          QMessageBox::Critical);
-      } else {
-        qWarning() << "[LuaScriptEngine] Source" << sourceId << "syntax error:" << errorMsg;
-      }
+      reportSyntaxError(m_state, sourceId, script, errorMsg, showMessageBoxes);
       restorePrevious();
       return false;
     }

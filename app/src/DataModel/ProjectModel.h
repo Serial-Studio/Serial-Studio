@@ -252,6 +252,8 @@ public:
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] QJsonObject groupLayout(int groupId) const;
   [[nodiscard]] QJsonObject groupLayout(const QString& scope, int groupId) const;
+  [[nodiscard]] QJsonObject layoutChoice(const QString& scope, int groupId) const;
+  void setLayoutChoice(const QString& scope, int groupId, const QString& pattern, int ratio);
 
   [[nodiscard]] bool containsCommercialFeatures() const;
 

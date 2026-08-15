@@ -141,14 +141,23 @@ int DataModel::NotificationCenter::maxHistory() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Primary posting entry point; normalizes inputs and fans out to the bus.
+ * @brief Primary posting entry point; normalizes inputs and fans out to the bus. The history and
+ *        its QML-facing signals are GUI-affine, so a post from a worker (the pipeline thread runs
+ *        parser and transform diagnostics since spec 0051 M3) is queued here instead of mutating
+ *        the bus off-thread; notifications carry no result, so nothing waits.
  */
 void DataModel::NotificationCenter::post(int level,
                                          const QString& channel,
                                          const QString& title,
                                          const QString& subtitle)
 {
-  SS_ASSERT_LOG(thread() == QThread::currentThread());
+  if (thread() != QThread::currentThread()) {
+    QMetaObject::invokeMethod(
+      this,
+      [this, level, channel, title, subtitle] { post(level, channel, title, subtitle); },
+      Qt::QueuedConnection);
+    return;
+  }
 
   const int clamped = qBound(static_cast<int>(Info), level, static_cast<int>(Critical));
 

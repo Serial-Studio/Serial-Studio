@@ -12,7 +12,7 @@ Item {
 
   required property color color
   required property string widgetId
-  required property Item windowRoot
+  required property var windowRoot
   required property ExtensionDataModel model
 
   readonly property real span: Math.max(model.maxValue - model.minValue, 1)

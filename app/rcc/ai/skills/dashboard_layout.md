@@ -367,6 +367,37 @@ widget instance, producing workspaces with duplicate or invisible
 tiles. The fixed auto-assign mirrors the runtime dashboard's flat
 per-type bucket order; refs now resolve to the intended widget.
 
+## Layout pattern (per workspace or group tab)
+
+How a dashboard tiles is a property of whatever the taskbar is showing, stored
+beside that view's window geometry, NOT a field on the workspace entry. It
+therefore works for auto group tabs as well as user workspaces, and choosing one
+never flips the project into customized-workspace mode.
+
+```
+ui.window.setLayoutPattern{pattern: "master-stack", ratio: 12}
+ui.window.getLayout{}   // -> pattern, ratio, autoLayout, layout
+```
+
+`pattern` is one of `""` (Grid, the default and what every project built before
+this used), `master-stack`, `master-grid`, `row`, `column`, `spiral`. An id this
+build does not know is stored as given and tiles as Grid, so a project from a
+newer build round-trips safely.
+
+`ratio` is the primary/secondary split in sixteenths, 1..15, default 8 (one
+half). It only matters for the patterns with a primary region: `master-stack`,
+`master-grid`, `spiral`. Values outside the range clamp, and omitting it keeps
+whatever ratio is already in force. The picker offers 4, 6, 8, 10, 12 (the
+wrench-ladder rungs from a quarter to three quarters).
+
+A pattern that cannot fit the widget count without driving a window under the
+size floor degrades to Grid rather than emitting unusable windows. Do not
+compensate for that yourself: pick the pattern that expresses the intent and let
+it degrade.
+
+Manual placement is the other option, and it is not a pattern: it is auto layout
+turned off, via `ui.window.setAutoLayout{enabled: false}`.
+
 ## MANDATORY pre-flight before any manual workspace edit
 
 Trial-and-error against `addWidget` burns calls on validation errors and

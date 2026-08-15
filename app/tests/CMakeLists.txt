@@ -139,6 +139,18 @@ ss_add_unit_test(tst_layout_patterns
 )
 
 #
+# Source-to-source Lua rewriter behind the parser autofix. It is a lexer plus a precedence walker
+# over QString and nothing else -- no Lua state, no engine, no project model -- so the suite links
+# against QtCore alone and the whole operator matrix is checkable without a running app.
+#
+ss_add_unit_test(tst_lua_migration
+  SOURCES tst_lua_migration.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/LuaMigration.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
 # SerialStudioFrameSupport.cpp holds the four SerialStudio statics Frame.cpp reaches (commercialCfg,
 # resolveEscapeSequences, hexToBytes, encodeText). They live apart from SerialStudio.cpp so this
 # suite links without the icon registry, theme manager and player singletons. Core5Compat comes with

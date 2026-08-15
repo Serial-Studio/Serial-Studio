@@ -144,6 +144,23 @@ void API::Handlers::WindowHandler::registerLayoutCommands()
                            empty,
                            &getLayout);
   registry.registerCommand(
+    QStringLiteral("ui.window.setLayoutPattern"),
+    QStringLiteral("Set the auto-layout pattern of the workspace or group on screen. Pattern is "
+                   "'' (Grid), master-stack, master-grid, row, column or spiral; ratio is the "
+                   "primary split in sixteenths (1..15, default 8) and only applies to the "
+                   "patterns with a primary region. Stored beside that workspace's window "
+                   "geometry, so it does not touch the workspace list."),
+    API::makeSchema(
+      {
+        {QStringLiteral("pattern"),
+         QStringLiteral("string"),
+         QStringLiteral("Pattern id; '' selects Grid")}
+  },
+      {{QStringLiteral("ratio"),
+        QStringLiteral("integer"),
+        QStringLiteral("Primary split in sixteenths, 1..15 (optional)")}}),
+    &setLayoutPattern);
+  registry.registerCommand(
     QStringLiteral("ui.window.setLayout"),
     QStringLiteral("Apply a layout to WindowManager (params: layout object)"),
     API::makeSchema({
@@ -482,7 +499,35 @@ API::CommandResponse API::Handlers::WindowHandler::getLayout(const QString& id,
   const QJsonObject layout = wm->serializeLayout();
 
   QJsonObject result;
-  result[QStringLiteral("layout")] = layout;
+  result[QStringLiteral("layout")]     = layout;
+  result[QStringLiteral("pattern")]    = wm->layoutPattern();
+  result[QStringLiteral("ratio")]      = wm->layoutRatio();
+  result[QStringLiteral("autoLayout")] = wm->autoLayoutEnabled();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Applies an auto-layout pattern to the workspace or group currently on screen.
+ */
+API::CommandResponse API::Handlers::WindowHandler::setLayoutPattern(const QString& id,
+                                                                    const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("pattern")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: pattern"));
+
+  static auto& sessionRegistry = UI::UISessionRegistry::instance();
+  auto* wm                     = sessionRegistry.primaryWindowManager();
+  if (!wm)
+    return noSession(id);
+
+  const auto pattern = params.value(QStringLiteral("pattern")).toString();
+  const int ratio    = params.value(QStringLiteral("ratio")).toInt(wm->layoutRatio());
+  wm->selectLayoutPattern(pattern, ratio);
+
+  QJsonObject result;
+  result[QStringLiteral("pattern")] = wm->layoutPattern();
+  result[QStringLiteral("ratio")]   = wm->layoutRatio();
   return CommandResponse::makeSuccess(id, result);
 }
 

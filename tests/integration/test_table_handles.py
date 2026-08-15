@@ -130,6 +130,35 @@ def _read(api_client, table, name):
     )["value"]
 
 
+def _read_until(api_client, table, name, expected, timeout=2.0):
+    """Poll a register until it shows `expected`, then return whatever it holds.
+
+    Store writes issued from the GUI thread (the project.dataTable.* commands)
+    are queued to the store's own thread, and GUI-side reads are served from the
+    display-tick snapshot mirror, so a write is visible on the next tick rather
+    than immediately. Waiting keeps the test on the app's real consistency
+    model instead of forcing a blocking marshal into the pipeline.
+    """
+    end = time.time() + timeout
+    value = _read(api_client, table, name)
+    while value != expected and time.time() < end:
+        time.sleep(0.05)
+        value = _read(api_client, table, name)
+
+    return value
+
+
+def _read_handle_until(api_client, handle, expected, timeout=2.0):
+    """Handle-addressed twin of _read_until; returns the last read result map."""
+    end = time.time() + timeout
+    got = api_client.command("project.dataTable.getValueH", {"handle": handle})
+    while got.get("value") != expected and time.time() < end:
+        time.sleep(0.05)
+        got = api_client.command("project.dataTable.getValueH", {"handle": handle})
+
+    return got
+
+
 @pytest.mark.integration
 @pytest.mark.project
 class TestParserHandleParity:
@@ -197,12 +226,12 @@ class TestControlScriptHandlePath:
         )["written"]
         assert written is True
 
-        got = api_client.command("project.dataTable.getValueH", {"handle": handle})
+        got = _read_handle_until(api_client, handle, 42)
         assert got["found"] is True
         assert got["value"] == 42
 
         # The handle write must be visible through name-based access too.
-        assert _read(api_client, "CTRL", "reg") == 42
+        assert _read_until(api_client, "CTRL", "reg", 42) == 42
 
     def test_invalid_handle_is_safe_noop(self, api_client, clean_state):
         """A -1 handle reads found=false and writes written=false, never throwing (R5)."""
@@ -252,4 +281,4 @@ class TestControlScriptHandlePath:
             )["written"]
             is True
         )
-        assert _read(api_client, "CTRL", "reg") == 7
+        assert _read_until(api_client, "CTRL", "reg", 7) == 7

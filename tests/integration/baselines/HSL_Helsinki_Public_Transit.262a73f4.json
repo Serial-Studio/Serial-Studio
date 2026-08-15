@@ -280,6 +280,7 @@
     }
   ],
   "hexadecimalDelimiters": false,
+  "luaFastMode": false,
   "mqttPublisher": {
     "alpnEnabled": false,
     "alpnProtocol": "x-amzn-mqtt-ca",
@@ -326,34 +327,6 @@
     }
   ],
   "title": "HSL Helsinki Public Transit",
-  "treeExpansion": {
-    "": false,
-    "HSL Helsinki Public Transit": true,
-    "HSL Helsinki Public Transit/ ": false,
-    "HSL Helsinki Public Transit/Control Loop": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets": true,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard": true,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Direction": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Heading": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Line Designation": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Speed": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Timestamp": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Dashboard/Vehicle ID": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)": true,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)/Altitude": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)/Latitude": false,
-    "HSL Helsinki Public Transit/Dashboard Widgets/Vehicle Position (GPS)/Longitude": false,
-    "HSL Helsinki Public Transit/HSL Broker": true,
-    "HSL Helsinki Public Transit/HSL Broker/Frame Parser": false,
-    "HSL Helsinki Public Transit/MQTT Publisher": false,
-    "HSL Helsinki Public Transit/Shared Memory": true,
-    "HSL Helsinki Public Transit/Shared Memory/Dataset Values": false,
-    "HSL Helsinki Public Transit/Workspaces": true,
-    "HSL Helsinki Public Transit/Workspaces/All Data": false,
-    "HSL Helsinki Public Transit/Workspaces/Overview": false,
-    "HSL Helsinki Public Transit/Workspaces/Vehicle Dashboard": false,
-    "HSL Helsinki Public Transit/Workspaces/Vehicle Position (GPS)": false
-  },
   "widgetDisplay": {
     "freezeTitle": {
       "13:10004": "bar"

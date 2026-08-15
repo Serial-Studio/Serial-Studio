@@ -70,7 +70,13 @@ Widgets.SmartDialog {
       }
 
       TabButton {
-        text: qsTr("Dashboard")
+        text: qsTr("Plotting")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+
+      TabButton {
+        text: qsTr("Layout")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
@@ -115,7 +121,8 @@ Widgets.SmartDialog {
       implicitHeight: Math.max(
                         generalTab.implicitHeight,
                         startupTab.implicitHeight,
-                        dashboardTab.implicitHeight,
+                        plottingTab.implicitHeight,
+                        layoutTab.implicitHeight,
                         taskbarTab.implicitHeight,
                         consoleTab.implicitHeight,
                         exportTab.implicitHeight,
@@ -702,14 +709,14 @@ Widgets.SmartDialog {
       }
 
       //
-      // Dashboard tab
+      // Plotting tab
       //
       Item {
-        id: dashboardTab
+        id: plottingTab
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        implicitHeight: dashboardLayout.implicitHeight + 16
+        implicitHeight: plottingLayout.implicitHeight + 16
 
         Rectangle {
           radius: 2
@@ -720,7 +727,7 @@ Widgets.SmartDialog {
         }
 
         GridLayout {
-          id: dashboardLayout
+          id: plottingLayout
 
           columns: 2
           rowSpacing: 4
@@ -849,12 +856,44 @@ Widgets.SmartDialog {
             }
           }
 
+          Item { Layout.fillHeight: true }
+          Item { Layout.fillHeight: true }
+        }
+      }
+
+      //
+      // Layout tab
+      //
+      Item {
+        id: layoutTab
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: dashboardLayout.implicitHeight + 16
+
+        Rectangle {
+          radius: 2
+          border.width: 1
+          anchors.fill: parent
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+        }
+
+        GridLayout {
+          id: dashboardLayout
+
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          anchors.margins: 8
+          anchors.fill: parent
+
           Item {
             implicitHeight: 2
             Layout.columnSpan: 2
           } Label {
             Layout.columnSpan: 2
-            Layout.topMargin: 6
+            Layout.topMargin: 2
             text: qsTr("Dashboard Font")
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
@@ -1086,48 +1125,6 @@ Widgets.SmartDialog {
               function onShowAlignmentGuidesChanged() {
                 _showAlignmentGuides.checked = Cpp_UI_Dashboard.showAlignmentGuides
               }
-            }
-          }
-
-          Item {
-            implicitHeight: 2
-            Layout.columnSpan: 2
-            visible: Cpp_CommercialBuild
-          } Label {
-            Layout.columnSpan: 2
-            Layout.topMargin: 6
-            visible: Cpp_CommercialBuild
-            text: qsTr("Video Export")
-            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
-            color: Cpp_ThemeManager.colors["pane_section_label"]
-            Component.onCompleted: font.capitalization = Font.AllUppercase
-          } Rectangle {
-            implicitHeight: 1
-            Layout.columnSpan: 2
-            Layout.fillWidth: true
-            visible: Cpp_CommercialBuild
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          } Item {
-            implicitHeight: 2
-            Layout.columnSpan: 2
-            visible: Cpp_CommercialBuild
-          }
-
-          Label {
-            visible: Cpp_CommercialBuild
-            text: qsTr("Save Videos by Default")
-            color: Cpp_ThemeManager.colors["text"]
-          } Switch {
-            id: _saveImages
-
-            Layout.rightMargin: -8
-            visible: Cpp_CommercialBuild
-            Layout.alignment: Qt.AlignRight
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            checked: Cpp_CommercialBuild && Cpp_Image_Export.exportEnabled
-            onCheckedChanged: {
-              if (Cpp_CommercialBuild && checked !== Cpp_Image_Export.exportEnabled)
-                Cpp_Image_Export.exportEnabled = checked
             }
           }
 
@@ -1923,6 +1920,48 @@ Widgets.SmartDialog {
             text: qsTr("0 writes one row per received frame. A positive value logs one "
                        + "snapshot row of every channel at that interval, which keeps file "
                        + "size bounded for multi-source or high-rate projects.")
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_CommercialBuild
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            visible: Cpp_CommercialBuild
+            text: qsTr("Video Export")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            visible: Cpp_CommercialBuild
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_CommercialBuild
+          }
+
+          Label {
+            visible: Cpp_CommercialBuild
+            text: qsTr("Save Videos by Default")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _saveImages
+
+            Layout.rightMargin: -8
+            visible: Cpp_CommercialBuild
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            checked: Cpp_CommercialBuild && Cpp_Image_Export.exportEnabled
+            onCheckedChanged: {
+              if (Cpp_CommercialBuild && checked !== Cpp_Image_Export.exportEnabled)
+                Cpp_Image_Export.exportEnabled = checked
+            }
           }
 
           Item { Layout.fillHeight: true }
