@@ -92,8 +92,8 @@ Item {
         return root.decoder.templateCode(root.decoderTemplates[i].file)
 
     return root.decoderTemplates.length > 0
-           ? root.decoder.templateCode(root.decoderTemplates[0].file)
-           : ""
+        ? root.decoder.templateCode(root.decoderTemplates[0].file)
+        : ""
   }
 
   //
@@ -375,8 +375,8 @@ Item {
                               + "decoder row: oldest on the left, newest on the right.")
 
                 const range = qsTr("Labelled bytes %1 to %2, oldest on the left.")
-                                .arg(root.formatNumber(root.model.labelledStart))
-                                .arg(root.formatNumber(root.model.labelledEnd))
+                .arg(root.formatNumber(root.model.labelledStart))
+                .arg(root.formatNumber(root.model.labelledEnd))
 
                 if (root.annotationCount < root.model.capacity)
                   return range
@@ -538,7 +538,7 @@ Item {
                             const w = g[j * 6 + 1]
                             const merged = g[j * 6 + 5] > 1
                             const long_text = merged ? qsTr("%1 labels")
-                                                         .arg(root.formatNumber(g[j * 6 + 5]))
+                                                       .arg(root.formatNumber(g[j * 6 + 5]))
                                                      : labels[j]
                             let label = ""
                             if (ctx.measureText(long_text).width + 6 <= w)
@@ -586,34 +586,34 @@ Item {
 
                         onExited: hoverText = ""
                         onPositionChanged: (mouse) => {
-                          const strip = _laneArea.strip
-                          if (!strip || strip.count <= 0) {
-                            hoverText = ""
-                            return
-                          }
+                                             const strip = _laneArea.strip
+                                             if (!strip || strip.count <= 0) {
+                                               hoverText = ""
+                                               return
+                                             }
 
-                          const g = strip.geometry
-                          for (let i = 0; i < g.length; i += 6) {
-                            if (mouse.x < g[i] || mouse.x > g[i] + g[i + 1])
-                              continue
+                                             const g = strip.geometry
+                                             for (let i = 0; i < g.length; i += 6) {
+                                               if (mouse.x < g[i] || mouse.x > g[i] + g[i + 1])
+                                               continue
 
-                            const merged = g[i + 5] > 1
-                            hoverText = merged
-                                        ? qsTr("%1 labels merged (bytes %2 to %3). Shrink the "
-                                               + "window to separate them.")
-                                            .arg(root.formatNumber(g[i + 5]))
-                                            .arg(root.formatNumber(g[i + 2]))
-                                            .arg(root.formatNumber(g[i + 3]))
-                                        : qsTr("%1 (bytes %2 to %3)")
-                                            .arg(strip.labels.length > i / 6
-                                                 ? strip.labels[i / 6] : "")
-                                            .arg(root.formatNumber(g[i + 2]))
-                                            .arg(root.formatNumber(g[i + 3]))
-                            return
-                          }
+                                               const merged = g[i + 5] > 1
+                                               hoverText = merged
+                                               ? qsTr("%1 labels merged (bytes %2 to %3). Shrink the "
+                                                      + "window to separate them.")
+                                                 .arg(root.formatNumber(g[i + 5]))
+                                                 .arg(root.formatNumber(g[i + 2]))
+                                                 .arg(root.formatNumber(g[i + 3]))
+                                               : qsTr("%1 (bytes %2 to %3)")
+                                               .arg(strip.labels.length > i / 6
+                                                    ? strip.labels[i / 6] : "")
+                                               .arg(root.formatNumber(g[i + 2]))
+                                               .arg(root.formatNumber(g[i + 3]))
+                                               return
+                                             }
 
-                          hoverText = ""
-                        }
+                                             hoverText = ""
+                                           }
 
                         ToolTip.delay: 300
                         ToolTip.text: _laneHover.hoverText
@@ -930,8 +930,8 @@ Item {
                     return
 
                   text = _payloadHex.checked
-                         ? root.model.payloadHex(_payloadClass.currentIndex, root.maxPayloadBytes)
-                         : root.model.payloadText(_payloadClass.currentIndex, root.maxPayloadBytes)
+                      ? root.model.payloadHex(_payloadClass.currentIndex, root.maxPayloadBytes)
+                      : root.model.payloadText(_payloadClass.currentIndex, root.maxPayloadBytes)
                 }
               }
             }
@@ -949,6 +949,8 @@ Item {
             Layout.fillWidth: true
 
             Widgets.IconButton {
+              id: _applyBt
+
               leftPadding: 8
               rightPadding: 8
               text: qsTr("Apply")
@@ -966,12 +968,13 @@ Item {
               textRole: "name"
               Layout.preferredWidth: 190
               model: root.decoderTemplates
+              implicitHeight: _applyBt.implicitHeight
               ToolTip.text: qsTr("Load a decoder for a known protocol")
               onActivated: (index) => {
                              const code = root.decoder.templateCode(
-                                            root.decoderTemplates[index].file)
+                               root.decoderTemplates[index].file)
                              if (code.length > 0)
-                               _decoderEditor.setText(code)
+                             _decoderEditor.setText(code)
                            }
             }
 
@@ -1027,20 +1030,12 @@ Item {
             }
           }
 
-          Rectangle {
-            border.width: 1
+          MacroEditor {
+            id: _decoderEditor
+
+            language: 0
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Cpp_ThemeManager.colors["base"]
-            border.color: Cpp_ThemeManager.colors["groupbox_border"]
-
-            MacroEditor {
-              id: _decoderEditor
-
-              language: 0
-              anchors.margins: 1
-              anchors.fill: parent
-            }
           }
         }
       }

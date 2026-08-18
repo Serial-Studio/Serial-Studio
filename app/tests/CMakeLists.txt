@@ -349,7 +349,8 @@ ss_add_unit_test(tst_expression_transform
 
 #
 # Frame annotation layer (spec 0059): the model, filter proxy, payload extraction, CSV export and
-# the JS decoder with carry-over. Console/Annotations.cpp reaches only JsWatchdog and SSAssert;
+# the JS decoder with carry-over. Console/Annotations.cpp reaches JsWatchdog, SSAssert and the
+# ScriptTemplates manifest helpers (which localise names through Misc::Translator, hence Widgets);
 # QtQml for the QJSEngine the decoder embeds.
 #
 ss_add_unit_test(tst_console_annotations
@@ -357,10 +358,13 @@ ss_add_unit_test(tst_console_annotations
           ${SS_APP_SRC}/Console/Annotations.cpp
           ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
           ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/ScriptTemplates.cpp
+          ${SS_APP_SRC}/Misc/Translator.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
+          Qt6::Widgets
 )
 
 ss_add_unit_test(tst_envelope_ring
