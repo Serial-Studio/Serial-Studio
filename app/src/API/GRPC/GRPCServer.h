@@ -22,6 +22,7 @@
 #  include <thread>
 #  include <vector>
 
+#  include "DataModel/DataBlock.h"
 #  include "DataModel/Frame.h"
 #  include "IO/HAL_Driver.h"
 #  include "serialstudio.grpc.pb.h"

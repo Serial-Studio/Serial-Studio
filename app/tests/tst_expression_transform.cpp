@@ -30,7 +30,7 @@
 
 /**
  * @file tst_expression_transform.cpp
- * @brief Grammar, evaluation and slot-table contract of the compiled expression transforms
+ * @brief Grammar, evaluation and slot-slot_table contract of the compiled expression transforms
  *        (spec 0060): precedence, the function set, comparisons and conditionals, sibling names
  *        (bare and braced), `sample()` history, `n`/`dt`, compile-time errors, and the
  *        allocation-free evaluator's NaN-on-inconsistency behaviour.
@@ -45,19 +45,19 @@ using namespace DataModel::Expression;
  *        the value for @p v (t = 0). Compile failures surface as NaN plus @p error.
  */
 [[nodiscard]] double evalWith(const QString& text,
-                              SlotTable& slots,
+                              SlotTable& slot_table,
                               double v,
                               QString* error = nullptr)
 {
-  const NameResolver resolver = [&slots](QStringView name) -> int {
+  const NameResolver resolver = [&slot_table](QStringView name) -> int {
     if (name == u"a")
-      return slots.slotFor(10);
+      return slot_table.slotFor(10);
 
     if (name == u"b")
-      return slots.slotFor(11);
+      return slot_table.slotFor(11);
 
     if (name == u"Long Name")
-      return slots.slotFor(12);
+      return slot_table.slotFor(12);
 
     return -1;
   };
@@ -71,13 +71,13 @@ using namespace DataModel::Expression;
     return std::numeric_limits<double>::quiet_NaN();
   }
 
-  return runtime.run(v, 0.0, slots);
+  return runtime.run(v, 0.0, slot_table);
 }
 
 [[nodiscard]] double evalPlain(const QString& text, double v)
 {
-  SlotTable slots;
-  return evalWith(text, slots, v);
+  SlotTable slot_table;
+  return evalWith(text, slot_table, v);
 }
 
 }  // namespace
@@ -120,17 +120,17 @@ void TstExpressionTransform::tableRegisters()
   const NameResolver names = [](QStringView) {
     return -1;
   };
-  const TableResolver tables = [](QStringView table, QStringView reg) -> qint64 {
-    if (table == u"cal" && reg == u"scale")
+  const TableResolver tables = [](QStringView slot_table, QStringView reg) -> qint64 {
+    if (slot_table == u"cal" && reg == u"scale")
       return 0;
 
-    if (table == u"cal" && reg == u"offset")
+    if (slot_table == u"cal" && reg == u"offset")
       return 1;
 
     return -1;
   };
 
-  SlotTable slots;
+  SlotTable slot_table;
   Runtime runtime;
   QString error;
   QVERIFY2(
@@ -138,7 +138,7 @@ void TstExpressionTransform::tableRegisters()
     qPrintable(error));
 
   runtime.tableValue = &fakeTableValue;
-  QCOMPARE(runtime.run(4.0, 0.0, slots), 9.0);
+  QCOMPARE(runtime.run(4.0, 0.0, slot_table), 9.0);
 
   Program program;
   QVERIFY(!compile("table(cal, missing)", names, tables, program, error));
@@ -213,22 +213,22 @@ void TstExpressionTransform::comparisonsAndConditional()
  */
 void TstExpressionTransform::siblingNames()
 {
-  SlotTable slots;
-  QVERIFY(std::isnan(evalWith("a + b", slots, 0.0)));
+  SlotTable slot_table;
+  QVERIFY(std::isnan(evalWith("a + b", slot_table, 0.0)));
 
-  slots.publish(10, 2.0);
-  slots.publish(11, 5.0);
-  QCOMPARE(evalWith("a + b", slots, 0.0), 7.0);
-  QCOMPARE(evalWith("v - a", slots, 10.0), 8.0);
+  slot_table.publish(10, 2.0);
+  slot_table.publish(11, 5.0);
+  QCOMPARE(evalWith("a + b", slot_table, 0.0), 7.0);
+  QCOMPARE(evalWith("v - a", slot_table, 10.0), 8.0);
 
-  slots.publish(12, 100.0);
-  QCOMPARE(evalWith("{Long Name} / 4", slots, 0.0), 25.0);
-  QCOMPARE(evalWith("{ Long Name } / 4", slots, 0.0), 25.0);
+  slot_table.publish(12, 100.0);
+  QCOMPARE(evalWith("{Long Name} / 4", slot_table, 0.0), 25.0);
+  QCOMPARE(evalWith("{ Long Name } / 4", slot_table, 0.0), 25.0);
 
-  slots.publish(99, 1.0);
-  QCOMPARE(slots.slotOf(99), -1);
-  QCOMPARE(slots.slotCount(), 3);
-  QCOMPARE(slots.uniqueIdAt(0), 10);
+  slot_table.publish(99, 1.0);
+  QCOMPARE(slot_table.slotOf(99), -1);
+  QCOMPARE(slot_table.slotCount(), 3);
+  QCOMPARE(slot_table.uniqueIdAt(0), 10);
 }
 
 /**
@@ -237,9 +237,9 @@ void TstExpressionTransform::siblingNames()
  */
 void TstExpressionTransform::sampleHistory()
 {
-  SlotTable slots;
-  const NameResolver resolver = [&slots](QStringView name) -> int {
-    return (name == u"x") ? slots.slotFor(7) : -1;
+  SlotTable slot_table;
+  const NameResolver resolver = [&slot_table](QStringView name) -> int {
+    return (name == u"x") ? slot_table.slotFor(7) : -1;
   };
 
   Runtime runtime;
@@ -247,29 +247,29 @@ void TstExpressionTransform::sampleHistory()
   QVERIFY(compile(
     "sample(x, 0) + 10 * sample(x, 1) + 100 * sample(x, 2)", resolver, runtime.program, error));
   QVERIFY(runtime.program.usesHistory);
-  QVERIFY(std::isnan(runtime.run(0.0, 0.0, slots)));
+  QVERIFY(std::isnan(runtime.run(0.0, 0.0, slot_table)));
 
-  slots.publish(7, 1.0);
-  slots.publish(7, 2.0);
-  slots.publish(7, 3.0);
-  QCOMPARE(runtime.run(0.0, 0.0, slots), 3.0 + 20.0 + 100.0);
+  slot_table.publish(7, 1.0);
+  slot_table.publish(7, 2.0);
+  slot_table.publish(7, 3.0);
+  QCOMPARE(runtime.run(0.0, 0.0, slot_table), 3.0 + 20.0 + 100.0);
 
   for (int i = 0; i < kMaxHistory + 5; ++i)
-    slots.publish(7, static_cast<double>(i));
+    slot_table.publish(7, static_cast<double>(i));
 
-  QCOMPARE(slots.sample(0, 0), static_cast<double>(kMaxHistory + 4));
-  QCOMPARE(slots.sample(0, kMaxHistory - 1), 5.0);
-  QVERIFY(std::isnan(slots.sample(0, kMaxHistory)));
-  QVERIFY(std::isnan(slots.sample(0, -1)));
-  QVERIFY(std::isnan(slots.sample(3, 0)));
+  QCOMPARE(slot_table.sample(0, 0), static_cast<double>(kMaxHistory + 4));
+  QCOMPARE(slot_table.sample(0, kMaxHistory - 1), 5.0);
+  QVERIFY(std::isnan(slot_table.sample(0, kMaxHistory)));
+  QVERIFY(std::isnan(slot_table.sample(0, -1)));
+  QVERIFY(std::isnan(slot_table.sample(3, 0)));
 
   Runtime negative;
   QVERIFY(compile("sample(x, -3)", resolver, negative.program, error));
-  QCOMPARE(negative.run(0.0, 0.0, slots), slots.sample(0, 0));
+  QCOMPARE(negative.run(0.0, 0.0, slot_table), slot_table.sample(0, 0));
 
-  slots.reset();
-  QVERIFY(std::isnan(slots.sample(0, 0)));
-  QCOMPARE(slots.slotCount(), 1);
+  slot_table.reset();
+  QVERIFY(std::isnan(slot_table.sample(0, 0)));
+  QCOMPARE(slot_table.slotCount(), 1);
 }
 
 /**
@@ -277,17 +277,17 @@ void TstExpressionTransform::sampleHistory()
  */
 void TstExpressionTransform::countersAndDt()
 {
-  SlotTable slots;
+  SlotTable slot_table;
   Runtime runtime;
   QString error;
   QVERIFY(compile("n * 1000 + dt", [](QStringView) { return -1; }, runtime.program, error));
 
-  QCOMPARE(runtime.run(0.0, 10.0, slots), 0.0);
-  QCOMPARE(runtime.run(0.0, 10.5, slots), 1000.5);
-  QCOMPARE(runtime.run(0.0, 12.0, slots), 2001.5);
+  QCOMPARE(runtime.run(0.0, 10.0, slot_table), 0.0);
+  QCOMPARE(runtime.run(0.0, 10.5, slot_table), 1000.5);
+  QCOMPARE(runtime.run(0.0, 12.0, slot_table), 2001.5);
 
   runtime.reset();
-  QCOMPARE(runtime.run(0.0, 20.0, slots), 0.0);
+  QCOMPARE(runtime.run(0.0, 20.0, slot_table), 0.0);
 }
 
 /**
@@ -295,26 +295,26 @@ void TstExpressionTransform::countersAndDt()
  */
 void TstExpressionTransform::compileErrors()
 {
-  SlotTable slots;
+  SlotTable slot_table;
   QString error;
 
-  QVERIFY(std::isnan(evalWith("sqtr(v)", slots, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("sqtr(v)", slot_table, 1.0, &error)));
   QVERIFY(error.contains(QStringLiteral("sqtr")));
 
-  QVERIFY(std::isnan(evalWith("zz + 1", slots, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("zz + 1", slot_table, 1.0, &error)));
   QVERIFY(error.contains(QStringLiteral("zz")));
 
-  QVERIFY(std::isnan(evalWith("(1 + 2", slots, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("(1 + 2", slot_table, 1.0, &error)));
   QVERIFY(!error.isEmpty());
 
-  QVERIFY(std::isnan(evalWith("1 +", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("min(1)", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("sample(1, 2)", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("1 2", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("1.2.3", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("{unterminated", slots, 1.0, &error)));
-  QVERIFY(std::isnan(evalWith("v $ 2", slots, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("1 +", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("min(1)", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("sample(1, 2)", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("1 2", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("1.2.3", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("{unterminated", slot_table, 1.0, &error)));
+  QVERIFY(std::isnan(evalWith("v $ 2", slot_table, 1.0, &error)));
 
   Program program;
   QVERIFY(compile("v", [](QStringView) { return -1; }, program, error));

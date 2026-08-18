@@ -40,6 +40,7 @@
 #  include "API/GRPC/ConversionUtils.h"
 #  include "API/GRPC/ProtoGenerator.h"
 #  include "API/Server.h"
+#  include "DataModel/FrameBuilder.h"
 #  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
 
