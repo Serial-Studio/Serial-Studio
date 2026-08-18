@@ -591,12 +591,14 @@ ss_add_unit_test(tst_js_watchdog
 # a source is what gets moc_HAL_Driver.cpp generated for this suite. Qt6::Gui covers the QColor
 # include that StreamWorker.cpp pulls in through FrameBuilder.h -> ... -> SerialStudio.h; the two
 # FrameBuilder table-API injectors it references are stubbed inside tst_stream_worker.cpp so the
-# suite links without the FrameBuilder dependency web.
+# suite links without the FrameBuilder dependency web. ExpressionTransform.cpp backs the
+# expression-mode channels (spec 0060) that StreamProcessor compiles and evaluates.
 #
 ss_add_unit_test(tst_stream_worker
   SOURCES tst_stream_worker.cpp
           ${SS_APP_SRC}/IO/HAL_Driver.h
           ${SS_APP_SRC}/IO/StreamWorker.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/ExpressionTransform.cpp
           ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
