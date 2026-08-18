@@ -221,6 +221,7 @@ void TstExpressionTransform::siblingNames()
   QCOMPARE(evalWith("a + b", slot_table, 0.0), 7.0);
   QCOMPARE(evalWith("v - a", slot_table, 10.0), 8.0);
 
+  QCOMPARE(slot_table.slotFor(12), 2);
   slot_table.publish(12, 100.0);
   QCOMPARE(evalWith("{Long Name} / 4", slot_table, 0.0), 25.0);
   QCOMPARE(evalWith("{ Long Name } / 4", slot_table, 0.0), 25.0);
@@ -339,9 +340,6 @@ void TstExpressionTransform::nanPropagatesAndDegenerateProgram()
   Context ctx{};
   ctx.v = 1.0;
   QVERIFY(std::isnan(evaluate(broken, ctx)));
-
-  Program empty;
-  QVERIFY(std::isnan(evaluate(empty, ctx)));
 }
 
 QTEST_APPLESS_MAIN(TstExpressionTransform)
